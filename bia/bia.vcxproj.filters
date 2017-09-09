@@ -25,9 +25,6 @@
     <Filter Include="Header Files\machine">
       <UniqueIdentifier>{1c57551a-d7da-44d8-9c1b-9c9e7d45eb50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\machine\debug">
-      <UniqueIdentifier>{02ba3db3-c4ec-483f-93b2-62ba65affbc9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\force">
       <UniqueIdentifier>{19b0d235-6ae2-4629-9cd5-b5b7757c4a20}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,9 @@
     </Filter>
     <Filter Include="Source Files\yu">
       <UniqueIdentifier>{8e5252ef-8397-4029-b47a-498ad640b239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\machine\debug">
+      <UniqueIdentifier>{06c13058-d866-4498-8c02-0bd33bd7ef1e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -209,9 +209,6 @@
     <ClInclude Include="biaHasher.h">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="biaDisassembler.h">
-      <Filter>Header Files\machine\scope</Filter>
-    </ClInclude>
     <ClInclude Include="biaStaticFunction.h">
       <Filter>Header Files\api\framework\executable</Filter>
     </ClInclude>
@@ -292,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="yinterpreter_token.h">
       <Filter>Header Files\yu</Filter>
+    </ClInclude>
+    <ClInclude Include="biaDisassembler.h">
+      <Filter>Header Files\machine\debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
