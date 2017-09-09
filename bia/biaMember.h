@@ -1,7 +1,10 @@
 #pragma once
 
 #include <typeinfo>
+#include <map>
+#include <unordered_map>
 #include <type_traits>
+#include <memory>
 
 #include "biaGlobal.h"
 #include "biaType.h"
@@ -19,6 +22,7 @@ namespace framework
 {
 
 typedef std::unordered_map<machine::BiaKey, machine::scope::BiaScopeElement, utility::bia_hasher> members;
+typedef std::map<uint32_t, std::unique_ptr<object::BiaClassOperatorBase>> operators;
 
 
 class BiaMember
@@ -42,7 +46,7 @@ public:
 
 		F_CLASS = 0x100,
 	};
-	enum OPERATORS : unsigned int
+	enum OPERATORS : uint32_t
 	{
 		O_PLUS = 0x2b,
 		O_MINUS = 0x2d,
@@ -78,15 +82,20 @@ public:
 	};
 	enum class SET_PARAMETER
 	{
-		MEMBERS
+		CLASS_PROMOTE_PARAMS
 	};
 	enum class GET_PARAMETER
 	{
 		CLASS_HASH_CODE
 	};
-	union SET_PARAMETER_DATA
+	struct CLASS_PROMOTE_PRAMAS
 	{
 		const std::shared_ptr<members> * pMembers;
+		const std::shared_ptr<operators> * pOperators;
+	};
+	union SET_PARAMETER_DATA
+	{
+		CLASS_PROMOTE_PRAMAS classPromoteParams;
 	};
 	union GET_PARAMETER_DATA
 	{
@@ -163,8 +172,7 @@ public:
 			return true;
 		}
 		//String reference
-		else if ((std::is_same<T, std::string*>::value && IsType(NATIVE_TYPE::STRING, false)) ||
-			(std::is_same<T, const std::string*>::value && IsType(NATIVE_TYPE::STRING, false)) ||
+		else if (((std::is_same<T, std::string*>::value || std::is_same<T, const std::string*>::value) && IsType(NATIVE_TYPE::STRING, false)) ||
 			(std::is_same<T, const char*>::value && IsType(NATIVE_TYPE::STRING, true)))
 		{
 			p_pOutput = static_cast<_TYPE*>(LoadPtr(std::is_same<T, const char*>::value ? PTR_TYPE::CONST_CHAR : PTR_TYPE::NORMAL));

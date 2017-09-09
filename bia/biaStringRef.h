@@ -67,7 +67,7 @@ public:
 				stResult.reserve(m_pstData->length() + iRightSize);
 				stResult.assign(*m_pstData).append(*ppszString, iRightSize);
 
-				new(p_pDestination) BiaNativeVariable<std::string>(std::move(stResult));
+				(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<std::string>>(std::move(stResult));
 
 				return 1;
 			}
@@ -165,7 +165,7 @@ public:
 				stResult.reserve(m_pstData->length() + iRightSize);
 				stResult.assign(*m_pstData).append(*ppszString, iRightSize);
 
-				new(p_pDestination) BiaNativeVariable<std::string>(std::move(stResult));
+				(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<std::string>>(std::move(stResult));
 
 				return 1;
 			}

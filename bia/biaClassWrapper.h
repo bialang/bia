@@ -14,6 +14,7 @@
 #include "biaLambdaMemberFunction.h"
 #include "biaMemberHolder.h"
 #include "biaParameter.h"
+#include "biaClassOperator.h"
 
 
 namespace bia
@@ -22,6 +23,8 @@ namespace api
 {
 namespace framework
 {
+namespace object
+{
 
 class BiaClassWrapperBase
 {
@@ -29,7 +32,7 @@ public:
 	/**
 	 * Constructor.
 	*/
-	inline BiaClassWrapperBase() : m_pMembers(new members()) {}
+	inline BiaClassWrapperBase() : m_pMembers(new members()), m_pOperators(new operators()) {}
 	virtual ~BiaClassWrapperBase() = default;
 	/**
 	 * Creates an instance.
@@ -53,6 +56,7 @@ protected:
 
 
 	std::shared_ptr<members> m_pMembers;	/**	Defines the members of the created intance.	*/
+	std::shared_ptr<operators> m_pOperators;	/**	Defines the operators of the created instance.	*/
 
 	std::vector<std::unique_ptr<BiaInitializerBase>> m_vpConstructors;	/**	Defines the usable constructors of a class. */
 };
@@ -73,12 +77,12 @@ public:
 	 *
 	 * @param	[in,out]	p_move	Defines the object that should be moved.
 	*/
-	BiaClassWrapper(BiaClassWrapper && p_move) : BiaClassWrapperBase(std::move(p_move))
+	inline BiaClassWrapper(BiaClassWrapper && p_move) : BiaClassWrapperBase(std::move(p_move))
 	{
 		m_uiIdCounter = p_move.m_uiIdCounter;
 		p_move.m_uiIdCounter = 0;
 	}
-	BiaClassWrapper(const BiaClassWrapper&) = delete;
+	inline BiaClassWrapper(const BiaClassWrapper&) = delete;
 	/**
 	 * @see	BiaClassWrapperBase::CreateInstance().
 	*/
@@ -92,13 +96,13 @@ public:
 			{
 				if (auto pInstance = (*i)->Initialize(p_pBegin, p_pEnd))
 				{
-					(new(p_pDestination) BiaMemberHolder())->Initialize<BiaClass<_CLASS>>(static_cast<_CLASS*>(pInstance), m_pMembers);
+					(new(p_pDestination) BiaMemberHolder())->Initialize<BiaClass<_CLASS>>(static_cast<_CLASS*>(pInstance), m_pMembers, m_pOperators);
 
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
 	/**
@@ -248,6 +252,24 @@ public:
 
 		return this;
 	}
+	/**
+	 * Sets an operator for the given id.
+	 *
+	 * @since	2.38.81.467
+	 * @date	09-Sep-17
+	 *
+	 * @param   p_uiOperatorId	Defines the operator id. See BiaMember::OPERATORS.
+	 * @param	p_function	Defines the operator.
+	 *
+	 * @return  This.
+	*/
+	inline BiaClassWrapper * SetOperator(uint32_t p_uiOperatorId, std::unique_ptr<BiaClassOperatorBase> p_function)
+	{
+		if (p_function)
+			m_pOperators->operator[](p_uiOperatorId) = std::move(p_function);
+
+		return this;
+	}
 	template<typename _RETURN, typename... _ARGS>
 	inline BiaClassWrapper * SetSMFunction(std::string p_stName, _RETURN(*p_pFunction)(_CLASS*, _ARGS...))
 	{
@@ -314,6 +336,7 @@ private:
 	unsigned int m_uiIdCounter;	/**	Defines the unqiue id counter for the members.	*/
 };
 
+}
 }
 }
 }

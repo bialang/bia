@@ -51,9 +51,9 @@ inline void MemberCreator(void * p_pDestination, T && p_value)
 	else if (utility::BiaFunctionTraits<T>::IS_FUNCTION && !utility::BiaFunctionTraits<T>::IS_MEMBER_FUNCTION)
 		(new(p_pDestination) BiaMemberHolder())->Initialize<executable::BiaStaticFunction<T>>(std::forward<T>(p_value));
 	else if (std::is_class<T>::value)
-		(new(p_pDestination) BiaMemberHolder())->Initialize<BiaClassRaw<_TYPE>>(new _TYPE(std::forward<T>(p_value)));
+		(new(p_pDestination) BiaMemberHolder())->Initialize<object::BiaClassRaw<_TYPE>>(new _TYPE(std::forward<T>(p_value)));
 	else if (std::is_class<std::remove_pointer<_TYPE>::type>::value)
-		(new(p_pDestination) BiaMemberHolder())->Initialize<BiaClassRawRef<std::remove_pointer<_TYPE>::type>>(std::forward<T>(p_value));
+		(new(p_pDestination) BiaMemberHolder())->Initialize<object::BiaClassRawRef<std::remove_pointer<_TYPE>::type>>(std::forward<T>(p_value));
 	else
 		throw exception::UnknownException("Can't create member for specified type.");
 }

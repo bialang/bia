@@ -2,6 +2,7 @@
 
 #include "biaMember.h"
 #include "biaType.h"
+#include "biaMemberHolder.h"
 
 
 namespace bia
@@ -181,25 +182,25 @@ inline int NativeOperatorHelperFloat(unsigned int p_uiOperator, T & p_data, void
 		return NativeHelper<int, 1, -1>([&](auto p_right) {
 			auto result = p_data + p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_MINUS:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data - p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_DIVIDE:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data / p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_MULTIPLY:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data * p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_ASSIGN_PLUS:
 		return NativeHelper<int, 0, -1>([&p_data](auto p_right) { p_data = static_cast<T>(p_data + p_right); }, p_pRight);
@@ -230,37 +231,37 @@ inline int NativeOperatorHelperFloat(unsigned int p_uiOperator, T & p_data, void
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data == p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_EQUALS_NOT:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data != p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_LESS_THAN:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data < p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_LESS_EQUALS:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data <= p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_GREATER_THAN:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data > p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_GREATER_EQUALS:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data >= p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	default:
 		break;
@@ -278,31 +279,31 @@ inline int NativeOperatorHelperIntegral(unsigned int p_uiOperator, T & p_data, v
 		return NativeHelper<int, 1, -1>([&](auto p_right) {
 			auto result = p_data + p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_MINUS:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data - p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_DIVIDE:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data / p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_MULTIPLY:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data * p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_MODULUS:
 		return NativeHelperIntegral<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data % p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_ASSIGN_PLUS:
 		return NativeHelper<int, 0, -1>([&p_data](auto p_right) { p_data = static_cast<T>(p_data + p_right); }, p_pRight);
@@ -319,37 +320,37 @@ inline int NativeOperatorHelperIntegral(unsigned int p_uiOperator, T & p_data, v
 		return NativeHelperIntegral<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data | p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_BITWISE_AND:
 		return NativeHelperIntegral<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data & p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_BITWISE_XOR:
 		return NativeHelperIntegral<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data ^ p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_BITWISE_ARITHMETIC_LEFT_SHIFT:
 		return NativeHelperIntegral<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data << p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_BITWISE_ARITHMETIC_RIGHT_SHIFT:
 		return NativeHelperIntegral<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data >> p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_BITWISE_LOGICAL_RIGHT_SHIFT:
 		return NativeHelperIntegral<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = static_cast<T>(static_cast<std::make_unsigned<T>::type>(p_data) >> p_right);
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_BITWISE_ASSIGN_OR:
 		return NativeHelperIntegral<int, 0, -1>([&p_data](auto p_right) { p_data = static_cast<T>(p_data | p_right); }, p_pRight);
@@ -368,37 +369,37 @@ inline int NativeOperatorHelperIntegral(unsigned int p_uiOperator, T & p_data, v
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data == p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_EQUALS_NOT:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data != p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_LESS_THAN:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data < p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_LESS_EQUALS:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data <= p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_GREATER_THAN:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data > p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	case BiaMember::O_GREATER_EQUALS:
 		return NativeHelper<int, 1, -1>([&p_data, p_pDestination](auto p_right) {
 			auto result = p_data >= p_right;
 
-			new(p_pDestination) BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>(result);
+			(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<utility::BiaUpgrade<decltype(result)>::upgrade>>(result);
 		}, p_pRight);
 	default:
 		break;

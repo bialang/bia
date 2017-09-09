@@ -27,6 +27,6 @@
 	sizeof(bia::api::framework::native::BiaNativeVariable<std::string>), \
 	sizeof(bia::api::framework::executable::BiaStaticFunction<void(*)()>), \
 	sizeof(bia::api::framework::executable::BiaMemberFunction<void>), \
-	sizeof(bia::api::framework::BiaClassWrapperMember), \
+	sizeof(bia::api::framework::object::BiaClassWrapperMember), \
 	sizeof(bia::api::framework::BiaNamespace), \
 }))

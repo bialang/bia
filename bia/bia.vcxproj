@@ -317,6 +317,7 @@ xcopy /Y /I /F "$(SolutionDir)Release\bia.lib" "C:\Users\$(Username)\Dropbox\Eig
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bia.cpp" />
+    <ClCompile Include="biaClassOperator.h" />
     <ClCompile Include="biaCompiler.cpp" />
     <ClCompile Include="biaDisassembler.cpp" />
     <ClCompile Include="biaGrammar.cpp" />

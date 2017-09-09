@@ -30,7 +30,7 @@ public:
 	 *
 	 * @return  true if it succeeded, otherwise false.
 	*/
-	inline bool AddTemplate(std::string p_stName, std::shared_ptr<BiaClassWrapperBase> p_pTemplate)
+	inline bool AddTemplate(std::string p_stName, std::shared_ptr<object::BiaClassWrapperBase> p_pTemplate)
 	{
 		if (!p_stName.empty())
 		{
@@ -80,7 +80,7 @@ public:
 	 *
 	 * @return  A pointer to the template if it succeeds, otherwise null.
 	*/
-	inline const BiaClassWrapperBase * GetTemplate(const machine::BiaKey & p_key)
+	inline const object::BiaClassWrapperBase * GetTemplate(const machine::BiaKey & p_key)
 	{
 		auto pResult = m_table.find(p_key);
 
@@ -88,7 +88,7 @@ public:
 	}
 
 private:
-	std::unordered_map<machine::BiaKey, std::shared_ptr<BiaClassWrapperBase>, utility::bia_hasher> m_table;
+	std::unordered_map<machine::BiaKey, std::shared_ptr<object::BiaClassWrapperBase>, utility::bia_hasher> m_table;
 };
 
 }

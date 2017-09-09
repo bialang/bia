@@ -564,13 +564,16 @@ public:
 			}
 			case OP::CALL_OPERATOR:
 			{
-				char acDestination[BIA_MEMBER_HOLDER_SIZE];
+				char acDestination[sizeof(api::framework::BiaMemberHolder)];
 				auto nResult = p_pContext->m_accumulator.GetMember()->Operator(p_pContext->m_pCode->Read<unsigned int>(), acDestination, p_pContext->m_stack.GetStackBasePointer(1)->GetMember());
 
 				if (nResult >= 0)
 				{
 					if (nResult > 0)
-						memcpy(p_pContext->m_accumulator.GetCloningDestination(), acDestination, sizeof(acDestination));
+					{
+						memcpy(p_pContext->m_accumulator.GetInitializationDestination(), acDestination, sizeof(acDestination));
+						p_pContext->m_accumulator.ConfirmInitialization();
+					}
 
 					p_pContext->m_stack.PopParameters(1);
 				}

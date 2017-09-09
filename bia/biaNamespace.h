@@ -183,13 +183,13 @@ public:
 
 		return *this;
 	}
-	inline BiaNamespace & AddTemplate(std::string p_stName, std::shared_ptr<BiaClassWrapperBase> p_pMembers)
+	inline BiaNamespace & AddTemplate(std::string p_stName, std::shared_ptr<object::BiaClassWrapperBase> p_pMembers)
 	{
 		if (!p_stName.empty())
 		{
 			BiaMemberHolder holder;
 
-			holder.Initialize<BiaClassWrapperMember>(std::move(p_pMembers));
+			holder.Initialize<object::BiaClassWrapperMember>(std::move(p_pMembers));
 
 			m_pMembers->insert_or_assign(std::move(p_stName), machine::scope::BiaScopeElement(std::move(holder), ++m_uiIdCounter, false));
 		}

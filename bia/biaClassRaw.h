@@ -11,6 +11,8 @@ namespace api
 {
 namespace framework
 {
+namespace object
+{
 
 template<typename _CLASS>
 class BiaClassRawBase : public BiaMember
@@ -114,14 +116,14 @@ public:
 	inline virtual void SetParameter(SET_PARAMETER p_type, SET_PARAMETER_DATA p_data) override
 	{
 		//Promote
-		if (p_type == SET_PARAMETER::MEMBERS)
+		if (p_type == SET_PARAMETER::CLASS_PROMOTE_PARAMS)
 		{
 			auto pTmp = m_pInstance;
 
 			m_pInstance = nullptr;
 
 			this->~BiaClassRaw();
-			new(this) BiaClass<_CLASS>(pTmp, *p_data.pMembers);
+			new(this) BiaClass<_CLASS>(pTmp, *p_data.classPromoteParams.pMembers, *p_data.classPromoteParams.pOperators);
 		}
 	}
 	inline virtual bool GetParameter(GET_PARAMETER p_type, GET_PARAMETER_DATA & p_data) override
@@ -151,14 +153,14 @@ public:
 	inline virtual void SetParameter(SET_PARAMETER p_type, SET_PARAMETER_DATA p_data) override
 	{
 		//Promote
-		if (p_type == SET_PARAMETER::MEMBERS)
+		if (p_type == SET_PARAMETER::CLASS_PROMOTE_PARAMS)
 		{
 			auto pTmp = m_pInstance;
 
 			m_pInstance = nullptr;
 
 			this->~BiaClassRawRef();
-			new(this) BiaClassRef<_CLASS>(pTmp, *p_data.pMembers);
+			new(this) BiaClassRef<_CLASS>(pTmp, *p_data.classPromoteParams.pMembers, *p_data.classPromoteParams.pOperators);
 		}
 	}
 	inline virtual bool GetParameter(GET_PARAMETER p_type, GET_PARAMETER_DATA & p_data) override
@@ -188,14 +190,14 @@ public:
 	inline virtual void SetParameter(SET_PARAMETER p_type, SET_PARAMETER_DATA p_data) override
 	{
 		//Promote
-		if (p_type == SET_PARAMETER::MEMBERS)
+		if (p_type == SET_PARAMETER::CLASS_PROMOTE_PARAMS)
 		{
 			auto pTmp = m_pInstance;
 
 			m_pInstance = nullptr;
 
 			this->~BiaClassRawRef();
-			new(this) BiaClassRef<const _CLASS>(pTmp, *p_data.pMembers);
+			new(this) BiaClassRef<const _CLASS>(pTmp, *p_data.classPromoteParams.pMembers, *p_data.classPromoteParams.pOperators);
 		}
 	}
 	inline virtual bool GetParameter(GET_PARAMETER p_type, GET_PARAMETER_DATA & p_data) override
@@ -211,6 +213,7 @@ public:
 	}
 };
 
+}
 }
 }
 }

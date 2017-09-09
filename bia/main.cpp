@@ -60,6 +60,14 @@ struct Printer
 
 		//return /*i / */factor;
 	}
+	int operator+(const Printer & right)
+	{
+		return factor + right.factor;
+	}
+	void operator+=(const Printer & p_r)
+	{
+		factor += p_r.factor;
+	}
 	int& DoNot()
 	{
 		std::cout << "Hello, I do not do anything." << std::endl;
@@ -158,28 +166,29 @@ int main(int argc, char ** argv)
 	*/
 	printf("MemberHolder size must be: %zi\n\n", BIA_MEMBER_HOLDER_SIZE_MIN);
 
-	auto bCompileEnd = false;
+	auto bCompileEnd = true;
 	char testCode[] = u8R"(
 
-range(var i = 0; 10; 1)
-{
-	print "hi";
-}
+var i = new Printer(23);
+var j = new Printer(77);
 
-
+j + i;
+print j.DoNot();
 )";
 	//setvbuf(stdout, nullptr, _IOFBF, 10000024 * 4);
 	{
 		BiaMachineContext context;
 
-		std::shared_ptr<BiaClassWrapperBase> asd((new BiaClassWrapper<Printer>())
+		std::shared_ptr<object::BiaClassWrapperBase> asd((new object::BiaClassWrapper<Printer>())
 			->AddConstructor<short>()
 			->SetFunction("PrintNothing"s, &Printer::PrintNothing)
 			->SetFunction("DoNot", &Printer::DoNot)
 			->SetFunction("lol", [] {puts("just printing lol. lol");})
 			->SetSMFunction("sm", [](Printer * pThis) { printf("Your factor is %i\n", pThis->factor); })
 			->SetFunction("Print0", &Printer::Print0)
-			->SetFunction("Print1", &Printer::Print1));
+			->SetFunction("Print1", &Printer::Print1)
+			->SetOperator(BiaMember::O_PLUS, std::unique_ptr<object::BiaClassOperatorBase>(new object::BiaClassOperator<Printer, const Printer &, void>(&Printer::operator+=)))
+		);
 
 
 		//Add templates
@@ -291,6 +300,8 @@ range(var i = 0; 10; 1)
 				puts("Some other error.");
 			}
 			puts("===================OUTPUT========================\n");
+
+			context.ClearScope();
 
 			END
 		}

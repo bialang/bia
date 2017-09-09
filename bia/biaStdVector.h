@@ -12,11 +12,11 @@ namespace standard
 {
 
 template<typename T>
-inline std::shared_ptr<api::framework::BiaClassWrapper<std::vector<T>>> CreateStandardVector()
+inline std::shared_ptr<api::framework::object::BiaClassWrapper<std::vector<T>>> CreateStandardVector()
 {
 	using V = std::vector<T>;
 
-	return std::shared_ptr<api::framework::BiaClassWrapper<V>>((new api::framework::BiaClassWrapper<V>())
+	return std::shared_ptr<api::framework::object::BiaClassWrapper<V>>((new api::framework::object::BiaClassWrapper<V>())
 		->AddConstructor()
 		->SetFunction<void, const T&>("push_back", &V::push_back)
 		->SetFunction("pop_back", &V::pop_back)

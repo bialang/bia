@@ -10,6 +10,8 @@ namespace api
 {
 namespace framework
 {
+namespace object
+{
 
 class BiaClassWrapperMember final : public BiaMember
 {
@@ -93,6 +95,7 @@ private:
 	std::shared_ptr<BiaClassWrapperBase> m_pMembers;
 };
 
+}
 }
 }
 }

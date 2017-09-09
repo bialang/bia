@@ -76,6 +76,9 @@
     <Filter Include="Header Files\machine\debug">
       <UniqueIdentifier>{06c13058-d866-4498-8c02-0bd33bd7ef1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\api\framework\object">
+      <UniqueIdentifier>{395a5fff-00c6-4cd8-988c-78bb2c49dd41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="yinterpreter.cpp">
       <Filter>Source Files\yu</Filter>
+    </ClCompile>
+    <ClCompile Include="biaClassOperator.h">
+      <Filter>Header Files\api\framework\object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +164,6 @@
     <ClInclude Include="biaTemplateTable.h">
       <Filter>Header Files\api\framework</Filter>
     </ClInclude>
-    <ClInclude Include="biaClassWrapper.h">
-      <Filter>Header Files\api\framework</Filter>
-    </ClInclude>
     <ClInclude Include="biaDouble.h">
       <Filter>Header Files\api\framework\native</Filter>
     </ClInclude>
@@ -175,9 +178,6 @@
     </ClInclude>
     <ClInclude Include="biaKey.h">
       <Filter>Header Files\machine</Filter>
-    </ClInclude>
-    <ClInclude Include="biaClass.h">
-      <Filter>Header Files\api\framework</Filter>
     </ClInclude>
     <ClInclude Include="biaMemberCreator.h">
       <Filter>Header Files\api\framework</Filter>
@@ -230,9 +230,6 @@
     <ClInclude Include="biaLongRef.h">
       <Filter>Header Files\api\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="biaClassRef.h">
-      <Filter>Header Files\api\framework</Filter>
-    </ClInclude>
     <ClInclude Include="biaStdVector.h">
       <Filter>Header Files\standard</Filter>
     </ClInclude>
@@ -250,9 +247,6 @@
     </ClInclude>
     <ClInclude Include="biaLambdaMemberFunction.h">
       <Filter>Header Files\api\framework\executable</Filter>
-    </ClInclude>
-    <ClInclude Include="biaClassWrapperMember.h">
-      <Filter>Header Files\api\framework</Filter>
     </ClInclude>
     <ClInclude Include="biaModule.h">
       <Filter>Header Files</Filter>
@@ -275,9 +269,6 @@
     <ClInclude Include="biaNumberBase.h">
       <Filter>Header Files\api\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="biaClassRaw.h">
-      <Filter>Header Files\api\framework</Filter>
-    </ClInclude>
     <ClInclude Include="yinterpreter.h">
       <Filter>Header Files\yu</Filter>
     </ClInclude>
@@ -292,6 +283,21 @@
     </ClInclude>
     <ClInclude Include="biaDisassembler.h">
       <Filter>Header Files\machine\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClass.h">
+      <Filter>Header Files\api\framework\object</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClassRaw.h">
+      <Filter>Header Files\api\framework\object</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClassRef.h">
+      <Filter>Header Files\api\framework\object</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClassWrapper.h">
+      <Filter>Header Files\api\framework\object</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClassWrapperMember.h">
+      <Filter>Header Files\api\framework\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

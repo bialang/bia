@@ -13,6 +13,8 @@ namespace api
 {
 namespace framework
 {
+namespace object
+{
 
 template<typename _CLASS>
 class BiaClassRef final : public BiaMember
@@ -21,19 +23,11 @@ public:
 	/**
 	* Constructor.
 	*
-	* @remarks	This is a 'pass constructor' meaning that function/member cannot be accessed. In order to do so the members has to be defined first.
-	*
 	* @param	[in]	p_pClass	Defines an instance of the class. Ownership will be transferred.
+	* @param	p_pMembers	Defines the members of the class.
+	* @param	p_pOperators	Defines the operators of the class.
 	*/
-	/*inline BiaClassRef(_CLASS * p_pClass)
-	{
-		m_pReference = p_pClass;
-	}
-	inline BiaClassRef(_CLASS & p_class)
-	{
-		m_pReference = &p_class;
-	}*/
-	inline BiaClassRef(_CLASS * p_pClass, std::shared_ptr<members> p_pMembers) : m_pMembers(std::move(p_pMembers))
+	inline BiaClassRef(_CLASS * p_pClass, std::shared_ptr<members> p_pMembers, std::shared_ptr<operators> p_pOperators) : m_pMembers(std::move(p_pMembers)), m_pOperators(std::move(p_pOperators))
 	{
 		m_pReference = p_pClass;
 	}
@@ -87,8 +81,17 @@ public:
 	{
 		return -1;
 	}
-	inline virtual int Operator(unsigned int, void*, BiaMember*) override
+	/**
+	* @see	BiaMember::Operator().
+	*/
+	inline virtual int Operator(unsigned int p_uiOperator, void * p_pDestination, BiaMember * p_pRight) override
 	{
+		auto pResult = m_pOperators->find(p_uiOperator);
+
+		//Operator was found
+		if (pResult != m_pOperators->end())
+			return pResult->second->ExecuteOperation(m_pReference, p_pRight, p_pDestination);
+
 		return -1;
 	}
 	inline virtual int SelfOperator(unsigned int, void*) override
@@ -140,6 +143,7 @@ private:
 	_CLASS * m_pReference;
 
 	std::shared_ptr<members> m_pMembers;
+	std::shared_ptr<operators> m_pOperators;
 };
 
 template<typename _CLASS>
@@ -149,18 +153,9 @@ public:
 	/**
 	* Constructor.
 	*
-	* @remarks	This is a 'pass constructor' meaning that function/member cannot be accessed. In order to do so the members has to be defined first.
-	*
 	* @param	[in]	p_pClass	Defines an instance of the class. Ownership will be transferred.
+	* @param	p_pMembers	Defines the members of the class.
 	*/
-	/*inline BiaClassRef(const _CLASS * p_pClass)
-	{
-		m_pReference = p_pClass;
-	}
-	inline BiaClassRef(const _CLASS & p_class)
-	{
-		m_pReference = &p_class;
-	}*/
 	inline BiaClassRef(const _CLASS * p_pClass, std::shared_ptr<members> p_pMembers) : m_pMembers(std::move(p_pMembers))
 	{
 		m_pReference = p_pClass;
@@ -272,6 +267,7 @@ private:
 	std::shared_ptr<members> m_pMembers;
 };
 
+}
 }
 }
 }

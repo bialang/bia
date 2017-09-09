@@ -53,7 +53,7 @@ public:
 				stResult.reserve(iLeftSize + iRightSize);
 				stResult.assign(m_pszString, iLeftSize).append(*ppszString, iRightSize);
 
-				new(p_pDestination) BiaNativeVariable<std::string>(std::move(stResult));
+				(new(p_pDestination) BiaMemberHolder())->Initialize<BiaNativeVariable<std::string>>(std::move(stResult));
 
 				return 1;
 			}

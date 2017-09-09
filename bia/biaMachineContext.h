@@ -13,6 +13,7 @@
 #include "biaParameter.h"
 #include "biaStaticFunction.h"
 #include "biaLambdaFunction.h"
+#include "biaClassWrapper.h"
 
 
 namespace bia
@@ -191,8 +192,9 @@ private:
 			{
 				api::framework::BiaMember::SET_PARAMETER_DATA data;
 
-				data.pMembers = &pTemplate->m_pMembers;
-				m_accumulator.GetMember()->SetParameter(api::framework::BiaMember::SET_PARAMETER::MEMBERS, data);
+				data.classPromoteParams.pMembers = &pTemplate->m_pMembers;
+				data.classPromoteParams.pOperators = &pTemplate->m_pOperators;
+				m_accumulator.GetMember()->SetParameter(api::framework::BiaMember::SET_PARAMETER::CLASS_PROMOTE_PARAMS, data);
 			}
 		}
 	}

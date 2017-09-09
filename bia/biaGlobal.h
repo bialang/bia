@@ -47,6 +47,13 @@ class BiaParameter;
 namespace framework
 {
 
+namespace object
+{
+
+class BiaClassOperatorBase;
+
+}
+
 namespace executable
 {
 
