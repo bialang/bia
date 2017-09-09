@@ -83,6 +83,20 @@ public:
 
 		throw exception::SymbolException("Invalid function call.");
 	}
+	/**
+	 * Instantiates an object.
+	 *
+	 * @since	2.38.81.467
+	 * @date	09-Sep-17
+	 *
+	 * @param   [in,out]	p_pContext	Defines the context.
+	 * @param	p_bGlobalTemplateTable	Defines whether the class template is global or not.
+	 *
+	 * @throws	bia::exception::ArgumentException	Thrown when the parameters for the instance are invalid.
+	 * @throws	bia::exception::InvalidByteCode	Thrown when the byte code is invalid.
+	 * @throws	bia::exception::AccessViolationException	Thrown when either the stack or the accumulator were accessed illegally.
+	 * @throws	bia::exception::UnknownTemplateException	Thrown when the class template is unknown.
+	*/
 	inline static void ExecuteInstantiate(BiaMachineContext * p_pContext, bool p_bGlobalTemplateTable)
 	{
 		//Get parameter list
@@ -680,6 +694,18 @@ public:
 			}
 		}
 	}
+	/**
+	 * Imports a module specified in the byte code.
+	 *
+	 * @since	2.38.81.467
+	 * @date	09-Sep-17
+	 *
+	 * @param   [in,out]	p_pContext	Defines the context.
+	 *
+	 * @throws	bia::exception::InvalidByteCodeException	Thrown when the byte code is invalid.
+	 *
+	 * @return  true if it succeeds, otherwise false.
+	*/
 	BIA_API static bool ImportModule(BiaMachineContext * p_pContext);
 	/**
 	 * Loads a key token from the byte stream.
@@ -688,6 +714,8 @@ public:
 	 * @date	18-Jul-17
 	 *
 	 * @param   [in,out]	p_byteCode	Defines the stream.
+	 *
+	 * @throws	bia::exception::InvalidByteCode	Thrown when the byte code is invalid.
 	*/
 	inline static BiaKeyToken LoadKeyToken(stream::BiaByteStream & p_byteCode)
 	{
@@ -705,17 +733,32 @@ public:
 
 		return keyToken;
 	}
-	inline static scope::BiaScopeReference LoadObject(BiaMachineContext * p_pContext, bool p_bGlobalObject, const BiaKey & p_object)
+	/**
+	 * Loads an object.
+	 *
+	 * @since	2.38.81.467
+	 * @date	09-Sep-17
+	 *
+	 * @param   [in,out]	p_pContext	Defines the context.
+	 * @param	p_bGlobalObject	Defines whether the object is a global or a member object.
+	 * @param	p_name	Defines the name of the object.
+	 *
+	 * @throws	bia::exception::SymbolException	Thrown when the object is unknown.
+	 * @throws	bia::exception::AccessViolationException	Thrown when the a member object was requested but the accumulator was empty.
+	 *
+	 * @return  A reference to the object.
+	*/
+	inline static scope::BiaScopeReference LoadObject(BiaMachineContext * p_pContext, bool p_bGlobalObject, const BiaKey & p_name)
 	{
 		//Load from global object
 		if (p_bGlobalObject)
-			return p_pContext->m_scope.GetVariable(p_object);
+			return p_pContext->m_scope.GetVariable(p_name);
 		//Load from accumulator
 		else
 		{
 			char acReference[sizeof(scope::BiaScopeReference)];
 
-			if (p_pContext->m_accumulator.GetMember()->LoadObject(p_object, acReference))
+			if (p_pContext->m_accumulator.GetMember()->LoadObject(p_name, acReference))
 				return std::move(*reinterpret_cast<scope::BiaScopeReference*>(acReference));
 		}
 
