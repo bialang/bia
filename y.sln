@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bia", "bia\bia.vcxproj", "{BA6F1A3F-583A-407D-8A78-BBD32CD81023}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		DebugBuild|x64 = DebugBuild|x64
+		DebugBuild|x86 = DebugBuild|x86
+		DebugModule|x64 = DebugModule|x64
+		DebugModule|x86 = DebugModule|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+		Test|x64 = Test|x64
+		Test|x86 = Test|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Debug|x64.ActiveCfg = Debug|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Debug|x64.Build.0 = Debug|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Debug|x86.ActiveCfg = Debug|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Debug|x86.Build.0 = Debug|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.DebugBuild|x64.ActiveCfg = DebugBuild|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.DebugBuild|x64.Build.0 = DebugBuild|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.DebugBuild|x86.ActiveCfg = DebugBuild|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.DebugBuild|x86.Build.0 = DebugBuild|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.DebugModule|x64.ActiveCfg = DebugModule|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.DebugModule|x64.Build.0 = DebugModule|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.DebugModule|x86.ActiveCfg = DebugModule|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.DebugModule|x86.Build.0 = DebugModule|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Release|x64.ActiveCfg = Release|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Release|x64.Build.0 = Release|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Release|x86.ActiveCfg = Release|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Release|x86.Build.0 = Release|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Test|x64.ActiveCfg = Test|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Test|x64.Build.0 = Test|x64
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Test|x86.ActiveCfg = Test|Win32
+		{BA6F1A3F-583A-407D-8A78-BBD32CD81023}.Test|x86.Build.0 = Test|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
