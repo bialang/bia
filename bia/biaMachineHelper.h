@@ -680,6 +680,18 @@ public:
 			}
 		}
 	}
+	/**
+	 * Imports a module specified in the byte code.
+	 *
+	 * @since	2.38.81.467
+	 * @date	09-Sep-17
+	 *
+	 * @param   [in,out]	Defines the context.
+	 *
+	 * @throws	bia::exception::InvalidByteCodeException	Thrown when the byte code is invalid.
+	 *
+	 * @return  true if it succeeds, otherwise false.
+	*/
 	BIA_API static bool ImportModule(BiaMachineContext * p_pContext);
 	/**
 	 * Loads a key token from the byte stream.
