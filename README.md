@@ -13,7 +13,7 @@ bia::machine::BiaMachineContext context;
 context.SetFunction("HelloWorld", [] { puts("Hello, World! - C++"); });
 
 //Bia script
-auto testCode = uR"(
+auto testCode = u8R"(
 
 print "Hello, World! - Bia";
 HelloWorld();
