@@ -153,7 +153,15 @@ BIA_MODULE_DEFINE_END(test)
 
 int main(int argc, char ** argv)
 {
-	grammar::InitializeRules().Interpret("var i = 3;", 10, compiler::BiaCompiler());
+	stream::BiaStreamBuffer cc;
+
+	grammar::InitializeRules().Interpret("var i = 3;", 10, compiler::BiaCompiler(cc));
+
+	constexpr char NOT[21]{};
+
+	cc.Write(&NOT, sizeof(NOT));
+
+	debug::BiaDisassembler::DisassembleByteCode(cc.GetByteStream());
 
 	END
 
