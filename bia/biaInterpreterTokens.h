@@ -20,43 +20,6 @@ enum class ACTION
 typedef ACTION(*bia_token_function)(const char*, size_t, size_t&);
 
 
-
-struct Keyword_var
-{
-	constexpr static const char * Token()
-	{
-		return "var";
-	}
-	constexpr static size_t Size()
-	{
-		return 3;
-	}
-};
-
-struct Keyword_new
-{
-	constexpr static const char * Token()
-	{
-		return "new";
-	}
-	constexpr static size_t Size()
-	{
-		return 3;
-	}
-};
-
-struct Keyword_for
-{
-	constexpr static const char * Token()
-	{
-		return "for";
-	}
-	constexpr static size_t Size()
-	{
-		return 3;
-	}
-};
-
 template<size_t _SIZE>
 inline bool FastFind(char p_cWhat, const char * p_pcSortedString)
 {

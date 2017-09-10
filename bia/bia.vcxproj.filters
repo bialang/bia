@@ -311,6 +311,9 @@
     <ClInclude Include="biaReportBundle.h">
       <Filter>Header Files\api\grammar</Filter>
     </ClInclude>
+    <ClInclude Include="biaInterpreterStringSet.h">
+      <Filter>Header Files\api\grammar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
