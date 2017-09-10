@@ -200,6 +200,54 @@ struct Keyword_println
 	}
 };
 
+struct Operator_equals
+{
+	constexpr static const char * Token()
+	{
+		return "=";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_semicolon
+{
+	constexpr static const char * Token()
+	{
+		return ";";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_quote
+{
+	constexpr static const char * Token()
+	{
+		return "\"";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Charset_whitespace
+{
+	constexpr static const char * Token()
+	{
+		return "\t\n\r ";
+	}
+	constexpr static size_t Size()
+	{
+		return 4;
+	}
+};
+
 }
 }
 }

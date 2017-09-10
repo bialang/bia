@@ -37,14 +37,8 @@
     <Filter Include="Source Files\api">
       <UniqueIdentifier>{e3c586a8-21f9-425b-a49a-015d2f47cdde}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\api\compiler">
-      <UniqueIdentifier>{e91d6ca9-ece4-4b71-af7d-061d089c247a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\machine\debug">
       <UniqueIdentifier>{67cf4f1c-a64a-4079-8dc6-a5171bbb58d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\api\grammar">
-      <UniqueIdentifier>{fc830bed-05ec-4ef4-b79c-0b97d9ba7170}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\api\framework">
       <UniqueIdentifier>{9184172a-6b40-4cad-a5d3-f7f91704de94}</UniqueIdentifier>
@@ -67,12 +61,6 @@
     <Filter Include="Header Files\standard">
       <UniqueIdentifier>{5655579d-6d66-4e37-a65f-4965070a1071}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\yu">
-      <UniqueIdentifier>{08060e9c-e256-40be-a107-c9d015bddfbf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\yu">
-      <UniqueIdentifier>{8e5252ef-8397-4029-b47a-498ad640b239}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\machine\debug">
       <UniqueIdentifier>{06c13058-d866-4498-8c02-0bd33bd7ef1e}</UniqueIdentifier>
     </Filter>
@@ -84,14 +72,8 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="biaCompiler.cpp">
-      <Filter>Source Files\api\compiler</Filter>
-    </ClCompile>
     <ClCompile Include="biaDisassembler.cpp">
       <Filter>Source Files\machine\debug</Filter>
-    </ClCompile>
-    <ClCompile Include="biaGrammar.cpp">
-      <Filter>Source Files\api\grammar</Filter>
     </ClCompile>
     <ClCompile Include="bia.cpp">
       <Filter>Source Files</Filter>
@@ -101,9 +83,6 @@
     </ClCompile>
     <ClCompile Include="biaMachineHelper.cpp">
       <Filter>Source Files\machine</Filter>
-    </ClCompile>
-    <ClCompile Include="yinterpreter.cpp">
-      <Filter>Source Files\yu</Filter>
     </ClCompile>
     <ClCompile Include="biaClassOperator.h">
       <Filter>Header Files\api\framework\object</Filter>
@@ -118,9 +97,6 @@
     </ClInclude>
     <ClInclude Include="bia.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaCompiler.h">
-      <Filter>Header Files\api\compiler</Filter>
     </ClInclude>
     <ClInclude Include="biaConditionMarker.h">
       <Filter>Header Files\api\compiler</Filter>
@@ -269,18 +245,6 @@
     <ClInclude Include="biaNumberBase.h">
       <Filter>Header Files\api\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="yinterpreter.h">
-      <Filter>Header Files\yu</Filter>
-    </ClInclude>
-    <ClInclude Include="yinterpreter_code.h">
-      <Filter>Header Files\yu</Filter>
-    </ClInclude>
-    <ClInclude Include="yinterpreter_exception.h">
-      <Filter>Header Files\yu</Filter>
-    </ClInclude>
-    <ClInclude Include="yinterpreter_token.h">
-      <Filter>Header Files\yu</Filter>
-    </ClInclude>
     <ClInclude Include="biaDisassembler.h">
       <Filter>Header Files\machine\debug</Filter>
     </ClInclude>
@@ -313,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="biaInterpreterStringSet.h">
       <Filter>Header Files\api\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="biaCompiler.h">
+      <Filter>Header Files\api\compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -148,8 +148,15 @@ m->AddFunction("now", [] {
 m->AddFunction("hi", [] { puts("Hihihi"); });
 BIA_MODULE_DEFINE_END(test)
 
+#include "biaCompiler.h"
+#include "biaInterpreter.h"
+
 int main(int argc, char ** argv)
 {
+	grammar::InitializeRules().Interpret("var i = 3;", 10, compiler::BiaCompiler());
+
+	END
+
 	Bia::Initialize();
 	
 	/*

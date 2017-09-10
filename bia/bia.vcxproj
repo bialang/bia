@@ -318,16 +318,13 @@ xcopy /Y /I /F "$(SolutionDir)Release\bia.lib" "C:\Users\$(Username)\Dropbox\Eig
   <ItemGroup>
     <ClCompile Include="bia.cpp" />
     <ClCompile Include="biaClassOperator.h" />
-    <ClCompile Include="biaCompiler.cpp" />
     <ClCompile Include="biaDisassembler.cpp" />
-    <ClCompile Include="biaGrammar.cpp" />
     <ClCompile Include="biaMachineContext.cpp" />
     <ClCompile Include="biaMachineHelper.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugBuild|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="yinterpreter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bia.h" />
@@ -394,10 +391,6 @@ xcopy /Y /I /F "$(SolutionDir)Release\bia.lib" "C:\Users\$(Username)\Dropbox\Eig
     <ClInclude Include="biaOpCodes.h" />
     <ClInclude Include="biaMemberHolder.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="yinterpreter.h" />
-    <ClInclude Include="yinterpreter_code.h" />
-    <ClInclude Include="yinterpreter_exception.h" />
-    <ClInclude Include="yinterpreter_token.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

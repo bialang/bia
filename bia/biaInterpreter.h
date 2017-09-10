@@ -1,5 +1,6 @@
 #pragma once
 
+#include "biaReportBundle.h"
 #include "biaInterpreterRule.h"
 
 
@@ -9,11 +10,21 @@ namespace api
 {
 namespace grammar
 {
-constexpr size_t _RULES = 3;
-//template<size_t _RULES>
+
+template<size_t _RULES>
 class BiaInterpreter
 {
 public:
+	inline BiaInterpreter() : m_aRules{} {}
+	/**
+	 * Sets a rule.
+	 *
+	 * @since	2.39.81.472
+	 * @date	10-Sep-17
+	 *
+	 * @param	p_iRuleId	Defines the id of the rule.
+	 * @param	p_rule	Defines the rule.
+	*/
 	inline void SetRule(size_t p_iRuleId, BiaInterpreterRule p_rule)
 	{
 		if (p_iRuleId < _RULES)
@@ -21,19 +32,23 @@ public:
 		else
 			throw exception::UnknownException("Invalid rule id.");
 	}
-	inline size_t Interpret(const char * p_pcBuffer, size_t p_iSize)
+	inline size_t Interpret(const char * p_pcBuffer, size_t p_iSize, BiaReportReceiver & p_receiver)
 	{
 		const auto ciSize = p_iSize;
+		BiaReportBundle bundle;
 
 		//Interpretation loop
 		while (p_iSize)
 		{
+			bundle.Clear();
+
 			//Start with rule 0
-			auto iSize = RunRule(m_aRules[0], p_pcBuffer, p_iSize);
+			auto iSize = m_aRules[0].RunRule(p_pcBuffer, p_iSize, { &bundle, m_aRules });
 
 			//Report
 			if (iSize)
 			{
+				p_receiver.Report(bundle);
 
 				p_pcBuffer += iSize;
 				p_iSize -= iSize;
@@ -44,6 +59,16 @@ public:
 
 		return ciSize - p_iSize;
 	}
+	/**
+	 * Gets the rule.
+	 *
+	 * @since	2.39.81.472
+	 * @date	10-Sep-17
+	 *
+	 * @param	p_iRuleId	Defines the id of the rule.
+	 *
+	 * @return	The rule.
+	*/
 	inline BiaInterpreterRule & GetRule(size_t p_iRuleId)
 	{
 		if (p_iRuleId < _RULES)
@@ -54,32 +79,6 @@ public:
 
 private:
 	BiaInterpreterRule m_aRules[_RULES];
-
-	inline static size_t RunRule(BiaInterpreterRule & p_rule, const char * p_pcBuffer, size_t p_iSize)
-	{
-		const auto ciSize = p_iSize;
-
-		p_rule.Reset();
-
-		while (p_rule.NotFinished())
-		{
-			size_t iTokenSize = 0;
-
-			switch (p_rule.Next()(p_pcBuffer, p_iSize, iTokenSize))
-			{
-			case ACTION::ACCEPT:
-			case ACTION::IGNORE:
-				p_pcBuffer += iTokenSize;
-				p_iSize -= iTokenSize;
-
-				break;
-			case ACTION::REJECT:
-				return 0;
-			}
-		}
-
-		return ciSize - p_iSize;
-	}
 };
 
 }
