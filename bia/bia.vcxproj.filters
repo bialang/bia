@@ -299,18 +299,6 @@
     <ClInclude Include="biaClassWrapperMember.h">
       <Filter>Header Files\api\framework\object</Filter>
     </ClInclude>
-    <ClInclude Include="biaInterpreter.h">
-      <Filter>Header Files\api\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="biaInterpreterTokens.h">
-      <Filter>Header Files\api\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="biaInterpreterRule.h">
-      <Filter>Header Files\api\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="biaReportBundle.h">
-      <Filter>Header Files\api\grammar</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
