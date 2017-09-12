@@ -30,7 +30,7 @@ struct TokenParams
 	BiaInterpreterRule * pRules;
 };
 
-typedef ACTION(*bia_token_function)(const char*, size_t, size_t&, TokenParams);
+typedef ACTION(*bia_token_function)(const char*, size_t, size_t&, TokenParams, uint64_t&);
 
 class BiaInterpreterRule
 {
@@ -83,11 +83,12 @@ public:
 			while (iCursor < m_iMaxElements)
 			{
 				size_t iTokenSize = 0;
+				uint64_t ullCustomParameter = 0;
 
-				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, iTokenSize, p_params))
+				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, iTokenSize, p_params, ullCustomParameter))
 				{
 				case ACTION::REPORT:
-					p_params.pBundle->AddReport({ p_pcBuffer, iTokenSize, iRuleId, iCursor - 1 });
+					p_params.pBundle->AddReport({ p_pcBuffer, iTokenSize, iRuleId, iCursor - 1, ullCustomParameter });
 				case ACTION::DONT_REPORT:
 					return iTokenSize;
 				case ACTION::ERROR:
@@ -105,11 +106,12 @@ public:
 			while (iCursor < m_iMaxElements)
 			{
 				size_t iTokenSize = 0;
+				uint64_t ullCustomParameter;
 
-				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, iTokenSize, p_params))
+				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, iTokenSize, p_params, ullCustomParameter))
 				{
 				case ACTION::REPORT:
-					p_params.pBundle->AddReport({ p_pcBuffer, iTokenSize, iRuleId, iCursor - 1 });
+					p_params.pBundle->AddReport({ p_pcBuffer, iTokenSize, iRuleId, iCursor - 1, ullCustomParameter });
 				case ACTION::DONT_REPORT:
 					p_pcBuffer += iTokenSize;
 					p_iSize -= iTokenSize;

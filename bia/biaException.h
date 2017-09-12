@@ -26,6 +26,11 @@ struct UnknownException final : Exception
 	inline UnknownException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
 };
 
+struct ImplementationException final : Exception
+{
+	inline ImplementationException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
+};
+
 struct UnknownTemplateException final : Exception
 {
 	inline UnknownTemplateException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}

@@ -349,6 +349,7 @@ xcopy /Y /I /F "$(SolutionDir)Release\bia.lib" "C:\Users\$(Username)\Dropbox\Eig
     <ClInclude Include="biaGrammar.h" />
     <ClInclude Include="biaHasher.h" />
     <ClInclude Include="biaInterpreter.h" />
+    <ClInclude Include="biaInterpreterIdentifiers.h" />
     <ClInclude Include="biaInterpreterStringSet.h" />
     <ClInclude Include="biaInterpreterTokens.h" />
     <ClInclude Include="biaKey.h" />

@@ -155,7 +155,9 @@ int main(int argc, char ** argv)
 {
 	stream::BiaStreamBuffer cc;
 
-	grammar::InitializeRules().Interpret("var i = 3;", 10, compiler::BiaCompiler(cc));
+	char tetea[] = "var i = 100;";
+	
+	grammar::InitializeRules().Interpret(tetea, sizeof(tetea) - 1, compiler::BiaCompiler(cc));
 
 	constexpr char NOT[21]{};
 

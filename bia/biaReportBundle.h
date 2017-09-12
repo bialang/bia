@@ -16,6 +16,7 @@ struct Report
 	size_t iSize;
 	size_t iRuleId;
 	size_t iTokenId;
+	uint64_t ullCustomParameter;
 };
 
 class BiaReportBundle

@@ -281,6 +281,9 @@
     <ClInclude Include="biaCompiler.h">
       <Filter>Header Files\api\compiler</Filter>
     </ClInclude>
+    <ClInclude Include="biaInterpreterIdentifiers.h">
+      <Filter>Header Files\api\grammar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

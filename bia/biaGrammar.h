@@ -3,6 +3,7 @@
 #include "biaInterpreter.h"
 #include "biaInterpreterTokens.h"
 #include "biaInterpreterStringSet.h"
+#include "biaInterpreterIdentifiers.h"
 
 
 namespace bia
@@ -11,23 +12,6 @@ namespace api
 {
 namespace grammar
 {
-
-enum BIA_GRAMMAR_RULE
-{
-	BGR_ROOT,
-	BGR_VARIABLE_DECLARATION,
-	BGR_VALUE,
-	BGR_STRING
-};
-
-enum BIA_VALUE
-{
-	BV_NUMBER,
-	BV_STRING,
-	BV_TRUE,
-	BV_FALSE,
-	BV_NULL
-};
 
 
 inline BiaInterpreter<4> & InitializeRules()
@@ -38,7 +22,7 @@ inline BiaInterpreter<4> & InitializeRules()
 	//Root
 	tmp.Reset(1, true);
 	
-	tmp.SetToken(0, RulePointerToken<BGR_VARIABLE_DECLARATION, NONE>);
+	tmp.SetToken(0, RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>);
 
 	interpreter.SetRule(BGR_ROOT, std::move(tmp));
 
