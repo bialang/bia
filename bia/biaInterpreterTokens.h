@@ -28,7 +28,7 @@ inline bool FastFind(char p_cWhat, const char * p_pcSortedString)
 }
 
 template<typename T, int _FLAGS>
-inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, size_t & p_iOutMatched, TokenParams, uint64_t&)
+inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? ACTION::DONT_REPORT : ACTION::REPORT;
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
@@ -39,7 +39,7 @@ inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, size_t & p_i
 			return ERROR;
 		else
 		{
-			p_iOutMatched = T::Size();
+			p_output.iTokenSize = T::Size();
 
 			return SUCCESS;
 		}
@@ -49,76 +49,108 @@ inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, size_t & p_i
 }
 
 template<typename T, int _FLAGS, size_t _MIN = 0, size_t _MAX = 0>
-inline ACTION CharsetToken(const char * p_pcBuffer, size_t p_iSize, size_t & p_iOutMatched, TokenParams, uint64_t&)
+inline ACTION CharsetToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? ACTION::DONT_REPORT : ACTION::REPORT;
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
 
 	while (p_iSize)
 	{
-		if (!FastFind<T::Size()>(p_pcBuffer[p_iOutMatched], T::Token()))
+		if (!FastFind<T::Size()>(p_pcBuffer[p_output.iTokenSize], T::Token()))
 			break;
 
-		++p_iOutMatched;
+		++p_output.iTokenSize;
 	}
 
-	return p_iOutMatched ? SUCCESS : ERROR;
+	return p_output.iTokenSize ? SUCCESS : ERROR;
 }
 
-template<size_t _RULE, int _FLAGS>
-inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, size_t & p_iOutMatched, TokenParams p_params, uint64_t&)
+template<size_t _RULE, int _FLAGS, bool _LOOP = false, size_t _MIN = 0, size_t _MAX = 0>
+inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, TokenParams p_params, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? ACTION::DONT_REPORT : ACTION::REPORT;
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
 
-	p_iOutMatched = p_params.pRules[_RULE].RunRule(p_pcBuffer, p_iSize, p_params);
+	if (_LOOP)
+	{
 
-	return p_iOutMatched ? SUCCESS : ERROR;
+	}
+
+	p_output.iTokenSize = p_params.pRules[_RULE].RunRule(p_pcBuffer, p_iSize, p_params);
+
+	return p_output.iTokenSize ? SUCCESS : ERROR;
 }
 
 template<int _FLAGS>
-inline ACTION IdentifierToken(const char * p_pcBuffer, size_t p_iSize, size_t & p_iOutMatched, TokenParams, uint64_t&)
+inline ACTION IdentifierToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? ACTION::DONT_REPORT : ACTION::REPORT;
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
 
-	p_iOutMatched = 1;
+	//Limit length
+	if (p_iSize > BIA_MAX_IDENTIFIER_LENGTH)
+		p_output.iTokenSize = BIA_MAX_IDENTIFIER_LENGTH;
+
+	if (p_output.iTokenSize < p_iSize)
+	{
+		if ((p_pcBuffer[p_output.iTokenSize] >= 'a' && p_pcBuffer[p_output.iTokenSize] <= 'z') ||
+			(p_pcBuffer[p_output.iTokenSize] >= 'A' && p_pcBuffer[p_output.iTokenSize] <= 'Z') ||
+			p_pcBuffer[p_output.iTokenSize] == '_')
+			++p_output.iTokenSize;
+		else
+			return ERROR;
+	}
+	else
+		return ERROR;
+
+	while (p_output.iTokenSize < p_iSize)
+	{
+		if ((p_pcBuffer[p_output.iTokenSize] >= 'a' && p_pcBuffer[p_output.iTokenSize] <= 'z') ||
+			(p_pcBuffer[p_output.iTokenSize] >= 'A' && p_pcBuffer[p_output.iTokenSize] <= 'Z') ||
+			(p_pcBuffer[p_output.iTokenSize] >= '0' && p_pcBuffer[p_output.iTokenSize] <= '9') ||
+			p_pcBuffer[p_output.iTokenSize] == '_')
+			++p_output.iTokenSize;
+		else
+			break;
+	}
 
 	return SUCCESS;
 }
 
 template<int _FLAGS>
-inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, size_t & p_iOutMatched, TokenParams, uint64_t&)
+inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? ACTION::DONT_REPORT : ACTION::REPORT;
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
 
-	return SUCCESS;
+
+
+	return ERROR;
 }
 
 template<int _FLAGS>
-inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, size_t & p_iOutMatched, TokenParams, uint64_t & p_ullCustomParameter)
+inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? ACTION::DONT_REPORT : ACTION::REPORT;
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
 
 	//Check for minus
 	if (p_iSize && *p_pcBuffer == '-')
-		++p_iOutMatched;
+		++p_output.iTokenSize;
 
-	p_ullCustomParameter = NI_INTEGER;
+	p_output.ullCustom = NI_INTEGER;
 
 	//First digit
-	if (p_iOutMatched < p_iSize)
+	if (p_output.iTokenSize < p_iSize)
 	{
-		if (p_pcBuffer[p_iOutMatched] > '0' && p_pcBuffer[p_iOutMatched] <= '9')
-			++p_iOutMatched;
-		else if (p_pcBuffer[p_iOutMatched] == '0')
+		if (p_pcBuffer[p_output.iTokenSize] > '0' && p_pcBuffer[p_output.iTokenSize] <= '9')
+			++p_output.iTokenSize;
+		else if (p_pcBuffer[p_output.iTokenSize] == '0')
 		{
-			if (++p_iOutMatched < p_iSize && p_pcBuffer[p_iOutMatched] == '.')
+			if (++p_output.iTokenSize < p_iSize && p_pcBuffer[p_output.iTokenSize] == '.')
 			{
-				p_ullCustomParameter = NI_DOUBLE;
-				++p_iOutMatched;
+				p_output.ullCustom = NI_DOUBLE;
+				++p_output.iTokenSize;
 			}
 			else
 				return SUCCESS;
@@ -129,15 +161,15 @@ inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, size_t &
 	else
 		return ERROR;
 
-	for (; p_iOutMatched < p_iSize; ++p_iOutMatched)
+	for (; p_output.iTokenSize < p_iSize; ++p_output.iTokenSize)
 	{
-		if (p_pcBuffer[p_iOutMatched] >= '0' && p_pcBuffer[p_iOutMatched] <= '9');
-		else if (p_pcBuffer[p_iOutMatched] == '.' && p_ullCustomParameter == NI_INTEGER)
-			p_ullCustomParameter = NI_DOUBLE;
-		else if ((p_pcBuffer[p_iOutMatched] == 'f' || p_pcBuffer[p_iOutMatched] == 'F') && p_ullCustomParameter == NI_DOUBLE)
+		if (p_pcBuffer[p_output.iTokenSize] >= '0' && p_pcBuffer[p_output.iTokenSize] <= '9');
+		else if (p_pcBuffer[p_output.iTokenSize] == '.' && p_output.ullCustom == NI_INTEGER)
+			p_output.ullCustom = NI_DOUBLE;
+		else if ((p_pcBuffer[p_output.iTokenSize] == 'f' || p_pcBuffer[p_output.iTokenSize] == 'F') && p_output.ullCustom == NI_DOUBLE)
 		{
-			p_ullCustomParameter = NI_FLOAT;
-			++p_iOutMatched;
+			p_output.ullCustom = NI_FLOAT;
+			++p_output.iTokenSize;
 
 			return SUCCESS;
 		}

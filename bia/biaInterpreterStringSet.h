@@ -224,11 +224,23 @@ struct Operator_semicolon
 	}
 };
 
-struct Operator_quote
+struct Operator_bracket_open
 {
 	constexpr static const char * Token()
 	{
-		return "\"";
+		return "(";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_bracket_close
+{
+	constexpr static const char * Token()
+	{
+		return ")";
 	}
 	constexpr static size_t Size()
 	{

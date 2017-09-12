@@ -19,6 +19,8 @@ enum class ACTION
 {
 	REPORT,
 	DONT_REPORT,
+	REPORT_AND_LOOP,
+	DONT_REPORT_AND_LOOP,
 	ERROR
 };
 
@@ -30,7 +32,15 @@ struct TokenParams
 	BiaInterpreterRule * pRules;
 };
 
-typedef ACTION(*bia_token_function)(const char*, size_t, size_t&, TokenParams, uint64_t&);
+struct TokenOutput
+{
+	size_t iTokenSize;
+	size_t iBufferOffset;
+	size_t iLoop;
+	uint64_t ullCustom;
+};
+
+typedef ACTION(*bia_token_function)(const char*, size_t, TokenParams, TokenOutput&);
 
 class BiaInterpreterRule
 {
@@ -80,17 +90,35 @@ public:
 		//Or loop
 		if (m_fFlags & F_OR)
 		{
+			size_t iAccount = 0;
+
 			while (iCursor < m_iMaxElements)
 			{
-				size_t iTokenSize = 0;
-				uint64_t ullCustomParameter = 0;
+				TokenOutput output{};
 
-				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, iTokenSize, p_params, ullCustomParameter))
+			gt_loop_or:;
+
+				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
 				{
 				case ACTION::REPORT:
-					p_params.pBundle->AddReport({ p_pcBuffer, iTokenSize, iRuleId, iCursor - 1, ullCustomParameter });
+					p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
 				case ACTION::DONT_REPORT:
-					return iTokenSize;
+					return output.iTokenSize + iAccount;
+				case ACTION::REPORT_AND_LOOP:
+					p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
+				case ACTION::DONT_REPORT_AND_LOOP:
+				{
+					iAccount += output.iTokenSize;
+					p_pcBuffer += output.iTokenSize;
+					p_iSize -= output.iTokenSize;
+
+					auto iLoop = output.iLoop;
+
+					output = {};
+					output.iLoop = iLoop;
+
+					goto gt_loop_or;
+				}
 				case ACTION::ERROR:
 					break;
 				}
@@ -102,21 +130,37 @@ public:
 		else
 		{
 			const auto ciSize = p_iSize;
+			auto bLoop = false;
 
 			while (iCursor < m_iMaxElements)
 			{
-				size_t iTokenSize = 0;
-				uint64_t ullCustomParameter;
+				TokenOutput output{};
 
-				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, iTokenSize, p_params, ullCustomParameter))
+			gt_loop_and:;
+
+				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
 				{
 				case ACTION::REPORT:
-					p_params.pBundle->AddReport({ p_pcBuffer, iTokenSize, iRuleId, iCursor - 1, ullCustomParameter });
+					p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
 				case ACTION::DONT_REPORT:
-					p_pcBuffer += iTokenSize;
-					p_iSize -= iTokenSize;
+					p_pcBuffer += output.iTokenSize;
+					p_iSize -= output.iTokenSize;
 
 					break;
+				case ACTION::REPORT_AND_LOOP:
+					p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
+				case ACTION::DONT_REPORT_AND_LOOP:
+				{
+					p_pcBuffer += output.iTokenSize;
+					p_iSize -= output.iTokenSize;
+
+					auto iLoop = output.iLoop;
+					
+					output = {};
+					output.iLoop = iLoop;
+
+					goto gt_loop_and;
+				}
 				case ACTION::ERROR:
 					return 0;
 				}

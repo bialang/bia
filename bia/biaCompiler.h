@@ -130,6 +130,14 @@ private:
 			HandleNumber(p_pReport, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
 
 			return;
+		case grammar::BV_TRUE:
+			WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_1 : machine::OP::LOAD_LONG_1);
+
+			return;
+		case grammar::BV_FALSE:
+			WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_0 : machine::OP::LOAD_LONG_0);
+
+			return;
 		}
 
 		//Push accumulator

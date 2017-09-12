@@ -19,6 +19,9 @@ inline BiaInterpreter<4> & InitializeRules()
    static BiaInterpreter<4> interpreter;
 	BiaInterpreterRule tmp;
 
+	constexpr auto WHITESPACE_OPTIONAL = CharsetToken<Charset_whitespace, FILLER_TOKEN | OPTIONAL_TOKEN>;
+	constexpr auto WHITESPACE_REQUIRED = CharsetToken<Charset_whitespace, FILLER_TOKEN, 1>;
+
 	//Root
 	tmp.Reset(1, true);
 	
@@ -30,13 +33,13 @@ inline BiaInterpreter<4> & InitializeRules()
 	tmp.Reset(9);
 
 	tmp.SetToken(0, KeywordToken<Keyword_var, FILLER_TOKEN>)
-		.SetToken(1, CharsetToken<Charset_whitespace, FILLER_TOKEN, 1>)
+		.SetToken(1, WHITESPACE_REQUIRED)
 		.SetToken(2, IdentifierToken<NONE>)
-		.SetToken(3, CharsetToken<Charset_whitespace, FILLER_TOKEN | OPTIONAL_TOKEN>)
+		.SetToken(3, WHITESPACE_OPTIONAL)
 		.SetToken(4, KeywordToken<Operator_equals, FILLER_TOKEN>)
-		.SetToken(5, CharsetToken<Charset_whitespace, FILLER_TOKEN | OPTIONAL_TOKEN>)
+		.SetToken(5, WHITESPACE_OPTIONAL)
 		.SetToken(6, RulePointerToken<BGR_VALUE, FILLER_TOKEN>)
-		.SetToken(7, CharsetToken<Charset_whitespace, FILLER_TOKEN | OPTIONAL_TOKEN>)
+		.SetToken(7, WHITESPACE_OPTIONAL)
 		.SetToken(8, KeywordToken<Operator_semicolon, FILLER_TOKEN>);
 
 	interpreter.SetRule(BGR_VARIABLE_DECLARATION, std::move(tmp));
@@ -45,21 +48,28 @@ inline BiaInterpreter<4> & InitializeRules()
 	tmp.Reset(5, true);
 
 	tmp.SetToken(BV_NUMBER, NumberValueToken<NONE>)
-		.SetToken(BV_STRING, RulePointerToken<BGR_STRING, FILLER_TOKEN>)
+		.SetToken(BV_STRING, StringValueToken<NONE>)
 		.SetToken(BV_TRUE, KeywordToken<Keyword_true, NONE>)
 		.SetToken(BV_FALSE, KeywordToken<Keyword_false, NONE>)
-		.SetToken(BV_NULL, KeywordToken<Keyword_null, NONE>);
+		.SetToken(BV_INSTANTIATION, RulePointerToken<BGR_INSTANTIATION, FILLER_TOKEN>);
 
 	interpreter.SetRule(BGR_VALUE, std::move(tmp));
 
-	//String
+	//Instantiation
 	tmp.Reset(3);
 
-	tmp.SetToken(0, KeywordToken<Operator_quote, FILLER_TOKEN>)
-		.SetToken(1, StringValueToken<NONE>)
-		.SetToken(2, KeywordToken<Operator_quote, FILLER_TOKEN>);
+	tmp.SetToken(0, KeywordToken<Keyword_new, FILLER_TOKEN>)
+		.SetToken(1, WHITESPACE_REQUIRED)
+		.SetToken(2, IdentifierToken<NONE>);
 
-	interpreter.SetRule(BGR_STRING, std::move(tmp));
+	interpreter.SetRule(BGR_INSTANTIATION, std::move(tmp));
+
+	//Parameter
+	tmp.Reset(2);
+
+	tmp.SetToken(0, WHITESPACE_OPTIONAL)
+		.SetToken(1, KeywordToken<Operator_bracket_open, FILLER_TOKEN>)
+		.SetToken(2, WHITESPACE_OPTIONAL);
 
 	return interpreter;
 }

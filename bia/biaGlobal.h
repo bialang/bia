@@ -18,6 +18,8 @@
 #endif
 #endif
 
+#define BIA_MAX_IDENTIFIER_LENGTH 0xff
+
 
 namespace bia
 {
