@@ -212,11 +212,71 @@ struct Operator_equals
 	}
 };
 
+struct Operator_times
+{
+	constexpr static const char * Token()
+	{
+		return "*";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_divide
+{
+	constexpr static const char * Token()
+	{
+		return "/";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_double_divide
+{
+	constexpr static const char * Token()
+	{
+		return "//";
+	}
+	constexpr static size_t Size()
+	{
+		return 2;
+	}
+};
+
+struct Operator_modulus
+{
+	constexpr static const char * Token()
+	{
+		return "%";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
 struct Operator_semicolon
 {
 	constexpr static const char * Token()
 	{
 		return ";";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_comma
+{
+	constexpr static const char * Token()
+	{
+		return ",";
 	}
 	constexpr static size_t Size()
 	{

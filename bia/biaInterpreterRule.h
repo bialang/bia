@@ -14,6 +14,7 @@ namespace grammar
 constexpr int NONE = 0;
 constexpr int FILLER_TOKEN = 0x1;
 constexpr int OPTIONAL_TOKEN = 0x2;
+constexpr int LOOPING_TOKEN = 0x4;
 
 enum class ACTION
 {
@@ -36,7 +37,6 @@ struct TokenOutput
 {
 	size_t iTokenSize;
 	size_t iBufferOffset;
-	size_t iLoop;
 	uint64_t ullCustom;
 };
 
@@ -91,37 +91,35 @@ public:
 		if (m_fFlags & F_OR)
 		{
 			size_t iAccount = 0;
+			bool bLoop;
 
 			while (iCursor < m_iMaxElements)
 			{
-				TokenOutput output{};
-
-			gt_loop_or:;
-
-				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
+				do
 				{
-				case ACTION::REPORT:
-					p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
-				case ACTION::DONT_REPORT:
-					return output.iTokenSize + iAccount;
-				case ACTION::REPORT_AND_LOOP:
-					p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
-				case ACTION::DONT_REPORT_AND_LOOP:
-				{
-					iAccount += output.iTokenSize;
-					p_pcBuffer += output.iTokenSize;
-					p_iSize -= output.iTokenSize;
+					TokenOutput output{};
 
-					auto iLoop = output.iLoop;
+					switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
+					{
+					case ACTION::REPORT:
+						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
+					case ACTION::DONT_REPORT:
+						return output.iTokenSize + iAccount;
+					case ACTION::REPORT_AND_LOOP:
+						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
+					case ACTION::DONT_REPORT_AND_LOOP:
+						iAccount += output.iTokenSize;
+						p_pcBuffer += output.iTokenSize;
+						p_iSize -= output.iTokenSize;
+						bLoop = true;
 
-					output = {};
-					output.iLoop = iLoop;
+						continue;
+					case ACTION::ERROR:
+						break;
+					}
 
-					goto gt_loop_or;
-				}
-				case ACTION::ERROR:
-					break;
-				}
+					bLoop = false;
+				} while (bLoop && iCursor < m_iMaxElements);
 			}
 
 			return 0;
@@ -130,40 +128,37 @@ public:
 		else
 		{
 			const auto ciSize = p_iSize;
-			auto bLoop = false;
+			bool bLoop;
 
 			while (iCursor < m_iMaxElements)
 			{
-				TokenOutput output{};
-
-			gt_loop_and:;
-
-				switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
+				do
 				{
-				case ACTION::REPORT:
-					p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
-				case ACTION::DONT_REPORT:
-					p_pcBuffer += output.iTokenSize;
-					p_iSize -= output.iTokenSize;
+					TokenOutput output{};
 
-					break;
-				case ACTION::REPORT_AND_LOOP:
-					p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
-				case ACTION::DONT_REPORT_AND_LOOP:
-				{
-					p_pcBuffer += output.iTokenSize;
-					p_iSize -= output.iTokenSize;
+					switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
+					{
+					case ACTION::REPORT:
+						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
+					case ACTION::DONT_REPORT:
+						p_pcBuffer += output.iTokenSize;
+						p_iSize -= output.iTokenSize;
 
-					auto iLoop = output.iLoop;
-					
-					output = {};
-					output.iLoop = iLoop;
+						break;
+					case ACTION::REPORT_AND_LOOP:
+						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
+					case ACTION::DONT_REPORT_AND_LOOP:
+						p_pcBuffer += output.iTokenSize;
+						p_iSize -= output.iTokenSize;
+						bLoop = true;
 
-					goto gt_loop_and;
-				}
-				case ACTION::ERROR:
-					return 0;
-				}
+						continue;
+					case ACTION::ERROR:
+						return 0;
+					}
+
+					bLoop = false;
+				} while (bLoop && iCursor < m_iMaxElements);
 			}
 
 			return ciSize - p_iSize;

@@ -30,7 +30,7 @@ public:
 		if (p_iRuleId < _RULES)
 			m_aRules[p_iRuleId] = std::move(p_rule);
 		else
-			throw exception::UnknownException("Invalid rule id.");
+			throw exception::ImplementationException("Invalid rule id.");
 	}
 	inline size_t Interpret(const char * p_pcBuffer, size_t p_iSize, BiaReportReceiver & p_receiver)
 	{

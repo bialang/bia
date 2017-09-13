@@ -14,9 +14,9 @@ namespace grammar
 {
 
 
-inline BiaInterpreter<4> & InitializeRules()
+inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 {
-   static BiaInterpreter<4> interpreter;
+   static BiaInterpreter<BGR_RULE_COUNT> interpreter;
 	BiaInterpreterRule tmp;
 
 	constexpr auto WHITESPACE_OPTIONAL = CharsetToken<Charset_whitespace, FILLER_TOKEN | OPTIONAL_TOKEN>;
@@ -56,20 +56,109 @@ inline BiaInterpreter<4> & InitializeRules()
 	interpreter.SetRule(BGR_VALUE, std::move(tmp));
 
 	//Instantiation
-	tmp.Reset(3);
+	tmp.Reset(5);
 
 	tmp.SetToken(0, KeywordToken<Keyword_new, FILLER_TOKEN>)
 		.SetToken(1, WHITESPACE_REQUIRED)
-		.SetToken(2, IdentifierToken<NONE>);
+		.SetToken(2, IdentifierToken<NONE>)
+		.SetToken(3, WHITESPACE_OPTIONAL)
+		.SetToken(4, RulePointerToken<BGR_PARAMETER, NONE>);
 
 	interpreter.SetRule(BGR_INSTANTIATION, std::move(tmp));
 
 	//Parameter
-	tmp.Reset(2);
+	tmp.Reset(5);
 
 	tmp.SetToken(0, WHITESPACE_OPTIONAL)
 		.SetToken(1, KeywordToken<Operator_bracket_open, FILLER_TOKEN>)
-		.SetToken(2, WHITESPACE_OPTIONAL);
+		.SetToken(2, WHITESPACE_OPTIONAL)
+		.SetToken(3, RulePointerToken<BGR_PARAMETER_LIST_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>)
+		.SetToken(4, KeywordToken<Operator_bracket_close, FILLER_TOKEN>);
+
+	interpreter.SetRule(BGR_PARAMETER, std::move(tmp));
+
+	//Parameter list helper 0
+	tmp.Reset(3);
+
+	tmp.SetToken(0, RulePointerToken<BGR_VALUE, FILLER_TOKEN>)
+		.SetToken(1, WHITESPACE_OPTIONAL)
+		.SetToken(2, RulePointerToken<BGR_PARAMETER_LIST_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN>);
+
+	interpreter.SetRule(BGR_PARAMETER_LIST_HELPER_0, std::move(tmp));
+
+	//Parameter list helper 1
+	tmp.Reset(3);
+
+	tmp.SetToken(0, KeywordToken<Operator_comma, FILLER_TOKEN>)
+		.SetToken(1, WHITESPACE_OPTIONAL)
+		.SetToken(2, RulePointerToken<BGR_VALUE, FILLER_TOKEN>);
+
+	interpreter.SetRule(BGR_PARAMETER_LIST_HELPER_1, std::move(tmp));
+
+	//Math factor
+	tmp.Reset(2, true);
+
+	tmp.SetToken(0, RulePointerToken<BGR_MATH_FACTOR_HELPER_0, FILLER_TOKEN>)
+		.SetToken(1, RulePointerToken<BGR_VALUE, FILLER_TOKEN>);
+
+	interpreter.SetRule(BGR_MATH_FACTOR, std::move(tmp));
+
+	//Math factor helper 0
+	tmp.Reset(3);
+
+	tmp.SetToken(0, KeywordToken<Operator_bracket_open, FILLER_TOKEN>)
+		.SetToken(1, RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN>)
+		.SetToken(2, KeywordToken<Operator_bracket_close, FILLER_TOKEN>);
+
+	interpreter.SetRule(BGR_MATH_FACTOR_HELPER_0, std::move(tmp));
+
+	//Math term
+	tmp.Reset(3);
+
+	tmp.SetToken(0, RulePointerToken<BGR_MATH_FACTOR, FILLER_TOKEN>)
+		.SetToken(1, WHITESPACE_OPTIONAL)
+		.SetToken(2, RulePointerToken<BGR_MATH_TERM_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>);
+
+	interpreter.SetRule(BGR_MATH_TERM, std::move(tmp));
+
+	//Math term helper 0
+	tmp.Reset(3);
+
+	tmp.SetToken(0, RulePointerToken<BGR_MATH_TERM_HELPER_1, FILLER_TOKEN>)
+		.SetToken(1, WHITESPACE_OPTIONAL)
+		.SetToken(2, RulePointerToken<BGR_MATH_FACTOR, FILLER_TOKEN>);///TODO: maybe whitespace?
+
+	interpreter.SetRule(BGR_MATH_TERM_HELPER_0, std::move(tmp));
+
+	//Math term helper 1
+	tmp.Reset(4, true);
+
+	tmp.SetToken(0, KeywordToken<Operator_times, NONE>)
+		.SetToken(1, KeywordToken<Operator_divide, NONE>)
+		.SetToken(2, KeywordToken<Operator_double_divide, NONE>)
+		.SetToken(3, KeywordToken<Operator_modulus, NONE>);
+
+	interpreter.SetRule(BGR_MATH_TERM_HELPER_1, std::move(tmp));
+
+	//Math expression
+	tmp.Reset(4);
+
+	tmp.SetToken(0, WHITESPACE_OPTIONAL)
+		.SetToken(1, RulePointerToken<BGR_MATH_TERM, FILLER_TOKEN>)
+		.SetToken(2, WHITESPACE_OPTIONAL)
+		.SetToken(3, RulePointerToken<BGR_MATH_EXPRESSION_HELPER_0, FILLER_TOKEN>);
+
+	interpreter.SetRule(BGR_MATH_EXPRESSION, std::move(tmp));
+
+	//Math expression helper 0
+	tmp.Reset(4);
+
+	tmp.SetToken(0, nullptr)
+		.SetToken(1, WHITESPACE_OPTIONAL)
+		.SetToken(2, RulePointerToken<BGR_MATH_TERM, FILLER_TOKEN>)
+		.SetToken(3, WHITESPACE_OPTIONAL);
+
+	interpreter.SetRule(BGR_MATH_EXPRESSION_HELPER_0, std::move(tmp));
 
 	return interpreter;
 }

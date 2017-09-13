@@ -155,7 +155,7 @@ int main(int argc, char ** argv)
 {
 	stream::BiaStreamBuffer cc;
 
-	char tetea[] = "var test = 100;";
+	char tetea[] = "var test = new Printer(34, 4.f);";
 	
 	grammar::InitializeRules().Interpret(tetea, sizeof(tetea) - 1, compiler::BiaCompiler(cc));
 
