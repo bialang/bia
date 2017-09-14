@@ -16,6 +16,7 @@ struct Report
 	size_t iSize;
 	size_t iRuleId;
 	size_t iTokenId;
+	size_t iDepth;
 	uint64_t ullCustomParameter;
 };
 

@@ -5,6 +5,9 @@
 #include "biaStream.h"
 #include "biaHash.h"
 
+#define BIA_COMPILER_DEV_TEST if(p_pBegin + 1 < p_pEnd){
+#define BIA_COMPILER_DEV_TEST_END } throw exception::ImplementationException("Invalid grammar.");
+
 
 namespace bia
 {
@@ -22,7 +25,7 @@ public:
 		for (auto i = p_bundle.Begin(), cond = p_bundle.End(); i < cond; ++i)
 		{
 			fwrite(i->pcString, 1, i->iSize, stdout);
-			printf(" id: %zi rule: %zi\n", i->iTokenId, i->iRuleId);
+			printf(" id: %zi rule: %zi depth: %zi\n", i->iTokenId, i->iRuleId, i->iDepth);
 		}
 
 		auto pBegin = p_bundle.Begin();
@@ -115,6 +118,13 @@ private:
 
 		m_output.Write(&uiOperator, sizeof(unsigned int));
 	}*/
+	inline const grammar::Report * FindCorrespondingEnd(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd, size_t p_iDepth)
+	{
+		while (p_pBegin < p_pEnd && p_pBegin->iDepth >= p_iDepth)
+			++p_pBegin;
+
+		return p_pBegin;
+	}
 	inline void HandleVariableDeclaration(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
 		HandleValue(p_pBegin + 1, false);
@@ -122,12 +132,39 @@ private:
 		//Objectify
 		WriteOpCode(machine::OP::OBJECTIFY, p_pBegin->pcString, p_pBegin->iSize);
 	}
-	inline void HandleValue(const grammar::Report * p_pReport, bool p_bPush)
+	inline const grammar::Report * HandleValue(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
-		switch (p_pReport->iTokenId)
+		p_pBegin = HandleMathExpression(p_pBegin, p_pEnd);
+
+
+		return p_pBegin;
+	}
+	inline const grammar::Report * HandleMathExpression(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+	{
+		BIA_COMPILER_DEV_TEST
+		auto pInfo = p_pBegin++;
+
+		p_pEnd = FindCorrespondingEnd(p_pBegin, p_pEnd, pInfo->iDepth);
+
+		do
+		{
+			//Handle first term
+			p_pBegin = HandleMathTerm(p_pBegin, p_pEnd);
+		} while (p_pBegin < p_pEnd && p_pBegin->iDepth >= pInfo->iDepth);
+
+		return p_pBegin;
+		BIA_COMPILER_DEV_TEST_END
+	}
+	inline const grammar::Report * HandleMathTerm(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+	{
+
+	}
+	inline void HandleValueRaw(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd, bool p_bPush)
+	{
+		switch (p_pBegin->iTokenId)
 		{
 		case grammar::BV_NUMBER:
-			HandleNumber(p_pReport, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
+			HandleNumber(p_pBegin, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
 
 			return;
 		case grammar::BV_TRUE:
