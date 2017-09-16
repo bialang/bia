@@ -20,29 +20,26 @@ class BiaCompiler : public grammar::BiaReportReceiver
 {
 public:
 	inline BiaCompiler(stream::BiaStream & p_output) : m_output(p_output) {}
-	inline virtual void Report(const grammar::BiaReportBundle & p_bundle) override
+	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
-		for (auto i = p_bundle.Begin(), cond = p_bundle.End(); i < cond; ++i)
+		for (auto i = p_pBegin, cond = p_pEnd; i < cond; ++i)
 		{
 			fwrite(i->pcString, 1, i->iSize, stdout);
-			printf(" id: %zi rule: %zi depth: %zi\n", i->iTokenId, i->iRuleId, i->iDepth);
+			printf(" id: %zi rule: %zi depth: %i\n", i->iTokenId, i->iRuleId, i->children.second - i->children.first);
 		}
 
-		auto pBegin = p_bundle.Begin();
-		auto pEnd = p_bundle.End();
-
-		if (pBegin < pEnd)
+		/*if (p_pBegin < p_pEnd)
 		{
-			switch (pBegin->iRuleId)
+			switch (p_pBegin->iRuleId)
 			{
 			case grammar::BGR_VARIABLE_DECLARATION:
-				HandleVariableDeclaration(pBegin, pEnd);
+				HandleVariableDeclaration(p_pBegin, p_pEnd);
 
 				break;
 			default:
 				break;
 			}
-		}
+		}*/
 	}
 
 private:
@@ -120,7 +117,7 @@ private:
 	}*/
 	inline const grammar::Report * FindCorrespondingEnd(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd, size_t p_iDepth)
 	{
-		while (p_pBegin < p_pEnd && p_pBegin->iDepth >= p_iDepth)
+		//while (p_pBegin < p_pEnd && p_pBegin->iDepth >= p_iDepth)
 			++p_pBegin;
 
 		return p_pBegin;
@@ -144,13 +141,13 @@ private:
 		BIA_COMPILER_DEV_TEST
 		auto pInfo = p_pBegin++;
 
-		p_pEnd = FindCorrespondingEnd(p_pBegin, p_pEnd, pInfo->iDepth);
+		//p_pEnd = FindCorrespondingEnd(p_pBegin, p_pEnd, pInfo->iDepth);
 
 		do
 		{
 			//Handle first term
 			p_pBegin = HandleMathTerm(p_pBegin, p_pEnd);
-		} while (p_pBegin < p_pEnd && p_pBegin->iDepth >= pInfo->iDepth);
+		} while (p_pBegin < p_pEnd);
 
 		return p_pBegin;
 		BIA_COMPILER_DEV_TEST_END

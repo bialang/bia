@@ -43,12 +43,12 @@ public:
 			bundle.Clear();
 
 			//Start with rule 0
-			auto iSize = m_aRules[0].RunRule(p_pcBuffer, p_iSize, { &bundle, m_aRules, 0 });
+			auto iSize = m_aRules[0].RunRule(p_pcBuffer, p_iSize, { &bundle, m_aRules });
 
 			//Report
 			if (iSize)
 			{
-				p_receiver.Report(bundle);
+				p_receiver.Report(bundle.Begin(), bundle.End());
 
 				p_pcBuffer += iSize;
 				p_iSize -= iSize;

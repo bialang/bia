@@ -15,11 +15,9 @@ constexpr uint64_t NONE = 0;
 constexpr uint64_t FILLER_TOKEN = 0x1;
 constexpr uint64_t OPTIONAL_TOKEN = 0x2;
 constexpr uint64_t LOOPING_TOKEN = 0x4;
-constexpr uint64_t NO_DEPTH_INCREMENT = 0x8;
 
 enum class ACTION
 {
-	REPORT_DELIMITOR,
 	REPORT,
 	DONT_REPORT,
 	REPORT_AND_LOOP,
@@ -33,7 +31,6 @@ struct TokenParams
 {
 	BiaReportBundle * pBundle;
 	BiaInterpreterRule * pRules;
-	size_t iDepth;
 };
 
 struct TokenOutput
@@ -52,8 +49,9 @@ public:
 	{
 		F_NONE = 0,
 		F_OR = 0x1,
-		F_START_WITH_INFO = 0x2
+		F_WRAP_UP = 0x2
 	};
+
 
 	/**
 	 * Constructor.
@@ -84,6 +82,15 @@ public:
 	{
 		delete[] m_ppTokens;
 	}
+	/**
+	 * Resets the rule.
+	 *
+	 * @since	2.39.82.486
+	 * @date	16-Sep-17
+	 *
+	 * @param	p_iElements	Defines the new amount of elements the rule can have.
+	 * @param	p_fFlags	Defines the flags.
+	*/
 	inline void Reset(size_t p_iElements, uint32_t p_fFlags = F_NONE)
 	{
 		m_iMaxElements = p_iElements;
@@ -92,14 +99,35 @@ public:
 		delete[] m_ppTokens;
 		m_ppTokens = new bia_token_function[p_iElements]{};
 	}
+	/**
+	 * Runs this rule.
+	 *
+	 * @since	2.39.82.486
+	 * @date	16-Sep-17
+	 *
+	 * @param	p_pcBuffer	Defines a buffer which this rule should be run on.
+	 * @param	p_iSize	Defines the size of the buffer.
+	 * @param	p_params	Defines parameters for the token functions.
+	 *
+	 * @return	The amount of bytes processed of the buffer.
+	*/
 	inline size_t RunRule(const char * p_pcBuffer, size_t p_iSize, TokenParams p_params)
 	{
+		const auto iSizeToBegin = p_params.pBundle->Size();
 		size_t iCursor = 0;
 		auto iRuleId = static_cast<size_t>(this - p_params.pRules);
+		auto WrapUp = [&] {
+			if (m_fFlags & F_WRAP_UP && p_params.pBundle->Size() - iSizeToBegin > 1)
+			{
+				auto pBegin = p_params.pBundle->Begin() + iSizeToBegin;
 
-		//Add info
-		if (m_fFlags & F_START_WITH_INFO)
-			p_params.pBundle->AddReport({ nullptr, 0, iRuleId, 0, p_params.iDepth, 0 });
+				pBegin->children = { pBegin + 1, p_params.pBundle->End() };
+			}
+		};
+
+		//Wrap up
+		if (m_fFlags & F_WRAP_UP)
+			p_params.pBundle->AddReport({ nullptr, 0, iRuleId });
 
 		//Or loop
 		if (m_fFlags & F_OR)
@@ -115,16 +143,14 @@ public:
 
 					switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
 					{
-					case ACTION::REPORT_DELIMITOR:
-						p_params.pBundle->AddReport({ nullptr, 0, iRuleId, iCursor - 1, p_params.iDepth, 0 });
-
-						break;
 					case ACTION::REPORT:
-						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, p_params.iDepth, output.ullCustom });
+						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
 					case ACTION::DONT_REPORT:
+						WrapUp();
+
 						return output.iTokenSize + iAccount;
 					case ACTION::REPORT_AND_LOOP:
-						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, p_params.iDepth, output.ullCustom });
+						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
 					case ACTION::DONT_REPORT_AND_LOOP:
 						iAccount += output.iTokenSize;
 						p_pcBuffer += output.iTokenSize;
@@ -139,6 +165,9 @@ public:
 					bLoop = false;
 				} while (bLoop && iCursor < m_iMaxElements);
 			}
+
+			//Clear errors
+			p_params.pBundle->Reset(iSizeToBegin);
 
 			return 0;
 		}
@@ -156,19 +185,15 @@ public:
 
 					switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
 					{
-					case ACTION::REPORT_DELIMITOR:
-						p_params.pBundle->AddReport({ nullptr, 0, iRuleId, iCursor - 1, p_params.iDepth, 0 });
-
-						break;
 					case ACTION::REPORT:
-						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, p_params.iDepth, output.ullCustom });
+						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
 					case ACTION::DONT_REPORT:
 						p_pcBuffer += output.iTokenSize;
 						p_iSize -= output.iTokenSize;
 
 						break;
 					case ACTION::REPORT_AND_LOOP:
-						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, p_params.iDepth, output.ullCustom });
+						p_params.pBundle->AddReport({ p_pcBuffer + output.iBufferOffset, output.iTokenSize, iRuleId, iCursor - 1, output.ullCustom });
 					case ACTION::DONT_REPORT_AND_LOOP:
 						p_pcBuffer += output.iTokenSize;
 						p_iSize -= output.iTokenSize;
@@ -176,12 +201,17 @@ public:
 
 						continue;
 					case ACTION::ERROR:
+						//Clear errors
+						p_params.pBundle->Reset(iSizeToBegin);
+
 						return 0;
 					}
 
 					bLoop = false;
 				} while (bLoop && iCursor < m_iMaxElements);
 			}
+
+			WrapUp();
 
 			return ciSize - p_iSize;
 		}
