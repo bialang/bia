@@ -15,7 +15,6 @@ template<size_t _RULES>
 class BiaInterpreter
 {
 public:
-	inline BiaInterpreter() : m_aRules{} {}
 	/**
 	 * Sets a rule.
 	 *

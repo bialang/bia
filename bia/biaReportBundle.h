@@ -10,6 +10,10 @@ namespace api
 namespace grammar
 {
 
+struct Report;
+
+typedef std::pair<const Report*, const Report*> report_range;
+
 struct Report
 {
 	const char * pcString;
@@ -17,7 +21,7 @@ struct Report
 	size_t iRuleId;
 	size_t iTokenId;
 	uint64_t ullCustomParameter;
-	std::pair<const Report*, const Report*> children;
+	report_range children;
 };
 
 class BiaReportBundle

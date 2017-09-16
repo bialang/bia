@@ -155,7 +155,9 @@ public:
 						iAccount += output.iTokenSize;
 						p_pcBuffer += output.iTokenSize;
 						p_iSize -= output.iTokenSize;
+						
 						bLoop = true;
+						--iCursor;
 
 						continue;
 					case ACTION::ERROR:
@@ -163,11 +165,11 @@ public:
 					}
 
 					bLoop = false;
-				} while (bLoop && iCursor < m_iMaxElements);
+				} while (bLoop);
 			}
 
 			//Clear errors
-			p_params.pBundle->Reset(iSizeToBegin);
+			//p_params.pBundle->Reset(iSizeToBegin);
 
 			return 0;
 		}
@@ -197,18 +199,20 @@ public:
 					case ACTION::DONT_REPORT_AND_LOOP:
 						p_pcBuffer += output.iTokenSize;
 						p_iSize -= output.iTokenSize;
+						
 						bLoop = true;
+						--iCursor;
 
 						continue;
 					case ACTION::ERROR:
 						//Clear errors
-						p_params.pBundle->Reset(iSizeToBegin);
+						//p_params.pBundle->Reset(iSizeToBegin);
 
 						return 0;
 					}
 
 					bLoop = false;
-				} while (bLoop && iCursor < m_iMaxElements);
+				} while (bLoop);
 			}
 
 			WrapUp();

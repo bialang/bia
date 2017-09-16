@@ -20,26 +20,39 @@ class BiaCompiler : public grammar::BiaReportReceiver
 {
 public:
 	inline BiaCompiler(stream::BiaStream & p_output) : m_output(p_output) {}
+	inline void Print(std::string p_stIndentation, const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+	{
+		for (; p_pBegin < p_pEnd; ++p_pBegin)
+		{
+			if (p_pBegin->children.first)
+			{
+				Print(p_stIndentation + "#", p_pBegin->children.first, p_pBegin->children.second);
+				p_pBegin = p_pBegin->children.second - 1;
+			}
+			else
+			{
+				printf("%s", p_stIndentation.c_str());
+				fwrite(p_pBegin->pcString, 1, p_pBegin->iSize, stdout);
+				printf(" id: %zi rule: %zi\n", p_pBegin->iTokenId, p_pBegin->iRuleId);
+			}
+		}
+	}
 	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
-		for (auto i = p_pBegin, cond = p_pEnd; i < cond; ++i)
-		{
-			fwrite(i->pcString, 1, i->iSize, stdout);
-			printf(" id: %zi rule: %zi depth: %i\n", i->iTokenId, i->iRuleId, i->children.second - i->children.first);
-		}
+		Print("", p_pBegin, p_pEnd);
 
-		/*if (p_pBegin < p_pEnd)
+		if (p_pBegin < p_pEnd)
 		{
 			switch (p_pBegin->iRuleId)
 			{
 			case grammar::BGR_VARIABLE_DECLARATION:
-				HandleVariableDeclaration(p_pBegin, p_pEnd);
+				HandleVariableDeclaration(p_pBegin->children);
 
 				break;
 			default:
 				break;
 			}
-		}*/
+		}
 	}
 
 private:
@@ -105,63 +118,141 @@ private:
 			m_output.Write(p_pcFirst, p_iSize);
 		}
 	}
-	/*void BiaCompiler::WriteOperator(OP p_code, const ycode & p_operator)
+	inline void WriteOperator(machine::OP p_code, const grammar::Report * p_pOperator)
 	{
-		m_output.Write(&p_code, sizeof(OP));
+		m_output.Write(&p_code, sizeof(machine::OP));
 
 		unsigned int uiOperator = 0;
 
-		memcpy(&uiOperator, p_operator.GetBuffer(), std::min(sizeof(unsigned int), p_operator.GetSize()));
+		memcpy(&uiOperator, p_pOperator->pcString, std::min(sizeof(unsigned int), p_pOperator->iTokenId));
 
 		m_output.Write(&uiOperator, sizeof(unsigned int));
-	}*/
-	inline const grammar::Report * FindCorrespondingEnd(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd, size_t p_iDepth)
-	{
-		//while (p_pBegin < p_pEnd && p_pBegin->iDepth >= p_iDepth)
-			++p_pBegin;
-
-		return p_pBegin;
 	}
-	inline void HandleVariableDeclaration(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+	inline void HandleVariableDeclaration(grammar::report_range p_reports)
 	{
-		HandleValue(p_pBegin + 1, false);
+		HandleValue(p_reports.first[1].children, false);
 
 		//Objectify
-		WriteOpCode(machine::OP::OBJECTIFY, p_pBegin->pcString, p_pBegin->iSize);
+		WriteOpCode(machine::OP::OBJECTIFY, p_reports.first->pcString, p_reports.first->iSize);
 	}
-	inline const grammar::Report * HandleValue(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+	template<size_t _RULE_ID, bool _LEFT = true>
+	inline const grammar::Report * FindWrapHeader(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
-		p_pBegin = HandleMathExpression(p_pBegin, p_pEnd);
+		if (_LEFT)
+		{
+			return nullptr;
+		}
+		else
+		{
+			while (p_pEnd-- > p_pBegin)
+			{
+				if (p_pEnd->iRuleId == _RULE_ID && !p_pEnd->iTokenId)
+					return p_pEnd;
+			}
 
-
-		return p_pBegin;
+			return nullptr;
+		}
 	}
-	inline const grammar::Report * HandleMathExpression(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+	inline const grammar::Report * HandleValue(grammar::report_range p_reports, bool p_bPush)
 	{
-		BIA_COMPILER_DEV_TEST
-		auto pInfo = p_pBegin++;
+		HandleMathExpression(p_reports.first->children, p_bPush);
 
-		//p_pEnd = FindCorrespondingEnd(p_pBegin, p_pEnd, pInfo->iDepth);
+		return p_reports.second;
+	}
+	inline const grammar::Report * HandleMathExpression(grammar::report_range p_reports, bool p_bPush)
+	{
+		//Push all terms starting from the right
+		auto i = p_reports.second;
+
+		while (i = FindWrapHeader<grammar::BGR_MATH_TERM, false>(p_reports.first + 1, i))
+		{
+			if (i->iRuleId != grammar::BGR_MATH_TERM)
+				puts("error");
+			else
+				puts("sucecs");
+			HandleMathTerm(i->children, true);
+		}
+
+		//Load the leftmost object
+		HandleMathTerm(p_reports.first->children, p_bPush);
+
+		//Call all operators
+
+		return p_reports.second;
+	}
+	inline const grammar::Report * HandleMathTerm(grammar::report_range p_reports, bool p_bPush)
+	{
+		//Push all factors starting from the right
+		for (auto i = p_reports.second; i = FindWrapHeader<grammar::BGR_MATH_FACTOR, false>(p_reports.first + 1, i);)
+			HandleMathFactor(i->children, true);
+
+		//Will be automaticall push because this is only one value
+		auto bPushed = false;
+		auto bLoaded = false;
+		auto i = p_reports.first + 1;
 
 		do
 		{
-			//Handle first term
-			p_pBegin = HandleMathTerm(p_pBegin, p_pEnd);
-		} while (p_pBegin < p_pEnd);
+			const grammar::Report * pOperator = nullptr;
 
-		return p_pBegin;
-		BIA_COMPILER_DEV_TEST_END
-	}
-	inline const grammar::Report * HandleMathTerm(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
-	{
+			//Get operator
+			if (i + 1 < p_reports.second)
+			{
+				pOperator = i->children.first;
 
+				i += 2;
+			}
+
+			//Load object
+			if (!bLoaded)
+			{
+				if (pOperator)
+					HandleMathFactor(p_reports.first->children, false);
+				else
+				{
+					HandleMathFactor(p_reports.first->children, p_bPush);
+
+					bPushed = true;
+				}
+
+				bLoaded = true;
+			}
+
+			//Call operator
+			if (pOperator)
+				WriteOperator(machine::OP::CALL_OPERATOR, pOperator);
+		} while (i < p_reports.second);
+
+		//Push accumulator
+		if (p_bPush && !bPushed)
+			WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
+
+		return p_reports.second;
 	}
-	inline void HandleValueRaw(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd, bool p_bPush)
+	inline const grammar::Report * HandleMathFactor(grammar::report_range p_reports, bool p_bPush)
 	{
-		switch (p_pBegin->iTokenId)
+		switch (p_reports.first->iRuleId)
+		{
+		case grammar::BGR_MATH_EXPRESSION:
+			HandleMathExpression(p_reports.first->children, p_bPush);
+
+			break;
+		case grammar::BGR_VALUE_RAW:
+			HandleValueRaw(p_reports.first->children, p_bPush);
+
+			break;
+		default:
+			throw exception::ImplementationException("Invalid switch case.");
+		}
+
+		return p_reports.second;
+	}
+	inline void HandleValueRaw(grammar::report_range p_reports, bool p_bPush)
+	{
+		switch (p_reports.first->iTokenId)
 		{
 		case grammar::BV_NUMBER:
-			HandleNumber(p_pBegin, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
+			HandleNumber(p_reports.first, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
 
 			return;
 		case grammar::BV_TRUE:
