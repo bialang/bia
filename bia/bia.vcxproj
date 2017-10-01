@@ -365,8 +365,6 @@ xcopy /Y /I /F "$(SolutionDir)Release\bia.lib" "C:\Users\$(Username)\Dropbox\Eig
     <ClInclude Include="biaModuleHandler.h" />
     <ClInclude Include="biaNamespace.h" />
     <ClInclude Include="biaNumberBase.h" />
-    <ClInclude Include="biaInterpreterRule.h" />
-    <ClInclude Include="biaReportBundle.h" />
     <ClInclude Include="biaScope.h" />
     <ClInclude Include="biaScopeStorage.h" />
     <ClInclude Include="biaStaticFunction.h" />
