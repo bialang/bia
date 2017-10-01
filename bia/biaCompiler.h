@@ -22,6 +22,8 @@ public:
 	inline BiaCompiler(stream::BiaStream & p_output) : m_output(p_output) {}
 	inline void Print(std::string p_stIndentation, const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
+		printf("%s BEGIN %zi\n", p_stIndentation.c_str(), p_pBegin->iRuleId);
+
 		for (; p_pBegin < p_pEnd; ++p_pBegin)
 		{
 			if (p_pBegin->children.first)
@@ -36,6 +38,8 @@ public:
 				printf(" id: %zi rule: %zi\n", p_pBegin->iTokenId, p_pBegin->iRuleId);
 			}
 		}
+
+		printf("%s END %zi\n", p_stIndentation.c_str(), p_pBegin->iRuleId);
 	}
 	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
@@ -124,7 +128,7 @@ private:
 
 		unsigned int uiOperator = 0;
 
-		memcpy(&uiOperator, p_pOperator->pcString, std::min(sizeof(unsigned int), p_pOperator->iTokenId));
+		memcpy(&uiOperator, p_pOperator->pcString, std::min(sizeof(unsigned int), p_pOperator->iSize));
 
 		m_output.Write(&uiOperator, sizeof(unsigned int));
 	}
@@ -186,12 +190,13 @@ private:
 		for (auto i = p_reports.second; i = FindWrapHeader<grammar::BGR_MATH_FACTOR, false>(p_reports.first + 1, i);)
 			HandleMathFactor(i->children, true);
 
-		//Will be automaticall push because this is only one value
+		Print("@@", p_reports.first, p_reports.second);
+
 		auto bPushed = false;
 		auto bLoaded = false;
-		auto i = p_reports.first + 1;
+		auto i = p_reports.first + 3;
 
-		do
+		/*do
 		{
 			const grammar::Report * pOperator = nullptr;
 
@@ -221,7 +226,7 @@ private:
 			//Call operator
 			if (pOperator)
 				WriteOperator(machine::OP::CALL_OPERATOR, pOperator);
-		} while (i < p_reports.second);
+		} while (i < p_reports.second);*/
 
 		//Push accumulator
 		if (p_bPush && !bPushed)

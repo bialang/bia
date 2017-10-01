@@ -46,7 +46,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{BA6F1A3F-583A-407D-8A78-BBD32CD81023}</ProjectGuid>
     <RootNamespace>bia</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -183,6 +183,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Users\C IR o IN A\Dropbox\Eigene C++ lib\yinterpreter\dll\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

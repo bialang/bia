@@ -70,7 +70,7 @@ public:
 	{
 		return -1;
 	}
-	inline virtual int SelfOperator(size_t, void*) override
+	inline virtual int SelfOperator(unsigned int, void*) override
 	{
 		return -1;
 	}
