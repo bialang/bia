@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 #include "biaGrammar.h"
 #include "biaReportBundle.h"
 #include "biaStream.h"
@@ -24,24 +26,24 @@ public:
 	{
 		auto iRuleId = p_pBegin->iRuleId;
 
-		printf("%s BEGIN %zi\n", p_stIndentation.c_str(), iRuleId);
+		printf("%sBEGIN %zi {%llu}\n", p_stIndentation.c_str(), iRuleId, p_pBegin->ullCustomParameter);
 
 		for (; p_pBegin < p_pEnd; ++p_pBegin)
 		{
 			if (p_pBegin->children.first)
 			{
-				Print(p_stIndentation + "#", p_pBegin->children.first, p_pBegin->children.second);
+				Print(p_stIndentation + "|", p_pBegin->children.first, p_pBegin->children.second);
 				p_pBegin = p_pBegin->children.second - 1;
 			}
 			else
 			{
 				printf("%s", p_stIndentation.c_str());
 				fwrite(p_pBegin->pcString, 1, p_pBegin->iSize, stdout);
-				printf(" id: %zi rule: %zi\n", p_pBegin->iTokenId, p_pBegin->iRuleId);
+				printf(" id: %zi rule: %zi {%llu}\n", p_pBegin->iTokenId, p_pBegin->iRuleId, p_pBegin->ullCustomParameter);
 			}
 		}
 
-		printf("%s END %zi\n", p_stIndentation.c_str(), iRuleId);
+		printf("%sEND %zi\n", p_stIndentation.c_str(), iRuleId);
 	}
 	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
@@ -100,7 +102,7 @@ private:
 	 *
 	 * @throws	bia::exception::SymbolException	Thrown when the size of the first parameter is too long.
 	*/
-	inline void WriteOpCode(machine::OP p_code, const char * p_pcFirst = nullptr, size_t p_iSize = 0, unsigned char p_ucParameterCount = 0xff)
+	inline void WriteOpCode(machine::OP p_code, const char * p_pcFirst = nullptr, size_t p_iSize = 0, uint8_t p_ucParameterCount = 0xff)
 	{
 		m_output.Write(&p_code, sizeof(machine::OP));
 
@@ -227,27 +229,61 @@ private:
 
 		return p_reports.second;
 	}
+	inline const grammar::Report * HandleInstantiation(grammar::report_range p_reports, bool p_bPush)
+	{
+		/*
+		if (p_pReport->pvTokenUnion->size() == 2)
+		{
+		p_pReport = p_pReport->pvTokenUnion->begin()._Ptr;
+
+		WriteOpCode(OP::INSTANTIATE, &p_pReport[0].code, HandleIdentifierAccess(p_pReport + 1));
+		}
+		else
+		{
+		p_pReport = p_pReport->pvTokenUnion->begin()._Ptr;
+
+		auto ucParameterCount = HandleIdentifierAccess(p_pReport + 2);
+
+		WriteOpCode(OP::LOAD, &p_pReport->code);
+		WriteOpCode(OP::INSTANTIATE_ACCUMULATOR, &p_pReport[1].code, ucParameterCount);
+		}
+		*/
+
+		WriteOpCode(machine::OP::INSTANTIATE, p_reports.first->pcString, p_reports.first->iSize, HandleParameter(p_reports.first[1].children));
+
+		//Push if wanted
+		if (p_bPush)
+			WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
+
+		return p_reports.second;
+	}
 	inline void HandleValueRaw(grammar::report_range p_reports, bool p_bPush)
 	{
-		switch (p_reports.first->iTokenId)
+		switch (p_reports.first->iRuleId)
 		{
-		case grammar::BV_NUMBER:
-			HandleNumber(p_reports.first, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
+		case grammar::BGR_VALUE_RAW:
+		{
+			switch (p_reports.first->iTokenId)
+			{
+			case grammar::BV_NUMBER:
+				HandleNumber(p_reports.first, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
 
-			return;
-		case grammar::BV_TRUE:
-			WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_1 : machine::OP::LOAD_LONG_1);
+				return;
+			case grammar::BV_TRUE:
+				WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_1 : machine::OP::LOAD_LONG_1);
 
-			return;
-		case grammar::BV_FALSE:
-			WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_0 : machine::OP::LOAD_LONG_0);
+				return;
+			case grammar::BV_FALSE:
+				WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_0 : machine::OP::LOAD_LONG_0);
+
+				return;
+			}
+		}
+		case grammar::BGR_INSTANTIATION:
+			HandleInstantiation(p_reports, p_bPush);
 
 			return;
 		}
-
-		//Push accumulator
-		if (p_bPush)
-			WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
 	}
 	inline void HandleNumber(const grammar::Report * p_pReport, NUMBER_TYPE p_type)
 	{
@@ -409,6 +445,22 @@ private:
 		default:
 			throw exception::ImplementationException("Invalid custom parameter.");
 		}
+	}
+	inline uint8_t HandleParameter(grammar::report_range p_reports)
+	{
+		uint8_t ucParameterCount = 0;
+
+		while (p_reports.first < p_reports.second)
+		{
+			if (p_reports.first->children.second)
+				p_reports.first = p_reports.first->children.second;
+			else
+				++p_reports.first;
+
+			++ucParameterCount;
+		}
+
+		return ucParameterCount;
 	}
 };
 
