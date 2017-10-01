@@ -22,7 +22,9 @@ public:
 	inline BiaCompiler(stream::BiaStream & p_output) : m_output(p_output) {}
 	inline void Print(std::string p_stIndentation, const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
-		printf("%s BEGIN %zi\n", p_stIndentation.c_str(), p_pBegin->iRuleId);
+		auto iRuleId = p_pBegin->iRuleId;
+
+		printf("%s BEGIN %zi\n", p_stIndentation.c_str(), iRuleId);
 
 		for (; p_pBegin < p_pEnd; ++p_pBegin)
 		{
@@ -39,7 +41,7 @@ public:
 			}
 		}
 
-		printf("%s END %zi\n", p_stIndentation.c_str(), p_pBegin->iRuleId);
+		printf("%s END %zi\n", p_stIndentation.c_str(), iRuleId);
 	}
 	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
@@ -166,22 +168,23 @@ private:
 	inline const grammar::Report * HandleMathExpression(grammar::report_range p_reports, bool p_bPush)
 	{
 		//Push all terms starting from the right
-		auto i = p_reports.second;
-
-		while (i = FindWrapHeader<grammar::BGR_MATH_TERM, false>(p_reports.first + 1, i))
-		{
-			if (i->iRuleId != grammar::BGR_MATH_TERM)
-				puts("error");
-			else
-				puts("sucecs");
+		for (auto i = p_reports.second; i = FindWrapHeader<grammar::BGR_MATH_TERM, false>(p_reports.first + 1, i);)
 			HandleMathTerm(i->children, true);
+
+		//With operator
+		if (p_reports.first->children.second + 1 < p_reports.second && p_reports.first->children.second->iRuleId == grammar::BGR_MATH_EXPRESSION_HELPER_0)
+		{
+			//First write first object and then write all operators
+			for (auto i = HandleMathTerm(p_reports.first->children, false); i < p_reports.second; i = (++i)->children.second)
+				WriteOperator(machine::OP::CALL_OPERATOR, i);
+
+			//Push result if needed
+			if (p_bPush)
+				WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
 		}
-
-		//Load the leftmost object
-		HandleMathTerm(p_reports.first->children, p_bPush);
-
-		//Call all operators
-
+		else
+			HandleMathTerm(p_reports.first->children, p_bPush);
+		
 		return p_reports.second;
 	}
 	inline const grammar::Report * HandleMathTerm(grammar::report_range p_reports, bool p_bPush)
@@ -190,47 +193,19 @@ private:
 		for (auto i = p_reports.second; i = FindWrapHeader<grammar::BGR_MATH_FACTOR, false>(p_reports.first + 1, i);)
 			HandleMathFactor(i->children, true);
 
-		Print("@@", p_reports.first, p_reports.second);
-
-		auto bPushed = false;
-		auto bLoaded = false;
-		auto i = p_reports.first + 3;
-
-		/*do
+		//With operator
+		if (p_reports.first->children.second + 1 < p_reports.second && p_reports.first->children.second->iRuleId == grammar::BGR_MATH_TERM_HELPER_1)
 		{
-			const grammar::Report * pOperator = nullptr;
+			//First write first object and then write all operators
+			for (auto i = HandleMathFactor(p_reports.first->children, false); i < p_reports.second; i = (++i)->children.second)
+				WriteOperator(machine::OP::CALL_OPERATOR, i);
 
-			//Get operator
-			if (i + 1 < p_reports.second)
-			{
-				pOperator = i->children.first;
-
-				i += 2;
-			}
-
-			//Load object
-			if (!bLoaded)
-			{
-				if (pOperator)
-					HandleMathFactor(p_reports.first->children, false);
-				else
-				{
-					HandleMathFactor(p_reports.first->children, p_bPush);
-
-					bPushed = true;
-				}
-
-				bLoaded = true;
-			}
-
-			//Call operator
-			if (pOperator)
-				WriteOperator(machine::OP::CALL_OPERATOR, pOperator);
-		} while (i < p_reports.second);*/
-
-		//Push accumulator
-		if (p_bPush && !bPushed)
-			WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
+			//Push result if needed
+			if (p_bPush)
+				WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
+		}
+		else
+			HandleMathFactor(p_reports.first->children, p_bPush);
 
 		return p_reports.second;
 	}
@@ -240,7 +215,7 @@ private:
 		{
 		case grammar::BGR_MATH_EXPRESSION:
 			HandleMathExpression(p_reports.first->children, p_bPush);
-
+			
 			break;
 		case grammar::BGR_VALUE_RAW:
 			HandleValueRaw(p_reports.first->children, p_bPush);
