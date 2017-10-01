@@ -45,7 +45,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{BA6F1A3F-583A-407D-8A78-BBD32CD81023}</ProjectGuid>
-    <RootNamespace>bia</RootNamespace>
+    <RootNamespace>Bia</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -348,10 +348,13 @@ xcopy /Y /I /F "$(SolutionDir)Release\bia.lib" "C:\Users\$(Username)\Dropbox\Eig
     <ClInclude Include="biaFunction.h" />
     <ClInclude Include="biaGrammar.h" />
     <ClInclude Include="biaHasher.h" />
+<<<<<<< HEAD
     <ClInclude Include="biaInterpreter.h" />
     <ClInclude Include="biaInterpreterIdentifiers.h" />
     <ClInclude Include="biaInterpreterStringSet.h" />
     <ClInclude Include="biaInterpreterTokens.h" />
+=======
+>>>>>>> test
     <ClInclude Include="biaKey.h" />
     <ClInclude Include="biaLambdaFunction.h" />
     <ClInclude Include="biaLambdaMemberFunction.h" />
@@ -364,8 +367,6 @@ xcopy /Y /I /F "$(SolutionDir)Release\bia.lib" "C:\Users\$(Username)\Dropbox\Eig
     <ClInclude Include="biaModuleHandler.h" />
     <ClInclude Include="biaNamespace.h" />
     <ClInclude Include="biaNumberBase.h" />
-    <ClInclude Include="biaInterpreterRule.h" />
-    <ClInclude Include="biaReportBundle.h" />
     <ClInclude Include="biaScope.h" />
     <ClInclude Include="biaScopeStorage.h" />
     <ClInclude Include="biaStaticFunction.h" />
