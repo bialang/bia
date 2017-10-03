@@ -34,7 +34,7 @@ enum BIA_GRAMMAR_RULE : size_t
 
 enum BIA_VALUE
 {
-	BV_NUMBER,
+	BV_NUMBER = 1,
 	BV_STRING,
 	BV_TRUE,
 	BV_FALSE,

@@ -33,6 +33,7 @@ struct TokenParams
 {
 	BiaReportBundle * pBundle;
 	BiaInterpreterRule * pRules;
+	uint32_t unTokenId;
 };
 
 struct TokenOutput
@@ -142,6 +143,7 @@ public:
 
 			begin.type = Report::T_BEGIN;
 			begin.unRuleId = unRuleId;
+			begin.unTokenId = p_params.unTokenId;
 			
 			p_params.pBundle->AddReport(std::move(begin));
 		}
@@ -158,6 +160,8 @@ public:
 				{
 					TokenOutput output{};
 
+					p_params.unTokenId = unCursor + 1;
+
 					switch (m_ppTokens[unCursor++](p_pcBuffer, p_iSize, p_params, output))
 					{
 					case ACTION::REPORT:
@@ -167,7 +171,7 @@ public:
 						token.type = Report::T_TOKEN;
 						token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
 						token.unRuleId = unRuleId;
-						token.unTokenId = unCursor - 1;
+						token.unTokenId = unCursor;
 						token.ullCustomParameter = output.ullCustom;
 
 						p_params.pBundle->AddReport(std::move(token));
@@ -183,7 +187,7 @@ public:
 						token.type = Report::T_TOKEN;
 						token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
 						token.unRuleId = unRuleId;
-						token.unTokenId = unCursor - 1;
+						token.unTokenId = unCursor;
 						token.ullCustomParameter = output.ullCustom;
 
 						p_params.pBundle->AddReport(std::move(token));
@@ -222,6 +226,8 @@ public:
 				{
 					TokenOutput output{};
 
+					p_params.unTokenId = unCursor + 1;
+
 					switch (m_ppTokens[unCursor++](p_pcBuffer, p_iSize, p_params, output))
 					{
 					case ACTION::REPORT:
@@ -231,7 +237,7 @@ public:
 						token.type = Report::T_TOKEN;
 						token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
 						token.unRuleId = unRuleId;
-						token.unTokenId = unCursor - 1;
+						token.unTokenId = unCursor;
 						token.ullCustomParameter = output.ullCustom;
 
 						p_params.pBundle->AddReport(std::move(token));
@@ -248,7 +254,7 @@ public:
 						token.type = Report::T_TOKEN;
 						token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
 						token.unRuleId = unRuleId;
-						token.unTokenId = unCursor - 1;
+						token.unTokenId = unCursor;
 						token.ullCustomParameter = output.ullCustom;
 
 						p_params.pBundle->AddReport(std::move(token));
@@ -292,7 +298,7 @@ public:
 	*/
 	inline BiaInterpreterRule & SetToken(uint32_t p_unTokenId, bia_token_function p_pToken)
 	{
-		if (p_unTokenId < m_unMaxElements)
+		if (--p_unTokenId < m_unMaxElements)
 		{
 			m_ppTokens[p_unTokenId] = p_pToken;
 

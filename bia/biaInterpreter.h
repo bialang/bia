@@ -11,7 +11,7 @@ namespace api
 namespace grammar
 {
 
-template<size_t _RULES>
+template<uint32_t _RULES>
 class BiaInterpreter
 {
 public:
@@ -21,13 +21,13 @@ public:
 	 * @since	2.39.81.472
 	 * @date	10-Sep-17
 	 *
-	 * @param	p_iRuleId	Defines the id of the rule.
+	 * @param	p_nRuleId	Defines the id of the rule.
 	 * @param	p_rule	Defines the rule.
 	*/
-	inline void SetRule(size_t p_iRuleId, BiaInterpreterRule p_rule)
+	inline void SetRule(uint32_t p_unRuleId, BiaInterpreterRule p_rule)
 	{
-		if (p_iRuleId < _RULES)
-			m_aRules[p_iRuleId] = std::move(p_rule);
+		if (p_unRuleId < _RULES)
+			m_aRules[p_unRuleId] = std::move(p_rule);
 		else
 			throw exception::ImplementationException("Invalid rule id.");
 	}
@@ -42,7 +42,7 @@ public:
 			bundle.Clear();
 
 			//Start with rule 0
-			auto iSize = m_aRules[0].RunRule(p_pcBuffer, p_iSize, { &bundle, m_aRules });
+			auto iSize = m_aRules[0].RunRule(p_pcBuffer, p_iSize, { &bundle, m_aRules, 0 });
 
 			//Report
 			if (iSize)
@@ -64,14 +64,14 @@ public:
 	 * @since	2.39.81.472
 	 * @date	10-Sep-17
 	 *
-	 * @param	p_iRuleId	Defines the id of the rule.
+	 * @param	p_unRuleId	Defines the id of the rule.
 	 *
 	 * @return	The rule.
 	*/
-	inline BiaInterpreterRule & GetRule(size_t p_iRuleId)
+	inline BiaInterpreterRule & GetRule(uint32_t p_unRuleId)
 	{
-		if (p_iRuleId < _RULES)
-			return m_aRules[p_iRuleId];
+		if (p_unRuleId < _RULES)
+			return m_aRules[p_unRuleId];
 		else
 			throw exception::UnknownException("Invalid rule id.");
 	}
