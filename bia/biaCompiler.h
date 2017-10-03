@@ -48,20 +48,20 @@ public:
 	}
 	inline void PrintStraight(const char * p_pszIndentation, grammar::report_range p_children)
 	{
-		printf("%s BEGIN [%03lu](% 2lu)\n", p_pszIndentation, p_children.pBegin->unRuleId, p_children.pBegin->unTokenId);
+		printf("%s  0:BEGIN [%03lu](% 2lu)\n", p_pszIndentation, p_children.pBegin->unRuleId, p_children.pBegin->unTokenId);
 
 		for (auto i = p_children.pBegin + 1; i < p_children.pEnd; ++i)
 		{
 			switch (i->type)
 			{
 			case grammar::Report::T_BEGIN:
-				printf("%s CHILD [%03lu](% 2lu)\n", p_pszIndentation, i->unRuleId, i->unTokenId);
+				printf("%s % 2i:CHILD [%03lu](% 2lu)\n", p_pszIndentation, i - p_children.pBegin, i->unRuleId, i->unTokenId);
 
 				i = i->content.children.pEnd;
 
 				break;
 			case grammar::Report::T_TOKEN:
-				printf("%s TOKEN [%03lu](% 2lu) ", p_pszIndentation, i->unRuleId, i->unTokenId);
+				printf("%s % 2i:TOKEN [%03lu](% 2lu) ", p_pszIndentation, i - p_children.pBegin, i->unRuleId, i->unTokenId);
 				fwrite(i->content.token.pcString, 1, i->content.token.iSize, stdout);
 				puts("");
 					
@@ -311,6 +311,25 @@ private:
 			BIA_COMPILER_DEV_INVALID
 		}
 	}
+	inline uint8_t HandleParameter(grammar::report_range p_reports)
+	{
+		PrintStraight("p>", p_reports);
+
+		uint8_t ucParameterCount = 0;
+
+		++p_reports.pBegin;
+
+		//Push all parameter values
+		while (p_reports.pBegin < p_reports.pEnd)
+		{
+			p_reports.pBegin = HandleValue(p_reports.pBegin->content.children, true);
+
+			if (!++ucParameterCount)
+				throw exception::ArgumentException("Too many arguments passed.");
+		}
+
+		return ucParameterCount;
+	}
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
@@ -443,9 +462,24 @@ private:
 
 			break;
 		case grammar::BV_INSTANTIATION:
+			HandleInstantiation(p_reports.pBegin[1].content.children, p_bPush);
+
+			break;
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
+
+		return p_reports.pEnd + 1;
+	}
+	inline const grammar::Report * HandleInstantiation(grammar::report_range p_reports, bool p_bPush)
+	{
+		PrintStraight("i>", p_reports);
+
+		//Handle parameter
+		uint8_t ucParameterCount = p_reports.pBegin + 2 == p_reports.pEnd ? 0 : HandleParameter(p_reports.pBegin[2].content.children);
+
+		//Instantiate object
+		WriteOpCode(machine::OP::INSTANTIATE, p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize, ucParameterCount);
 
 		return p_reports.pEnd + 1;
 	}
