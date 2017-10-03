@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstring>
+#include <stdint.h>
 
 #include "biaInterpreterRule.h"
 #include "biaInterpreterIdentifiers.h"
@@ -65,7 +66,7 @@ inline ACTION CharsetToken(const char * p_pcBuffer, size_t p_iSize, TokenParams,
 	return p_output.iTokenSize ? SUCCESS : ERROR;
 }
 
-template<size_t _RULE, uint64_t _FLAGS, uint64_t _CUSTOM = 0>
+template<uint32_t _RULE, uint64_t _FLAGS, uint64_t _CUSTOM = 0>
 inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, TokenParams p_params, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);

@@ -24,26 +24,26 @@ public:
 	inline BiaCompiler(stream::BiaStream & p_output) : m_output(p_output) {}
 	inline void Print(std::string p_stIndentation, const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
-		auto iRuleId = p_pBegin->iRuleId;
+		auto unRuleId = p_pBegin->unRuleId;
 
-		printf("%sBEGIN %zi {%llu}\n", p_stIndentation.c_str(), iRuleId, p_pBegin->ullCustomParameter);
+		printf("%sBEGIN %lu {%llu}\n", p_stIndentation.c_str(), unRuleId, p_pBegin->ullCustomParameter);
 
 		for (; p_pBegin < p_pEnd; ++p_pBegin)
 		{
-			if (p_pBegin->children.first)
+			if (p_pBegin->type == grammar::Report::T_BEGIN)
 			{
-				Print(p_stIndentation + "|", p_pBegin->children.first, p_pBegin->children.second);
-				p_pBegin = p_pBegin->children.second - 1;
+				Print(p_stIndentation + "|", p_pBegin->content.children.pBegin + 1, p_pBegin->content.children.pEnd);
+				p_pBegin = p_pBegin->content.children.pEnd;
 			}
-			else
+			else if (p_pBegin->type == grammar::Report::T_TOKEN)
 			{
 				printf("%s", p_stIndentation.c_str());
-				fwrite(p_pBegin->pcString, 1, p_pBegin->iSize, stdout);
-				printf(" id: %zi rule: %zi {%llu}\n", p_pBegin->iTokenId, p_pBegin->iRuleId, p_pBegin->ullCustomParameter);
+				fwrite(p_pBegin->content.token.pcString, 1, p_pBegin->content.token.iSize, stdout);
+				printf(" id: %lu rule: %lu {%llu}\n", p_pBegin->unTokenId, p_pBegin->unRuleId, p_pBegin->ullCustomParameter);
 			}
 		}
 
-		printf("%sEND %zi\n", p_stIndentation.c_str(), iRuleId);
+		printf("%sEND %zi\n", p_stIndentation.c_str(), unRuleId);
 	}
 	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
@@ -51,10 +51,10 @@ public:
 
 		if (p_pBegin < p_pEnd)
 		{
-			switch (p_pBegin->iRuleId)
+			switch (p_pBegin->unRuleId)
 			{
 			case grammar::BGR_VARIABLE_DECLARATION:
-				HandleVariableDeclaration(p_pBegin->children);
+				HandleVariableDeclaration(p_pBegin->content.children);
 
 				break;
 			default:
@@ -132,141 +132,28 @@ private:
 
 		unsigned int uiOperator = 0;
 
-		memcpy(&uiOperator, p_pOperator->pcString, std::min(sizeof(unsigned int), p_pOperator->iSize));
+		memcpy(&uiOperator, p_pOperator->content.token.pcString, std::min<uint32_t>(sizeof(unsigned int), p_pOperator->content.token.iSize));
 
 		m_output.Write(&uiOperator, sizeof(unsigned int));
 	}
 	inline void HandleVariableDeclaration(grammar::report_range p_reports)
 	{
-		HandleValue(p_reports.first[1].children, false);
+		//Handle value
+		HandleValue(p_reports.pBegin[2].content.children, false);
 
 		//Objectify
-		WriteOpCode(machine::OP::OBJECTIFY, p_reports.first->pcString, p_reports.first->iSize);
-	}
-	template<size_t _RULE_ID, bool _LEFT = true>
-	inline const grammar::Report * FindWrapHeader(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
-	{
-		if (_LEFT)
-		{
-			return nullptr;
-		}
-		else
-		{
-			while (p_pEnd-- > p_pBegin)
-			{
-				if (p_pEnd->iRuleId == _RULE_ID && !p_pEnd->iTokenId)
-					return p_pEnd;
-			}
-
-			return nullptr;
-		}
-	}
-	inline const grammar::Report * HandleValue(grammar::report_range p_reports, bool p_bPush)
-	{
-		HandleMathExpression(p_reports.first->children, p_bPush);
-
-		return p_reports.second;
-	}
-	inline const grammar::Report * HandleMathExpression(grammar::report_range p_reports, bool p_bPush)
-	{
-		//Push all terms starting from the right
-		for (auto i = p_reports.second; i = FindWrapHeader<grammar::BGR_MATH_TERM, false>(p_reports.first + 1, i);)
-			HandleMathTerm(i->children, true);
-
-		//With operator
-		if (p_reports.first->children.second + 1 < p_reports.second && p_reports.first->children.second->iRuleId == grammar::BGR_MATH_EXPRESSION_HELPER_0)
-		{
-			//First write first object and then write all operators
-			for (auto i = HandleMathTerm(p_reports.first->children, false); i < p_reports.second; i = (++i)->children.second)
-				WriteOperator(machine::OP::CALL_OPERATOR, i);
-
-			//Push result if needed
-			if (p_bPush)
-				WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
-		}
-		else
-			HandleMathTerm(p_reports.first->children, p_bPush);
-		
-		return p_reports.second;
-	}
-	inline const grammar::Report * HandleMathTerm(grammar::report_range p_reports, bool p_bPush)
-	{
-		//Push all factors starting from the right
-		for (auto i = p_reports.second; i = FindWrapHeader<grammar::BGR_MATH_FACTOR, false>(p_reports.first + 1, i);)
-			HandleMathFactor(i->children, true);
-
-		//With operator
-		if (p_reports.first->children.second + 1 < p_reports.second && p_reports.first->children.second->iRuleId == grammar::BGR_MATH_TERM_HELPER_1)
-		{
-			//First write first object and then write all operators
-			for (auto i = HandleMathFactor(p_reports.first->children, false); i < p_reports.second; i = (++i)->children.second)
-				WriteOperator(machine::OP::CALL_OPERATOR, i);
-
-			//Push result if needed
-			if (p_bPush)
-				WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
-		}
-		else
-			HandleMathFactor(p_reports.first->children, p_bPush);
-
-		return p_reports.second;
-	}
-	inline const grammar::Report * HandleMathFactor(grammar::report_range p_reports, bool p_bPush)
-	{
-		switch (p_reports.first->iRuleId)
-		{
-		case grammar::BGR_MATH_EXPRESSION:
-			HandleMathExpression(p_reports.first->children, p_bPush);
-			
-			break;
-		case grammar::BGR_VALUE_RAW:
-			HandleValueRaw(p_reports.first->children, p_bPush);
-
-			break;
-		default:
-			throw exception::ImplementationException("Invalid switch case.");
-		}
-
-		return p_reports.second;
-	}
-	inline const grammar::Report * HandleInstantiation(grammar::report_range p_reports, bool p_bPush)
-	{
-		/*
-		if (p_pReport->pvTokenUnion->size() == 2)
-		{
-		p_pReport = p_pReport->pvTokenUnion->begin()._Ptr;
-
-		WriteOpCode(OP::INSTANTIATE, &p_pReport[0].code, HandleIdentifierAccess(p_pReport + 1));
-		}
-		else
-		{
-		p_pReport = p_pReport->pvTokenUnion->begin()._Ptr;
-
-		auto ucParameterCount = HandleIdentifierAccess(p_pReport + 2);
-
-		WriteOpCode(OP::LOAD, &p_pReport->code);
-		WriteOpCode(OP::INSTANTIATE_ACCUMULATOR, &p_pReport[1].code, ucParameterCount);
-		}
-		*/
-
-		WriteOpCode(machine::OP::INSTANTIATE, p_reports.first->pcString, p_reports.first->iSize, HandleParameter(p_reports.first[1].children));
-
-		//Push if wanted
-		if (p_bPush)
-			WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
-
-		return p_reports.second;
+		WriteOpCode(machine::OP::OBJECTIFY, p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize);
 	}
 	inline void HandleValueRaw(grammar::report_range p_reports, bool p_bPush)
 	{
-		switch (p_reports.first->iRuleId)
+		switch (p_reports.pBegin->unRuleId)
 		{
 		case grammar::BGR_VALUE_RAW:
 		{
-			switch (p_reports.first->iTokenId)
+			switch (p_reports.pBegin->unTokenId)
 			{
 			case grammar::BV_NUMBER:
-				HandleNumber(p_reports.first, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
+				HandleNumber(p_reports.pBegin, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
 
 				return;
 			case grammar::BV_TRUE:
@@ -295,12 +182,12 @@ private:
 		{
 			auto llTmp = 0ll;
 
-			if (p_pReport->iSize < 128)
+			if (p_pReport[1].content.token.iSize < 128)
 			{
 				char acTmp[129];
 
-				memcpy(acTmp, p_pReport->pcString, p_pReport->iSize);
-				acTmp[p_pReport->iSize] = 0;
+				memcpy(acTmp, p_pReport[1].content.token.pcString, p_pReport[1].content.token.iSize);
+				acTmp[p_pReport[1].content.token.iSize] = 0;
 
 				//Interpret
 				char * pcEnd = nullptr;
@@ -372,12 +259,12 @@ private:
 		{
 			auto rTmp = 0.0f;
 
-			if (p_pReport->iSize < 128)
+			if (p_pReport[1].content.token.iSize < 128)
 			{
 				char acTmp[129];
 
-				memcpy(acTmp, p_pReport->pcString, p_pReport->iSize);
-				acTmp[p_pReport->iSize] = 0;
+				memcpy(acTmp, p_pReport[1].content.token.pcString, p_pReport[1].content.token.iSize);
+				acTmp[p_pReport[1].content.token.iSize] = 0;
 
 				//Interpret
 				char * pcEnd = nullptr;
@@ -409,12 +296,12 @@ private:
 		{
 			auto rTmp = 0.0;
 
-			if (p_pReport->iSize < 128)
+			if (p_pReport[1].content.token.iSize < 128)
 			{
 				char acTmp[129];
 
-				memcpy(acTmp, p_pReport->pcString, p_pReport->iSize);
-				acTmp[p_pReport->iSize] = 0;
+				memcpy(acTmp, p_pReport[1].content.token.pcString, p_pReport[1].content.token.iSize);
+				acTmp[p_pReport[1].content.token.iSize] = 0;
 
 				//Interpret
 				char * pcEnd = nullptr;
@@ -450,17 +337,155 @@ private:
 	{
 		uint8_t ucParameterCount = 0;
 
-		while (p_reports.first < p_reports.second)
+		for (; p_reports.pBegin < p_reports.pEnd; ++p_reports.pBegin, ++ucParameterCount)
 		{
-			if (p_reports.first->children.second)
-				p_reports.first = p_reports.first->children.second;
-			else
-				++p_reports.first;
-
-			++ucParameterCount;
+			if (p_reports.pBegin->content.children.pEnd)
+				p_reports.pBegin = p_reports.pBegin->content.children.pEnd;
 		}
 
 		return ucParameterCount;
+	}
+	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT = true>
+	inline const grammar::Report * FindWrapHeader(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+	{
+		if (_LEFT)
+		{
+			return nullptr;
+		}
+		else
+		{
+			printf("%lu\n", _RULE_ID);
+			Print("==", p_pBegin, p_pEnd);
+
+			uint32_t unDepth = 0;
+
+			while (p_pEnd-- > p_pBegin)
+			{
+				//Token end found
+				if (p_pEnd->type == grammar::Report::T_END)
+				{
+					//Searched token
+					if (unDepth <= _DEPTH && p_pEnd->unRuleId == _RULE_ID)
+						return p_pEnd->content.children.pBegin;
+					//Skip
+					else if (unDepth >= _DEPTH)
+						p_pEnd = p_pEnd->content.children.pBegin;
+					else
+						++unDepth;
+				}
+				else if (p_pEnd->type == grammar::Report::T_BEGIN)
+					--unDepth;
+			}
+			/*
+			for (; p_pEnd > p_pBegin; --p_pEnd)
+			{
+				if(p_pEnd->children)
+			}
+
+			while (p_pEnd-- > p_pBegin)
+			{
+				if (p_pEnd->iRuleId == _RULE_ID && !p_pEnd->iTokenId)
+					return p_pEnd;
+			}*/
+
+			return nullptr;
+		}
+	}
+	inline const grammar::Report * HandleValue(grammar::report_range p_reports, bool p_bPush)
+	{
+		HandleMathExpression(p_reports.pBegin[1].content.children, p_bPush);
+
+		return p_reports.pEnd + 1;
+	}
+	inline const grammar::Report * HandleMathExpression(grammar::report_range p_reports, bool p_bPush)
+	{
+		//Push all terms starting from the right
+		for (auto i = p_reports.pEnd; i = FindWrapHeader<grammar::BGR_MATH_TERM, 10, false>(p_reports.pBegin + 1, i);)
+			HandleMathTerm(i[1].content.children, true);
+
+		//With operator
+		if (p_reports.pBegin->content.children.pEnd + 1 < p_reports.pEnd && p_reports.pBegin->content.children.pEnd->unRuleId == grammar::BGR_MATH_EXPRESSION_HELPER_0)
+		{
+			//First write first object and then write all operators
+			for (auto i = HandleMathTerm(p_reports.pBegin[1].content.children, false); i < p_reports.pEnd; i = (++i)->content.children.pEnd)
+				WriteOperator(machine::OP::CALL_OPERATOR, i);
+
+			//Push result if needed
+			if (p_bPush)
+				WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
+		}
+		else
+			HandleMathTerm(p_reports.pBegin[1].content.children.pBegin[1].content.children, p_bPush);
+		
+		return p_reports.pEnd + 1;
+	}
+	inline const grammar::Report * HandleMathTerm(grammar::report_range p_reports, bool p_bPush)
+	{
+		//Push all factors starting from the right
+		for (auto i = p_reports.pEnd; i = FindWrapHeader<grammar::BGR_MATH_FACTOR, 10, false>(p_reports.pBegin + 1, i);)
+			HandleMathFactor(i[1].content.children, true);
+
+		//With operator
+		if (p_reports.pBegin->content.children.pEnd + 1 < p_reports.pEnd && p_reports.pBegin->content.children.pEnd->unRuleId == grammar::BGR_MATH_TERM_HELPER_1)
+		{
+			//First write first object and then write all operators
+			for (auto i = HandleMathFactor(p_reports.pBegin[1].content.children, false); i < p_reports.pEnd; i = (++i)->content.children.pEnd)
+				WriteOperator(machine::OP::CALL_OPERATOR, i);
+
+			//Push result if needed
+			if (p_bPush)
+				WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
+		}
+		else
+			HandleMathFactor(p_reports.pBegin[1].content.children, p_bPush);
+
+		return p_reports.pEnd + 1;
+	}
+	inline const grammar::Report * HandleMathFactor(grammar::report_range p_reports, bool p_bPush)
+	{
+		switch (p_reports.pBegin->unRuleId)
+		{
+		case grammar::BGR_MATH_EXPRESSION:
+			HandleMathExpression(p_reports.pBegin[1].content.children, p_bPush);
+			
+			break;
+		case grammar::BGR_VALUE_RAW:
+			HandleValueRaw(p_reports.pBegin->content.children, p_bPush);
+
+			break;
+		default:
+			throw exception::ImplementationException("Invalid switch case.");
+		}
+
+		return p_reports.pEnd + 1;
+	}
+	inline const grammar::Report * HandleInstantiation(grammar::report_range p_reports, bool p_bPush)
+	{
+		/*
+		if (p_pReport->pvTokenUnion->size() == 2)
+		{
+		p_pReport = p_pReport->pvTokenUnion->begin()._Ptr;
+
+		WriteOpCode(OP::INSTANTIATE, &p_pReport[0].code, HandleIdentifierAccess(p_pReport + 1));
+		}
+		else
+		{
+		p_pReport = p_pReport->pvTokenUnion->begin()._Ptr;
+
+		auto ucParameterCount = HandleIdentifierAccess(p_pReport + 2);
+
+		WriteOpCode(OP::LOAD, &p_pReport->code);
+		WriteOpCode(OP::INSTANTIATE_ACCUMULATOR, &p_pReport[1].code, ucParameterCount);
+		}
+		*/
+
+		WriteOpCode(machine::OP::INSTANTIATE, p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize, HandleParameter(p_reports.pBegin[2].content.children));
+
+		//Push if wanted
+		if (p_bPush)
+			WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
+
+		return p_reports.pEnd + 1;
 	}
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <stdint.h>
 
 
 namespace bia
@@ -12,16 +13,34 @@ namespace grammar
 
 struct Report;
 
-typedef std::pair<const Report*, const Report*> report_range;
+typedef struct
+{
+	const Report * pBegin;
+	const Report * pEnd;
+} report_range;
 
 struct Report
 {
-	const char * pcString;
-	size_t iSize;
-	size_t iRuleId;
-	size_t iTokenId;
+	enum TYPE : uint8_t
+	{
+		T_TOKEN,
+		T_BEGIN,
+		T_END
+	};
+
+	TYPE type;
+	union
+	{
+		struct
+		{
+			const char * pcString;
+			size_t iSize;
+		} token;
+		report_range children;
+	} content;
+	uint32_t unRuleId;
+	uint32_t unTokenId;
 	uint64_t ullCustomParameter;
-	report_range children;
 };
 
 class BiaReportBundle
@@ -32,7 +51,7 @@ public:
 	*/
 	inline BiaReportBundle()
 	{
-		m_iSize = 0;
+		m_unSize = 0;
 	}
 	/**
 	 * Adds a report to the bundle.
@@ -44,14 +63,14 @@ public:
 	*/
 	inline void AddReport(Report p_report)
 	{
-		if (m_iSize < SIZE)
+		if (m_unSize < SIZE)
 		{
-			m_aReports[m_iSize++] = std::move(p_report);
+			m_aReports[m_unSize++] = std::move(p_report);
 
 			return;
 		}
-		else if (m_iSize == SIZE)
-			m_vReports.assign(m_aReports, m_aReports + m_iSize++);
+		else if (m_unSize == SIZE)
+			m_vReports.assign(m_aReports, m_aReports + m_unSize++);
 
 		m_vReports.push_back(std::move(p_report));
 	}
@@ -63,7 +82,7 @@ public:
 	*/
 	inline void Clear()
 	{
-		m_iSize = 0;
+		m_unSize = 0;
 		m_vReports.clear();
 	}
 	/**
@@ -72,14 +91,14 @@ public:
 	 * @since	2.39.82.486
 	 * @date	16-Sep-17
 	 *
-	 * @param	p_iOldState	Defines the previous state.
+	 * @param	p_unOldState	Defines the previous state.
 	*/
-	inline void Reset(size_t p_iOldState)
+	inline void Reset(uint32_t p_unOldState)
 	{
-		if (m_iSize > SIZE)
-			m_vReports.erase(m_vReports.begin() + p_iOldState, m_vReports.end());
+		if (m_unSize > SIZE)
+			m_vReports.erase(m_vReports.begin() + p_unOldState, m_vReports.end());
 		else
-			m_iSize = p_iOldState;
+			m_unSize = p_unOldState;
 	}
 	/**
 	 * Returns the current size of the bundle.
@@ -89,9 +108,9 @@ public:
 	 *
 	 * @return	The current size.
 	*/
-	inline size_t Size() const
+	inline uint32_t Size() const
 	{
-		return m_iSize > SIZE ? m_vReports.size() : m_iSize;
+		return m_unSize > SIZE ? m_vReports.size() : m_unSize;
 	}
 	/**
 	 * Returns a pointer to the beginning.
@@ -103,7 +122,7 @@ public:
 	*/
 	inline Report * Begin()
 	{
-		return m_iSize > SIZE ? m_vReports.begin()._Ptr : m_aReports;
+		return m_unSize > SIZE ? m_vReports.begin()._Ptr : m_aReports;
 	}
 	/**
 	 * Returns a pointer to the end.
@@ -115,12 +134,12 @@ public:
 	*/
 	inline Report * End()
 	{
-		return m_iSize > SIZE ? m_vReports.end()._Ptr : m_aReports + m_iSize;
+		return m_unSize > SIZE ? m_vReports.end()._Ptr : m_aReports + m_unSize;
 	}
 
 private:
-	constexpr static size_t SIZE = 64;
-	size_t m_iSize;
+	constexpr static uint32_t SIZE = 64;
+	uint32_t m_unSize;
 
 	Report m_aReports[SIZE];
 
