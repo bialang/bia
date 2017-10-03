@@ -56,7 +56,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	interpreter.SetRule(BGR_VALUE_RAW, std::move(tmp));
 
 	//Instantiation
-	tmp.Reset(5);
+	tmp.Reset(5, BiaInterpreterRule::F_WRAP_UP);
 
 	tmp.SetToken(1, KeywordToken<Keyword_new, FILLER_TOKEN>)
 		.SetToken(2, WHITESPACE_REQUIRED)
