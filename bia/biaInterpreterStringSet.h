@@ -272,6 +272,18 @@ struct Operator_semicolon
 	}
 };
 
+struct Operator_dot
+{
+	constexpr static const char * Token()
+	{
+		return ".";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
 struct Operator_comma
 {
 	constexpr static const char * Token()
@@ -301,6 +313,30 @@ struct Operator_bracket_close
 	constexpr static const char * Token()
 	{
 		return ")";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_square_bracket_open
+{
+	constexpr static const char * Token()
+	{
+		return "[";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_square_bracket_close
+{
+	constexpr static const char * Token()
+	{
+		return "]";
 	}
 	constexpr static size_t Size()
 	{

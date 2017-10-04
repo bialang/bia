@@ -52,7 +52,8 @@ public:
 	{
 		F_NONE = 0,
 		F_OR = 0x1,
-		F_WRAP_UP = 0x2
+		F_WRAP_UP = 0x2,
+		F_DONT_REPORT_EMPTY = 0x4
 	};
 
 
@@ -120,19 +121,39 @@ public:
 		uint32_t unCursor = 0;
 		auto unRuleId = static_cast<uint32_t>(this - p_params.pRules);
 		auto WrapUp = [&] {
-			if (m_fFlags & F_WRAP_UP && p_params.pBundle->Size() - iSizeToBegin > 1)
+			auto unTokenAdded = p_params.pBundle->Size() - iSizeToBegin;
+
+			if (m_fFlags & F_WRAP_UP)
 			{
-				//Edit beginning token
-				auto pBegin = p_params.pBundle->Begin() + iSizeToBegin;
+				if (unTokenAdded > 1)
+				{
+					//Edit beginning token
+					auto pBegin = p_params.pBundle->Begin() + iSizeToBegin;
 
-				pBegin->content.children = { pBegin, p_params.pBundle->End() };
-				
-				//End
-				auto end = *pBegin;
+					pBegin->content.children = { pBegin, p_params.pBundle->End() };
 
-				end.type = Report::T_END;
+					//End
+					auto end = *pBegin;
 
-				p_params.pBundle->AddReport(std::move(end));
+					end.type = Report::T_END;
+
+					p_params.pBundle->AddReport(std::move(end));
+				}
+				//Dont report empty child
+				else if (m_fFlags & F_DONT_REPORT_EMPTY)
+				{
+					if (unTokenAdded)
+						p_params.pBundle->Reset(iSizeToBegin);
+				}
+				//Empty child
+				else if (unTokenAdded == 1)
+				{
+					//Edit beginning token
+					auto pBegin = p_params.pBundle->Begin() + iSizeToBegin;
+
+					pBegin->content.children = { pBegin, pBegin };
+					pBegin->type = Report::T_EMPTY_CHILD;
+				}
 			}
 		};
 

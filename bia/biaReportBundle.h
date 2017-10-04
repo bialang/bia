@@ -25,7 +25,8 @@ struct Report
 	{
 		T_TOKEN,
 		T_BEGIN,
-		T_END
+		T_END,
+		T_EMPTY_CHILD
 	};
 
 	TYPE type;

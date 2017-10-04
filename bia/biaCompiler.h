@@ -48,12 +48,19 @@ public:
 	}
 	inline void PrintStraight(const char * p_pszIndentation, grammar::report_range p_children)
 	{
-		printf("%s  0:BEGIN [%03lu](% 2lu)\n", p_pszIndentation, p_children.pBegin->unRuleId, p_children.pBegin->unTokenId);
+		if (p_children.pBegin->content.children.pBegin == p_children.pBegin->content.children.pEnd)
+			return;
+		else
+			printf("%s  0:BEGIN [%03lu](% 2lu)\n", p_pszIndentation, p_children.pBegin->unRuleId, p_children.pBegin->unTokenId);
 
 		for (auto i = p_children.pBegin + 1; i < p_children.pEnd; ++i)
 		{
 			switch (i->type)
 			{
+			case grammar::Report::T_EMPTY_CHILD:
+				printf("%s % 2i:EMPTY [%03lu](% 2lu)\n", p_pszIndentation, i - p_children.pBegin, i->unRuleId, i->unTokenId);
+
+				break;
 			case grammar::Report::T_BEGIN:
 				printf("%s % 2i:CHILD [%03lu](% 2lu)\n", p_pszIndentation, i - p_children.pBegin, i->unRuleId, i->unTokenId);
 
@@ -458,11 +465,16 @@ private:
 
 			break;
 		case grammar::BV_FALSE:
+		case grammar::BV_NULL:
 			WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_0 : machine::OP::LOAD_LONG_0);
 
 			break;
 		case grammar::BV_INSTANTIATION:
 			HandleInstantiation(p_reports.pBegin[1].content.children, p_bPush);
+
+			break;
+		case grammar::BV_MEMBER:
+			HandleMember(p_reports.pBegin[1].content.children, p_bPush);
 
 			break;
 		default:
@@ -475,11 +487,8 @@ private:
 	{
 		PrintStraight("i>", p_reports);
 
-		//Handle parameter
-		uint8_t ucParameterCount = p_reports.pBegin + 2 == p_reports.pEnd ? 0 : HandleParameter(p_reports.pBegin[2].content.children);
-
 		//Instantiate object
-		WriteOpCode(machine::OP::INSTANTIATE, p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize, ucParameterCount);
+		WriteOpCode(machine::OP::INSTANTIATE, p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize, HandleParameter(p_reports.pBegin[2].content.children));
 
 		return p_reports.pEnd + 1;
 	}
@@ -554,6 +563,94 @@ private:
 			break;
 		default:
 			BIA_COMPILER_DEV_INVALID
+		}
+
+		return p_reports.pEnd + 1;
+	}
+	inline const grammar::Report * HandleMember(grammar::report_range p_reports, bool p_bPush)
+	{
+		PrintStraight("m>", p_reports);
+
+		//Handle first element
+		do
+		{
+			if (++p_reports.pBegin + 1 < p_reports.pEnd)
+			{
+				//Check if this is a function call
+				switch (p_reports.pBegin[1].unRuleId)
+				{
+				case grammar::BGR_PARAMETER:
+					//Write global function call
+					WriteOpCode(machine::OP::CALL_GLOBAL, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize, HandleParameter(p_reports.pBegin[1].content.children));
+
+					p_reports.pBegin = p_reports.pBegin[1].content.children.pEnd + 1;
+
+					continue;
+				case grammar::BGR_PARAMETER_ITEM_ACCESS:
+				{
+					//Handle parameter
+					auto ucParameterCount = HandleParameter(p_reports.pBegin[1].content.children);
+
+					//Write item access
+					WriteOpCode(machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+					WriteOpCode(machine::OP::CALL, "[]", 2, ucParameterCount);
+
+					p_reports.pBegin = p_reports.pBegin[1].content.children.pEnd + 1;
+
+					continue;
+				}
+				case grammar::BGR_MEMBER_HELPER_1:
+					break;
+				default:
+					BIA_COMPILER_DEV_INVALID
+				}
+			}
+
+			//Load object
+			WriteOpCode(machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+
+			++p_reports.pBegin;
+		} while (false);
+
+		//Loop through all remaining elements
+		while (p_reports.pBegin < p_reports.pEnd)
+		{
+			if (p_reports.pBegin + 1 < p_reports.pEnd)
+			{
+				//Check if this is a function call
+				switch (p_reports.pBegin[1].unRuleId)
+				{
+				case grammar::BGR_PARAMETER:
+					//Write function call
+					WriteOpCode(machine::OP::CALL, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize, HandleParameter(p_reports.pBegin[1].content.children));
+
+					p_reports.pBegin = p_reports.pBegin[1].content.children.pEnd + 1;
+
+					continue;
+				case grammar::BGR_PARAMETER_ITEM_ACCESS:
+				{
+					//Handle parameter
+					auto ucParameterCount = HandleParameter(p_reports.pBegin[1].content.children);
+
+					//Write item access
+					WriteOpCode(machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+					WriteOpCode(machine::OP::CALL, "[]", 2, ucParameterCount);
+
+					p_reports.pBegin = p_reports.pBegin[1].content.children.pEnd + 1;
+
+					continue;
+				}
+				case grammar::BGR_MEMBER_HELPER_1:
+					break;
+				default:
+					BIA_COMPILER_DEV_INVALID
+				}
+			}
+			
+			//Load object from accumulator
+			WriteOpCode(machine::OP::LOAD_FROM_ACCUMULATOR, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+
+			++p_reports.pBegin;
 		}
 
 		return p_reports.pEnd + 1;
