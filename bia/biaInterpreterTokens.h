@@ -5,6 +5,7 @@
 
 #include "biaInterpreterRule.h"
 #include "biaInterpreterIdentifiers.h"
+#include "utf8.h"
 
 
 namespace bia
@@ -15,6 +16,11 @@ namespace grammar
 {
 
 
+struct StringCustomParameter
+{
+	const char * pcBuffer;
+	uint64_t ullSize;
+};
 
 template<size_t _SIZE>
 inline bool FastFind(char p_cWhat, const char * p_pcSortedString)
@@ -120,7 +126,151 @@ inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR);
 
+	enum FLAGS : uint32_t
+	{
+		F_SINGLE_QUOTE = 0x1,	/**	If set ', otherwise ".	*/
+		F_QUOTE_SET = 0x2,
+		F_RAW_STRING = 0x4,
+	};
 
+	constexpr uint64_t cullSize = 256;
+	thread_local char acLocalBuffer[cullSize];
+	thread_local StringCustomParameter customParameter;
+	const auto cpcDestEnd = acLocalBuffer + cullSize;
+	const auto cpcEnd = p_pcBuffer + p_iSize;
+	auto pcDest = acLocalBuffer;
+	auto pcDelimitor = "";
+	size_t iDelimitor = 0;
+	uint32_t fFlags = 0;
+
+	//Determine delimitor and quote
+	while (p_iSize--)
+	{
+		switch (*p_pcBuffer++)
+		{
+		case 'R':
+			//Add 'R' to delimitor
+			if (fFlags & F_QUOTE_SET)
+				++iDelimitor;
+			else if (!(fFlags & F_RAW_STRING))
+				fFlags |= F_RAW_STRING;
+			else
+				return ERROR;
+
+			break;
+		case '"': //Double quote
+			//No quote set yet
+			if (!(fFlags & F_QUOTE_SET))
+			{
+				fFlags |= F_QUOTE_SET;
+
+				//Terminate
+				if (!(fFlags & F_RAW_STRING))
+					goto gt_break;
+			}
+			//Add to delimitor
+			else
+				++iDelimitor;
+
+			break;
+		case '\'': //Single quote
+			//No quote set yet
+			if (!(fFlags & F_QUOTE_SET))
+			{
+				fFlags |= F_QUOTE_SET | F_SINGLE_QUOTE;
+
+				//Terminate
+				if (!(fFlags & F_RAW_STRING))
+					goto gt_break;
+			}
+			//Add to delimitor
+			else
+				++iDelimitor;
+
+			break;
+		case '(':
+			//Terminate delimitor
+			if (fFlags & F_QUOTE_SET)
+				goto gt_break;
+
+			return ERROR;
+		default:
+			//Add delimitor
+			if (fFlags & F_QUOTE_SET)
+				++iDelimitor;
+			else
+				return ERROR;
+
+			break;
+		}
+	}
+
+gt_break:;
+
+	auto pcLast = p_pcBuffer;
+	auto bEscape = false;
+	auto Maker = [](size_t p_iSize, auto p_lambda) {
+		if (pcDest + p_iSize <= cpcDestEnd)
+			p_lambda();
+		else
+			return false;
+
+		return true;
+	};
+
+	//Main checking loop
+	while (p_pcBuffer < cpcEnd)
+	{
+		auto pcTmp = p_pcBuffer;
+
+		if (bEscape)
+		{
+
+
+			switch (utf8::next(p_pcBuffer, cpcEnd))
+			{
+			case 'n':
+				*pcDest++ = '\n';
+				++pcLast;
+
+				break;
+			case 't':
+				*pcDest++ = '\t';
+				++pcLast;
+
+				break;
+			case 'r':
+				*pcDest++ = '\r';
+				++pcLast;
+
+				break;
+			case 'b':
+				*pcDest++ = '\b';
+				++pcLast;
+			default:
+				break;
+			}
+
+			bEscape = false;
+		}
+		else
+		{
+			switch (utf8::next(p_pcBuffer, cpcEnd))
+			{
+			case '\\':
+				memcpy(pcDest, pcLast, pcTmp - pcLast);
+
+				pcDest += pcTmp - pcLast;
+				pcLast = p_pcBuffer;
+				bEscape = true;
+			default:
+				break;
+			}
+		}
+	}
+
+	//On success
+	p_output.ullCustom = static_cast<uint64_t>(&customParameter);
 
 	return ERROR;
 }
