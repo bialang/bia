@@ -344,6 +344,30 @@ struct Operator_square_bracket_close
 	}
 };
 
+struct Operator_logical_and
+{
+	constexpr static const char * Token()
+	{
+		return "&&";
+	}
+	constexpr static size_t Size()
+	{
+		return 2;
+	}
+};
+
+struct Operator_logical_or
+{
+	constexpr static const char * Token()
+	{
+		return "||";
+	}
+	constexpr static size_t Size()
+	{
+		return 2;
+	}
+};
+
 struct Charset_whitespace
 {
 	constexpr static const char * Token()

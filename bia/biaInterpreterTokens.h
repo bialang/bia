@@ -209,7 +209,7 @@ gt_break:;
 
 	auto pcLast = p_pcBuffer;
 	auto bEscape = false;
-	auto Maker = [](size_t p_iSize, auto p_lambda) {
+	auto Maker = [&](size_t p_iSize, auto p_lambda) {
 		if (pcDest + p_iSize <= cpcDestEnd)
 			p_lambda();
 		else
@@ -270,7 +270,7 @@ gt_break:;
 	}
 
 	//On success
-	p_output.ullCustom = static_cast<uint64_t>(&customParameter);
+	p_output.ullCustom = reinterpret_cast<uint64_t>(&customParameter);
 
 	return ERROR;
 }

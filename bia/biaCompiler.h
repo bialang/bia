@@ -6,6 +6,7 @@
 #include "biaReportBundle.h"
 #include "biaStream.h"
 #include "biaHash.h"
+#include "biaConditionMarker.h"
 
 #define BIA_COMPILER_DEV_TEST if(p_pBegin + 1 < p_pEnd){
 #define BIA_COMPILER_DEV_TEST_END } throw exception::ImplementationException("Invalid grammar.");
@@ -445,7 +446,50 @@ private:
 	}
 	inline const grammar::Report * HandleValue(grammar::report_range p_reports, bool p_bPush)
 	{
-		HandleMathExpression(p_reports.pBegin[1].content.children, p_bPush);
+		PrintStraight("vv>", p_reports);
+		
+		//Handle first expression
+		p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, p_bPush);
+
+		BiaConditionMaker maker(m_output);
+
+		while (p_reports.pBegin < p_reports.pEnd)
+		{
+			auto unLogicalId = p_reports.pBegin->unTokenId;
+
+			//Handle right value
+			p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
+
+			//Logical operator
+			switch (unLogicalId)
+			{
+			case grammar::BVO_LOGICAL_AND:
+			{
+				constexpr uint64_t cullNull = 0;
+
+				WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
+
+				maker.MarkPlaceholder(BiaConditionMaker::L_END);
+
+				break;
+			}
+			case grammar::BVO_LOGICAL_OR:
+			{
+				constexpr uint64_t cullNull = 0;
+
+				WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
+
+				maker.MarkPlaceholder(BiaConditionMaker::L_END);
+
+				break;
+			}
+			default:
+				BIA_COMPILER_DEV_INVALID
+			}
+		}
+
+		maker.MarkLocation(BiaConditionMaker::L_END);
+		maker.ReplaceAll();
 
 		return p_reports.pEnd + 1;
 	}
@@ -557,8 +601,8 @@ private:
 			HandleValueRaw(p_reports.pBegin[1].content.children, p_bPush);
 
 			break;
-		case grammar::BGR_MATH_EXPRESSION:
-			HandleMathExpression(p_reports.pBegin[1].content.children, p_bPush);
+		case grammar::BGR_VALUE:
+			HandleValue(p_reports.pBegin[1].content.children, p_bPush);
 
 			break;
 		default:
