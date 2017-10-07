@@ -15,11 +15,10 @@ namespace api
 namespace grammar
 {
 
-
-struct StringCustomParameter
+enum STRING_CUSTOM_PARAMETER_FLAGS : uint64_t
 {
-	const char * pcBuffer;
-	uint64_t ullSize;
+	SCPF_RAW_STRING = 1ui64 << 63,
+	SCPF_MASK = 0xffffffffui64
 };
 
 template<size_t _SIZE>
@@ -133,12 +132,6 @@ inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 		F_RAW_STRING = 0x4,
 	};
 
-	constexpr uint64_t cullSize = 256;
-	thread_local char acLocalBuffer[cullSize];
-	thread_local StringCustomParameter customParameter;
-	const auto cpcDestEnd = acLocalBuffer + cullSize;
-	const auto cpcEnd = p_pcBuffer + p_iSize;
-	auto pcDest = acLocalBuffer;
 	auto pcDelimitor = "";
 	size_t iDelimitor = 0;
 	uint32_t fFlags = 0;
@@ -146,6 +139,8 @@ inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 	//Determine delimitor and quote
 	while (p_iSize--)
 	{
+		++p_output.iBufferOffset;
+
 		switch (*p_pcBuffer++)
 		{
 		case 'R':
@@ -167,6 +162,8 @@ inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 				//Terminate
 				if (!(fFlags & F_RAW_STRING))
 					goto gt_break;
+				else
+					pcDelimitor = p_pcBuffer;
 			}
 			//Add to delimitor
 			else
@@ -182,6 +179,8 @@ inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 				//Terminate
 				if (!(fFlags & F_RAW_STRING))
 					goto gt_break;
+				else
+					pcDelimitor = p_pcBuffer;
 			}
 			//Add to delimitor
 			else
@@ -207,71 +206,78 @@ inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 
 gt_break:;
 
-	auto pcLast = p_pcBuffer;
-	auto bEscape = false;
-	auto Maker = [&](size_t p_iSize, auto p_lambda) {
-		if (pcDest + p_iSize <= cpcDestEnd)
-			p_lambda();
-		else
-			return false;
-
-		return true;
-	};
-
-	//Main checking loop
-	while (p_pcBuffer < cpcEnd)
+	//Raw string
+	if (fFlags & F_RAW_STRING)
 	{
-		auto pcTmp = p_pcBuffer;
+		p_output.ullCustom = SCPF_RAW_STRING;
 
-		if (bEscape)
+		while (p_iSize--)
 		{
-
-
-			switch (utf8::next(p_pcBuffer, cpcEnd))
+			switch (*p_pcBuffer++)
 			{
-			case 'n':
-				*pcDest++ = '\n';
-				++pcLast;
+			case ')':
+				//Check delimitor size + quote
+				if (p_iSize < iDelimitor + 1)
+					return ERROR;
+				else if (!memcmp(pcDelimitor, p_pcBuffer, iDelimitor))
+				{
+					if (!(fFlags & F_SINGLE_QUOTE) && p_pcBuffer[iDelimitor] == '"' ||
+						fFlags & F_SINGLE_QUOTE && p_pcBuffer[iDelimitor] == '\'')
+					{
+						p_output.iBufferPadding = iDelimitor + 2;
 
-				break;
-			case 't':
-				*pcDest++ = '\t';
-				++pcLast;
-
-				break;
-			case 'r':
-				*pcDest++ = '\r';
-				++pcLast;
-
-				break;
-			case 'b':
-				*pcDest++ = '\b';
-				++pcLast;
+						return SUCCESS;
+					}
+				}
 			default:
-				break;
-			}
+				++p_output.iTokenSize;
 
-			bEscape = false;
-		}
-		else
-		{
-			switch (utf8::next(p_pcBuffer, cpcEnd))
-			{
-			case '\\':
-				memcpy(pcDest, pcLast, pcTmp - pcLast);
-
-				pcDest += pcTmp - pcLast;
-				pcLast = p_pcBuffer;
-				bEscape = true;
-			default:
 				break;
 			}
 		}
 	}
+	else
+	{
+		const auto cpcEnd = p_pcBuffer + p_iSize;
+		const auto cpcBegin = p_pcBuffer;
 
-	//On success
-	p_output.ullCustom = reinterpret_cast<uint64_t>(&customParameter);
+		while (p_pcBuffer < cpcEnd)
+		{
+			try
+			{
+				switch (utf8::next(p_pcBuffer, cpcEnd))
+				{
+				case '\\':
+					utf8::advance(p_pcBuffer, 1, cpcEnd);
 
+					break;
+				case '\'':
+					if (fFlags & F_SINGLE_QUOTE)
+					{
+						p_output.iBufferPadding = 1;
+						p_output.iTokenSize = p_pcBuffer - cpcBegin - 1;
+
+						return SUCCESS;
+					}
+				case '"':
+					if (!(fFlags & F_SINGLE_QUOTE))
+					{
+						p_output.iBufferPadding = 1;
+						p_output.iTokenSize = p_pcBuffer - cpcBegin - 1;
+
+						return SUCCESS;
+					}
+				default:
+					break;
+				}
+			}
+			catch (...)
+			{
+				return ERROR;
+			}
+		}
+	}
+	
 	return ERROR;
 }
 

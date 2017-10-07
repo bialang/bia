@@ -155,7 +155,7 @@ int main(int argc, char ** argv)
 {
 	stream::BiaStreamBuffer cc;
 
-	char tetea[] = "var test = 12 && 32||8;";
+	char tetea[] = R"kart(var test = '(ich \asagte "hi" (zu)" dir)';)kart";
 	
 	grammar::InitializeRules().Interpret(tetea, sizeof(tetea) - 1, compiler::BiaCompiler(cc));
 

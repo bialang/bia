@@ -223,7 +223,7 @@ void BiaDisassembler::DisassembleByteCode(stream::BiaByteStream p_byteCode)
 			}
 			case OP::LOAD_STRING:
 			{
-				printf("loads%s%s\n", pszIndent, ReadBuffer<unsigned short>(p_byteCode, stBuffer).c_str());
+				printf("loads%s%s\n", pszIndent, ReadBuffer<uint32_t>(p_byteCode, stBuffer).c_str());
 
 				break;
 			}
@@ -367,7 +367,7 @@ void BiaDisassembler::DisassembleByteCode(stream::BiaByteStream p_byteCode)
 			}
 			case OP::PUSH_STRING:
 			{
-				printf("pushs%s%s\n", pszIndent, ReadBuffer<unsigned short>(p_byteCode, stBuffer).c_str());
+				printf("pushs%s%s\n", pszIndent, ReadBuffer<uint32_t>(p_byteCode, stBuffer).c_str());
 				++p_byteCode.pcCursor;
 
 				break;

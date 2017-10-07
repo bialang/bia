@@ -7,6 +7,7 @@
 #include "biaStream.h"
 #include "biaHash.h"
 #include "biaConditionMarker.h"
+#include "utf8.h"
 
 #define BIA_COMPILER_DEV_TEST if(p_pBegin + 1 < p_pEnd){
 #define BIA_COMPILER_DEV_TEST_END } throw exception::ImplementationException("Invalid grammar.");
@@ -319,6 +320,105 @@ private:
 			BIA_COMPILER_DEV_INVALID
 		}
 	}
+	inline void HandleString(const grammar::Report * p_pReport, bool p_bPush)
+	{
+		auto unSize = static_cast<uint32_t>(p_pReport->content.token.iSize - static_cast<size_t>(p_pReport->ullCustomParameter));
+
+		if (unSize)
+		{
+			//Write size
+			if (p_bPush)
+				WriteConstant(machine::OP::PUSH_STRING, unSize);
+			else
+				WriteConstant(machine::OP::LOAD_STRING, unSize);
+
+			auto pcDest = m_output.GetBuffer(unSize);
+
+			//Copy raw string
+			if (p_pReport->ullCustomParameter & grammar::SCPF_RAW_STRING)
+				memcpy(pcDest, p_pReport->content.token.pcString, unSize);
+			else
+			{
+				auto pcBegin = p_pReport->content.token.pcString;
+				const auto cpcEnd = pcBegin + p_pReport->content.token.iSize;
+				auto pcLast = pcBegin;
+				auto bEscape = false;
+
+				while (pcBegin < cpcEnd)
+				{
+					if (bEscape)
+					{
+						switch (utf8::next(pcBegin, cpcEnd))
+						{
+						case 'n':
+							*pcDest++ = '\n';
+							++pcLast;
+
+							break;
+						case 'r':
+							*pcDest++ = '\r';
+							++pcLast;
+
+							break;
+						case 't':
+							*pcDest++ = '\t';
+							++pcLast;
+
+							break;
+						case 'a':
+							*pcDest++ = '\a';
+							++pcLast;
+
+							break;
+						case 'b':
+							*pcDest++ = '\b';
+							++pcLast;
+
+							break;
+						default:
+							break;
+						}
+
+						bEscape = false;
+					}
+					else
+					{
+						auto pcTmp = pcBegin;
+
+						switch (utf8::next(pcBegin, cpcEnd))
+						{
+						case '\\':
+							//Copy buffer
+							memcpy(pcDest, pcLast, pcTmp - pcLast);
+
+							pcDest += pcTmp - pcLast;
+							bEscape = true;
+							pcLast = pcBegin;
+						default:
+							break;
+						}
+					}
+				}
+
+				memcpy(pcDest, pcLast, pcBegin - pcLast);
+			}
+
+			//Commit buffer
+			m_output.CommitBuffer(unSize);
+
+			//Write terminator
+			if (p_bPush)
+			{
+				constexpr uint8_t cucTerminator = 0;
+
+				m_output.Write(&cucTerminator, 1);
+			}
+		}
+		else if (p_bPush)
+			WriteOpCode(machine::OP::PUSH_STRING_EMPTY);
+		else
+			WriteOpCode(machine::OP::LOAD_STRING_EMPTY);
+	}
 	inline uint8_t HandleParameter(grammar::report_range p_reports)
 	{
 		PrintStraight("p>", p_reports);
@@ -503,7 +603,10 @@ private:
 			HandleNumber(p_reports.pBegin + 1, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
 
 			break;
-		//case grammar::BV_STRING:
+		case grammar::BV_STRING:
+			HandleString(p_reports.pBegin + 1, p_bPush);
+
+			break;
 		case grammar::BV_TRUE:
 			WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_1 : machine::OP::LOAD_LONG_1);
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 #include "biaMemberHolder.h"
 #include "biaMachineContext.h"
 #include "biaScopeElement.h"
@@ -371,13 +373,13 @@ public:
 			case OP::LOAD_DOUBLE_1:
 			{
 				p_pContext->m_accumulator.Initialize<api::framework::native::BiaNativeVariable<double>>(1.0);
-
+				
 				break;
 			}
 			case OP::LOAD_STRING:
 			{
-				auto iLength = static_cast<size_t>(p_pContext->m_pCode->Read<unsigned short>());
-
+				auto iLength = static_cast<size_t>(p_pContext->m_pCode->Read<uint32_t>());
+				
 				if (p_pContext->m_pCode->pcCursor + iLength > p_pContext->m_pCode->pcByteCodeEnd)
 					throw exception::InvalidByteCodeException("Invalid string length.");
 
@@ -533,7 +535,7 @@ public:
 			}
 			case OP::PUSH_STRING:
 			{
-				auto unSize = p_pContext->m_pCode->Read<unsigned short>();
+				auto unSize = p_pContext->m_pCode->Read<uint32_t>();
 
 				//Read buffer
 				if (p_pContext->m_pCode->pcCursor + unSize + 1 > p_pContext->m_pCode->pcByteCodeEnd)

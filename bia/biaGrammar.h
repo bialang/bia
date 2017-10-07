@@ -176,7 +176,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	tmp.Reset(2, BiaInterpreterRule::F_WRAP_UP);
 
 	tmp.SetToken(1, RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN>)
-		.SetToken(2, RulePointerToken<BGR_VALUE_HELPER_0, FILLER_TOKEN, LOOPING_TOKEN>);
+		.SetToken(2, RulePointerToken<BGR_VALUE_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>);
 
 	interpreter.SetRule(BGR_VALUE, std::move(tmp));
 

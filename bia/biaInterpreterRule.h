@@ -40,6 +40,7 @@ struct TokenOutput
 {
 	size_t iTokenSize;
 	size_t iBufferOffset;
+	size_t iBufferPadding;
 	uint64_t ullCustom;
 };
 
@@ -200,7 +201,7 @@ public:
 					case ACTION::DONT_REPORT:
 						WrapUp();
 
-						return output.iTokenSize + iAccount;
+						return output.iTokenSize + output.iBufferOffset + output.iBufferPadding + iAccount;
 					case ACTION::REPORT_AND_LOOP:
 					{
 						Report token{};
@@ -214,14 +215,18 @@ public:
 						p_params.pBundle->AddReport(std::move(token));
 					}
 					case ACTION::DONT_REPORT_AND_LOOP:
-						iAccount += output.iTokenSize;
-						p_pcBuffer += output.iTokenSize;
-						p_iSize -= output.iTokenSize;
-						
+					{
+						auto iOffset = output.iTokenSize + output.iBufferOffset + output.iBufferPadding;
+
+						iAccount += iOffset;
+						p_pcBuffer += iOffset;
+						p_iSize -= iOffset;
+
 						bLoop = true;
 						--unCursor;
 
 						continue;
+					}
 					case ACTION::ERROR:
 						break;
 					}
@@ -264,10 +269,14 @@ public:
 						p_params.pBundle->AddReport(std::move(token));
 					}
 					case ACTION::DONT_REPORT:
-						p_pcBuffer += output.iTokenSize;
-						p_iSize -= output.iTokenSize;
+					{
+						auto iOffset = output.iTokenSize + output.iBufferOffset + output.iBufferPadding;
+
+						p_pcBuffer += iOffset;
+						p_iSize -= iOffset;
 
 						break;
+					}
 					case ACTION::REPORT_AND_LOOP:
 					{
 						Report token{};
@@ -281,13 +290,17 @@ public:
 						p_params.pBundle->AddReport(std::move(token));
 					}
 					case ACTION::DONT_REPORT_AND_LOOP:
-						p_pcBuffer += output.iTokenSize;
-						p_iSize -= output.iTokenSize;
-						
+					{
+						auto iOffset = output.iTokenSize + output.iBufferOffset + output.iBufferPadding;
+
+						p_pcBuffer += iOffset;
+						p_iSize -= iOffset;
+
 						bLoop = true;
 						--unCursor;
 
 						continue;
+					}
 					case ACTION::ERROR:
 						//Clear errors
 						p_params.pBundle->Reset(iSizeToBegin);

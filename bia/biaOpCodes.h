@@ -37,8 +37,8 @@ enum class OP : unsigned char
 	LOAD_DOUBLE_0,
 	LOAD_DOUBLE_N1,
 	LOAD_DOUBLE_1,
-	LOAD_STRING,	/**	Loads a constant string.	(2b size/(size)b string)	*/
-	LOAD_STRING_EMPTY,
+	LOAD_STRING,	/**	Loads a constant string.	(4b size/(size)b string)	*/
+	LOAD_STRING_EMPTY,	/**	Loads an empty string. (no params)	*/
 	PUSH_ACCUMULATOR,	/**	Pushes the accumulator onto the parameter stack. Does reset the accumulator. (no params)   */
 	PUSH,	/**	Pushes the specified object onto the stack. (8b hash64/4b hash32/1b size/(size)b name)	*/
 	PUSH_COPY,	/**	Pushes the specified object onto the stack. (8b hash64/4b hash32/1b size/(size)b name)	*/
@@ -61,8 +61,8 @@ enum class OP : unsigned char
 	PUSH_DOUBLE_0,
 	PUSH_DOUBLE_N1,
 	PUSH_DOUBLE_1,
-	PUSH_STRING,	/**	Pushes a constant string. (2b size/(size)b string/1b zero-terminator)	*/
-	PUSH_STRING_EMPTY,
+	PUSH_STRING,	/**	Pushes a constant string. (4b size/(size)b string/1b zero-terminator)	*/
+	PUSH_STRING_EMPTY,	/**	Pushes an empty string. (no params)	*/
 	CALL,	/**	Calls a function/variable on the accumulator. (1b param_count/8b hash64/4b hash32/1b size/(size)b name)	*/
 	CALL_GLOBAL,	/**	Calls a global member. (1b paramCount/8b hash64/4b hash32/1b size/(size)b name)	*/
 	CALL_OPERATOR,	/**	Calls an operator on the accumulator. (4b operator_id)	*/
