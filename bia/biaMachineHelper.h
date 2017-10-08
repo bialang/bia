@@ -204,6 +204,17 @@ public:
 
 				break;
 			}
+			case OP::OBJECTIFY_MULTIPLE:
+			{
+				auto ucAdditional = p_pContext->m_pCode->Read<uint8_t>();
+				auto reference = p_pContext->m_accumulator.GetType() == api::BiaParameter::TYPE::MEMBER ? p_pContext->m_scope.AddVariable(LoadKeyToken(*p_pContext->m_pCode), p_pContext->m_accumulator.MoveMemberHolder(), p_bBiaFunction) : p_pContext->m_scope.AddVariable(LoadKeyToken(*p_pContext->m_pCode), p_pContext->m_accumulator.MoveScopeReference(), p_bBiaFunction);
+
+				//Create additional
+				while (ucAdditional--)
+					p_pContext->m_scope.AddVariable(LoadKeyToken(*p_pContext->m_pCode), reference, p_bBiaFunction);
+
+				break;
+			}
 			case OP::INSTANTIATE:
 			{
 				ExecuteInstantiate(p_pContext, true);

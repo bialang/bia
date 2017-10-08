@@ -53,7 +53,20 @@ void BiaDisassembler::DisassembleByteCode(stream::BiaByteStream p_byteCode)
 			}
 			case OP::OBJECTIFY:
 			{
-				printf("objtfy%s%s\n", pszIndent, ReadBuffer<unsigned char>(p_byteCode, stBuffer).c_str());
+				printf("objtfy%s%s\n", pszIndent, ReadBuffer<uint8_t>(p_byteCode, stBuffer).c_str());
+
+				break;
+			}
+			case OP::OBJECTIFY_MULTIPLE:
+			{
+				auto ucAdditional = p_byteCode.Read<uint8_t>();
+
+				printf("objtfym%s%s", pszIndent, ReadBuffer<uint8_t>(p_byteCode, stBuffer).c_str());
+
+				while (ucAdditional--)
+					printf("\t%s", ReadBuffer<uint8_t>(p_byteCode, stBuffer).c_str());
+
+				puts("");
 
 				break;
 			}

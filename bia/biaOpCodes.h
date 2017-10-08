@@ -9,7 +9,8 @@ namespace machine
 enum class OP : unsigned char
 {
 	TERMINATE,	/**	Terminates the script.	*/
-	OBJECTIFY,	/**	Creates or sets an object with the specified name from the data stored in the accumulator. (8b hash64/4b hash32/1b size/(size)b name)	  */
+	OBJECTIFY,	/**	Creates or sets an object with the specified name from the data stored in the accumulator. The accumulator will be cleared. (8b hash64/4b hash32/1b size/(size)b name)	  */
+	OBJECTIFY_MULTIPLE,	/**	Creates or sets multiple object (at least one) with the specified name from the data stored in the accumulator. (1b additional/{8b hash64/4b hash32/1b size/(size)b name})  */
 	INSTANTIATE,	/**	Instantiates an object from the params and stores it in the accumulator. Uses the global template table. (1b param_count/8b hash64/4b hash32/1b size/(size)b name)	  */
 	INSTANTIATE_ACCUMULATOR,	/**	Instantiates an object from the params and stores it in the accumulator. The template table is the accumulator. (1b param_count/8b hash64/4b hash32/1b size/(size)b name)	   */
 	INCREMENT,	/**	Incrementes the specified object. (8b hash64/4b hash32/1b size/(size)b name)	*/

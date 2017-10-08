@@ -25,44 +25,6 @@ public:
 	*/
 	inline BiaScope(unsigned int p_unMaxElements) : m_container(p_unMaxElements) {}
 	/**
-	 * Adds a scope reference.
-	 *
-	 * @since	2.28.67.395
-	 * @date	24-Jul-17
-	 *
-	 * @param   [in,out]	p_key	Defines the key.
-	 * @param	[in,out]	p_reference	Defines the scope reference.
-	 * @param	p_bCreateNew	If true a new variable will be declared no matter what, otherwise the last one will be overwritten.
-	*/
-	inline void AddVariable(BiaKey && p_key, BiaScopeReference && p_reference, bool p_bCreateNew)
-	{
-		auto & vVariables = m_index[std::move(p_key)];
-
-		if (vVariables.empty() || p_bCreateNew)
-			vVariables.push_back(std::move(p_reference));
-		else
-			vVariables.back() = std::move(p_reference);
-	}
-	/**
-	 * Adds a member holder.
-	 *
-	 * @since	2.28.67.395
-	 * @date	24-Jul-17
-	 *
-	 * @param   [in,out]	p_key	Defines the key.
-	 * @param	[in,out]	p_member	Defines the member.
-	 * @param	p_bCreateNew	If true a new variable will be declared no matter what, otherwise the last one will be overwritten.
-	*/
-	inline void AddVariable(BiaKey && p_key, api::framework::BiaMemberHolder && p_member, bool p_bCreateNew)
-	{
-		auto & vVariables = m_index[std::move(p_key)];
-
-		if (vVariables.empty() || p_bCreateNew)
-			vVariables.push_back(scope::BiaScopeReference(m_container.Insert(std::move(p_member))));
-		else
-			vVariables.back() = scope::BiaScopeReference(m_container.Insert(std::move(p_member)));
-	}
-	/**
 	 * Opens a new scope.
 	 *
 	 * @since	2.28.67.395
@@ -96,6 +58,52 @@ public:
 		m_vScopes.clear();
 		m_index.clear();
 		m_container.Clear();
+	}
+	/**
+	* Adds a member holder.
+	*
+	* @since	2.28.67.395
+	* @date	24-Jul-17
+	*
+	* @param	[in,out]	p_key	Defines the key.
+	* @param	[in,out]	p_member	Defines the member.
+	* @param	p_bCreateNew	If true a new variable will be declared no matter what, otherwise the last one will be overwritten.
+	*
+	* @return	A reference to the reference stored in the index.
+	*/
+	inline BiaScopeReference & AddVariable(BiaKey p_key, api::framework::BiaMemberHolder p_member, bool p_bCreateNew)
+	{
+		auto & vVariables = m_index[std::move(p_key)];
+
+		if (vVariables.empty() || p_bCreateNew)
+			vVariables.push_back(scope::BiaScopeReference(m_container.Insert(std::move(p_member))));
+		else
+			return vVariables.back() = scope::BiaScopeReference(m_container.Insert(std::move(p_member)));
+
+		return vVariables.back();
+	}
+	/**
+	 * Adds a scope reference.
+	 *
+	 * @since	2.28.67.395
+	 * @date	24-Jul-17
+	 *
+	 * @param	[in,out]	p_key	Defines the key.
+	 * @param	[in,out]	p_reference	Defines the scope reference.
+	 * @param	p_bCreateNew	If true a new variable will be declared no matter what, otherwise the last one will be overwritten.
+	 *
+	 * @return	A reference to the reference stored in the index.
+	*/
+	inline BiaScopeReference & AddVariable(BiaKey p_key, BiaScopeReference p_reference, bool p_bCreateNew)
+	{
+		auto & vVariables = m_index[std::move(p_key)];
+
+		if (vVariables.empty() || p_bCreateNew)
+			vVariables.push_back(std::move(p_reference));
+		else
+			return vVariables.back() = std::move(p_reference);
+
+		return vVariables.back();
 	}
 	/**
 	 * Returns a reference associated with the specified key.
