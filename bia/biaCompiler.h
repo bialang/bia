@@ -134,20 +134,22 @@ private:
 
 		//First
 		if (p_pcFirst)
-		{
-			//Too large
-			if (p_iSize > 0xff)
-				throw exception::SymbolException("Symbol too long");
+			WriteKeyToken(p_pcFirst, p_iSize);
+	}
+	inline void WriteKeyToken(const char * p_pcName, size_t p_iSize)
+	{
+		//Too large
+		if (p_iSize > 0xff)
+			throw exception::SymbolException("Symbol too long");
 
-			auto ucSize = static_cast<unsigned char>(p_iSize);
-			auto ullHash = utility::Hash64(p_pcFirst, ucSize);
-			auto uiHash = utility::Hash32(p_pcFirst, ucSize);
+		auto ucSize = static_cast<unsigned char>(p_iSize);
+		auto ullHash = utility::Hash64(p_pcName, ucSize);
+		auto uiHash = utility::Hash32(p_pcName, ucSize);
 
-			m_output.Write(&ullHash, 8);
-			m_output.Write(&uiHash, 4);
-			m_output.Write(&ucSize, sizeof(unsigned char));
-			m_output.Write(p_pcFirst, p_iSize);
-		}
+		m_output.Write(&ullHash, 8);
+		m_output.Write(&uiHash, 4);
+		m_output.Write(&ucSize, sizeof(unsigned char));
+		m_output.Write(p_pcName, p_iSize);
 	}
 	inline void WriteOperator(machine::OP p_code, const grammar::Report * p_pOperator)
 	{
@@ -536,11 +538,24 @@ private:
 	}
 	inline const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports)
 	{
+		PrintStraight("vd>", p_reports);
+
 		//Handle value
-		HandleValue(p_reports.pBegin[2].content.children, false);
+		auto pRight = FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd);
+
+		HandleValue(pRight->content.children, false);
 
 		//Objectify accumulator
-		WriteOpCode(machine::OP::OBJECTIFY, p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize);
+		if (pRight - p_reports.pBegin > 2)
+		{
+			WriteConstant<uint8_t>(machine::OP::OBJECTIFY_MULTIPLE, pRight - p_reports.pBegin - 2);
+
+			//Write additional objects
+			while (++p_reports.pBegin < pRight)
+				WriteKeyToken(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+		}
+		else
+			WriteOpCode(machine::OP::OBJECTIFY, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
 
 		return p_reports.pEnd + 1;
 	}
@@ -548,20 +563,23 @@ private:
 	{
 		PrintStraight("vv>", p_reports);
 		
+		enum STATE : uint8_t
+		{
+			S_NONE,
+			S_NEXT_0,
+			S_NEXT_1
+		};
+
 		//Handle first expression
 		p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, p_bPush);
 
 		BiaConditionMaker maker(m_output);
+		STATE state = S_NONE;
 
 		while (p_reports.pBegin < p_reports.pEnd)
 		{
-			auto unLogicalId = p_reports.pBegin->unTokenId;
-
-			//Handle right value
-			p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
-
 			//Logical operator
-			switch (unLogicalId)
+			switch (p_reports.pBegin->unTokenId)
 			{
 			case grammar::BVO_LOGICAL_AND:
 			{
@@ -569,7 +587,13 @@ private:
 
 				WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
 
-				maker.MarkPlaceholder(BiaConditionMaker::L_END);
+				maker.MarkPlaceholder(BiaConditionMaker::L_NEXT_1);
+
+				//Mark last next
+				if (state == S_NEXT_0)
+					maker.MarkLocation(BiaConditionMaker::L_NEXT_0);
+
+				state = S_NEXT_1;
 
 				break;
 			}
@@ -579,17 +603,38 @@ private:
 
 				WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
 
-				maker.MarkPlaceholder(BiaConditionMaker::L_END);
+				maker.MarkPlaceholder(BiaConditionMaker::L_NEXT_0);
+
+				//Mark last next
+				if (state == S_NEXT_1)
+					maker.MarkLocation(BiaConditionMaker::L_NEXT_1);
+
+				state = S_NEXT_0;
 
 				break;
 			}
 			default:
 				BIA_COMPILER_DEV_INVALID
 			}
+
+			//Handle right value
+			p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
 		}
 
-		maker.MarkLocation(BiaConditionMaker::L_END);
-		maker.ReplaceAll();
+		//Mark last next
+		switch (state)
+		{
+		case S_NEXT_0:
+			maker.MarkLocation(BiaConditionMaker::L_NEXT_0);
+
+			break;
+		case S_NEXT_1:
+			maker.MarkLocation(BiaConditionMaker::L_NEXT_1);
+
+			break;
+		default:
+			break;
+		}
 
 		return p_reports.pEnd + 1;
 	}
@@ -603,10 +648,6 @@ private:
 			HandleNumber(p_reports.pBegin + 1, p_bPush ? NUMBER_TYPE::PUSH : NUMBER_TYPE::LOAD);
 
 			break;
-		case grammar::BV_STRING:
-			HandleString(p_reports.pBegin + 1, p_bPush);
-
-			break;
 		case grammar::BV_TRUE:
 			WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_1 : machine::OP::LOAD_LONG_1);
 
@@ -614,10 +655,6 @@ private:
 		case grammar::BV_FALSE:
 		case grammar::BV_NULL:
 			WriteOpCode(p_bPush ? machine::OP::PUSH_LONG_0 : machine::OP::LOAD_LONG_0);
-
-			break;
-		case grammar::BV_INSTANTIATION:
-			HandleInstantiation(p_reports.pBegin[1].content.children, p_bPush);
 
 			break;
 		case grammar::BV_MEMBER:
@@ -723,38 +760,96 @@ private:
 		{
 			if (++p_reports.pBegin + 1 < p_reports.pEnd)
 			{
+				auto pSecond = (p_reports.pBegin->type == grammar::Report::T_BEGIN ? p_reports.pBegin->content.children.pEnd : p_reports.pBegin) + 1;
+				uint8_t ucParameterCount = pSecond->unRuleId == grammar::BGR_PARAMETER || pSecond->unRuleId == grammar::BGR_PARAMETER_ITEM_ACCESS ? HandleParameter(pSecond->content.children) : 0;
+
+				//Handle string/instantiation
+				switch (p_reports.pBegin->unTokenId)
+				{
+				case grammar::BM_INSTANTIATION:
+					HandleInstantiation(p_reports.pBegin->content.children, false);
+
+					break;
+				case grammar::BM_STRING:
+					HandleString(p_reports.pBegin, false);
+				default:
+					break;
+				}
+
 				//Check if this is a function call
-				switch (p_reports.pBegin[1].unRuleId)
+				switch (pSecond->unRuleId)
 				{
 				case grammar::BGR_PARAMETER:
-					//Write global function call
-					WriteOpCode(machine::OP::CALL_GLOBAL, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize, HandleParameter(p_reports.pBegin[1].content.children));
+				{
+					switch (p_reports.pBegin->unTokenId)
+					{
+					case grammar::BM_INSTANTIATION:
+					case grammar::BM_STRING:
+						WriteOpCode(machine::OP::CALL, "()", 2, ucParameterCount);
 
-					p_reports.pBegin = p_reports.pBegin[1].content.children.pEnd + 1;
+						break;
+					case grammar::BM_IDENTIFIER:
+						//Write global function call
+						WriteOpCode(machine::OP::CALL_GLOBAL, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize, ucParameterCount);
+
+						break;
+					default:
+						BIA_COMPILER_DEV_INVALID
+					}
+
+					p_reports.pBegin = pSecond->content.children.pEnd + 1;
 
 					continue;
+				}
 				case grammar::BGR_PARAMETER_ITEM_ACCESS:
 				{
-					//Handle parameter
-					auto ucParameterCount = HandleParameter(p_reports.pBegin[1].content.children);
-
 					//Write item access
-					WriteOpCode(machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
-					WriteOpCode(machine::OP::CALL, "[]", 2, ucParameterCount);
+					if (p_reports.pBegin->unTokenId == grammar::BM_IDENTIFIER)
+						WriteOpCode(machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
 
-					p_reports.pBegin = p_reports.pBegin[1].content.children.pEnd + 1;
+					//Call item access
+					WriteOpCode(machine::OP::CALL, "[]", 2, ucParameterCount);
+					p_reports.pBegin = pSecond->content.children.pEnd + 1;
 
 					continue;
 				}
 				case grammar::BGR_MEMBER_HELPER_1:
+					//Load object
+					if (p_reports.pBegin->unTokenId == grammar::BM_IDENTIFIER)
+						WriteOpCode(machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+
 					break;
 				default:
 					BIA_COMPILER_DEV_INVALID
 				}
 			}
+			//Only one object
+			else
+			{
+				switch (p_reports.pBegin->unTokenId)
+				{
+				case grammar::BM_INSTANTIATION:
+					HandleInstantiation(p_reports.pBegin->content.children, p_bPush);
 
-			//Load object
-			WriteOpCode(machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+					break;
+				case grammar::BM_STRING:
+					HandleString(p_reports.pBegin, p_bPush);
+
+					break;
+				case grammar::BM_IDENTIFIER:
+					WriteOpCode(p_bPush ? machine::OP::PUSH : machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+
+					break;
+				default:
+					BIA_COMPILER_DEV_INVALID
+				}
+
+				return p_reports.pEnd + 1;
+			}
+
+			//Jump to the end
+			if (p_reports.pBegin->type == grammar::Report::T_BEGIN)
+				p_reports.pBegin = p_reports.pBegin->content.children.pEnd;
 
 			++p_reports.pBegin;
 		} while (false);
@@ -799,6 +894,10 @@ private:
 
 			++p_reports.pBegin;
 		}
+
+		//Push result
+		if (p_bPush)
+			WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
 
 		return p_reports.pEnd + 1;
 	}

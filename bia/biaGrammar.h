@@ -30,29 +30,38 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	interpreter.SetRule(BGR_ROOT, std::move(tmp));
 
 	//Variable declaration
-	tmp.Reset(9, BiaInterpreterRule::F_WRAP_UP);
+	tmp.Reset(10, BiaInterpreterRule::F_WRAP_UP);
 
 	tmp.SetToken(1, KeywordToken<Keyword_var, FILLER_TOKEN>)
 		.SetToken(2, WHITESPACE_REQUIRED)
 		.SetToken(3, IdentifierToken<NONE>)
 		.SetToken(4, WHITESPACE_OPTIONAL)
-		.SetToken(5, KeywordToken<Operator_equals, FILLER_TOKEN>)
-		.SetToken(6, WHITESPACE_OPTIONAL)
-		.SetToken(7, RulePointerToken<BGR_VALUE, FILLER_TOKEN>)
-		.SetToken(8, WHITESPACE_OPTIONAL)
-		.SetToken(9, KeywordToken<Operator_semicolon, FILLER_TOKEN>);
+		.SetToken(5, RulePointerToken<BGR_VARIABLE_DECLARATION_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>)
+		.SetToken(6, KeywordToken<Operator_equals, FILLER_TOKEN>)
+		.SetToken(7, WHITESPACE_OPTIONAL)
+		.SetToken(8, RulePointerToken<BGR_VALUE, FILLER_TOKEN>)
+		.SetToken(9, WHITESPACE_OPTIONAL)
+		.SetToken(10, KeywordToken<Operator_semicolon, FILLER_TOKEN>);
 
 	interpreter.SetRule(BGR_VARIABLE_DECLARATION, std::move(tmp));
 
+	//Variable declaration helper 0
+	tmp.Reset(4);
+
+	tmp.SetToken(1, KeywordToken<Operator_comma, FILLER_TOKEN>)
+		.SetToken(2, WHITESPACE_OPTIONAL)
+		.SetToken(3, IdentifierToken<NONE>)
+		.SetToken(4, WHITESPACE_OPTIONAL);
+
+	interpreter.SetRule(BGR_VARIABLE_DECLARATION_HELPER_0, std::move(tmp));
+
 	//Value raw (must be wrapped becaus of math factor)
-	tmp.Reset(7, BiaInterpreterRule::F_OR | BiaInterpreterRule::F_WRAP_UP);
+	tmp.Reset(5, BiaInterpreterRule::F_OR | BiaInterpreterRule::F_WRAP_UP);
 
 	tmp.SetToken(BV_NUMBER, NumberValueToken<NONE>)
-		.SetToken(BV_STRING, StringValueToken<NONE>)
 		.SetToken(BV_TRUE, KeywordToken<Keyword_true, NONE>)
 		.SetToken(BV_FALSE, KeywordToken<Keyword_false, NONE>)
 		.SetToken(BV_NULL, KeywordToken<Keyword_null, NONE>)
-		.SetToken(BV_INSTANTIATION, RulePointerToken<BGR_INSTANTIATION, FILLER_TOKEN>)
 		.SetToken(BV_MEMBER, RulePointerToken<BGR_MEMBER, FILLER_TOKEN>);
 
 	interpreter.SetRule(BGR_VALUE_RAW, std::move(tmp));
@@ -202,7 +211,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	tmp.Reset(5, BiaInterpreterRule::F_WRAP_UP);
 
 	tmp.SetToken(1, CustomOperatorToken<OPTIONAL_TOKEN>)
-		.SetToken(2, IdentifierToken<NONE>)
+		.SetToken(2, RulePointerToken<BGR_MEMBER_HELPER_2, FILLER_TOKEN>)
 		.SetToken(3, WHITESPACE_OPTIONAL)
 		.SetToken(4, RulePointerToken<BGR_MEMBER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>)
 		.SetToken(5, RulePointerToken<BGR_MEMBER_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN>);
@@ -228,6 +237,15 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		.SetToken(6, RulePointerToken<BGR_MEMBER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>);
 
 	interpreter.SetRule(BGR_MEMBER_HELPER_1, std::move(tmp));
+
+	//Member helper 2
+	tmp.Reset(3, BiaInterpreterRule::F_OR);
+
+	tmp.SetToken(BM_INSTANTIATION, RulePointerToken<BGR_INSTANTIATION, FILLER_TOKEN>)
+		.SetToken(BM_STRING, StringValueToken<NONE>)
+		.SetToken(BM_IDENTIFIER, IdentifierToken<NONE>);
+
+	interpreter.SetRule(BGR_MEMBER_HELPER_2, std::move(tmp));
 
 	return interpreter;
 }

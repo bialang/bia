@@ -247,7 +247,7 @@ public:
 
 		throw exception::AccessViolationException("Invalid access on parameter.");
 	}
-	inline BiaParameter & operator=(BiaParameter && p_right)
+	inline BiaParameter & operator=(BiaParameter p_right)
 	{
 		Clear();
 
@@ -260,7 +260,7 @@ public:
 
 		return *this;
 	}
-	inline BiaParameter & operator=(machine::scope::BiaScopeReference && p_right)
+	inline BiaParameter & operator=(machine::scope::BiaScopeReference p_right)
 	{
 		Clear();
 

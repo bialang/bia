@@ -153,9 +153,11 @@ BIA_MODULE_DEFINE_END(test)
 
 int main(int argc, char ** argv)
 {
+	Bia::Initialize();
+
 	stream::BiaStreamBuffer cc;
 
-	char tetea[] = R"kart(var test = '(ich \asagte "hi" (zu)" dir)';)kart";
+	char tetea[] = u8R"kart(var i, j,l  = lul;)kart";
 	
 	grammar::InitializeRules().Interpret(tetea, sizeof(tetea) - 1, compiler::BiaCompiler(cc));
 
@@ -167,7 +169,7 @@ int main(int argc, char ** argv)
 
 	END
 
-	Bia::Initialize();
+	
 	
 	/*
 	Operator precedence:
