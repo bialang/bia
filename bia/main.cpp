@@ -157,7 +157,7 @@ int main(int argc, char ** argv)
 
 	stream::BiaStreamBuffer cc;
 
-	char tetea[] = u8R"kart(var i, j,l  = lul;)kart";
+	char tetea[] = u8R"kart(var i, j = k;)kart";
 	
 	grammar::InitializeRules().Interpret(tetea, sizeof(tetea) - 1, compiler::BiaCompiler(cc));
 

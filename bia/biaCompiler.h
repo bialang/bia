@@ -24,7 +24,10 @@ namespace compiler
 class BiaCompiler : public grammar::BiaReportReceiver
 {
 public:
-	inline BiaCompiler(stream::BiaStream & p_output) : m_output(p_output) {}
+	inline BiaCompiler(stream::BiaStream & p_output) : m_output(p_output)
+	{
+		m_fState = 0;
+	}
 	inline void Print(std::string p_stIndentation, const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
 		auto unRuleId = p_pBegin->unRuleId;
@@ -87,6 +90,10 @@ public:
 	}
 
 private:
+	enum STATE_FLAGS : uint32_t
+	{
+		SF_REFERENCE_VALUE = 0x1
+	};
 	enum class NUMBER_TYPE : char
 	{
 		PUSH,
@@ -95,6 +102,8 @@ private:
 	};
 
 	stream::BiaStream & m_output;
+
+	uint32_t m_fState;
 
 
 	/**
@@ -542,17 +551,41 @@ private:
 
 		//Handle value
 		auto pRight = FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd);
+		auto llStartPos = m_output.TellWrite();
+
+		m_fState = 0;
 
 		HandleValue(pRight->content.children, false);
 
 		//Objectify accumulator
-		if (pRight - p_reports.pBegin > 2)
+		if (pRight - ++p_reports.pBegin > 1)
 		{
-			WriteConstant<uint8_t>(machine::OP::OBJECTIFY_MULTIPLE, pRight - p_reports.pBegin - 2);
+			//Objectify multiple is only useable for reference value
+			if (m_fState & SF_REFERENCE_VALUE)
+			{
+				WriteConstant<uint8_t>(machine::OP::OBJECTIFY_MULTIPLE, pRight - p_reports.pBegin - 1);
 
-			//Write additional objects
-			while (++p_reports.pBegin < pRight)
-				WriteKeyToken(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+				//Write additional objects
+				for (; p_reports.pBegin < pRight; ++p_reports.pBegin)
+					WriteKeyToken(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+			}
+			else
+			{
+				auto iLength = static_cast<size_t>(m_output.TellWrite() - llStartPos);
+
+				//Objectify first object
+				WriteOpCode(machine::OP::OBJECTIFY, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+
+				//Copy value operations and write additional objects
+				m_output.Reserve((pRight - p_reports.pBegin) * iLength * (sizeof(machine::OP) + 21));
+
+				while (++p_reports.pBegin < pRight)
+				{
+					m_output.CopyFrom(llStartPos, iLength);
+
+					WriteOpCode(machine::OP::OBJECTIFY, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+				}
+			}
 		}
 		else
 			WriteOpCode(machine::OP::OBJECTIFY, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
@@ -573,67 +606,71 @@ private:
 		//Handle first expression
 		p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, p_bPush);
 
-		BiaConditionMaker maker(m_output);
-		STATE state = S_NONE;
-
-		while (p_reports.pBegin < p_reports.pEnd)
+		//Logical operators were used
+		if (p_reports.pBegin < p_reports.pEnd)
 		{
-			//Logical operator
-			switch (p_reports.pBegin->unTokenId)
+			BiaConditionMaker maker(m_output);
+			STATE state = S_NONE;
+
+			do
 			{
-			case grammar::BVO_LOGICAL_AND:
+				//Logical operator
+				switch (p_reports.pBegin->unTokenId)
+				{
+				case grammar::BVO_LOGICAL_AND:
+				{
+					constexpr uint64_t cullNull = 0;
+
+					WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
+
+					maker.MarkPlaceholder(BiaConditionMaker::L_NEXT_1);
+
+					//Mark last next
+					if (state == S_NEXT_0)
+						maker.MarkLocation(BiaConditionMaker::L_NEXT_0);
+
+					state = S_NEXT_1;
+
+					break;
+				}
+				case grammar::BVO_LOGICAL_OR:
+				{
+					constexpr uint64_t cullNull = 0;
+
+					WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
+
+					maker.MarkPlaceholder(BiaConditionMaker::L_NEXT_0);
+
+					//Mark last next
+					if (state == S_NEXT_1)
+						maker.MarkLocation(BiaConditionMaker::L_NEXT_1);
+
+					state = S_NEXT_0;
+
+					break;
+				}
+				default:
+					BIA_COMPILER_DEV_INVALID
+				}
+
+				//Handle right value
+				p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
+			} while (p_reports.pBegin < p_reports.pEnd);
+
+			//Mark last next
+			switch (state)
 			{
-				constexpr uint64_t cullNull = 0;
-
-				WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
-
-				maker.MarkPlaceholder(BiaConditionMaker::L_NEXT_1);
-
-				//Mark last next
-				if (state == S_NEXT_0)
-					maker.MarkLocation(BiaConditionMaker::L_NEXT_0);
-
-				state = S_NEXT_1;
+			case S_NEXT_0:
+				maker.MarkLocation(BiaConditionMaker::L_NEXT_0);
 
 				break;
-			}
-			case grammar::BVO_LOGICAL_OR:
-			{
-				constexpr uint64_t cullNull = 0;
-
-				WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
-
-				maker.MarkPlaceholder(BiaConditionMaker::L_NEXT_0);
-
-				//Mark last next
-				if (state == S_NEXT_1)
-					maker.MarkLocation(BiaConditionMaker::L_NEXT_1);
-
-				state = S_NEXT_0;
+			case S_NEXT_1:
+				maker.MarkLocation(BiaConditionMaker::L_NEXT_1);
 
 				break;
-			}
 			default:
-				BIA_COMPILER_DEV_INVALID
+				break;
 			}
-
-			//Handle right value
-			p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
-		}
-
-		//Mark last next
-		switch (state)
-		{
-		case S_NEXT_0:
-			maker.MarkLocation(BiaConditionMaker::L_NEXT_0);
-
-			break;
-		case S_NEXT_1:
-			maker.MarkLocation(BiaConditionMaker::L_NEXT_1);
-
-			break;
-		default:
-			break;
 		}
 
 		return p_reports.pEnd + 1;
@@ -838,6 +875,8 @@ private:
 					break;
 				case grammar::BM_IDENTIFIER:
 					WriteOpCode(p_bPush ? machine::OP::PUSH : machine::OP::LOAD, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+
+					m_fState |= SF_REFERENCE_VALUE;
 
 					break;
 				default:

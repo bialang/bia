@@ -51,6 +51,14 @@ public:
 	{
 		m_pcCursor += p_iSize;
 	}
+	inline virtual void CopyFrom(long long p_llPosition, size_t p_iSize) override final
+	{
+		Enlarge(p_iSize);
+
+		memcpy(m_pcCursor, m_pcBufferBegin.get() + p_llPosition, p_iSize);
+
+		m_pcCursor += p_iSize;
+	}
 	inline virtual bool SeekWrite(long long p_llPosition) override final
 	{
 		if (p_llPosition < m_llCapacity)
