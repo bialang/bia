@@ -86,7 +86,7 @@ public:
 	}
 	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
-		HandleVariableDeclaration(p_pBegin->content.children);
+		HandleRoot(p_pBegin);
 	}
 
 private:
@@ -545,6 +545,18 @@ private:
 
 		return nullptr;
 	}
+	inline const grammar::Report * HandleRoot(const grammar::Report * p_pReport)
+	{
+		switch (p_pReport->unRuleId)
+		{
+		case grammar::BGR_VARIABLE_DECLARATION:
+			return HandleVariableDeclaration(p_pReport->content.children);
+		case grammar::BGR_IF:
+			return HandleIf(p_pReport->content.children);
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+	}
 	inline const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports)
 	{
 		PrintStraight("vd>", p_reports);
@@ -592,6 +604,26 @@ private:
 
 		return p_reports.pEnd + 1;
 	}
+	inline const grammar::Report * HandleIf(grammar::report_range p_reports)
+	{
+		PrintStraight("if>", p_reports);
+
+		BiaConditionMakerSimple maker(m_output);
+
+		while (p_reports.pBegin < p_reports.pEnd)
+		{
+			p_reports.pBegin = HandleValue(p_reports.pBegin[1].content.children, false);
+
+			WriteConstant<uint64_t>(machine::OP::JUMP_CONDITIONAL_NOT, 0);
+			maker.MarkPlaceholder();
+
+			p_reports.pBegin = HandleRoot(p_reports.pBegin);
+
+			maker.MarkLocation();
+		}
+
+		return p_reports.pEnd + 1;
+	}
 	inline const grammar::Report * HandleValue(grammar::report_range p_reports, bool p_bPush)
 	{
 		PrintStraight("vv>", p_reports);
@@ -609,7 +641,7 @@ private:
 		//Logical operators were used
 		if (p_reports.pBegin < p_reports.pEnd)
 		{
-			BiaConditionMaker maker(m_output);
+			BiaConditionMakerDouble maker(m_output);
 			STATE state = S_NONE;
 
 			do
@@ -623,11 +655,11 @@ private:
 
 					WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
 
-					maker.MarkPlaceholder(BiaConditionMaker::L_NEXT_1);
+					maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_1);
 
 					//Mark last next
 					if (state == S_NEXT_0)
-						maker.MarkLocation(BiaConditionMaker::L_NEXT_0);
+						maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
 
 					state = S_NEXT_1;
 
@@ -639,11 +671,11 @@ private:
 
 					WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
 
-					maker.MarkPlaceholder(BiaConditionMaker::L_NEXT_0);
+					maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_0);
 
 					//Mark last next
 					if (state == S_NEXT_1)
-						maker.MarkLocation(BiaConditionMaker::L_NEXT_1);
+						maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
 
 					state = S_NEXT_0;
 
@@ -661,11 +693,11 @@ private:
 			switch (state)
 			{
 			case S_NEXT_0:
-				maker.MarkLocation(BiaConditionMaker::L_NEXT_0);
+				maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
 
 				break;
 			case S_NEXT_1:
-				maker.MarkLocation(BiaConditionMaker::L_NEXT_1);
+				maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
 
 				break;
 			default:

@@ -23,9 +23,10 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	constexpr auto WHITESPACE_REQUIRED = CharsetToken<Charset_whitespace, FILLER_TOKEN, 1>;
 
 	//Root
-	tmp.Reset(1, BiaInterpreterRule::F_OR);
+	tmp.Reset(2, BiaInterpreterRule::F_OR);
 	
-	tmp.SetToken(1, RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>);
+	tmp.SetToken(1, RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>)
+		.SetToken(2, RulePointerToken<BGR_IF, FILLER_TOKEN>);
 
 	interpreter.SetRule(BGR_ROOT, std::move(tmp));
 
@@ -54,6 +55,37 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		.SetToken(4, WHITESPACE_OPTIONAL);
 
 	interpreter.SetRule(BGR_VARIABLE_DECLARATION_HELPER_0, std::move(tmp));
+
+	//If
+	tmp.Reset(9, BiaInterpreterRule::F_WRAP_UP);
+
+	tmp.SetToken(1, KeywordToken<Keyword_if, FILLER_TOKEN>)
+		.SetToken(2, WHITESPACE_OPTIONAL)
+		.SetToken(3, KeywordToken<Operator_bracket_open, FILLER_TOKEN>)
+		.SetToken(4, WHITESPACE_OPTIONAL)
+		.SetToken(5, RulePointerToken<BGR_VALUE, FILLER_TOKEN>)
+		.SetToken(6, WHITESPACE_OPTIONAL)
+		.SetToken(7, KeywordToken<Operator_bracket_close, FILLER_TOKEN>)
+		.SetToken(8, RulePointerToken<BGR_ROOT, FILLER_TOKEN>)
+		.SetToken(9, RulePointerToken<BGR_IF_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>);
+
+	interpreter.SetRule(BGR_IF, std::move(tmp));
+
+	//If helper 0
+	tmp.Reset(10);
+
+	tmp.SetToken(1, WHITESPACE_OPTIONAL)
+		.SetToken(2, KeywordToken<Keyword_else, FILLER_TOKEN>)
+		.SetToken(3, WHITESPACE_REQUIRED)
+		.SetToken(4, KeywordToken<Keyword_if, FILLER_TOKEN>)
+		.SetToken(5, WHITESPACE_OPTIONAL)
+		.SetToken(6, KeywordToken<Operator_bracket_open, FILLER_TOKEN>)
+		.SetToken(7, WHITESPACE_OPTIONAL)
+		.SetToken(8, RulePointerToken<BGR_VALUE, FILLER_TOKEN>)
+		.SetToken(9, KeywordToken<Operator_bracket_close, FILLER_TOKEN>)
+		.SetToken(10, RulePointerToken<BGR_ROOT, FILLER_TOKEN>);
+
+	interpreter.SetRule(BGR_IF_HELPER_0, std::move(tmp));
 
 	//Value raw (must be wrapped becaus of math factor)
 	tmp.Reset(5, BiaInterpreterRule::F_OR | BiaInterpreterRule::F_WRAP_UP);

@@ -116,7 +116,54 @@ namespace compiler
 //	long long m_allMarkLocation[2];
 //};
 
-class BiaConditionMaker
+class BiaConditionMakerSimple
+{
+public:
+	/**
+	 * Constructor.
+	 *
+	 * @param	[in,out]	p_code	Defines the stream.
+	*/
+	inline BiaConditionMakerSimple(stream::BiaStream & p_code) : m_code(p_code)
+	{
+		m_llPlaceholder = 0;
+	}
+	inline ~BiaConditionMakerSimple() = default;
+	/**
+	 * Marks the last 8 bytes as placeholder.
+	 *
+	 * @since	2.41.93.550
+	 * @date	08-Oct-17
+	*/
+	inline void MarkPlaceholder()
+	{
+		m_llPlaceholder = m_code.TellWrite() - 8;
+	}
+	/**
+	 * Marks the location of a group.
+	 *
+	 * @since	2.41.93.550
+	 * @date	08-Oct-17
+	 *
+	 * @param   p_group	Defines the group.
+	*/
+	inline void MarkLocation()
+	{
+		auto llMark = m_code.TellWrite();
+		auto llOffset = llMark - m_llPlaceholder - 8;
+
+		m_code.SeekWrite(m_llPlaceholder);
+		m_code.Write(&llOffset, sizeof(long long));
+		m_code.SeekWrite(llMark);
+	}
+
+private:
+	stream::BiaStream & m_code;
+
+	long long m_llPlaceholder;
+};
+
+class BiaConditionMakerDouble
 {
 public:
 	enum LOCATION
@@ -130,8 +177,8 @@ public:
 	 *
 	 * @param	[in,out]	p_code	Defines the stream.
 	*/
-	inline BiaConditionMaker(stream::BiaStream & p_code) : m_code(p_code) {}
-	inline ~BiaConditionMaker() = default;
+	inline BiaConditionMakerDouble(stream::BiaStream & p_code) : m_code(p_code) {}
+	inline ~BiaConditionMakerDouble() = default;
 	/**
 	 * Marks the last 8 bytes as placeholder.
 	 *
@@ -174,6 +221,8 @@ private:
 
 	std::vector<long long> m_avllPlaceholder[2];
 };
+
+
 
 }
 }
