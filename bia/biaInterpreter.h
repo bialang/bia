@@ -41,6 +41,16 @@ public:
 		{
 			bundle.Clear();
 
+			//Remove leading whitespace
+			{
+				TokenOutput output{};
+
+				CharsetToken<Charset_whitespace, OPTIONAL_TOKEN>(p_pcBuffer, p_iSize, {}, output);
+
+				p_pcBuffer += output.iTokenSize;
+				p_iSize -= output.iTokenSize;
+			}
+
 			//Start with rule 0
 			auto iSize = m_aRules[0].RunRule(p_pcBuffer, p_iSize, { &bundle, m_aRules, 0 });
 

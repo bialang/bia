@@ -320,6 +320,30 @@ struct Operator_bracket_close
 	}
 };
 
+struct Operator_scope_open
+{
+	constexpr static const char * Token()
+	{
+		return "{";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
+struct Operator_scope_close
+{
+	constexpr static const char * Token()
+	{
+		return "}";
+	}
+	constexpr static size_t Size()
+	{
+		return 1;
+	}
+};
+
 struct Operator_square_bracket_open
 {
 	constexpr static const char * Token()

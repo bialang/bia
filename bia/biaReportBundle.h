@@ -64,6 +64,13 @@ public:
 	*/
 	inline void AddReport(Report p_report)
 	{
+		switch (p_report.type)
+		{
+		case Report::T_TOKEN:
+			fwrite(p_report.content.token.pcString, 1, p_report.content.token.iSize, stdout);
+			puts("");
+		}
+
 		if (m_unSize < SIZE)
 		{
 			m_aReports[m_unSize++] = std::move(p_report);

@@ -84,8 +84,42 @@ public:
 			}
 		}
 	}
+	inline void PrintAll(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+	{
+		for (auto i = p_pBegin; i < p_pEnd; ++i)
+		{
+			switch (i->type)
+			{
+			case grammar::Report::T_EMPTY_CHILD:
+				printf("% 3i:EMPTY [%03lu](% 2lu)\n", i - p_pBegin, i->unRuleId, i->unTokenId);
+
+				break;
+			case grammar::Report::T_BEGIN:
+				printf("% 3i:BEGIN [%03lu](% 2lu)\n", i - p_pBegin, i->unRuleId, i->unTokenId);
+
+				break;
+			case grammar::Report::T_TOKEN:
+				printf("% 3i:TOKEN [%03lu](% 2lu) ", i - p_pBegin, i->unRuleId, i->unTokenId);
+				fwrite(i->content.token.pcString, 1, i->content.token.iSize, stdout);
+				puts("");
+
+				break;
+			case grammar::Report::T_END:
+				printf("% 3i:END [%03lu](% 2lu)\n", i - p_pBegin, i->unRuleId, i->unTokenId);
+
+				break;
+			default:
+				puts("eRror");
+				break;
+			}
+		}
+	}
 	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
+		PrintAll(p_pBegin, p_pEnd);
+
+		system("pause");
+
 		HandleRoot(p_pBegin);
 	}
 
@@ -549,6 +583,17 @@ private:
 	{
 		switch (p_pReport->unRuleId)
 		{
+		case grammar::BGR_ROOT_HELPER_0:
+		{
+			auto report = p_pReport->content.children;
+
+			++report.pBegin;
+
+			while (report.pBegin < report.pEnd)
+				report.pBegin = HandleRoot(report.pBegin);
+
+			return report.pEnd + 1;
+		}
 		case grammar::BGR_VARIABLE_DECLARATION:
 			return HandleVariableDeclaration(p_pReport->content.children);
 		case grammar::BGR_IF:
@@ -606,13 +651,17 @@ private:
 	}
 	inline const grammar::Report * HandleIf(grammar::report_range p_reports)
 	{
-		PrintStraight("if>", p_reports);
+		//PrintStraight("if>", p_reports);
+
+		printf("%i\n", p_reports.pEnd - p_reports.pBegin);
 
 		BiaConditionMakerSimple maker(m_output);
 
+		++p_reports.pBegin;
+
 		while (p_reports.pBegin < p_reports.pEnd)
 		{
-			p_reports.pBegin = HandleValue(p_reports.pBegin[1].content.children, false);
+			p_reports.pBegin = HandleValue(p_reports.pBegin->content.children, false);
 
 			WriteConstant<uint64_t>(machine::OP::JUMP_CONDITIONAL_NOT, 0);
 			maker.MarkPlaceholder();
