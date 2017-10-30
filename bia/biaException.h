@@ -3,6 +3,8 @@
 #include <string>
 #include <stdio.h>
 
+#define BIA_IMPLEMENTATION_EXCEPTION(msg) bia::exception::ImplementationException(msg, __FILE__, __LINE__)
+
 
 namespace bia
 {
@@ -12,7 +14,7 @@ namespace exception
 struct Exception
 {
 	std::string stMessage;
-	
+
 	inline Exception(std::string p_stMessage) : stMessage(std::move(p_stMessage)) {}
 	inline virtual ~Exception() = default;
 	inline virtual void Print() const
@@ -28,7 +30,7 @@ struct UnknownException final : Exception
 
 struct ImplementationException final : Exception
 {
-	inline ImplementationException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
+	inline ImplementationException(std::string p_stMessage, const char * p_pszFile, int p_nLine) : Exception(p_pszFile + std::string("//#") + std::to_string(p_nLine) + ": " + std::move(p_stMessage)) {}
 };
 
 struct UnknownTemplateException final : Exception

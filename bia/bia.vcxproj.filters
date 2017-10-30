@@ -269,12 +269,6 @@
     <ClInclude Include="biaInterpreterTokens.h">
       <Filter>Header Files\api\grammar</Filter>
     </ClInclude>
-    <ClInclude Include="biaInterpreterRule.h">
-      <Filter>Header Files\api\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="biaReportBundle.h">
-      <Filter>Header Files\api\grammar</Filter>
-    </ClInclude>
     <ClInclude Include="biaInterpreterStringSet.h">
       <Filter>Header Files\api\grammar</Filter>
     </ClInclude>

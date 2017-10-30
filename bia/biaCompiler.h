@@ -9,9 +9,7 @@
 #include "biaConditionMarker.h"
 #include "utf8.h"
 
-#define BIA_COMPILER_DEV_TEST if(p_pBegin + 1 < p_pEnd){
-#define BIA_COMPILER_DEV_TEST_END } throw exception::ImplementationException("Invalid grammar.");
-#define BIA_COMPILER_DEV_INVALID throw exception::ImplementationException("Invalid case.");
+#define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
 
 
 namespace bia
@@ -32,20 +30,20 @@ public:
 	{
 		auto unRuleId = p_pBegin->unRuleId;
 
-		printf("%sBEGIN %lu {%llu}\n", p_stIndentation.c_str(), unRuleId, p_pBegin->ullCustomParameter);
+		printf("%sBEGIN %lu {%llu}\n", p_stIndentation.c_str(), unRuleId, p_pBegin->unCustomParameter);
 
 		for (; p_pBegin < p_pEnd; ++p_pBegin)
 		{
-			if (p_pBegin->type == grammar::Report::T_BEGIN)
+			if (p_pBegin->type == grammar::Report::TYPE::BEGIN)
 			{
 				Print(p_stIndentation + "|", p_pBegin->content.children.pBegin + 1, p_pBegin->content.children.pEnd);
 				p_pBegin = p_pBegin->content.children.pEnd;
 			}
-			else if (p_pBegin->type == grammar::Report::T_TOKEN)
+			else if (p_pBegin->type == grammar::Report::TYPE::TOKEN)
 			{
 				printf("%s", p_stIndentation.c_str());
 				fwrite(p_pBegin->content.token.pcString, 1, p_pBegin->content.token.iSize, stdout);
-				printf(" id: %lu rule: %lu {%llu}\n", p_pBegin->unTokenId, p_pBegin->unRuleId, p_pBegin->ullCustomParameter);
+				printf(" id: %lu rule: %lu {%llu}\n", p_pBegin->unTokenId, p_pBegin->unRuleId, p_pBegin->unCustomParameter);
 			}
 		}
 
@@ -62,17 +60,17 @@ public:
 		{
 			switch (i->type)
 			{
-			case grammar::Report::T_EMPTY_CHILD:
+			case grammar::Report::TYPE::EMPTY_CHILD:
 				printf("%s % 2i:EMPTY [%03lu](% 2lu)\n", p_pszIndentation, i - p_children.pBegin, i->unRuleId, i->unTokenId);
 
 				break;
-			case grammar::Report::T_BEGIN:
+			case grammar::Report::TYPE::BEGIN:
 				printf("%s % 2i:CHILD [%03lu](% 2lu)\n", p_pszIndentation, i - p_children.pBegin, i->unRuleId, i->unTokenId);
 
 				i = i->content.children.pEnd;
 
 				break;
-			case grammar::Report::T_TOKEN:
+			case grammar::Report::TYPE::TOKEN:
 				printf("%s % 2i:TOKEN [%03lu](% 2lu) ", p_pszIndentation, i - p_children.pBegin, i->unRuleId, i->unTokenId);
 				fwrite(i->content.token.pcString, 1, i->content.token.iSize, stdout);
 				puts("");
@@ -90,21 +88,21 @@ public:
 		{
 			switch (i->type)
 			{
-			case grammar::Report::T_EMPTY_CHILD:
+			case grammar::Report::TYPE::EMPTY_CHILD:
 				printf("% 3i:EMPTY [%03lu](% 2lu)\n", i - p_pBegin, i->unRuleId, i->unTokenId);
 
 				break;
-			case grammar::Report::T_BEGIN:
+			case grammar::Report::TYPE::BEGIN:
 				printf("% 3i:BEGIN [%03lu](% 2lu)\n", i - p_pBegin, i->unRuleId, i->unTokenId);
 
 				break;
-			case grammar::Report::T_TOKEN:
+			case grammar::Report::TYPE::TOKEN:
 				printf("% 3i:TOKEN [%03lu](% 2lu) ", i - p_pBegin, i->unRuleId, i->unTokenId);
 				fwrite(i->content.token.pcString, 1, i->content.token.iSize, stdout);
 				puts("");
 
 				break;
-			case grammar::Report::T_END:
+			case grammar::Report::TYPE::END:
 				printf("% 3i:END [%03lu](% 2lu)\n", i - p_pBegin, i->unRuleId, i->unTokenId);
 
 				break;
@@ -116,10 +114,6 @@ public:
 	}
 	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
 	{
-		PrintAll(p_pBegin, p_pEnd);
-
-		system("pause");
-
 		HandleRoot(p_pBegin);
 	}
 
@@ -208,7 +202,7 @@ private:
 	{
 		auto bPush = p_type == NUMBER_TYPE::PUSH;
 
-		switch (p_pReport->ullCustomParameter)
+		switch (p_pReport->unCustomParameter)
 		{
 		case grammar::NI_INTEGER:
 		{
@@ -367,7 +361,7 @@ private:
 	}
 	inline void HandleString(const grammar::Report * p_pReport, bool p_bPush)
 	{
-		auto unSize = static_cast<uint32_t>(p_pReport->content.token.iSize - static_cast<size_t>(p_pReport->ullCustomParameter));
+		auto unSize = static_cast<uint32_t>(p_pReport->content.token.iSize - static_cast<size_t>(p_pReport->unCustomParameter));
 
 		if (unSize)
 		{
@@ -380,7 +374,7 @@ private:
 			auto pcDest = m_output.GetBuffer(unSize);
 
 			//Copy raw string
-			if (p_pReport->ullCustomParameter & grammar::SCPF_RAW_STRING)
+			if (p_pReport->unCustomParameter & grammar::SCPF_RAW_STRING)
 				memcpy(pcDest, p_pReport->content.token.pcString, unSize);
 			else
 			{
@@ -490,7 +484,7 @@ private:
 		{
 			for (uint32_t unDepth = 0; p_pBegin < p_pEnd; ++p_pBegin)
 			{
-				if (p_pBegin->type == grammar::Report::T_BEGIN)
+				if (p_pBegin->type == grammar::Report::TYPE::BEGIN)
 				{
 					//Skip
 					if (unDepth > _DEPTH)
@@ -502,7 +496,7 @@ private:
 					else
 						++unDepth;
 				}
-				else if (p_pBegin->type == grammar::Report::T_END)
+				else if (p_pBegin->type == grammar::Report::TYPE::END)
 					--unDepth;
 			}
 		}
@@ -512,7 +506,7 @@ private:
 
 			while (p_pEnd-- > p_pBegin)
 			{
-				if (p_pEnd->type == grammar::Report::T_END)
+				if (p_pEnd->type == grammar::Report::TYPE::END)
 				{
 					//Skip
 					if (unDepth > _DEPTH)
@@ -524,7 +518,7 @@ private:
 					else
 						++unDepth;
 				}
-				else if (p_pEnd->type == grammar::Report::T_BEGIN)
+				else if (p_pEnd->type == grammar::Report::TYPE::BEGIN)
 					--unDepth;
 			}
 		}
@@ -538,7 +532,7 @@ private:
 		{
 			for (uint32_t unDepth = 0; p_pBegin < p_pEnd; ++p_pBegin)
 			{
-				if (p_pBegin->type == grammar::Report::T_BEGIN)
+				if (p_pBegin->type == grammar::Report::TYPE::BEGIN)
 				{
 					//Skip
 					if (unDepth > _DEPTH)
@@ -547,7 +541,7 @@ private:
 					else
 						++unDepth;
 				}
-				else if (p_pBegin->type == grammar::Report::T_END)
+				else if (p_pBegin->type == grammar::Report::TYPE::END)
 					--unDepth;
 				//Found token
 				else if (p_pBegin->unRuleId == _RULE_ID)
@@ -560,7 +554,7 @@ private:
 
 			while (p_pEnd-- > p_pBegin)
 			{
-				if (p_pEnd->type == grammar::Report::T_END)
+				if (p_pEnd->type == grammar::Report::TYPE::END)
 				{
 					//Skip
 					if (unDepth > _DEPTH)
@@ -569,7 +563,7 @@ private:
 					else
 						++unDepth;
 				}
-				else if (p_pEnd->type == grammar::Report::T_BEGIN)
+				else if (p_pEnd->type == grammar::Report::TYPE::BEGIN)
 					--unDepth;
 				//Found token
 				else if (p_pBegin->unRuleId == _RULE_ID)
@@ -655,7 +649,7 @@ private:
 
 		printf("%i\n", p_reports.pEnd - p_reports.pBegin);
 
-		BiaConditionMakerSimple maker(m_output);
+		BiaConditionMakerSemiDuplex maker(m_output);
 
 		++p_reports.pBegin;
 
@@ -664,12 +658,21 @@ private:
 			p_reports.pBegin = HandleValue(p_reports.pBegin->content.children, false);
 
 			WriteConstant<uint64_t>(machine::OP::JUMP_CONDITIONAL_NOT, 0);
-			maker.MarkPlaceholder();
+			maker.MarkPlaceholder(BiaConditionMakerSemiDuplex::L_NEXT);
 
 			p_reports.pBegin = HandleRoot(p_reports.pBegin);
+			
+			//Jump to end if not last
+			if (p_reports.pBegin < p_reports.pEnd)
+			{
+				WriteConstant<uint64_t>(machine::OP::JUMP, 0);
+				maker.MarkPlaceholder(BiaConditionMakerSemiDuplex::L_END);
+			}
 
-			maker.MarkLocation();
+			maker.MarkLocation(BiaConditionMakerSemiDuplex::L_NEXT);
 		}
+
+		maker.MarkLocation(BiaConditionMakerSemiDuplex::L_END);
 
 		return p_reports.pEnd + 1;
 	}
@@ -878,7 +881,7 @@ private:
 		{
 			if (++p_reports.pBegin + 1 < p_reports.pEnd)
 			{
-				auto pSecond = (p_reports.pBegin->type == grammar::Report::T_BEGIN ? p_reports.pBegin->content.children.pEnd : p_reports.pBegin) + 1;
+				auto pSecond = (p_reports.pBegin->type == grammar::Report::TYPE::BEGIN ? p_reports.pBegin->content.children.pEnd : p_reports.pBegin) + 1;
 				uint8_t ucParameterCount = pSecond->unRuleId == grammar::BGR_PARAMETER || pSecond->unRuleId == grammar::BGR_PARAMETER_ITEM_ACCESS ? HandleParameter(pSecond->content.children) : 0;
 
 				//Handle string/instantiation
@@ -968,7 +971,7 @@ private:
 			}
 
 			//Jump to the end
-			if (p_reports.pBegin->type == grammar::Report::T_BEGIN)
+			if (p_reports.pBegin->type == grammar::Report::TYPE::BEGIN)
 				p_reports.pBegin = p_reports.pBegin->content.children.pEnd;
 
 			++p_reports.pBegin;

@@ -34,7 +34,7 @@ struct TokenParams
 {
 	BiaReportBundle * pBundle;
 	BiaInterpreterRule * pRules;
-	uint32_t unTokenId;
+	Report::token_id iTokenId;
 };
 
 struct TokenOutput
@@ -42,7 +42,7 @@ struct TokenOutput
 	size_t iTokenSize;
 	size_t iBufferOffset;
 	size_t iBufferPadding;
-	uint64_t ullCustom;
+	Report::custom_parameter iCustom;
 };
 
 typedef ACTION(*bia_token_function)(const char*, size_t, TokenParams, TokenOutput&);
@@ -64,7 +64,7 @@ public:
 	*/
 	inline BiaInterpreterRule()
 	{
-		m_unMaxElements = 0;
+		m_iMaxElements = 0;
 		m_fFlags = 0;
 
 		m_ppTokens = nullptr;
@@ -76,9 +76,9 @@ public:
 	*/
 	inline BiaInterpreterRule(BiaInterpreterRule && p_move)
 	{
-		m_unMaxElements = p_move.m_unMaxElements;
+		m_iMaxElements = p_move.m_iMaxElements;
 		m_fFlags = p_move.m_fFlags;
-		p_move.m_unMaxElements = 0;
+		p_move.m_iMaxElements = 0;
 		p_move.m_fFlags = 0;
 
 		m_ppTokens = p_move.m_ppTokens;
@@ -94,16 +94,21 @@ public:
 	 * @since	2.39.82.486
 	 * @date	16-Sep-17
 	 *
-	 * @param	p_unElements	Defines the new amount of elements the rule can have.
+	 * @param	p_iElements	Defines the new amount of elements the rule can have.
 	 * @param	p_fFlags	Defines the flags.
+	 *
+	 * @throws	bia::exception::ImplementationException	Thrown when the element size is not allowed.
 	*/
-	inline void Reset(uint32_t p_unElements, uint32_t p_fFlags = F_NONE)
+	inline void Reset(Report::token_id p_iElements, uint32_t p_fFlags = F_NONE)
 	{
-		m_unMaxElements = p_unElements;
+		if (p_iElements & static_cast<Report::token_id>(-1) << Report::TOKEN_BITS)
+			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid token size.");
+
+		m_iMaxElements = p_iElements;
 		m_fFlags = p_fFlags;
 
 		delete[] m_ppTokens;
-		m_ppTokens = new bia_token_function[p_unElements]{};
+		m_ppTokens = new bia_token_function[p_iElements]{};
 	}
 	/**
 	 * Runs this rule.
@@ -120,8 +125,8 @@ public:
 	inline size_t RunRule(const char * p_pcBuffer, size_t p_iSize, TokenParams p_params)
 	{
 		const auto iSizeToBegin = p_params.pBundle->Size();
-		uint32_t unCursor = 0;
-		auto unRuleId = static_cast<uint32_t>(this - p_params.pRules);
+		Report::token_id iCursor = 0;
+		auto iRuleId = static_cast<Report::rule_id>(this - p_params.pRules);
 		auto WrapUp = [&] {
 			auto unTokenAdded = p_params.pBundle->Size() - iSizeToBegin;
 
@@ -137,7 +142,7 @@ public:
 					//End
 					auto end = *pBegin;
 
-					end.type = Report::T_END;
+					end.type = Report::TYPE::END;
 
 					p_params.pBundle->AddReport(std::move(end));
 				}
@@ -154,7 +159,7 @@ public:
 					auto pBegin = p_params.pBundle->Begin() + iSizeToBegin;
 
 					pBegin->content.children = { pBegin, pBegin };
-					pBegin->type = Report::T_EMPTY_CHILD;
+					pBegin->type = Report::TYPE::EMPTY_CHILD;
 				}
 			}
 		};
@@ -164,9 +169,9 @@ public:
 		{
 			Report begin{};
 
-			begin.type = Report::T_BEGIN;
-			begin.unRuleId = unRuleId;
-			begin.unTokenId = p_params.unTokenId;
+			begin.type = Report::TYPE::BEGIN;
+			begin.unRuleId = iRuleId;
+			begin.unTokenId = p_params.iTokenId;
 			
 			p_params.pBundle->AddReport(std::move(begin));
 		}
@@ -177,25 +182,25 @@ public:
 			size_t iAccount = 0;
 			bool bLoop;
 
-			while (unCursor < m_unMaxElements)
+			while (iCursor < m_iMaxElements)
 			{
 				do
 				{
 					TokenOutput output{};
 
-					p_params.unTokenId = unCursor + 1;
+					p_params.iTokenId = iCursor + 1;
 
-					switch (m_ppTokens[unCursor++](p_pcBuffer, p_iSize, p_params, output))
+					switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
 					{
 					case ACTION::REPORT:
 					{
 						Report token{};
 
-						token.type = Report::T_TOKEN;
+						token.type = Report::TYPE::TOKEN;
 						token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
-						token.unRuleId = unRuleId;
-						token.unTokenId = unCursor;
-						token.ullCustomParameter = output.ullCustom;
+						token.unRuleId = iRuleId;
+						token.unTokenId = iCursor;
+						token.unCustomParameter = output.iCustom;
 
 						p_params.pBundle->AddReport(std::move(token));
 					}
@@ -207,11 +212,11 @@ public:
 					{
 						Report token{};
 
-						token.type = Report::T_TOKEN;
+						token.type = Report::TYPE::TOKEN;
 						token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
-						token.unRuleId = unRuleId;
-						token.unTokenId = unCursor;
-						token.ullCustomParameter = output.ullCustom;
+						token.unRuleId = iRuleId;
+						token.unTokenId = iCursor;
+						token.unCustomParameter = output.iCustom;
 
 						p_params.pBundle->AddReport(std::move(token));
 					}
@@ -224,7 +229,7 @@ public:
 						p_iSize -= iOffset;
 
 						bLoop = true;
-						--unCursor;
+						--iCursor;
 
 						continue;
 					}
@@ -247,25 +252,25 @@ public:
 			const auto ciSize = p_iSize;
 			bool bLoop;
 
-			while (unCursor < m_unMaxElements)
+			while (iCursor < m_iMaxElements)
 			{
 				do
 				{
 					TokenOutput output{};
 
-					p_params.unTokenId = unCursor + 1;
+					p_params.iTokenId = iCursor + 1;
 
-					switch (m_ppTokens[unCursor++](p_pcBuffer, p_iSize, p_params, output))
+					switch (m_ppTokens[iCursor++](p_pcBuffer, p_iSize, p_params, output))
 					{
 					case ACTION::REPORT:
 					{
 						Report token{};
 
-						token.type = Report::T_TOKEN;
+						token.type = Report::TYPE::TOKEN;
 						token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
-						token.unRuleId = unRuleId;
-						token.unTokenId = unCursor;
-						token.ullCustomParameter = output.ullCustom;
+						token.unRuleId = iRuleId;
+						token.unTokenId = iCursor;
+						token.unCustomParameter = output.iCustom;
 
 						p_params.pBundle->AddReport(std::move(token));
 					}
@@ -282,11 +287,11 @@ public:
 					{
 						Report token{};
 
-						token.type = Report::T_TOKEN;
+						token.type = Report::TYPE::TOKEN;
 						token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
-						token.unRuleId = unRuleId;
-						token.unTokenId = unCursor;
-						token.ullCustomParameter = output.ullCustom;
+						token.unRuleId = iRuleId;
+						token.unTokenId = iCursor;
+						token.unCustomParameter = output.iCustom;
 
 						p_params.pBundle->AddReport(std::move(token));
 					}
@@ -298,7 +303,7 @@ public:
 						p_iSize -= iOffset;
 
 						bLoop = true;
-						--unCursor;
+						--iCursor;
 
 						continue;
 					}
@@ -324,29 +329,29 @@ public:
 	 * @since	2.39.81.472
 	 * @date	10-Sep-17
 	 *
-	 * @param	p_unTokenId	Defines the if of the token. Must be smaller than the previously defined max elements.
+	 * @param	p_iTokenId	Defines the if of the token. Must be smaller than the previously defined max elements.
 	 * @param   p_pToken	Defines the token.
 	 *
-	 * @throws	bia::exception::UnknownException	Thrown when the element limit has been reached.
+	 * @throws	bia::exception::ImplementationException	Thrown when the element limit has been reached.
 	 *
 	 * @return  This.
 	*/
-	inline BiaInterpreterRule & SetToken(uint32_t p_unTokenId, bia_token_function p_pToken)
+	inline BiaInterpreterRule & SetToken(Report::token_id p_iTokenId, bia_token_function p_pToken)
 	{
-		if (--p_unTokenId < m_unMaxElements)
+		if (--p_iTokenId < m_iMaxElements)
 		{
-			m_ppTokens[p_unTokenId] = p_pToken;
+			m_ppTokens[p_iTokenId] = p_pToken;
 
 			return *this;
 		}
 		else
-			throw exception::UnknownException("Invalid rule element size.");
+			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid rule element size.");
 	}
-	inline BiaInterpreterRule & operator=(BiaInterpreterRule && p_right)
+	inline BiaInterpreterRule & operator=(BiaInterpreterRule p_right)
 	{
-		m_unMaxElements = p_right.m_unMaxElements;
+		m_iMaxElements = p_right.m_iMaxElements;
 		m_fFlags = p_right.m_fFlags;
-		p_right.m_unMaxElements = 0;
+		p_right.m_iMaxElements = 0;
 		p_right.m_fFlags = 0;
 
 		delete[] m_ppTokens;
@@ -358,7 +363,7 @@ public:
 
 
 private:
-	uint32_t m_unMaxElements;
+	Report::token_id m_iMaxElements;
 	uint32_t m_fFlags;
 
 	bia_token_function * m_ppTokens;

@@ -13,7 +13,7 @@
 #include "biaModule.h"
 
 
-#define END system("pause"); return 0;
+#define ENDE system("pause"); return 0;
 
 using namespace bia;
 using namespace machine;
@@ -157,7 +157,7 @@ int main(int argc, char ** argv)
 
 	stream::BiaStreamBuffer cc;
 
-	char tetea[] = u8R"kart(if(4){var a=0;}else if(3){var i=0;})kart";
+	char tetea[] = u8R"kart(if(4){var a=0;}else if(3 && 5){var i=0;}else if("hi"){var l = ol;}else{var o = p;})kart";
 	
 	grammar::InitializeRules().Interpret(tetea, sizeof(tetea) - 1, compiler::BiaCompiler(cc));
 
@@ -167,7 +167,7 @@ int main(int argc, char ** argv)
 
 	debug::BiaDisassembler::DisassembleByteCode(cc.GetByteStream());
 
-	END
+	ENDE
 
 	
 	
@@ -322,7 +322,7 @@ print j.DoNot();
 
 			context.ClearScope();
 
-			END
+			ENDE
 		}
 
 		std::string stCode;

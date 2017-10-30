@@ -11,7 +11,7 @@ namespace api
 namespace grammar
 {
 
-template<uint32_t _RULES>
+template<Report::rule_id _RULES>
 class BiaInterpreter
 {
 public:
@@ -21,15 +21,17 @@ public:
 	 * @since	2.39.81.472
 	 * @date	10-Sep-17
 	 *
-	 * @param	p_nRuleId	Defines the id of the rule.
+	 * @param	p_iRuleId	Defines the id of the rule.
 	 * @param	p_rule	Defines the rule.
+	 *
+	 * @throws	bia::exception::ImplementationException	Thrown when the rule id is invalid.
 	*/
-	inline void SetRule(uint32_t p_unRuleId, BiaInterpreterRule p_rule)
+	inline void SetRule(Report::rule_id p_iRuleId, BiaInterpreterRule p_rule)
 	{
-		if (p_unRuleId < _RULES)
-			m_aRules[p_unRuleId] = std::move(p_rule);
+		if (p_iRuleId < _RULES)
+			m_aRules[p_iRuleId] = std::move(p_rule);
 		else
-			throw exception::ImplementationException("Invalid rule id.");
+			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid rule id.");
 	}
 	inline size_t Interpret(const char * p_pcBuffer, size_t p_iSize, BiaReportReceiver & p_receiver)
 	{
@@ -74,16 +76,18 @@ public:
 	 * @since	2.39.81.472
 	 * @date	10-Sep-17
 	 *
-	 * @param	p_unRuleId	Defines the id of the rule.
+	 * @param	p_iRuleId	Defines the id of the rule.
+	 *
+	 * @throws	bia::exception::ImplementationException	Thrown when the rule id is invalid.
 	 *
 	 * @return	The rule.
 	*/
-	inline BiaInterpreterRule & GetRule(uint32_t p_unRuleId)
+	inline BiaInterpreterRule & GetRule(Report::rule_id p_iRuleId)
 	{
-		if (p_unRuleId < _RULES)
-			return m_aRules[p_unRuleId];
+		if (p_iRuleId < _RULES)
+			return m_aRules[p_iRuleId];
 		else
-			throw exception::UnknownException("Invalid rule id.");
+			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid rule id.");
 	}
 
 private:

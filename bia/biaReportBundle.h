@@ -21,15 +21,26 @@ typedef struct
 
 struct Report
 {
-	enum TYPE : uint8_t
+	typedef uint32_t custom_parameter;
+	typedef uint32_t rule_id;
+	typedef uint16_t token_id;
+
+	constexpr static int CUSTOM_BITS = 27;
+	constexpr static int RULE_BITS = 22;
+	constexpr static int TOKEN_BITS = 32 - RULE_BITS;
+
+	enum class TYPE : uint32_t
 	{
-		T_TOKEN,
-		T_BEGIN,
-		T_END,
-		T_EMPTY_CHILD
+		TOKEN,
+		BEGIN,
+		END,
+		EMPTY_CHILD
 	};
 
-	TYPE type;
+	TYPE type : 32 - CUSTOM_BITS;
+	uint32_t unCustomParameter : CUSTOM_BITS;
+	uint32_t unRuleId : RULE_BITS;
+	uint32_t unTokenId : TOKEN_BITS;
 	union
 	{
 		struct
@@ -39,9 +50,6 @@ struct Report
 		} token;
 		report_range children;
 	} content;
-	uint32_t unRuleId;
-	uint32_t unTokenId;
-	uint64_t ullCustomParameter;
 };
 
 class BiaReportBundle
@@ -64,13 +72,6 @@ public:
 	*/
 	inline void AddReport(Report p_report)
 	{
-		switch (p_report.type)
-		{
-		case Report::T_TOKEN:
-			fwrite(p_report.content.token.pcString, 1, p_report.content.token.iSize, stdout);
-			puts("");
-		}
-
 		if (m_unSize < SIZE)
 		{
 			m_aReports[m_unSize++] = std::move(p_report);
@@ -146,7 +147,7 @@ public:
 	}
 
 private:
-	constexpr static uint32_t SIZE = 64;
+	constexpr static uint32_t SIZE = 512;
 	uint32_t m_unSize;
 
 	Report m_aReports[SIZE];

@@ -222,6 +222,81 @@ private:
 	std::vector<long long> m_avllPlaceholder[2];
 };
 
+class BiaConditionMakerSemiDuplex
+{
+public:
+	enum LOCATION
+	{
+		L_NEXT,
+		L_END
+	};
+
+	/**
+	 * Constructor.
+	 *
+	 * @param	[in,out]	p_code	Defines the stream.
+	*/
+	inline BiaConditionMakerSemiDuplex(stream::BiaStream & p_code) : m_code(p_code) {}
+	inline ~BiaConditionMakerSemiDuplex() = default;
+	/**
+	 * Marks the last 8 bytes as placeholder.
+	 *
+	 * @since	2.41.93.550
+	 * @date	08-Oct-17
+	 *
+	 * @param   p_group	Defines the group of the placeholder.
+	 * @param	p_nOffset	(Optional)	Defines an additional offset.
+	*/
+	inline void MarkPlaceholder(LOCATION p_group)
+	{
+		if (p_group == L_NEXT)
+			m_llPlaceholderNext = m_code.TellWrite() - 8;
+		else
+			m_vllPlaceholderEnd.push_back(m_code.TellWrite() - 8);
+	}
+	/**
+	 * Marks the location of a group.
+	 *
+	 * @since	2.41.93.550
+	 * @date	08-Oct-17
+	 *
+	 * @param   p_group	Defines the group.
+	*/
+	inline void MarkLocation(LOCATION p_group)
+	{
+		if (p_group == L_NEXT)
+		{
+			auto llMark = m_code.TellWrite();
+			auto llOffset = llMark - m_llPlaceholderNext - 8;
+
+			m_code.SeekWrite(m_llPlaceholderNext);
+			m_code.Write(&llOffset, sizeof(long long));
+			m_code.SeekWrite(llMark);
+		}
+		else
+		{
+			auto llMark = m_code.TellWrite();
+
+			for (auto i = m_vllPlaceholderEnd.begin()._Ptr, cond = m_vllPlaceholderEnd.end()._Ptr; i < cond; ++i)
+			{
+				auto llOffset = llMark - *i - 8;
+
+				m_code.SeekWrite(*i);
+				m_code.Write(&llOffset, sizeof(long long));
+			}
+
+			m_code.SeekWrite(llMark);
+			m_vllPlaceholderEnd.clear();
+		}
+	}
+
+private:
+	stream::BiaStream & m_code;
+
+	long long m_llPlaceholderNext;
+	std::vector<long long> m_vllPlaceholderEnd;
+};
+
 
 
 }

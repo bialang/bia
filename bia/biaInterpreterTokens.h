@@ -93,7 +93,7 @@ inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 	}
 
 	p_output.iTokenSize = p_params.pRules[_RULE].RunRule(p_pcBuffer, p_iSize, p_params);
-	p_output.ullCustom = _CUSTOM;
+	p_output.iCustom = _CUSTOM;
 
 	return p_output.iTokenSize ? SUCCESS : ERROR;
 }
@@ -224,7 +224,7 @@ gt_break:;
 	//Raw string
 	if (fFlags & F_RAW_STRING)
 	{
-		p_output.ullCustom = SCPF_RAW_STRING;
+		p_output.iCustom = SCPF_RAW_STRING;
 
 		while (p_iSize--)
 		{
@@ -342,7 +342,7 @@ inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 	if (p_iSize && *p_pcBuffer == '-')
 		++p_output.iTokenSize;
 
-	p_output.ullCustom = NI_INTEGER;
+	p_output.iCustom = NI_INTEGER;
 
 	//First digit
 	if (p_output.iTokenSize < p_iSize)
@@ -353,7 +353,7 @@ inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 		{
 			if (++p_output.iTokenSize < p_iSize && p_pcBuffer[p_output.iTokenSize] == '.')
 			{
-				p_output.ullCustom = NI_DOUBLE;
+				p_output.iCustom = NI_DOUBLE;
 				++p_output.iTokenSize;
 			}
 			else
@@ -368,11 +368,11 @@ inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 	for (; p_output.iTokenSize < p_iSize; ++p_output.iTokenSize)
 	{
 		if (p_pcBuffer[p_output.iTokenSize] >= '0' && p_pcBuffer[p_output.iTokenSize] <= '9');
-		else if (p_pcBuffer[p_output.iTokenSize] == '.' && p_output.ullCustom == NI_INTEGER)
-			p_output.ullCustom = NI_DOUBLE;
-		else if ((p_pcBuffer[p_output.iTokenSize] == 'f' || p_pcBuffer[p_output.iTokenSize] == 'F') && p_output.ullCustom == NI_DOUBLE)
+		else if (p_pcBuffer[p_output.iTokenSize] == '.' && p_output.iCustom == NI_INTEGER)
+			p_output.iCustom = NI_DOUBLE;
+		else if ((p_pcBuffer[p_output.iTokenSize] == 'f' || p_pcBuffer[p_output.iTokenSize] == 'F') && p_output.iCustom == NI_DOUBLE)
 		{
-			p_output.ullCustom = NI_FLOAT;
+			p_output.iCustom = NI_FLOAT;
 			++p_output.iTokenSize;
 
 			return SUCCESS;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "biaReportBundle.h"
+
 
 namespace bia
 {
@@ -8,7 +10,7 @@ namespace api
 namespace grammar
 {
 
-enum BIA_GRAMMAR_RULE : size_t
+enum BIA_GRAMMAR_RULE : Report::rule_id
 {
 	BGR_ROOT,
 	BGR_ROOT_HELPER_0,
