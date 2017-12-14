@@ -25,6 +25,9 @@ public:
 	 * @param	p_iSize	Defines the size of the buffer.
 	*/
 	virtual void Write(const void * p_pBuffer, size_t p_iSize) = 0;
+	virtual void Write(uint8_t) = 0;
+	virtual void Write(uint32_t) = 0;
+	virtual void Write(uint64_t) = 0;
 	/**
 	 * Commits the last retrieved buffer.
 	 *

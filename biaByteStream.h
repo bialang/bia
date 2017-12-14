@@ -41,6 +41,8 @@ struct BiaByteStream
 		pcCursor = pcByteCode;
 		pcByteCodeEnd = pcByteCode + p_iSize;
 	}
+	const void * GetBase() const;
+	size_t GetSize() const;
 	/**
 	 * Seeks the specified position.
 	 *

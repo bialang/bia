@@ -19,6 +19,7 @@ namespace api
 namespace compiler
 {
 
+template<typename _TOOLSET>
 class BiaCompiler : public grammar::BiaReportReceiver
 {
 public:
