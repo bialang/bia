@@ -20,22 +20,31 @@ template<typename _ARCHITECTURE>
 class BiaToolGcc
 {
 public:
-	inline static void Call(stream::BiaStream & p_output, BiaMachineContext * p_context, const void * p_pAddress)
+	inline static void Initialize(stream::BiaStream & p_output, BiaMachineContext * p_context)
+	{
+		//For 32-Bit systems
+		if (std::is_same<_ARCHITECTURE, Biax86>::value)
+			Biax86::Operation32<OP_CODE::PUSH>(p_output, reinterpret_cast<uint32_t>(p_context));
+	}
+	inline static void Finalize(stream::BiaStream & p_output)
 	{
 		//For 32-Bit systems
 		if (std::is_same<_ARCHITECTURE, Biax86>::value)
 		{
-			//Push context onto the stack
-			Biax86::Operation32<OP_CODE::PUSH>(p_output, reinterpret_cast<uint32_t>(p_context));
-
+			Biax86::Operation8<OP_CODE::ADD>(p_output, 4, REGISTER::ESP);
+			Biax86::Operation<OP_CODE::RETURN_NEAR>(p_output);
+		}
+	}
+	inline static void Call(stream::BiaStream & p_output, const void * p_pAddress)
+	{
+		//For 32-Bit systems
+		if (std::is_same<_ARCHITECTURE, Biax86>::value)
+		{
 			//Move the address of the function into EAX
 			Biax86::Operation32<OP_CODE::MOVE>(p_output, reinterpret_cast<uint32_t>(p_pAddress), REGISTER::EAX);
 
 			//Call EAX
 			Biax86::Operation<OP_CODE::CALL>(p_output, REGISTER::EAX);
-
-			//Pop the context from the stack
-			Biax86::Operation32<OP_CODE::SUBTRACT>(p_output, 4, REGISTER::ESP);
 		}
 	}
 };

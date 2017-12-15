@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <utility>
 
 
 namespace bia
@@ -13,57 +14,50 @@ class BiaStream
 {
 public:
 	virtual ~BiaStream() = default;
+
+	template<typename... _ARGS>
+	inline void WriteAll(_ARGS... p_args)
+	{
+		Prepare(Size(p_args...));
+
+		Write(p_args...);
+	}
 	/**
-	 * Reserves the specified amount of bytes.
-	 *
-	 * @param	p_iSize	Defines the size.
-	*/
-	virtual void Reserve(size_t p_iSize) = 0;
-	/**
-	 * Writes the specifed buffer to the stream.
-	 *
-	 * @param	p_pBuffer	Defines the buffer.
-	 * @param	p_iSize	Defines the size of the buffer.
-	*/
-	virtual void Write(const void * p_pBuffer, size_t p_iSize) = 0;
-	virtual void Write(uint8_t) = 0;
-	virtual void Write(uint32_t) = 0;
-	virtual void Write(uint64_t) = 0;
-	/**
-	 * Commits the last retrieved buffer.
-	 *
-	 * @param	p_iSize	Defines the actual size written to the buffer.
-	*/
-	virtual void CommitBuffer(size_t p_iSize) = 0;
-	/**
-	 * Copies from the specified position the specified amount of bytes to the current cursor postion.
-	 *
-	 * @param	p_llPosition	Defines the position.
-	 * @param	p_iSize	Defines the amount of bytes that should be copied.
-	*/
-	virtual void CopyFrom(long long p_llPosition, size_t p_iSize) = 0;
-	/**
-	 * Moves the cursor to the position.
-	 *
-	 * @param	p_llPosition	Defines the position.
-	 *
-	 * @return	true if it succeeds, otherwise false.
-	*/
-	virtual bool SeekWrite(long long p_llPosition) = 0;
-	/**
-	 * Tells the current position of the cursor.
-	 *
-	 * @return	The position of the cursor.
-	*/
-	virtual long long TellWrite() = 0;
-	/**
-	 * Readies the a buffer and returns it.
-	 *
-	 * @param	p_iSize	Defines the maximum intended size of the buffer.
-	 *
+	 * Returns a memory buffer with its size.
+	 * 
+	 * @remarks	This buffer is only valid until the destruction of this object.
+	 * 
+	 * @since	3.42.93.562
+	 * @date	15-Dec-17
+	 * 
 	 * @return	The buffer.
-	*/
-	virtual char * GetBuffer(size_t p_iSize) = 0;
+	 */
+	virtual std::pair<const uint8_t*, size_t> GetBuffer() const = 0;
+
+protected:
+	virtual void Prepare(size_t p_iAdditonalSize) = 0;
+	virtual void Write(uint64_t p_ullValue) = 0;
+	virtual void Write(uint32_t p_unValue) = 0;
+	virtual void Write(uint16_t p_usValue) = 0;
+	virtual void Write(uint8_t p_ucValue) = 0;
+
+private:
+	template<typename T, typename... _ARGS>
+	inline void Write(T p_value, _ARGS... p_args)
+	{
+		Write(p_value);
+
+		Write(p_args...);
+	}
+	inline constexpr static size_t Size()
+	{
+		return 0;
+	}
+	template<typename T, typename... _ARGS>
+	inline constexpr static size_t Size(T, _ARGS... p_args)
+	{
+		return sizeof(T) + Size(p_args...);
+	}
 };
 
 }

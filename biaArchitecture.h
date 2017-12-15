@@ -19,20 +19,19 @@ enum class OP_CODE
 	PUSH,
 	MOVE,
 	CALL,
+	ADD,
 	SUBTRACT,
 	RETURN_NEAR
 };
 
-template<typename T>
-inline uint8_t operator "" _8(T p_value)
+inline uint8_t operator "" _8(unsigned long long p_ullValue)
 {
-	return static_cast<uint8_t>(p_value);
+	return static_cast<uint8_t>(p_ullValue);
 }
 
-template<typename T>
-inline uint32_t operator "" _32(T p_value)
+inline uint32_t operator "" _32(unsigned long long p_ullValue)
 {
-	return static_cast<uint32_t>(p_value);
+	return static_cast<uint32_t>(p_ullValue);
 }
 
 }

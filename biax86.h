@@ -22,13 +22,10 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::RETURN_NEAR:
-		{
-			p_output.Write(0xc3_8);
-
-			break;
-		}
+			return p_output.WriteAll(0xc3_8);
 		default:
 			
+			throw 1;
 		}
 	}
 	template<OP_CODE _OP_CODE>
@@ -37,19 +34,11 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
-		{
-			p_output.Write(static_cast<uint8_t>(0x50 | Register(p_register)));
-
-			break;
-		}
+			return p_output.WriteAll(static_cast<uint8_t>(0x50 | Register(p_register)));
 		case OP_CODE::CALL:
-		{
-			p_output.Write(0xff_8);
-			p_output.Write(static_cast<uint8_t>(0xd0 | Register(p_register)));
-
-			break;
-		}
+			return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0xd0 | Register(p_register)));
 		default:
+			throw 1;
 		}
 	}
 	template<OP_CODE _OP_CODE>
@@ -58,13 +47,9 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
-		{
-			p_output.Write(0x68_8);
-			p_output.Write(p_unConstant);
-
-			break;
-		}
+			return p_output.WriteAll(0x68_8, p_unConstant);
 		default:
+			throw 1;
 		}
 	}
 	template<OP_CODE _OP_CODE>
@@ -73,13 +58,9 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::RETURN_NEAR:
-		{
-			p_output.Write(0xc2_8);
-			p_output.Write(p_usConstant);
-
-			break;
-		}
+			return p_output.WriteAll(0xc2_8, p_usConstant);
 		default:
+			throw 1;
 		}
 	}
 	template<OP_CODE _OP_CODE>
@@ -88,13 +69,9 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
-		{
-			p_output.Write(0x6a_8);
-			p_output.Write(p_ucConstant);
-
-			break;
-		}
+			return p_output.WriteAll(0x6a_8, p_ucConstant);
 		default:
+			throw 1;
 		}
 	}
 	template<OP_CODE _OP_CODE>
@@ -103,30 +80,25 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::MOVE:
+			return p_output.WriteAll(static_cast<uint8_t>(0xb8 | Register(p_destination)), p_unConstant);
+		case OP_CODE::ADD:
 		{
-			p_output.Write(static_cast<uint8_t>(0xb8 | Register(p_destination)));
-			p_output.Write(p_unConstant);
-
-			break;
+			//Special opcode for EAX
+			if (p_destination == REGISTER::EAX)
+				return p_output.WriteAll(0x05_8, p_unConstant);
+			else
+				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0300 | Register(p_destination)), p_unConstant);
 		}
 		case OP_CODE::SUBTRACT:
 		{
 			//Special opcode for EAX
 			if (p_destination == REGISTER::EAX)
-			{
-				p_output.Write(0x2d_8);
-				p_output.Write(p_unConstant);
-			}
+				return p_output.WriteAll(0x2d_8, p_unConstant);
 			else
-			{
-				p_output.Write(0x81_8);
-				p_output.Write(static_cast<uint8_t>(0xe8 | Register(p_desitnation)));
-				p_output.Write(p_unConstant);
-			}
-
-			break;
+				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0xe8 | Register(p_destination)), p_unConstant);
 		}
 		default:
+			throw 1;
 		}
 	}
 	template<OP_CODE _OP_CODE>
@@ -135,31 +107,25 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::MOVE:
+			return p_output.WriteAll(static_cast<uint8_t>(0xb8 | Register(p_destination)), static_cast<uint32_t>(p_ucConstant));
+		case OP_CODE::ADD:
 		{
-			p_output.Write(static_cast<uint8_t>(0xb8 | Register(p_destination)));
-			p_output.Write(static_cast<uint32_t>(p_ucConstant));
-
-			break;
+			//Special opcode for EAX
+			if (p_destination == REGISTER::EAX)
+				return p_output.WriteAll(0x04_8, p_ucConstant);
+			else
+				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0300 | Register(p_destination)), p_ucConstant);
 		}
 		case OP_CODE::SUBTRACT:
 		{
 			//Special opcode for EAX
 			if (p_destination == REGISTER::EAX)
-			{
-				p_output.Write(0x2c_8);
-				p_output.Write(p_ucConstant);
-			}
+				return p_output.WriteAll(0x2c_8, p_ucConstant);
 			else
-			{
-				p_output.Write(0x83_8);
-				p_output.Write(static_cast<uint8_t>(0xe8 | Register(p_desitnation)));
-				p_output.Write(p_ucConstant);
-			}
-			
-
-			break;
+				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0xe8 | Register(p_destination)), p_ucConstant);
 		}
 		default:
+			throw 1;
 		}
 	}
 

@@ -2,18 +2,43 @@
 #include "biaToolGcc.h"
 #include "biaStreamBuffer.h"
 
-void hello_world(void*)
+void hello_world(void*p)
 {
-	puts("Hello, World!");
+	printf("Hello, World! %p\n", p);
 }
 
 int main()
 {
 	bia::stream::BiaStreamBuffer buf;
+	bia::machine::BiaMachineContext context;
 
-	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Call(buf, nullptr, hello_world);
+	printf("address: %p\n", &context);
 
-	bia::machine::BiaMachineCode code(buf.GetByteStream());
+	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Initialize(buf, &context);
+	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Call(buf, reinterpret_cast<const void*>(hello_world));
+	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Call(buf, reinterpret_cast<const void*>(hello_world));
+	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Finalize(buf);
 
-	code.Execute(nullptr);
+	bia::machine::BiaMachineCode code(buf.GetBuffer());
+
+	auto buffer = buf.GetBuffer();
+	int t = 0;
+
+	while (buffer.second--)
+	{
+		printf("%02hhx ", *buffer.first++);
+
+		if (++t == 10)
+		{
+			puts("");
+			t =0 ;
+		}
+	}
+
+	if (t != 0)
+	{
+		puts("");
+	}
+
+	code.Execute(context);
 }
