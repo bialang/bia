@@ -1,6 +1,7 @@
 #include "biaMachineCode.h"
 
 #include <sys/mman.h>
+#include <cstring>
 
 
 namespace bia
@@ -8,22 +9,21 @@ namespace bia
 namespace machine
 {
 
-BiaMachineCode::BiaMachineCode(stream::BiaByteStream p_machineCode)
+BiaMachineCode::BiaMachineCode(std::pair<const uint8_t*, size_t> p_machineCode)
 {
-	m_iSize = p_machineCode.GetSize();
-
 	//Allocate virtual memory
-	auto pCode = mmap(nullptr, m_iSize, PROT_WRITE | PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	auto pCode = mmap(nullptr, p_machineCode.second, PROT_WRITE | PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
 	if (pCode != reinterpret_cast<void*>(-1))
 	{
 		//Copy machine code to executable memory
-		memcpy(pCode, p_machineCode.GetBase(), m_iSize);
+		memcpy(pCode, p_machineCode.first, p_machineCode.second);
 
 		//Protect memory
-		if (!mprotect(pCode, m_iSize, PROT_EXEC))
+		if (!mprotect(pCode, p_machineCode.second, PROT_EXEC))
 		{
-			m_run = static_cast<entry_point>(pCode);
+			m_run = reinterpret_cast<entry_point>(pCode);
+			m_iSize = p_machineCode.second;
 
 			return;
 		}
@@ -47,7 +47,7 @@ BiaMachineCode::BiaMachineCode(BiaMachineCode && p_move)
 BiaMachineCode::~BiaMachineCode()
 {
 	if (m_run)
-		munmap(m_run, m_iSize);
+		munmap(reinterpret_cast<void*>(m_run), m_iSize);
 }
 
 void BiaMachineCode::Execute(BiaMachineContext & p_context) const
@@ -55,7 +55,7 @@ void BiaMachineCode::Execute(BiaMachineContext & p_context) const
 	m_run(&p_context);
 }
 
-bool BiaMachineContext::IsValid() const
+bool BiaMachineCode::IsValid()
 {
 	return m_run && m_iSize;
 }

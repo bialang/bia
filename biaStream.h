@@ -1,6 +1,7 @@
 #pragma once
 
-#include "biaOpCodes.h"
+#include <cstddef>
+#include <cstdint>
 
 
 namespace bia
