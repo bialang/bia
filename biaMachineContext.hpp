@@ -16,6 +16,8 @@ namespace bia
 namespace machine
 {
 
+class BiaCompiler;
+
 class BiaMachineContext final
 {
 public:
@@ -27,12 +29,21 @@ BiaMachineContext() : m_storage(34)
 	void Run(stream::BiaInputStream & p_script);
 
 private:
-	std::unordered_map<std::string, api::framework::BiaMember*> m_index;	/**	Stores all pointers to the known variables.	*/
-	std::map<std::string, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
+	friend BiaCompiler;
+
+	struct StringKey
+	{
+		StringKey(std::string);
+		StringKey(const void*, size_t);
+	};
+
+	std::unordered_map<StringKey, api::framework::BiaMember*> m_index;	/**	Stores all pointers to the known variables.	*/
+	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
 	BiaStorage<1> m_storage;
 
 
+	api::framework::BiaMember * AddressOf(StringKey p_name);
 	BIA_INSTRUCTION_CALLING_CONVETION static void InstantiateInt_32(int32_t p_unValue, api::framework::BiaMember * p_pMember, BiaMachineCode * p_pThis);
 	BIA_INSTRUCTION_CALLING_CONVETION static void InstantiateInt_64(int64_t p_unValue, api::framework::BiaMember * p_pMember, BiaMachineCode * p_pThis);
 	BIA_INSTRUCTION_CALLING_CONVETION static void InstantiateInt0(api::framework::BiaMember * p_pMember, BiaMachineCode * p_pThis);

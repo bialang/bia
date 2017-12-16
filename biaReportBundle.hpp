@@ -1,12 +1,10 @@
 #pragma once
 
 #include <vector>
-#include <stdint.h>
+#include <cstdint>
 
 
 namespace bia
-{
-namespace api
 {
 namespace grammar
 {
@@ -162,6 +160,5 @@ public:
 	virtual void Report(const Report * p_pBegin, const Report * p_pEnd) = 0;
 };
 
-}
 }
 }

@@ -30,5 +30,23 @@ void BiaMachineContext::Run(stream::BiaInputStream & p_input)
 		pMachineCode->Execute();
 }
 
+api::framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
+{
+	auto pResult = m_index.find(p_name);
+
+	//Address found
+	if (pResult != m_index.end())
+		return pResult->second;
+	//Create address
+	else
+	{
+		auto pAddress = static_cast<api::framework::BiaMember*>(m_storage.CreateElement());
+
+		m_index.insert({ p_name, pAddress });
+
+		return pAddress;
+	}
+}
+
 }
 }

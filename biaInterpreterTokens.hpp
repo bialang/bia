@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstring>
-#include <stdint.h>
+#include <cstdint>
 
 #include "biaInterpreterRule.hpp"
 #include "biaInterpreterIdentifiers.hpp"

@@ -13,7 +13,6 @@ namespace api
 namespace grammar
 {
 
-
 inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 {
 	static BiaInterpreter<BGR_RULE_COUNT> interpreter;

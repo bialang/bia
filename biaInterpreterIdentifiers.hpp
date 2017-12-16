@@ -5,8 +5,6 @@
 
 namespace bia
 {
-namespace api
-{
 namespace grammar
 {
 
@@ -79,6 +77,5 @@ enum NUMBER_ID
 	NI_NUMBER_ID_MASK = 0xf
 };
 
-}
 }
 }
