@@ -1,8 +1,8 @@
 #pragma once
 
-#include "biaGlobal.h"
-#include "biaMachineContext.h"
-#include "biaStream.h"
+#include "biaGlobal.hpp"
+#include "biaMachineContext.hpp"
+#include "biaStream.hpp"
 
 
 namespace bia

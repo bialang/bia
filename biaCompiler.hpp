@@ -2,11 +2,11 @@
 
 #include <stdint.h>
 
-#include "biaGrammar.h"
-#include "biaReportBundle.h"
-#include "biaStream.h"
-#include "biaHash.h"
-#include "biaConditionMarker.h"
+#include "biaGrammar.hpp"
+#include "biaReportBundle.hpp"
+#include "biaStream.hpp"
+#include "biaHash.hpp"
+#include "biaConditionMarker.hpp"
 #include "utf8.h"
 
 #define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");

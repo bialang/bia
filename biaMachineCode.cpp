@@ -1,4 +1,4 @@
-#include "biaMachineCode.h"
+#include "biaMachineCode.hpp"
 
 #include <sys/mman.h>
 #include <cstring>
@@ -50,9 +50,9 @@ BiaMachineCode::~BiaMachineCode()
 		munmap(reinterpret_cast<void*>(m_run), m_iSize);
 }
 
-void BiaMachineCode::Execute(BiaMachineContext & p_context) const
+void BiaMachineCode::Execute() const
 {
-	m_run(&p_context);
+	m_run();
 }
 
 bool BiaMachineCode::IsValid()

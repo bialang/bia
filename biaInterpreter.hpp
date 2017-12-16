@@ -1,7 +1,7 @@
 #pragma once
 
-#include "biaReportBundle.h"
-#include "biaInterpreterRule.h"
+#include "biaReportBundle.hpp"
+#include "biaInterpreterRule.hpp"
 
 
 namespace bia

@@ -1,6 +1,6 @@
-#include "biaMachineCode.h"
-#include "biaToolGcc.h"
-#include "biaStreamBuffer.h"
+#include "biaMachineCode.hpp"
+#include "biaToolGcc.hpp"
+#include "biaOutputStreamBuffer.hpp"
 
 void hello_world(void*p)
 {
@@ -9,14 +9,14 @@ void hello_world(void*p)
 
 int main()
 {
-	bia::stream::BiaStreamBuffer buf;
+	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context;
 
 	printf("address: %p\n", &context);
 
 	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Initialize(buf, &context);
 	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Call(buf, reinterpret_cast<const void*>(hello_world));
-	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Call(buf, reinterpret_cast<const void*>(hello_world));
+	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Call(buf, reinterpret_cast<const void*>(&bia::machine::BiaMachineContext::hello_world));
 	bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>::Finalize(buf);
 
 	bia::machine::BiaMachineCode code(buf.GetBuffer());
@@ -40,5 +40,5 @@ int main()
 		puts("");
 	}
 
-	code.Execute(context);
+	code.Execute();
 }

@@ -1,4 +1,4 @@
-#include "biaStreamBuffer.h"
+#include "biaOutputStreamBuffer.hpp"
 
 #include <cstring>
 
@@ -8,7 +8,7 @@ namespace bia
 namespace stream
 {
 
-BiaStreamBuffer::BiaStreamBuffer(size_t p_iReserve)
+BiaOutputStreamBuffer::BiaOutputStreamBuffer(size_t p_iReserve)
 {
 	m_iSize = 0;
 
@@ -16,12 +16,12 @@ BiaStreamBuffer::BiaStreamBuffer(size_t p_iReserve)
 		m_pucBuffer.reset(new uint8_t[m_iLimit]);
 }
 
-std::pair<const uint8_t*, size_t> BiaStreamBuffer::GetBuffer() const
+std::pair<const uint8_t*, size_t> BiaOutputStreamBuffer::GetBuffer() const
 {
 	return  { m_pucBuffer.get(), m_iSize };
 }
 
-void BiaStreamBuffer::Prepare(size_t p_iAdditonalSize)
+void BiaOutputStreamBuffer::Prepare(size_t p_iAdditonalSize)
 {
 	if (m_iLimit < p_iAdditonalSize + m_iSize)
 	{
@@ -35,28 +35,28 @@ void BiaStreamBuffer::Prepare(size_t p_iAdditonalSize)
 	}
 }
 
-void BiaStreamBuffer::Write(uint64_t p_ullValue)
+void BiaOutputStreamBuffer::Write(uint64_t p_ullValue)
 {
 	memcpy(m_pucBuffer.get() + m_iSize, &p_ullValue, 8);
 
 	m_iSize += 8;
 }
 
-void BiaStreamBuffer::Write(uint32_t p_unValue)
+void BiaOutputStreamBuffer::Write(uint32_t p_unValue)
 {
 	memcpy(m_pucBuffer.get() + m_iSize, &p_unValue, 4);
 
 	m_iSize += 4;
 }
 
-void BiaStreamBuffer::Write(uint16_t p_usValue)
+void BiaOutputStreamBuffer::Write(uint16_t p_usValue)
 {
 	memcpy(m_pucBuffer.get() + m_iSize, &p_usValue, 2);
 
 	m_iSize += 2;
 }
 
-void BiaStreamBuffer::Write(uint8_t p_ucValue)
+void BiaOutputStreamBuffer::Write(uint8_t p_ucValue)
 {
 	m_pucBuffer[m_iSize++] = p_ucValue;
 }

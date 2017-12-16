@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-#include "biaArchitecture.h"
-#include "biaStream.h"
+#include "biaArchitecture.hpp"
+#include "biaOutputStream.hpp"
 
 
 namespace bia
@@ -17,7 +17,7 @@ class Biax86
 {
 public:
 	template<OP_CODE _OP_CODE>
-	inline static void Operation(stream::BiaStream & p_output)
+	inline static void Operation(stream::BiaOutputStream & p_output)
 	{
 		switch (_OP_CODE)
 		{
@@ -29,7 +29,7 @@ public:
 		}
 	}
 	template<OP_CODE _OP_CODE>
-	inline static void Operation(stream::BiaStream & p_output, REGISTER p_register)
+	inline static void Operation(stream::BiaOutputStream & p_output, REGISTER p_register)
 	{
 		switch (_OP_CODE)
 		{
@@ -42,7 +42,7 @@ public:
 		}
 	}
 	template<OP_CODE _OP_CODE>
-	inline static void Operation32(stream::BiaStream & p_output, uint32_t p_unConstant)
+	inline static void Operation32(stream::BiaOutputStream & p_output, uint32_t p_unConstant)
 	{
 		switch (_OP_CODE)
 		{
@@ -53,7 +53,7 @@ public:
 		}
 	}
 	template<OP_CODE _OP_CODE>
-	inline static void Operation16(stream::BiaStream & p_output, uint16_t p_usConstant)
+	inline static void Operation16(stream::BiaOutputStream & p_output, uint16_t p_usConstant)
 	{
 		switch (_OP_CODE)
 		{
@@ -64,7 +64,7 @@ public:
 		}
 	}
 	template<OP_CODE _OP_CODE>
-	inline static void Operation8(stream::BiaStream & p_output, uint8_t p_ucConstant)
+	inline static void Operation8(stream::BiaOutputStream & p_output, uint8_t p_ucConstant)
 	{
 		switch (_OP_CODE)
 		{
@@ -75,7 +75,7 @@ public:
 		}
 	}
 	template<OP_CODE _OP_CODE>
-	inline static void Operation32(stream::BiaStream & p_output, uint32_t p_unConstant, REGISTER p_destination)
+	inline static void Operation32(stream::BiaOutputStream & p_output, uint32_t p_unConstant, REGISTER p_destination)
 	{
 		switch (_OP_CODE)
 		{
@@ -102,7 +102,7 @@ public:
 		}
 	}
 	template<OP_CODE _OP_CODE>
-	inline static void Operation8(stream::BiaStream & p_output, uint8_t p_ucConstant, REGISTER p_destination)
+	inline static void Operation8(stream::BiaOutputStream & p_output, uint8_t p_ucConstant, REGISTER p_destination)
 	{
 		switch (_OP_CODE)
 		{

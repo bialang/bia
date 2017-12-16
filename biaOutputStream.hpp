@@ -10,10 +10,10 @@ namespace bia
 namespace stream
 {
 
-class BiaStream
+class BiaOutputStream
 {
 public:
-	virtual ~BiaStream() = default;
+	virtual ~BiaOutputStream() = default;
 
 	template<typename... _ARGS>
 	inline void WriteAll(_ARGS... p_args)

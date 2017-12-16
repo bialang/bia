@@ -3,8 +3,8 @@
 #include <cstring>
 #include <stdint.h>
 
-#include "biaInterpreterRule.h"
-#include "biaInterpreterIdentifiers.h"
+#include "biaInterpreterRule.hpp"
+#include "biaInterpreterIdentifiers.hpp"
 #include "utf8.h"
 
 
@@ -314,11 +314,11 @@ inline ACTION CustomOperatorToken(const char * p_pcBuffer, size_t p_iSize, Token
 		case '+':
 		case '-':
 		case '^':
-		case '°':
+		case 'ï¿½':
 		case '~':
 		case '#':
 		case '!':
-		case '§':
+		case 'ï¿½':
 		case '$':
 			++p_output.iTokenSize;
 

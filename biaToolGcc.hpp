@@ -3,10 +3,10 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "biaMachineContext.h"
-#include "biaArchitecture.h"
-#include "biax86.h"
-#include "biaStream.h"
+#include "biaMachineContext.hpp"
+#include "biaArchitecture.hpp"
+#include "biax86.hpp"
+#include "biaOutputStream.hpp"
 
 
 namespace bia
@@ -20,13 +20,13 @@ template<typename _ARCHITECTURE>
 class BiaToolGcc
 {
 public:
-	inline static void Initialize(stream::BiaStream & p_output, BiaMachineContext * p_context)
+	inline static void Initialize(stream::BiaOutputStream & p_output, BiaMachineContext * p_context)
 	{
 		//For 32-Bit systems
 		if (std::is_same<_ARCHITECTURE, Biax86>::value)
 			Biax86::Operation32<OP_CODE::PUSH>(p_output, reinterpret_cast<uint32_t>(p_context));
 	}
-	inline static void Finalize(stream::BiaStream & p_output)
+	inline static void Finalize(stream::BiaOutputStream & p_output)
 	{
 		//For 32-Bit systems
 		if (std::is_same<_ARCHITECTURE, Biax86>::value)
@@ -35,7 +35,7 @@ public:
 			Biax86::Operation<OP_CODE::RETURN_NEAR>(p_output);
 		}
 	}
-	inline static void Call(stream::BiaStream & p_output, const void * p_pAddress)
+	inline static void Call(stream::BiaOutputStream & p_output, const void * p_pAddress)
 	{
 		//For 32-Bit systems
 		if (std::is_same<_ARCHITECTURE, Biax86>::value)

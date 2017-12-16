@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 
-#include "biaException.h"
-#include "biaReportBundle.h"
+#include "biaException.hpp"
+#include "biaReportBundle.hpp"
 
 
 namespace bia

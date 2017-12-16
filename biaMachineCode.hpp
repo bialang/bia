@@ -4,8 +4,6 @@
 #include <cstddef>
 #include <utility>
 
-#include "biaMachineContext.h"
-
 
 namespace bia
 {
@@ -37,10 +35,8 @@ public:
 	 * 
 	 * @since	3.42.93.562
 	 * @date	14-Dec-2017
-	 * 
-	 * @param	[in]	p_context	Defines the machine context.
 	 */
-	void Execute(BiaMachineContext & p_context) const;
+	void Execute() const;
 	/**
 	 * Checks wheter the parameter passed to the constructor was valid or not.
 	 * 
@@ -54,7 +50,7 @@ public:
 	bool IsValid();
 
 private:
-	typedef void(*entry_point)(BiaMachineContext*);
+	typedef void(*entry_point)();
 
 	entry_point m_run;	/**	If non-null, defines the entry point of the machine code.	*/
 

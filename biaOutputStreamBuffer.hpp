@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "biaStream.h"
+#include "biaOutputStream.hpp"
 
 
 namespace bia
@@ -10,10 +10,10 @@ namespace bia
 namespace stream
 {
 
-class BiaStreamBuffer : public BiaStream
+class BiaOutputStreamBuffer : public BiaOutputStream
 {
 public:
-	BiaStreamBuffer(size_t p_iReserve = 0);
+	BiaOutputStreamBuffer(size_t p_iReserve = 0);
 
 	virtual std::pair<const uint8_t*, size_t> GetBuffer() const override;
 

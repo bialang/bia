@@ -1,6 +1,6 @@
-#include "bia.h"
-#include "biaGrammar.h"
-#include "biaCompiler.h"
+#include "bia.hpp"
+#include "biaGrammar.hpp"
+#include "biaCompiler.hpp"
 
 #include <Windows.h>
 

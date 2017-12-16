@@ -1,9 +1,9 @@
 #pragma once
 
-#include "biaInterpreter.h"
-#include "biaInterpreterTokens.h"
-#include "biaInterpreterStringSet.h"
-#include "biaInterpreterIdentifiers.h"
+#include "biaInterpreter.hpp"
+#include "biaInterpreterTokens.hpp"
+#include "biaInterpreterStringSet.hpp"
+#include "biaInterpreterIdentifiers.hpp"
 
 
 namespace bia

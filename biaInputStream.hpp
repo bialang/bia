@@ -2,10 +2,10 @@
 
 namespace bia
 {
-namespace machine
+namespace stream
 {
 
-class BiaMachineContext
+class BiaInputStream
 {
 public:
 };
