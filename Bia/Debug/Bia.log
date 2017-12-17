@@ -1,0 +1,24 @@
+﻿  main.cpp
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(202): error C3861: 'PrintStraight': identifier not found
+  c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(201): note: while compiling class template member function 'const bia::grammar::Report *bia::compiler::BiaCompiler<bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>>::HandleVariableDeclaration(bia::grammar::report_range)'
+  c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(193): note: see reference to function template instantiation 'const bia::grammar::Report *bia::compiler::BiaCompiler<bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>>::HandleVariableDeclaration(bia::grammar::report_range)' being compiled
+  c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\main.cpp(23): note: see reference to class template instantiation 'bia::compiler::BiaCompiler<bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>>' being compiled
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(207): error C2065: 'm_fState': undeclared identifier
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(210): error C2065: 'm_output': undeclared identifier
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(210): error C2039: 'AddressOf': is not a member of 'bia::machine::BiaMachineContext'
+  c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biamachinecontext.hpp(22): note: see declaration of 'bia::machine::BiaMachineContext'
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(210): error C2039: 'token': is not a member of 'bia::grammar::Report'
+  c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biareportbundle.hpp(21): note: see declaration of 'bia::grammar::Report'
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(210): error C2228: left of '.pcString' must have class/struct/union
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(210): error C2228: left of '.iSize' must have class/struct/union
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(210): error C3861: 'StringKey': identifier not found
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(216): error C2065: 'm_output': undeclared identifier
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(216): error C2039: 'InstantiateInt_32': is not a member of 'bia::machine::BiaMachineContext'
+  c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biamachinecontext.hpp(22): note: see declaration of 'bia::machine::BiaMachineContext'
+c:\users\c ir o in a\documents\visual studio 2017\projects\bia\bia\biacompiler.hpp(216): error C2065: 'InstantiateInt_32': undeclared identifier
+  Generating Code...
+  Compiling...
+  biaMachineContext.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  bia.cpp
