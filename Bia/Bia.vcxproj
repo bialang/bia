@@ -133,11 +133,14 @@
     <ClInclude Include="biaInterpreterRule.hpp" />
     <ClInclude Include="biaInterpreterStringSet.hpp" />
     <ClInclude Include="biaInterpreterTokens.hpp" />
+    <ClInclude Include="biaInstantiate.hpp" />
+    <ClInclude Include="biaLink.hpp" />
     <ClInclude Include="biaMachineCode.hpp" />
     <ClInclude Include="biaMachineContext.hpp" />
     <ClInclude Include="biaMember.hpp" />
     <ClInclude Include="biaOutputStream.hpp" />
     <ClInclude Include="biaOutputStreamBuffer.hpp" />
+    <ClInclude Include="biaPrint.hpp" />
     <ClInclude Include="biaReportBundle.hpp" />
     <ClInclude Include="biaStorage.hpp" />
     <ClInclude Include="biaToolGcc.hpp" />

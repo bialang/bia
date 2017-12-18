@@ -51,11 +51,6 @@ BiaMachineContext() : m_storage(34)
 
 
 	api::framework::BiaMember * AddressOf(StringKey p_name);
-	static void BIA_INSTRUCTION_CALLING_CONVETION InstantiateInt_32(int32_t p_unValue, api::framework::BiaMember * p_pMember);
-	//BIA_INSTRUCTION_CALLING_CONVETION static void InstantiateInt_64(int64_t p_unValue, api::framework::BiaMember * p_pMember, BiaMachineCode * p_pThis);
-	//BIA_INSTRUCTION_CALLING_CONVETION static void InstantiateInt0(api::framework::BiaMember * p_pMember, BiaMachineCode * p_pThis);
-	//BIA_INSTRUCTION_CALLING_CONVETION static void InstantiateIntP1(api::framework::BiaMember * p_pMember, BiaMachineCode * p_pThis);
-	//BIA_INSTRUCTION_CALLING_CONVETION static void InstantiateIntN1(api::framework::BiaMember * p_pMember, BiaMachineCode * p_pThis);
 };
 
 }

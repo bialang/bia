@@ -40,6 +40,9 @@
     <Filter Include="Header Files\grammar">
       <UniqueIdentifier>{29b28362-ca7c-4c23-9607-54039a8898d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\machine\link">
+      <UniqueIdentifier>{7017d3e0-f814-42b3-b90f-df3d2a64f2e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bia.cpp">
@@ -130,6 +133,15 @@
     </ClInclude>
     <ClInclude Include="biax86.hpp">
       <Filter>Header Files\machine\architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInstantiate.hpp">
+      <Filter>Header Files\machine\link</Filter>
+    </ClInclude>
+    <ClInclude Include="biaPrint.hpp">
+      <Filter>Header Files\machine\link</Filter>
+    </ClInclude>
+    <ClInclude Include="biaLink.hpp">
+      <Filter>Header Files\machine\link</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

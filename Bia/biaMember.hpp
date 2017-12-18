@@ -1,6 +1,7 @@
 #pragma once
 
 #include <typeinfo>
+#include <cstdio>
 
 
 namespace bia
@@ -16,6 +17,16 @@ public:
 	virtual ~BiaMember() = default;
 
 
+	/**
+	 * Prints the contents of this object.
+	 *
+	 * @since	3.42.93.567
+	 * @date	18-Dec-17
+	*/
+	inline virtual void Print()
+	{
+		printf("<Empty member at %p>", this);
+	}
 	/**
 	 * Checks whether the specified type matches this object.
 	 *

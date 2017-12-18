@@ -6,6 +6,7 @@
 #include "biaMachineContext.hpp"
 #include "biaReportBundle.hpp"
 #include "biaInterpreterIdentifiers.hpp"
+#include "biaLink.hpp"
 
 #define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
 
@@ -213,7 +214,7 @@ private:
 		HandleValue(pRight->content.children);
 
 		//Make call
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::BiaMachineContext::InstantiateInt_32));
+		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateInt_32));
 
 		return p_reports.pEnd + 1;
 	}

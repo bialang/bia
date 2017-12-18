@@ -49,17 +49,5 @@ api::framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 	}
 }
 
-void BiaMachineContext::InstantiateInt_32(int32_t p_unValue, api::framework::BiaMember * p_pMember)
-{
-	printf("int instantiated %i\n", p_unValue);
-	printf("member: %p\n", p_pMember);
-
-	//Destruct old object
-	p_pMember->~BiaMember();
-
-	//Create new int object
-	new(p_pMember) api::framework::BiaInt(p_unValue);
-}
-
 }
 }
