@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
+#include <utility>
 
 
 namespace bia
@@ -37,17 +38,20 @@ public:
 	BiaStorage(BiaStorage && p_move) = default;
 	BiaStorage(const BiaStorage&) = delete;
 	/**
-	 * Allocates space for the specified element size.
+	 * Allocates space for the specified element size and constructs the given type.
 	 * 
-	 * @remarks	Do not delete the returned pointer. The returned pointer is valid until destruction of this object.
+	 * @remarks	Do not delete the returned pointer. The returned pointer is valid until destruction of the storage.
 	 * 
 	 * @since	3.42.93.564
 	 * @date	16-Dec-17
 	 * 
-	 * @return	An address to the allocated space.
+	 * @return	An address to the allocated and constructed object.
 	 */
-	inline void * CreateElement()
+	template<typename T, typename... _ARGS>
+	inline T * CreateElement(_ARGS &&... p_args)
 	{
+		static_assert(sizeof(T) <= _ELEMENT_SIZE, "Specified element is larger than the element size.");
+
 		//Add row
 		if (m_iCurrentPosition == m_iRowSize)
 		{
@@ -61,7 +65,7 @@ public:
 
 		m_iCurrentPosition += _ELEMENT_SIZE;
 
-		return pElement;
+		return new(pElement) T(std::forward<_ARGS>(p_args)...);
 	}
 
 private:

@@ -20,20 +20,18 @@ template<typename _ARCHITECTURE>
 class BiaToolGcc
 {
 public:
-	inline BiaToolGcc(stream::BiaOutputStream & p_output, BiaMachineContext & p_context) : m_output(p_output)
+	inline BiaToolGcc(stream::BiaOutputStream & p_output) : m_output(p_output)
 	{
 		m_ucPushedElements = 0;
-
-		//For 32-Bit systems
-		if (std::is_same<_ARCHITECTURE, Biax86>::value)
-			Biax86::Operation32<OP_CODE::PUSH>(m_output, reinterpret_cast<uint32_t>(&p_context));
 	}
 	inline ~BiaToolGcc()
 	{
 		//For 32-Bit systems
 		if (std::is_same<_ARCHITECTURE, Biax86>::value)
 		{
-			Biax86::Operation8<OP_CODE::ADD>(m_output, 4, REGISTER::ESP);
+			//Pop rest
+			PopParameters();
+
 			Biax86::Operation<OP_CODE::RETURN_NEAR>(m_output);
 		}
 	}
@@ -50,9 +48,16 @@ public:
 	{
 		if (std::is_same<_ARCHITECTURE, Biax86>::value)
 		{
-			Biax86::Operation32<OP_CODE::PUSH>(m_output, p_unValue);
+			//Save 3 bytes
+			if (p_unValue < 256)
+				PushParameter(static_cast<uint8_t>(p_unValue));
+			//Push all 4 bytes
+			else
+			{
+				Biax86::Operation32<OP_CODE::PUSH>(m_output, p_unValue);
 
-			++m_ucPushedElements;
+				++m_ucPushedElements;
+			}
 		}
 	}
 	inline void PushParameter(uint64_t p_ullValue)
@@ -74,6 +79,7 @@ public:
 			m_ucPushedElements = 0;
 		}
 	}
+	template<bool _AUTO_POP = true>
 	inline void Call(const void * p_pAddress)
 	{
 		//For 32-Bit systems
@@ -84,6 +90,14 @@ public:
 
 			//Call EAX
 			Biax86::Operation<OP_CODE::CALL>(m_output, REGISTER::EAX);
+
+			//Pop parameter
+			if (_AUTO_POP && m_ucPushedElements)
+			{
+				Biax86::Operation8<OP_CODE::ADD>(m_output, m_ucPushedElements * 4, REGISTER::ESP);
+
+				m_ucPushedElements = 0;
+			}
 		}
 	}
 

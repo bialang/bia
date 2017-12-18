@@ -125,14 +125,15 @@
     <ClInclude Include="biaConfig.hpp" />
     <ClInclude Include="biaException.hpp" />
     <ClInclude Include="biaGrammar.hpp" />
+    <ClInclude Include="biaHasher.hpp" />
     <ClInclude Include="biaInputStream.hpp" />
+    <ClInclude Include="biaInt.hpp" />
     <ClInclude Include="biaInterpreter.hpp" />
     <ClInclude Include="biaInterpreterIdentifiers.hpp" />
     <ClInclude Include="biaInterpreterRule.hpp" />
     <ClInclude Include="biaInterpreterStringSet.hpp" />
     <ClInclude Include="biaInterpreterTokens.hpp" />
     <ClInclude Include="biaMachineCode.hpp" />
-    <ClInclude Include="biaMachineCompiler.hpp" />
     <ClInclude Include="biaMachineContext.hpp" />
     <ClInclude Include="biaMember.hpp" />
     <ClInclude Include="biaOutputStream.hpp" />
@@ -141,6 +142,10 @@
     <ClInclude Include="biaStorage.hpp" />
     <ClInclude Include="biaToolGcc.hpp" />
     <ClInclude Include="biax86.hpp" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

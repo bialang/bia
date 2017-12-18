@@ -8,6 +8,7 @@
 void hello_world(unsigned long long c, void*p)
 {
 	printf("Hello, %llu! %p\n", c, p);
+	
 }
 
 
@@ -15,9 +16,9 @@ int main()
 {
 	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context;
-
+	
 	char script[] = R"(
-	var i = 0;
+	var i = 555;
 )";
 	{
 		bia::compiler::BiaCompiler<bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>> compiler(buf, context);
@@ -26,8 +27,8 @@ int main()
 	}
 
 	printf("address: %p\n", &context);
-	/*
-	{
+	
+	/*{
 		bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86> toolset(buf, context);
 
 		toolset.PushParameter(6542ull);
@@ -58,7 +59,7 @@ int main()
 	{
 		puts("");
 	}
-
+	system("pause");
 	code.Execute();
 
 	system("pause");

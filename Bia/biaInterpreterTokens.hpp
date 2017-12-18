@@ -103,8 +103,8 @@ inline ACTION IdentifierToken(const char * p_pcBuffer, size_t p_iSize, TokenPara
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
 
 	//Limit length
-	if (p_iSize > BIA_MAX_IDENTIFIER_LENGTH)
-		p_output.iTokenSize = BIA_MAX_IDENTIFIER_LENGTH;
+	/*if (p_iSize > BIA_MAX_IDENTIFIER_LENGTH)
+		p_output.iTokenSize = BIA_MAX_IDENTIFIER_LENGTH;*/
 
 	if (p_output.iTokenSize < p_iSize)
 	{
@@ -312,11 +312,11 @@ inline ACTION CustomOperatorToken(const char * p_pcBuffer, size_t p_iSize, Token
 		case '+':
 		case '-':
 		case '^':
-		case '�':
+		//case '�':
 		case '~':
 		case '#':
 		case '!':
-		case '�':
+		//case '�':
 		case '$':
 			++p_output.iTokenSize;
 

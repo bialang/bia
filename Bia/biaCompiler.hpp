@@ -25,7 +25,7 @@ public:
 	 * @param	[in]	p_output	Defines the output stream for the machine code.
 	 * @param	[in]	p_context	Defines the machine context.
 	 */
-	inline BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context) : m_toolset(p_output, m_context), m_context(p_context)
+	inline BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context) : m_toolset(p_output), m_context(p_context)
 	{
 	}
 	
@@ -68,7 +68,7 @@ private:
 			else
 				throw exception::ArgumentException("Too long number.");
 
-			_TOOLSET::PushParameter(m_output, static_cast<uint32_t>(llTmp));
+			m_toolset.PushParameter(static_cast<uint32_t>(llTmp));
 
 			break;
 		}
@@ -93,7 +93,7 @@ private:
 			else
 				throw exception::ArgumentException("Too long number.");
 
-			_TOOLSET::PushParameter(m_output, *reinterpret_cast<uint32_t*>(&rTmp));
+			m_toolset.PushParameter(*reinterpret_cast<uint32_t*>(&rTmp));
 
 			break;
 		}
@@ -118,7 +118,7 @@ private:
 			else
 				throw exception::ArgumentException("Too long number.");
 
-			_TOOLSET::PushParameter(m_output, *reinterpret_cast<uint64_t*>(&rTmp));
+			m_toolset.PushParameter(*reinterpret_cast<uint64_t*>(&rTmp));
 
 			break;
 		}
@@ -199,15 +199,15 @@ private:
 	}
 	inline const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports)
 	{
-		PrintStraight("vd>", p_reports);
+		//PrintStraight("vd>", p_reports);
 
 		//Handle value
 		auto pRight = FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd);
 
-		m_fState = 0;
+		//m_fState = 0;
 
 		//Push address of variable
-		m_toolset.PushParameter(reinterpret_cast<uintptr_t>(m_context.AddressOf(StringKey(p_reports.pBegin[1].token.pcString, p_reports.pBegin[1].token.iSize))));
+		m_toolset.PushParameter(reinterpret_cast<uintptr_t>(m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize))));
 
 		//Handle value and prepare the result for a function call
 		HandleValue(pRight->content.children);
@@ -219,7 +219,7 @@ private:
 	}
 	inline const grammar::Report * HandleValue(grammar::report_range p_reports)
 	{
-		PrintStraight("vv>", p_reports);
+		//PrintStraight("vv>", p_reports);
 		
 		enum STATE
 		{
@@ -302,7 +302,7 @@ private:
 	}
 	inline const grammar::Report * HandleValueRaw(grammar::report_range p_reports)
 	{
-		PrintStraight("v>", p_reports);
+		//PrintStraight("v>", p_reports);
 
 		switch (p_reports.pBegin[1].unTokenId)
 		{
@@ -311,12 +311,12 @@ private:
 
 			break;
 		case grammar::BV_TRUE:
-			_TOOLSET::PushParameter(m_output, uint8_t(1));
+			m_toolset.PushParameter(uint8_t(1));
 
 			break;
 		case grammar::BV_FALSE:
 		case grammar::BV_NULL:
-			_TOOLSET::PushParameter(m_output, uint8_t(0));
+			m_toolset.PushParameter(uint8_t(0));
 
 			break;
 		case grammar::BV_MEMBER:
@@ -331,7 +331,7 @@ private:
 	}
 	inline const grammar::Report * HandleMathExpression(grammar::report_range p_reports)
 	{
-		PrintStraight("e>", p_reports);
+		//PrintStraight("e>", p_reports);
 
 		//Handle all math terms starting from the right
 		for (auto i = p_reports.pEnd, pBegin = p_reports.pBegin[1].content.children.pEnd + 1; i = FindNextChild<grammar::BGR_MATH_TERM, 0, false>(pBegin, i);)
@@ -358,7 +358,7 @@ private:
 	}
 	inline const grammar::Report * HandleMathTerm(grammar::report_range p_reports)
 	{
-		PrintStraight("t>", p_reports);
+		//PrintStraight("t>", p_reports);
 
 		//Handle all math factors starting from the right
 		for (auto i = p_reports.pEnd, pBegin = p_reports.pBegin[1].content.children.pEnd + 1; i = FindNextChild<grammar::BGR_MATH_FACTOR, 0, false>(pBegin, i);)
@@ -386,7 +386,7 @@ private:
 	}
 	inline const grammar::Report * HandleMathFactor(grammar::report_range p_reports)
 	{
-		PrintStraight("f>", p_reports);
+		//PrintStraight("f>", p_reports);
 
 		switch (p_reports.pBegin[1].unRuleId)
 		{

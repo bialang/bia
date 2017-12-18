@@ -13,32 +13,53 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\api">
+      <UniqueIdentifier>{6ad9ab27-7213-4b3a-9c3a-ba104924abda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\api\framework">
+      <UniqueIdentifier>{ae480377-60c3-4183-ac29-fc29231c764f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\compiler">
+      <UniqueIdentifier>{7fbb595e-5c09-4b5d-98ea-c2ede1c6af7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\machine">
+      <UniqueIdentifier>{f3c6978f-4d52-4d25-be83-f6ede58ed7d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\machine">
+      <UniqueIdentifier>{2a36cedb-a4a1-42d9-b354-7fe36f62c41c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\stream">
+      <UniqueIdentifier>{de11f0e1-8210-4447-bc7b-c5a3feb2e2b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\stream">
+      <UniqueIdentifier>{0fab095a-ab87-4d21-9de0-9205b5f57776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\machine\architecture">
+      <UniqueIdentifier>{c8f001b3-0745-4231-88a2-a567801fa485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\grammar">
+      <UniqueIdentifier>{29b28362-ca7c-4c23-9607-54039a8898d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bia.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="biaMachineCode.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="biaMachineContext.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\machine</Filter>
+    </ClCompile>
+    <ClCompile Include="biaMachineCode.cpp">
+      <Filter>Source Files\machine</Filter>
     </ClCompile>
     <ClCompile Include="biaOutputStreamBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\stream</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bia.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaArchitecture.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaCompiler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="biaConfig.hpp">
@@ -47,56 +68,73 @@
     <ClInclude Include="biaException.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="biaGrammar.hpp">
+    <ClInclude Include="biaHasher.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="biaInputStream.hpp">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="biaInterpreter.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaInterpreterIdentifiers.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaInterpreterRule.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaInterpreterStringSet.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaInterpreterTokens.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaMachineCode.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaMachineCompiler.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaMachineContext.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="biaInt.hpp">
+      <Filter>Header Files\api\framework</Filter>
     </ClInclude>
     <ClInclude Include="biaMember.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\api\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="biaCompiler.hpp">
+      <Filter>Header Files\compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="biaArchitecture.hpp">
+      <Filter>Header Files\machine\architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="biaGrammar.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInputStream.hpp">
+      <Filter>Header Files\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInterpreter.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInterpreterIdentifiers.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInterpreterRule.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInterpreterStringSet.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInterpreterTokens.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="biaMachineCode.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="biaMachineContext.hpp">
+      <Filter>Header Files\machine</Filter>
     </ClInclude>
     <ClInclude Include="biaOutputStream.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\stream</Filter>
     </ClInclude>
     <ClInclude Include="biaOutputStreamBuffer.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\stream</Filter>
     </ClInclude>
     <ClInclude Include="biaReportBundle.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\grammar</Filter>
     </ClInclude>
     <ClInclude Include="biaStorage.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\machine</Filter>
     </ClInclude>
     <ClInclude Include="biaToolGcc.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\machine\architecture</Filter>
     </ClInclude>
     <ClInclude Include="biax86.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\machine\architecture</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
