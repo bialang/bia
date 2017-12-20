@@ -143,6 +143,9 @@
     <ClInclude Include="biaLink.hpp">
       <Filter>Header Files\machine\link</Filter>
     </ClInclude>
+    <ClInclude Include="biaOperator.hpp">
+      <Filter>Header Files\machine\link</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

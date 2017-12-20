@@ -35,6 +35,24 @@ public:
 			Biax86::Operation<OP_CODE::RETURN_NEAR>(m_output);
 		}
 	}
+	inline void PushResult32()
+	{
+		if (std::is_same<_ARCHITECTURE, Biax86>::value)
+		{
+			Biax86::Operation<OP_CODE::PUSH>(m_output, REGISTER::EAX);
+
+			++m_ucPushedElements;
+		}
+	}
+	inline void PushResult64()
+	{
+		if (std::is_same<_ARCHITECTURE, Biax86>::value)
+		{
+			Biax86::Operation<OP_CODE::PUSH>(m_output, REGISTER::EAX);
+
+			++m_ucPushedElements;
+		}
+	}
 	inline void PushParameter(uint8_t p_ucValue)
 	{
 		if (std::is_same<_ARCHITECTURE, Biax86>::value)
@@ -70,13 +88,24 @@ public:
 			m_ucPushedElements += 2;
 		}
 	}
-	inline void PopParameters()
+	inline void PopParameters(uint8_t p_ucElements = 0)
 	{
 		if (std::is_same<_ARCHITECTURE, Biax86>::value && m_ucPushedElements)
 		{
-			Biax86::Operation8<OP_CODE::ADD>(m_output, m_ucPushedElements * 4, REGISTER::ESP);
+			//Pop an specified amount
+			if (p_ucElements)
+			{
+				Biax86::Operation8<OP_CODE::ADD>(m_output, p_ucElements * 4, REGISTER::ESP);
 
-			m_ucPushedElements = 0;
+				m_ucPushedElements -= p_ucElements;
+			}
+			//Pop all
+			else
+			{
+				Biax86::Operation8<OP_CODE::ADD>(m_output, m_ucPushedElements * 4, REGISTER::ESP);
+
+				m_ucPushedElements = 0;
+			}
 		}
 	}
 	template<bool _AUTO_POP = true>

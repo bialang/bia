@@ -39,9 +39,22 @@ public:
 	}
 
 private:
+	enum class VALUE_TYPE
+	{
+		NONE,
+		MEMBER,
+		INT_32,
+		INT_64,
+		FLOAT,
+		DOUBLE,
+		STRING
+	};
+
 	_TOOLSET m_toolset;
 
 	machine::BiaMachineContext & m_context;
+
+	VALUE_TYPE m_valueType;
 
 
 	inline void HandleNumber(const grammar::Report * p_pReport)
@@ -69,7 +82,20 @@ private:
 			else
 				throw exception::ArgumentException("Too long number.");
 
-			m_toolset.PushParameter(static_cast<uint32_t>(llTmp));
+			//64-Bit number
+			if (llTmp & 0xffffffff00000000ull)
+			{
+				m_toolset.PushParameter(static_cast<uint64_t>(llTmp));
+
+				m_valueType = VALUE_TYPE::INT_64;
+			}
+			//32-Bit number
+			else
+			{
+				m_toolset.PushParameter(static_cast<uint32_t>(llTmp));
+
+				m_valueType = VALUE_TYPE::INT_32;
+			}
 
 			break;
 		}
@@ -96,6 +122,8 @@ private:
 
 			m_toolset.PushParameter(*reinterpret_cast<uint32_t*>(&rTmp));
 
+			m_valueType = VALUE_TYPE::FLOAT;
+
 			break;
 		}
 		case grammar::NI_DOUBLE:
@@ -121,11 +149,50 @@ private:
 
 			m_toolset.PushParameter(*reinterpret_cast<uint64_t*>(&rTmp));
 
+			m_valueType = VALUE_TYPE::DOUBLE;
+
 			break;
 		}
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
+	}
+	/**
+	 * Retruns the amount of 4 byte pairs for the specified value type.
+	 *
+	 * @since	3.42.93.570
+	 * @date	20-Dec-17
+	 *
+	 * @param	p_type	Defines the value type.
+	 *
+	 * @return	Either 1 or 2.
+	*/
+	inline static uint8_t ParameterElements(VALUE_TYPE p_type)
+	{
+		switch (p_type)
+		{
+		case VALUE_TYPE::MEMBER:
+		case VALUE_TYPE::STRING:
+			static_assert(sizeof(void*) % 4 == 0, "Pointer size must be a multiple of 4.");
+
+			return sizeof(void*) / 4;
+		case VALUE_TYPE::INT_32:
+		case VALUE_TYPE::FLOAT:
+			return 1;
+		case VALUE_TYPE::INT_64:
+		case VALUE_TYPE::DOUBLE:
+			return 2;
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+	}
+	inline const void * HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, const grammar::Report * p_pOperator)
+	{
+		printf("your operator: ");
+		fwrite(p_pOperator->content.token.pcString, p_pOperator->content.token.iSize, 1, stdout);
+		puts("");
+
+		return static_cast<const void*>(&machine::link::testt);
 	}
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
@@ -205,7 +272,7 @@ private:
 		//Handle value
 		auto pRight = FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd);
 
-		//m_fState = 0;
+		m_valueType = VALUE_TYPE::NONE;
 
 		//Push address of variable
 		m_toolset.PushParameter(reinterpret_cast<uintptr_t>(m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize))));
@@ -214,7 +281,27 @@ private:
 		HandleValue(pRight->content.children);
 
 		//Make call
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateInt_32));
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::INT_32:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateInt_32));
+
+			break;
+		case VALUE_TYPE::INT_64:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateInt_64));
+
+			break;
+		case VALUE_TYPE::FLOAT:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateFloat));
+
+			break;
+		case VALUE_TYPE::DOUBLE:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateDouble));
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
 
 		return p_reports.pEnd + 1;
 	}
@@ -222,13 +309,6 @@ private:
 	{
 		//PrintStraight("vv>", p_reports);
 		
-		enum STATE
-		{
-			S_NONE,
-			S_NEXT_0,
-			S_NEXT_1
-		};
-
 		//Handle first expression
 		p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children);
 
@@ -303,8 +383,6 @@ private:
 	}
 	inline const grammar::Report * HandleValueRaw(grammar::report_range p_reports)
 	{
-		//PrintStraight("v>", p_reports);
-
 		switch (p_reports.pBegin[1].unTokenId)
 		{
 		case grammar::BV_NUMBER:
@@ -314,10 +392,14 @@ private:
 		case grammar::BV_TRUE:
 			m_toolset.PushParameter(uint8_t(1));
 
+			m_valueType = VALUE_TYPE::INT_32;
+
 			break;
 		case grammar::BV_FALSE:
 		case grammar::BV_NULL:
 			m_toolset.PushParameter(uint8_t(0));
+
+			m_valueType = VALUE_TYPE::INT_32;
 
 			break;
 		case grammar::BV_MEMBER:
@@ -332,63 +414,85 @@ private:
 	}
 	inline const grammar::Report * HandleMathExpression(grammar::report_range p_reports)
 	{
-		//PrintStraight("e>", p_reports);
-
-		//Handle all math terms starting from the right
-		for (auto i = p_reports.pEnd, pBegin = p_reports.pBegin[1].content.children.pEnd + 1; i = FindNextChild<grammar::BGR_MATH_TERM, 0, false>(pBegin, i);)
-			HandleMathTerm(i->content.children);
-
 		//Only one math term to handle
 		if (p_reports.pBegin[1].content.children.pEnd + 1 == p_reports.pEnd)
 			HandleMathTerm(p_reports.pBegin[1].content.children);
-		/*else
+		else
 		{
-			//Load the leftmost object
+			auto left = VALUE_TYPE::NONE;
+
+			//Handle leftmost math term
 			auto i = HandleMathTerm(p_reports.pBegin[1].content.children);
 
-			//Call all operators
-			for (auto pEnd = p_reports.pEnd[-1].content.children.pBegin; i = FindNextToken<grammar::BGR_MATH_EXPRESSION_HELPER_0, 0, true>(i, pEnd); ++i)
-				WriteOperator(machine::OP::CALL_OPERATOR, i);
+			left = m_valueType;
 
-			//Push accumulator
-			if (p_bPush)
-				WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
-		}*/
+			do
+			{
+				auto pOperator = i;
+
+				//Handle first right math term
+				i = HandleMathTerm(i[1].content.children);
+
+				//Call operator
+				auto ucPopElements = ParameterElements(left) + ParameterElements(m_valueType);
+
+				m_toolset.Call<false>(HandleOperator(left, m_valueType, pOperator));
+				m_toolset.PopParameters(ucPopElements);
+
+				left = m_valueType;
+
+				//Push result
+				if (ParameterElements(m_valueType) == 1)
+					m_toolset.PushResult32();
+				else
+					m_toolset.PushResult64();
+			} while (i < p_reports.pEnd);
+		}
 
 		return p_reports.pEnd + 1;
 	}
 	inline const grammar::Report * HandleMathTerm(grammar::report_range p_reports)
 	{
-		//PrintStraight("t>", p_reports);
-
-		//Handle all math factors starting from the right
-		for (auto i = p_reports.pEnd, pBegin = p_reports.pBegin[1].content.children.pEnd + 1; i = FindNextChild<grammar::BGR_MATH_FACTOR, 0, false>(pBegin, i);)
-			HandleMathFactor(i->content.children);
-
 		//Only one math factor to handle
 		if (p_reports.pBegin[1].content.children.pEnd + 1 == p_reports.pEnd)
 			HandleMathFactor(p_reports.pBegin[1].content.children);
 		//Call all operator and load the leftmost object
-		/*else
+		else
 		{
-			//Load the leftmost object
-			auto i = HandleMathFactor(p_reports.pBegin[1].content.children, false);
+			auto left = VALUE_TYPE::NONE;
 
-			//Call all operators
-			for (auto pEnd = p_reports.pEnd[-1].content.children.pBegin; i = FindNextToken<grammar::BGR_MATH_TERM_HELPER_1, 0, true>(i, pEnd); ++i)
-				WriteOperator(machine::OP::CALL_OPERATOR, i);
+			//Handle leftmost math factor
+			auto i = HandleMathFactor(p_reports.pBegin[1].content.children);
 
-			//Push accumulator
-			if (p_bPush)
-				WriteOpCode(machine::OP::PUSH_ACCUMULATOR);
-		}*/
+			left = m_valueType;
+
+			do
+			{
+				auto pOperator = i;
+
+				//Handle first right math factor
+				i = HandleMathFactor(i[1].content.children);
+
+				//Call operator
+				auto ucPopElements = ParameterElements(left) + ParameterElements(m_valueType);
+				
+				m_toolset.Call<false>(HandleOperator(left, m_valueType, pOperator));
+				m_toolset.PopParameters(ucPopElements);
+
+				left = m_valueType;
+
+				//Push result
+				if (ParameterElements(m_valueType) == 1)
+					m_toolset.PushResult32();
+				else
+					m_toolset.PushResult64();
+			} while (i < p_reports.pEnd);
+		}
 
 		return p_reports.pEnd + 1;
 	}
 	inline const grammar::Report * HandleMathFactor(grammar::report_range p_reports)
 	{
-		//PrintStraight("f>", p_reports);
-
 		switch (p_reports.pBegin[1].unRuleId)
 		{
 		case grammar::BGR_VALUE_RAW:

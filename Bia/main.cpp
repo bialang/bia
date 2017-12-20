@@ -18,7 +18,7 @@ int main()
 	bia::machine::BiaMachineContext context;
 	
 	char script[] = R"(
-	var i = 555;
+	var i = 2 * 4 + 7*5*5;
 )";
 	{
 		bia::compiler::BiaCompiler<bia::machine::architecture::BiaToolGcc<bia::machine::architecture::Biax86>> compiler(buf, context);
