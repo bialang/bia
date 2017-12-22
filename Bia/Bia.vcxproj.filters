@@ -86,9 +86,6 @@
     <ClInclude Include="biaCompiler.hpp">
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
-    <ClInclude Include="biaArchitecture.hpp">
-      <Filter>Header Files\machine\architecture</Filter>
-    </ClInclude>
     <ClInclude Include="biaGrammar.hpp">
       <Filter>Header Files\grammar</Filter>
     </ClInclude>
@@ -128,12 +125,6 @@
     <ClInclude Include="biaStorage.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
-    <ClInclude Include="biaToolGcc.hpp">
-      <Filter>Header Files\machine\architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="biax86.hpp">
-      <Filter>Header Files\machine\architecture</Filter>
-    </ClInclude>
     <ClInclude Include="biaInstantiate.hpp">
       <Filter>Header Files\machine\link</Filter>
     </ClInclude>
@@ -145,6 +136,12 @@
     </ClInclude>
     <ClInclude Include="biaOperator.hpp">
       <Filter>Header Files\machine\link</Filter>
+    </ClInclude>
+    <ClInclude Include="biaArchitecture.hpp">
+      <Filter>Header Files\machine\architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="biaToolset.hpp">
+      <Filter>Header Files\machine\architecture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

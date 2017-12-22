@@ -22,6 +22,8 @@ public:
 
 		Write(p_args...);
 	}
+	virtual void SetPosition(long long p_llPosition) = 0;
+	virtual long long GetPosition() const = 0;
 	/**
 	 * Returns a memory buffer with its size.
 	 * 

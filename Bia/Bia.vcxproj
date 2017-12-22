@@ -120,7 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bia.hpp" />
-    <ClInclude Include="biaArchitecture.hpp" />
     <ClInclude Include="biaCompiler.hpp" />
     <ClInclude Include="biaConfig.hpp" />
     <ClInclude Include="biaException.hpp" />
@@ -144,8 +143,8 @@
     <ClInclude Include="biaPrint.hpp" />
     <ClInclude Include="biaReportBundle.hpp" />
     <ClInclude Include="biaStorage.hpp" />
-    <ClInclude Include="biaToolGcc.hpp" />
-    <ClInclude Include="biax86.hpp" />
+    <ClInclude Include="biaToolset.hpp" />
+    <ClInclude Include="biaArchitecture.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

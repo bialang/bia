@@ -51,6 +51,7 @@ BiaMachineContext() : m_storage(34)
 
 
 	api::framework::BiaMember * AddressOf(StringKey p_name);
+	api::framework::BiaMember * TemporaryAddress(uint32_t p_unIndex);
 };
 
 }

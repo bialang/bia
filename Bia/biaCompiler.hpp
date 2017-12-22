@@ -1,12 +1,15 @@
 #pragma once
 
 #include <cstdint>
+#include <cstring>
+#include <algorithm>
 
 #include "biaOutputStream.hpp"
 #include "biaMachineContext.hpp"
 #include "biaReportBundle.hpp"
 #include "biaInterpreterIdentifiers.hpp"
 #include "biaLink.hpp"
+#include "biaToolset.hpp"
 
 #define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
 
@@ -16,20 +19,19 @@ namespace bia
 namespace compiler
 {
 
-template<typename _TOOLSET>
 class BiaCompiler final : public grammar::BiaReportReceiver
 {
 public:
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param	[in]	p_output	Defines the output stream for the machine code.
 	 * @param	[in]	p_context	Defines the machine context.
 	 */
 	inline BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context) : m_toolset(p_output), m_context(p_context)
 	{
 	}
-	
+
 	/**
 	 * @see	bia::grammar::BiaReportReceiver::Report().
 	 */
@@ -41,20 +43,30 @@ public:
 private:
 	enum class VALUE_TYPE
 	{
-		NONE,
-		MEMBER,
 		INT_32,
 		INT_64,
 		FLOAT,
 		DOUBLE,
-		STRING
+		STRING,
+		MEMBER,
+		NONE,
 	};
 
-	_TOOLSET m_toolset;
+	union Value
+	{
+		int32_t nInt;
+		int64_t llInt;
+		float rFloat;
+		double rDouble;
+		size_t iString;
+	};
+
+	machine::architecture::BiaToolset m_toolset;
 
 	machine::BiaMachineContext & m_context;
 
 	VALUE_TYPE m_valueType;
+	Value m_value;
 
 
 	inline void HandleNumber(const grammar::Report * p_pReport)
@@ -63,8 +75,6 @@ private:
 		{
 		case grammar::NI_INTEGER:
 		{
-			auto llTmp = 0ll;
-
 			if (p_pReport->content.token.iSize <= 70)
 			{
 				char acTmp[70];
@@ -74,7 +84,7 @@ private:
 
 				//Interpret
 				char * pcEnd = nullptr;
-				llTmp = std::strtoll(acTmp, &pcEnd, 10);
+				m_value.llInt = std::strtoll(acTmp, &pcEnd, 10);
 
 				if (acTmp == pcEnd)
 					throw exception::ArgumentException("Invalid number.");
@@ -83,16 +93,16 @@ private:
 				throw exception::ArgumentException("Too long number.");
 
 			//64-Bit number
-			if (llTmp & 0xffffffff00000000ull)
+			if (m_value.llInt & 0xffffffff00000000ull)
 			{
-				m_toolset.PushParameter(static_cast<uint64_t>(llTmp));
+				m_toolset.Push(m_value.llInt);
 
 				m_valueType = VALUE_TYPE::INT_64;
 			}
 			//32-Bit number
 			else
 			{
-				m_toolset.PushParameter(static_cast<uint32_t>(llTmp));
+				m_toolset.Push(m_value.nInt);
 
 				m_valueType = VALUE_TYPE::INT_32;
 			}
@@ -101,8 +111,6 @@ private:
 		}
 		case grammar::NI_FLOAT:
 		{
-			auto rTmp = 0.0f;
-
 			if (p_pReport->content.token.iSize < 128)
 			{
 				char acTmp[129];
@@ -112,7 +120,7 @@ private:
 
 				//Interpret
 				char * pcEnd = nullptr;
-				rTmp = strtof(acTmp, &pcEnd);
+				m_value.rFloat = strtof(acTmp, &pcEnd);
 
 				if (acTmp == pcEnd)
 					throw exception::ArgumentException("Invalid number.");
@@ -120,7 +128,7 @@ private:
 			else
 				throw exception::ArgumentException("Too long number.");
 
-			m_toolset.PushParameter(*reinterpret_cast<uint32_t*>(&rTmp));
+			m_toolset.Push(m_value.rFloat);
 
 			m_valueType = VALUE_TYPE::FLOAT;
 
@@ -128,8 +136,6 @@ private:
 		}
 		case grammar::NI_DOUBLE:
 		{
-			auto rTmp = 0.0;
-
 			if (p_pReport->content.token.iSize < 128)
 			{
 				char acTmp[129];
@@ -139,7 +145,7 @@ private:
 
 				//Interpret
 				char * pcEnd = nullptr;
-				rTmp = strtod(acTmp, &pcEnd);
+				m_value.rDouble = strtod(acTmp, &pcEnd);
 
 				if (acTmp == pcEnd)
 					throw exception::ArgumentException("Invalid number.");
@@ -147,7 +153,7 @@ private:
 			else
 				throw exception::ArgumentException("Too long number.");
 
-			m_toolset.PushParameter(*reinterpret_cast<uint64_t*>(&rTmp));
+			m_toolset.Push(m_value.rDouble);
 
 			m_valueType = VALUE_TYPE::DOUBLE;
 
@@ -157,42 +163,23 @@ private:
 			BIA_COMPILER_DEV_INVALID
 		}
 	}
-	/**
-	 * Retruns the amount of 4 byte pairs for the specified value type.
-	 *
-	 * @since	3.42.93.570
-	 * @date	20-Dec-17
-	 *
-	 * @param	p_type	Defines the value type.
-	 *
-	 * @return	Either 1 or 2.
-	*/
-	inline static uint8_t ParameterElements(VALUE_TYPE p_type)
+	inline void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
 	{
-		switch (p_type)
-		{
-		case VALUE_TYPE::MEMBER:
-		case VALUE_TYPE::STRING:
-			static_assert(sizeof(void*) % 4 == 0, "Pointer size must be a multiple of 4.");
-
-			return sizeof(void*) / 4;
-		case VALUE_TYPE::INT_32:
-		case VALUE_TYPE::FLOAT:
-			return 1;
-		case VALUE_TYPE::INT_64:
-		case VALUE_TYPE::DOUBLE:
-			return 2;
-		default:
-			BIA_COMPILER_DEV_INVALID
-		}
+		m_toolset.Push(p_leftValue.nInt);
 	}
-	inline const void * HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, const grammar::Report * p_pOperator)
+	inline static const void * GetOperatorFunction_xM(VALUE_TYPE p_right)
 	{
-		printf("your operator: ");
-		fwrite(p_pOperator->content.token.pcString, p_pOperator->content.token.iSize, 1, stdout);
-		puts("");
 
-		return static_cast<const void*>(&machine::link::testt);
+	}
+	inline const void * HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, uint32_t p_unOperator)
+	{
+		switch (p_unOperator)
+		{
+		default:
+			m_toolset.Push(p_unOperator);
+
+			return static_cast<const void*>(&machine::link::Operator_MM);
+		}
 	}
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
@@ -275,7 +262,7 @@ private:
 		m_valueType = VALUE_TYPE::NONE;
 
 		//Push address of variable
-		m_toolset.PushParameter(reinterpret_cast<uintptr_t>(m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize))));
+		m_toolset.Push(reinterpret_cast<uintptr_t>(m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize))));
 
 		//Handle value and prepare the result for a function call
 		HandleValue(pRight->content.children);
@@ -310,7 +297,7 @@ private:
 		//PrintStraight("vv>", p_reports);
 		
 		//Handle first expression
-		p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children);
+		p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
 
 		//Logical operators were used
 		/*if (p_reports.pBegin < p_reports.pEnd)
@@ -390,14 +377,14 @@ private:
 
 			break;
 		case grammar::BV_TRUE:
-			m_toolset.PushParameter(uint8_t(1));
+			m_toolset.Push<uint8_t>(1);
 
 			m_valueType = VALUE_TYPE::INT_32;
 
 			break;
 		case grammar::BV_FALSE:
 		case grammar::BV_NULL:
-			m_toolset.PushParameter(uint8_t(0));
+			m_toolset.Push<uint8_t>(0);
 
 			m_valueType = VALUE_TYPE::INT_32;
 
@@ -412,80 +399,52 @@ private:
 
 		return p_reports.pEnd + 1;
 	}
-	inline const grammar::Report * HandleMathExpression(grammar::report_range p_reports)
+	template<bool _START = true>
+	inline const grammar::Report * HandleMathExpressionTerm(grammar::report_range p_reports)
 	{
+		constexpr auto NEXT = _START ? HandleMathExpressionTerm<false> : HandleMathFactor;
+
 		//Only one math term to handle
 		if (p_reports.pBegin[1].content.children.pEnd + 1 == p_reports.pEnd)
-			HandleMathTerm(p_reports.pBegin[1].content.children);
+			NEXT(p_reports.pBegin[1].content.children);
 		else
 		{
-			auto left = VALUE_TYPE::NONE;
+			m_toolset.MarkLocation();
 
 			//Handle leftmost math term
-			auto i = HandleMathTerm(p_reports.pBegin[1].content.children);
-
-			left = m_valueType;
+			const grammar::Report * i = NEXT(p_reports.pBegin[1].content.children);
+			auto leftType = m_valueType;
+			auto leftValue = m_value;
 
 			do
 			{
-				auto pOperator = i;
+				//Move string operator to int 32 bit value
+				uint32_t unOperator = 0;
+
+				memcpy(&unOperator, i->content.token.pcString, std::min(sizeof(unOperator), i->content.token.iSize));
 
 				//Handle first right math term
-				i = HandleMathTerm(i[1].content.children);
+				i = NEXT(i[1].content.children);
 
 				//Call operator
-				auto ucPopElements = ParameterElements(left) + ParameterElements(m_valueType);
+				if (leftType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::MEMBER)
+				{
+					m_toolset.Call<false>(HandleOperator(leftType, m_valueType, unOperator));
+					m_toolset.PushResult();
+					m_toolset.PopPoint();
 
-				m_toolset.Call<false>(HandleOperator(left, m_valueType, pOperator));
-				m_toolset.PopParameters(ucPopElements);
-
-				left = m_valueType;
-
-				//Push result
-				if (ParameterElements(m_valueType) == 1)
-					m_toolset.PushResult32();
+					leftType = VALUE_TYPE::MEMBER;
+				}
+				//Both operands can be optimized
 				else
-					m_toolset.PushResult64();
-			} while (i < p_reports.pEnd);
-		}
+				{
+					m_toolset.RestoreLocation();
 
-		return p_reports.pEnd + 1;
-	}
-	inline const grammar::Report * HandleMathTerm(grammar::report_range p_reports)
-	{
-		//Only one math factor to handle
-		if (p_reports.pBegin[1].content.children.pEnd + 1 == p_reports.pEnd)
-			HandleMathFactor(p_reports.pBegin[1].content.children);
-		//Call all operator and load the leftmost object
-		else
-		{
-			auto left = VALUE_TYPE::NONE;
+					HandleConstantOperation(leftType, leftValue, m_valueType, m_value, unOperator);
 
-			//Handle leftmost math factor
-			auto i = HandleMathFactor(p_reports.pBegin[1].content.children);
-
-			left = m_valueType;
-
-			do
-			{
-				auto pOperator = i;
-
-				//Handle first right math factor
-				i = HandleMathFactor(i[1].content.children);
-
-				//Call operator
-				auto ucPopElements = ParameterElements(left) + ParameterElements(m_valueType);
-				
-				m_toolset.Call<false>(HandleOperator(left, m_valueType, pOperator));
-				m_toolset.PopParameters(ucPopElements);
-
-				left = m_valueType;
-
-				//Push result
-				if (ParameterElements(m_valueType) == 1)
-					m_toolset.PushResult32();
-				else
-					m_toolset.PushResult64();
+					leftType = m_valueType;
+					leftValue = m_value;
+				}
 			} while (i < p_reports.pEnd);
 		}
 
