@@ -22,7 +22,10 @@ namespace link
  * s	= zero-terminated string pointer
 */
 
-inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_MM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, api::framework::BiaMember * p_pLeft);
+inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_MM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, api::framework::BiaMember * p_pLeft)
+{
+	return nullptr;
+}
 inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_iM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, int32_t p_nLeft);
 inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_IM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, int64_t p_llLeft);
 inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_fM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, float p_rLeft);

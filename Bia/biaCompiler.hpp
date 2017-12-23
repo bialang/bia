@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstring>
 #include <algorithm>
+#include <type_traits>
 
 #include "biaOutputStream.hpp"
 #include "biaMachineContext.hpp"
@@ -10,16 +11,17 @@
 #include "biaInterpreterIdentifiers.hpp"
 #include "biaLink.hpp"
 #include "biaToolset.hpp"
+#include "biaConstantOperation.hpp"
+#include "biaException.hpp"
 
 #define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
-
 
 namespace bia
 {
 namespace compiler
 {
 
-class BiaCompiler final : public grammar::BiaReportReceiver
+class BiaCompiler  : public grammar::BiaReportReceiver
 {
 public:
 	/**
@@ -69,7 +71,86 @@ private:
 	Value m_value;
 
 
-	inline void HandleNumber(const grammar::Report * p_pReport)
+	inline void SetValue(int32_t p_nValue)
+	{
+		m_toolset.Push(p_nValue);
+		m_valueType = VALUE_TYPE::INT_32;
+		m_value.nInt = p_nValue;
+	}
+	inline void SetValue(int64_t p_llValue)
+	{
+		m_toolset.Push(p_llValue);
+		m_valueType = VALUE_TYPE::INT_64;
+		m_value.llInt = p_llValue;
+	}
+	inline void SetValue(float p_rValue)
+	{
+		m_toolset.Push(p_rValue);
+		m_valueType = VALUE_TYPE::FLOAT;
+		m_value.rFloat = p_rValue;
+	}
+	inline void SetValue(double p_rValue)
+	{
+		m_toolset.Push(p_rValue);
+		m_valueType = VALUE_TYPE::DOUBLE;
+		m_value.rDouble = p_rValue;
+	}
+	template<typename _LEFT, typename std::enable_if<std::is_integral<_LEFT>::value, int>::type = 0>
+	inline void HandleConstantOperation(_LEFT p_left, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
+	{
+		switch (p_rightType)
+		{
+		case VALUE_TYPE::INT_32:
+			return SetValue(ConstantOperationIntegral(p_left, p_rightValue.nInt, p_unOperator));
+		case VALUE_TYPE::INT_64:
+			return SetValue(ConstantOperationIntegral(p_left, p_rightValue.llInt, p_unOperator));
+		case VALUE_TYPE::FLOAT:
+			return SetValue(ConstantOperationBasic(p_left, p_rightValue.rFloat, p_unOperator));
+		case VALUE_TYPE::DOUBLE:
+			return SetValue(ConstantOperationBasic(p_left, p_rightValue.rDouble, p_unOperator));
+		case VALUE_TYPE::STRING:
+		default:
+			break;
+		}
+	}
+	template<typename _LEFT, typename std::enable_if<std::is_floating_point<_LEFT>::value, int>::type = 0>
+	inline void HandleConstantOperation(_LEFT p_left, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
+	{
+		switch (p_rightType)
+		{
+		case VALUE_TYPE::INT_32:
+			return SetValue(ConstantOperationBasic(p_left, p_rightValue.nInt, p_unOperator));
+		case VALUE_TYPE::INT_64:
+			return SetValue(ConstantOperationBasic(p_left, p_rightValue.llInt, p_unOperator));
+		case VALUE_TYPE::FLOAT:
+			return SetValue(ConstantOperationBasic(p_left, p_rightValue.rFloat, p_unOperator));
+		case VALUE_TYPE::DOUBLE:
+			return SetValue(ConstantOperationBasic(p_left, p_rightValue.rDouble, p_unOperator));
+		case VALUE_TYPE::STRING:
+		default:
+			break;
+		}
+	}
+	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
+	{
+		using namespace api::framework;
+
+		switch (p_leftType)
+		{
+		case VALUE_TYPE::INT_32:
+			return HandleConstantOperation(p_leftValue.nInt, p_rightType, p_rightValue, p_unOperator);
+		case VALUE_TYPE::INT_64:
+			return HandleConstantOperation(p_leftValue.llInt, p_rightType, p_rightValue, p_unOperator);
+		case VALUE_TYPE::FLOAT:
+			return HandleConstantOperation(p_leftValue.rFloat, p_rightType, p_rightValue, p_unOperator);
+		case VALUE_TYPE::DOUBLE:
+			return HandleConstantOperation(p_leftValue.rDouble, p_rightType, p_rightValue, p_unOperator);
+		case VALUE_TYPE::STRING:
+		default:
+			break;
+		}
+	}
+	void HandleNumber(const grammar::Report * p_pReport)
 	{
 		switch (p_pReport->unCustomParameter)
 		{
@@ -163,10 +244,6 @@ private:
 			BIA_COMPILER_DEV_INVALID
 		}
 	}
-	inline void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
-	{
-		m_toolset.Push(p_leftValue.nInt);
-	}
 	inline static const void * GetOperatorFunction_xM(VALUE_TYPE p_right)
 	{
 
@@ -229,7 +306,7 @@ private:
 
 		return nullptr;
 	}
-	inline const grammar::Report * HandleRoot(const grammar::Report * p_pReport)
+	const grammar::Report * HandleRoot(const grammar::Report * p_pReport)
 	{
 		switch (p_pReport->unRuleId)
 		{
@@ -246,16 +323,16 @@ private:
 		}
 		case grammar::BGR_VARIABLE_DECLARATION:
 			return HandleVariableDeclaration(p_pReport->content.children);
-		case grammar::BGR_IF:
+			//case grammar::BGR_IF:
 			//return HandleIf(p_pReport->content.children);
+		case grammar::BGR_VALUE://print
+			return HandlePrint(p_pReport->content.children);
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
 	}
-	inline const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports)
+	const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports)
 	{
-		//PrintStraight("vd>", p_reports);
-
 		//Handle value
 		auto pRight = FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd);
 
@@ -292,83 +369,83 @@ private:
 
 		return p_reports.pEnd + 1;
 	}
-	inline const grammar::Report * HandleValue(grammar::report_range p_reports)
+	const grammar::Report * HandleValue(grammar::report_range p_reports)
 	{
 		//PrintStraight("vv>", p_reports);
-		
+
 		//Handle first expression
 		p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
 
 		//Logical operators were used
 		/*if (p_reports.pBegin < p_reports.pEnd)
 		{
-			BiaConditionMakerDouble maker(m_output);
-			STATE state = S_NONE;
+		BiaConditionMakerDouble maker(m_output);
+		STATE state = S_NONE;
 
-			do
-			{
-				//Logical operator
-				switch (p_reports.pBegin->unTokenId)
-				{
-				case grammar::BVO_LOGICAL_AND:
-				{
-					constexpr uint64_t cullNull = 0;
+		do
+		{
+		//Logical operator
+		switch (p_reports.pBegin->unTokenId)
+		{
+		case grammar::BVO_LOGICAL_AND:
+		{
+		constexpr uint64_t cullNull = 0;
 
-					WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
+		WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
 
-					maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_1);
+		maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_1);
 
-					//Mark last next
-					if (state == S_NEXT_0)
-						maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
+		//Mark last next
+		if (state == S_NEXT_0)
+		maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
 
-					state = S_NEXT_1;
+		state = S_NEXT_1;
 
-					break;
-				}
-				case grammar::BVO_LOGICAL_OR:
-				{
-					constexpr uint64_t cullNull = 0;
+		break;
+		}
+		case grammar::BVO_LOGICAL_OR:
+		{
+		constexpr uint64_t cullNull = 0;
 
-					WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
+		WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
 
-					maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_0);
+		maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_0);
 
-					//Mark last next
-					if (state == S_NEXT_1)
-						maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
+		//Mark last next
+		if (state == S_NEXT_1)
+		maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
 
-					state = S_NEXT_0;
+		state = S_NEXT_0;
 
-					break;
-				}
-				default:
-					BIA_COMPILER_DEV_INVALID
-				}
+		break;
+		}
+		default:
+		BIA_COMPILER_DEV_INVALID
+		}
 
-				//Handle right value
-				p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
-			} while (p_reports.pBegin < p_reports.pEnd);
+		//Handle right value
+		p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
+		} while (p_reports.pBegin < p_reports.pEnd);
 
-			//Mark last next
-			switch (state)
-			{
-			case S_NEXT_0:
-				maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
+		//Mark last next
+		switch (state)
+		{
+		case S_NEXT_0:
+		maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
 
-				break;
-			case S_NEXT_1:
-				maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
+		break;
+		case S_NEXT_1:
+		maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
 
-				break;
-			default:
-				break;
-			}
+		break;
+		default:
+		break;
+		}
 		}*/
 
 		return p_reports.pEnd + 1;
 	}
-	inline const grammar::Report * HandleValueRaw(grammar::report_range p_reports)
+	const grammar::Report * HandleValueRaw(grammar::report_range p_reports)
 	{
 		switch (p_reports.pBegin[1].unTokenId)
 		{
@@ -402,17 +479,16 @@ private:
 	template<bool _START = true>
 	inline const grammar::Report * HandleMathExpressionTerm(grammar::report_range p_reports)
 	{
-		constexpr auto NEXT = _START ? HandleMathExpressionTerm<false> : HandleMathFactor;
+		constexpr auto NEXT = _START ? &BiaCompiler::HandleMathExpressionTerm<false> : &BiaCompiler::HandleMathFactor;
 
 		//Only one math term to handle
 		if (p_reports.pBegin[1].content.children.pEnd + 1 == p_reports.pEnd)
-			NEXT(p_reports.pBegin[1].content.children);
+			(this->*NEXT)(p_reports.pBegin[1].content.children);
 		else
 		{
-			m_toolset.MarkLocation();
-
 			//Handle leftmost math term
-			const grammar::Report * i = NEXT(p_reports.pBegin[1].content.children);
+			auto location = m_toolset.GetLocation();
+			const grammar::Report * i = (this->*NEXT)(p_reports.pBegin[1].content.children);
 			auto leftType = m_valueType;
 			auto leftValue = m_value;
 
@@ -424,21 +500,20 @@ private:
 				memcpy(&unOperator, i->content.token.pcString, std::min(sizeof(unOperator), i->content.token.iSize));
 
 				//Handle first right math term
-				i = NEXT(i[1].content.children);
+				i = (this->*NEXT)(i[1].content.children);
 
 				//Call operator
 				if (leftType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::MEMBER)
 				{
 					m_toolset.Call<false>(HandleOperator(leftType, m_valueType, unOperator));
 					m_toolset.PushResult();
-					m_toolset.PopPoint();
 
 					leftType = VALUE_TYPE::MEMBER;
 				}
 				//Both operands can be optimized
 				else
 				{
-					m_toolset.RestoreLocation();
+					m_toolset.RestoreLocation(location);
 
 					HandleConstantOperation(leftType, leftValue, m_valueType, m_value, unOperator);
 
@@ -450,7 +525,7 @@ private:
 
 		return p_reports.pEnd + 1;
 	}
-	inline const grammar::Report * HandleMathFactor(grammar::report_range p_reports)
+	const grammar::Report * HandleMathFactor(grammar::report_range p_reports)
 	{
 		switch (p_reports.pBegin[1].unRuleId)
 		{
@@ -465,6 +540,44 @@ private:
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
+
+		return p_reports.pEnd + 1;
+	}
+	const grammar::Report * HandlePrint(grammar::report_range p_reports)
+	{
+		auto ucStart = m_toolset.GetPushedElements();
+
+		//Handle value to print
+		HandleValue(p_reports);
+
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::INT_32:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_i));
+
+			break;
+		case VALUE_TYPE::INT_64:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_I));
+
+			break;
+		case VALUE_TYPE::FLOAT:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_f));
+
+			break;
+		case VALUE_TYPE::DOUBLE:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_d));
+
+			break;
+		case VALUE_TYPE::MEMBER:
+			m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_M));
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+
+		//Pop
+		m_toolset.Pop(m_toolset.GetPushedElements() - ucStart);
 
 		return p_reports.pEnd + 1;
 	}

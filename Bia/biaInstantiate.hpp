@@ -51,13 +51,6 @@ inline void BIA_INSTRUCTION_CALLING_CONVETION InstantiateIntP1(api::framework::B
 	new(p_pMember) api::framework::BiaInt(1);
 }
 
-inline int32_t BIA_INSTRUCTION_CALLING_CONVETION testt(int32_t p_nRight, int32_t p_nLeft)
-{
-	printf("%i * %i\n", p_nLeft, p_nRight);
-
-	return p_nLeft * p_nRight;
-}
-
 inline void BIA_INSTRUCTION_CALLING_CONVETION InstantiateIntN1(api::framework::BiaMember * p_pMember)
 {
 	//Destruct old object

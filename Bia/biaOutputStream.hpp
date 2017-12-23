@@ -22,15 +22,22 @@ public:
 
 		Write(p_args...);
 	}
+	/**
+	 * Sets the position of the cursor.
+	 *
+	 * @param	p_llPosition	Defines the new position of the cursor. Cannot move the cursor forward.
+	*/
 	virtual void SetPosition(long long p_llPosition) = 0;
+	/**
+	 * Returns the position of the cursor.
+	 *
+	 * @return	The position of the cursor.
+	*/
 	virtual long long GetPosition() const = 0;
 	/**
 	 * Returns a memory buffer with its size.
 	 * 
 	 * @remarks	This buffer is only valid until the destruction of this object.
-	 * 
-	 * @since	3.42.93.562
-	 * @date	15-Dec-17
 	 * 
 	 * @return	The buffer.
 	 */

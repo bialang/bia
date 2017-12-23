@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <type_traits>
+#include <utility>
 
 #include "biaMachineContext.hpp"
 #include "biaArchitecture.hpp"
@@ -21,7 +22,6 @@ public:
 	inline BiaToolset(stream::BiaOutputStream & p_output) : m_output(p_output)
 	{
 		m_ucPushedElements = 0;
-		m_ucPopPoint = 0;
 	}
 	inline ~BiaToolset()
 	{
@@ -44,7 +44,7 @@ public:
 	inline void Push(T p_value)
 	{
 #if defined(BIA_ARCHITECTURE_MG32)
-		static_cast(sizeof(T) == 1 || sizeof(T) == 4 || sizeof(T) == 8, "Push parameter must of size 1, 4 or 8.");
+		static_assert(sizeof(T) == 1 || sizeof(T) == 4 || sizeof(T) == 8, "Push parameter must of size 1, 4 or 8.");
 
 		//8 bit
 		if (sizeof(T) == 1)
@@ -53,7 +53,7 @@ public:
 		else if (sizeof(T) == 4)
 		{
 			//Save 3 bytes
-			if (p_value & 0xffffff00)
+			if (std::is_integral<T>::value && !(*reinterpret_cast<uint32_t*>(&p_value) & 0xffffff00))
 				BiaArchitecture::Operation8<OP_CODE::PUSH>(m_output, *reinterpret_cast<uint8_t*>(&p_value));
 			//Push all 4 bytes
 			else
@@ -71,39 +71,19 @@ public:
 		++m_ucPushedElements;
 #endif
 	}
-	inline void RestoreLocation()
+	inline void RestoreLocation(std::pair<uint8_t, long long> p_location)
 	{
-		m_ucPushedElements = m_ucPopPoint;
-		m_output.SetPosition(m_llCursorPosition);
-	}
-	inline void MarkLocation()
-	{
-		m_ucPopPoint = m_ucPushedElements;
-		m_llCursorPosition = m_output.GetPosition();
-	}
-	inline void MarkPopLocation()
-	{
-		m_ucPopPoint = m_ucPushedElements;
+		m_ucPushedElements = p_location.first;
+		m_output.SetPosition(p_location.second);
 	}
 	inline void Pop(uint8_t p_ucElements)
 	{
 #if defined(BIA_ARCHITECTURE_MG32)
-		if (m_ucPushedElements)
+		if (p_ucElements && p_ucElements <= m_ucPushedElements)
 		{
 			BiaArchitecture::Operation8<OP_CODE::ADD>(m_output, p_ucElements * 4, REGISTER::ESP);
 
 			m_ucPushedElements -= p_ucElements;
-		}
-#endif
-	}
-	inline void PopPoint()
-	{
-#if defined(BIA_ARCHITECTURE_MG32)
-		if (m_ucPopPoint && m_ucPopPoint <= m_ucPushedElements)
-		{
-			BiaArchitecture::Operation8<OP_CODE::ADD>(m_output, m_ucPopPoint * 4, REGISTER::ESP);
-
-			m_ucPushedElements -= m_ucPopPoint;
 		}
 #endif
 	}
@@ -137,14 +117,19 @@ public:
 		}
 #endif
 	}
+	inline uint8_t GetPushedElements()
+	{
+		return m_ucPushedElements;
+	}
+	inline std::pair<uint8_t, long long> GetLocation() const
+	{
+		return { m_ucPushedElements, m_output.GetPosition() };
+	}
 
 private:
 	stream::BiaOutputStream & m_output;
 
 	uint8_t m_ucPushedElements;
-	uint8_t m_ucPopPoint;
-
-	long long m_llCursorPosition;
 };
 
 }

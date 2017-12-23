@@ -13,8 +13,24 @@ namespace stream
 class BiaOutputStreamBuffer : public BiaOutputStream
 {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * @param	p_iReserve	(Optional)	Defines the initial reserved size.
+	*/
 	BiaOutputStreamBuffer(size_t p_iReserve = 0);
 
+	/**
+	 * @see	bia::stream::BiaOutputStream::SetPosition().
+	*/
+	virtual void SetPosition(long long p_llPosition) override;
+	/**
+	 * @see	bia::stream::BiaOutputStream::GetPosition().
+	*/
+	virtual long long GetPosition() const override;
+	/**
+	 * @see	bia::stream::BiaOutputStream::GetBuffer().
+	*/
 	virtual std::pair<const uint8_t*, size_t> GetBuffer() const override;
 
 protected:

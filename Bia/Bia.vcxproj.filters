@@ -60,6 +60,9 @@
     <ClCompile Include="biaOutputStreamBuffer.cpp">
       <Filter>Source Files\stream</Filter>
     </ClCompile>
+    <ClCompile Include="biaCompiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bia.hpp">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="biaToolset.hpp">
       <Filter>Header Files\machine\architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="biaConstantOperation.hpp">
+      <Filter>Header Files\compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

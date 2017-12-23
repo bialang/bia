@@ -38,10 +38,11 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	interpreter.SetRule(BGR_ROOT_HELPER_0, std::move(tmp));
 
 	//Root helper single statement
-	tmp.Reset(2, BiaInterpreterRule::F_OR);
+	tmp.Reset(3, BiaInterpreterRule::F_OR);
 
 	tmp.SetToken(1, RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>)
-		.SetToken(2, RulePointerToken<BGR_IF, FILLER_TOKEN>);
+		.SetToken(2, RulePointerToken<BGR_IF, FILLER_TOKEN>)
+		.SetToken(3, RulePointerToken<BGR_PRINT, FILLER_TOKEN>);
 
 	interpreter.SetRule(BGR_ROOT_HELPER_SINGLE_STATEMENT, std::move(tmp));
 
@@ -101,6 +102,17 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		.SetToken(10, RulePointerToken<BGR_ROOT, FILLER_TOKEN>);
 
 	interpreter.SetRule(BGR_IF_HELPER_0, std::move(tmp));
+
+	//Print
+	tmp.Reset(5);
+
+	tmp.SetToken(1, KeywordToken<Keyword_print, FILLER_TOKEN>)
+		.SetToken(2, WHITESPACE_REQUIRED)
+		.SetToken(3, RulePointerToken<BGR_VALUE, FILLER_TOKEN>)
+		.SetToken(4, WHITESPACE_OPTIONAL)
+		.SetToken(5, KeywordToken<Operator_semicolon, FILLER_TOKEN>);
+
+	interpreter.SetRule(BGR_PRINT, std::move(tmp));
 
 	//Value raw (must be wrapped becaus of math factor)
 	tmp.Reset(5, BiaInterpreterRule::F_OR | BiaInterpreterRule::F_WRAP_UP);
