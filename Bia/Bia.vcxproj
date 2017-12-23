@@ -145,6 +145,7 @@
     <ClInclude Include="biaPrint.hpp" />
     <ClInclude Include="biaReportBundle.hpp" />
     <ClInclude Include="biaStorage.hpp" />
+    <ClInclude Include="biaTemporaryStorage.hpp" />
     <ClInclude Include="biaToolset.hpp" />
     <ClInclude Include="biaArchitecture.hpp" />
     <ClInclude Include="resource.h" />

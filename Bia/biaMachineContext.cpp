@@ -31,6 +31,10 @@ void BiaMachineContext::Run(stream::BiaInputStream & p_input)
 		pMachineCode->Execute();
 }
 
+void BiaMachineContext::DeleteTemporaryObjectTo(uint32_t p_unLowerIndex)
+{
+}
+
 api::framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 {
 	auto pResult = m_index.find(p_name);
@@ -47,6 +51,11 @@ api::framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 
 		return pAddress;
 	}
+}
+
+api::framework::BiaMember * BiaMachineContext::TemporaryAddress(uint32_t p_unIndex)
+{
+	return m_temporaryStorage.GetSpace(p_unIndex);
 }
 
 }

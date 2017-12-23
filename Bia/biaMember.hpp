@@ -50,7 +50,14 @@ public:
 		O_GREATER_EQUALS = 0x3d3e,
 	};
 
-	virtual ~BiaMember() = default;
+	inline BiaMember()
+	{
+		m_bInitialized = true;
+	}
+	inline virtual ~BiaMember()
+	{
+		m_bInitialized = false;
+	}
 
 
 	/**
@@ -77,6 +84,9 @@ public:
 	{
 		return false;
 	}
+
+protected:
+	bool m_bInitialized;
 };
 
 }

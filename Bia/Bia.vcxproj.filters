@@ -149,6 +149,9 @@
     <ClInclude Include="biaConstantOperation.hpp">
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
+    <ClInclude Include="biaTemporaryStorage.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

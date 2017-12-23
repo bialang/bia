@@ -3,17 +3,17 @@
 
 #include "biaGrammar.hpp"
 #include "biaCompiler.hpp"
-#include <iostream>
+
 int main()
 {
 	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context;
 	
 	char script[] = R"(
-	print 2 * (4 + 7)*5*5.5;
+var i = 65*65+5*8;
+	print i*8.;
 )";
 	
-	//bia::compiler::OperationResult<int, double>::type;
 
 	try
 	{

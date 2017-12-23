@@ -7,6 +7,7 @@
 #include "biaConfig.hpp"
 #include "biaMember.hpp"
 #include "biaStorage.hpp"
+#include "biaTemporaryStorage.hpp"
 #include "biaMachineCode.hpp"
 #include "biaInputStream.hpp"
 
@@ -48,8 +49,10 @@ BiaMachineContext() : m_storage(34)
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
 	BiaStorage<16> m_storage;
+	BiaTemporaryStorage<api::framework::BiaMember, 16> m_temporaryStorage;
 
 
+	void DeleteTemporaryObjectTo(uint32_t p_unLowerIndex);
 	api::framework::BiaMember * AddressOf(StringKey p_name);
 	api::framework::BiaMember * TemporaryAddress(uint32_t p_unIndex);
 };

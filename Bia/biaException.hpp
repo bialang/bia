@@ -30,7 +30,7 @@ struct UnknownException final : Exception
 
 struct ImplementationException final : Exception
 {
-	inline ImplementationException(std::string p_stMessage, const char * p_pszFile, int p_nLine) : Exception(p_pszFile + std::string("//#") + std::to_string(p_nLine) + ": " + std::move(p_stMessage)) {}
+	inline ImplementationException(std::string p_stMessage, const char * p_pszFile, int p_nLine) : Exception(p_pszFile + std::string(":") + std::to_string(p_nLine) + ": " + std::move(p_stMessage)) {}
 };
 
 struct UnknownTemplateException final : Exception
