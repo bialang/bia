@@ -8,7 +8,7 @@
 
 #if defined(_MSC_VER)
 
-#define BIA_INSTRUCTION_CALLING_CONVETION __cdecl
+#define BIA_INSTRUCTION_CALLING_CONVETION(x, y) x __cdecl y
 
 #if defined(_M_IX86)
 #define BIA_ARCHITECTURE_MG32 1

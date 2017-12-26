@@ -7,15 +7,13 @@
 
 namespace bia
 {
-namespace api
-{
 namespace framework
 {
 
 class BiaMember
 {
 public:
-	enum OPERATORS : uint32_t
+	enum OPERATOR : uint32_t
 	{
 		O_PLUS = 0x2b,
 		O_MINUS = 0x2d,
@@ -50,6 +48,9 @@ public:
 		O_GREATER_EQUALS = 0x3d3e,
 	};
 
+	/**
+	 * Constructor.
+	*/
 	inline BiaMember()
 	{
 		m_bInitialized = true;
@@ -71,24 +72,29 @@ public:
 		printf("<Empty member at %p>", this);
 	}
 	/**
+	 * @throws	exception::OperatorException
+	*/
+	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination) = 0;
+	/**
+	 * @throws	exception::OperatorException
+	*/
+	virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) = 0;
+	/**
+	 * @throws	exception::OperatorException
+	*/
+	virtual void OperatorSelfCall(uint32_t p_unOperator) = 0;
+	/**
 	 * Checks whether the specified type matches this object.
-	 *
-	 * @since	3.42.93.567
-	 * @date	18-Dec-17
 	 *
 	 * @param	p_type	Defines the type.
 	 *
 	 * @return	true if they match, otherwise false.
 	*/
-	inline virtual bool IsType(const std::type_info & p_type) const
-	{
-		return false;
-	}
+	virtual bool IsType(const std::type_info & p_type) const = 0;
 
 protected:
 	bool m_bInitialized;
 };
 
-}
 }
 }

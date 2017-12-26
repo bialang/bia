@@ -1,6 +1,6 @@
 #include "biaMachineContext.hpp"
 #include "biaOutputStreamBuffer.hpp"
-#include "biaInt.hpp"
+#include "biaUnknown.hpp"
 
 #include <memory>
 #include <cstdint>
@@ -35,7 +35,7 @@ void BiaMachineContext::DeleteTemporaryObjectTo(uint32_t p_unLowerIndex)
 {
 }
 
-api::framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
+framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 {
 	auto pResult = m_index.find(p_name);
 
@@ -45,7 +45,7 @@ api::framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 	//Create address
 	else
 	{
-		auto pAddress = m_storage.CreateElement<api::framework::BiaMember>();
+		auto pAddress = m_storage.CreateElement<framework::BiaUnknown>();
 
 		m_index.insert({ p_name, pAddress });
 
@@ -53,7 +53,7 @@ api::framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 	}
 }
 
-api::framework::BiaMember * BiaMachineContext::TemporaryAddress(uint32_t p_unIndex)
+framework::BiaMember * BiaMachineContext::TemporaryAddress(uint32_t p_unIndex)
 {
 	return m_temporaryStorage.GetSpace(p_unIndex);
 }

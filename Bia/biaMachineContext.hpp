@@ -45,16 +45,16 @@ BiaMachineContext() : m_storage(34)
 		std::string stKey;
 	};*/
 
-	std::unordered_map<StringKey, api::framework::BiaMember*> m_index;	/**	Stores all pointers to the known variables.	*/
+	std::unordered_map<StringKey, framework::BiaMember*> m_index;	/**	Stores all pointers to the known variables.	*/
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
 	BiaStorage<16> m_storage;
-	BiaTemporaryStorage<api::framework::BiaMember, 16> m_temporaryStorage;
+	BiaTemporaryStorage<framework::BiaMember, 16> m_temporaryStorage;
 
 
 	void DeleteTemporaryObjectTo(uint32_t p_unLowerIndex);
-	api::framework::BiaMember * AddressOf(StringKey p_name);
-	api::framework::BiaMember * TemporaryAddress(uint32_t p_unIndex);
+	framework::BiaMember * AddressOf(StringKey p_name);
+	framework::BiaMember * TemporaryAddress(uint32_t p_unIndex);
 };
 
 }

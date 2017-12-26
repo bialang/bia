@@ -4,6 +4,9 @@
 
 #include "biaConfig.hpp"
 #include "biaOutputStream.hpp"
+#include "biaException.hpp"
+
+#define BIA_THROW_INVALID_OP_CODE throw BIA_IMPLEMENTATION_EXCEPTION("Invalid op code.");
 
 
 namespace bia
@@ -13,6 +16,7 @@ namespace machine
 namespace architecture
 {
 
+#if defined(BIA_ARCHITECTURE_MG32)
 enum class REGISTER
 {
 	EAX,
@@ -46,134 +50,117 @@ public:
 	template<OP_CODE _OP_CODE>
 	inline static void Operation(stream::BiaOutputStream & p_output)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		switch (_OP_CODE)
 		{
 		case OP_CODE::RETURN_NEAR:
 			return p_output.WriteAll(0xc3_8);
 		default:
-			
-			throw 1;
+			BIA_THROW_INVALID_OP_CODE
 		}
-#endif
 	}
-	template<OP_CODE _OP_CODE>
-	inline static void Operation(stream::BiaOutputStream & p_output, REGISTER p_register)
+	template<OP_CODE _OP_CODE, REGISTER _REGISTER>
+	inline static void Operation(stream::BiaOutputStream & p_output)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
-			return p_output.WriteAll(static_cast<uint8_t>(0x50 | Register(p_register)));
+			return p_output.WriteAll(static_cast<uint8_t>(0x50 | Register<_REGISTER>()));
 		case OP_CODE::CALL:
-			return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0xd0 | Register(p_register)));
+			return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0320 | Register<_REGISTER>()));
 		default:
-			throw 1;
+			BIA_THROW_INVALID_OP_CODE
 		}
-#endif
 	}
 	template<OP_CODE _OP_CODE>
-	inline static void Operation32(stream::BiaOutputStream & p_output, uint32_t p_unConstant)
+	inline static void Operation32(stream::BiaOutputStream & p_output, int32_t p_nConstant)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
-			return p_output.WriteAll(0x68_8, p_unConstant);
+			return p_output.WriteAll(0x68_8, static_cast<uint32_t>(p_nConstant));
 		default:
-			throw 1;
+			BIA_THROW_INVALID_OP_CODE
 		}
-#endif
 	}
 	template<OP_CODE _OP_CODE>
-	inline static void Operation16(stream::BiaOutputStream & p_output, uint16_t p_usConstant)
+	inline static void Operation8(stream::BiaOutputStream & p_output, int8_t p_cConstant)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
-		switch (_OP_CODE)
-		{
-		case OP_CODE::RETURN_NEAR:
-			return p_output.WriteAll(0xc2_8, p_usConstant);
-		default:
-			throw 1;
-		}
-#endif
-	}
-	template<OP_CODE _OP_CODE>
-	inline static void Operation8(stream::BiaOutputStream & p_output, uint8_t p_ucConstant)
-	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
-			return p_output.WriteAll(0x6a_8, p_ucConstant);
+			return p_output.WriteAll(0x6a_8, static_cast<uint8_t>(p_cConstant));
 		default:
-			throw 1;
+			BIA_THROW_INVALID_OP_CODE
 		}
-#endif
 	}
-	template<OP_CODE _OP_CODE>
-	inline static void Operation32(stream::BiaOutputStream & p_output, uint32_t p_unConstant, REGISTER p_destination)
+	template<OP_CODE _OP_CODE, REGISTER _REGISTER>
+	inline static void Operation32(stream::BiaOutputStream & p_output, int32_t p_nConstant)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		switch (_OP_CODE)
 		{
 		case OP_CODE::MOVE:
-			return p_output.WriteAll(static_cast<uint8_t>(0xb8 | Register(p_destination)), p_unConstant);
+			return p_output.WriteAll(static_cast<uint8_t>(0xb8 | Register<_REGISTER>()), static_cast<uint32_t>(p_nConstant));
 		case OP_CODE::ADD:
 		{
 			//Special opcode for EAX
-			if (p_destination == REGISTER::EAX)
-				return p_output.WriteAll(0x05_8, p_unConstant);
+			if (_REGISTER == REGISTER::EAX)
+				return p_output.WriteAll(0x05_8, static_cast<uint32_t>(p_nConstant));
 			else
-				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0300 | Register(p_destination)), p_unConstant);
+				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0300 | Register<_REGISTER>()), static_cast<uint32_t>(p_nConstant));
 		}
 		case OP_CODE::SUBTRACT:
 		{
 			//Special opcode for EAX
-			if (p_destination == REGISTER::EAX)
-				return p_output.WriteAll(0x2d_8, p_unConstant);
+			if (_REGISTER == REGISTER::EAX)
+				return p_output.WriteAll(0x2d_8, static_cast<uint32_t>(p_nConstant));
 			else
-				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0xe8 | Register(p_destination)), p_unConstant);
+				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0350 | Register<_REGISTER>()), static_cast<uint32_t>(p_nConstant));
 		}
 		default:
-			throw 1;
+			BIA_THROW_INVALID_OP_CODE
 		}
-#endif
 	}
-	template<OP_CODE _OP_CODE>
-	inline static void Operation8(stream::BiaOutputStream & p_output, uint8_t p_ucConstant, REGISTER p_destination)
+	template<OP_CODE _OP_CODE, REGISTER _REGISTER>
+	inline static void Operation8(stream::BiaOutputStream & p_output, int8_t p_cConstant)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		switch (_OP_CODE)
 		{
-		case OP_CODE::MOVE:
-			return p_output.WriteAll(static_cast<uint8_t>(0xb8 | Register(p_destination)), static_cast<uint32_t>(p_ucConstant));
+		case OP_CODE::PUSH:
+		{
+			//If constant displacement is 0 the push register directly, otherwise push with one byte displacement
+			if (p_cConstant == 0)
+				return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0160 | Register<_REGISTER>()), static_cast<uint8_t>(p_cConstant));
+			else
+				return Operation<OP_CODE::PUSH>(p_output, _REGISTER);
+		}
 		case OP_CODE::ADD:
 		{
 			//Special opcode for EAX
-			if (p_destination == REGISTER::EAX)
-				return p_output.WriteAll(0x04_8, p_ucConstant);
+			if (_REGISTER == REGISTER::EAX)
+				return p_output.WriteAll(0x04_8, static_cast<uint8_t>(p_cConstant));
 			else
-				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0300 | Register(p_destination)), p_ucConstant);
+				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0300 | Register<_REGISTER>()), static_cast<uint8_t>(p_cConstant));
 		}
 		case OP_CODE::SUBTRACT:
 		{
 			//Special opcode for EAX
-			if (p_destination == REGISTER::EAX)
-				return p_output.WriteAll(0x2c_8, p_ucConstant);
+			if (_REGISTER == REGISTER::EAX)
+				return p_output.WriteAll(0x2c_8, static_cast<uint8_t>(p_cConstant));
 			else
-				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0xe8 | Register(p_destination)), p_ucConstant);
+				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0350 | Register<_REGISTER>()), static_cast<uint8_t>(p_cConstant));
 		}
 		default:
-			throw 1;
+			BIA_THROW_INVALID_OP_CODE
 		}
-#endif
 	}
 
 private:
-	inline static uint8_t Register(REGISTER p_register)
+	template<REGISTER _REGISTER>
+	inline constexpr static uint8_t Register()
 	{
-		switch (p_register)
+		static_assert(_REGISTER == REGISTER::EAX || _REGISTER == REGISTER::ESP || _REGISTER == REGISTER::EBP, "Invalid register.");
+
+		switch (_REGISTER)
 		{
 		case REGISTER::EAX:
 			return 0;
@@ -181,11 +168,10 @@ private:
 			return 4;
 		case REGISTER::EBP:
 			return 5;
-		default:
-			throw 1;
 		}
 	}
 };
+#endif
 
 }
 }

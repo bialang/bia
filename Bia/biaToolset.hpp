@@ -32,16 +32,16 @@ public:
 		BiaArchitecture::Operation<OP_CODE::RETURN_NEAR>(m_output);
 #endif
 	}
-	inline void PushResult()
+	inline void PassResult()
 	{
 #if defined(BIA_ARCHITECTURE_MG32)
-		BiaArchitecture::Operation<OP_CODE::PUSH>(m_output, REGISTER::EAX);
+		BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EAX>(m_output);
 
 		++m_ucPushedElements;
 #endif
 	}
 	template<typename T>
-	inline void Push(T p_value)
+	inline void Pass(T p_value)
 	{
 #if defined(BIA_ARCHITECTURE_MG32)
 		static_assert(sizeof(T) == 1 || sizeof(T) == 4 || sizeof(T) == 8, "Push parameter must of size 1, 4 or 8.");
@@ -71,6 +71,12 @@ public:
 		++m_ucPushedElements;
 #endif
 	}
+	inline void PassReservedPointer(int8_t p_cIndex)
+	{
+#if defined(BIA_ARCHITECTURE_MG32)
+		BiaArchitecture::Operation8<OP_CODE::PUSH, REGISTER::ESP>(m_output, static_cast<uint8_t>(p_cIndex));
+#endif
+	}
 	inline void RestoreLocation(std::pair<uint8_t, long long> p_location)
 	{
 		m_ucPushedElements = p_location.first;
@@ -81,7 +87,7 @@ public:
 #if defined(BIA_ARCHITECTURE_MG32)
 		if (p_ucElements && p_ucElements <= m_ucPushedElements)
 		{
-			BiaArchitecture::Operation8<OP_CODE::ADD>(m_output, p_ucElements * 4, REGISTER::ESP);
+			BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(m_output, p_ucElements * 4);
 
 			m_ucPushedElements -= p_ucElements;
 		}
@@ -92,7 +98,7 @@ public:
 #if defined(BIA_ARCHITECTURE_MG32)
 		if (m_ucPushedElements)
 		{
-			BiaArchitecture::Operation8<OP_CODE::ADD>(m_output, m_ucPushedElements * 4, REGISTER::ESP);
+			BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(m_output, m_ucPushedElements * 4);
 
 			m_ucPushedElements = 0;
 		}
@@ -103,18 +109,21 @@ public:
 	{
 #if defined(BIA_ARCHITECTURE_MG32)
 		//Move the address of the function into EAX
-		BiaArchitecture::Operation32<OP_CODE::MOVE>(m_output, reinterpret_cast<uint32_t>(p_pAddress), REGISTER::EAX);
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(p_pAddress));
 
 		//Call EAX
-		BiaArchitecture::Operation<OP_CODE::CALL>(m_output, REGISTER::EAX);
+		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
 
 		//Pop parameter
-		if (_AUTO_POP && m_ucPushedElements)
-		{
-			BiaArchitecture::Operation8<OP_CODE::ADD>(m_output, m_ucPushedElements * 4, REGISTER::ESP);
-
-			m_ucPushedElements = 0;
-		}
+		if (_AUTO_POP)
+			PopAll();
+#endif
+	}
+	inline void ReserveAndPassPointers(uint8_t p_ucCount)
+	{
+#if defined(BIA_ARCHITECTURE_MG32)
+		BiaArchitecture::Operation8<OP_CODE::SUBTRACT, REGISTER::ESP>(m_output, p_ucCount);
+		BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::ESP>(m_output);
 #endif
 	}
 	inline uint8_t GetPushedElements()

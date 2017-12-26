@@ -4,6 +4,7 @@
 #include <type_traits>
 
 #include "biaMember.hpp"
+#include "biaException.hpp"
 
 
 namespace bia
@@ -68,7 +69,7 @@ struct OperationResult<_LEFT, float, typename std::enable_if<Negation<std::is_sa
 template<typename _LEFT, typename _RIGHT>
 inline typename OperationResult<_LEFT, _RIGHT>::type ConstantOperationBasic(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
 {
-	using namespace bia::api::framework;
+	using namespace framework;
 
 	switch (p_unOperator)
 	{
@@ -85,14 +86,14 @@ inline typename OperationResult<_LEFT, _RIGHT>::type ConstantOperationBasic(_LEF
 	case BiaMember::O_ASSIGN_MULTIPLY:
 		return p_left * p_right;
 	default:
-		throw 1;
+		throw exception::OperatorException("Invalid operation on native type.");
 	}
 }
 
 template<typename _LEFT, typename _RIGHT>
 inline typename OperationResult<_LEFT, _RIGHT>::type ConstantOperationIntegral(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
 {
-	using namespace bia::api::framework;
+	using namespace framework;
 
 	switch (p_unOperator)
 	{

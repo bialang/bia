@@ -8,8 +8,6 @@
 
 namespace bia
 {
-namespace api
-{
 namespace framework
 {
 
@@ -30,6 +28,5 @@ private:
 	int64_t m_llValue;
 };
 
-}
 }
 }

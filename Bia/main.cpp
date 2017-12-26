@@ -8,7 +8,6 @@ int main()
 {
 	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context;
-	
 	char script[] = R"(
 var i = 65*65+5*8;
 	print i*8.;

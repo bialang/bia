@@ -22,16 +22,24 @@ namespace link
  * s	= zero-terminated string pointer
 */
 
-inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_MM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, api::framework::BiaMember * p_pLeft)
-{
-	puts("operatio");
-	return nullptr;
-}
-inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_iM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, int32_t p_nLeft)
-{
-	puts("operatio1");
-	return nullptr;
-}
+/**
+ * Calls the given operator on the left operand.
+ *
+ * @since	3.43.95.574
+ * @date	26-Dec-17
+ *
+ * @param	p_unOperator	Defines the operator to call.
+ * @param	[in]	p_pRight	Defines the right member operand.
+ * @param	[in]	p_pLeft	Defines the left member operand.
+ * @param	[in]	p_pDestination	Defines the destination of the result.
+ *
+ * @throws	exception::OperatorException	Thrown when the call operator is unspecified.
+ *
+ * @return	The destination address.
+*/
+BIA_INSTRUCTION_CALLING_CONVETION(void*, OperatorCall_MM(uint32_t p_unOperator, framework::BiaMember * p_pRight, framework::BiaMember * p_pLeft, void * p_pDestination));
+/*
+BIA_INSTRUCTION_CALLING_CONVETION(void*, OperatorCall_iM(uint32_t p_unOperator, framework::BiaMember * p_pRight, int32_t p_nLeft, void * p_pDestination));
 inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_IM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, int64_t p_llLeft)
 {
 	puts("operatio2");
@@ -52,11 +60,24 @@ inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_sM
 	puts("operatio5");
 	return nullptr;
 }
-inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_Mi(uint32_t p_unOperator, int32_t p_nRight, api::framework::BiaMember * p_pLeft)
-{
-	puts("operatio6");
-	return nullptr;
-}
+*/
+/**
+ * Calls the given operator on the left operand.
+ *
+ * @since	3.43.95.574
+ * @date	26-Dec-17
+ *
+ * @param	p_unOperator	Defines the operator to call.
+ * @param	[in]	p_pRight	Defines the right native int operand.
+ * @param	[in]	p_pLeft	Defines the left member operand.
+ * @param	[in]	p_pDestination	Defines the destination of the result.
+ *
+ * @throws	exception::OperatorException	Thrown when the call operator is unspecified.
+ *
+ * @return	The destination address.
+*/
+BIA_INSTRUCTION_CALLING_CONVETION(void*, OperatorCall_Mi(uint32_t p_unOperator, int32_t p_nRight, framework::BiaMember * p_pLeft, void * p_pDestination));
+/*
 inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_MI(uint32_t p_unOperator, int64_t p_llRight, api::framework::BiaMember * p_pLeft)
 {
 	puts("operatio7");
@@ -77,7 +98,7 @@ inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_Ms
 	puts("operatio10");
 	return nullptr;
 }
-
+*/
 }
 }
 }
