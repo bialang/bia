@@ -55,7 +55,8 @@ framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 
 framework::BiaMember * BiaMachineContext::TemporaryAddress(uint32_t p_unIndex)
 {
-	return m_temporaryStorage.GetSpace(p_unIndex);
+	return nullptr;
+	//return m_temporaryStorage.GetSpace(p_unIndex);
 }
 
 }

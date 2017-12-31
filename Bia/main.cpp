@@ -1,20 +1,28 @@
 #include "biaMachineCode.hpp"
 #include "biaOutputStreamBuffer.hpp"
+#include "biaToolset.hpp"
 
-#include "biaGrammar.hpp"
-#include "biaCompiler.hpp"
+//#include "biaGrammar.hpp"
+//#include "biaCompiler.hpp"
+
+void hi(int val, int a)
+{
+	printf("say hi to val %i\n", val);
+}
 
 int main()
 {
 	bia::stream::BiaOutputStreamBuffer buf;
-	bia::machine::BiaMachineContext context;
+	//bia::machine::BiaMachineContext context;
 	char script[] = R"(
 var i = 65*65+5*8;
 	print i*8.;
 )";
-	
-
-	try
+	{
+		bia::machine::architecture::BiaToolset toolset(buf);
+		toolset.SafeCall(&hi, 34, 5);
+	}
+	/*try
 	{
 		bia::compiler::BiaCompiler compiler(buf, context);
 
@@ -28,8 +36,8 @@ var i = 65*65+5*8;
 
 		return 1;
 	}
-
-	printf("address: %p\n", &context);
+	*/
+	//printf("address: %p\n", &context);
 
 	bia::machine::BiaMachineCode code(buf.GetBuffer());
 

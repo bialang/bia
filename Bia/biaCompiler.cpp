@@ -11,7 +11,7 @@ namespace compiler
 
 const void * const BiaCompiler::m_scpOperatorFunctions[][11] = {
 	{ 
-		&machine::link::Operator_iM, 
+		/*&machine::link::Operator_iM, 
 		&machine::link::Operator_IM, 
 		&machine::link::Operator_fM, 
 		&machine::link::Operator_dM, 
@@ -21,7 +21,7 @@ const void * const BiaCompiler::m_scpOperatorFunctions[][11] = {
 		&machine::link::Operator_MI, 
 		&machine::link::Operator_Mf, 
 		&machine::link::Operator_Md, 
-		&machine::link::Operator_Ms 
+		&machine::link::Operator_Ms */
 	}
 };
 
@@ -131,16 +131,17 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 	}
 }
 
-const void * BiaCompiler::HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, uint32_t p_unOperator)
+void BiaCompiler::HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, uint32_t p_unOperator)
 {
 	switch (p_unOperator)
 	{
 	default:
-		m_toolset.Push(p_unOperator);
+		//m_toolset.Push(p_unOperator);
 
 		m_valueType = VALUE_TYPE::MEMBER;
 
-		return m_scpOperatorFunctions[0][static_cast<int>(p_left) + (static_cast<int>(p_right) + 1) % (static_cast<int>(VALUE_TYPE::MEMBER) + 1)];
+		m_scpOperatorFunctions[0][static_cast<int>(p_left) + (static_cast<int>(p_right) + 1) % (static_cast<int>(VALUE_TYPE::MEMBER) + 1)];
+
 	}
 }
 
@@ -188,19 +189,19 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 		switch (m_value.nInt)
 		{
 		case 0:
-			m_toolset.Call(&machine::link::InstantiateInt0, pVariable);
+			m_toolset.SafeCall(&machine::link::InstantiateInt0, pVariable);
 
 			break;
 		case 1:
-			m_toolset.Call(&machine::link::InstantiateIntP1, pVariable);
+			m_toolset.SafeCall(&machine::link::InstantiateIntP1, pVariable);
 
 			break;
 		case -1:
-			m_toolset.Call(&machine::link::InstantiateIntN1, pVariable);
+			m_toolset.SafeCall(&machine::link::InstantiateIntN1, pVariable);
 
 			break;
 		default:
-			m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
+			//m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
 
 			break;
 		}
@@ -208,15 +209,15 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 		break;
 	}
 	case VALUE_TYPE::INT_64:
-		m_toolset.Call(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
+		//m_toolset.Call(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
 
 		break;
 	case VALUE_TYPE::FLOAT:
-		m_toolset.Call(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
+		//m_toolset.Call(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
 
 		break;
 	case VALUE_TYPE::DOUBLE:
-		m_toolset.Call(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
+		//m_toolset.Call(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
 
 		break;
 	default:
@@ -228,10 +229,8 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 
 const grammar::Report * BiaCompiler::HandleValue(grammar::report_range p_reports)
 {
-	//PrintStraight("vv>", p_reports);
-
 	//Push temporary size
-	m_toolset.ReserveAndPassPointers(0);
+	auto llPosition = m_toolset.ReserveTemporyMembers();
 
 	//Handle first expression
 	p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
@@ -365,23 +364,23 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 	switch (m_valueType)
 	{
 	case VALUE_TYPE::INT_32:
-		m_toolset.Call(&machine::link::Print_i, m_value.nInt);
+		m_toolset.SafeCall(&machine::link::Print_i, m_value.nInt);
 
 		break;
 	case VALUE_TYPE::INT_64:
-		m_toolset.Call(&machine::link::Print_I, m_value.llInt);
+		m_toolset.SafeCall(&machine::link::Print_I, m_value.llInt);
 
 		break;
 	case VALUE_TYPE::FLOAT:
-		m_toolset.Call(&machine::link::Print_f, m_value.rFloat);
+		m_toolset.SafeCall(&machine::link::Print_f, m_value.rFloat);
 
 		break;
 	case VALUE_TYPE::DOUBLE:
-		m_toolset.Call(&machine::link::Print_d, m_value.rDouble);
+		m_toolset.SafeCall(&machine::link::Print_d, m_value.rDouble);
 
 		break;
 	case VALUE_TYPE::MEMBER:
-		m_toolset.Call(&machine::link::Print_M, m_value.pMember);
+		m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
 
 		break;
 	default:

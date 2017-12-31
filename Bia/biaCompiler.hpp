@@ -51,6 +51,7 @@ private:
 		DOUBLE,
 		STRING,
 		MEMBER,
+		REGISTER,
 		NONE,
 	};
 
@@ -62,6 +63,7 @@ private:
 		double rDouble;
 		size_t iString;
 		framework::BiaMember * pMember;
+		machine::architecture::REGISTER _register;
 	};
 
 	machine::architecture::BiaToolset m_toolset;
@@ -76,25 +78,25 @@ private:
 
 	inline void SetValue(int32_t p_nValue)
 	{
-		m_toolset.Push(p_nValue);
+		//m_toolset.Push(p_nValue);
 		m_valueType = VALUE_TYPE::INT_32;
 		m_value.nInt = p_nValue;
 	}
 	inline void SetValue(int64_t p_llValue)
 	{
-		m_toolset.Push(p_llValue);
+		//m_toolset.Push(p_llValue);
 		m_valueType = VALUE_TYPE::INT_64;
 		m_value.llInt = p_llValue;
 	}
 	inline void SetValue(float p_rValue)
 	{
-		m_toolset.Push(p_rValue);
+		//m_toolset.Push(p_rValue);
 		m_valueType = VALUE_TYPE::FLOAT;
 		m_value.rFloat = p_rValue;
 	}
 	inline void SetValue(double p_rValue)
 	{
-		m_toolset.Push(p_rValue);
+		//m_toolset.Push(p_rValue);
 		m_valueType = VALUE_TYPE::DOUBLE;
 		m_value.rDouble = p_rValue;
 	}
@@ -136,11 +138,7 @@ private:
 	}
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
-	inline static const void * GetOperatorFunction_xM(VALUE_TYPE p_right)
-	{
-
-	}
-	const void * HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, uint32_t p_unOperator);
+	void HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, uint32_t p_unOperator);
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
@@ -204,7 +202,6 @@ private:
 		else
 		{
 			//Handle leftmost math term
-			auto location = m_toolset.GetLocation();
 			const grammar::Report * i = (this->*NEXT)(p_reports.pBegin[1].content.children);
 			auto leftType = m_valueType;
 			auto leftValue = m_value;
@@ -222,16 +219,14 @@ private:
 				//Call operator
 				if (leftType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::MEMBER)
 				{
-					m_toolset.Call<false>(HandleOperator(leftType, m_valueType, unOperator));
-					m_toolset.PushResult();
+					//Handle operator
+					HandleOperator(leftType, m_valueType, unOperator);
 
 					leftType = VALUE_TYPE::MEMBER;
 				}
 				//Both operands can be optimized
 				else
 				{
-					m_toolset.RestoreLocation(location);
-
 					HandleConstantOperation(leftType, leftValue, m_valueType, m_value, unOperator);
 
 					leftType = m_valueType;

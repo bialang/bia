@@ -49,7 +49,7 @@ BiaMachineContext() : m_storage(34)
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
 	BiaStorage<16> m_storage;
-	BiaTemporaryStorage<framework::BiaMember, 16> m_temporaryStorage;
+	//BiaTemporaryStorage<framework::BiaMember, 16> m_temporaryStorage;
 
 
 	void DeleteTemporaryObjectTo(uint32_t p_unLowerIndex);

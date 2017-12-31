@@ -12,11 +12,11 @@ namespace machine
 {
 namespace link
 {
-
-BIA_INSTRUCTION_CALLING_CONVETION(void, AllocateTemporaryMembers(uint8_t p_ucCount, BiaMachineContext * p_pContext))
+	/*/
+BIA_INSTRUCTION_CALLING_CONVETION(void, AllocateTemporaryMembers(int8_t p_cCount, BiaMachineContext * p_pContext))
 {
 	
-}
+}*/
 
 }
 }
