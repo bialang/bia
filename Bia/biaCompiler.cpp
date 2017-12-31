@@ -27,7 +27,7 @@ const void * const BiaCompiler::m_scpOperatorFunctions[][11] = {
 
 void BiaCompiler::HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
 {
-	using namespace api::framework;
+	using namespace framework;
 
 	switch (p_leftType)
 	{
@@ -63,23 +63,18 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 			m_value.llInt = std::strtoll(acTmp, &pcEnd, 10);
 
 			if (acTmp == pcEnd)
-				throw exception::ArgumentException("Invalid number.");
+				throw exception::NumberException("Invalid number.");
 		}
 		else
-			throw exception::ArgumentException("Too long number.");
+			throw exception::NumberException("Too long number.");
 
 		//64-Bit number
-		if (m_value.llInt & 0xffffffff00000000ull)
-		{
-			m_toolset.Push(m_value.llInt);
-
+		if(m_value.llInt < 0xffffffff80000000ll || m_value.llInt > 0x7fffffffll)
 			m_valueType = VALUE_TYPE::INT_64;
-		}
 		//32-Bit number
 		else
 		{
-			m_toolset.Push(m_value.nInt);
-
+			m_value.nInt = static_cast<int32_t>(m_value.llInt);
 			m_valueType = VALUE_TYPE::INT_32;
 		}
 
@@ -99,12 +94,10 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 			m_value.rFloat = strtof(acTmp, &pcEnd);
 
 			if (acTmp == pcEnd)
-				throw exception::ArgumentException("Invalid number.");
+				throw exception::NumberException("Invalid number.");
 		}
 		else
-			throw exception::ArgumentException("Too long number.");
-
-		m_toolset.Push(m_value.rFloat);
+			throw exception::NumberException("Too long number.");
 
 		m_valueType = VALUE_TYPE::FLOAT;
 
@@ -124,12 +117,10 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 			m_value.rDouble = strtod(acTmp, &pcEnd);
 
 			if (acTmp == pcEnd)
-				throw exception::ArgumentException("Invalid number.");
+				throw exception::NumberException("Invalid number.");
 		}
 		else
-			throw exception::ArgumentException("Too long number.");
-
-		m_toolset.Push(m_value.rDouble);
+			throw exception::NumberException("Too long number.");
 
 		m_valueType = VALUE_TYPE::DOUBLE;
 
@@ -182,34 +173,50 @@ const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pRepor
 
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
 {
-	//Handle value
-	auto pRight = FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd);
-
-	m_valueType = VALUE_TYPE::NONE;
-
-	//Push address of variable
-	m_toolset.Push(reinterpret_cast<uintptr_t>(m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize))));
-
 	//Handle value and prepare the result for a function call
-	HandleValue(pRight->content.children);
+	HandleValue(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children);
+
+	//Get address of variable
+	auto pVariable = m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
 
 	//Make call
 	switch (m_valueType)
 	{
 	case VALUE_TYPE::INT_32:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateInt_32));
+	{
+		//Optimize common used constant values
+		switch (m_value.nInt)
+		{
+		case 0:
+			m_toolset.Call(&machine::link::InstantiateInt0, pVariable);
+
+			break;
+		case 1:
+			m_toolset.Call(&machine::link::InstantiateIntP1, pVariable);
+
+			break;
+		case -1:
+			m_toolset.Call(&machine::link::InstantiateIntN1, pVariable);
+
+			break;
+		default:
+			m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
+
+			break;
+		}
 
 		break;
+	}
 	case VALUE_TYPE::INT_64:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateInt_64));
+		m_toolset.Call(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
 
 		break;
 	case VALUE_TYPE::FLOAT:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateFloat));
+		m_toolset.Call(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
 
 		break;
 	case VALUE_TYPE::DOUBLE:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::InstantiateDouble));
+		m_toolset.Call(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
 
 		break;
 	default:
@@ -223,8 +230,13 @@ const grammar::Report * BiaCompiler::HandleValue(grammar::report_range p_reports
 {
 	//PrintStraight("vv>", p_reports);
 
+	//Push temporary size
+	m_toolset.ReserveAndPassPointers(0);
+
 	//Handle first expression
 	p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
+
+	//
 
 	//Logical operators were used
 	/*if (p_reports.pBegin < p_reports.pEnd)
@@ -305,15 +317,13 @@ const grammar::Report * BiaCompiler::HandleValueRaw(grammar::report_range p_repo
 
 		break;
 	case grammar::BV_TRUE:
-		m_toolset.Push<uint8_t>(1);
-
+		m_value.nInt = 1;
 		m_valueType = VALUE_TYPE::INT_32;
 
 		break;
 	case grammar::BV_FALSE:
 	case grammar::BV_NULL:
-		m_toolset.Push<uint8_t>(0);
-
+		m_value.nInt = 0;
 		m_valueType = VALUE_TYPE::INT_32;
 
 		break;
@@ -349,39 +359,34 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 
 const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_range p_reports)
 {
-	auto ucStart = m_toolset.GetPushedElements();
-
 	//Handle value to print
 	HandleValue(p_reports);
 
 	switch (m_valueType)
 	{
 	case VALUE_TYPE::INT_32:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_i));
+		m_toolset.Call(&machine::link::Print_i, m_value.nInt);
 
 		break;
 	case VALUE_TYPE::INT_64:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_I));
+		m_toolset.Call(&machine::link::Print_I, m_value.llInt);
 
 		break;
 	case VALUE_TYPE::FLOAT:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_f));
+		m_toolset.Call(&machine::link::Print_f, m_value.rFloat);
 
 		break;
 	case VALUE_TYPE::DOUBLE:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_d));
+		m_toolset.Call(&machine::link::Print_d, m_value.rDouble);
 
 		break;
 	case VALUE_TYPE::MEMBER:
-		m_toolset.Call(reinterpret_cast<const void*>(&machine::link::Print_M));
+		m_toolset.Call(&machine::link::Print_M, m_value.pMember);
 
 		break;
 	default:
 		BIA_COMPILER_DEV_INVALID
 	}
-
-	//Pop
-	m_toolset.Pop(m_toolset.GetPushedElements() - ucStart);
 
 	return p_reports.pEnd + 1;
 }
@@ -399,8 +404,7 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 		break;*/
 	case grammar::BM_IDENTIFIER:
-		m_toolset.Push(reinterpret_cast<uintptr_t>(m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize))));
-
+		m_value.pMember = m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
 		m_valueType = VALUE_TYPE::MEMBER;
 
 		break;

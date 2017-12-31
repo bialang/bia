@@ -61,6 +61,7 @@ private:
 		float rFloat;
 		double rDouble;
 		size_t iString;
+		framework::BiaMember * pMember;
 	};
 
 	machine::architecture::BiaToolset m_toolset;

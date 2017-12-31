@@ -39,6 +39,11 @@ struct OperatorException final : Exception
 	inline OperatorException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
 };
 
+struct NumberException final : Exception
+{
+	inline NumberException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
+};
+
 struct BadCastException final : Exception
 {
 	inline BadCastException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
