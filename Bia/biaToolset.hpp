@@ -174,7 +174,7 @@ private:
 		//BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(&machine::link::AllocateTemporaryMembers));
 
 		//Call EAX
-		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
+		//BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
 
 		//Pop parameter
 		Pop<1>();

@@ -29,6 +29,10 @@ public:
 	*/
 	virtual void OperatorSelfCall(uint32_t p_unOperator) override;
 	/**
+	 * @see	BiaMember::Clone().
+	*/
+	virtual void Clone(void * p_pDestination) override;
+	/**
 	 * @see	BiaMember::IsType().
 	*/
 	virtual bool IsType(const std::type_info & p_type) const override;

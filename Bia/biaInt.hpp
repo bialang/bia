@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <new>
 
 #include "biaMember.hpp"
 #include "biaPrint.hpp"
@@ -43,6 +44,10 @@ public:
 	virtual void OperatorSelfCall(uint32_t p_unOperator) override
 	{
 
+	}
+	virtual void Clone(void * p_pDestination) override
+	{
+		new(p_pDestination) BiaInt(m_llValue);
 	}
 	/**
 	 * @see	BiaMember::IsType().

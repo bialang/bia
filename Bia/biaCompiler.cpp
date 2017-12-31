@@ -201,7 +201,7 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 
 			break;
 		default:
-			//m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
+			m_toolset.SafeCall(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
 
 			break;
 		}
@@ -209,15 +209,19 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 		break;
 	}
 	case VALUE_TYPE::INT_64:
-		//m_toolset.Call(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
+		m_toolset.SafeCall(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
 
 		break;
 	case VALUE_TYPE::FLOAT:
-		//m_toolset.Call(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
+		m_toolset.SafeCall(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
 
 		break;
 	case VALUE_TYPE::DOUBLE:
-		//m_toolset.Call(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
+		m_toolset.SafeCall(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
+
+		break;
+	case VALUE_TYPE::MEMBER:
+		m_toolset.SafeCall(&machine::link::InstantiateCopy, pVariable, m_value.pMember);
 
 		break;
 	default:
@@ -230,12 +234,13 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 const grammar::Report * BiaCompiler::HandleValue(grammar::report_range p_reports)
 {
 	//Push temporary size
-	auto llPosition = m_toolset.ReserveTemporyMembers();
+	auto parameter = m_toolset.ReserveTemporyMembers();
 
 	//Handle first expression
 	p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
 
 	//
+	m_toolset.CommitTemporaryMembers(parameter, 0);
 
 	//Logical operators were used
 	/*if (p_reports.pBegin < p_reports.pEnd)

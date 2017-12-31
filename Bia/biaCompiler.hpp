@@ -16,6 +16,7 @@
 
 #define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
 
+
 namespace bia
 {
 namespace compiler
@@ -67,7 +68,6 @@ private:
 	};
 
 	machine::architecture::BiaToolset m_toolset;
-
 	machine::BiaMachineContext & m_context;
 
 	VALUE_TYPE m_valueType;

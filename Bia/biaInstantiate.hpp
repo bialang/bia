@@ -15,7 +15,16 @@ namespace machine
 namespace link
 {
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_32(int32_t p_nValue, framework::BiaMember * p_pMember))
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, InstantiateCopy(framework::BiaMember * p_pMember, framework::BiaMember * p_pSource))
+{
+	//Destruct old object
+	p_pMember->~BiaMember();
+
+	//Create new int object
+	p_pSource->Clone(p_pMember);
+}
+
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, InstantiateInt_32(framework::BiaMember * p_pMember, int32_t p_nValue))
 {
 	//Destruct old object
 	p_pMember->~BiaMember();
@@ -24,7 +33,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_32(int32_t p_nValue, fram
 	new(p_pMember) framework::BiaInt(p_nValue);
 }
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_64(int64_t p_llValue, framework::BiaMember * p_pMember))
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, InstantiateInt_64(framework::BiaMember * p_pMember, int64_t p_llValue))
 {
 	//Destruct old object
 	p_pMember->~BiaMember();
@@ -33,7 +42,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_64(int64_t p_llValue, fra
 	new(p_pMember) framework::BiaInt(p_llValue);
 }
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt0(framework::BiaMember * p_pMember))
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, InstantiateInt0(framework::BiaMember * p_pMember))
 {
 	//Destruct old object
 	p_pMember->~BiaMember();
@@ -42,7 +51,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt0(framework::BiaMember * p
 	new(p_pMember) framework::BiaInt(0);
 }
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntP1(framework::BiaMember * p_pMember))
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, InstantiateIntP1(framework::BiaMember * p_pMember))
 {
 	//Destruct old object
 	p_pMember->~BiaMember();
@@ -51,7 +60,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntP1(framework::BiaMember * 
 	new(p_pMember) framework::BiaInt(1);
 }
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntN1(framework::BiaMember * p_pMember))
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, InstantiateIntN1(framework::BiaMember * p_pMember))
 {
 	//Destruct old object
 	p_pMember->~BiaMember();
@@ -60,7 +69,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntN1(framework::BiaMember * 
 	new(p_pMember) framework::BiaInt(-1);
 }
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateFloat(float p_rValue, framework::BiaMember * p_pMember))
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, InstantiateFloat(framework::BiaMember * p_pMember, float p_rValue))
 {
 	//Destruct old object
 	p_pMember->~BiaMember();
@@ -69,7 +78,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateFloat(float p_rValue, framewo
 	//new(p_pMember) api::framework::BiaInt(p_nValue);
 }
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateDouble(double p_rValue, framework::BiaMember * p_pMember))
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, InstantiateDouble(framework::BiaMember * p_pMember, double p_rValue))
 {
 	//Destruct old object
 	p_pMember->~BiaMember();

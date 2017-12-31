@@ -83,6 +83,7 @@ public:
 	 * @throws	exception::OperatorException
 	*/
 	virtual void OperatorSelfCall(uint32_t p_unOperator) = 0;
+	virtual void Clone(void * p_pDestination) = 0;
 	/**
 	 * Checks whether the specified type matches this object.
 	 *
