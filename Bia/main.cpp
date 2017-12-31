@@ -62,7 +62,14 @@ print o;
 		puts("");
 	}
 	system("pause");
-	code.Execute();
 
+	try
+	{
+		code.Execute();
+	}
+	catch (const bia::exception::Exception & e)
+	{
+		e.Print();
+	}
 	system("pause");
 }

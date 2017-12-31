@@ -83,7 +83,16 @@ BiaMachineCode::~BiaMachineCode()
 
 void BiaMachineCode::Execute() const
 {
-	m_run();
+	try
+	{
+		m_run();
+	}
+	catch (...)
+	{
+		//Clean up
+
+		throw;
+	}
 }
 
 bool BiaMachineCode::IsValid()

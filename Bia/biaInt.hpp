@@ -45,6 +45,9 @@ public:
 	{
 
 	}
+	/**
+	 * @see	BiaMember::Clone().
+	*/
 	virtual void Clone(void * p_pDestination) override
 	{
 		new(p_pDestination) BiaInt(m_llValue);

@@ -63,6 +63,9 @@
     <ClCompile Include="biaOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="biaInstantiate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaConfig.hpp">

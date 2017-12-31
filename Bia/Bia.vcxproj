@@ -113,6 +113,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="biaCompiler.cpp" />
+    <ClCompile Include="biaInstantiate.cpp" />
     <ClCompile Include="biaMachineCode.cpp" />
     <ClCompile Include="biaMachineContext.cpp" />
     <ClCompile Include="biaOperator.cpp" />
