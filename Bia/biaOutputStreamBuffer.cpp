@@ -22,6 +22,13 @@ void BiaOutputStreamBuffer::SetPosition(long long p_llPosition)
 		m_iSize = static_cast<size_t>(p_llPosition);
 }
 
+void BiaOutputStreamBuffer::Move(long long p_llDestination, long long p_llSource, long long p_llSize)
+{
+	memmove(m_pucBuffer.get() + p_llDestination, m_pucBuffer.get() + p_llSource, p_llSize);
+
+	m_iSize -= p_llSource - p_llDestination;
+}
+
 long long BiaOutputStreamBuffer::GetPosition() const
 {
 	return static_cast<long long>(m_iSize);

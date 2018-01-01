@@ -44,6 +44,11 @@ struct NumberException final : Exception
 	inline NumberException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
 };
 
+struct LimitationException final : Exception
+{
+	inline LimitationException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
+};
+
 struct BadCastException final : Exception
 {
 	inline BadCastException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}

@@ -31,8 +31,22 @@ void BiaMachineContext::Run(stream::BiaInputStream & p_input)
 		pMachineCode->Execute();
 }
 
-void BiaMachineContext::DeleteTemporaryObjectTo(uint32_t p_unLowerIndex)
+void BiaMachineContext::ConstructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppDestination)
 {
+	for (int8_t i = 0; i < p_cCount; ++i)
+	{
+		p_ppDestination[i] = new(malloc(50)) framework::BiaUnknown();
+	}
+}
+
+void BiaMachineContext::DestructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppAddresses)
+{
+	for (int8_t i = 0; i < p_cCount; ++i)
+	{
+		p_ppAddresses[i]->~BiaMember();
+
+		free(p_ppAddresses[i]);
+	}
 }
 
 framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
@@ -51,12 +65,6 @@ framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 
 		return pAddress;
 	}
-}
-
-framework::BiaMember * BiaMachineContext::TemporaryAddress(uint32_t p_unIndex)
-{
-	return nullptr;
-	//return m_temporaryStorage.GetSpace(p_unIndex);
 }
 
 }

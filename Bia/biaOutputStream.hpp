@@ -29,6 +29,14 @@ public:
 	*/
 	virtual void SetPosition(long long p_llPosition) = 0;
 	/**
+	 * Moves the source to the destination cursor.
+	 *
+	 * @param	p_llDestination	Defines the destination cursor.
+	 * @param	p_llSource	Defines the source cursor.
+	 * @param	p_llSize	Defines the size of the source cursor.
+	*/
+	virtual void Move(long long p_llDestination, long long p_llSource, long long p_llSize) = 0;
+	/**
 	 * Returns the position of the cursor.
 	 *
 	 * @return	The position of the cursor.

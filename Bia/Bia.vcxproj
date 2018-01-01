@@ -139,7 +139,6 @@
     <ClInclude Include="biaLink.hpp" />
     <ClInclude Include="biaMachineCode.hpp" />
     <ClInclude Include="biaMachineContext.hpp" />
-    <ClInclude Include="biaManagement.hpp" />
     <ClInclude Include="biaMember.hpp" />
     <ClInclude Include="biaOperator.hpp" />
     <ClInclude Include="biaOutputStream.hpp" />
@@ -147,6 +146,7 @@
     <ClInclude Include="biaPrint.hpp" />
     <ClInclude Include="biaReportBundle.hpp" />
     <ClInclude Include="biaStorage.hpp" />
+    <ClInclude Include="biaTempCounter.hpp" />
     <ClInclude Include="biaTemporaryStorage.hpp" />
     <ClInclude Include="biaToolset.hpp" />
     <ClInclude Include="biaArchitecture.hpp" />

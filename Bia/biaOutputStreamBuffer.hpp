@@ -21,15 +21,19 @@ public:
 	BiaOutputStreamBuffer(size_t p_iReserve = 0);
 
 	/**
-	 * @see	bia::stream::BiaOutputStream::SetPosition().
+	 * @see	BiaOutputStream::SetPosition().
 	*/
 	virtual void SetPosition(long long p_llPosition) override;
 	/**
-	 * @see	bia::stream::BiaOutputStream::GetPosition().
+	 * @see	BiaOutputStream::Move().
+	*/
+	virtual void Move(long long p_llDestination, long long p_llSource, long long p_llSize) override;
+	/**
+	 * @see	BiaOutputStream::GetPosition().
 	*/
 	virtual long long GetPosition() const override;
 	/**
-	 * @see	bia::stream::BiaOutputStream::GetBuffer().
+	 * @see	BiaOutputStream::GetBuffer().
 	*/
 	virtual std::pair<const uint8_t*, size_t> GetBuffer() const override;
 

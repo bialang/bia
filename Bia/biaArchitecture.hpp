@@ -46,13 +46,25 @@ inline uint32_t operator "" _32(unsigned long long p_ullValue)
 	return static_cast<uint32_t>(p_ullValue);
 }
 
+template<REGISTER _REGISTER, typename _OFFSET>
+struct RegisterOffset
+{
+	_OFFSET offset;
+
+	inline RegisterOffset(_OFFSET p_offset)
+	{
+		offset = p_offset;
+	}
+};
+
+template<REGISTER _REGISTER>
+struct RegisterOffset<_REGISTER, void>
+{
+};
+
 class BiaArchitecture
 {
 public:
-	inline static void PushRegister(stream::BiaOutputStream & p_output, REGISTER p_register)
-	{
-		p_output.WriteAll(static_cast<uint8_t>(0x50 | Register(p_register)));
-	}
 	template<OP_CODE _OP_CODE>
 	inline static void Operation(stream::BiaOutputStream & p_output)
 	{
@@ -74,9 +86,9 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
-			return p_output.WriteAll(static_cast<uint8_t>(0x50 | Register(_REGISTER)));
+			return p_output.WriteAll(static_cast<uint8_t>(0x50 | Register<_REGISTER>()));
 		case OP_CODE::CALL:
-			return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0320 | Register(_REGISTER)));
+			return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0320 | Register<_REGISTER>()));
 		}
 	}
 	template<OP_CODE _OP_CODE, REGISTER _DESTINATION, REGISTER _SOURCE>
@@ -87,7 +99,7 @@ public:
 		switch (_OP_CODE)
 		{
 		case OP_CODE::MOVE:
-			return p_output.WriteAll(0x89_8, static_cast<uint8_t>(0300 | Register(_SOURCE) << 3 | Register(_DESTINATION)));
+			return p_output.WriteAll(0x89_8, static_cast<uint8_t>(0300 | Register<_SOURCE>() << 3 | Register<_DESTINATION>()));
 		}
 	}
 	template<OP_CODE _OP_CODE>
@@ -115,19 +127,21 @@ public:
 	template<OP_CODE _OP_CODE, REGISTER _REGISTER>
 	inline static void Operation32(stream::BiaOutputStream & p_output, int32_t p_nConstant)
 	{
-		static_assert(_OP_CODE == OP_CODE::MOVE || _OP_CODE == OP_CODE::ADD || _OP_CODE == OP_CODE::SUBTRACT, "This opcode is not supported.");
+		static_assert(_OP_CODE == OP_CODE::PUSH || _OP_CODE == OP_CODE::MOVE || _OP_CODE == OP_CODE::ADD || _OP_CODE == OP_CODE::SUBTRACT, "This opcode is not supported.");
 
 		switch (_OP_CODE)
 		{
+		case OP_CODE::PUSH:
+			return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0260 | Register<_REGISTER>()), static_cast<uint32_t>(p_nConstant));
 		case OP_CODE::MOVE:
-			return p_output.WriteAll(static_cast<uint8_t>(0xb8 | Register(_REGISTER)), static_cast<uint32_t>(p_nConstant));
+			return p_output.WriteAll(static_cast<uint8_t>(0xb8 | Register<_REGISTER>()), static_cast<uint32_t>(p_nConstant));
 		case OP_CODE::ADD:
 		{
 			//Special opcode for EAX
 			if (_REGISTER == REGISTER::EAX)
 				return p_output.WriteAll(0x05_8, static_cast<uint32_t>(p_nConstant));
 			else
-				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0300 | Register(_REGISTER)), static_cast<uint32_t>(p_nConstant));
+				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0300 | Register<_REGISTER>()), static_cast<uint32_t>(p_nConstant));
 		}
 		case OP_CODE::SUBTRACT:
 		{
@@ -135,7 +149,7 @@ public:
 			if (_REGISTER == REGISTER::EAX)
 				return p_output.WriteAll(0x2d_8, static_cast<uint32_t>(p_nConstant));
 			else
-				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0350 | Register(_REGISTER)), static_cast<uint32_t>(p_nConstant));
+				return p_output.WriteAll(0x81_8, static_cast<uint8_t>(0350 | Register<_REGISTER>()), static_cast<uint32_t>(p_nConstant));
 		}
 		}
 	}
@@ -150,7 +164,7 @@ public:
 		{
 			//If constant displacement is 0 the push register directly, otherwise push with one byte displacement
 			if (p_cConstant == 0)
-				return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0160 | Register(_REGISTER)), static_cast<uint8_t>(p_cConstant));
+				return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0160 | Register<_REGISTER>()), static_cast<uint8_t>(p_cConstant));
 			else
 				return Operation<OP_CODE::PUSH, _REGISTER>(p_output);
 		}
@@ -160,7 +174,7 @@ public:
 			if (_REGISTER == REGISTER::EAX)
 				return p_output.WriteAll(0x04_8, static_cast<uint8_t>(p_cConstant));
 			else
-				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0300 | Register(_REGISTER)), static_cast<uint8_t>(p_cConstant));
+				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0300 | Register<_REGISTER>()), static_cast<uint8_t>(p_cConstant));
 		}
 		case OP_CODE::SUBTRACT:
 		{
@@ -168,15 +182,18 @@ public:
 			if (_REGISTER == REGISTER::EAX)
 				return p_output.WriteAll(0x2c_8, static_cast<uint8_t>(p_cConstant));
 			else
-				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0350 | Register(_REGISTER)), static_cast<uint8_t>(p_cConstant));
+				return p_output.WriteAll(0x83_8, static_cast<uint8_t>(0350 | Register<_REGISTER>()), static_cast<uint8_t>(p_cConstant));
 		}
 		}
 	}
 
 private:
-	inline constexpr static uint8_t Register(REGISTER p_register)
+	template<REGISTER _REGISTER>
+	inline constexpr static uint8_t Register()
 	{
-		switch (p_register)
+		static_assert(_REGISTER == REGISTER::EAX || _REGISTER == REGISTER::ECX || _REGISTER == REGISTER::ESP || _REGISTER == REGISTER::EBP, "This register is not supported.");
+
+		switch (_REGISTER)
 		{
 		case REGISTER::EAX:
 			return 0;

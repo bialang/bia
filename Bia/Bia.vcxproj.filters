@@ -152,11 +152,11 @@
     <ClInclude Include="biaTemporaryStorage.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
-    <ClInclude Include="biaManagement.hpp">
-      <Filter>Header Files\machine\link</Filter>
-    </ClInclude>
     <ClInclude Include="biaUnknown.hpp">
       <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="biaTempCounter.hpp">
+      <Filter>Header Files\compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -52,13 +52,37 @@ BiaMachineContext() : m_storage(34)
 	//BiaTemporaryStorage<framework::BiaMember, 16> m_temporaryStorage;
 
 
-	void DeleteTemporaryObjectTo(uint32_t p_unLowerIndex);
-	void __thiscall AllocateTemporaryAddresses(framework::BiaMember ** p_ppDestination, int8_t p_cCount)
-	{
-		printf("hi %hhi from %p\n", p_cCount, this);
-	}
+	/**
+	 * Allocates and constructs the members and stores the addresses in 2D destination array.
+	 *
+	 * @since	3.45.96.586
+	 * @date	1-Jan-18
+	 *
+	 * @param	p_cCount	Defines the count of the addresses.
+	 * @param	[in,out]	p_ppDestination	Defines the destination.
+	*/
+	void ConstructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppDestination);
+	/**
+	 * Destroys and deallocates the given addresses.
+	 *
+	 * @since	3.45.96.586
+	 * @date	1-Jan-18
+	 *
+	 * @param	p_cCount	Defines the count of the addresses.
+	 * @param	[in,out]	p_ppAddresses	Defines the addresses that should be freed.
+	*/
+	void DestructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppAddresses);
+	/**
+	 * Returns the address of the member.
+	 *
+	 * @since	3.45.96.586
+	 * @date	1-Jan-18
+	 *
+	 * @param	p_name	Defines the name of the member.
+	 *
+	 * @return	The address.
+	*/
 	framework::BiaMember * AddressOf(StringKey p_name);
-	framework::BiaMember * TemporaryAddress(uint32_t p_unIndex);
 };
 
 }
