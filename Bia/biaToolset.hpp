@@ -8,6 +8,7 @@
 #include "biaArchitecture.hpp"
 #include "biaOutputStream.hpp"
 #include "biaManagement.hpp"
+#include "biaMachineContext.hpp"
 
 
 namespace bia
@@ -17,32 +18,25 @@ namespace machine
 namespace architecture
 {
 
+#if defined(BIA_ARCHITECTURE_MG32)
 class BiaToolset
 {
 public:
-#if defined(BIA_ARCHITECTURE_MG32)
 	typedef std::pair<long long, long long> temp_members;
-#endif
-
 
 	inline BiaToolset(stream::BiaOutputStream & p_output) : m_output(p_output)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EBP>(m_output);
 		BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(m_output);
-#endif
 	}
 	inline ~BiaToolset()
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		BiaArchitecture::Operation<OP_CODE::LEAVE>(m_output);
 		BiaArchitecture::Operation<OP_CODE::RETURN_NEAR>(m_output);
-#endif
 	}	
 	template<typename _RETURN, typename... _ARGS>
 	inline void SafeCall(_RETURN(*p_pFunctionAddress)(_ARGS...), _ARGS... p_args)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		//Push all parameters
 		Pass(p_args...);
 
@@ -52,12 +46,32 @@ public:
 
 		//Pop parameter
 		Pop<sizeof...(_ARGS)>();
-#endif
 	}
-	template<typename T, typename... _ARGS, bool _POP = true>
+	template<typename _RETURN, typename _CLASS, typename... _ARGS>
+	inline void SafeCall(_RETURN(__thiscall _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS... p_args)
+	{
+		//Push all parameters
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<uint32_t>(p_pInstance));
+		Pass(p_args...);
+
+		union
+		{
+			_RETURN(_CLASS::*pMember)(_ARGS...);
+			void * pAddress;
+		} address;
+		
+		address.pMember = p_pFunctionAddress;
+
+		//Move the address of the function into EAX and call it
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(address.pAddress));
+		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
+
+		//Pop parameter
+		Pop<sizeof...(_ARGS)>();
+	}
+	template<bool _POP, typename T, typename... _ARGS>
 	inline void Call(T * p_pFunctionAddress, _ARGS... p_args)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		//Push all
 		Pass(p_args...);
 
@@ -68,28 +82,47 @@ public:
 		//Pop all
 		if (_POP)
 			Pop<sizeof...(_ARGS)>();
-#endif
 	}
-	inline void CommitTemporaryMembers(temp_members p_parameter, int8_t p_cCount)
+	template<bool _POP, typename _RETURN, typename _CLASS, typename... _ARGS, typename... _ARGS2>
+	inline void Call(_RETURN(__thiscall _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS2... p_args)
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
+		//Push all parameters
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<uint32_t>(p_pInstance));
+		Pass(p_args...);
+
+		union
+		{
+			_RETURN(_CLASS::*pMember)(_ARGS...);
+			void * pAddress;
+		} address;
+
+		address.pMember = p_pFunctionAddress;
+
+		//Move the address of the function into EAX and call it
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(address.pAddress));
+		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
+
+		//Pop all
+		if (_POP)
+			Pop<sizeof...(_ARGS)>();
+	}
+	inline void CommitTemporaryMembers(BiaMachineContext & p_context, temp_members p_parameter, int8_t p_cCount)
+	{
 		//Get position
-		auto llPosition = GetLocation();
+		auto llPosition = m_output.GetPosition();
 
 		//Ovewrite
 		m_output.SetPosition(p_parameter.second);
 
-		PrepareTemporyMembers(p_cCount);
+		PrepareTemporyMembers(p_cCount, &p_context);
 
 		m_output.SetPosition(llPosition);
 
 		//Leave
 		BiaArchitecture::Operation<OP_CODE::LEAVE>(m_output);
-#endif
 	}
 	inline temp_members ReserveTemporyMembers()
 	{
-#if defined(BIA_ARCHITECTURE_MG32)
 		temp_members tmp;
 
 		tmp.first = GetLocation();
@@ -99,10 +132,9 @@ public:
 
 		tmp.second = GetLocation();
 
-		PrepareTemporyMembers(0);
+		PrepareTemporyMembers(0, nullptr);
 
 		return tmp;
-#endif
 	}
 	inline long long GetLocation() const
 	{
@@ -113,7 +145,6 @@ private:
 	stream::BiaOutputStream & m_output;
 
 
-#if defined(BIA_ARCHITECTURE_MG32)
 	inline void Pass() {}
 	template<typename T, typename... _ARGS>
 	inline void Pass(T p_value, _ARGS... p_args)
@@ -146,6 +177,11 @@ private:
 			BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, *reinterpret_cast<uint32_t*>(&p_value));
 		}
 	}
+	template<typename T>
+	inline void Pass(T * p_pAddress)
+	{
+		BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, reinterpret_cast<uint32_t>(p_pAddress));
+	}
 	inline void Pass(REGISTER p_register)
 	{
 		BiaArchitecture::PushRegister(m_output, p_register);
@@ -161,26 +197,16 @@ private:
 				BiaArchitecture::Operation32<OP_CODE::ADD, REGISTER::ESP>(m_output, _POP * 4);
 		}
 	}
-	inline void PrepareTemporyMembers(int8_t p_cCount)
+	inline void PrepareTemporyMembers(int8_t p_cCount, BiaMachineContext * p_pContext)
 	{
 		//Create space for member pointers
 		BiaArchitecture::Operation8<OP_CODE::SUBTRACT, REGISTER::ESP>(m_output, p_cCount);
 
 		//Push count and not esp because it is already on the stack
-		Pass(p_cCount);
-
-
-		//Move the address of the function into EAX
-		//BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(&machine::link::AllocateTemporaryMembers));
-
-		//Call EAX
-		//BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
-
-		//Pop parameter
-		Pop<1>();
+		Call<true>(&BiaMachineContext::AllocateTemporaryAddresses, p_pContext, REGISTER::ESP, p_cCount);
 	}
-#endif
 };
+#endif
 
 }
 }

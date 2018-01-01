@@ -18,7 +18,7 @@ BiaOutputStreamBuffer::BiaOutputStreamBuffer(size_t p_iReserve)
 
 void BiaOutputStreamBuffer::SetPosition(long long p_llPosition)
 {
-	if (static_cast<size_t>(p_llPosition) < m_iSize)
+	if (static_cast<size_t>(p_llPosition) <= m_iLimit)
 		m_iSize = static_cast<size_t>(p_llPosition);
 }
 

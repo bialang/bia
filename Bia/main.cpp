@@ -16,15 +16,16 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-	var i = 65*5+5*8+9*46/3*5598+239488278/2+5-514;
-var o = i;
-print o;
+var o = 3+5;
+	var i = 65*o;
 )";
-	/*{
+
+	{
 		bia::machine::architecture::BiaToolset toolset(buf);
 		toolset.SafeCall(&hi, 34, 5);
-	}*/
-	try
+		toolset.SafeCall(&bia::machine::BiaMachineContext::AllocateTemporaryAddresses, &context, (bia::framework::BiaMember**)0, (int8_t)8);
+	}
+	/*try
 	{
 		bia::compiler::BiaCompiler compiler(buf, context);
 
@@ -37,7 +38,7 @@ print o;
 		system("pause");
 
 		return 1;
-	}
+	}*/
 	
 	printf("address: %p\n", &context);
 

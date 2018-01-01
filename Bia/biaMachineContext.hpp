@@ -53,6 +53,10 @@ BiaMachineContext() : m_storage(34)
 
 
 	void DeleteTemporaryObjectTo(uint32_t p_unLowerIndex);
+	void __thiscall AllocateTemporaryAddresses(framework::BiaMember ** p_ppDestination, int8_t p_cCount)
+	{
+		printf("hi %hhi from %p\n", p_cCount, this);
+	}
 	framework::BiaMember * AddressOf(StringKey p_name);
 	framework::BiaMember * TemporaryAddress(uint32_t p_unIndex);
 };

@@ -20,6 +20,7 @@ namespace architecture
 enum class REGISTER
 {
 	EAX,
+	ECX,
 	ESP,
 	EBP
 };
@@ -179,6 +180,8 @@ private:
 		{
 		case REGISTER::EAX:
 			return 0;
+		case REGISTER::ECX:
+			return 1;
 		case REGISTER::ESP:
 			return 4;
 		case REGISTER::EBP:

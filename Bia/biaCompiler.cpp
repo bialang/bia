@@ -41,7 +41,7 @@ void BiaCompiler::HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftVal
 		return HandleConstantOperation(p_leftValue.rDouble, p_rightType, p_rightValue, p_unOperator);
 	case VALUE_TYPE::STRING:
 	default:
-		break;
+		BIA_COMPILER_DEV_INVALID
 	}
 }
 
@@ -174,6 +174,9 @@ const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pRepor
 
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
 {
+	//Push temporary size
+	auto parameter = m_toolset.ReserveTemporyMembers();
+
 	//Handle value and prepare the result for a function call
 	HandleValue(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children);
 
@@ -228,19 +231,22 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 		BIA_COMPILER_DEV_INVALID
 	}
 
+	//Clean up
+	m_toolset.CommitTemporaryMembers(m_context, parameter, 0);
+
 	return p_reports.pEnd + 1;
 }
 
 const grammar::Report * BiaCompiler::HandleValue(grammar::report_range p_reports)
 {
-	//Push temporary size
-	auto parameter = m_toolset.ReserveTemporyMembers();
+	puts("value call");
+	
 
 	//Handle first expression
 	p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
 
 	//
-	m_toolset.CommitTemporaryMembers(parameter, 0);
+	
 
 	//Logical operators were used
 	/*if (p_reports.pBegin < p_reports.pEnd)
