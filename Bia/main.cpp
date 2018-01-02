@@ -16,7 +16,9 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-	var i = 65*o;
+var a = 65*5;
+var b = 10;
+	var i = a*b;
 )";
 
 	/*{

@@ -139,9 +139,8 @@ private:
 	}
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
-	void HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, uint32_t p_unOperator);
 	template<typename _LAMBDA>
-	void HandleValue(grammar::report_range p_reports, _LAMBDA && p_function)
+	inline void HandleValue(grammar::report_range p_reports, _LAMBDA && p_function)
 	{
 		//Push temporary size
 		auto parameter = m_toolset.ReserveTemporyMembers();
@@ -160,6 +159,7 @@ private:
 		else
 			m_toolset.CommitTemporaryMembers(m_context, parameter, max);
 	}
+	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator, BiaTempCounter & p_counter);
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
@@ -241,8 +241,8 @@ private:
 				if (leftType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::MEMBER)
 				{
 					//Handle operator
-					HandleOperator(leftType, m_valueType, unOperator);
-
+					HandleOperator(leftType, leftValue, m_valueType, m_value, unOperator, p_counter);
+					
 					leftType = VALUE_TYPE::MEMBER;
 				}
 				//Both operands can be optimized

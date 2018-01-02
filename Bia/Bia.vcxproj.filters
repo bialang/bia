@@ -158,6 +158,9 @@
     <ClInclude Include="biaTempCounter.hpp">
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
+    <ClInclude Include="biaAllocator.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

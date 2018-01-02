@@ -29,15 +29,15 @@ namespace link
  * @date	26-Dec-17
  *
  * @param	p_unOperator	Defines the operator to call.
- * @param	[in]	p_pRight	Defines the right member operand.
  * @param	[in]	p_pLeft	Defines the left member operand.
+ * @param	[in]	p_pRight	Defines the right member operand.
  * @param	[in]	p_pDestination	Defines the destination of the result.
  *
  * @throws	exception::OperatorException	Thrown when the call operator is unspecified.
  *
  * @return	The destination address.
 */
-BIA_INSTRUCTION_CALLING_CONVETION(void*, OperatorCall_MM(uint32_t p_unOperator, framework::BiaMember * p_pRight, framework::BiaMember * p_pLeft, void * p_pDestination));
+BIA_INSTRUCTION_CALLING_CONVETION(void*, OperatorCall_MM(uint32_t p_unOperator, framework::BiaMember * p_pLeft, framework::BiaMember * p_pRight, void * p_pDestination));
 /*
 BIA_INSTRUCTION_CALLING_CONVETION(void*, OperatorCall_iM(uint32_t p_unOperator, framework::BiaMember * p_pRight, int32_t p_nLeft, void * p_pDestination));
 inline api::framework::BiaMember * BIA_INSTRUCTION_CALLING_CONVETION Operator_IM(uint32_t p_unOperator, api::framework::BiaMember * p_pRight, int64_t p_llLeft)

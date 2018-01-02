@@ -131,18 +131,49 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 	}
 }
 
-void BiaCompiler::HandleOperator(VALUE_TYPE p_left, VALUE_TYPE p_right, uint32_t p_unOperator)
+void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator, BiaTempCounter & p_counter)
 {
-	switch (p_unOperator)
+	using namespace machine::architecture;
+
+	p_counter.Next();
+
+	switch (p_leftType)
 	{
-	default:
-		//m_toolset.Push(p_unOperator);
+	case VALUE_TYPE::MEMBER:
+		switch (p_rightType)
+		{
+		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_32:
+			break;
+		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_64:
+			break;
+		case bia::compiler::BiaCompiler::VALUE_TYPE::FLOAT:
+			break;
+		case bia::compiler::BiaCompiler::VALUE_TYPE::DOUBLE:
+			break;
+		case bia::compiler::BiaCompiler::VALUE_TYPE::STRING:
+			break;
+		case VALUE_TYPE::MEMBER:
+			m_toolset.Call<true>(&machine::link::OperatorCall_MM, p_unOperator, p_leftValue.pMember, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t>(-4));
 
-		m_valueType = VALUE_TYPE::MEMBER;
-
-		m_scpOperatorFunctions[0][static_cast<int>(p_left) + (static_cast<int>(p_right) + 1) % (static_cast<int>(VALUE_TYPE::MEMBER) + 1)];
-
+			break;
+		case bia::compiler::BiaCompiler::VALUE_TYPE::REGISTER:
+			break;
+		case bia::compiler::BiaCompiler::VALUE_TYPE::NONE:
+			break;
+		default:
+			break;
+		}
 	}
+	//switch (p_unOperator)
+	//{
+	//default:
+	//	//m_toolset.Push(p_unOperator);
+
+	//	m_valueType = VALUE_TYPE::MEMBER;
+
+	//	
+	//	m_toolset.Call(m_scpOperatorFunctions[0][static_cast<int>(p_left) + (static_cast<int>(p_right) + 1) % (static_cast<int>(VALUE_TYPE::MEMBER) + 1)], )
+	//}
 }
 
 const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pReport)
