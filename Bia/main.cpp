@@ -4,6 +4,7 @@
 
 #include "biaGrammar.hpp"
 #include "biaCompiler.hpp"
+#include "biaMachineDecoder.hpp"
 
 void hi(int val, int a)
 {
@@ -12,13 +13,21 @@ void hi(int val, int a)
 
 int main()
 {
+	uint64_t p_ullInstruction = 0x691234;
+	//Rotate instruction
+	/*for (uint8_t i = 1; i < 3; ++i)
+		p_ullInstruction = (p_ullInstruction >> 8 & 0xffffff) | p_ullInstruction << 3 * 8 - 8;
+		//p_ullInstruction = p_ullInstruction << i * 8 | (p_ullInstruction >> 3 * 8 - 8 & 0xff);
+
+	p_ullInstruction &= ~(~0ull << 3 * 8);*/
+
+	p_ullInstruction =	_byteswap_uint64(p_ullInstruction);
 	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-var a = 65*5;
-var b = 10;
-	var i = a*b;
+	var i = 6556*6546/546*46+65*65;
+	print i;
 )";
 
 	/*{
@@ -58,11 +67,18 @@ var b = 10;
 			t =0 ;
 		}
 	}
-
 	if (t != 0)
 	{
 		puts("");
 	}
+
+	puts("--BEGIN--");
+	buffer = buf.GetBuffer();
+	bia::machine::disassembler::BiaMachineDecoder decoder(context.m_index);
+	decoder.Disassemble(buffer.first, buffer.second);
+	puts("--END--");
+
+	
 	system("pause");
 
 	try

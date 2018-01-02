@@ -208,7 +208,7 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 	//Handle value and prepare the result for a function call
 	HandleValue(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children, [&] {
 		//Get address of variable
-		auto pVariable = m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+		auto pVariable = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
 
 		//Make call
 		switch (m_valueType)
@@ -439,7 +439,7 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 		break;*/
 	case grammar::BM_IDENTIFIER:
-		m_value.pMember = m_context.AddressOf(machine::BiaMachineContext::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+		m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
 		m_valueType = VALUE_TYPE::MEMBER;
 
 		break;

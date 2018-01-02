@@ -116,6 +116,7 @@
     <ClCompile Include="biaInstantiate.cpp" />
     <ClCompile Include="biaMachineCode.cpp" />
     <ClCompile Include="biaMachineContext.cpp" />
+    <ClCompile Include="biaMachineDecoder.cpp" />
     <ClCompile Include="biaOperator.cpp" />
     <ClCompile Include="biaOutputStreamBuffer.cpp" />
     <ClCompile Include="biaUnknown.cpp" />

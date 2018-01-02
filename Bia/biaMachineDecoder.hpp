@@ -24,11 +24,8 @@ class BiaMachineDecoder
 public:
 	BiaMachineDecoder(variable_index & p_index) : m_index(p_index)
 	{
-
-	}
-	void AddInstruction(std::function<uint8_t(const void*)> p_callback, uint64_t p_ullMask, uint8_t p_ucSize)
-	{
-		m_vInstructions.push_back({ p_ullMask, p_callback, p_ucSize });
+		if (m_svInstructions.empty())
+			Initialize();
 	}
 	void Disassemble(const void * p_pMachineCode, size_t p_iSize)
 	{
@@ -37,21 +34,21 @@ public:
 		while (p_iSize)
 		{
 			//Check all instruction
-			for (auto & instruction : m_vInstructions)
+			for (auto & instruction : m_svInstructions)
 			{
 				if (instruction.ucSize <= p_iSize)
 				{
 					uint64_t ullCode = 0;
 
-					memcpy(&ullCode, pBuffer, std::min<size_t>(instruction.ucSize, 8));
+					memcpy(&ullCode, pBuffer, std::min<uint8_t>(8, instruction.ucSize));
 
 					//This it the instruction
-					if ((ullCode & instruction.ullMask) == instruction.ullMask)
+					if ((ullCode & instruction.ullMask) == instruction.ullInstruction)
 					{
-						auto ucOffset = instruction.callback(pBuffer);
+						instruction.callback(this, pBuffer);
 
-						pBuffer += ucOffset;
-						p_iSize -= ucOffset;
+						pBuffer += instruction.ucSize;
+						p_iSize -= instruction.ucSize;
 
 						goto gt_continue;
 					}
@@ -65,7 +62,7 @@ public:
 		gt_continue:;
 		}
 	}
-	const char * GetVariableName(variable_index::mapped_type p_value)
+	const char * GetVariableName(const framework::BiaMember * p_value)
 	{
 		for (auto & element : m_index)
 		{
@@ -78,13 +75,21 @@ public:
 private:
 	struct Instruction
 	{
+		uint64_t ullInstruction;
 		uint64_t ullMask;
-		std::function<uint8_t(const void*)> callback;
+		std::function<void(BiaMachineDecoder*, const uint8_t*)> callback;
 		uint8_t ucSize;
 	};
 
 	variable_index & m_index;
-	std::vector<Instruction> m_vInstructions;
+	static std::vector<Instruction> m_svInstructions;
+
+
+	static void Initialize();
+	static void AddInstruction(uint64_t p_ullInstruction, uint8_t p_ucFirstBitCount, uint8_t p_ucInstructionSize, std::function<void(BiaMachineDecoder*, const uint8_t*)> p_callback)
+	{
+		m_svInstructions.push_back({ _byteswap_uint64(p_ullInstruction) >> (8 - p_ucInstructionSize) * 8, ~(~0ull << (p_ucFirstBitCount & 0xf8)) | (0xff00ull >> (p_ucFirstBitCount & 0x7) & 0xff) << (p_ucFirstBitCount & 0xf8), p_callback, p_ucInstructionSize });
+	}
 };
 
 }
