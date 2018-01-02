@@ -126,6 +126,7 @@
     <ClInclude Include="biaCompiler.hpp" />
     <ClInclude Include="biaConfig.hpp" />
     <ClInclude Include="biaConstantOperation.hpp" />
+    <ClInclude Include="biaDisassembler.hpp" />
     <ClInclude Include="biaException.hpp" />
     <ClInclude Include="biaGrammar.hpp" />
     <ClInclude Include="biaHasher.hpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="biaLink.hpp" />
     <ClInclude Include="biaMachineCode.hpp" />
     <ClInclude Include="biaMachineContext.hpp" />
+    <ClInclude Include="biaMachineDecoder.hpp" />
     <ClInclude Include="biaMember.hpp" />
     <ClInclude Include="biaOperator.hpp" />
     <ClInclude Include="biaOutputStream.hpp" />
@@ -152,6 +154,7 @@
     <ClInclude Include="biaToolset.hpp" />
     <ClInclude Include="biaArchitecture.hpp" />
     <ClInclude Include="biaUnknown.hpp" />
+    <ClInclude Include="biaVariableHandler.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

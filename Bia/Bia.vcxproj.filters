@@ -40,6 +40,9 @@
     <Filter Include="Header Files\framework">
       <UniqueIdentifier>{ae480377-60c3-4183-ac29-fc29231c764f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\machine\disassembler">
+      <UniqueIdentifier>{2c50b938-5c4b-4bdd-bf5e-2d500407e81f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -159,6 +162,15 @@
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
     <ClInclude Include="biaAllocator.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="biaDisassembler.hpp">
+      <Filter>Header Files\machine\disassembler</Filter>
+    </ClInclude>
+    <ClInclude Include="biaMachineDecoder.hpp">
+      <Filter>Header Files\machine\disassembler</Filter>
+    </ClInclude>
+    <ClInclude Include="biaVariableHandler.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
   </ItemGroup>

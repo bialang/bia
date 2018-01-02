@@ -10,6 +10,7 @@
 #include "biaTemporaryStorage.hpp"
 #include "biaMachineCode.hpp"
 #include "biaInputStream.hpp"
+#include "biaVariableHandler.hpp"
 
 
 namespace bia
@@ -30,7 +31,6 @@ BiaMachineContext() : m_storage(34)
 //private:
 	//friend BiaCompiler;
 
-	typedef std::string StringKey;
 	/*struct StringKey
 	{
 		inline StringKey(std::string p_stString) : stKey(std::move(p_stString))
@@ -45,7 +45,7 @@ BiaMachineContext() : m_storage(34)
 		std::string stKey;
 	};*/
 
-	std::unordered_map<StringKey, framework::BiaMember*> m_index;	/**	Stores all pointers to the known variables.	*/
+	variable_index m_index;	/**	Stores all pointers to the known variables.	*/
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
 	BiaStorage<16> m_storage;
