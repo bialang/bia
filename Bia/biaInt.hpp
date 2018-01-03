@@ -60,7 +60,7 @@ public:
 		return false;
 	}
 
-private:
+//private:
 	int64_t m_llValue;
 };
 

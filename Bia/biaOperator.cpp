@@ -14,11 +14,12 @@ BIA_INSTRUCTION_CALLING_CONVETION(void*, OperatorCall_MM(uint32_t p_unOperator, 
 	printf("Destination: %p\n", p_pDestination);
 
 	//Destruct destination if it was not already
-	//static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
+	static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
 	
 	//Call operator
 	//p_pLeft->OperatorCall(p_unOperator, p_pRight, p_pDestination);
-	
+	new(p_pDestination) framework::BiaInt(static_cast<framework::BiaInt*>(p_pLeft)->m_llValue * static_cast<framework::BiaInt*>(p_pRight)->m_llValue);
+
 	return p_pDestination;
 }
 

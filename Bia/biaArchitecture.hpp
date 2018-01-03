@@ -180,10 +180,10 @@ public:
 		case OP_CODE::PUSH:
 		{
 			//If constant displacement is 0 the push register directly, otherwise push with one byte displacement
-			if (p_cConstant == 0)
-				return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0160 | Register<_REGISTER>()), static_cast<uint8_t>(p_cConstant));
-			else
+			if (!p_cConstant)
 				return Operation<OP_CODE::PUSH, _REGISTER>(p_output);
+			else
+				return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0160 | Register<_REGISTER>()), static_cast<uint8_t>(p_cConstant));
 		}
 		case OP_CODE::ADD:
 		{

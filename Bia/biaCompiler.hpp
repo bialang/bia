@@ -53,7 +53,7 @@ private:
 		DOUBLE,
 		STRING,
 		MEMBER,
-		REGISTER,
+		RESULT,
 		NONE,
 	};
 
@@ -65,7 +65,6 @@ private:
 		double rDouble;
 		size_t iString;
 		framework::BiaMember * pMember;
-		machine::architecture::REGISTER _register;
 	};
 
 	machine::architecture::BiaToolset m_toolset;
@@ -147,12 +146,12 @@ private:
 		BiaTempCounter counter;
 
 		//Handle value and prepare the result for a function call
-		/*HandleValue(p_reports, counter);
+		HandleValue(p_reports, counter);
 
-		p_function();*/
+		p_function();
 
 		//Clean up
-		auto max = counter.Max()+1;
+		auto max = counter.Max();
 
 		if (max == 0)
 			m_toolset.DiscardTemporaryMembers(parameter);
@@ -243,7 +242,7 @@ private:
 					//Handle operator
 					HandleOperator(leftType, leftValue, m_valueType, m_value, unOperator, p_counter);
 					
-					leftType = VALUE_TYPE::MEMBER;
+					leftType = VALUE_TYPE::RESULT;
 				}
 				//Both operands can be optimized
 				else
@@ -254,6 +253,9 @@ private:
 					leftValue = m_value;
 				}
 			} while (i < p_reports.pEnd);
+
+			m_valueType = leftType;
+			m_value = leftValue;
 		}
 
 		return p_reports.pEnd + 1;

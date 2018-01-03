@@ -26,7 +26,8 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-	var i = 6556*6546/546*46+65*65;
+	var i = 2*2*2;
+print i*i;
 )";
 
 	/*{
@@ -87,6 +88,14 @@ int main()
 	catch (const bia::exception::Exception & e)
 	{
 		e.Print();
+	}
+	catch (const std::exception & e)
+	{
+		puts(e.what());
+	}
+	catch (...)
+	{
+		puts("Something was thrown");
 	}
 	system("pause");
 }

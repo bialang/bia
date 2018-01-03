@@ -153,10 +153,10 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		case bia::compiler::BiaCompiler::VALUE_TYPE::STRING:
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call<true>(&machine::link::OperatorCall_MM, p_unOperator, p_leftValue.pMember, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, true>(-4));
+			m_toolset.Call<true>(&machine::link::OperatorCall_MM, p_unOperator, p_leftValue.pMember, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, false>(-4));
 
 			break;
-		case bia::compiler::BiaCompiler::VALUE_TYPE::REGISTER:
+		case bia::compiler::BiaCompiler::VALUE_TYPE::RESULT:
 			break;
 		case bia::compiler::BiaCompiler::VALUE_TYPE::NONE:
 			break;
@@ -416,6 +416,10 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 			break;
 		case VALUE_TYPE::MEMBER:
 			m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
+
+			break;
+		case VALUE_TYPE::RESULT:
+			m_toolset.Call<true>(&machine::link::Print_M, machine::architecture::RegisterOffset<machine::architecture::REGISTER::EAX, void, false>());
 
 			break;
 		default:
