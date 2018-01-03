@@ -22,8 +22,10 @@ namespace disassembler
 class BiaMachineDecoder
 {
 public:
-	BiaMachineDecoder(variable_index & p_index) : m_index(p_index)
+	BiaMachineDecoder(const void * p_pMachineContextAddress, variable_index & p_index) : m_index(p_index)
 	{
+		m_pMachineContextAddress = p_pMachineContextAddress;
+
 		if (m_svInstructions.empty())
 			Initialize();
 	}
@@ -62,11 +64,19 @@ public:
 		gt_continue:;
 		}
 	}
-	const char * GetVariableName(const framework::BiaMember * p_value)
+	const char * GetVariableName(const void * p_pAddress)
 	{
+		if (p_pAddress == m_pMachineContextAddress)
+			return "this";
+
+		auto pResult = m_sFunctions.find(p_pAddress);
+
+		if (pResult != m_sFunctions.end())
+			return pResult->second.c_str();
+
 		for (auto & element : m_index)
 		{
-			if (element.second == p_value)
+			if (element.second == p_pAddress)
 				return element.first.data();
 		}
 
@@ -81,8 +91,11 @@ private:
 		uint8_t ucSize;
 	};
 
+	const void * m_pMachineContextAddress;
 	variable_index & m_index;
+
 	static std::vector<Instruction> m_svInstructions;
+	static std::map<const void*, std::string> m_sFunctions;
 
 
 	static void Initialize();
