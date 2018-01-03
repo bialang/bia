@@ -37,8 +37,8 @@ void BiaMachineContext::ConstructTemporaryAddresses(int8_t p_cCount, framework::
 
 	for (int8_t i = 0; i < p_cCount; ++i)
 	{
-		p_ppDestination[i] = new(malloc(50)) framework::BiaUnknown();
-
+		//p_ppDestination[i] = new(malloc(50)) framework::BiaUnknown();
+		p_ppDestination[i] = reinterpret_cast<framework::BiaMember*>(0x123456);
 		printf("Allocated: %p\n", p_ppDestination[i]);
 	}
 

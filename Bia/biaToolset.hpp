@@ -58,8 +58,8 @@ public:
 	inline void SafeCall(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS... p_args)
 	{
 		//Push all parameters
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<uint32_t>(p_pInstance));
 		Pass(p_args...);
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<uint32_t>(p_pInstance));
 
 		union
 		{
@@ -94,8 +94,8 @@ public:
 	inline void Call(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS2... p_args)
 	{
 		//Push all parameters
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<uint32_t>(p_pInstance));
 		Pass(p_args...);
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<uint32_t>(p_pInstance));
 
 		union
 		{
@@ -126,9 +126,12 @@ public:
 		m_output.SetPosition(llPosition);
 
 		//Destruct
-		Call<true>(&BiaMachineContext::DestructTemporaryAddresses, &p_context, p_cCount, RegisterOffset<REGISTER::EBP, int32_t, true>(p_cCount * -4));
+#if defined(BIA_COMPILER_MSCV)
+		Call<false>(&BiaMachineContext::DestructTemporaryAddresses, &p_context, p_cCount, RegisterOffset<REGISTER::EBP, int8_t, true>(p_cCount * -4));
+#endif
 
 		//Leave
+		BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(m_output, static_cast<int8_t>(p_cCount * 4));
 		BiaArchitecture::Operation<OP_CODE::LEAVE>(m_output);
 	}
 	inline void DiscardTemporaryMembers(temp_members p_parameter)
@@ -251,10 +254,12 @@ private:
 	inline void PrepareTemporyMembers(int8_t p_cCount, BiaMachineContext * p_pContext)
 	{
 		//Create space for member pointers; add because -128 is better than 127
-		BiaArchitecture::Operation8<OP_CODE::SUBTRACT, REGISTER::ESP>(m_output, p_cCount * 4);
+		BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(m_output, p_cCount * -4);
 
 		//Push count and not esp because it is already on the stack
-		Call<true>(&BiaMachineContext::ConstructTemporaryAddresses, p_pContext, p_cCount, RegisterOffset<REGISTER::EBP, int32_t, true>(p_cCount * -4));
+#if defined(BIA_COMPILER_MSCV)
+		Call<false>(&BiaMachineContext::ConstructTemporaryAddresses, p_pContext, p_cCount, RegisterOffset<REGISTER::EBP, int8_t, true>(p_cCount * -4));
+#endif
 	}
 };
 #endif

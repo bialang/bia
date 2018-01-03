@@ -27,7 +27,6 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 	var i = 6556*6546/546*46+65*65;
-	print i*i;
 )";
 
 	/*{
