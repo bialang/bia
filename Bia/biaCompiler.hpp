@@ -147,12 +147,12 @@ private:
 		BiaTempCounter counter;
 
 		//Handle value and prepare the result for a function call
-		HandleValue(p_reports, counter);
+		/*HandleValue(p_reports, counter);
 
-		p_function();
+		p_function();*/
 
 		//Clean up
-		auto max = counter.Max();
+		auto max = counter.Max()+1;
 
 		if (max == 0)
 			m_toolset.DiscardTemporaryMembers(parameter);

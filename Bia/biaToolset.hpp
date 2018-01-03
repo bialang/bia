@@ -33,7 +33,7 @@ public:
 	{
 		//Create new stack frame for this entry point
 		BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EBP>(m_output);
-		BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(m_output);
+		BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(m_output, 0);
 	}
 	inline ~BiaToolset()
 	{
@@ -126,7 +126,7 @@ public:
 		m_output.SetPosition(llPosition);
 
 		//Destruct
-		Call<true>(&BiaMachineContext::DestructTemporaryAddresses, &p_context, p_cCount, RegisterOffset<REGISTER::EBP, int32_t>(p_cCount * -4));
+		Call<true>(&BiaMachineContext::DestructTemporaryAddresses, &p_context, p_cCount, RegisterOffset<REGISTER::EBP, int32_t, true>(p_cCount * -4));
 
 		//Leave
 		BiaArchitecture::Operation<OP_CODE::LEAVE>(m_output);
@@ -142,7 +142,7 @@ public:
 		std::get<0>(tmp) = m_output.GetPosition();
 
 		BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EBP>(m_output);
-		BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(m_output);
+		BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(m_output, 0);
 
 		std::get<1>(tmp) = m_output.GetPosition();
 
@@ -194,23 +194,39 @@ private:
 	{
 		BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, reinterpret_cast<uint32_t>(p_pAddress));
 	}
-	template<REGISTER _REGISTER, typename _OFFSET>
-	inline void Pass(RegisterOffset<_REGISTER, _OFFSET> p_offset)
+	template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
+	inline void Pass(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)
 	{
 		static_assert(std::is_same<_OFFSET, int32_t>::value || std::is_same<_OFFSET, int8_t>::value, "Invalid offset type.");
 
-		//32 bit signed offset
-		if (std::is_same<_OFFSET, int32_t>::value)
-			BiaArchitecture::Operation32<OP_CODE::PUSH, _REGISTER>(m_output, p_offset.offset);
-		//8 bit signed offset
+		//Push address
+		if (_EFFECTIVE_ADDRESS)
+		{
+			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::EAX, _REGISTER, _OFFSET>(m_output, p_offset.offset);
+			BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EAX>(m_output);
+		}
 		else
-			BiaArchitecture::Operation8<OP_CODE::PUSH, _REGISTER>(m_output, p_offset.offset);
+		{
+			//32 bit signed offset
+			if (std::is_same<_OFFSET, int32_t>::value)
+				BiaArchitecture::Operation32<OP_CODE::PUSH, _REGISTER>(m_output, p_offset.offset);
+			//8 bit signed offset
+			else
+				BiaArchitecture::Operation8<OP_CODE::PUSH, _REGISTER>(m_output, p_offset.offset);
+		}
 	}
-	template<REGISTER _REGISTER>
-	inline void Pass(RegisterOffset<_REGISTER, void> p_offset)
+	template<REGISTER _REGISTER, bool _EFFECTIVE_ADDRESS>
+	inline void Pass(RegisterOffset<_REGISTER, void, _EFFECTIVE_ADDRESS> p_offset)
 	{
+		//Push address
+		if (_EFFECTIVE_ADDRESS)
+		{
+			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::EAX, _REGISTER, int8_t>(m_output, 0);
+			BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EAX>(m_output);
+		}
 		//No offset
-		BiaArchitecture::Operation<OP_CODE::PUSH, _REGISTER>(m_output);
+		else
+			BiaArchitecture::Operation<OP_CODE::PUSH, _REGISTER>(m_output);
 	}
 	template<int32_t _POP>
 	inline void Pop()
@@ -235,10 +251,10 @@ private:
 	inline void PrepareTemporyMembers(int8_t p_cCount, BiaMachineContext * p_pContext)
 	{
 		//Create space for member pointers; add because -128 is better than 127
-		BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(m_output, p_cCount * -4);
+		BiaArchitecture::Operation8<OP_CODE::SUBTRACT, REGISTER::ESP>(m_output, p_cCount * 4);
 
 		//Push count and not esp because it is already on the stack
-		Call<true>(&BiaMachineContext::ConstructTemporaryAddresses, p_pContext, p_cCount, RegisterOffset<REGISTER::EBP, int32_t>(p_cCount * -4));
+		Call<true>(&BiaMachineContext::ConstructTemporaryAddresses, p_pContext, p_cCount, RegisterOffset<REGISTER::EBP, int32_t, true>(p_cCount * -4));
 	}
 };
 #endif

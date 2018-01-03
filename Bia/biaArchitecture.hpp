@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 
 #include "biaConfig.hpp"
 #include "biaOutputStream.hpp"
@@ -32,6 +33,7 @@ enum class OP_CODE
 	CALL,
 	ADD,
 	SUBTRACT,
+	LEA,
 	LEAVE,
 	RETURN_NEAR,
 };
@@ -46,7 +48,7 @@ inline uint32_t operator "" _32(unsigned long long p_ullValue)
 	return static_cast<uint32_t>(p_ullValue);
 }
 
-template<REGISTER _REGISTER, typename _OFFSET>
+template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
 struct RegisterOffset
 {
 	_OFFSET offset;
@@ -57,8 +59,8 @@ struct RegisterOffset
 	}
 };
 
-template<REGISTER _REGISTER>
-struct RegisterOffset<_REGISTER, void>
+template<REGISTER _REGISTER, bool _EFFECTIVE_ADDRESS>
+struct RegisterOffset<_REGISTER, void, _EFFECTIVE_ADDRESS>
 {
 };
 
@@ -91,15 +93,30 @@ public:
 			return p_output.WriteAll(0xff_8, static_cast<uint8_t>(0320 | Register<_REGISTER>()));
 		}
 	}
-	template<OP_CODE _OP_CODE, REGISTER _DESTINATION, REGISTER _SOURCE>
-	inline static void Operation(stream::BiaOutputStream & p_output)
+	template<OP_CODE _OP_CODE, REGISTER _DESTINATION, REGISTER _SOURCE, typename _OFFSET>
+	inline static void Operation(stream::BiaOutputStream & p_output, _OFFSET p_offset)
 	{
-		static_assert(_OP_CODE == OP_CODE::MOVE, "This opcode is not supported.");
+		static_assert(_OP_CODE == OP_CODE::MOVE || _OP_CODE == OP_CODE::LEA, "This opcode is not supported.");
 
 		switch (_OP_CODE)
 		{
 		case OP_CODE::MOVE:
 			return p_output.WriteAll(0x89_8, static_cast<uint8_t>(0300 | Register<_SOURCE>() << 3 | Register<_DESTINATION>()));
+		case OP_CODE::LEA:
+			//Add SIB byte
+			if (_SOURCE == REGISTER::ESP)
+			{
+				static_assert(!(_SOURCE == REGISTER::ESP && _OP_CODE == OP_CODE::LEA), "SIB not implemented.");
+			}
+			else
+			{
+				static_assert(!(_OP_CODE == OP_CODE::LEA && !(std::is_same<int8_t, _OFFSET>::value || std::is_same<int32_t, _OFFSET>::value)), "Offset required.");
+
+				if (std::is_same<int8_t, _OFFSET>::value)
+					return p_output.WriteAll(0x8d_8, static_cast<uint8_t>(0100 | Register<_SOURCE>() | Register<_DESTINATION>() << 3), static_cast<uint8_t>(p_offset));
+				else if (std::is_same<int32_t, _OFFSET>::value)
+					return p_output.WriteAll(0x8d_8, static_cast<uint8_t>(0200 | Register<_SOURCE>() | Register<_DESTINATION>() << 3), static_cast<uint32_t>(p_offset));
+			}
 		}
 	}
 	template<OP_CODE _OP_CODE>

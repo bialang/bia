@@ -153,7 +153,7 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		case bia::compiler::BiaCompiler::VALUE_TYPE::STRING:
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call<true>(&machine::link::OperatorCall_MM, p_unOperator, p_leftValue.pMember, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t>(-4));
+			m_toolset.Call<true>(&machine::link::OperatorCall_MM, p_unOperator, p_leftValue.pMember, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, true>(-4));
 
 			break;
 		case bia::compiler::BiaCompiler::VALUE_TYPE::REGISTER:
