@@ -35,5 +35,20 @@ bool BiaUnknown::IsType(const std::type_info & p_type) const
 	throw exception::SymbolException("Undefined symbol.");
 }
 
+int BiaUnknown::GetNativeType() const
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void * BiaUnknown::GetNativeData(NATIVE_TYPE p_nativeType)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void * BiaUnknown::GetData(const std::type_info & p_type, bool p_bConst)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
 }
 }

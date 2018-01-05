@@ -9,22 +9,6 @@ namespace bia
 namespace compiler
 {
 
-const void * const BiaCompiler::m_scpOperatorFunctions[][11] = {
-	{ 
-		/*&machine::link::Operator_iM, 
-		&machine::link::Operator_IM, 
-		&machine::link::Operator_fM, 
-		&machine::link::Operator_dM, 
-		&machine::link::Operator_sM, 
-		&machine::link::Operator_MM, 
-		&machine::link::Operator_Mi, 
-		&machine::link::Operator_MI, 
-		&machine::link::Operator_Mf, 
-		&machine::link::Operator_Md, 
-		&machine::link::Operator_Ms */
-	}
-};
-
 void BiaCompiler::HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
 {
 	using namespace framework;
@@ -135,14 +119,14 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 {
 	using namespace machine::architecture;
 
-	p_counter.Next();
-
 	switch (p_leftType)
 	{
 	case VALUE_TYPE::MEMBER:
 		switch (p_rightType)
 		{
 		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_32:
+			m_toolset.Call<true>(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, p_rightValue.nInt, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4));
+
 			break;
 		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_64:
 			break;
@@ -153,7 +137,8 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		case bia::compiler::BiaCompiler::VALUE_TYPE::STRING:
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call<true>(&machine::link::OperatorCall_MM, p_unOperator, p_leftValue.pMember, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, false>(-4));
+			m_toolset.Call<true>(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4));
+			//m_toolset.Call<true>(&machine::link::OperatorCall_MM, p_unOperator, p_leftValue.pMember, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4));
 
 			break;
 		case bia::compiler::BiaCompiler::VALUE_TYPE::RESULT:
@@ -161,6 +146,14 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		case bia::compiler::BiaCompiler::VALUE_TYPE::NONE:
 			break;
 		default:
+			break;
+		}
+	case VALUE_TYPE::TEMPORARY_MEMBER:
+		switch (p_rightType)
+		{
+		case VALUE_TYPE::MEMBER:
+			m_toolset.Call<true>(&framework::BiaMember::OperatorAssignCall, RegisterOffset<REGISTER::EBP, int8_t, false>(p_rightValue.tempIndex * -4), p_unOperator, p_rightValue.pMember);
+
 			break;
 		}
 	}

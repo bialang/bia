@@ -36,6 +36,20 @@ public:
 	 * @see	BiaMember::IsType().
 	*/
 	virtual bool IsType(const std::type_info & p_type) const override;
+	/**
+	 * @see	BiaMember::GetNativeType().
+	*/
+	virtual int GetNativeType() const override;
+
+protected:
+	/**
+	 * @see	BiaMember::GetNativeData().
+	*/
+	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override;
+	/**
+	 * @see	BiaMember::GetData().
+	*/
+	virtual void * GetData(const std::type_info & p_type, bool p_bConst) override;
 };
 
 }

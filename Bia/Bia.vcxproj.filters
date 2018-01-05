@@ -43,6 +43,15 @@
     <Filter Include="Header Files\machine\disassembler">
       <UniqueIdentifier>{2c50b938-5c4b-4bdd-bf5e-2d500407e81f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\framework">
+      <UniqueIdentifier>{58b22ed4-9623-4f29-8907-8e30c4585db5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\compiler">
+      <UniqueIdentifier>{dfb82fe3-3f18-4146-b212-f5ed12700c66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\machine\link">
+      <UniqueIdentifier>{9d176a48-210b-4979-9f2c-1f2d4d08cadd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -57,20 +66,20 @@
     <ClCompile Include="biaOutputStreamBuffer.cpp">
       <Filter>Source Files\stream</Filter>
     </ClCompile>
-    <ClCompile Include="biaCompiler.cpp">
+    <ClCompile Include="biaMachineDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="biaUnknown.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="biaCompiler.cpp">
+      <Filter>Source Files\compiler</Filter>
     </ClCompile>
     <ClCompile Include="biaOperator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\machine\link</Filter>
     </ClCompile>
     <ClCompile Include="biaInstantiate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="biaMachineDecoder.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\machine\link</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

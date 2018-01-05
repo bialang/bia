@@ -14,6 +14,8 @@ namespace compiler
 class BiaTempCounter
 {
 public:
+	typedef int8_t counter_type;
+
 	inline BiaTempCounter()
 	{
 		m_counter = m_max = 0;
@@ -23,11 +25,11 @@ public:
 		if (--m_counter < 0)
 			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid temp counter.");
 	}
-	inline int8_t Current() const
+	inline counter_type Current() const
 	{
 		return m_counter;
 	}
-	int8_t Next()
+	counter_type Next()
 	{
 		if (++m_counter > BIA_MAX_TEMP_ADDRESSES)
 			throw exception::LimitationException("Limitation exceeded.");
@@ -37,14 +39,14 @@ public:
 
 		return m_counter;
 	}
-	int8_t Max() const
+	counter_type Max() const
 	{
 		return m_max;
 	}
 
 private:
-	int8_t m_counter;
-	int8_t m_max;
+	counter_type m_counter;
+	counter_type m_max;
 };
 
 }

@@ -53,7 +53,7 @@ private:
 		DOUBLE,
 		STRING,
 		MEMBER,
-		RESULT,
+		TEMPORARY_MEMBER,
 		NONE,
 	};
 
@@ -65,6 +65,7 @@ private:
 		double rDouble;
 		size_t iString;
 		framework::BiaMember * pMember;
+		BiaTempCounter::counter_type tempIndex;
 	};
 
 	machine::architecture::BiaToolset m_toolset;
@@ -72,8 +73,6 @@ private:
 
 	VALUE_TYPE m_valueType;
 	Value m_value;
-
-	static const void * const m_scpOperatorFunctions[][11];
 
 
 	inline void SetValue(int32_t p_nValue)

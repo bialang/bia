@@ -11,29 +11,40 @@ void hi(int val, int a)
 	printf("say hi to val %i\n", val);
 }
 
+struct a
+{
+	virtual void da(int p)
+	{
+		printf("hi from a at %p to %i\n", this, p);
+	}
+};
+
+struct b : a
+{
+	virtual void da(int p) override
+	{
+		printf("hi from b at %p to %i\n", this, p);
+	}
+};
+
 int main()
 {
-	uint64_t p_ullInstruction = 0x691234;
-	//Rotate instruction
-	/*for (uint8_t i = 1; i < 3; ++i)
-		p_ullInstruction = (p_ullInstruction >> 8 & 0xffffff) | p_ullInstruction << 3 * 8 - 8;
-		//p_ullInstruction = p_ullInstruction << i * 8 | (p_ullInstruction >> 3 * 8 - 8 & 0xff);
-
-	p_ullInstruction &= ~(~0ull << 3 * 8);*/
-
-	p_ullInstruction =	_byteswap_uint64(p_ullInstruction);
 	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
 	var i = 2*2*2;
-print i*i;
+var o = 2;
+print i*o;
 )";
+
+	a * ptr = new a();
+	printf("ad: %p\n", ptr);
 
 	/*{
 		bia::machine::architecture::BiaToolset toolset(buf);
 		toolset.SafeCall(&hi, 34, 5);
-		toolset.SafeCall(&bia::machine::BiaMachineContext::AllocateTemporaryAddresses, &context, (bia::framework::BiaMember**)0, (int8_t)8);
+		toolset.SafeCall(&a::da, ptr, 376);
 	}*/
 	try
 	{

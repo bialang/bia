@@ -1,8 +1,9 @@
 #pragma once
 
-#include <typeinfo>
 #include <cstdio>
 #include <cstdint>
+#include <typeinfo>
+#include <type_traits>
 
 
 namespace bia
@@ -47,6 +48,16 @@ public:
 		O_GREATER_THAN = 0x3e,
 		O_GREATER_EQUALS = 0x3d3e,
 	};
+	
+	enum NATIVE_TYPE_FLAG : int
+	{
+		NTF_INT_8 = 0x1,
+		NTF_INT_16 = 0x2,
+		NTF_INT_32 = 0x4,
+		NTF_INT_64 = 0x8,
+		NTF_FLOAT = 0x10,
+		NTF_DOUBLE = 0x20,
+	};
 
 	/**
 	 * Constructor.
@@ -75,6 +86,10 @@ public:
 	 * @throws	exception::OperatorException
 	*/
 	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination) = 0;
+	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, void * p_pDestination) = 0;
+	virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_nRight, void * p_pDestination) = 0;
+	virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, void * p_pDestination) = 0;
+	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, void * p_pDestination) = 0;
 	/**
 	 * @throws	exception::OperatorException
 	*/
@@ -92,9 +107,65 @@ public:
 	 * @return	true if they match, otherwise false.
 	*/
 	virtual bool IsType(const std::type_info & p_type) const = 0;
+	virtual int GetNativeType() const = 0;
+	template<typename T, typename _T = typename std::remove_reference<T>::type>
+	inline _T * Cast()
+	{
+		//Native type
+		if (NativeType<_T>() != NATIVE_TYPE::CUSTOM)
+			return static_cast<_T*>(GetNativeData(NativeType<_T>()));
+		//Custom type
+		else
+			return static_cast<_T*>(GetData(typeid(_T), std::is_const<_T>::value));
+	}
 
 protected:
+	enum class NATIVE_TYPE
+	{
+		INT_8,
+		CONST_INT_8,
+		INT_16,
+		CONST_INT_16,
+		INT_32,
+		CONST_INT_32,
+		INT_64,
+		CONST_INT_64,
+		FLOAT,
+		CONST_FLOAT,
+		DOUBLE,
+		CONST_DOUBLE,
+		CUSTOM
+	};
+
 	bool m_bInitialized;
+
+	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) = 0;
+	virtual void * GetData(const std::type_info & p_type, bool p_bConst) = 0;
+private:
+	template<typename T>
+	inline constexpr static NATIVE_TYPE NativeType()
+	{
+		if (std::is_integral<T>::value)
+		{
+			switch (sizeof(T))
+			{
+			case 1:
+				return std::is_const<T>::value ? NATIVE_TYPE::CONST_INT_8 : NATIVE_TYPE::INT_8;
+			case 2:
+				return std::is_const<T>::value ? NATIVE_TYPE::CONST_INT_16 : NATIVE_TYPE::INT_16;
+			case 4:
+				return std::is_const<T>::value ? NATIVE_TYPE::CONST_INT_32 : NATIVE_TYPE::INT_32;
+			case 8:
+				return std::is_const<T>::value ? NATIVE_TYPE::CONST_INT_64 : NATIVE_TYPE::INT_64;
+			}
+		}
+		else if (std::is_same<T, float>::value)
+			return std::is_const<T>::value ? NATIVE_TYPE::CONST_FLOAT : NATIVE_TYPE::FLOAT;
+		else if (std::is_same<T, double>::value)
+			return std::is_const<T>::value ? NATIVE_TYPE::CONST_DOUBLE : NATIVE_TYPE::DOUBLE;
+
+		return NATIVE_TYPE::CUSTOM;
+	}
 };
 
 }
