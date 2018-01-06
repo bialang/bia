@@ -63,11 +63,50 @@ public:
 		throw exception::OperatorException("Invalid type on native operation.");
 	}
 	/**
+	 * @see	BiaMember::OperatorCallInt_32().
+	*/
+	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, void * p_pDestination) override
+	{
+		static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
+		new(p_pDestination) BiaInt(compiler::ConstantOperationIntegral(m_llValue, p_nRight, p_unOperator));
+	}
+	/**
+	 * @see	BiaMember::OperatorCallInt_64().
+	*/
+	virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, void * p_pDestination) override
+	{
+		static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
+		new(p_pDestination) BiaInt(compiler::ConstantOperationIntegral(m_llValue, p_llRight, p_unOperator));
+	}
+	/**
+	 * @see	BiaMember::OperatorCallFloat().
+	*/
+	virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, void * p_pDestination) override
+	{
+		static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
+		new(p_pDestination) BiaInt(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
+	}
+	/**
+	 * @see	BiaMember::OperatorCallDouble().
+	*/
+	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, void * p_pDestination) override
+	{
+		static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
+		new(p_pDestination) BiaInt(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
+	}
+	/**
 	 * @see	BiaMember::OperatorAssignCall().
 	*/
 	virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
-		puts("assign call");
+		m_llValue = compiler::ConstantOperationIntegral(m_llValue, *p_pRight->Cast<int64_t>(), p_unOperator);
+	}
+	/**
+	 * @see	BiaMember::OperatorAssignCallInt_32().
+	*/
+	virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
+	{
+		m_llValue = compiler::ConstantOperationIntegral(m_llValue, p_nRight, p_unOperator);
 	}
 	/**
 	 * @see	BiaMember::OperatorSelfCall().

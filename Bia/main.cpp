@@ -13,6 +13,10 @@ void hi(int val, int a)
 
 struct a
 {
+	virtual ~a()
+	{
+		puts("destroy a");
+	}
 	virtual void da(int p)
 	{
 		printf("hi from a at %p to %i\n", this, p);
@@ -21,6 +25,10 @@ struct a
 
 struct b : a
 {
+	~b()
+	{
+		puts("destroy b");
+	}
 	virtual void da(int p) override
 	{
 		printf("hi from b at %p to %i\n", this, p);
@@ -35,16 +43,16 @@ int main()
 	char script[] = R"(
 	var i = 2*2*2;
 var o = 2;
-print i*o;
+print i*2+i*5*3;
 )";
 
 	a * ptr = new a();
 	printf("ad: %p\n", ptr);
 
-	/*{
+/*	{
 		bia::machine::architecture::BiaToolset toolset(buf);
 		toolset.SafeCall(&hi, 34, 5);
-		toolset.SafeCall(&a::da, ptr, 376);
+		toolset.SafeCall(a::~a, ptr);
 	}*/
 	try
 	{

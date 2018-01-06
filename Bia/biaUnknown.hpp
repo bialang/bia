@@ -21,9 +21,29 @@ public:
 	*/
 	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination) override;
 	/**
+	 * @see	BiaMember::OperatorCallInt_32().
+	*/
+	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, void * p_pDestination) override;
+	/**
+	 * @see	BiaMember::OperatorCallInt_64().
+	*/
+	virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, void * p_pDestination) override;
+	/**
+	 * @see	BiaMember::OperatorCallFloat().
+	*/
+	virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, void * p_pDestination) override;
+	/**
+	 * @see	BiaMember::OperatorCallDouble().
+	*/
+	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, void * p_pDestination) override;
+	/**
 	 * @see	BiaMember::OperatorAssignCall().
 	*/
 	virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override;
+	/**
+	 * @see	BiaMember::OperatorAssignCallInt_32().
+	*/
+	virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override;
 	/**
 	 * @see	BiaMember::OperatorSelfCall().
 	*/

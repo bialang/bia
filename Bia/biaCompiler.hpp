@@ -221,7 +221,7 @@ private:
 		else
 		{
 			//Reserve new temporary address
-			if (!_START)
+			//if (!_START)
 				p_counter.Next();
 
 			//Handle leftmost math term
@@ -240,12 +240,13 @@ private:
 				i = (this->*NEXT)(i[1].content.children, p_counter);
 
 				//Call operator
-				if (leftType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::MEMBER)
+				if (leftType == VALUE_TYPE::MEMBER || leftType == VALUE_TYPE::TEMPORARY_MEMBER || m_valueType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::TEMPORARY_MEMBER)
 				{
 					//Handle operator
 					HandleOperator(leftType, leftValue, m_valueType, m_value, unOperator, p_counter);
 					
 					leftType = m_valueType  = VALUE_TYPE::TEMPORARY_MEMBER;
+					leftValue.temporaryResultIndex = p_counter.Current();
 
 					//Set result for later
 					m_value.temporaryResultIndex = 1;
@@ -260,7 +261,8 @@ private:
 				}
 			} while (i < p_reports.pEnd);
 			
-			
+			//if (!_START)
+				p_counter.Pop();
 		}
 
 		return p_reports.pEnd + 1;

@@ -144,7 +144,7 @@ public:
 
 		return tmp;
 	}
-	inline static temporary_result TemporaryResult(int8_t p_cIndex)
+	inline static temporary_result TemporaryMember(int8_t p_cIndex)
 	{
 		return temporary_result(p_cIndex * -4);
 	}
