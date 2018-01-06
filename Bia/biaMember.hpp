@@ -86,10 +86,10 @@ public:
 	 * @throws	exception::OperatorException
 	*/
 	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination) = 0;
-	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, void * p_pDestination) = 0;
+	/*virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, void * p_pDestination) = 0;
 	virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_nRight, void * p_pDestination) = 0;
 	virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, void * p_pDestination) = 0;
-	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, void * p_pDestination) = 0;
+	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, void * p_pDestination) = 0;*/
 	/**
 	 * @throws	exception::OperatorException
 	*/

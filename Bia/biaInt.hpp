@@ -67,7 +67,7 @@ public:
 	*/
 	virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
-
+		puts("assign call");
 	}
 	/**
 	 * @see	BiaMember::OperatorSelfCall().

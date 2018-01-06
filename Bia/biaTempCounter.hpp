@@ -25,17 +25,17 @@ public:
 		if (--m_counter < 0)
 			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid temp counter.");
 	}
-	inline counter_type Current() const
+	inline counter_type Current()
 	{
+		if (m_max < m_counter)
+			m_max = m_counter;
+
 		return m_counter;
 	}
 	counter_type Next()
 	{
 		if (++m_counter > BIA_MAX_TEMP_ADDRESSES)
 			throw exception::LimitationException("Limitation exceeded.");
-
-		if (m_max < m_counter)
-			m_max = m_counter;
 
 		return m_counter;
 	}

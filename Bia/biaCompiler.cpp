@@ -125,7 +125,7 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		switch (p_rightType)
 		{
 		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_32:
-			m_toolset.Call<true>(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, p_rightValue.nInt, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4));
+			//m_toolset.Call<true>(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, p_rightValue.nInt, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4));
 
 			break;
 		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_64:
@@ -137,25 +137,31 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		case bia::compiler::BiaCompiler::VALUE_TYPE::STRING:
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call<true>(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4));
+			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4));
 			//m_toolset.Call<true>(&machine::link::OperatorCall_MM, p_unOperator, p_leftValue.pMember, p_rightValue.pMember, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4));
 
 			break;
-		case bia::compiler::BiaCompiler::VALUE_TYPE::RESULT:
+		case bia::compiler::BiaCompiler::VALUE_TYPE::TEMPORARY_MEMBER:
 			break;
 		case bia::compiler::BiaCompiler::VALUE_TYPE::NONE:
 			break;
 		default:
 			break;
 		}
+
+		break;
 	case VALUE_TYPE::TEMPORARY_MEMBER:
 		switch (p_rightType)
 		{
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call<true>(&framework::BiaMember::OperatorAssignCall, RegisterOffset<REGISTER::EBP, int8_t, false>(p_rightValue.tempIndex * -4), p_unOperator, p_rightValue.pMember);
+			m_toolset.Call(&framework::BiaMember::OperatorAssignCall, RegisterOffset<REGISTER::EBP, int8_t, false>(p_counter.Current() * -4), p_unOperator, p_rightValue.pMember);
 
 			break;
 		}
+
+		break;
+	default:
+		BIA_COMPILER_DEV_INVALID
 	}
 	//switch (p_unOperator)
 	//{
@@ -411,8 +417,8 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 			m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
 
 			break;
-		case VALUE_TYPE::RESULT:
-			m_toolset.Call<true>(&machine::link::Print_M, machine::architecture::RegisterOffset<machine::architecture::REGISTER::EAX, void, false>());
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call<true>(&machine::link::Print_M, m_toolset.TemporaryResult(m_value.temporaryResultIndex));
 
 			break;
 		default:

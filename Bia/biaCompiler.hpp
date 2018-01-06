@@ -65,7 +65,7 @@ private:
 		double rDouble;
 		size_t iString;
 		framework::BiaMember * pMember;
-		BiaTempCounter::counter_type tempIndex;
+		int8_t temporaryResultIndex;
 	};
 
 	machine::architecture::BiaToolset m_toolset;
@@ -220,6 +220,10 @@ private:
 			(this->*NEXT)(p_reports.pBegin[1].content.children, p_counter);
 		else
 		{
+			//Reserve new temporary address
+			if (!_START)
+				p_counter.Next();
+
 			//Handle leftmost math term
 			const grammar::Report * i = (this->*NEXT)(p_reports.pBegin[1].content.children, p_counter);
 			auto leftType = m_valueType;
@@ -241,7 +245,10 @@ private:
 					//Handle operator
 					HandleOperator(leftType, leftValue, m_valueType, m_value, unOperator, p_counter);
 					
-					leftType = VALUE_TYPE::RESULT;
+					leftType = m_valueType  = VALUE_TYPE::TEMPORARY_MEMBER;
+
+					//Set result for later
+					m_value.temporaryResultIndex = 1;
 				}
 				//Both operands can be optimized
 				else
@@ -252,9 +259,8 @@ private:
 					leftValue = m_value;
 				}
 			} while (i < p_reports.pEnd);
-
-			m_valueType = leftType;
-			m_value = leftValue;
+			
+			
 		}
 
 		return p_reports.pEnd + 1;
