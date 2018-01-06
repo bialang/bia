@@ -36,8 +36,9 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateDouble);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateCopy);
 
-	BIA_FUNCTION_ENTRY(machine::link::OperatorCall_MM);
-	BIA_FUNCTION_ENTRY(machine::link::OperatorCall_Mi);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCall);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCall);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorSelfCall);
 
 	BIA_FUNCTION_ENTRY(BiaMachineContext::ConstructTemporaryAddresses);
 	BIA_FUNCTION_ENTRY(BiaMachineContext::DestructTemporaryAddresses);
@@ -79,12 +80,19 @@ void BiaMachineDecoder::Initialize()
 	AddInstruction(0x8900 | 0300, 10, 2, [](BiaMachineDecoder*, const uint8_t * p_pBuffer) {
 		printf("mov\t%s,%s\n", RegisterName(p_pBuffer[1] & 07), RegisterName(p_pBuffer[1] >> 3 & 07));
 	});
+	AddInstruction(0x8b0000 | 0100 << 8, 10, 3, [](BiaMachineDecoder*, const uint8_t * p_pBuffer) {
+		printf("mov\t%s,[%s%+hhi]\n", RegisterName(p_pBuffer[1] >> 3 & 07), RegisterName(p_pBuffer[1] & 07), p_pBuffer[2]);
+	});
+	AddInstruction(0x8b0000000000 | 0200ll << 32, 10, 6, [](BiaMachineDecoder*, const uint8_t * p_pBuffer) {
+		printf("mov\t%s,[%s%+i]\n", RegisterName(p_pBuffer[1] >> 3 & 07), RegisterName(p_pBuffer[1] & 07), *reinterpret_cast<const int32_t*>(p_pBuffer + 2));
+	});
 	AddInstruction(0x8d0000 | 0100 << 8, 10, 3, [](BiaMachineDecoder*, const uint8_t * p_pBuffer) {
 		printf("lea\t%s,[%s%+hhi]\n", RegisterName(p_pBuffer[1] >> 3 & 07), RegisterName(p_pBuffer[1] & 07), p_pBuffer[2]);
 	});
 	AddInstruction(0x8d0000000000 | 0200ll << 32, 10, 6, [](BiaMachineDecoder*, const uint8_t * p_pBuffer) {
 		printf("lea\t%s,[%s%+i]\n", RegisterName(p_pBuffer[1] >> 3 & 07), RegisterName(p_pBuffer[1] & 07), *reinterpret_cast<const int32_t*>(p_pBuffer + 2));
 	});
+
 
 	//Opcode + register + 32 bit constant
 	AddInstruction(0xff0000000000 | 0260ll << 32, 13, 6, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {

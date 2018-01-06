@@ -90,8 +90,8 @@ public:
 		if (_POP)
 			Pop<sizeof...(_ARGS)>();
 	}
-	template<bool _POP, typename _RETURN, typename _CLASS, typename... _ARGS, typename... _ARGS2>
-	inline void Call(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS2... p_args)
+	template<bool _POP, typename _RETURN, typename _CLASS, typename _INSTANCE, typename... _ARGS, typename... _ARGS2>
+	inline void Call(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _INSTANCE p_instance, _ARGS2... p_args)
 	{
 		//Push all parameters
 		Pass(p_args...);
@@ -230,6 +230,29 @@ private:
 		//No offset
 		else
 			BiaArchitecture::Operation<OP_CODE::PUSH, _REGISTER>(m_output);
+	}
+	template<typename T>
+	inline void PassInstance(T * p_pInstance)
+	{
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<uint32_t>(p_pInstance));
+	}
+	template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
+	inline void PassInstance(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)
+	{
+		static_assert(std::is_same<_OFFSET, int32_t>::value || std::is_same<_OFFSET, int8_t>::value, "Invalid offset type.");
+
+		//Push address
+		if (_EFFECTIVE_ADDRESS)
+			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::ECX, _REGISTER, _OFFSET>(m_output, p_offset.offset);
+		else
+		{
+			//32 bit signed offset
+			if (std::is_same<_OFFSET, int32_t>::value)
+				BiaArchitecture::Operation32<OP_CODE::PUSH, _REGISTER>(m_output, p_offset.offset);
+			//8 bit signed offset
+			else
+				BiaArchitecture::Operation8<OP_CODE::PUSH, _REGISTER>(m_output, p_offset.offset);
+		}
 	}
 	template<int32_t _POP>
 	inline void Pop()

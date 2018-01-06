@@ -97,11 +97,22 @@ public:
 	inline static void Operation(stream::BiaOutputStream & p_output, _OFFSET p_offset)
 	{
 		static_assert(_OP_CODE == OP_CODE::MOVE || _OP_CODE == OP_CODE::LEA, "This opcode is not supported.");
+		static_assert(std::is_same<int8_t, _OFFSET>::value || std::is_same<int32_t, _OFFSET>::value, "Offset must be int8_t or int32_t.");
 
 		switch (_OP_CODE)
 		{
 		case OP_CODE::MOVE:
-			return p_output.WriteAll(0x89_8, static_cast<uint8_t>(0300 | Register<_SOURCE>() << 3 | Register<_DESTINATION>()));
+		{
+			//No offset
+			if (p_offset == 0)
+				return p_output.WriteAll(0x89_8, static_cast<uint8_t>(0300 | Register<_SOURCE>() << 3 | Register<_DESTINATION>()));
+			//8 bit offset
+			else if (std::is_same<_OFFSET, int8_t>::value)
+				return p_output.WriteAll(0x8b_8, static_cast<uint8_t>(0100 | Register<_SOURCE>() | Register<_DESTINATION>() << 3), static_cast<uint8_t>(p_offset));
+			//32 bit offset
+			else
+				return p_output.WriteAll(0x8b_8, static_cast<uint8_t>(0200 | Register<_SOURCE>() | Register<_DESTINATION>() << 3), static_cast<uint32_t>(p_offset));
+		}
 		case OP_CODE::LEA:
 			//Add SIB byte
 			if (_SOURCE == REGISTER::ESP)
@@ -110,11 +121,11 @@ public:
 			}
 			else
 			{
-				static_assert(!(_OP_CODE == OP_CODE::LEA && !(std::is_same<int8_t, _OFFSET>::value || std::is_same<int32_t, _OFFSET>::value)), "Offset required.");
-
+				//8 bit offset
 				if (std::is_same<int8_t, _OFFSET>::value)
 					return p_output.WriteAll(0x8d_8, static_cast<uint8_t>(0100 | Register<_SOURCE>() | Register<_DESTINATION>() << 3), static_cast<uint8_t>(p_offset));
-				else if (std::is_same<int32_t, _OFFSET>::value)
+				//32 bit offset
+				else
 					return p_output.WriteAll(0x8d_8, static_cast<uint8_t>(0200 | Register<_SOURCE>() | Register<_DESTINATION>() << 3), static_cast<uint32_t>(p_offset));
 			}
 		}
