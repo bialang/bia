@@ -115,7 +115,7 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 	}
 }
 
-void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator, BiaTempCounter & p_counter)
+void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
 {
 	using namespace machine::architecture;
 
@@ -126,7 +126,7 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		switch (p_rightType)
 		{
 		case VALUE_TYPE::INT_32:
-			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, p_rightValue.nInt, BiaToolset::TemporaryMember(p_counter.Current()));
+			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, p_rightValue.nInt, BiaToolset::TemporaryMember(m_counter.Current()));
 
 			break;
 		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_64:
@@ -136,7 +136,7 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		case bia::compiler::BiaCompiler::VALUE_TYPE::DOUBLE:
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, p_rightValue.pMember, BiaToolset::TemporaryMember(p_counter.Current()));
+			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, p_rightValue.pMember, BiaToolset::TemporaryMember(m_counter.Current()));
 
 			break;
 		default:
@@ -150,15 +150,15 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		switch (p_rightType)
 		{
 		case VALUE_TYPE::INT_32:
-			m_toolset.Call(&framework::BiaMember::OperatorAssignCallInt_32, BiaToolset::TemporaryMember(p_counter.Current()), p_unOperator, p_rightValue.nInt);
+			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, p_rightValue.nInt, BiaToolset::TemporaryMember(m_counter.Current()));
 
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorAssignCall, BiaToolset::TemporaryMember(p_counter.Current()), p_unOperator, p_rightValue.pMember);
+			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, p_rightValue.pMember, BiaToolset::TemporaryMember(m_counter.Current()));
 
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorAssignCall, BiaToolset::TemporaryMember(p_counter.Current()), p_unOperator, BiaToolset::TemporaryMember(p_rightValue.temporaryResultIndex));
+			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, BiaToolset::TemporaryMember(p_rightValue.temporaryResultIndex), BiaToolset::TemporaryMember(m_counter.Current()));
 
 			break;
 		default:
@@ -212,69 +212,69 @@ const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pRepor
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
 {
 	//Handle value and prepare the result for a function call
-	HandleValue(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children, [&] {
-		//Get address of variable
-		auto pVariable = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+	HandleValue(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children);
 
-		//Make call
-		switch (m_valueType)
+	//Get address of variable
+	auto pVariable = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+
+	//Make call
+	switch (m_valueType)
+	{
+	case VALUE_TYPE::INT_32:
+	{
+		//Optimize common used constant values
+		switch (m_value.nInt)
 		{
-		case VALUE_TYPE::INT_32:
-		{
-			//Optimize common used constant values
-			switch (m_value.nInt)
-			{
-			case 0:
-				m_toolset.SafeCall(&machine::link::InstantiateInt0, pVariable);
-
-				break;
-			case 1:
-				m_toolset.SafeCall(&machine::link::InstantiateIntP1, pVariable);
-
-				break;
-			case -1:
-				m_toolset.SafeCall(&machine::link::InstantiateIntN1, pVariable);
-
-				break;
-			default:
-				m_toolset.SafeCall(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
-
-				break;
-			}
+		case 0:
+			m_toolset.SafeCall(&machine::link::InstantiateInt0, pVariable);
 
 			break;
-		}
-		case VALUE_TYPE::INT_64:
-			m_toolset.SafeCall(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
+		case 1:
+			m_toolset.SafeCall(&machine::link::InstantiateIntP1, pVariable);
 
 			break;
-		case VALUE_TYPE::FLOAT:
-			m_toolset.SafeCall(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
-
-			break;
-		case VALUE_TYPE::DOUBLE:
-			m_toolset.SafeCall(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
-
-			break;
-		case VALUE_TYPE::MEMBER:
-			m_toolset.SafeCall(&machine::link::InstantiateCopy, pVariable, m_value.pMember);
+		case -1:
+			m_toolset.SafeCall(&machine::link::InstantiateIntN1, pVariable);
 
 			break;
 		default:
-			BIA_COMPILER_DEV_INVALID
+			m_toolset.SafeCall(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
+
+			break;
 		}
-	});
+
+		break;
+	}
+	case VALUE_TYPE::INT_64:
+		m_toolset.SafeCall(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
+
+		break;
+	case VALUE_TYPE::FLOAT:
+		m_toolset.SafeCall(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
+
+		break;
+	case VALUE_TYPE::DOUBLE:
+		m_toolset.SafeCall(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
+
+		break;
+	case VALUE_TYPE::MEMBER:
+		m_toolset.SafeCall(&machine::link::InstantiateCopy, pVariable, m_value.pMember);
+
+		break;
+	default:
+		BIA_COMPILER_DEV_INVALID
+	}
 
 	return p_reports.pEnd + 1;
 }
 
-const grammar::Report * BiaCompiler::HandleValue(grammar::report_range p_reports, BiaTempCounter & p_counter)
+const grammar::Report * BiaCompiler::HandleValue(grammar::report_range p_reports)
 {
 	puts("value call");
 	
 
 	//Handle first expression
-	p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children, p_counter);
+	p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
 
 	//
 	
@@ -379,7 +379,7 @@ const grammar::Report * BiaCompiler::HandleValueRaw(grammar::report_range p_repo
 	return p_reports.pEnd + 1;
 }
 
-const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_reports, BiaTempCounter & p_counter)
+const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_reports)
 {
 	switch (p_reports.pBegin[1].unRuleId)
 	{
@@ -388,7 +388,7 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 
 		break;
 	case grammar::BGR_VALUE:
-		HandleValue(p_reports.pBegin[1].content.children, p_counter);
+		HandleValue(p_reports.pBegin[1].content.children);
 
 		break;
 	default:
@@ -401,37 +401,38 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_range p_reports)
 {
 	//Handle value to print
-	HandleValue(p_reports, [this] {
-		switch (m_valueType)
-		{
-		case VALUE_TYPE::INT_32:
-			m_toolset.SafeCall(&machine::link::Print_i, m_value.nInt);
+	HandleValue(p_reports);
 
-			break;
-		case VALUE_TYPE::INT_64:
-			m_toolset.SafeCall(&machine::link::Print_I, m_value.llInt);
+	//Call print
+	switch (m_valueType)
+	{
+	case VALUE_TYPE::INT_32:
+		m_toolset.SafeCall(&machine::link::Print_i, m_value.nInt);
 
-			break;
-		case VALUE_TYPE::FLOAT:
-			m_toolset.SafeCall(&machine::link::Print_f, m_value.rFloat);
+		break;
+	case VALUE_TYPE::INT_64:
+		m_toolset.SafeCall(&machine::link::Print_I, m_value.llInt);
 
-			break;
-		case VALUE_TYPE::DOUBLE:
-			m_toolset.SafeCall(&machine::link::Print_d, m_value.rDouble);
+		break;
+	case VALUE_TYPE::FLOAT:
+		m_toolset.SafeCall(&machine::link::Print_f, m_value.rFloat);
 
-			break;
-		case VALUE_TYPE::MEMBER:
-			m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
+		break;
+	case VALUE_TYPE::DOUBLE:
+		m_toolset.SafeCall(&machine::link::Print_d, m_value.rDouble);
 
-			break;
-		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call<true>(&machine::link::Print_M, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+		break;
+	case VALUE_TYPE::MEMBER:
+		m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
 
-			break;
-		default:
-			BIA_COMPILER_DEV_INVALID
-		}
-	});
+		break;
+	case VALUE_TYPE::TEMPORARY_MEMBER:
+		m_toolset.Call<true>(&machine::link::Print_M, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+
+		break;
+	default:
+		BIA_COMPILER_DEV_INVALID
+	}
 
 	return p_reports.pEnd + 1;
 }

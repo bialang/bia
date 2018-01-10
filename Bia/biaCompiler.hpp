@@ -34,6 +34,18 @@ public:
 	 */
 	inline BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context) : m_toolset(p_output), m_context(p_context)
 	{
+		//Reserve temporary members
+		m_parameter = m_toolset.ReserveTemporyMembers();
+	}
+	inline ~BiaCompiler()
+	{
+		//Clean up
+		auto max = m_counter.Max();
+
+		if (max == 0)
+			m_toolset.DiscardTemporaryMembers(m_parameter);
+		else
+			m_toolset.CommitTemporaryMembers(m_context, m_parameter, max);
 	}
 
 	/**
@@ -70,6 +82,9 @@ private:
 
 	machine::architecture::BiaToolset m_toolset;
 	machine::BiaMachineContext & m_context;
+
+	machine::architecture::BiaToolset::temp_members m_parameter;
+	BiaTempCounter m_counter;
 
 	VALUE_TYPE m_valueType;
 	Value m_value;
@@ -137,27 +152,7 @@ private:
 	}
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
-	template<typename _LAMBDA>
-	inline void HandleValue(grammar::report_range p_reports, _LAMBDA && p_function)
-	{
-		//Push temporary size
-		auto parameter = m_toolset.ReserveTemporyMembers();
-		BiaTempCounter counter;
-
-		//Handle value and prepare the result for a function call
-		HandleValue(p_reports, counter);
-
-		p_function();
-
-		//Clean up
-		auto max = counter.Max();
-
-		if (max == 0)
-			m_toolset.DiscardTemporaryMembers(parameter);
-		else
-			m_toolset.CommitTemporaryMembers(m_context, parameter, max);
-	}
-	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator, BiaTempCounter & p_counter);
+	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator);
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
@@ -208,24 +203,24 @@ private:
 	}
 	const grammar::Report * HandleRoot(const grammar::Report * p_pReport);
 	const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports);
-	const grammar::Report * HandleValue(grammar::report_range p_reports, BiaTempCounter & p_counter);
+	const grammar::Report * HandleValue(grammar::report_range p_reports);
 	const grammar::Report * HandleValueRaw(grammar::report_range p_reports);
 	template<bool _START = true>
-	inline const grammar::Report * HandleMathExpressionTerm(grammar::report_range p_reports, BiaTempCounter & p_counter)
+	inline const grammar::Report * HandleMathExpressionTerm(grammar::report_range p_reports)
 	{
 		constexpr auto NEXT = _START ? &BiaCompiler::HandleMathExpressionTerm<false> : &BiaCompiler::HandleMathFactor;
 
 		//Only one math term to handle
 		if (p_reports.pBegin[1].content.children.pEnd + 1 == p_reports.pEnd)
-			(this->*NEXT)(p_reports.pBegin[1].content.children, p_counter);
+			(this->*NEXT)(p_reports.pBegin[1].content.children);
 		else
 		{
 			//Reserve new temporary address
 			//if (!_START)
-				p_counter.Next();
+				m_counter.Next();
 
 			//Handle leftmost math term
-			const grammar::Report * i = (this->*NEXT)(p_reports.pBegin[1].content.children, p_counter);
+			const grammar::Report * i = (this->*NEXT)(p_reports.pBegin[1].content.children);
 			auto leftType = m_valueType;
 			auto leftValue = m_value;
 
@@ -237,16 +232,16 @@ private:
 				memcpy(&unOperator, i->content.token.pcString, std::min(sizeof(unOperator), i->content.token.iSize));
 
 				//Handle first right math term
-				i = (this->*NEXT)(i[1].content.children, p_counter);
+				i = (this->*NEXT)(i[1].content.children);
 
 				//Call operator
 				if (leftType == VALUE_TYPE::MEMBER || leftType == VALUE_TYPE::TEMPORARY_MEMBER || m_valueType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::TEMPORARY_MEMBER)
 				{
 					//Handle operator
-					HandleOperator(leftType, leftValue, m_valueType, m_value, unOperator, p_counter);
+					HandleOperator(leftType, leftValue, m_valueType, m_value, unOperator);
 					
 					leftType = m_valueType  = VALUE_TYPE::TEMPORARY_MEMBER;
-					leftValue.temporaryResultIndex = p_counter.Current();
+					leftValue.temporaryResultIndex = m_counter.Current();
 
 					//Set result for later
 					m_value.temporaryResultIndex = 1;
@@ -262,12 +257,12 @@ private:
 			} while (i < p_reports.pEnd);
 			
 			//if (!_START)
-				p_counter.Pop();
+				//m_counter.Pop();
 		}
 
 		return p_reports.pEnd + 1;
 	}
-	const grammar::Report * HandleMathFactor(grammar::report_range p_reports, BiaTempCounter & p_counter);
+	const grammar::Report * HandleMathFactor(grammar::report_range p_reports);
 	const grammar::Report * HandlePrint(grammar::report_range p_reports);
 	const grammar::Report * HandleMember(grammar::report_range p_reports);
 } ;
