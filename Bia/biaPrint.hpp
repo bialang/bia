@@ -13,12 +13,6 @@ namespace machine
 namespace link
 {
 
-BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_M(framework::BiaMember * p_pMember))
-{
-	puts("hi");
-	p_pMember->Print();
-}
-
 BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_i(int32_t p_nValue))
 {
 	printf("%i", p_nValue);

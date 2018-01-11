@@ -423,11 +423,11 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 
 		break;
 	case VALUE_TYPE::MEMBER:
-		m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
+		m_toolset.SafeCall(&framework::BiaMember::Print, m_value.pMember);
 
 		break;
 	case VALUE_TYPE::TEMPORARY_MEMBER:
-		m_toolset.Call<true>(&machine::link::Print_M, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+		m_toolset.Call(&framework::BiaMember::Print, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
 
 		break;
 	default:

@@ -21,7 +21,6 @@ std::map<const void*, std::string> BiaMachineDecoder::m_sFunctions;
 void BiaMachineDecoder::Initialize()
 {
 #if defined(BIA_ARCHITECTURE_MG32)
-	BIA_FUNCTION_ENTRY(machine::link::Print_M);
 	BIA_FUNCTION_ENTRY(machine::link::Print_i);
 	BIA_FUNCTION_ENTRY(machine::link::Print_I);
 	BIA_FUNCTION_ENTRY(machine::link::Print_f);

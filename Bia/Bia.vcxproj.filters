@@ -75,9 +75,6 @@
     <ClCompile Include="biaCompiler.cpp">
       <Filter>Source Files\compiler</Filter>
     </ClCompile>
-    <ClCompile Include="biaOperator.cpp">
-      <Filter>Source Files\machine\link</Filter>
-    </ClCompile>
     <ClCompile Include="biaInstantiate.cpp">
       <Filter>Source Files\machine\link</Filter>
     </ClCompile>
@@ -150,9 +147,6 @@
       <Filter>Header Files\machine\link</Filter>
     </ClInclude>
     <ClInclude Include="biaLink.hpp">
-      <Filter>Header Files\machine\link</Filter>
-    </ClInclude>
-    <ClInclude Include="biaOperator.hpp">
       <Filter>Header Files\machine\link</Filter>
     </ClInclude>
     <ClInclude Include="biaArchitecture.hpp">

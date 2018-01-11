@@ -117,7 +117,6 @@
     <ClCompile Include="biaMachineCode.cpp" />
     <ClCompile Include="biaMachineContext.cpp" />
     <ClCompile Include="biaMachineDecoder.cpp" />
-    <ClCompile Include="biaOperator.cpp" />
     <ClCompile Include="biaOutputStreamBuffer.cpp" />
     <ClCompile Include="biaUnknown.cpp" />
     <ClCompile Include="main.cpp" />
@@ -144,7 +143,6 @@
     <ClInclude Include="biaMachineContext.hpp" />
     <ClInclude Include="biaMachineDecoder.hpp" />
     <ClInclude Include="biaMember.hpp" />
-    <ClInclude Include="biaOperator.hpp" />
     <ClInclude Include="biaOutputStream.hpp" />
     <ClInclude Include="biaOutputStreamBuffer.hpp" />
     <ClInclude Include="biaPrint.hpp" />
