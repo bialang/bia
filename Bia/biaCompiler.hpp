@@ -215,11 +215,8 @@ private:
 			(this->*NEXT)(p_reports.pBegin[1].content.children);
 		else
 		{
-			//Reserve new temporary address
-			//if (!_START)
-				m_counter.Next();
-
 			//Handle leftmost math term
+			auto oldCounter = m_counter.Next();
 			const grammar::Report * i = (this->*NEXT)(p_reports.pBegin[1].content.children);
 			auto leftType = m_valueType;
 			auto leftValue = m_value;
@@ -245,6 +242,9 @@ private:
 
 					//Set result for later
 					m_value.temporaryResultIndex = 1;
+					
+					//Pop back
+					m_counter.Pop(oldCounter);
 				}
 				//Both operands can be optimized
 				else
@@ -255,9 +255,6 @@ private:
 					leftValue = m_value;
 				}
 			} while (i < p_reports.pEnd);
-			
-			//if (!_START)
-				//m_counter.Pop();
 		}
 
 		return p_reports.pEnd + 1;
