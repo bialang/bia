@@ -92,9 +92,6 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="biaInt.hpp">
-      <Filter>Header Files\framework</Filter>
-    </ClInclude>
     <ClInclude Include="biaMember.hpp">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
@@ -178,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="biaVariableHandler.hpp">
       <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="biaNativeVariable.hpp">
+      <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInt.hpp">
+      <Filter>Header Files\framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

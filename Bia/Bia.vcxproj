@@ -143,6 +143,7 @@
     <ClInclude Include="biaMachineContext.hpp" />
     <ClInclude Include="biaMachineDecoder.hpp" />
     <ClInclude Include="biaMember.hpp" />
+    <ClInclude Include="biaNativeVariable.hpp" />
     <ClInclude Include="biaOutputStream.hpp" />
     <ClInclude Include="biaOutputStreamBuffer.hpp" />
     <ClInclude Include="biaPrint.hpp" />
