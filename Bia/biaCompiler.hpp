@@ -203,6 +203,20 @@ private:
 	}
 	const grammar::Report * HandleRoot(const grammar::Report * p_pReport);
 	const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports);
+	template<typename _LAMBDA>
+	inline const grammar::Report * HandleValue(grammar::report_range p_reports, _LAMBDA && p_callback)
+	{
+		//Handle value
+		HandleValue(p_reports);
+		
+		//Execute function
+		p_callback();
+		
+		//Pop value
+		m_counter.Pop();
+		
+		return p_reports.pEnd + 1;
+	}
 	const grammar::Report * HandleValue(grammar::report_range p_reports);
 	const grammar::Report * HandleValueRaw(grammar::report_range p_reports);
 	template<bool _START = true>
@@ -242,9 +256,6 @@ private:
 
 					//Set result for later
 					m_value.temporaryResultIndex = 1;
-					
-					//Pop back
-					m_counter.Pop(oldCounter);
 				}
 				//Both operands can be optimized
 				else
@@ -254,6 +265,9 @@ private:
 					leftType = m_valueType;
 					leftValue = m_value;
 				}
+				
+				//Pop back
+				m_counter.Pop(oldCounter);
 			} while (i < p_reports.pEnd);
 		}
 

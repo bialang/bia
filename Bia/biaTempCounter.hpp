@@ -20,6 +20,11 @@ public:
 	{
 		m_counter = m_max = 0;
 	}
+	inline void Pop()
+	{
+		if (--m_counter < 0)
+			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid temp counter.");
+	}
 	inline void Pop(counter_type p_oldCounter)
 	{
 		if (m_counter < p_oldCounter)

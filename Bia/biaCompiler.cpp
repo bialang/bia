@@ -212,58 +212,58 @@ const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pRepor
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
 {
 	//Handle value and prepare the result for a function call
-	HandleValue(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children);
-
-	//Get address of variable
-	auto pVariable = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
-
-	//Make call
-	switch (m_valueType)
-	{
-	case VALUE_TYPE::INT_32:
-	{
-		//Optimize common used constant values
-		switch (m_value.nInt)
+	HandleValue(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children, [&] {
+		//Get address of variable
+		auto pVariable = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+	
+		//Make call
+		switch (m_valueType)
 		{
-		case 0:
-			m_toolset.SafeCall(&machine::link::InstantiateInt0, pVariable);
-
-			break;
-		case 1:
-			m_toolset.SafeCall(&machine::link::InstantiateIntP1, pVariable);
-
-			break;
-		case -1:
-			m_toolset.SafeCall(&machine::link::InstantiateIntN1, pVariable);
-
-			break;
-		default:
-			m_toolset.SafeCall(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
-
+		case VALUE_TYPE::INT_32:
+		{
+			//Optimize common used constant values
+			switch (m_value.nInt)
+			{
+			case 0:
+				m_toolset.SafeCall(&machine::link::InstantiateInt0, pVariable);
+	
+				break;
+			case 1:
+				m_toolset.SafeCall(&machine::link::InstantiateIntP1, pVariable);
+	
+				break;
+			case -1:
+				m_toolset.SafeCall(&machine::link::InstantiateIntN1, pVariable);
+	
+				break;
+			default:
+				m_toolset.SafeCall(&machine::link::InstantiateInt_32, pVariable, m_value.nInt);
+	
+				break;
+			}
+	
 			break;
 		}
-
-		break;
-	}
-	case VALUE_TYPE::INT_64:
-		m_toolset.SafeCall(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
-
-		break;
-	case VALUE_TYPE::FLOAT:
-		m_toolset.SafeCall(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
-
-		break;
-	case VALUE_TYPE::DOUBLE:
-		m_toolset.SafeCall(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
-
-		break;
-	case VALUE_TYPE::MEMBER:
-		m_toolset.SafeCall(&machine::link::InstantiateCopy, pVariable, m_value.pMember);
-
-		break;
-	default:
-		BIA_COMPILER_DEV_INVALID
-	}
+		case VALUE_TYPE::INT_64:
+			m_toolset.SafeCall(&machine::link::InstantiateInt_64, pVariable, m_value.llInt);
+	
+			break;
+		case VALUE_TYPE::FLOAT:
+			m_toolset.SafeCall(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
+	
+			break;
+		case VALUE_TYPE::DOUBLE:
+			m_toolset.SafeCall(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
+	
+			break;
+		case VALUE_TYPE::MEMBER:
+			m_toolset.SafeCall(&machine::link::InstantiateCopy, pVariable, m_value.pMember);
+	
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+	});
 
 	return p_reports.pEnd + 1;
 }
@@ -401,38 +401,38 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_range p_reports)
 {
 	//Handle value to print
-	HandleValue(p_reports);
-
-	//Call print
-	switch (m_valueType)
-	{
-	case VALUE_TYPE::INT_32:
-		m_toolset.SafeCall(&machine::link::Print_i, m_value.nInt);
-
-		break;
-	case VALUE_TYPE::INT_64:
-		m_toolset.SafeCall(&machine::link::Print_I, m_value.llInt);
-
-		break;
-	case VALUE_TYPE::FLOAT:
-		m_toolset.SafeCall(&machine::link::Print_f, m_value.rFloat);
-
-		break;
-	case VALUE_TYPE::DOUBLE:
-		m_toolset.SafeCall(&machine::link::Print_d, m_value.rDouble);
-
-		break;
-	case VALUE_TYPE::MEMBER:
-		m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
-
-		break;
-	case VALUE_TYPE::TEMPORARY_MEMBER:
-		m_toolset.Call<true>(&machine::link::Print_M, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
-
-		break;
-	default:
-		BIA_COMPILER_DEV_INVALID
-	}
+	HandleValue(p_reports), [this] {
+		//Call print
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::INT_32:
+			m_toolset.SafeCall(&machine::link::Print_i, m_value.nInt);
+	
+			break;
+		case VALUE_TYPE::INT_64:
+			m_toolset.SafeCall(&machine::link::Print_I, m_value.llInt);
+	
+			break;
+		case VALUE_TYPE::FLOAT:
+			m_toolset.SafeCall(&machine::link::Print_f, m_value.rFloat);
+	
+			break;
+		case VALUE_TYPE::DOUBLE:
+			m_toolset.SafeCall(&machine::link::Print_d, m_value.rDouble);
+	
+			break;
+		case VALUE_TYPE::MEMBER:
+			m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
+	
+			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call<true>(&machine::link::Print_M, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+	
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+	});
 
 	return p_reports.pEnd + 1;
 }
