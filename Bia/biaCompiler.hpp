@@ -77,7 +77,7 @@ private:
 		double rDouble;
 		size_t iString;
 		framework::BiaMember * pMember;
-		int8_t temporaryResultIndex;
+		BiaTempCounter::counter_type temporaryResultIndex;
 	};
 
 	machine::architecture::BiaToolset m_toolset;
@@ -152,7 +152,7 @@ private:
 	}
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
-	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator);
+	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
@@ -230,7 +230,7 @@ private:
 		else
 		{
 			//Handle leftmost math term
-			auto oldCounter = m_counter.Next();
+			auto currentCounter = m_counter.Next();
 			const grammar::Report * i = (this->*NEXT)(p_reports.pBegin[1].content.children);
 			auto leftType = m_valueType;
 			auto leftValue = m_value;
@@ -249,13 +249,10 @@ private:
 				if (leftType == VALUE_TYPE::MEMBER || leftType == VALUE_TYPE::TEMPORARY_MEMBER || m_valueType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::TEMPORARY_MEMBER)
 				{
 					//Handle operator
-					HandleOperator(leftType, leftValue, m_valueType, m_value, unOperator);
+					HandleOperator(leftType, leftValue, m_valueType, m_value, unOperator, currentCounter);
 					
 					leftType = m_valueType  = VALUE_TYPE::TEMPORARY_MEMBER;
-					leftValue.temporaryResultIndex = m_counter.Current();
-
-					//Set result for later
-					m_value.temporaryResultIndex = 1;
+					leftValue.temporaryResultIndex = currentCounter;
 				}
 				//Both operands can be optimized
 				else
@@ -267,8 +264,15 @@ private:
 				}
 				
 				//Pop back
-				m_counter.Pop(oldCounter);
+				m_counter.Pop(currentCounter);
 			} while (i < p_reports.pEnd);
+
+			m_valueType = leftType;
+
+			if (m_valueType == VALUE_TYPE::TEMPORARY_MEMBER)
+				m_value.temporaryResultIndex = currentCounter;
+			else
+				m_value = leftValue;
 		}
 
 		return p_reports.pEnd + 1;

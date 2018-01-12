@@ -70,8 +70,8 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 	var i = 2*2*2;
-var o = 2;
-print i*2+i*5*3;
+var o = 3;
+print i*2+i*5*3+o*i;
 
 )";
 

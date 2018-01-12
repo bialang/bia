@@ -115,7 +115,7 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 	}
 }
 
-void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
+void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex)
 {
 	using namespace machine::architecture;
 
@@ -158,8 +158,8 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, BiaToolset::TemporaryMember(p_rightValue.temporaryResultIndex), BiaToolset::TemporaryMember(m_counter.Current()));
-
+			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, BiaToolset::TemporaryMember(p_rightValue.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
+		//	m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(2), p_unOperator, BiaToolset::TemporaryMember(3), BiaToolset::TemporaryMember(1));
 			break;
 		default:
 			BIA_COMPILER_DEV_INVALID
@@ -401,7 +401,7 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_range p_reports)
 {
 	//Handle value to print
-	HandleValue(p_reports), [this] {
+	HandleValue(p_reports, [this] {
 		//Call print
 		switch (m_valueType)
 		{
@@ -422,11 +422,11 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 	
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.SafeCall(&machine::link::Print_M, m_value.pMember);
+			m_toolset.SafeCall(&framework::BiaMember::Print, m_value.pMember);
 	
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call<true>(&machine::link::Print_M, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+			m_toolset.Call(&framework::BiaMember::Print, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
 	
 			break;
 		default:
