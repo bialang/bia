@@ -99,7 +99,19 @@ public:
 	*/
 	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
-		m_llValue = static_cast<long long>(compiler::ConstantOperationIntegral(m_llValue, *p_pRight->Cast<int64_t>(), p_unOperator));
+		auto fRightNativeType = p_pRight->GetNativeType();
+
+		//64 bit int operand
+		if (fRightNativeType & NTF_INT_64)
+			return OperatorAssignCallInt_64(p_unOperator, *p_pRight->Cast<int64_t>());
+		//Float
+		else if (fRightNativeType & NTF_FLOAT)
+			return OperatorAssignCallFloat(p_unOperator, *p_pRight->Cast<float>());
+		//Double
+		else if (fRightNativeType & NTF_DOUBLE)
+			return OperatorAssignCallDouble(p_unOperator, *p_pRight->Cast<double>());
+
+		throw exception::OperatorException("Invalid type on native operation.");
 	}
 	/**
 	* @see	BiaMember::OperatorAssignCallInt_32().
@@ -107,6 +119,27 @@ public:
 	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
 		m_llValue = static_cast<long long>(compiler::ConstantOperationIntegral(m_llValue, p_nRight, p_unOperator));
+	}
+	/**
+	 * @see	BiaMember::OperatorAssignCallInt_64().
+	*/
+	inline virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
+	{
+		m_llValue = static_cast<long long>(compiler::ConstantOperationIntegral(m_llValue, p_llRight, p_unOperator));
+	}
+	/**
+	 * @see	BiaMember::OperatorAssignCallFloat().
+	*/
+	inline virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override
+	{
+		m_llValue = static_cast<long long>(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
+	}
+	/**
+	 * @see	BiaMember::OperatorAssignCallDouble().
+	*/
+	inline virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override
+	{
+		m_llValue = static_cast<long long>(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
 	}
 	/**
 	* @see	BiaMember::OperatorSelfCall().

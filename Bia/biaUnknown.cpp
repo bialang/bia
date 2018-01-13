@@ -45,6 +45,21 @@ void BiaUnknown::OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRigh
 	throw exception::SymbolException("Undefined symbol.");
 }
 
+void BiaUnknown::OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void BiaUnknown::OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void BiaUnknown::OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
 void BiaUnknown::OperatorSelfCall(uint32_t p_unOperator)
 {
 	throw exception::SymbolException("Undefined symbol.");

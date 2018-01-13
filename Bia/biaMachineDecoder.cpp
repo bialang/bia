@@ -43,6 +43,9 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCallDouble);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCall);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallInt_32);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallInt_64);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallFloat);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallDouble);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorSelfCall);
 
 	BIA_FUNCTION_ENTRY(BiaMachineContext::ConstructTemporaryAddresses);

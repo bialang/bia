@@ -95,6 +95,9 @@ public:
 	*/
 	virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) = 0;
 	virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) = 0;
+	virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) = 0;
+	virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) = 0;
+	virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) = 0;
 	/**
 	 * @throws	exception::OperatorException
 	*/

@@ -119,13 +119,13 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 {
 	using namespace machine::architecture;
 
+	//Mark current
+	m_counter.Current();
+
 	switch (p_leftType)
 	{
 	case VALUE_TYPE::MEMBER:
 	{
-		//Mark current
-		m_counter.Current();
-
 		//Right value
 		switch (m_valueType)
 		{
@@ -133,11 +133,17 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, m_value.nInt, BiaToolset::TemporaryMember(p_destinationIndex));
 
 			break;
-		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_64:
+		case VALUE_TYPE::INT_64:
+			m_toolset.Call(&framework::BiaMember::OperatorCallInt_64, p_leftValue.pMember, p_unOperator, m_value.llInt, BiaToolset::TemporaryMember(p_destinationIndex));
+
 			break;
-		case bia::compiler::BiaCompiler::VALUE_TYPE::FLOAT:
+		case VALUE_TYPE::FLOAT:
+			m_toolset.Call(&framework::BiaMember::OperatorCallFloat, p_leftValue.pMember, p_unOperator, m_value.rFloat, BiaToolset::TemporaryMember(p_destinationIndex));
+
 			break;
-		case bia::compiler::BiaCompiler::VALUE_TYPE::DOUBLE:
+		case VALUE_TYPE::DOUBLE:
+			m_toolset.Call(&framework::BiaMember::OperatorCallDouble, p_leftValue.pMember, p_unOperator, m_value.rDouble, BiaToolset::TemporaryMember(p_destinationIndex));
+
 			break;
 		case VALUE_TYPE::MEMBER:
 			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
@@ -158,16 +164,58 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 		switch (m_valueType)
 		{
 		case VALUE_TYPE::INT_32:
-			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.nInt, BiaToolset::TemporaryMember(m_counter.Current()));
+			//Assign call if destination is the left hand side
+			if (p_leftValue.temporaryResultIndex == p_destinationIndex)
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallInt_32, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.nInt);
+			//Normal operator call with new destination
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.nInt, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::INT_64:
+			//Assign call if destination is the left hand side
+			if (p_leftValue.temporaryResultIndex == p_destinationIndex)
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallInt_64, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.llInt);
+			//Normal operator call with new destination
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorCallInt_64, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.llInt, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::FLOAT:
+			//Assign call if destination is the left hand side
+			if (p_leftValue.temporaryResultIndex == p_destinationIndex)
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallFloat, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.rFloat);
+			//Normal operator call with new destination
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorCallFloat, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.rFloat, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::DOUBLE:
+			//Assign call if destination is the left hand side
+			if (p_leftValue.temporaryResultIndex == p_destinationIndex)
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallDouble, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.rDouble);
+			//Normal operator call with new destination
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorCallDouble, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.rDouble, BiaToolset::TemporaryMember(p_destinationIndex));
 
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(m_counter.Current()));
+			//Assign call if destination is the left hand side
+			if (p_leftValue.temporaryResultIndex == p_destinationIndex)
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.pMember);
+			//Normal operator call with new destination
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
 
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
-		//	m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(2), p_unOperator, BiaToolset::TemporaryMember(3), BiaToolset::TemporaryMember(1));
+			//Assign call if destination is the left hand side
+			if (p_leftValue.temporaryResultIndex == p_destinationIndex)
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+			//Normal operator call with new destination
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
+			
 			break;
 		default:
 			BIA_COMPILER_DEV_INVALID
@@ -178,16 +226,6 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 	default:
 		BIA_COMPILER_DEV_INVALID
 	}
-	//switch (p_unOperator)
-	//{
-	//default:
-	//	//m_toolset.Push(p_unOperator);
-
-	//	m_valueType = VALUE_TYPE::MEMBER;
-
-	//	
-	//	m_toolset.Call(m_scpOperatorFunctions[0][static_cast<int>(p_left) + (static_cast<int>(p_right) + 1) % (static_cast<int>(VALUE_TYPE::MEMBER) + 1)], )
-	//}
 }
 
 const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pReport)
