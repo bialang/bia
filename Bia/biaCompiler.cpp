@@ -9,20 +9,20 @@ namespace bia
 namespace compiler
 {
 
-void BiaCompiler::HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
+void BiaCompiler::HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator)
 {
 	using namespace framework;
 
 	switch (p_leftType)
 	{
 	case VALUE_TYPE::INT_32:
-		return HandleConstantOperation(p_leftValue.nInt, p_rightType, p_rightValue, p_unOperator);
+		return HandleConstantOperation(p_leftValue.nInt, p_unOperator);
 	case VALUE_TYPE::INT_64:
-		return HandleConstantOperation(p_leftValue.llInt, p_rightType, p_rightValue, p_unOperator);
+		return HandleConstantOperation(p_leftValue.llInt, p_unOperator);
 	case VALUE_TYPE::FLOAT:
-		return HandleConstantOperation(p_leftValue.rFloat, p_rightType, p_rightValue, p_unOperator);
+		return HandleConstantOperation(p_leftValue.rFloat, p_unOperator);
 	case VALUE_TYPE::DOUBLE:
-		return HandleConstantOperation(p_leftValue.rDouble, p_rightType, p_rightValue, p_unOperator);
+		return HandleConstantOperation(p_leftValue.rDouble, p_unOperator);
 	case VALUE_TYPE::STRING:
 	default:
 		BIA_COMPILER_DEV_INVALID
@@ -124,6 +124,70 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 
 	switch (p_leftType)
 	{
+	case VALUE_TYPE::INT_32:
+	{
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::MEMBER:
+			m_toolset.Call(&machine::link::OperatorCallInt_32, p_leftValue.nInt, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&machine::link::OperatorCallInt_32, p_leftValue.nInt, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		}
+
+		break;
+	}
+	case VALUE_TYPE::INT_64:
+	{
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::MEMBER:
+			m_toolset.Call(&machine::link::OperatorCallInt_64, p_leftValue.llInt, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&machine::link::OperatorCallInt_64, p_leftValue.llInt, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		}
+
+		break;
+	}
+	case VALUE_TYPE::FLOAT:
+	{
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::MEMBER:
+			m_toolset.Call(&machine::link::OperatorCallFloat, p_leftValue.rFloat, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&machine::link::OperatorCallFloat, p_leftValue.rFloat, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		}
+
+		break;
+	}
+	case VALUE_TYPE::DOUBLE:
+	{
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::MEMBER:
+			m_toolset.Call(&machine::link::OperatorCallDouble, p_leftValue.rDouble, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&machine::link::OperatorCallDouble, p_leftValue.rDouble, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		}
+
+		break;
+	}
 	case VALUE_TYPE::MEMBER:
 	{
 		//Right value
@@ -226,6 +290,9 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 	default:
 		BIA_COMPILER_DEV_INVALID
 	}
+
+	m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
+	m_value.temporaryResultIndex = p_destinationIndex;
 }
 
 const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pReport)

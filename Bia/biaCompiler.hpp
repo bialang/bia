@@ -92,65 +92,61 @@ private:
 
 	inline void SetValue(int32_t p_nValue)
 	{
-		//m_toolset.Push(p_nValue);
 		m_valueType = VALUE_TYPE::INT_32;
 		m_value.nInt = p_nValue;
 	}
 	inline void SetValue(int64_t p_llValue)
 	{
-		//m_toolset.Push(p_llValue);
 		m_valueType = VALUE_TYPE::INT_64;
 		m_value.llInt = p_llValue;
 	}
 	inline void SetValue(float p_rValue)
 	{
-		//m_toolset.Push(p_rValue);
 		m_valueType = VALUE_TYPE::FLOAT;
 		m_value.rFloat = p_rValue;
 	}
 	inline void SetValue(double p_rValue)
 	{
-		//m_toolset.Push(p_rValue);
 		m_valueType = VALUE_TYPE::DOUBLE;
 		m_value.rDouble = p_rValue;
 	}
 	template<typename _LEFT, typename std::enable_if<std::is_integral<_LEFT>::value, int>::type = 0>
-	inline void HandleConstantOperation(_LEFT p_left, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
+	inline void HandleConstantOperation(_LEFT p_left, uint32_t p_unOperator)
 	{
-		switch (p_rightType)
+		switch (m_valueType)
 		{
 		case VALUE_TYPE::INT_32:
-			return SetValue(ConstantOperationIntegral(p_left, p_rightValue.nInt, p_unOperator));
+			return SetValue(ConstantOperationIntegral(p_left, m_value.nInt, p_unOperator));
 		case VALUE_TYPE::INT_64:
-			return SetValue(ConstantOperationIntegral(p_left, p_rightValue.llInt, p_unOperator));
+			return SetValue(ConstantOperationIntegral(p_left, m_value.llInt, p_unOperator));
 		case VALUE_TYPE::FLOAT:
-			return SetValue(ConstantOperationBasic(p_left, p_rightValue.rFloat, p_unOperator));
+			return SetValue(ConstantOperationBasic(p_left, m_value.rFloat, p_unOperator));
 		case VALUE_TYPE::DOUBLE:
-			return SetValue(ConstantOperationBasic(p_left, p_rightValue.rDouble, p_unOperator));
+			return SetValue(ConstantOperationBasic(p_left, m_value.rDouble, p_unOperator));
 		case VALUE_TYPE::STRING:
 		default:
 			break;
 		}
 	}
 	template<typename _LEFT, typename std::enable_if<std::is_floating_point<_LEFT>::value, int>::type = 0>
-	inline void HandleConstantOperation(_LEFT p_left, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator)
+	inline void HandleConstantOperation(_LEFT p_left, uint32_t p_unOperator)
 	{
-		switch (p_rightType)
+		switch (m_valueType)
 		{
 		case VALUE_TYPE::INT_32:
-			return SetValue(ConstantOperationBasic(p_left, p_rightValue.nInt, p_unOperator));
+			return SetValue(ConstantOperationBasic(p_left, m_value.nInt, p_unOperator));
 		case VALUE_TYPE::INT_64:
-			return SetValue(ConstantOperationBasic(p_left, p_rightValue.llInt, p_unOperator));
+			return SetValue(ConstantOperationBasic(p_left, m_value.llInt, p_unOperator));
 		case VALUE_TYPE::FLOAT:
-			return SetValue(ConstantOperationBasic(p_left, p_rightValue.rFloat, p_unOperator));
+			return SetValue(ConstantOperationBasic(p_left, m_value.rFloat, p_unOperator));
 		case VALUE_TYPE::DOUBLE:
-			return SetValue(ConstantOperationBasic(p_left, p_rightValue.rDouble, p_unOperator));
+			return SetValue(ConstantOperationBasic(p_left, m_value.rDouble, p_unOperator));
 		case VALUE_TYPE::STRING:
 		default:
 			break;
 		}
 	}
-	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator);
+	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
@@ -248,32 +244,17 @@ private:
 				//Call operator
 				if (leftType == VALUE_TYPE::MEMBER || leftType == VALUE_TYPE::TEMPORARY_MEMBER || 
 					m_valueType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::TEMPORARY_MEMBER)
-				{
-					//Handle operator
 					HandleOperator(leftType, leftValue, unOperator, currentCounter);
-					
-					leftType = m_valueType  = VALUE_TYPE::TEMPORARY_MEMBER;
-					leftValue.temporaryResultIndex = currentCounter;
-				}
 				//Both operands can be optimized
 				else
-				{
-					HandleConstantOperation(leftType, leftValue, m_valueType, m_value, unOperator);
+					HandleConstantOperation(leftType, leftValue, unOperator);
 
-					leftType = m_valueType;
-					leftValue = m_value;
-				}
+				leftType = m_valueType;
+				leftValue = m_value;
 				
 				//Pop back
 				m_counter.Pop(currentCounter);
 			} while (i < p_reports.pEnd);
-
-			m_valueType = leftType;
-
-			if (m_valueType == VALUE_TYPE::TEMPORARY_MEMBER)
-				m_value.temporaryResultIndex = currentCounter;
-			else
-				m_value = leftValue;
 		}
 
 		return p_reports.pEnd + 1;

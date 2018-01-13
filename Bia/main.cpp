@@ -71,7 +71,7 @@ int main()
 	char script[] = R"(
 	var i = 2*2*2;
 var o = 3;
-print i*2+i*(i+5)*8+o*i;
+print 5*i*2+i*(i+5)*8+o*i;
 )";
 
 	/*
@@ -253,7 +253,7 @@ print i*2+i*(i+5)*8+o*i;
 	{
 		printf("%02hhx ", *buffer.first++);
 
-		if (++t == 10)
+		if (++t == 20)
 		{
 			puts("");
 			t =0 ;

@@ -77,7 +77,7 @@ public:
 #if defined(BIA_COMPILER_MSCV)
 #endif
 	}
-	template<bool _POP, typename T, typename... _ARGS>
+	template<typename T, typename... _ARGS>
 	inline void Call(T * p_pFunctionAddress, _ARGS... p_args)
 	{
 		//Push all
@@ -88,8 +88,7 @@ public:
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
 
 		//Pop all
-		if (_POP)
-			Pop<sizeof...(_ARGS)>();
+		Pop<sizeof...(_ARGS)>();
 	}
 	template<typename _RETURN, typename _CLASS, typename _INSTANCE, typename... _ARGS, typename... _ARGS2>
 	inline void Call(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _INSTANCE p_instance, _ARGS2... p_args)
