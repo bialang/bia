@@ -231,6 +231,8 @@ private:
 			return 4;
 		case REGISTER::EBP:
 			return 5;
+		default:
+			return 0;
 		}
 	}
 };

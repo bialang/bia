@@ -69,9 +69,7 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-	var i = 2*2*2;
-var o = 3;
-print 5*i*2+i*(i+5)*8+o*i;
+print 1*2*3*4+5*6*7;
 )";
 
 	/*
@@ -248,6 +246,8 @@ print 5*i*2+i*(i+5)*8+o*i;
 
 	auto buffer = buf.GetBuffer();
 	int t = 0;
+
+	printf("Code Size: %zi\n", buffer.second);
 
 	while (buffer.second--)
 	{

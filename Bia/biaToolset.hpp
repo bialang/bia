@@ -49,7 +49,7 @@ public:
 		Pass(p_args...);
 
 		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(p_pFunctionAddress));
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<int32_t>(p_pFunctionAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
 
 		//Pop parameter
@@ -71,7 +71,7 @@ public:
 		address.pMember = p_pFunctionAddress;
 
 		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(address.pAddress));
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<int32_t>(address.pAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
 
 #if defined(BIA_COMPILER_MSCV)
@@ -84,7 +84,7 @@ public:
 		Pass(p_args...);
 
 		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(p_pFunctionAddress));
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<int32_t>(p_pFunctionAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
 
 		//Pop all
@@ -106,7 +106,7 @@ public:
 		address.pMember = p_pFunctionAddress;
 
 		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<uint32_t>(address.pAddress));
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<int32_t>(address.pAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
 	}
 	inline void CommitTemporaryMembers(BiaMachineContext & p_context, temp_members p_parameter, int8_t p_cCount)
@@ -166,28 +166,28 @@ private:
 
 		//8 bit
 		if (sizeof(T) == 1)
-			BiaArchitecture::Operation8<OP_CODE::PUSH>(m_output, *reinterpret_cast<uint8_t*>(&p_value));
+			BiaArchitecture::Operation8<OP_CODE::PUSH>(m_output, static_cast<int8_t>(p_value));
 		//32 bit
 		else if (sizeof(T) == 4)
 		{
 			//Save 3 bytes
-			if (std::is_integral<T>::value && !(*reinterpret_cast<uint32_t*>(&p_value) & 0xffffff00))
-				BiaArchitecture::Operation8<OP_CODE::PUSH>(m_output, *reinterpret_cast<uint8_t*>(&p_value));
+			if (std::is_integral<T>::value && p_value <= 127 && p_value >= -128)
+				BiaArchitecture::Operation8<OP_CODE::PUSH>(m_output, static_cast<int8_t>(p_value));
 			//Push all 4 bytes
 			else
-				BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, *reinterpret_cast<uint32_t*>(&p_value));
+				BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, static_cast<int32_t>(p_value));
 		}
 		//64 bit
 		else
 		{
-			BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, *reinterpret_cast<uint64_t*>(&p_value) >> 32);
-			BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, *reinterpret_cast<uint32_t*>(&p_value));
+			BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, *reinterpret_cast<int64_t*>(&p_value) >> 32);
+			BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, *reinterpret_cast<int32_t*>(&p_value));
 		}
 	}
 	template<typename T>
 	inline void Pass(T * p_pAddress)
 	{
-		BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, reinterpret_cast<uint32_t>(p_pAddress));
+		BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, reinterpret_cast<int32_t>(p_pAddress));
 	}
 	template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
 	inline void Pass(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)
@@ -226,7 +226,7 @@ private:
 	template<typename T>
 	inline void PassInstance(T * p_pInstance)
 	{
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<uint32_t>(p_pInstance));
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::ECX>(m_output, reinterpret_cast<int32_t>(p_pInstance));
 	}
 	template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
 	inline void PassInstance(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)
