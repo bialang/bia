@@ -38,30 +38,23 @@ public:
 
 		//64 bit int operand
 		if (fRightNativeType & NTF_INT_64)
-		{
-			if (auto pRight = p_pRight->Cast<int64_t>())
-			{
-				static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
-				new(p_pDestination) BiaNativeVariable(compiler::ConstantOperationIntegral(m_llValue, *pRight, p_unOperator));
-
-				return;
-			}
-		}
+			return OperatorCallInt_64(p_unOperator, *p_pRight->Cast<int64_t>(), p_pDestination);
 		//Float
 		else if (fRightNativeType & NTF_FLOAT)
-		{
-			//static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
-		}
+			return OperatorCallFloat(p_unOperator, *p_pRight->Cast<float>(), p_pDestination);
 		//Double
 		else if (fRightNativeType & NTF_DOUBLE)
-		{
-			//static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
-		}
-		//Maybe 8, 16 or 32 bit?
+			return OperatorCallDouble(p_unOperator, *p_pRight->Cast<double>(), p_pDestination);
+		/*//Maybe 8, 16 or 32 bit?
 		else if (fRightNativeType & (NTF_INT_8 | NTF_INT_16 | NTF_INT_32))
 		{
-			//static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
-		}
+			if (fRightNativeType & NTF_INT_64)
+				return OperatorCallInt_32(p_unOperator, *p_pRight->Cast<int32_t>(), p_pDestination);
+			else if (fRightNativeType & NTF_INT_64)
+				return OperatorCallInt_32(p_unOperator, *p_pRight->Cast<int16_t>(), p_pDestination);
+			else
+				return OperatorCallInt_32(p_unOperator, *p_pRight->Cast<int8_t>(), p_pDestination);
+		}*/
 
 		throw exception::OperatorException("Invalid type on native operation.");
 	}

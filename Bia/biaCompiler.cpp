@@ -115,7 +115,7 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 	}
 }
 
-void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE_TYPE p_rightType, Value p_rightValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex)
+void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex)
 {
 	using namespace machine::architecture;
 
@@ -123,10 +123,14 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 	{
 	case VALUE_TYPE::MEMBER:
 	{
-		switch (p_rightType)
+		//Mark current
+		m_counter.Current();
+
+		//Right value
+		switch (m_valueType)
 		{
 		case VALUE_TYPE::INT_32:
-			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, p_rightValue.nInt, BiaToolset::TemporaryMember(m_counter.Current()));
+			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, m_value.nInt, BiaToolset::TemporaryMember(p_destinationIndex));
 
 			break;
 		case bia::compiler::BiaCompiler::VALUE_TYPE::INT_64:
@@ -136,7 +140,11 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 		case bia::compiler::BiaCompiler::VALUE_TYPE::DOUBLE:
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, p_rightValue.pMember, BiaToolset::TemporaryMember(m_counter.Current()));
+			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
 
 			break;
 		default:
@@ -147,18 +155,18 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, VALUE
 	}
 	case VALUE_TYPE::TEMPORARY_MEMBER:
 	{
-		switch (p_rightType)
+		switch (m_valueType)
 		{
 		case VALUE_TYPE::INT_32:
-			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, p_rightValue.nInt, BiaToolset::TemporaryMember(m_counter.Current()));
+			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.nInt, BiaToolset::TemporaryMember(m_counter.Current()));
 
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, p_rightValue.pMember, BiaToolset::TemporaryMember(m_counter.Current()));
+			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(m_counter.Current()));
 
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, BiaToolset::TemporaryMember(p_rightValue.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
+			m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
 		//	m_toolset.Call(&framework::BiaMember::OperatorCall, BiaToolset::TemporaryMember(2), p_unOperator, BiaToolset::TemporaryMember(3), BiaToolset::TemporaryMember(1));
 			break;
 		default:

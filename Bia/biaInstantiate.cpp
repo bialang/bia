@@ -1,5 +1,5 @@
 #include "biaInstantiate.hpp"
-#include "biaNativeVariable.hpp"
+#include "biaInt.hpp"
 
 #include <new>
 

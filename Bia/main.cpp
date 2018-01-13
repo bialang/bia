@@ -71,8 +71,7 @@ int main()
 	char script[] = R"(
 	var i = 2*2*2;
 var o = 3;
-print i*2+i*5*3+o*i;
-print i*2+i*5*3;
+print i*2+i*(i+5)*8+o*i;
 )";
 
 	/*
