@@ -24,6 +24,9 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Print);
 	BIA_FUNCTION_ENTRY(machine::link::Print_i);
 	BIA_FUNCTION_ENTRY(machine::link::Print_I);
+	BIA_FUNCTION_ENTRY(machine::link::Print_true);
+	BIA_FUNCTION_ENTRY(machine::link::Print_false);
+	BIA_FUNCTION_ENTRY(machine::link::Print_b);
 	BIA_FUNCTION_ENTRY(machine::link::Print_f);
 	BIA_FUNCTION_ENTRY(machine::link::Print_d);
 

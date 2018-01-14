@@ -80,6 +80,11 @@ int BiaUnknown::GetNativeType() const
 	throw exception::SymbolException("Undefined symbol.");
 }
 
+int32_t BiaUnknown::Test()
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
 void * BiaUnknown::GetNativeData(NATIVE_TYPE p_nativeType)
 {
 	throw exception::SymbolException("Undefined symbol.");

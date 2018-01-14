@@ -59,6 +59,7 @@ public:
 		NTF_DOUBLE = 0x20,
 	};
 
+
 	/**
 	 * Constructor.
 	*/
@@ -112,6 +113,7 @@ public:
 	*/
 	virtual bool IsType(const std::type_info & p_type) const = 0;
 	virtual int GetNativeType() const = 0;
+	virtual int32_t Test() = 0;
 	template<typename T, typename _T = typename std::remove_reference<T>::type>
 	inline _T * Cast()
 	{

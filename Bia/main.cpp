@@ -69,7 +69,7 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-print 3.22;
+print false;
 )";
 
 	/*

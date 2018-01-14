@@ -147,6 +147,10 @@ public:
 	{
 		return temporary_result(p_cIndex * -4);
 	}
+	inline static RegisterOffset<REGISTER::EAX, void, false> TestValueResult()
+	{
+		return RegisterOffset<REGISTER::EAX, void, false>();
+	}
 
 private:
 	stream::BiaOutputStream & m_output;

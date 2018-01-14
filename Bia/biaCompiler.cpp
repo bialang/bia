@@ -325,7 +325,7 @@ const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pRepor
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
 {
 	//Handle value and prepare the result for a function call
-	HandleValue(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children, [&] {
+	HandleValue<false>(FindNextChild<grammar::BGR_VALUE, 0, true>(p_reports.pBegin + 2, p_reports.pEnd)->content.children, [&] {
 		//Get address of variable
 		auto pVariable = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
 	
@@ -471,14 +471,14 @@ const grammar::Report * BiaCompiler::HandleValueRaw(grammar::report_range p_repo
 
 		break;
 	case grammar::BV_TRUE:
-		m_value.nInt = 1;
-		m_valueType = VALUE_TYPE::INT_32;
+		m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
+		m_value.bTestValue = true;
 
 		break;
 	case grammar::BV_FALSE:
 	case grammar::BV_NULL:
-		m_value.nInt = 0;
-		m_valueType = VALUE_TYPE::INT_32;
+		m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
+		m_value.bTestValue = false;
 
 		break;
 	case grammar::BV_MEMBER:
@@ -514,7 +514,7 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_range p_reports)
 {
 	//Handle value to print
-	HandleValue(p_reports, [this] {
+	HandleValue<false>(p_reports, [this] {
 		//Call print
 		switch (m_valueType)
 		{
@@ -541,6 +541,17 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 		case VALUE_TYPE::TEMPORARY_MEMBER:
 			m_toolset.Call(&framework::BiaMember::Print, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
 	
+			break;
+		case VALUE_TYPE::TEST_VALUE_REGISTER:
+			m_toolset.Call(&machine::link::Print_b, machine::architecture::BiaToolset::TestValueResult());
+
+			break;
+		case VALUE_TYPE::TEST_VALUE_CONSTANT:
+			if (m_value.bTestValue)
+				m_toolset.SafeCall(&machine::link::Print_true);
+			else
+				m_toolset.SafeCall(&machine::link::Print_false);
+
 			break;
 		default:
 			BIA_COMPILER_DEV_INVALID

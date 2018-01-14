@@ -23,6 +23,24 @@ BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_I(int64_t p_llValue))
 	printf("%lli\n", p_llValue);
 }
 
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_true())
+{
+	puts("true");
+}
+
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_false())
+{
+	puts("false");
+}
+
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_b(int32_t p_nValue))
+{
+	if (p_nValue)
+		Print_true();
+	else
+		Print_false();
+}
+
 BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_f(float p_rValue))
 {
 	printf("%f\n", p_rValue);

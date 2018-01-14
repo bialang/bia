@@ -72,6 +72,10 @@ public:
 	 * @see	BiaMember::GetNativeType().
 	*/
 	virtual int GetNativeType() const override;
+	/**
+	 * @see	BiaMember::Test().
+	*/
+	virtual int32_t Test() override;
 
 protected:
 	/**

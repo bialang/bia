@@ -26,7 +26,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_32(framework::BiaMember *
 	p_pMember->~BiaMember();
 
 	//Create new int object
-	new(p_pMember) framework::BiaNativeVariable<long long>(p_nValue);
+	new(p_pMember) framework::BiaNativeVariable<int64_t>(p_nValue);
 }
 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_64(framework::BiaMember * p_pMember, int64_t p_llValue))
@@ -35,7 +35,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_64(framework::BiaMember *
 	p_pMember->~BiaMember();
 
 	//Create new int object
-	new(p_pMember) framework::BiaNativeVariable<long long>(p_llValue);
+	new(p_pMember) framework::BiaNativeVariable<int64_t>(p_llValue);
 }
 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt0(framework::BiaMember * p_pMember))
@@ -44,7 +44,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt0(framework::BiaMember * p
 	p_pMember->~BiaMember();
 
 	//Create new int object
-	new(p_pMember) framework::BiaNativeVariable<long long>(0);
+	new(p_pMember) framework::BiaNativeVariable<int64_t>(0);
 }
 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntP1(framework::BiaMember * p_pMember))
@@ -53,7 +53,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntP1(framework::BiaMember * 
 	p_pMember->~BiaMember();
 
 	//Create new int object
-	new(p_pMember) framework::BiaNativeVariable<long long>(1);
+	new(p_pMember) framework::BiaNativeVariable<int64_t>(1);
 }
 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntN1(framework::BiaMember * p_pMember))
@@ -62,7 +62,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntN1(framework::BiaMember * 
 	p_pMember->~BiaMember();
 
 	//Create new int object
-	new(p_pMember) framework::BiaNativeVariable<long long>(-1);
+	new(p_pMember) framework::BiaNativeVariable<int64_t>(-1);
 }
 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateFloat(framework::BiaMember *p_pMember, float p_rValue))

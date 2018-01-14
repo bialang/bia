@@ -66,6 +66,8 @@ private:
 		STRING,
 		MEMBER,
 		TEMPORARY_MEMBER,
+		TEST_VALUE_REGISTER,	/**	Defines that the test value is stored in the test register.	*/
+		TEST_VALUE_CONSTANT,	/**	Defines that the test value is known at compile time.	*/
 		NONE,
 	};
 
@@ -78,6 +80,7 @@ private:
 		size_t iString;
 		framework::BiaMember * pMember;
 		BiaTempCounter::counter_type temporaryResultIndex;
+		bool bTestValue;	/**	Defines the constant test value.	*/
 	};
 
 	machine::architecture::BiaToolset m_toolset;
@@ -199,12 +202,60 @@ private:
 	}
 	const grammar::Report * HandleRoot(const grammar::Report * p_pReport);
 	const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports);
-	template<typename _LAMBDA>
+	/**
+	 * Handles the value and calls the given function.
+	 *
+	 * @remarks	If _TEST is set true the value will be tested. This guarantees a test value result.
+	 *
+	 * @since	3.48.104.629
+	 * @date	14-Jan-18
+	 *
+	 * @param	p_reports	Defines the reports.
+	 * @param	[in]	p_callback	Defines the to be called function.
+	 *
+	 * @return	The end of this token.
+	*/
+	template<bool _TEST, typename _LAMBDA>
 	inline const grammar::Report * HandleValue(grammar::report_range p_reports, _LAMBDA && p_callback)
 	{
 		//Handle value
 		HandleValue(p_reports);
 		
+		//Test
+		if (_TEST)
+		{
+			switch (m_valueType)
+			{
+			case VALUE_TYPE::INT_32:
+			case VALUE_TYPE::FLOAT:
+				m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
+				m_value.bTestValue = m_value.nInt ? true : false;
+
+				break;
+			case VALUE_TYPE::INT_64:
+			case VALUE_TYPE::DOUBLE:
+				m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
+				m_value.bTestValue = m_value.llInt ? true : false;
+
+				break;
+			case VALUE_TYPE::MEMBER:
+				m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
+				m_toolset.SafeCall(&framework::BiaMember::Test, m_value.pMember);
+
+				break;
+			case VALUE_TYPE::TEMPORARY_MEMBER:
+				m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
+				m_toolset.Call(&framework::BiaMember::Test, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+
+				break;
+			case VALUE_TYPE::TEST_VALUE_REGISTER:
+			case VALUE_TYPE::TEST_VALUE_CONSTANT:
+				break;
+			default:
+				BIA_COMPILER_DEV_INVALID
+			}
+		}
+
 		//Execute function
 		p_callback();
 		
