@@ -39,11 +39,18 @@ enum class OP_CODE
 	RETURN_NEAR,
 	TEST,
 	JUMP_RELATIVE,
+	JUMP_EQUAL,
+	JUMP_NOT_EQUAL,
 };
 
 inline uint8_t operator "" _8(unsigned long long p_ullValue)
 {
 	return static_cast<uint8_t>(p_ullValue);
+}
+
+inline uint16_t operator "" _16(unsigned long long p_ullValue)
+{
+	return static_cast<uint16_t>(p_ullValue);
 }
 
 inline uint32_t operator "" _32(unsigned long long p_ullValue)
@@ -149,7 +156,7 @@ public:
 	template<OP_CODE _OP_CODE>
 	inline static void Operation32(stream::BiaOutputStream & p_output, int32_t p_nConstant)
 	{
-		static_assert(_OP_CODE == OP_CODE::PUSH || _OP_CODE == OP_CODE::JUMP_RELATIVE, "This opcode is not supported.");
+		static_assert(_OP_CODE == OP_CODE::PUSH || _OP_CODE == OP_CODE::JUMP_RELATIVE || _OP_CODE == OP_CODE::JUMP_EQUAL || _OP_CODE == OP_CODE::JUMP_NOT_EQUAL, "This opcode is not supported.");
 
 		switch (_OP_CODE)
 		{
@@ -157,12 +164,16 @@ public:
 			return p_output.WriteAll(0x68_8, static_cast<uint32_t>(p_nConstant));
 		case OP_CODE::JUMP_RELATIVE:
 			return p_output.WriteAll(0xe9_8, static_cast<uint32_t>(p_nConstant));
+		case OP_CODE::JUMP_EQUAL:
+			return p_output.WriteAll(0x0f84_16, static_cast<uint32_t>(p_nConstant));
+		case OP_CODE::JUMP_NOT_EQUAL:
+			return p_output.WriteAll(0x0f85_16, static_cast<uint32_t>(p_nConstant));
 		}
 	}
 	template<OP_CODE _OP_CODE>
 	inline static void Operation8(stream::BiaOutputStream & p_output, int8_t p_cConstant)
 	{
-		static_assert(_OP_CODE == OP_CODE::PUSH || _OP_CODE == OP_CODE::JUMP_RELATIVE, "This opcode is not supported.");
+		static_assert(_OP_CODE == OP_CODE::PUSH || _OP_CODE == OP_CODE::JUMP_RELATIVE || _OP_CODE == OP_CODE::JUMP_EQUAL || _OP_CODE == OP_CODE::JUMP_NOT_EQUAL, "This opcode is not supported.");
 
 		switch (_OP_CODE)
 		{
@@ -170,6 +181,10 @@ public:
 			return p_output.WriteAll(0x6a_8, static_cast<uint8_t>(p_cConstant));
 		case OP_CODE::JUMP_RELATIVE:
 			return p_output.WriteAll(0xeb_8, static_cast<uint8_t>(p_cConstant));
+		case OP_CODE::JUMP_EQUAL:
+			return p_output.WriteAll(0x74_8, static_cast<uint8_t>(p_cConstant));
+		case OP_CODE::JUMP_NOT_EQUAL:
+			return p_output.WriteAll(0x75_8, static_cast<uint8_t>(p_cConstant));
 		}
 	}
 	template<OP_CODE _OP_CODE, REGISTER _REGISTER>
