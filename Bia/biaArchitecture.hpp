@@ -20,6 +20,7 @@ namespace architecture
 #if defined(BIA_ARCHITECTURE_MG32)
 enum class REGISTER
 {
+	AL,
 	EAX,
 	ECX,
 	ESP,
@@ -36,6 +37,8 @@ enum class OP_CODE
 	LEA,
 	LEAVE,
 	RETURN_NEAR,
+	TEST,
+	JUMP_RELATIVE,
 };
 
 inline uint8_t operator "" _8(unsigned long long p_ullValue)
@@ -96,7 +99,7 @@ public:
 	template<OP_CODE _OP_CODE, REGISTER _DESTINATION, REGISTER _SOURCE, typename _OFFSET>
 	inline static void Operation(stream::BiaOutputStream & p_output, _OFFSET p_offset)
 	{
-		static_assert(_OP_CODE == OP_CODE::MOVE || _OP_CODE == OP_CODE::LEA, "This opcode is not supported.");
+		static_assert(_OP_CODE == OP_CODE::MOVE || _OP_CODE == OP_CODE::LEA || _OP_CODE == OP_CODE::TEST, "This opcode is not supported.");
 		static_assert(std::is_same<int8_t, _OFFSET>::value || std::is_same<int32_t, _OFFSET>::value, "Offset must be int8_t or int32_t.");
 
 		switch (_OP_CODE)
@@ -114,6 +117,7 @@ public:
 				return p_output.WriteAll(0x8b_8, static_cast<uint8_t>(0200 | Register<_SOURCE>() | Register<_DESTINATION>() << 3), static_cast<uint32_t>(p_offset));
 		}
 		case OP_CODE::LEA:
+		{
 			//Add SIB byte
 			if (_SOURCE == REGISTER::ESP)
 			{
@@ -129,27 +133,43 @@ public:
 					return p_output.WriteAll(0x8d_8, static_cast<uint8_t>(0200 | Register<_SOURCE>() | Register<_DESTINATION>() << 3), static_cast<uint32_t>(p_offset));
 			}
 		}
+		case OP_CODE::TEST:
+		{
+			static_assert(RegisterSize<_DESTINATION>() == RegisterSize<_SOURCE>() || _OP_CODE != OP_CODE::TEST, "Registers must be the same size for testing.");
+
+			//8 bit register
+			if (RegisterSize<_DESTINATION>() == 8)
+				return p_output.WriteAll(0x84_8, static_cast<uint8_t>(0300 | Register<_SOURCE>() << 3 | Register<_DESTINATION>()));
+			//32 bit register
+			else
+				return p_output.WriteAll(0x85_8, static_cast<uint8_t>(0300 | Register<_SOURCE>() << 3 | Register<_DESTINATION>()));
+		}
+		}
 	}
 	template<OP_CODE _OP_CODE>
 	inline static void Operation32(stream::BiaOutputStream & p_output, int32_t p_nConstant)
 	{
-		static_assert(_OP_CODE == OP_CODE::PUSH, "This opcode is not supported.");
+		static_assert(_OP_CODE == OP_CODE::PUSH || _OP_CODE == OP_CODE::JUMP_RELATIVE, "This opcode is not supported.");
 
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
 			return p_output.WriteAll(0x68_8, static_cast<uint32_t>(p_nConstant));
+		case OP_CODE::JUMP_RELATIVE:
+			return p_output.WriteAll(0xe9_8, static_cast<uint32_t>(p_nConstant));
 		}
 	}
 	template<OP_CODE _OP_CODE>
 	inline static void Operation8(stream::BiaOutputStream & p_output, int8_t p_cConstant)
 	{
-		static_assert(_OP_CODE == OP_CODE::PUSH, "This opcode is not supported.");
+		static_assert(_OP_CODE == OP_CODE::PUSH || _OP_CODE == OP_CODE::JUMP_RELATIVE, "This opcode is not supported.");
 
 		switch (_OP_CODE)
 		{
 		case OP_CODE::PUSH:
 			return p_output.WriteAll(0x6a_8, static_cast<uint8_t>(p_cConstant));
+		case OP_CODE::JUMP_RELATIVE:
+			return p_output.WriteAll(0xeb_8, static_cast<uint8_t>(p_cConstant));
 		}
 	}
 	template<OP_CODE _OP_CODE, REGISTER _REGISTER>
@@ -219,10 +239,11 @@ private:
 	template<REGISTER _REGISTER>
 	inline constexpr static uint8_t Register()
 	{
-		static_assert(_REGISTER == REGISTER::EAX || _REGISTER == REGISTER::ECX || _REGISTER == REGISTER::ESP || _REGISTER == REGISTER::EBP, "This register is not supported.");
+		static_assert(_REGISTER == REGISTER::AL || _REGISTER == REGISTER::EAX || _REGISTER == REGISTER::ECX || _REGISTER == REGISTER::ESP || _REGISTER == REGISTER::EBP, "This register is not supported.");
 
 		switch (_REGISTER)
 		{
+		case REGISTER::AL:
 		case REGISTER::EAX:
 			return 0;
 		case REGISTER::ECX:
@@ -231,6 +252,24 @@ private:
 			return 4;
 		case REGISTER::EBP:
 			return 5;
+		default:
+			return 0;
+		}
+	}
+	template<REGISTER _REGISTER>
+	inline constexpr static int RegisterSize()
+	{
+		static_assert(_REGISTER == REGISTER::AL || _REGISTER == REGISTER::EAX || _REGISTER == REGISTER::ECX || _REGISTER == REGISTER::ESP || _REGISTER == REGISTER::EBP, "This register is not supported.");
+
+		switch (_REGISTER)
+		{
+		case REGISTER::AL:
+			return 8;
+		case REGISTER::EAX:
+		case REGISTER::ECX:
+		case REGISTER::ESP:
+		case REGISTER::EBP:
+			return 32;
 		default:
 			return 0;
 		}
