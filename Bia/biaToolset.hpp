@@ -166,7 +166,7 @@ private:
 
 		//8 bit
 		if (sizeof(T) == 1)
-			BiaArchitecture::Operation8<OP_CODE::PUSH>(m_output, static_cast<int8_t>(p_value));
+			BiaArchitecture::Operation8<OP_CODE::PUSH>(m_output, *reinterpret_cast<int32_t*>(&p_value));
 		//32 bit
 		else if (sizeof(T) == 4)
 		{
@@ -175,7 +175,7 @@ private:
 				BiaArchitecture::Operation8<OP_CODE::PUSH>(m_output, static_cast<int8_t>(p_value));
 			//Push all 4 bytes
 			else
-				BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, static_cast<int32_t>(p_value));
+				BiaArchitecture::Operation32<OP_CODE::PUSH>(m_output, *reinterpret_cast<int32_t*>(&p_value));
 		}
 		//64 bit
 		else
