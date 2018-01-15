@@ -76,6 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp14</LanguageStandard>
+      <EnableModules>false</EnableModules>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -114,6 +115,7 @@
   <ItemGroup>
     <ClCompile Include="biaCompiler.cpp" />
     <ClCompile Include="biaInstantiate.cpp" />
+    <ClCompile Include="biaInterpreterRule.cpp" />
     <ClCompile Include="biaMachineCode.cpp" />
     <ClCompile Include="biaMachineContext.cpp" />
     <ClCompile Include="biaMachineDecoder.cpp" />

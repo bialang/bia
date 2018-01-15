@@ -109,6 +109,10 @@ public:
 		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(m_output, reinterpret_cast<int32_t>(address.pAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(m_output);
 	}
+	inline void CommitJumpIf(position p_position, int32_t p_nOffset)
+	{
+
+	}
 	inline void CommitTemporaryMembers(BiaMachineContext & p_context, temp_members p_parameter, int8_t p_cCount)
 	{
 		//Get position
@@ -130,6 +134,17 @@ public:
 	inline void DiscardTemporaryMembers(temp_members p_parameter)
 	{
 		m_output.Move(std::get<0>(p_parameter), std::get<1>(p_parameter), m_output.GetPosition() - std::get<1>(p_parameter));
+	}
+	inline position ReserveJumpIf(bool p_bIf)
+	{
+		position pos = m_output.GetPosition();
+
+		if (p_bIf)
+			BiaArchitecture::Operation32<OP_CODE::JUMP_NOT_EQUAL>(m_output, 0);
+		else
+			BiaArchitecture::Operation32<OP_CODE::JUMP_EQUAL>(m_output, 0);
+
+		return pos;
 	}
 	inline temp_members ReserveTemporyMembers()
 	{

@@ -31,7 +31,7 @@ inline bool FastFind(char p_cWhat, const char * p_pcSortedString)
 	return false;
 }
 
-template<typename T, uint64_t _FLAGS>
+template<typename T, uint64_t _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
@@ -69,7 +69,7 @@ inline ACTION CharsetToken(const char * p_pcBuffer, size_t p_iSize, TokenParams,
 	return p_output.iTokenSize ? SUCCESS : ERROR;
 }
 
-template<uint32_t _RULE, uint64_t _FLAGS, uint64_t _CUSTOM = 0>
+template<uint32_t _RULE, uint64_t _FLAGS, uint64_t _CUSTOM = 0, int _FOR_CLARITY = 0>
 inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, TokenParams p_params, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
@@ -96,7 +96,7 @@ inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 	return p_output.iTokenSize ? SUCCESS : ERROR;
 }
 
-template<uint64_t _FLAGS>
+template<uint64_t _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION IdentifierToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
@@ -132,7 +132,7 @@ inline ACTION IdentifierToken(const char * p_pcBuffer, size_t p_iSize, TokenPara
 	return SUCCESS;
 }
 
-template<uint64_t _FLAGS>
+template<uint64_t _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
@@ -330,7 +330,7 @@ inline ACTION CustomOperatorToken(const char * p_pcBuffer, size_t p_iSize, Token
 	return ERROR;
 }
 
-template<uint64_t _FLAGS>
+template<uint64_t _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);

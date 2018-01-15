@@ -585,5 +585,45 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 	return p_reports.pEnd + 1;
 }
 
+const grammar::Report * BiaCompiler::HandlePreTestLoop(grammar::report_range p_reports)
+{
+	//Handle condition and test it
+	HandleValue<true>(p_reports.pBegin[1].content.children, [&] {
+		auto conditionType = m_valueType;
+		auto conditionValue = m_value;
+
+		//Dynamic condition
+		if (conditionType == VALUE_TYPE::TEST_VALUE_REGISTER)
+		{
+			//Write jump command
+		}
+		//Constant condition
+		else if (conditionType == VALUE_TYPE::TEST_VALUE_CONSTANT)
+		{
+			//Don't compile this loop
+			if (!conditionValue.bTestValue)
+				return;
+		}
+		else
+			BIA_COMPILER_DEV_INVALID
+
+		//Compile loop
+		auto posBegin = 0;
+
+		//Dynamic condition
+		if (conditionType == VALUE_TYPE::TEST_VALUE_REGISTER)
+		{
+			//Write jump command
+		}
+		//Constant condition -> unconditional jump to begin of loop
+		else
+		{
+			
+		}
+	});
+
+	return p_reports.pEnd + 1;
+}
+
 }
 }

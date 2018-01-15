@@ -56,11 +56,11 @@ struct Keyword_while
 	}
 };
 
-struct Keyword_range
+struct Keyword_until
 {
 	constexpr static const char * Token()
 	{
-		return "range";
+		return "until";
 	}
 	constexpr static size_t Size()
 	{
