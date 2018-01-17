@@ -16,6 +16,15 @@ BiaOutputStreamBuffer::BiaOutputStreamBuffer(size_t p_iReserve)
 		m_pucBuffer.reset(new uint8_t[m_iLimit]);
 }
 
+void BiaOutputStreamBuffer::WriteStream(const BiaOutputStreamBuffer & p_stream)
+{
+	Prepare(p_stream.m_iSize);
+
+	memcpy(m_pucBuffer.get() + m_iSize, p_stream.m_pucBuffer.get(), p_stream.m_iSize);
+
+	m_iSize += p_stream.m_iSize;
+}
+
 void BiaOutputStreamBuffer::SetPosition(long long p_llPosition)
 {
 	if (static_cast<size_t>(p_llPosition) <= m_iLimit)

@@ -314,6 +314,7 @@ private:
 	const grammar::Report * HandlePrint(grammar::report_range p_reports);
 	const grammar::Report * HandleMember(grammar::report_range p_reports);
 	const grammar::Report * HandlePreTestLoop(grammar::report_range p_reports);
+	const grammar::Report * HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition);
 } ;
 
 }

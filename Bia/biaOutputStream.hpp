@@ -10,6 +10,8 @@ namespace bia
 namespace stream
 {
 
+class BiaOutputStreamBuffer;
+
 class BiaOutputStream
 {
 public:
@@ -22,6 +24,7 @@ public:
 
 		Write(p_args...);
 	}
+	virtual void WriteStream(const stream::BiaOutputStreamBuffer & p_stream) = 0;
 	/**
 	 * Sets the position of the cursor.
 	 *

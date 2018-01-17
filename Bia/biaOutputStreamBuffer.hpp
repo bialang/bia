@@ -21,6 +21,10 @@ public:
 	BiaOutputStreamBuffer(size_t p_iReserve = 0);
 
 	/**
+	 * @see	BiaOutputStream::WriteStream.
+	*/
+	virtual void WriteStream(const BiaOutputStreamBuffer & p_stream) override;
+	/**
 	 * @see	BiaOutputStream::SetPosition().
 	*/
 	virtual void SetPosition(long long p_llPosition) override;

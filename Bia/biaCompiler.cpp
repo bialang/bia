@@ -1,5 +1,6 @@
 #include "biaCompiler.hpp"
 #include "biaException.hpp"
+#include "biaOutputStreamBuffer.hpp"
 
 #define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
 
@@ -317,6 +318,8 @@ const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pRepor
 	case grammar::BGR_PRINT:
 	case grammar::BGR_VALUE:
 		return HandlePrint(p_pReport->content.children);
+	case grammar::BGR_WHILE:
+		return HandlePreTestLoop(p_pReport->content.children);
 	default:
 		BIA_COMPILER_DEV_INVALID
 	}
@@ -587,40 +590,73 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 const grammar::Report * BiaCompiler::HandlePreTestLoop(grammar::report_range p_reports)
 {
-	//Handle condition and test it
-	HandleValue<true>(p_reports.pBegin[1].content.children, [&] {
-		auto conditionType = m_valueType;
-		auto conditionValue = m_value;
+	//Write jump to end condition
+	machine::architecture::BiaToolset::position position;
+	auto firstJump = m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP);
 
-		//Dynamic condition
-		if (conditionType == VALUE_TYPE::TEST_VALUE_REGISTER)
-		{
-			//Write jump command
-		}
+	//Handle loop
+	HandlePostTestLoop(p_reports, &position);
+
+	//Update jump condition
+	m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP, position - firstJump, firstJump);
+
+	return p_reports.pEnd + 1;
+}
+
+const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition)
+{
+	auto & originalBuffer = m_toolset.GetBuffer();
+	stream::BiaOutputStreamBuffer conditionBuffer;
+	machine::architecture::BiaToolset::position conditionJumpPosition;
+	machine::architecture::BiaToolset::JUMP jumpType;
+	auto bCompile = true;
+
+	//Redirect conditional code to a temporary buffer
+	m_toolset.SetOutput(conditionBuffer);
+
+	//Handle condition and test it
+	auto pLoopBegin = HandleValue<true>(p_reports.pBegin[1].content.children, [&] {
 		//Constant condition
-		else if (conditionType == VALUE_TYPE::TEST_VALUE_CONSTANT)
+		if (m_valueType == VALUE_TYPE::TEST_VALUE_CONSTANT)
 		{
 			//Don't compile this loop
-			if (!conditionValue.bTestValue)
-				return;
-		}
-		else
-			BIA_COMPILER_DEV_INVALID
+			if (!m_value.bTestValue)
+				return (void)(bCompile = false);
 
-		//Compile loop
-		auto posBegin = 0;
-
-		//Dynamic condition
-		if (conditionType == VALUE_TYPE::TEST_VALUE_REGISTER)
-		{
-			//Write jump command
+			jumpType = machine::architecture::BiaToolset::JUMP::JUMP;
 		}
-		//Constant condition -> unconditional jump to begin of loop
+		else if (m_valueType == VALUE_TYPE::TEST_VALUE_REGISTER)
+			jumpType = machine::architecture::BiaToolset::JUMP::JUMP_IF_TRUE;
 		else
-		{
-			
-		}
+			BIA_COMPILER_DEV_INVALID;
+
+		conditionJumpPosition = m_toolset.WriteJump(jumpType);
 	});
+
+	//Reset output buffer
+	m_toolset.SetOutput(originalBuffer);
+
+	//Compile loop
+	if (bCompile)
+	{
+		auto jumpPosition = originalBuffer.GetPosition();
+
+		HandleRoot(pLoopBegin);
+		
+		//Update jump positions
+		machine::architecture::BiaToolset::position tempPos;
+		
+		p_pConditionPosition = p_pConditionPosition ? p_pConditionPosition : &tempPos;
+		*p_pConditionPosition  = originalBuffer.GetPosition();
+
+		conditionJumpPosition += *p_pConditionPosition;
+
+		//Write loop condition
+		originalBuffer.WriteStream(conditionBuffer);
+
+		//Upate jump offset
+		m_toolset.WriteJump(jumpType, jumpPosition - conditionJumpPosition, conditionJumpPosition);
+	}
 
 	return p_reports.pEnd + 1;
 }

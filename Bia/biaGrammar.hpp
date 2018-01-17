@@ -35,6 +35,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	interpreter.SetRule(BGR_ROOT_HELPER_SINGLE_STATEMENT, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
 		RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
 		RulePointerToken<BGR_IF, FILLER_TOKEN>,
+		RulePointerToken<BGR_WHILE, FILLER_TOKEN>,
 		RulePointerToken<BGR_PRINT, FILLER_TOKEN>
 		}));
 
@@ -98,12 +99,11 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 
 	//While
 	interpreter.SetRule(BGR_WHILE, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
-		RulePointerToken<BGR_WHILE_HELPER_0, FILLER_TOKEN>,
+		KeywordToken<Keyword_while, FILLER_TOKEN>,
 		KeywordToken<Operator_bracket_open, FILLER_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN>,
 		KeywordToken<Operator_bracket_close, FILLER_TOKEN>,
-		KeywordToken<Operator_scope_open, FILLER_TOKEN>,
-		KeywordToken<Operator_scope_close, FILLER_TOKEN>
+		RulePointerToken<BGR_ROOT, FILLER_TOKEN>
 		}));
 
 	//While helper 0

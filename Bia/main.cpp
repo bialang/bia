@@ -69,7 +69,7 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-print false;
+while(true){print true;}
 )";
 
 	/*
