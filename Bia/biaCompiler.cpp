@@ -598,7 +598,11 @@ const grammar::Report * BiaCompiler::HandlePreTestLoop(grammar::report_range p_r
 	HandlePostTestLoop(p_reports, &position);
 
 	//Update jump condition
-	m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP, position - firstJump, firstJump);
+	if (position != -1)
+		m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP, position - firstJump, firstJump);
+	//Discard jump
+	else
+		m_toolset.GetBuffer().SetPosition(firstJump);
 
 	return p_reports.pEnd + 1;
 }
@@ -621,7 +625,14 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 		{
 			//Don't compile this loop
 			if (!m_value.bTestValue)
-				return (void)(bCompile = false);
+			{
+				bCompile = false;
+
+				if (p_pConditionPosition)
+					*p_pConditionPosition = -1;
+
+				return;
+			}
 
 			jumpType = machine::architecture::BiaToolset::JUMP::JUMP;
 		}
