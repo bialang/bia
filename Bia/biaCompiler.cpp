@@ -658,7 +658,7 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 		machine::architecture::BiaToolset::position tempPos;
 		
 		p_pConditionPosition = p_pConditionPosition ? p_pConditionPosition : &tempPos;
-		*p_pConditionPosition  = originalBuffer.GetPosition();
+		*p_pConditionPosition = originalBuffer.GetPosition();
 
 		conditionJumpPosition += *p_pConditionPosition;
 

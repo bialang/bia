@@ -69,7 +69,7 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-var i = 10;
+var i = 0;
 while(i){print i-1;}
 )";
 
@@ -267,8 +267,16 @@ while(i){print i-1;}
 
 	puts("--BEGIN--");
 	buffer = buf.GetBuffer();
-	bia::machine::disassembler::BiaMachineDecoder decoder(&context, context.m_index);
-	decoder.Disassemble(buffer.first, buffer.second);
+	try
+	{
+		bia::machine::disassembler::BiaMachineDecoder decoder(&context, context.m_index);
+		decoder.Disassemble(buffer.first, buffer.second);
+	}
+	catch (const bia::exception::Exception & e)
+	{
+		e.Print();
+	}
+	
 	puts("--END--");
 
 	

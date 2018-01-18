@@ -165,9 +165,9 @@ public:
 		case OP_CODE::JUMP_RELATIVE:
 			return p_output.WriteAll(0xe9_8, static_cast<uint32_t>(p_nConstant));
 		case OP_CODE::JUMP_EQUAL:
-			return p_output.WriteAll(0x0f84_16, static_cast<uint32_t>(p_nConstant));
+			return p_output.WriteAll(0x840f_16, static_cast<uint32_t>(p_nConstant));
 		case OP_CODE::JUMP_NOT_EQUAL:
-			return p_output.WriteAll(0x0f85_16, static_cast<uint32_t>(p_nConstant));
+			return p_output.WriteAll(0x850f_16, static_cast<uint32_t>(p_nConstant));
 		}
 	}
 	template<OP_CODE _OP_CODE>

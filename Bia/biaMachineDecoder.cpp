@@ -56,6 +56,7 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallDouble);
 
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorSelfCall);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::Test);
 
 	BIA_FUNCTION_ENTRY(BiaMachineContext::ConstructTemporaryAddresses);
 	BIA_FUNCTION_ENTRY(BiaMachineContext::DestructTemporaryAddresses);
@@ -171,10 +172,10 @@ void BiaMachineDecoder::Initialize()
 	AddInstruction(0xe900000000, 8, 5, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
 		printf("jmp\t%i\n", *reinterpret_cast<const int32_t*>(p_pBuffer + 1));
 	});
-	AddInstruction(0x0f8400000000, 8, 6, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
+	AddInstruction(0x0f8400000000, 16, 6, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
 		printf("je\t%i\n", *reinterpret_cast<const int32_t*>(p_pBuffer + 2));
 	});
-	AddInstruction(0x0f8500000000, 8, 6, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
+	AddInstruction(0x0f8500000000, 16, 6, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
 		printf("jne\t%i\n", *reinterpret_cast<const int32_t*>(p_pBuffer + 2));
 	});
 

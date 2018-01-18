@@ -241,16 +241,17 @@ private:
 			case VALUE_TYPE::MEMBER:
 				m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
 				m_toolset.SafeCall(&framework::BiaMember::Test, m_value.pMember);
+				m_toolset.WriteTest();
 
 				break;
 			case VALUE_TYPE::TEMPORARY_MEMBER:
 				m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
 				m_toolset.Call(&framework::BiaMember::Test, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+				m_toolset.WriteTest();
 
 				break;
 			case VALUE_TYPE::TEST_VALUE_REGISTER:
 			case VALUE_TYPE::TEST_VALUE_CONSTANT:
-				break;
 			default:
 				BIA_COMPILER_DEV_INVALID
 			}

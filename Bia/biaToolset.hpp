@@ -142,6 +142,10 @@ public:
 	{
 		m_pOutput->Move(std::get<0>(p_parameter), std::get<1>(p_parameter), m_pOutput->GetPosition() - std::get<1>(p_parameter));
 	}
+	inline void WriteTest()
+	{
+		BiaArchitecture::Operation<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*m_pOutput, 0);
+	}
 	inline position WriteJump(JUMP p_jump, int32_t p_nOffset = 0, position p_position = -1)
 	{
 		auto oldPos = m_pOutput->GetPosition();
