@@ -170,13 +170,13 @@ void BiaMachineDecoder::Initialize()
 			printf("push\t%i\n", *reinterpret_cast<const int32_t*>(p_pBuffer + 1));
 	});
 	AddInstruction(0xe900000000, 8, 5, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
-		printf("jmp\t%i\n", *reinterpret_cast<const int32_t*>(p_pBuffer + 1));
+		printf("jmp\t%p\n", p_pBuffer + 5 + *reinterpret_cast<const int32_t*>(p_pBuffer + 1));
 	});
 	AddInstruction(0x0f8400000000, 16, 6, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
-		printf("je\t%i\n", *reinterpret_cast<const int32_t*>(p_pBuffer + 2));
+		printf("je\t%p\n", p_pBuffer + 6 + *reinterpret_cast<const int32_t*>(p_pBuffer + 2));
 	});
 	AddInstruction(0x0f8500000000, 16, 6, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
-		printf("jne\t%i\n", *reinterpret_cast<const int32_t*>(p_pBuffer + 2));
+		printf("jne\t%p\n", p_pBuffer + 6 + *reinterpret_cast<const int32_t*>(p_pBuffer + 2));
 	});
 
 	//Opcode + 8 bit constant
@@ -184,13 +184,13 @@ void BiaMachineDecoder::Initialize()
 		printf("push\t%hhi\n", static_cast<int8_t>(p_pBuffer[1]));
 	});
 	AddInstruction(0xeb00, 8, 2, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
-		printf("jmp\t%hhi\n", static_cast<int8_t>(p_pBuffer[1]));
+		printf("jmp\t%p\n", p_pBuffer + 2 + static_cast<int8_t>(p_pBuffer[1]));
 	});
 	AddInstruction(0x7400, 8, 2, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
-		printf("je\t%hhi\n", static_cast<int8_t>(p_pBuffer[1]));
+		printf("je\t%p\n", p_pBuffer + 2 + static_cast<int8_t>(p_pBuffer[1]));
 	});
 	AddInstruction(0x7500, 8, 2, [](BiaMachineDecoder * p_pDecoder, const uint8_t * p_pBuffer) {
-		printf("jne\t%hhi\n", static_cast<int8_t>(p_pBuffer[1]));
+		printf("jne\t%p\n", p_pBuffer + 2 + static_cast<int8_t>(p_pBuffer[1]));
 	});
 #endif
 }

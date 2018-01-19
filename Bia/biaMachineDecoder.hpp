@@ -47,6 +47,8 @@ public:
 					//This it the instruction
 					if ((ullCode & instruction.ullMask) == instruction.ullInstruction)
 					{
+						printf("%p: ", pBuffer);
+
 						instruction.callback(this, pBuffer);
 
 						pBuffer += instruction.ucSize;
