@@ -8,15 +8,27 @@ namespace bia
 namespace grammar
 {
 
-struct Keyword_var
+struct Keyword_global
 {
 	constexpr static const char * Token()
 	{
-		return "var";
+		return "global";
 	}
 	constexpr static size_t Size()
 	{
-		return 3;
+		return 6;
+	}
+};
+
+struct Keyword_local
+{
+	constexpr static const char * Token()
+	{
+		return "local";
+	}
+	constexpr static size_t Size()
+	{
+		return 5;
 	}
 };
 
@@ -65,6 +77,18 @@ struct Keyword_until
 	constexpr static size_t Size()
 	{
 		return 5;
+	}
+};
+
+struct Keyword_do
+{
+	constexpr static const char * Token()
+	{
+		return "do";
+	}
+	constexpr static size_t Size()
+	{
+		return 2;
 	}
 };
 
@@ -140,6 +164,18 @@ struct Keyword_import
 	}
 };
 
+struct Keyword_include
+{
+	constexpr static const char * Token()
+	{
+		return "include";
+	}
+	constexpr static size_t Size()
+	{
+		return 7;
+	}
+};
+
 struct Keyword_from
 {
 	constexpr static const char * Token()
@@ -164,18 +200,6 @@ struct Keyword_as
 	}
 };
 
-struct Keyword_copyof
-{
-	constexpr static const char * Token()
-	{
-		return "copyof";
-	}
-	constexpr static size_t Size()
-	{
-		return 6;
-	}
-};
-
 struct Keyword_print
 {
 	constexpr static const char * Token()
@@ -185,18 +209,6 @@ struct Keyword_print
 	constexpr static size_t Size()
 	{
 		return 5;
-	}
-};
-
-struct Keyword_println
-{
-	constexpr static const char * Token()
-	{
-		return "println";
-	}
-	constexpr static size_t Size()
-	{
-		return 7;
 	}
 };
 
