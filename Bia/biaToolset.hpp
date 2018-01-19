@@ -25,7 +25,7 @@ public:
 	{
 		JUMP,
 		JUMP_IF_TRUE,
-		JUMP_IF_FLASE
+		JUMP_IF_FALSE
 	};
 
 	typedef long long position;
@@ -159,15 +159,15 @@ public:
 		switch (p_jump)
 		{
 		case JUMP::JUMP:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_RELATIVE>(*m_pOutput, p_nOffset - 5);
+			BiaArchitecture::Operation32<OP_CODE::JUMP_RELATIVE>(*m_pOutput, p_nOffset - 5 - p_position);
 
 			break;
 		case JUMP::JUMP_IF_TRUE:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_NOT_EQUAL>(*m_pOutput, p_nOffset - 6);
+			BiaArchitecture::Operation32<OP_CODE::JUMP_NOT_EQUAL>(*m_pOutput, p_nOffset - 6 - p_position);
 
 			break;
-		case JUMP::JUMP_IF_FLASE:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_EQUAL>(*m_pOutput, p_nOffset - 6);
+		case JUMP::JUMP_IF_FALSE:
+			BiaArchitecture::Operation32<OP_CODE::JUMP_EQUAL>(*m_pOutput, p_nOffset - 6 - p_position);
 
 			break;
 		}

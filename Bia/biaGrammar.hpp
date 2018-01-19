@@ -41,7 +41,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 
 	//Variable declaration
 	interpreter.SetRule(BGR_VARIABLE_DECLARATION, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
-		KeywordToken<Keyword_var, FILLER_TOKEN>,
+		KeywordToken<Keyword_global, FILLER_TOKEN>,
 		WHITESPACE_REQUIRED,
 		IdentifierToken<NONE>,
 		WHITESPACE_OPTIONAL,

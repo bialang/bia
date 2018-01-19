@@ -200,7 +200,65 @@ private:
 
 		return nullptr;
 	}
-	const grammar::Report * HandleRoot(const grammar::Report * p_pReport);
+	template<bool _IGNORE = false>
+	const grammar::Report * HandleRoot(const grammar::Report * p_pReport)
+	{
+		//Don't compile these tokens, only return the end
+		if (_IGNORE)
+		{
+			switch (p_pReport->unRuleId)
+			{
+			case grammar::BGR_ROOT_HELPER_0:
+			{
+				auto report = p_pReport->content.children;
+
+				++report.pBegin;
+
+				while (report.pBegin < report.pEnd)
+					report.pBegin = HandleRoot<true>(report.pBegin);
+
+				return report.pEnd + 1;
+			}
+			case grammar::BGR_VARIABLE_DECLARATION:
+			case grammar::BGR_IF:
+			case grammar::BGR_PRINT:
+			case grammar::BGR_VALUE:
+			case grammar::BGR_WHILE:
+				return p_pReport->content.children.pEnd + 1;
+			default:
+				BIA_COMPILER_DEV_INVALID
+			}
+		}
+		//Compile
+		else
+		{
+			switch (p_pReport->unRuleId)
+			{
+			case grammar::BGR_ROOT_HELPER_0:
+			{
+				auto report = p_pReport->content.children;
+
+				++report.pBegin;
+
+				while (report.pBegin < report.pEnd)
+					report.pBegin = HandleRoot(report.pBegin);
+
+				return report.pEnd + 1;
+			}
+			case grammar::BGR_VARIABLE_DECLARATION:
+				return HandleVariableDeclaration(p_pReport->content.children);
+			case grammar::BGR_IF:
+				return HandleIf(p_pReport->content.children);
+			case grammar::BGR_PRINT:
+			case grammar::BGR_VALUE:
+				return HandlePrint(p_pReport->content.children);
+			case grammar::BGR_WHILE:
+				return HandlePreTestLoop(p_pReport->content.children);
+			default:
+				BIA_COMPILER_DEV_INVALID
+			}
+		}
+	}
 	const grammar::Report * HandleVariableDeclaration(grammar::report_range p_reports);
 	/**
 	 * Handles the value and calls the given function.
@@ -252,6 +310,7 @@ private:
 				break;
 			case VALUE_TYPE::TEST_VALUE_REGISTER:
 			case VALUE_TYPE::TEST_VALUE_CONSTANT:
+				break;
 			default:
 				BIA_COMPILER_DEV_INVALID
 			}
@@ -312,6 +371,7 @@ private:
 		return p_reports.pEnd + 1;
 	}
 	const grammar::Report * HandleMathFactor(grammar::report_range p_reports);
+	const grammar::Report * HandleIf(grammar::report_range p_reports);
 	const grammar::Report * HandlePrint(grammar::report_range p_reports);
 	const grammar::Report * HandleMember(grammar::report_range p_reports);
 	const grammar::Report * HandlePreTestLoop(grammar::report_range p_reports);

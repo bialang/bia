@@ -2,7 +2,7 @@
 #include "biaException.hpp"
 #include "biaOutputStreamBuffer.hpp"
 
-#define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
+#include <vector>
 
 
 namespace bia
@@ -296,35 +296,6 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 	m_value.temporaryResultIndex = p_destinationIndex;
 }
 
-const grammar::Report * BiaCompiler::HandleRoot(const grammar::Report * p_pReport)
-{
-	switch (p_pReport->unRuleId)
-	{
-	case grammar::BGR_ROOT_HELPER_0:
-	{
-		auto report = p_pReport->content.children;
-
-		++report.pBegin;
-
-		while (report.pBegin < report.pEnd)
-			report.pBegin = HandleRoot(report.pBegin);
-
-		return report.pEnd + 1;
-	}
-	case grammar::BGR_VARIABLE_DECLARATION:
-		return HandleVariableDeclaration(p_pReport->content.children);
-	//case grammar::BGR_IF:
-		//return HandleIf(p_pReport->content.children);
-	case grammar::BGR_PRINT:
-	case grammar::BGR_VALUE:
-		return HandlePrint(p_pReport->content.children);
-	case grammar::BGR_WHILE:
-		return HandlePreTestLoop(p_pReport->content.children);
-	default:
-		BIA_COMPILER_DEV_INVALID
-	}
-}
-
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
 {
 	//Handle value and prepare the result for a function call
@@ -514,6 +485,63 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 	return p_reports.pEnd + 1;
 }
 
+const grammar::Report * BiaCompiler::HandleIf(grammar::report_range p_reports)
+{
+	std::vector<machine::architecture::BiaToolset::position> vEndJumps;
+	auto bRun = true;
+
+	++p_reports.pBegin;
+
+	do
+	{
+		//Handle value
+		p_reports.pBegin = HandleValue<true>(p_reports.pBegin->content.children, [] {});
+
+		//Compile statement
+		auto bCompile = m_valueType != VALUE_TYPE::TEST_VALUE_CONSTANT || m_value.bTestValue;
+
+		if (bCompile)
+		{
+			auto bConstant = m_valueType == VALUE_TYPE::TEST_VALUE_CONSTANT;
+
+			//Write jump
+			auto jump = !bConstant ? m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP_IF_FALSE) : 0;
+
+			//Handle statement
+			p_reports.pBegin = HandleRoot(p_reports.pBegin);
+
+			//Write end jump
+			if (p_reports.pBegin < p_reports.pEnd)
+				vEndJumps.push_back(m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP));
+			//End of ifs
+			else
+				bRun = false;
+
+			//Update jump
+			if (!bConstant)
+				m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP_IF_FALSE, m_toolset.GetBuffer().GetPosition(), jump);
+			else
+				bRun = false;
+		}
+		//Skip statements
+		else
+		{
+			p_reports.pBegin = HandleRoot<true>(p_reports.pBegin);
+
+			if (p_reports.pBegin >= p_reports.pEnd)
+				break;
+		}
+	} while (bRun);
+
+	//Update jump locations
+	auto endPos = m_toolset.GetBuffer().GetPosition();
+
+	for (auto & jumpPos : vEndJumps)
+		m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP, endPos, jumpPos);
+
+	return p_reports.pEnd + 1;
+}
+
 const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_range p_reports)
 {
 	//Handle value to print
@@ -599,7 +627,7 @@ const grammar::Report * BiaCompiler::HandlePreTestLoop(grammar::report_range p_r
 
 	//Update jump condition
 	if (position != -1)
-		m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP, position - firstJump, firstJump);
+		m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP, position, firstJump);
 	//Discard jump
 	else
 		m_toolset.GetBuffer().SetPosition(firstJump);
@@ -666,7 +694,7 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 		originalBuffer.WriteStream(conditionBuffer);
 
 		//Upate jump offset
-		m_toolset.WriteJump(jumpType, jumpPosition - conditionJumpPosition, conditionJumpPosition);
+		m_toolset.WriteJump(jumpType, jumpPosition, conditionJumpPosition);
 	}
 
 	return p_reports.pEnd + 1;
