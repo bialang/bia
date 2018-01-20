@@ -71,7 +71,8 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		WHITESPACE_OPTIONAL,
 		KeywordToken<Operator_bracket_close, FILLER_TOKEN>,
 		RulePointerToken<BGR_ROOT, FILLER_TOKEN>,
-		RulePointerToken<BGR_IF_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN> 
+		RulePointerToken<BGR_IF_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>,
+		RulePointerToken<BGR_IF_HELPER_1, FILLER_TOKEN | OPTIONAL_TOKEN>
 		}));
 
 	//If helper 0
@@ -86,6 +87,12 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		WHITESPACE_OPTIONAL,
 		KeywordToken<Operator_bracket_close, FILLER_TOKEN>,
 		RulePointerToken<BGR_ROOT, FILLER_TOKEN> 
+		}));
+
+	//If helper 1
+	interpreter.SetRule(BGR_IF_HELPER_1, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
+		KeywordToken<Keyword_else, FILLER_TOKEN>,
+		RulePointerToken<BGR_ROOT, FILLER_TOKEN>
 		}));
 
 	//Print

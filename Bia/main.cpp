@@ -71,7 +71,7 @@ int main()
 	char script[] = R"(
 global i = 0;
 global o = 1;
-if(false){print true;}
+if(i){print true;}elseprint false;
 )";
 
 	/*
