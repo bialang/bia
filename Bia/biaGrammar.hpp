@@ -124,7 +124,6 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		NumberValueToken<NONE, BV_NUMBER>,
 		KeywordToken<Keyword_true, NONE, BV_TRUE>,
 		KeywordToken<Keyword_false, NONE, BV_FALSE>,
-		KeywordToken<Keyword_null, NONE, BV_NULL>,
 		RulePointerToken<BGR_MEMBER, FILLER_TOKEN, 0, BV_MEMBER>
 		}));
 

@@ -140,18 +140,6 @@ struct Keyword_false
 	}
 };
 
-struct Keyword_null
-{
-	constexpr static const char * Token()
-	{
-		return "null";
-	}
-	constexpr static size_t Size()
-	{
-		return 4;
-	}
-};
-
 struct Keyword_import
 {
 	constexpr static const char * Token()

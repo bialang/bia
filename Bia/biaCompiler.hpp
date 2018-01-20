@@ -4,6 +4,7 @@
 #include <cstring>
 #include <algorithm>
 #include <type_traits>
+#include <map>
 
 #include "biaOutputStream.hpp"
 #include "biaMachineContext.hpp"
@@ -32,29 +33,15 @@ public:
 	 * @param	[in]	p_output	Defines the output stream for the machine code.
 	 * @param	[in]	p_context	Defines the machine context.
 	 */
-	inline BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context) : m_toolset(p_output), m_context(p_context)
-	{
-		//Reserve temporary members
-		m_parameter = m_toolset.ReserveTemporyMembers();
-	}
-	inline ~BiaCompiler()
-	{
-		//Clean up
-		auto max = m_counter.Max();
-
-		if (max == 0)
-			m_toolset.DiscardTemporaryMembers(m_parameter);
-		else
-			m_toolset.CommitTemporaryMembers(m_context, m_parameter, max);
-	}
+	BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context);
+	BiaCompiler(BiaCompiler&&) = delete;
+	BiaCompiler(const BiaCompiler&) = delete;
+	~BiaCompiler();
 
 	/**
 	 * @see	bia::grammar::BiaReportReceiver::Report().
 	 */
-	inline virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override
-	{
-		HandleRoot(p_pBegin);
-	}
+	virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override;
 
 private:
 	enum class VALUE_TYPE
@@ -83,14 +70,14 @@ private:
 		bool bTestValue;	/**	Defines the constant test value.	*/
 	};
 
-	machine::architecture::BiaToolset m_toolset;
-	machine::BiaMachineContext & m_context;
+	machine::architecture::BiaToolset m_toolset;	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
+	machine::BiaMachineContext & m_context;	/**	Defines the context for which this script should be compiled.	*/
 
-	machine::architecture::BiaToolset::temp_members m_parameter;
-	BiaTempCounter m_counter;
+	machine::architecture::BiaToolset::temp_members m_parameter;	/**	Used for initializing and finalizing the code.	*/
+	BiaTempCounter m_counter;	/**	Defines the temporary address counter for temporary storage.	*/
 
-	VALUE_TYPE m_valueType;
-	Value m_value;
+	VALUE_TYPE m_valueType;	/**	Defines the type of the last operation result.	*/
+	Value m_value;	/**	Defines the value of the last operation result.	*/
 
 
 	inline void SetValue(int32_t p_nValue)
@@ -371,7 +358,27 @@ private:
 		return p_reports.pEnd + 1;
 	}
 	const grammar::Report * HandleMathFactor(grammar::report_range p_reports);
+	/**
+	 * Handles all if-else branch statements.
+	 *
+	 * @since	3.51.112.650
+	 * @date	20-Jan-18
+	 *
+	 * @param	p_reports	Defines the if token.
+	 *
+	 * @return	The begin of the next token.
+	*/
 	const grammar::Report * HandleIf(grammar::report_range p_reports);
+	/**
+	 * Handles the print value and prints it.
+	 *
+	 * @since	3.51.112.650
+	 * @date	20-Jan-18
+	 *
+	 * @param	p_reports	Defines the print token.
+	 *
+	 * @return	The begin of the next token.
+	*/
 	const grammar::Report * HandlePrint(grammar::report_range p_reports);
 	const grammar::Report * HandleMember(grammar::report_range p_reports);
 	const grammar::Report * HandlePreTestLoop(grammar::report_range p_reports);

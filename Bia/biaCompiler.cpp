@@ -10,6 +10,28 @@ namespace bia
 namespace compiler
 {
 
+BiaCompiler::BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context) : m_toolset(p_output), m_context(p_context)
+{
+	//Reserve temporary members
+	m_parameter = m_toolset.ReserveTemporyMembers();
+}
+
+BiaCompiler::~BiaCompiler()
+{
+	//Clean up
+	auto max = m_counter.Max();
+
+	if (max == 0)
+		m_toolset.DiscardTemporaryMembers(m_parameter);
+	else
+		m_toolset.CommitTemporaryMembers(m_context, m_parameter, max);
+}
+
+void BiaCompiler::Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
+{
+	HandleRoot(p_pBegin);
+}
+
 void BiaCompiler::HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator)
 {
 	using namespace framework;
@@ -450,7 +472,6 @@ const grammar::Report * BiaCompiler::HandleValueRaw(grammar::report_range p_repo
 
 		break;
 	case grammar::BV_FALSE:
-	case grammar::BV_NULL:
 		m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
 		m_value.bTestValue = false;
 
@@ -488,11 +509,10 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 const grammar::Report * BiaCompiler::HandleIf(grammar::report_range p_reports)
 {
 	std::vector<machine::architecture::BiaToolset::position> vEndJumps;
-	auto bRun = true;
 
 	++p_reports.pBegin;
 
-	do
+	while (true)
 	{
 		//Else statement
 		if (p_reports.pBegin->unRuleId == grammar::BGR_IF_HELPER_1)
@@ -517,7 +537,7 @@ const grammar::Report * BiaCompiler::HandleIf(grammar::report_range p_reports)
 			auto bConstant = m_valueType == VALUE_TYPE::TEST_VALUE_CONSTANT;
 			auto jump = bConstant ? 0 : m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP_IF_FALSE);
 
-			//Handle statement
+			//Compile statement
 			p_reports.pBegin = HandleRoot(p_reports.pBegin);
 
 			//Write end jump but only if the end has not been reached
@@ -528,9 +548,9 @@ const grammar::Report * BiaCompiler::HandleIf(grammar::report_range p_reports)
 				//Update test jump to next statement
 				m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP_IF_FALSE, m_toolset.GetBuffer().GetPosition(), jump);
 			}
-			//End of ifs
+			//End of ifs or condition is at compile time true
 			else
-				bRun = false;
+				break;
 		}
 		//Skip statements. These are conditions that are at compile time false
 		else
@@ -540,7 +560,7 @@ const grammar::Report * BiaCompiler::HandleIf(grammar::report_range p_reports)
 			if (p_reports.pBegin >= p_reports.pEnd)
 				break;
 		}
-	} while (bRun);
+	}
 
 	//Update end jump locations
 	auto endPos = m_toolset.GetBuffer().GetPosition();

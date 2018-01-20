@@ -57,7 +57,6 @@ enum BIA_VALUE
 	BV_NUMBER = 1,
 	BV_TRUE,
 	BV_FALSE,
-	BV_NULL,
 	BV_MEMBER
 };
 
