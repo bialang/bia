@@ -142,6 +142,7 @@
     <ClInclude Include="biaInterpreterTokens.hpp" />
     <ClInclude Include="biaInstantiate.hpp" />
     <ClInclude Include="biaLink.hpp" />
+    <ClInclude Include="biaLocalVariableHandler.hpp" />
     <ClInclude Include="biaMachineCode.hpp" />
     <ClInclude Include="biaMachineContext.hpp" />
     <ClInclude Include="biaMachineDecoder.hpp" />

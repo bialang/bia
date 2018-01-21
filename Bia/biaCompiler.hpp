@@ -4,7 +4,6 @@
 #include <cstring>
 #include <algorithm>
 #include <type_traits>
-#include <map>
 
 #include "biaOutputStream.hpp"
 #include "biaMachineContext.hpp"
@@ -15,6 +14,7 @@
 #include "biaConstantOperation.hpp"
 #include "biaException.hpp"
 #include "biaTempCounter.hpp"
+#include "biaLocalVariableHandler.hpp"
 
 #define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
 
@@ -73,6 +73,8 @@ private:
 	machine::architecture::BiaToolset m_toolset;	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
 	machine::BiaMachineContext & m_context;	/**	Defines the context for which this script should be compiled.	*/
 
+	BiaLocalVariableHandler m_localVariables;	/**	Handles the local variables.	*/
+	
 	machine::architecture::BiaToolset::temp_members m_parameter;	/**	Used for initializing and finalizing the code.	*/
 	BiaTempCounter m_counter;	/**	Defines the temporary address counter for temporary storage.	*/
 
@@ -139,6 +141,7 @@ private:
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
+	framework::BiaMember * GetAddressOfVariable();
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
