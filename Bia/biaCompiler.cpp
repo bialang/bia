@@ -623,7 +623,22 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 
 const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_reports)
 {
-	switch (p_reports.pBegin[1].unTokenId)
+	++p_reports.pBegin;
+
+	const grammar::Report * pNext = nullptr;
+	VALUE_TYPE parameterType;
+	Value parameterValue;
+
+	//Function call
+	if (p_reports.pBegin + 1 < p_reports.pEnd && p_reports.pBegin[1].unRuleId == grammar::BGR_PARAMETER)
+	{
+		pNext = HandleParameters(p_reports.pBegin[1].content.children);
+
+		parameterType = m_valueType;
+		parameterValue = m_value;
+	}
+
+	switch (p_reports.pBegin->unTokenId)
 	{
 	/*case grammar::BM_INSTANTIATION:
 		HandleInstantiation(p_reports.pBegin->content.children, p_bPush);
@@ -634,13 +649,48 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 		break;*/
 	case grammar::BM_IDENTIFIER:
-		m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+		m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
 		m_valueType = VALUE_TYPE::MEMBER;
 
 		break;
 	default:
 		BIA_COMPILER_DEV_INVALID
 	}
+
+	//Function call
+	if (pNext)
+	{
+		switch (parameterType)
+		{
+		case VALUE_TYPE::PARAMETER_COUNT:
+		{
+			//Call with member parameters only
+			if (parameterValue.unParameterCount)
+				;//m_toolset.Call(&framework::BiaMember::CallCount, m_value.pMember, parameterValue.unParameterCount);
+			//Call without any parameters
+			else
+				m_toolset.SafeCall(&framework::BiaMember::Call, m_value.pMember);
+
+			break;
+		}
+		case VALUE_TYPE::PARAMETER_FORMAT:
+			//m_toolset.Call(&framework::BiaMember::CallFormat, m_value.pMember, parameterValue.szParameterFormat);
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+	}
+
+	return p_reports.pEnd + 1;
+}
+
+const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_reports)
+{
+
+
+	m_valueType = VALUE_TYPE::PARAMETER_COUNT;
+	m_value.unParameterCount = 0;
 
 	return p_reports.pEnd + 1;
 }

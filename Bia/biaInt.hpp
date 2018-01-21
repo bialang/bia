@@ -31,6 +31,54 @@ public:
 		machine::link::Print_I(m_llValue);
 	}
 	/**
+	 * @see	BiaMember::Call().
+	*/
+	inline virtual void Call() override
+	{
+		puts("system execute");
+	}
+	/**
+	 * @see	BiaMember::CallCount().
+	*/
+	inline virtual void CallCount(uint32_t p_unParameterCount, ...) override
+	{
+
+	}
+	/**
+	 * @see	BiaMember::CallFormat().
+	*/
+	inline virtual void CallFormat(const char * p_szFormat, ...) override
+	{
+		va_list parameters;
+		va_start(parameters, p_szFormat);
+
+		while (true)
+		{
+			switch (*p_szFormat++)
+			{
+			case 0:
+				goto gt_break;
+			case 'M':
+				va_arg(parameters, BiaMember*);
+			case 'i':
+				va_arg(parameters, int32_t);
+			case 'I':
+				va_arg(parameters, int64_t);
+			case 'f':
+				va_arg(parameters, float);
+			case 'd':
+				va_arg(parameters, double);
+			case 's':
+			default:
+				break;
+			}
+		}
+
+	gt_break:;
+
+		va_end(parameters);
+	}
+	/**
 	* @see	BiaMember::OperatorCall().
 	*/
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination) override

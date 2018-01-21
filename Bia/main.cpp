@@ -6,9 +6,17 @@
 #include "biaCompiler.hpp"
 #include "biaMachineDecoder.hpp"
 #include <chrono>
-void hi(int val, int a)
+
+
+void hi(int val, ...)
 {
-	printf("say hi to val %i\n", val);
+	va_list l;
+	va_start(l, val);
+
+	while (val-- > 0)
+		printf("%i ", va_arg(l, int));
+
+	va_end(l);
 }
 
 struct a
@@ -69,9 +77,8 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-global i = 0;
-global o = 1;
-if(i){print true;}elseprint false;
+global system = 0;
+print system();
 )";
 
 	/*

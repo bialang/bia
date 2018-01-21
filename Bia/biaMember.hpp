@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <cstdint>
+#include <cstdarg>
 #include <typeinfo>
 #include <type_traits>
 
@@ -83,6 +84,9 @@ public:
 	{
 		printf("<Empty member at %p>", this);
 	}
+	virtual void Call() = 0;
+	virtual void CallCount(uint32_t p_unParameterCount, ...) = 0;
+	virtual void CallFormat(const char * p_szFormat, ...) = 0;
 	/**
 	 * @throws	exception::OperatorException
 	*/

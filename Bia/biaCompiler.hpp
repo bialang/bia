@@ -55,6 +55,8 @@ private:
 		TEMPORARY_MEMBER,
 		TEST_VALUE_REGISTER,	/**	Defines that the test value is stored in the test register.	*/
 		TEST_VALUE_CONSTANT,	/**	Defines that the test value is known at compile time.	*/
+		PARAMETER_COUNT,
+		PARAMETER_FORMAT,
 		NONE,
 	};
 
@@ -68,6 +70,8 @@ private:
 		framework::BiaMember * pMember;
 		BiaTempCounter::counter_type temporaryResultIndex;
 		bool bTestValue;	/**	Defines the constant test value.	*/
+		uint32_t unParameterCount;
+		const char * szParameterFormat;
 	};
 
 	machine::architecture::BiaToolset m_toolset;	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
@@ -141,7 +145,7 @@ private:
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
-	framework::BiaMember * GetAddressOfVariable();
+	//framework::BiaMember * GetAddressOfVariable();
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 	{
@@ -384,6 +388,7 @@ private:
 	*/
 	const grammar::Report * HandlePrint(grammar::report_range p_reports);
 	const grammar::Report * HandleMember(grammar::report_range p_reports);
+	const grammar::Report * HandleParameters(grammar::report_range p_reports);
 	const grammar::Report * HandlePreTestLoop(grammar::report_range p_reports);
 	const grammar::Report * HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition);
 } ;

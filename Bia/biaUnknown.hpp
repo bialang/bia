@@ -17,6 +17,18 @@ public:
 	*/
 	virtual void Print() override;
 	/**
+	 * @see	BiaMember::Call().
+	*/
+	virtual void Call() override;
+	/**
+	 * @see	BiaMember::CallCount().
+	*/
+	virtual void CallCount(uint32_t p_unParameterCount, ...) override;
+	/**
+	 * @see	BiaMember::CallFormat().
+	*/
+	virtual void CallFormat(const char * p_szFormat, ...) override;
+	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
 	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination) override;

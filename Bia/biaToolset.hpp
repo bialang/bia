@@ -39,6 +39,8 @@ public:
 	*/
 	inline BiaToolset(stream::BiaOutputStream & p_output) : m_pOutput(&p_output)
 	{
+		m_nPassed = 0;
+
 		//Create new stack frame for this entry point
 		BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EBP>(*m_pOutput);
 		BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(*m_pOutput, 0);
@@ -57,14 +59,14 @@ public:
 	inline void SafeCall(_RETURN(BIA_STATIC_CALLING_CONEVENTION *p_pFunctionAddress)(_ARGS...), _ARGS... p_args)
 	{
 		//Push all parameters
-		Pass(p_args...);
+		constexpr auto PASSED = Pass(p_args...);
 
 		//Move the address of the function into EAX and call it
 		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*m_pOutput, reinterpret_cast<int32_t>(p_pFunctionAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
 
 		//Pop parameter
-		Pop<sizeof...(_ARGS)>();
+		Pop<PASSED>();
 	}
 	template<typename _RETURN, typename _CLASS, typename... _ARGS>
 	inline void SafeCall(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS... p_args)
@@ -87,6 +89,27 @@ public:
 
 #if defined(BIA_COMPILER_MSCV)
 #endif
+	}
+	template<typename _RETURN, typename _CLASS, typename... _ARGS>
+	inline void SafeCall(_RETURN(BIA_MEMBER_VARARG_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS..., ...), _CLASS * p_pInstance, _ARGS... p_args)
+	{
+		//Push all parameters
+		constexpr auto PASSED = Pass(p_pInstance, p_args...);
+
+		union
+		{
+			_RETURN(_CLASS::*pMember)(_ARGS...);
+			void * pAddress;
+		} address;
+
+		address.pMember = p_pFunctionAddress;
+
+		//Move the address of the function into EAX and call it
+		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*m_pOutput, reinterpret_cast<int32_t>(address.pAddress));
+		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
+
+		//Pop
+		Pop<PASSED>();
 	}
 	template<typename T, typename... _ARGS>
 	inline void Call(T * p_pFunctionAddress, _ARGS... p_args)
@@ -206,22 +229,30 @@ public:
 private:
 	stream::BiaOutputStream * m_pOutput;
 
+	int32_t m_nPassed;
 
-	inline void Pass() {}
-	template<typename T, typename... _ARGS>
-	inline void Pass(T p_value, _ARGS... p_args)
+
+	inline int32_t Pass()
 	{
-		Pass(p_args...);
-		Pass(p_value);
+		return 0;
+	}
+	template<typename T, typename... _ARGS>
+	inline int32_t Pass(T p_value, _ARGS... p_args)
+	{
+		return Pass(p_args...) + Pass(p_value);
 	}
 	template<typename T>
-	inline void Pass(T p_value)
+	inline int32_t Pass(T p_value)
 	{
 		static_assert(sizeof(T) == 1 || sizeof(T) == 4 || sizeof(T) == 8, "Push parameter must of size 1, 4 or 8.");
 
 		//8 bit
 		if (sizeof(T) == 1)
+		{
 			BiaArchitecture::Operation8<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
+
+			return 1;
+		}
 		//32 bit
 		else if (sizeof(T) == 4)
 		{
@@ -231,21 +262,27 @@ private:
 			//Push all 4 bytes
 			else
 				BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
+
+			return 1;
 		}
 		//64 bit
 		else
 		{
 			BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int64_t*>(&p_value) >> 32);
 			BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
+
+			return 2;
 		}
 	}
 	template<typename T>
-	inline void Pass(T * p_pAddress)
+	inline int32_t Pass(T * p_pAddress)
 	{
 		BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, reinterpret_cast<int32_t>(p_pAddress));
+
+		return 1;
 	}
 	template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
-	inline void Pass(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)
+	inline int32_t Pass(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)
 	{
 		static_assert(std::is_same<_OFFSET, int32_t>::value || std::is_same<_OFFSET, int8_t>::value, "Invalid offset type.");
 
@@ -264,9 +301,11 @@ private:
 			else
 				BiaArchitecture::Operation8<OP_CODE::PUSH, _REGISTER>(*m_pOutput, p_offset.offset);
 		}
+
+		return 1;
 	}
 	template<REGISTER _REGISTER, bool _EFFECTIVE_ADDRESS>
-	inline void Pass(RegisterOffset<_REGISTER, void, _EFFECTIVE_ADDRESS> p_offset)
+	inline int32_t Pass(RegisterOffset<_REGISTER, void, _EFFECTIVE_ADDRESS> p_offset)
 	{
 		//Push address
 		if (_EFFECTIVE_ADDRESS)
@@ -277,6 +316,8 @@ private:
 		//No offset
 		else
 			BiaArchitecture::Operation<OP_CODE::PUSH, _REGISTER>(*m_pOutput);
+
+		return 1;
 	}
 	template<typename T>
 	inline void PassInstance(T * p_pInstance)

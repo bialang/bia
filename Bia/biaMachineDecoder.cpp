@@ -30,6 +30,10 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(machine::link::Print_f);
 	BIA_FUNCTION_ENTRY(machine::link::Print_d);
 
+	BIA_FUNCTION_ENTRY(framework::BiaMember::Call);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::CallCount);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::CallFormat);
+
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_32);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_64);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt0);

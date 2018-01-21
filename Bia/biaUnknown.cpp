@@ -10,6 +10,21 @@ void BiaUnknown::Print()
 	throw exception::SymbolException("Undefined symbol.");
 }
 
+void BiaUnknown::Call()
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void BiaUnknown::CallCount(uint32_t p_unParameterCount, ...)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void BiaUnknown::CallFormat(const char * p_szFormat, ...)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
 void BiaUnknown::OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination)
 {
 	throw exception::SymbolException("Undefined symbol.");
