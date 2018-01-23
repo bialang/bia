@@ -40,7 +40,7 @@ public:
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	inline virtual void CallCount(uint32_t p_unParameterCount, ...) override
+	inline virtual void CallCount(parameter_count p_unParameterCount, ...) override
 	{
 
 	}

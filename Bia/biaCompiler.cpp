@@ -665,7 +665,7 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 		case VALUE_TYPE::PARAMETER_COUNT:
 		{
 			//Call with member parameters only
-			if (parameterValue.unParameterCount)
+			if (parameterValue.parameterCount)
 				;//m_toolset.Call(&framework::BiaMember::CallCount, m_value.pMember, parameterValue.unParameterCount);
 			//Call without any parameters
 			else
@@ -687,10 +687,75 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_reports)
 {
+	++p_reports.pBegin;
 
+	auto bUseCounter = true;
+	machine::architecture::BiaToolset::pass_count parameterPassed = 0;
+	framework::BiaMember::parameter_count parameterCounter = 0;
+	std::string stFormat;
 
-	m_valueType = VALUE_TYPE::PARAMETER_COUNT;
-	m_value.unParameterCount = 0;
+	//Handle value
+	while (p_reports.pBegin < p_reports.pEnd)
+	{
+		p_reports.pBegin = HandleValue<false>(p_reports.pBegin->content.children, [&] {
+			switch (m_valueType)
+			{
+			case VALUE_TYPE::INT_32:
+				parameterPassed += m_toolset.Pass(m_value.nInt);
+				stFormat += 'i';
+				bUseCounter = false;
+
+				break;
+			case VALUE_TYPE::INT_64:
+				parameterPassed += m_toolset.Pass(m_value.llInt);
+				stFormat += 'I';
+				bUseCounter = false;
+
+				break;
+			case VALUE_TYPE::FLOAT:
+				parameterPassed += m_toolset.Pass(m_value.rFloat);
+				stFormat += 'f';
+				bUseCounter = false;
+
+				break;
+			case VALUE_TYPE::DOUBLE:
+				parameterPassed += m_toolset.Pass(m_value.rDouble);
+				stFormat += 'd';
+				bUseCounter = false;
+
+				break;
+			//case VALUE_TYPE::STRING:
+			case VALUE_TYPE::MEMBER:
+				parameterPassed += m_toolset.Pass(m_value.pMember);
+				stFormat += 'M';
+
+				break;
+			case VALUE_TYPE::TEMPORARY_MEMBER:
+				parameterPassed += m_toolset.Pass(machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+				stFormat += 'M';
+
+				break;
+			default:
+				BIA_COMPILER_DEV_INVALID
+			}
+		});
+	}
+
+	//Only members or nothing was passed
+	if (bUseCounter)
+	{
+		m_valueType = VALUE_TYPE::PARAMETER_COUNT;
+		m_value.parameterCount = parameterCounter;
+	}
+	//Mixed
+	else
+	{
+		//Allocate string
+		const char * szParameterFormat = nullptr;
+
+		m_valueType = VALUE_TYPE::PARAMETER_FORMAT;
+		m_value.szParameterFormat = szParameterFormat;
+	}
 
 	return p_reports.pEnd + 1;
 }

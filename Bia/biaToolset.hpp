@@ -31,6 +31,7 @@ public:
 	typedef long long position;
 	typedef std::tuple<position, position, position> temp_members;
 	typedef RegisterOffset<REGISTER::EBP, int8_t, false> temporary_result;
+	typedef int32_t pass_count;
 
 	/**
 	 * Constructor.
@@ -169,6 +170,93 @@ public:
 	{
 		BiaArchitecture::Operation<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*m_pOutput, 0);
 	}
+	inline pass_count Pass()
+	{
+		return 0;
+	}
+	template<typename T, typename... _ARGS>
+	inline pass_count Pass(T p_value, _ARGS... p_args)
+	{
+		return Pass(p_args...) + Pass(p_value);
+	}
+	template<typename T>
+	inline pass_count Pass(T p_value)
+	{
+		static_assert(sizeof(T) == 1 || sizeof(T) == 4 || sizeof(T) == 8, "Push parameter must of size 1, 4 or 8.");
+
+		//8 bit
+		if (sizeof(T) == 1)
+		{
+			BiaArchitecture::Operation8<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
+
+			return 1;
+		}
+		//32 bit
+		else if (sizeof(T) == 4)
+		{
+			//Save 3 bytes
+			if (std::is_integral<T>::value && p_value <= 127 && p_value >= -128)
+				BiaArchitecture::Operation8<OP_CODE::PUSH>(*m_pOutput, static_cast<int8_t>(p_value));
+			//Push all 4 bytes
+			else
+				BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
+
+			return 1;
+		}
+		//64 bit
+		else
+		{
+			BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int64_t*>(&p_value) >> 32);
+			BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
+
+			return 2;
+		}
+	}
+	template<typename T>
+	inline pass_count Pass(T * p_pAddress)
+	{
+		BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, reinterpret_cast<int32_t>(p_pAddress));
+
+		return 1;
+	}
+	template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
+	inline pass_count Pass(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)
+	{
+		static_assert(std::is_same<_OFFSET, int32_t>::value || std::is_same<_OFFSET, int8_t>::value, "Invalid offset type.");
+
+		//Push address
+		if (_EFFECTIVE_ADDRESS)
+		{
+			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::EAX, _REGISTER, _OFFSET>(*m_pOutput, p_offset.offset);
+			BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EAX>(*m_pOutput);
+		}
+		else
+		{
+			//32 bit signed offset
+			if (std::is_same<_OFFSET, int32_t>::value)
+				BiaArchitecture::Operation32<OP_CODE::PUSH, _REGISTER>(*m_pOutput, p_offset.offset);
+			//8 bit signed offset
+			else
+				BiaArchitecture::Operation8<OP_CODE::PUSH, _REGISTER>(*m_pOutput, p_offset.offset);
+		}
+
+		return 1;
+	}
+	template<REGISTER _REGISTER, bool _EFFECTIVE_ADDRESS>
+	inline pass_count Pass(RegisterOffset<_REGISTER, void, _EFFECTIVE_ADDRESS> p_offset)
+	{
+		//Push address
+		if (_EFFECTIVE_ADDRESS)
+		{
+			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::EAX, _REGISTER, int8_t>(*m_pOutput, 0);
+			BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EAX>(*m_pOutput);
+		}
+		//No offset
+		else
+			BiaArchitecture::Operation<OP_CODE::PUSH, _REGISTER>(*m_pOutput);
+
+		return 1;
+	}
 	inline position WriteJump(JUMP p_jump, int32_t p_nOffset = 0, position p_position = -1)
 	{
 		auto oldPos = m_pOutput->GetPosition();
@@ -229,96 +317,9 @@ public:
 private:
 	stream::BiaOutputStream * m_pOutput;
 
-	int32_t m_nPassed;
+	pass_count m_nPassed;
 
 
-	inline int32_t Pass()
-	{
-		return 0;
-	}
-	template<typename T, typename... _ARGS>
-	inline int32_t Pass(T p_value, _ARGS... p_args)
-	{
-		return Pass(p_args...) + Pass(p_value);
-	}
-	template<typename T>
-	inline int32_t Pass(T p_value)
-	{
-		static_assert(sizeof(T) == 1 || sizeof(T) == 4 || sizeof(T) == 8, "Push parameter must of size 1, 4 or 8.");
-
-		//8 bit
-		if (sizeof(T) == 1)
-		{
-			BiaArchitecture::Operation8<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
-
-			return 1;
-		}
-		//32 bit
-		else if (sizeof(T) == 4)
-		{
-			//Save 3 bytes
-			if (std::is_integral<T>::value && p_value <= 127 && p_value >= -128)
-				BiaArchitecture::Operation8<OP_CODE::PUSH>(*m_pOutput, static_cast<int8_t>(p_value));
-			//Push all 4 bytes
-			else
-				BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
-
-			return 1;
-		}
-		//64 bit
-		else
-		{
-			BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int64_t*>(&p_value) >> 32);
-			BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
-
-			return 2;
-		}
-	}
-	template<typename T>
-	inline int32_t Pass(T * p_pAddress)
-	{
-		BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, reinterpret_cast<int32_t>(p_pAddress));
-
-		return 1;
-	}
-	template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
-	inline int32_t Pass(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)
-	{
-		static_assert(std::is_same<_OFFSET, int32_t>::value || std::is_same<_OFFSET, int8_t>::value, "Invalid offset type.");
-
-		//Push address
-		if (_EFFECTIVE_ADDRESS)
-		{
-			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::EAX, _REGISTER, _OFFSET>(*m_pOutput, p_offset.offset);
-			BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EAX>(*m_pOutput);
-		}
-		else
-		{
-			//32 bit signed offset
-			if (std::is_same<_OFFSET, int32_t>::value)
-				BiaArchitecture::Operation32<OP_CODE::PUSH, _REGISTER>(*m_pOutput, p_offset.offset);
-			//8 bit signed offset
-			else
-				BiaArchitecture::Operation8<OP_CODE::PUSH, _REGISTER>(*m_pOutput, p_offset.offset);
-		}
-
-		return 1;
-	}
-	template<REGISTER _REGISTER, bool _EFFECTIVE_ADDRESS>
-	inline int32_t Pass(RegisterOffset<_REGISTER, void, _EFFECTIVE_ADDRESS> p_offset)
-	{
-		//Push address
-		if (_EFFECTIVE_ADDRESS)
-		{
-			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::EAX, _REGISTER, int8_t>(*m_pOutput, 0);
-			BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EAX>(*m_pOutput);
-		}
-		//No offset
-		else
-			BiaArchitecture::Operation<OP_CODE::PUSH, _REGISTER>(*m_pOutput);
-
-		return 1;
-	}
 	template<typename T>
 	inline void PassInstance(T * p_pInstance)
 	{
@@ -336,7 +337,7 @@ private:
 		else
 			BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::ECX, _REGISTER, _OFFSET>(*m_pOutput, p_offset.offset);
 	}
-	template<int32_t _POP>
+	template<pass_count _POP>
 	inline void Pop()
 	{
 		if (_POP > 0)

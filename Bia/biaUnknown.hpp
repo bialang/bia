@@ -23,7 +23,7 @@ public:
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	virtual void CallCount(uint32_t p_unParameterCount, ...) override;
+	virtual void CallCount(parameter_count p_unParameterCount, ...) override;
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/

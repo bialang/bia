@@ -70,7 +70,7 @@ private:
 		framework::BiaMember * pMember;
 		BiaTempCounter::counter_type temporaryResultIndex;
 		bool bTestValue;	/**	Defines the constant test value.	*/
-		uint32_t unParameterCount;
+		framework::BiaMember::parameter_count parameterCount;
 		const char * szParameterFormat;
 	};
 

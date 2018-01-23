@@ -15,7 +15,7 @@ void BiaUnknown::Call()
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUnknown::CallCount(uint32_t p_unParameterCount, ...)
+void BiaUnknown::CallCount(parameter_count p_unParameterCount, ...)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
