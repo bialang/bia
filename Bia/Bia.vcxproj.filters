@@ -52,6 +52,9 @@
     <Filter Include="Source Files\machine\link">
       <UniqueIdentifier>{9d176a48-210b-4979-9f2c-1f2d4d08cadd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\force">
+      <UniqueIdentifier>{ab1c16fb-40f7-4716-87f5-5a83852f65f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="biaLocalVariableHandler.hpp">
       <Filter>Header Files\compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="biaDisguisedCalled.hpp">
+      <Filter>Header Files\force</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

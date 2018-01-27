@@ -3,6 +3,8 @@
 
 [Dd]ebug/
 [Rr]elease/
+x64/
 
 main
 *.o
+

@@ -77,6 +77,8 @@
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp14</LanguageStandard>
       <EnableModules>false</EnableModules>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -93,6 +95,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -130,6 +133,7 @@
     <ClInclude Include="biaConfig.hpp" />
     <ClInclude Include="biaConstantOperation.hpp" />
     <ClInclude Include="biaDisassembler.hpp" />
+    <ClInclude Include="biaDisguisedCalled.hpp" />
     <ClInclude Include="biaException.hpp" />
     <ClInclude Include="biaGrammar.hpp" />
     <ClInclude Include="biaHasher.hpp" />

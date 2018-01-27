@@ -6,18 +6,9 @@
 #include "biaCompiler.hpp"
 #include "biaMachineDecoder.hpp"
 #include <chrono>
+#include "biaDisguisedCalled.hpp"
+#include "biaInt.hpp"
 
-
-void hi(int val, ...)
-{
-	va_list l;
-	va_start(l, val);
-
-	while (val-- > 0)
-		printf("%i ", va_arg(l, int));
-
-	va_end(l);
-}
 
 struct a
 {
@@ -42,6 +33,29 @@ struct b : a
 		printf("hi from b at %p to %i\n", this, p);
 	}
 };
+
+void lua(int a, float b)
+{
+	printf("a: %i b; %f\n", a, b);
+}
+
+void test(int a, int b)
+{
+	printf("%i, %i\n", a, b);
+}
+template<typename... _ARGS>
+void Run(void(*foo)(_ARGS...), int n, ...)
+{
+	va_list vl;
+	va_start(vl, n);
+
+	foo(*reinterpret_cast<int*>(vl), *reinterpret_cast<int*>(vl + sizeof(int)));
+	auto sa = va_arg(vl, int);
+	foo(va_arg(vl, int), va_arg(vl, int));
+	// foo((va_arg(vl, _ARGS),...));
+
+	va_end(vl);
+}
 
 int main()
 {
@@ -77,8 +91,8 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-global system = 0;
-print system();
+global i = 1;
+if(i&&i&&false&&true){print true;}
 )";
 
 	/*

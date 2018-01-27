@@ -33,7 +33,7 @@ BiaMachineCode::BiaMachineCode(std::pair<const uint8_t*, size_t> p_machineCode)
 			return;
 		}
 
-		VirtualFree(reinterpret_cast<void*>(m_run), m_iSize, MEM_RELEASE);
+		VirtualFree(reinterpret_cast<void*>(m_run), 0, MEM_RELEASE);
 	}
 #else
 	//Allocate virtual memory
@@ -74,7 +74,7 @@ BiaMachineCode::~BiaMachineCode()
 {
 #ifdef _WIN32
 	if (m_run)
-		VirtualFree(reinterpret_cast<void*>(m_run), m_iSize, MEM_RELEASE);
+		VirtualFree(reinterpret_cast<void*>(m_run), 0, MEM_RELEASE);
 #else
 	if (m_run)
 		munmap(reinterpret_cast<void*>(m_run), m_iSize);

@@ -58,7 +58,7 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 	{
 	case grammar::NI_INTEGER:
 	{
-		if (p_pReport->content.token.iSize <= 70)
+		if (p_pReport->content.token.iSize < 70)
 		{
 			char acTmp[70];
 
@@ -377,87 +377,6 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 	return p_reports.pEnd + 1;
 }
 
-const grammar::Report * BiaCompiler::HandleValue(grammar::report_range p_reports)
-{
-	puts("value call");
-	
-
-	//Handle first expression
-	p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
-
-	//
-	
-
-	//Logical operators were used
-	/*if (p_reports.pBegin < p_reports.pEnd)
-	{
-	BiaConditionMakerDouble maker(m_output);
-	STATE state = S_NONE;
-
-	do
-	{
-	//Logical operator
-	switch (p_reports.pBegin->unTokenId)
-	{
-	case grammar::BVO_LOGICAL_AND:
-	{
-	constexpr uint64_t cullNull = 0;
-
-	WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
-
-	maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_1);
-
-	//Mark last next
-	if (state == S_NEXT_0)
-	maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
-
-	state = S_NEXT_1;
-
-	break;
-	}
-	case grammar::BVO_LOGICAL_OR:
-	{
-	constexpr uint64_t cullNull = 0;
-
-	WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
-
-	maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_0);
-
-	//Mark last next
-	if (state == S_NEXT_1)
-	maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
-
-	state = S_NEXT_0;
-
-	break;
-	}
-	default:
-	BIA_COMPILER_DEV_INVALID
-	}
-
-	//Handle right value
-	p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
-	} while (p_reports.pBegin < p_reports.pEnd);
-
-	//Mark last next
-	switch (state)
-	{
-	case S_NEXT_0:
-	maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
-
-	break;
-	case S_NEXT_1:
-	maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
-
-	break;
-	default:
-	break;
-	}
-	}*/
-
-	return p_reports.pEnd + 1;
-}
-
 const grammar::Report * BiaCompiler::HandleValueRaw(grammar::report_range p_reports)
 {
 	switch (p_reports.pBegin[1].unTokenId)
@@ -496,7 +415,7 @@ const grammar::Report * BiaCompiler::HandleMathFactor(grammar::report_range p_re
 
 		break;
 	case grammar::BGR_VALUE:
-		HandleValue(p_reports.pBegin[1].content.children);
+		HandleValue<false>(p_reports.pBegin[1].content.children);
 
 		break;
 	default:
@@ -550,7 +469,13 @@ const grammar::Report * BiaCompiler::HandleIf(grammar::report_range p_reports)
 			}
 			//End of ifs or condition is at compile time true
 			else
+			{
+				//Update test jump to ent
+				if (!bConstant)
+					m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP_IF_FALSE, m_toolset.GetBuffer().GetPosition(), jump);
+
 				break;
+			}
 		}
 		//Skip statements. These are conditions that are at compile time false
 		else
@@ -669,7 +594,7 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 				;//m_toolset.Call(&framework::BiaMember::CallCount, m_value.pMember, parameterValue.unParameterCount);
 			//Call without any parameters
 			else
-				m_toolset.SafeCall(&framework::BiaMember::Call, m_value.pMember);
+				;// m_toolset.SafeCall(&framework::BiaMember::Call, m_value.pMember);
 
 			break;
 		}

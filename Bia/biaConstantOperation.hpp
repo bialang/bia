@@ -111,7 +111,7 @@ inline typename OperationResult<_LEFT, _RIGHT>::type ConstantOperationIntegral(_
 		return p_left ^ p_right;
 	case BiaMember::O_BITWISE_ARITHMETIC_LEFT_SHIFT:
 	case BiaMember::O_BITWISE_ASSIGN_ARITHMETIC_LEFT_SHIFT:
-		return p_left << p_right;
+		return static_cast<OperationResult<_LEFT, _RIGHT>::type>(p_left) << p_right;
 	case BiaMember::O_BITWISE_ARITHMETIC_RIGHT_SHIFT:
 	case BiaMember::O_BITWISE_ASSIGN_ARITHMETIC_RIGHT_SHIFT:
 		return p_left >> p_right;

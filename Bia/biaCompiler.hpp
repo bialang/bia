@@ -271,44 +271,7 @@ private:
 	inline const grammar::Report * HandleValue(grammar::report_range p_reports, _LAMBDA && p_callback)
 	{
 		//Handle value
-		HandleValue(p_reports);
-		
-		//Test
-		if (_TEST)
-		{
-			switch (m_valueType)
-			{
-			case VALUE_TYPE::INT_32:
-			case VALUE_TYPE::FLOAT:
-				m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
-				m_value.bTestValue = m_value.nInt ? true : false;
-
-				break;
-			case VALUE_TYPE::INT_64:
-			case VALUE_TYPE::DOUBLE:
-				m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
-				m_value.bTestValue = m_value.llInt ? true : false;
-
-				break;
-			case VALUE_TYPE::MEMBER:
-				m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
-				m_toolset.SafeCall(&framework::BiaMember::Test, m_value.pMember);
-				m_toolset.WriteTest();
-
-				break;
-			case VALUE_TYPE::TEMPORARY_MEMBER:
-				m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
-				m_toolset.Call(&framework::BiaMember::Test, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
-				m_toolset.WriteTest();
-
-				break;
-			case VALUE_TYPE::TEST_VALUE_REGISTER:
-			case VALUE_TYPE::TEST_VALUE_CONSTANT:
-				break;
-			default:
-				BIA_COMPILER_DEV_INVALID
-			}
-		}
+		HandleValue<_TEST>(p_reports);
 
 		//Execute function
 		p_callback();
@@ -318,7 +281,166 @@ private:
 		
 		return p_reports.pEnd + 1;
 	}
-	const grammar::Report * HandleValue(grammar::report_range p_reports);
+	template<bool _TEST>
+	inline const grammar::Report * HandleValue(grammar::report_range p_reports)
+	{
+		using JUMP = machine::architecture::BiaToolset::JUMP;
+
+		//Handle all logical operators
+		auto bTest = false;
+		std::vector<std::pair<JUMP, machine::architecture::BiaToolset::position>> vEndJumps;
+
+		goto gt_start;
+
+		while (p_reports.pBegin < p_reports.pEnd)
+		{
+			//Logical operator
+			switch (p_reports.pBegin->unTokenId)
+			{
+			case grammar::BVO_LOGICAL_AND:
+			{
+				//Constant test result
+				if (m_valueType == VALUE_TYPE::TEST_VALUE_CONSTANT)
+				{
+					if (!m_value.bTestValue)
+					{
+						vEndJumps.push_back({ JUMP::JUMP, m_toolset.WriteJump(JUMP::JUMP) });
+
+						goto gt_end;
+					}
+				}
+				//Jump to next condition
+				else
+				vEndJumps.push_back({ JUMP::JUMP_IF_FALSE, m_toolset.WriteJump(JUMP::JUMP_IF_FALSE) });
+
+				break;
+			}
+			case grammar::BVO_LOGICAL_OR:
+			default:
+				BIA_COMPILER_DEV_INVALID
+			}
+
+		gt_start:;
+			//Handle first expression
+			p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
+
+			//Test
+			if (_TEST || bTest || p_reports.pBegin < p_reports.pEnd)
+			{
+				switch (m_valueType)
+				{
+				case VALUE_TYPE::INT_32:
+				case VALUE_TYPE::FLOAT:
+					m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
+					m_value.bTestValue = m_value.nInt ? true : false;
+
+					break;
+				case VALUE_TYPE::INT_64:
+				case VALUE_TYPE::DOUBLE:
+					m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
+					m_value.bTestValue = m_value.llInt ? true : false;
+
+					break;
+				case VALUE_TYPE::MEMBER:
+					m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
+					m_toolset.SafeCall(&framework::BiaMember::Test, m_value.pMember);
+					m_toolset.WriteTest();
+
+					break;
+				case VALUE_TYPE::TEMPORARY_MEMBER:
+					m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
+					m_toolset.Call(&framework::BiaMember::Test, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+					m_toolset.WriteTest();
+
+					break;
+				case VALUE_TYPE::TEST_VALUE_REGISTER:
+				case VALUE_TYPE::TEST_VALUE_CONSTANT:
+					break;
+				default:
+					BIA_COMPILER_DEV_INVALID
+				}
+			}
+
+			//Test next value
+			bTest = true;
+		}
+
+	gt_end:;
+		//Update end jump locations
+		auto endPos = m_toolset.GetBuffer().GetPosition();
+
+		for (auto & jumpPos : vEndJumps)
+			m_toolset.WriteJump(jumpPos.first, endPos, jumpPos.second);
+
+		//Logical operators were used
+		/*if (p_reports.pBegin < p_reports.pEnd)
+		{
+		BiaConditionMakerDouble maker(m_output);
+		STATE state = S_NONE;
+
+		do
+		{
+		//Logical operator
+		switch (p_reports.pBegin->unTokenId)
+		{
+		case grammar::BVO_LOGICAL_AND:
+		{
+		constexpr uint64_t cullNull = 0;
+
+		WriteConstant(machine::OP::JUMP_CONDITIONAL_NOT, cullNull);
+
+		maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_1);
+
+		//Mark last next
+		if (state == S_NEXT_0)
+		maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
+
+		state = S_NEXT_1;
+
+		break;
+		}
+		case grammar::BVO_LOGICAL_OR:
+		{
+		constexpr uint64_t cullNull = 0;
+
+		WriteConstant(machine::OP::JUMP_CONDITIONAL, cullNull);
+
+		maker.MarkPlaceholder(BiaConditionMakerDouble::L_NEXT_0);
+
+		//Mark last next
+		if (state == S_NEXT_1)
+		maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
+
+		state = S_NEXT_0;
+
+		break;
+		}
+		default:
+		BIA_COMPILER_DEV_INVALID
+		}
+
+		//Handle right value
+		p_reports.pBegin = HandleMathExpression(p_reports.pBegin[1].content.children, false);
+		} while (p_reports.pBegin < p_reports.pEnd);
+
+		//Mark last next
+		switch (state)
+		{
+		case S_NEXT_0:
+		maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_0);
+
+		break;
+		case S_NEXT_1:
+		maker.MarkLocation(BiaConditionMakerDouble::L_NEXT_1);
+
+		break;
+		default:
+		break;
+		}
+		}*/
+
+		return p_reports.pEnd + 1;
+	}
 	const grammar::Report * HandleValueRaw(grammar::report_range p_reports);
 	template<bool _START = true>
 	inline const grammar::Report * HandleMathExpressionTerm(grammar::report_range p_reports)

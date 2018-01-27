@@ -60,14 +60,14 @@ public:
 	inline void SafeCall(_RETURN(BIA_STATIC_CALLING_CONEVENTION *p_pFunctionAddress)(_ARGS...), _ARGS... p_args)
 	{
 		//Push all parameters
-		constexpr auto PASSED = Pass(p_args...);
+		auto passed = Pass(p_args...);
 
 		//Move the address of the function into EAX and call it
 		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*m_pOutput, reinterpret_cast<int32_t>(p_pFunctionAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
 
 		//Pop parameter
-		Pop<PASSED>();
+		Pop(passed);
 	}
 	template<typename _RETURN, typename _CLASS, typename... _ARGS>
 	inline void SafeCall(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS... p_args)
@@ -87,15 +87,12 @@ public:
 		//Move the address of the function into EAX and call it
 		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*m_pOutput, reinterpret_cast<int32_t>(address.pAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
-
-#if defined(BIA_COMPILER_MSCV)
-#endif
 	}
 	template<typename _RETURN, typename _CLASS, typename... _ARGS>
 	inline void SafeCall(_RETURN(BIA_MEMBER_VARARG_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS..., ...), _CLASS * p_pInstance, _ARGS... p_args)
 	{
 		//Push all parameters
-		constexpr auto PASSED = Pass(p_pInstance, p_args...);
+		auto passed = Pass(p_pInstance, p_args...);
 
 		union
 		{
@@ -110,20 +107,20 @@ public:
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
 
 		//Pop
-		Pop<PASSED>();
+		Pop(passed);
 	}
 	template<typename T, typename... _ARGS>
 	inline void Call(T * p_pFunctionAddress, _ARGS... p_args)
 	{
 		//Push all
-		Pass(p_args...);
+		auto passed = Pass(p_args...);
 
 		//Move the address of the function into EAX and call it
 		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*m_pOutput, reinterpret_cast<int32_t>(p_pFunctionAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
 
 		//Pop all
-		Pop<sizeof...(_ARGS)>();
+		Pop(passed);
 	}
 	template<typename _RETURN, typename _CLASS, typename _INSTANCE, typename... _ARGS, typename... _ARGS2>
 	inline void Call(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _INSTANCE p_instance, _ARGS2... p_args)
@@ -186,11 +183,7 @@ public:
 
 		//8 bit
 		if (sizeof(T) == 1)
-		{
 			BiaArchitecture::Operation8<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
-
-			return 1;
-		}
 		//32 bit
 		else if (sizeof(T) == 4)
 		{
@@ -200,17 +193,15 @@ public:
 			//Push all 4 bytes
 			else
 				BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
-
-			return 1;
 		}
 		//64 bit
 		else
 		{
 			BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int64_t*>(&p_value) >> 32);
 			BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, *reinterpret_cast<int32_t*>(&p_value));
-
-			return 2;
 		}
+
+		return sizeof(T) == 8 ? 2 : 1;
 	}
 	template<typename T>
 	inline pass_count Pass(T * p_pAddress)
@@ -337,15 +328,14 @@ private:
 		else
 			BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::ECX, _REGISTER, _OFFSET>(*m_pOutput, p_offset.offset);
 	}
-	template<pass_count _POP>
-	inline void Pop()
+	inline void Pop(pass_count p_pop)
 	{
-		if (_POP > 0)
+		if (p_pop > 0)
 		{
-			if (_POP * 4 < 128)
-				BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(*m_pOutput, static_cast<int8_t>(_POP * 4));
+			if (p_pop * 4 < 128)
+				BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(*m_pOutput, static_cast<int8_t>(p_pop * 4));
 			else
-				BiaArchitecture::Operation32<OP_CODE::ADD, REGISTER::ESP>(*m_pOutput, _POP * 4);
+				BiaArchitecture::Operation32<OP_CODE::ADD, REGISTER::ESP>(*m_pOutput, p_pop * 4);
 		}
 	}
 	/**
