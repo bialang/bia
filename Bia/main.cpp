@@ -50,8 +50,8 @@ void Run(void(*foo)(_ARGS...), int n, ...)
 	va_start(vl, n);
 
 	foo(*reinterpret_cast<int*>(vl), *reinterpret_cast<int*>(vl + sizeof(int)));
-	auto sa = va_arg(vl, int);
-	foo(va_arg(vl, int), va_arg(vl, int));
+	//auto sa = va_arg(vl, int);
+	foo(*(int*)((vl += sizeof(int)) - sizeof(int)), (*(int*)((vl += sizeof(int)) - sizeof(int))));
 	// foo((va_arg(vl, _ARGS),...));
 
 	va_end(vl);
@@ -59,6 +59,7 @@ void Run(void(*foo)(_ARGS...), int n, ...)
 
 int main()
 {
+	Run(test, 2, 4, 434);
 	{
 		auto time_taken = 0ll;
 
