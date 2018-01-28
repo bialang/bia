@@ -48,12 +48,12 @@ inline void DisguisedCallerCount(_RETURN(*p_pFunction)(""")
     f.write(b"\tp_pFunction(")
 
     for x in range(0, i):
-        f.write("std::forward<_{0}>(*reinterpret_cast<framework::BiaMember*>(p_args".format(x).encode())
+        f.write("std::forward<_{0}>(*(*reinterpret_cast<framework::BiaMember**>(p_args".format(x).encode())
 
-        if x != 0:
-            f.write(" + sizeof(framework::BiaMember*) * {0}".format(x).encode())
+        if i - x - 1 != 0:
+            f.write(" + sizeof(framework::BiaMember*) * {0}".format(i - x - 1).encode())
 
-        f.write(")->Cast<_{0}>())".format(x).encode())
+        f.write("))->Cast<_{0}>())".format(x).encode())
 
         if x + 1 < i:
             f.write(b", ")

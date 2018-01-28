@@ -21,9 +21,10 @@ namespace bia
 namespace machine
 {
 
-inline void heyho()
+inline void heyho(int a, int b)
 {
 	puts("heyho");
+	printf("your param: %i, %i\n", a, b);
 }
 
 class BiaMachineContext final
@@ -32,7 +33,7 @@ public:
 BiaMachineContext() : m_storage(34)
 {
 
-	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<void>>(heyho);
+	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<void, int, int>>(heyho);
 
 	m_index.insert({ "test", pAddress });
 }

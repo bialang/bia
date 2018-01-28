@@ -59,7 +59,7 @@ void Run(void(*foo)(_ARGS...), int n, ...)
 
 int main()
 {
-	Run(test, 2, 4, 434);
+	/*Run(test, 2, 4, 434);
 	{
 		auto time_taken = 0ll;
 
@@ -86,15 +86,15 @@ int main()
 		}
 
 		printf("%f\n", time_taken / 20.0);
-	}
+	}*/
 
 	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
 global i = 1;
-print test(i);
-if(i&&i&&false&&true){print true;}
+global o=61;
+print test(i, o);
 )";
 
 	/*
@@ -241,11 +241,11 @@ if(i&&i&&false&&true){print true;}
 	exit;
 
 	*/
-
+/*
 	a * ptr = new a();
 	printf("ad: %p\n", ptr);
 
-/*	{
+	{
 		bia::machine::architecture::BiaToolset toolset(buf);
 		toolset.SafeCall(&hi, 34, 5);
 		toolset.SafeCall(a::~a, ptr);
@@ -262,8 +262,10 @@ if(i&&i&&false&&true){print true;}
 
 		system("pause");
 
-		return 1;
+		return 2;
 	}
+
+	puts(script);
 	
 	printf("address: %p\n", &context);
 

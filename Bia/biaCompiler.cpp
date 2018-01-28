@@ -593,7 +593,7 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 		{
 			//Call with member parameters only
 			if (parameterValue.parameterCount)
-				;//m_toolset.Call(&framework::BiaMember::CallCount, m_value.pMember, parameterValue.unParameterCount);
+				m_toolset.Call(&framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount);
 			//Call without any parameters
 			else
 				m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
@@ -628,6 +628,8 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 	while (p_reports.pBegin < p_reports.pEnd)
 	{
 		p_reports.pBegin = HandleValue<false>(p_reports.pBegin->content.children, [&] {
+			++parameterCounter;
+
 			switch (m_valueType)
 			{
 			case VALUE_TYPE::INT_32:

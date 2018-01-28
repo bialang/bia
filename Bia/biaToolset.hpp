@@ -88,15 +88,15 @@ public:
 		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*m_pOutput, reinterpret_cast<int32_t>(address.pAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
 	}
-	template<typename _RETURN, typename _CLASS, typename... _ARGS>
-	inline void SafeCall(_RETURN(BIA_MEMBER_VARARG_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS..., ...), _CLASS * p_pInstance, _ARGS... p_args)
+	template<typename _RETURN, typename _CLASS, typename... _ARGS, typename... _ARGS2>
+	inline void Call(_RETURN(BIA_MEMBER_VARARG_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS..., ...), _CLASS * p_pInstance, _ARGS2... p_args)
 	{
 		//Push all parameters
 		auto passed = Pass(p_pInstance, p_args...);
 
 		union
 		{
-			_RETURN(_CLASS::*pMember)(_ARGS...);
+			_RETURN(_CLASS::*pMember)(_ARGS..., ...);
 			void * pAddress;
 		} address;
 
@@ -107,7 +107,7 @@ public:
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
 
 		//Pop
-		Pop(passed);
+		Pop(passed+1);
 	}
 	template<typename T, typename... _ARGS>
 	inline void Call(T * p_pFunctionAddress, _ARGS... p_args)
