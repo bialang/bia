@@ -13,16 +13,29 @@
 #include "biaVariableHandler.hpp"
 
 
+#include "biaStaticFunction.hpp"
+
+
 namespace bia
 {
 namespace machine
 {
 
+inline void heyho()
+{
+	puts("heyho");
+}
+
 class BiaMachineContext final
 {
 public:
 BiaMachineContext() : m_storage(34)
-{}
+{
+
+	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<void>>(heyho);
+
+	m_index.insert({ "test", pAddress });
+}
 	//void AddScript(std::string p_stScriptName, script);
 	//void RemoveScript(std::string p_stScriptName);
 	//void Run(std::string p_stScriptName);

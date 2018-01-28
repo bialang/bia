@@ -93,6 +93,7 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 global i = 1;
+print test(i);
 if(i&&i&&false&&true){print true;}
 )";
 

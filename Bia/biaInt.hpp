@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <new>
 #include <type_traits>
 
@@ -33,50 +32,23 @@ public:
 	/**
 	 * @see	BiaMember::Call().
 	*/
-	inline virtual void Call() override
+	inline virtual void Call(BiaMember*) override
 	{
-		puts("system execute");
+		throw exception::BadCallException("Invalid function call on native type.");
 	}
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	inline virtual void CallCount(parameter_count p_unParameterCount, ...) override
+	inline virtual void CallCount(BiaMember*, parameter_count, ...) override
 	{
-
+		throw exception::BadCallException("Invalid function call on native type.");
 	}
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	inline virtual void CallFormat(const char * p_szFormat, ...) override
+	inline virtual void CallFormat(BiaMember*, const char*, ...) override
 	{
-		va_list parameters;
-		va_start(parameters, p_szFormat);
-
-		while (true)
-		{
-			switch (*p_szFormat++)
-			{
-			case 0:
-				goto gt_break;
-			case 'M':
-				va_arg(parameters, BiaMember*);
-			case 'i':
-				va_arg(parameters, int32_t);
-			case 'I':
-				va_arg(parameters, int64_t);
-			case 'f':
-				va_arg(parameters, float);
-			case 'd':
-				va_arg(parameters, double);
-			case 's':
-			default:
-				break;
-			}
-		}
-
-	gt_break:;
-
-		va_end(parameters);
+		throw exception::BadCallException("Invalid function call on native type.");
 	}
 	/**
 	* @see	BiaMember::OperatorCall().
@@ -108,7 +80,7 @@ public:
 		throw exception::OperatorException("Invalid type on native operation.");
 	}
 	/**
-	* @see	BiaMember::OperatorCallInt_32().
+	 * @see	BiaMember::OperatorCallInt_32().
 	*/
 	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, void * p_pDestination) override
 	{
@@ -117,7 +89,7 @@ public:
 		new(p_pDestination) BiaNativeVariable(compiler::ConstantOperationIntegral(m_llValue, p_nRight, p_unOperator));
 	}
 	/**
-	* @see	BiaMember::OperatorCallInt_64().
+	 * @see	BiaMember::OperatorCallInt_64().
 	*/
 	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, void * p_pDestination) override
 	{
@@ -126,7 +98,7 @@ public:
 		new(p_pDestination) BiaNativeVariable(compiler::ConstantOperationIntegral(m_llValue, p_llRight, p_unOperator));
 	}
 	/**
-	* @see	BiaMember::OperatorCallFloat().
+	 * @see	BiaMember::OperatorCallFloat().
 	*/
 	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, void * p_pDestination) override
 	{
@@ -135,7 +107,7 @@ public:
 		//new(p_pDestination) BiaNativeVariable(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
 	}
 	/**
-	* @see	BiaMember::OperatorCallDouble().
+	 * @see	BiaMember::OperatorCallDouble().
 	*/
 	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, void * p_pDestination) override
 	{
@@ -144,7 +116,7 @@ public:
 		//new(p_pDestination) BiaNativeVariable(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
 	}
 	/**
-	* @see	BiaMember::OperatorAssignCall().
+	 * @see	BiaMember::OperatorAssignCall().
 	*/
 	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
@@ -163,7 +135,7 @@ public:
 		throw exception::OperatorException("Invalid type on native operation.");
 	}
 	/**
-	* @see	BiaMember::OperatorAssignCallInt_32().
+	 * @see	BiaMember::OperatorAssignCallInt_32().
 	*/
 	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
@@ -191,28 +163,28 @@ public:
 		m_llValue = static_cast<int64_t>(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
 	}
 	/**
-	* @see	BiaMember::OperatorSelfCall().
+	 * @see	BiaMember::OperatorSelfCall().
 	*/
 	inline virtual void OperatorSelfCall(uint32_t p_unOperator) override
 	{
 
 	}
 	/**
-	* @see	BiaMember::Clone().
+	 * @see	BiaMember::Clone().
 	*/
 	inline virtual void Clone(void * p_pDestination) override
 	{
 		new(p_pDestination) BiaNativeVariable(m_llValue);
 	}
 	/**
-	* @see	BiaMember::IsType().
+	 * @see	BiaMember::IsType().
 	*/
 	inline virtual bool IsType(const std::type_info & p_type) const override
 	{
 		return false;
 	}
 	/**
-	* @see	BiaMember::GetNativeType().
+	 * @see	BiaMember::GetNativeType().
 	*/
 	inline virtual int GetNativeType() const override
 	{
@@ -228,7 +200,7 @@ public:
 
 protected:
 	/**
-	* @see	BiaMember::GetNativeData().
+	 * @see	BiaMember::GetNativeData().
 	*/
 	inline virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override
 	{
@@ -244,15 +216,15 @@ protected:
 		case NATIVE_TYPE::CONST_INT_64:
 			return &m_llValue;
 		default:
-			return nullptr;
+			throw exception::BadCastException("Native type is not supported.");
 		}
 	}
 	/**
-	* @see	BiaMember::GetData().
+	 * @see	BiaMember::GetData().
 	*/
 	inline virtual void * GetData(const std::type_info & p_type, bool p_bConst) override
 	{
-		return nullptr;
+		throw exception::BadCastException("Type is not supported.");
 	}
 
 private:

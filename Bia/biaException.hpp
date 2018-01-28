@@ -59,6 +59,11 @@ struct BadCallException final : Exception
 	inline BadCallException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
 };
 
+struct ArgumentException final : Exception
+{
+	inline ArgumentException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
+};
+
 struct SymbolException final : Exception
 {
 	inline SymbolException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}

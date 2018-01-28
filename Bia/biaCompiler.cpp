@@ -554,6 +554,8 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 	VALUE_TYPE parameterType;
 	Value parameterValue;
 
+	m_counter.Next();
+
 	//Function call
 	if (p_reports.pBegin + 1 < p_reports.pEnd && p_reports.pBegin[1].unRuleId == grammar::BGR_PARAMETER)
 	{
@@ -594,17 +596,20 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 				;//m_toolset.Call(&framework::BiaMember::CallCount, m_value.pMember, parameterValue.unParameterCount);
 			//Call without any parameters
 			else
-				;// m_toolset.SafeCall(&framework::BiaMember::Call, m_value.pMember);
+				m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
 
 			break;
 		}
 		case VALUE_TYPE::PARAMETER_FORMAT:
 			//m_toolset.Call(&framework::BiaMember::CallFormat, m_value.pMember, parameterValue.szParameterFormat);
 
-			break;
+			//break;
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
+
+		m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
+		m_value.temporaryResultIndex = m_counter.Current();
 	}
 
 	return p_reports.pEnd + 1;

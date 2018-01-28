@@ -157,6 +157,7 @@
     <ClInclude Include="biaOutputStreamBuffer.hpp" />
     <ClInclude Include="biaPrint.hpp" />
     <ClInclude Include="biaReportBundle.hpp" />
+    <ClInclude Include="biaStaticFunction.hpp" />
     <ClInclude Include="biaStorage.hpp" />
     <ClInclude Include="biaTempCounter.hpp" />
     <ClInclude Include="biaTemporaryStorage.hpp" />

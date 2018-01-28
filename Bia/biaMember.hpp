@@ -17,6 +17,8 @@ class BiaMember
 public:
 	enum OPERATOR : uint32_t
 	{
+		O_ASSIGN = 0x3d,
+
 		O_PLUS = 0x2b,
 		O_MINUS = 0x2d,
 		O_DIVIDE = 0x2f,
@@ -52,6 +54,7 @@ public:
 	
 	enum NATIVE_TYPE_FLAG : int
 	{
+		NTF_NONE = 0,
 		NTF_INT_8 = 0x1,
 		NTF_INT_16 = 0x2,
 		NTF_INT_32 = 0x4,
@@ -78,17 +81,41 @@ public:
 
 	/**
 	 * Prints the contents of this object.
-	 *
-	 * @since	3.42.93.567
-	 * @date	18-Dec-17
 	*/
-	inline virtual void Print()
-	{
-		printf("<Empty member at %p>", this);
-	}
-	virtual void Call() = 0;
-	virtual void CallCount(parameter_count p_unParameterCount, ...) = 0;
-	virtual void CallFormat(const char * p_szFormat, ...) = 0;
+	virtual void Print() = 0;
+	/**
+	 * Calls this function without any parameters.
+	 *
+	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
+	 *
+	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
+	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	*/
+	virtual void Call(BiaMember * p_pDestination) = 0;
+	/**
+	 * Calls this function with only members as parameters.
+	 *
+	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
+	 * @param	p_unParameterCount	Defines how many parameters are passed.
+	 * @param	...	Defines the passed parameters.
+	 *
+	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
+	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
+	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	*/
+	virtual void CallCount(BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) = 0;
+	/**
+	 * Calls this function with any type as parameter.
+	 *
+	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
+	 * @param	p_szFormat	Defines the type order of the parameters.
+	 * @param	...	Defines the passed parameters.
+	 *
+	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
+	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
+	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	*/
+	virtual void CallFormat(BiaMember * p_pDestination, const char * p_szFormat, ...) = 0;
 	/**
 	 * @throws	exception::OperatorException
 	*/
@@ -151,7 +178,26 @@ protected:
 
 	bool m_bInitialized;
 
+	/**
+	 * Returns the data depending on the native type.
+	 *
+	 * @param	p_nativeType	Defines the type.
+	 *
+	 * @throws	exception::BadCastException	Thrown when the type is not supported.
+	 *
+	 * @return	The address to the data.
+	*/
 	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) = 0;
+	/**
+	 * Returns the data depending on the type.
+	 *
+	 * @param	p_type	Defines the type.
+	 * @param	p_bConst	Defines how the data will be accessed.
+	 *
+	 * @throws	exception::BadCastException	Thrown when the type is not supported.
+	 *
+	 * @return	The address to the data.
+	*/
 	virtual void * GetData(const std::type_info & p_type, bool p_bConst) = 0;
 private:
 	template<typename T>

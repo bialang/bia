@@ -19,67 +19,67 @@ public:
 	/**
 	 * @see	BiaMember::Call().
 	*/
-	virtual void Call() override;
+	virtual void Call(BiaMember*) override;
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	virtual void CallCount(parameter_count p_unParameterCount, ...) override;
+	virtual void CallCount(BiaMember*, parameter_count, ...) override;
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	virtual void CallFormat(const char * p_szFormat, ...) override;
+	virtual void CallFormat(BiaMember*, const char*, ...) override;
 	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
-	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination) override;
+	virtual void OperatorCall(uint32_t, BiaMember*, void*) override;
 	/**
 	 * @see	BiaMember::OperatorCallInt_32().
 	*/
-	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, void * p_pDestination) override;
+	virtual void OperatorCallInt_32(uint32_t, int32_t, void*) override;
 	/**
 	 * @see	BiaMember::OperatorCallInt_64().
 	*/
-	virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, void * p_pDestination) override;
+	virtual void OperatorCallInt_64(uint32_t, int64_t, void*) override;
 	/**
 	 * @see	BiaMember::OperatorCallFloat().
 	*/
-	virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, void * p_pDestination) override;
+	virtual void OperatorCallFloat(uint32_t, float, void*) override;
 	/**
 	 * @see	BiaMember::OperatorCallDouble().
 	*/
-	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, void * p_pDestination) override;
+	virtual void OperatorCallDouble(uint32_t, double, void*) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCall().
 	*/
-	virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override;
+	virtual void OperatorAssignCall(uint32_t, BiaMember*) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCallInt_32().
 	*/
-	virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override;
+	virtual void OperatorAssignCallInt_32(uint32_t, int32_t) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCallInt_64().
 	*/
-	virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override;
+	virtual void OperatorAssignCallInt_64(uint32_t, int64_t) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCallFloat().
 	*/
-	virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override;
+	virtual void OperatorAssignCallFloat(uint32_t, float) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCallDouble().
 	*/
-	virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override;
+	virtual void OperatorAssignCallDouble(uint32_t, double) override;
 	/**
 	 * @see	BiaMember::OperatorSelfCall().
 	*/
-	virtual void OperatorSelfCall(uint32_t p_unOperator) override;
+	virtual void OperatorSelfCall(uint32_t) override;
 	/**
 	 * @see	BiaMember::Clone().
 	*/
-	virtual void Clone(void * p_pDestination) override;
+	virtual void Clone(void*) override;
 	/**
 	 * @see	BiaMember::IsType().
 	*/
-	virtual bool IsType(const std::type_info & p_type) const override;
+	virtual bool IsType(const std::type_info&) const override;
 	/**
 	 * @see	BiaMember::GetNativeType().
 	*/
@@ -93,11 +93,11 @@ protected:
 	/**
 	 * @see	BiaMember::GetNativeData().
 	*/
-	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override;
+	virtual void * GetNativeData(NATIVE_TYPE) override;
 	/**
 	 * @see	BiaMember::GetData().
 	*/
-	virtual void * GetData(const std::type_info & p_type, bool p_bConst) override;
+	virtual void * GetData(const std::type_info&, bool) override;
 };
 
 }
