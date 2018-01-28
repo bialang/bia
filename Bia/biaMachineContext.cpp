@@ -1,6 +1,6 @@
 #include "biaMachineContext.hpp"
 #include "biaOutputStreamBuffer.hpp"
-#include "biaUnknown.hpp"
+#include "biaUndefined.hpp"
 
 #include <memory>
 #include <cstdint>
@@ -37,12 +37,10 @@ void BiaMachineContext::ConstructTemporaryAddresses(int8_t p_cCount, framework::
 
 	for (int8_t i = 0; i < p_cCount; ++i)
 	{
-		p_ppDestination[i] = new(malloc(50)) framework::BiaUnknown();
+		p_ppDestination[i] = new(malloc(50)) framework::BiaUndefined();
 
 		printf("Allocated: %p\n", p_ppDestination[i]);
 	}
-
-	
 }
 
 void BiaMachineContext::DestructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppAddresses)
@@ -69,7 +67,7 @@ framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 	//Create address
 	else
 	{
-		auto pAddress = m_storage.CreateElement<framework::BiaUnknown>();
+		auto pAddress = m_storage.CreateElement<framework::BiaUndefined>();
 
 		m_index.insert({ p_name, pAddress });
 

@@ -124,7 +124,7 @@
     <ClCompile Include="biaMachineDecoder.cpp" />
     <ClCompile Include="biaOperator.cpp" />
     <ClCompile Include="biaOutputStreamBuffer.cpp" />
-    <ClCompile Include="biaUnknown.cpp" />
+    <ClCompile Include="biaUndefined.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,7 +163,7 @@
     <ClInclude Include="biaTemporaryStorage.hpp" />
     <ClInclude Include="biaToolset.hpp" />
     <ClInclude Include="biaArchitecture.hpp" />
-    <ClInclude Include="biaUnknown.hpp" />
+    <ClInclude Include="biaUndefined.hpp" />
     <ClInclude Include="biaVariableHandler.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

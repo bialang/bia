@@ -1,4 +1,4 @@
-max_args = 50
+max_args = 3
 
 f = open("disguised.txt", "wb")
 
@@ -21,44 +21,41 @@ inline void DisguisedCaller(_RETURN(*)(_ARGS...), framework::BiaMember*)
 
 """)
 
-#Static functions
-for i in range(0, max_args + 1):
-    f.write(b"template<typename _RETURN")
+for template in ["static", "static_void"]:
+    filler = {}
 
-    for x in range(0, i):
-        f.write(", typename _{0}".format(x).encode())
+    if template == "static":
+        filler["template_begin"] = "template<typename _RETURN"
+        filler["template_end"] = ">"
+        filler["return"] = "_RETURN"
+    elif template == "static_void":
+        filler["template_begin"] = ""
+        filler["template_end"] = ""
+        filler["return"] = "void"
+        
+    filler["args"] = ""
+    filler["arg_count"] = 0
+    filler["arg_pass"] = ""
+    filler["template_middle"] = ""
 
-    f.write(b""">
-inline void DisguisedCallerCount(_RETURN(*p_pFunction)(""")
+    for i in range(0, max_args + 1):
 
-    for x in range(0, i):
-        f.write("_{0}".format(x).encode())
-
-        if x + 1 < i:
-            f.write(b", ")
-    
-    f.write("""), framework::BiaMember * p_pDestination, uint32_t p_unCount, va_list p_args)
+        f.write("""{template_begin}{template_middle}{template_end}
+inline void DisguisedCallerCount({return}(*p_pFunction)({args}), framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {{
-    if (p_unCount != {0})
-        throw exception::ArgumentException("Argument count is invalid.");
+    if (p_count != {arg_count})
+        throw exception::ArgumentException("Argument count does not match.");
 
-""".format(i).encode())
+    p_pFunction({arg_pass});
+}}
 
-    #Call function
-    f.write(b"\tp_pFunction(")
+""".format(**filler).encode())
 
-    for x in range(0, i):
-        f.write("std::forward<_{0}>(*(*reinterpret_cast<framework::BiaMember**>(p_args".format(x).encode())
+        filler["arg_count"] += 1
+        filler["arg_pass"] += (", " if i != 0 else "") + "std::forward<_{0}>(*(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * {0}))->Cast<_{0}>())".format(i)
+        filler["args"] += (", " if i != 0 else "") + "_" + str(i)
+        filler["template_middle"] += (", " if i != 0 or template == "static" else "") + "typename _" + str(i)
 
-        if i - x - 1 != 0:
-            f.write(" + sizeof(framework::BiaMember*) * {0}".format(i - x - 1).encode())
-
-        f.write("))->Cast<_{0}>())".format(x).encode())
-
-        if x + 1 < i:
-            f.write(b", ")
-
-    f.write(b""");
-}
-
-""")
+        if template == "static_void":
+            filler["template_begin"] = "template<"
+            filler["template_end"] = ">"

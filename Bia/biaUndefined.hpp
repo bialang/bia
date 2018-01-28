@@ -9,9 +9,13 @@ namespace bia
 namespace framework
 {
 
-class BiaUnknown final : public BiaMember
+class BiaUndefined final : public BiaMember
 {
 public:
+	/**
+	 * @see	BiaMember::Undefine().
+	*/
+	virtual void Undefine() override;
 	/**
 	 * @see	BiaMember::Print().
 	*/

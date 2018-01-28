@@ -8,6 +8,7 @@
 #include "biaPrint.hpp"
 #include "biaException.hpp"
 #include "biaConstantOperation.hpp"
+#include "biaUndefined.hpp"
 
 
 namespace bia
@@ -21,9 +22,21 @@ class BiaNativeVariable<int64_t> final : public BiaMember
 public:
 	inline explicit BiaNativeVariable(int64_t p_llValue) : m_llValue(p_llValue) {}
 	inline explicit BiaNativeVariable(int32_t p_nValue) : m_llValue(p_nValue) {}
+	inline ~BiaNativeVariable() = default;
 
 	/**
-	* @see	BiaMember::Print().
+	 * @see	BiaMember::Undefine().
+	*/
+	virtual void Undefine() override
+	{
+		//Destroy this
+		this->~BiaNativeVariable();
+
+		//Undefine
+		new(this) BiaUndefined();
+	}
+	/**
+	 * @see	BiaMember::Print().
 	*/
 	inline virtual void Print() override
 	{

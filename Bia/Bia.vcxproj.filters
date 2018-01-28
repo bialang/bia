@@ -72,9 +72,6 @@
     <ClCompile Include="biaMachineDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="biaUnknown.cpp">
-      <Filter>Source Files\framework</Filter>
-    </ClCompile>
     <ClCompile Include="biaCompiler.cpp">
       <Filter>Source Files\compiler</Filter>
     </ClCompile>
@@ -86,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="biaInterpreterRule.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="biaUndefined.cpp">
+      <Filter>Source Files\framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +167,6 @@
     <ClInclude Include="biaTemporaryStorage.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
-    <ClInclude Include="biaUnknown.hpp">
-      <Filter>Header Files\framework</Filter>
-    </ClInclude>
     <ClInclude Include="biaTempCounter.hpp">
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
@@ -201,6 +198,9 @@
       <Filter>Header Files\force</Filter>
     </ClInclude>
     <ClInclude Include="biaStaticFunction.hpp">
+      <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="biaUndefined.hpp">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
   </ItemGroup>

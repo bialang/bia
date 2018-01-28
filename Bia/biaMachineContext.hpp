@@ -33,7 +33,7 @@ public:
 BiaMachineContext() : m_storage(34)
 {
 
-	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<void, int, int>>(heyho);
+	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<decltype(&heyho)>>(heyho);
 
 	m_index.insert({ "test", pAddress });
 }

@@ -4,6 +4,7 @@
 #include <type_traits>
 
 #include "biaMember.hpp"
+#include "biaUndefined.hpp"
 #include "biaException.hpp"
 #include "biaDisguisedCalled.hpp"
 
@@ -14,7 +15,12 @@ namespace framework
 {
 
 template<typename _RETURN, typename... _ARGS>
-class BiaStaticFunction final : public BiaMember
+class BiaStaticFunction
+{
+};
+
+template<typename _RETURN, typename... _ARGS>
+class BiaStaticFunction<_RETURN(*)(_ARGS...)> final : public BiaMember
 {
 public:
 	/**
@@ -23,7 +29,19 @@ public:
 	 * @param	p_pFunction	Defines the static function.
 	*/
 	inline explicit BiaStaticFunction(_RETURN(*p_pFunction)(_ARGS...)) : m_pFunction(p_pFunction) {}
+	inline ~BiaStaticFunction() = default;
 
+	/**
+	 * @see	BiaMember::Undefine().
+	*/
+	virtual void Undefine() override
+	{
+		//Destroy this
+		this->~BiaStaticFunction();
+
+		//Undefine
+		new(this) BiaUndefined();
+	}
 	/**
 	* @see	BiaMember::Print().
 	*/
@@ -171,7 +189,7 @@ public:
 	*/
 	inline virtual void Clone(void * p_pDestination) override
 	{
-		//new(p_pDestination) BiaStaticFunction<_RETURN(*)(_ARGS...)>(m_pFunction);
+		new(p_pDestination) BiaStaticFunction<_RETURN(*)(_ARGS...)>(m_pFunction);
 	}
 	/**
 	 * @see	BiaMember::IsType().

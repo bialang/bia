@@ -5,6 +5,7 @@
 #include <cstdarg>
 #include <typeinfo>
 #include <type_traits>
+#include <utility>
 
 
 namespace bia
@@ -79,6 +80,7 @@ public:
 	}
 
 
+	virtual void Undefine() = 0;
 	/**
 	 * Prints the contents of this object.
 	*/

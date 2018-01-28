@@ -592,8 +592,8 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 		case VALUE_TYPE::PARAMETER_COUNT:
 		{
 			//Call with member parameters only
-			if (parameterValue.parameterCount)
-				m_toolset.Call(&framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount);
+			if (parameterValue.parameterCount.parameterCount)
+				m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
 			//Call without any parameters
 			else
 				m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
@@ -620,7 +620,7 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 	++p_reports.pBegin;
 
 	auto bUseCounter = true;
-	machine::architecture::BiaToolset::pass_count parameterPassed = 0;
+	machine::architecture::BiaToolset::pass_count quartetsPassed = 0;
 	framework::BiaMember::parameter_count parameterCounter = 0;
 	std::string stFormat;
 
@@ -633,37 +633,37 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 			switch (m_valueType)
 			{
 			case VALUE_TYPE::INT_32:
-				parameterPassed += m_toolset.Pass(m_value.nInt);
+				quartetsPassed += m_toolset.Pass(m_value.nInt);
 				stFormat += 'i';
 				bUseCounter = false;
 
 				break;
 			case VALUE_TYPE::INT_64:
-				parameterPassed += m_toolset.Pass(m_value.llInt);
+				quartetsPassed += m_toolset.Pass(m_value.llInt);
 				stFormat += 'I';
 				bUseCounter = false;
 
 				break;
 			case VALUE_TYPE::FLOAT:
-				parameterPassed += m_toolset.Pass(m_value.rFloat);
+				quartetsPassed += m_toolset.Pass(m_value.rFloat);
 				stFormat += 'f';
 				bUseCounter = false;
 
 				break;
 			case VALUE_TYPE::DOUBLE:
-				parameterPassed += m_toolset.Pass(m_value.rDouble);
+				quartetsPassed += m_toolset.Pass(m_value.rDouble);
 				stFormat += 'd';
 				bUseCounter = false;
 
 				break;
 			//case VALUE_TYPE::STRING:
 			case VALUE_TYPE::MEMBER:
-				parameterPassed += m_toolset.Pass(m_value.pMember);
+				quartetsPassed += m_toolset.Pass(m_value.pMember);
 				stFormat += 'M';
 
 				break;
 			case VALUE_TYPE::TEMPORARY_MEMBER:
-				parameterPassed += m_toolset.Pass(machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+				quartetsPassed += m_toolset.Pass(machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
 				stFormat += 'M';
 
 				break;
@@ -677,7 +677,8 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 	if (bUseCounter)
 	{
 		m_valueType = VALUE_TYPE::PARAMETER_COUNT;
-		m_value.parameterCount = parameterCounter;
+		m_value.parameterCount.parameterCount = parameterCounter;
+		m_value.parameterCount.quartetsPassed = quartetsPassed;
 	}
 	//Mixed
 	else
