@@ -22,6 +22,11 @@ class BiaNativeVariable<int64_t> final : public BiaMember
 public:
 	inline explicit BiaNativeVariable(int64_t p_llValue) : m_llValue(p_llValue) {}
 	inline explicit BiaNativeVariable(int32_t p_nValue) : m_llValue(p_nValue) {}
+	template<typename _DUMMY>
+	inline explicit BiaNativeVariable(_DUMMY)
+	{
+		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
+	}
 	inline ~BiaNativeVariable() = default;
 
 	/**
@@ -243,6 +248,8 @@ protected:
 private:
 	int64_t m_llValue;
 };
+
+typedef BiaNativeVariable<int64_t> BiaInt;
 
 }
 }

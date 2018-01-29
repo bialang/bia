@@ -29,6 +29,11 @@ public:
 	 * @param	p_pFunction	Defines the static function.
 	*/
 	inline explicit BiaStaticFunction(_RETURN(*p_pFunction)(_ARGS...)) : m_pFunction(p_pFunction) {}
+	template<typename _DUMMY>
+	inline explicit BiaStaticFunction(_DUMMY)
+	{
+		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
+	}
 	inline ~BiaStaticFunction() = default;
 
 	/**

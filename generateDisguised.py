@@ -2,15 +2,17 @@ max_args = 3
 
 f = open("disguised.txt", "wb")
 
-f.write(b"""inline void DisguisedCaller(void(*p_pFunction)(), framework::BiaMember*)
+f.write(b"""inline void DisguisedCaller(void(*p_pFunction)(), framework::BiaMember * p_pDestination)
 {
     p_pFunction();
+
+    framework::MemberCreator(p_pDestination);
 }
 
 template<typename _RETURN>
 inline void DisguisedCaller(_RETURN(*p_pFunction)(), framework::BiaMember * p_pDestination)
 {
-    p_pFunction();
+    framework::MemberCreator(p_pDestination, p_pFunction());
 }
 
 template<typename _RETURN, typename... _ARGS>
@@ -28,10 +30,16 @@ for template in ["static", "static_void"]:
         filler["template_begin"] = "template<typename _RETURN"
         filler["template_end"] = ">"
         filler["return"] = "_RETURN"
+        filler["pre_call"] = "framework::MemberCreator(p_pDestination, "
+        filler["post_call"] = ")"
     elif template == "static_void":
         filler["template_begin"] = ""
         filler["template_end"] = ""
         filler["return"] = "void"
+        filler["pre_call"] = ""
+        filler["post_call"] = """;
+
+    framework::MemberCreator(p_pDestination)"""
         
     filler["args"] = ""
     filler["arg_count"] = 0
@@ -46,7 +54,7 @@ inline void DisguisedCallerCount({return}(*p_pFunction)({args}), framework::BiaM
     if (p_count != {arg_count})
         throw exception::ArgumentException("Argument count does not match.");
 
-    p_pFunction({arg_pass});
+    {pre_call}p_pFunction({arg_pass}){post_call};
 }}
 
 """.format(**filler).encode())

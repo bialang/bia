@@ -21,10 +21,12 @@ namespace bia
 namespace machine
 {
 
-inline void heyho(int a, int b)
+inline int heyho(int a, int b)
 {
 	puts("heyho");
 	printf("your param: %i, %i\n", a, b);
+
+	return a * b;
 }
 
 class BiaMachineContext final
