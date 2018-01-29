@@ -29,6 +29,9 @@ inline void MemberCreator(BiaMember * p_pDestination, T && p_value)
 	//Integral type
 	if (std::is_integral<T>::value)
 		new(p_pDestination) BiaInt(std::forward<T>(p_value));
+	//Static function
+	else if (std::is_pointer<T>::value && std::is_function<std::remove_pointer<T>::type>::value)
+		new(p_pDestination) BiaStaticFunction<std::add_pointer<std::remove_pointer<_TYPE>::type>::type>(std::forward<T>(p_value));
 	else
 		throw BIA_IMPLEMENTATION_EXCEPTION("Value not supported.");
 }

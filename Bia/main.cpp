@@ -94,7 +94,8 @@ int main()
 	char script[] = R"(
 global i = 1;
 global o=61;
-print test(i, o);
+global ex = test(i, o);
+print ex(i);
 )";
 
 	/*

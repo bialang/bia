@@ -369,6 +369,10 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 			m_toolset.SafeCall(&machine::link::InstantiateCopy, pVariable, m_value.pMember);
 	
 			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&machine::link::InstantiateCopy, pVariable, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+
+			break;
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
@@ -633,18 +637,13 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 			switch (m_valueType)
 			{
 			case VALUE_TYPE::INT_32:
-				quartetsPassed += m_toolset.Pass(m_value.nInt);
-				stFormat += 'i';
-				bUseCounter = false;
-
-				break;
 			case VALUE_TYPE::INT_64:
 				quartetsPassed += m_toolset.Pass(m_value.llInt);
 				stFormat += 'I';
 				bUseCounter = false;
 
 				break;
-			case VALUE_TYPE::FLOAT:
+			/*case VALUE_TYPE::FLOAT:
 				quartetsPassed += m_toolset.Pass(m_value.rFloat);
 				stFormat += 'f';
 				bUseCounter = false;
@@ -655,7 +654,7 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 				stFormat += 'd';
 				bUseCounter = false;
 
-				break;
+				break;*/
 			//case VALUE_TYPE::STRING:
 			case VALUE_TYPE::MEMBER:
 				quartetsPassed += m_toolset.Pass(m_value.pMember);
