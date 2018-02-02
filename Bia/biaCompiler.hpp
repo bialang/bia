@@ -66,7 +66,7 @@ private:
 		int64_t llInt;
 		float rFloat;
 		double rDouble;
-		size_t iString;
+		const char * szString;
 		framework::BiaMember * pMember;
 		BiaTempCounter::counter_type temporaryResultIndex;
 		bool bTestValue;	/**	Defines the constant test value.	*/

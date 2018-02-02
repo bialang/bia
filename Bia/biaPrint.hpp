@@ -51,6 +51,11 @@ BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_d(double p_rValue))
 	printf("%f\n", p_rValue);
 }
 
+BIA_INSTRUCTION_CALLING_CONVETION(inline void, Print_s(const char * p_szString))
+{
+	puts(p_szString);
+}
+
 }
 }
 }
