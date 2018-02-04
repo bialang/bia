@@ -89,7 +89,7 @@ int main()
 	}*/
 
 	bia::stream::BiaOutputStreamBuffer buf;
-	bia::machine::BiaMachineContext context;
+	bia::machine::BiaMachineContext context(std::shared_ptr<bia::machine::BiaAllocator>(new bia::machine::BiaAllocator()));
 //var i = 65*65+5*8;
 	char script[] = R"(
 global str = "hi wie gehts?";

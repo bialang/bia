@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <map>
 #include <set>
+#include <memory>
 #include <string>
 
 #include "biaConfig.hpp"
@@ -12,6 +13,7 @@
 #include "biaMachineCode.hpp"
 #include "biaInputStream.hpp"
 #include "biaVariableHandler.hpp"
+#include "biaAllocator.hpp"
 
 
 #include "biaStaticFunction.hpp"
@@ -42,7 +44,7 @@ inline rra heyho(const char * b)
 class BiaMachineContext final
 {
 public:
-BiaMachineContext() : m_storage(34)
+BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator))
 {
 
 	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<decltype(&heyho)>>(heyho);
@@ -75,6 +77,8 @@ BiaMachineContext() : m_storage(34)
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
 	std::set<std::string> m_stringAddresses;	/**	Stores all string addresses.	*/
+
+	std::shared_ptr<BiaAllocator> m_pAllocator;	/**	Defines the memory allocator.	*/
 
 	BiaStorage<16> m_storage;
 	//BiaTemporaryStorage<framework::BiaMember, 16> m_temporaryStorage;

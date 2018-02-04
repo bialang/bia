@@ -33,11 +33,12 @@ void BiaMachineContext::Run(stream::BiaInputStream & p_input)
 
 void BiaMachineContext::ConstructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppDestination)
 {
+	auto pBlocks = static_cast<int8_t*>(m_pAllocator->AllocateBlocks(p_cCount));
 	printf("construct %p\n", p_ppDestination);
 
 	for (int8_t i = 0; i < p_cCount; ++i)
 	{
-		p_ppDestination[i] = new(malloc(50)) framework::BiaUndefined();
+		p_ppDestination[i] = new(pBlocks + i * BiaAllocator::BLOCK_SIZE) framework::BiaUndefined();
 
 		printf("Allocated: %p\n", p_ppDestination[i]);
 	}
@@ -53,8 +54,9 @@ void BiaMachineContext::DestructTemporaryAddresses(int8_t p_cCount, framework::B
 
 		p_ppAddresses[i]->~BiaMember();
 
-		free(p_ppAddresses[i]);
 	}
+
+	m_pAllocator->DeallocateBlocks(*p_ppAddresses, p_cCount);
 }
 
 const char * BiaMachineContext::StringAddressOf(std::string p_stString)
@@ -78,7 +80,8 @@ framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 	//Create address
 	else
 	{
-		auto pAddress = m_storage.CreateElement<framework::BiaUndefined>();
+		auto pAddress = static_cast<framework::BiaMember*>(m_pAllocator->ConstructBlocks<framework::BiaUndefined>(1, BiaAllocator::F_NONE));
+		//auto pAddress = m_storage.CreateElement<framework::BiaUndefined>();
 
 		m_index.insert({ p_name, pAddress });
 

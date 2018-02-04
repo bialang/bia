@@ -116,6 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="biaAllocator.cpp" />
     <ClCompile Include="biaCompiler.cpp" />
     <ClCompile Include="biaInstantiate.cpp" />
     <ClCompile Include="biaInterpreterRule.cpp" />
