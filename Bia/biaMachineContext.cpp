@@ -57,6 +57,17 @@ void BiaMachineContext::DestructTemporaryAddresses(int8_t p_cCount, framework::B
 	}
 }
 
+const char * BiaMachineContext::StringAddressOf(std::string p_stString)
+{
+	auto pResult = m_stringAddresses.find(p_stString);
+
+	//Not found
+	if (pResult == m_stringAddresses.end())
+		pResult = m_stringAddresses.insert(std::move(p_stString)).first;
+
+	return pResult->data();
+}
+
 framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 {
 	auto pResult = m_index.find(p_name);

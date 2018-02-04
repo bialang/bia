@@ -151,7 +151,7 @@ public:
 	*/
 	inline virtual int GetNativeType() const override
 	{
-		return NTF_INT_8 | NTF_INT_16 | NTF_INT_32 | NTF_INT_64;
+		return NTF_STRING;
 	}
 	/**
 	* @see	BiaMember::Test().
@@ -170,6 +170,8 @@ protected:
 	{
 		switch (p_nativeType)
 		{
+		case NATIVE_TYPE::CONST_STRING:
+			return &m_szString;
 		default:
 			throw exception::BadCastException("Native type is not supported.");
 		}

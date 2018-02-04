@@ -62,6 +62,7 @@ public:
 		NTF_INT_64 = 0x8,
 		NTF_FLOAT = 0x10,
 		NTF_DOUBLE = 0x20,
+		NTF_STRING = 0x40
 	};
 
 	typedef uint32_t parameter_count;
@@ -175,6 +176,7 @@ protected:
 		CONST_FLOAT,
 		DOUBLE,
 		CONST_DOUBLE,
+		CONST_STRING,
 		CUSTOM
 	};
 
@@ -223,6 +225,8 @@ private:
 			return std::is_const<T>::value ? NATIVE_TYPE::CONST_FLOAT : NATIVE_TYPE::FLOAT;
 		else if (std::is_same<T, double>::value)
 			return std::is_const<T>::value ? NATIVE_TYPE::CONST_DOUBLE : NATIVE_TYPE::DOUBLE;
+		else if (std::is_same<T, const char*>::value)
+			return NATIVE_TYPE::CONST_STRING;
 
 		return NATIVE_TYPE::CUSTOM;
 	}

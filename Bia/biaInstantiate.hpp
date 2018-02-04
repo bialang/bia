@@ -21,6 +21,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntP1(framework::BiaMember * 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntN1(framework::BiaMember * p_pMember));
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateFloat(framework::BiaMember * p_pMember, float p_rValue));
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateDouble(framework::BiaMember * p_pMember, double p_rValue));
+BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateCString(framework::BiaMember * p_pMember, const char * p_szString));
 
 }
 }

@@ -29,6 +29,7 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(machine::link::Print_b);
 	BIA_FUNCTION_ENTRY(machine::link::Print_f);
 	BIA_FUNCTION_ENTRY(machine::link::Print_d);
+	BIA_FUNCTION_ENTRY(machine::link::Print_s);
 
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Call);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::CallCount);

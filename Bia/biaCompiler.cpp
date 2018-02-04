@@ -138,6 +138,13 @@ void BiaCompiler::HandleNumber(const grammar::Report * p_pReport)
 	}
 }
 
+void BiaCompiler::HandleString(const grammar::Report * p_pReport)
+{
+	m_valueType = VALUE_TYPE::STRING;
+	m_value.string.pcString = p_pReport->content.token.pcString;
+	m_value.string.iSize = p_pReport->content.token.iSize;
+}
+
 void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex)
 {
 	using namespace machine::architecture;
@@ -318,6 +325,18 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 	m_value.temporaryResultIndex = p_destinationIndex;
 }
 
+const char * BiaCompiler::GetStringLocation(Value::String p_string)
+{
+	std::string stString;
+
+	stString.reserve(p_string.iSize);
+
+	//Parse string
+	stString.append(p_string.pcString, p_string.iSize);
+
+	return m_context.StringAddressOf(std::move(stString));
+}
+
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
 {
 	//Handle value and prepare the result for a function call
@@ -364,6 +383,10 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 		case VALUE_TYPE::DOUBLE:
 			m_toolset.SafeCall(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);
 	
+			break;
+		case VALUE_TYPE::STRING:
+			m_toolset.SafeCall(&machine::link::InstantiateCString, pVariable, GetStringLocation(m_value.string));
+
 			break;
 		case VALUE_TYPE::MEMBER:
 			m_toolset.SafeCall(&machine::link::InstantiateCopy, pVariable, m_value.pMember);
@@ -523,6 +546,10 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 			m_toolset.SafeCall(&machine::link::Print_d, m_value.rDouble);
 	
 			break;
+		case VALUE_TYPE::STRING:
+			m_toolset.SafeCall(&machine::link::Print_s, GetStringLocation(m_value.string));
+
+			break;
 		case VALUE_TYPE::MEMBER:
 			m_toolset.SafeCall(&framework::BiaMember::Print, m_value.pMember);
 	
@@ -574,11 +601,11 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 	/*case grammar::BM_INSTANTIATION:
 		HandleInstantiation(p_reports.pBegin->content.children, p_bPush);
 
-		break;
-	case grammar::BM_STRING:
-		HandleString(p_reports.pBegin, p_bPush);
-
 		break;*/
+	case grammar::BM_STRING:
+		HandleString(p_reports.pBegin);
+
+		break;
 	case grammar::BM_IDENTIFIER:
 		m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
 		m_valueType = VALUE_TYPE::MEMBER;

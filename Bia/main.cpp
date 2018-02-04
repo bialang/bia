@@ -92,10 +92,12 @@ int main()
 	bia::machine::BiaMachineContext context;
 //var i = 65*65+5*8;
 	char script[] = R"(
-global i = 1;
-global o=61;
-global ex = test(i, o);
-print ex(i);
+global str = "hi wie gehts?";
+
+print str;
+print "gut und dir?";
+
+print test(str);
 )";
 
 	/*

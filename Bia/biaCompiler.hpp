@@ -66,7 +66,11 @@ private:
 		int64_t llInt;
 		float rFloat;
 		double rDouble;
-		const char * szString;
+		struct String
+		{
+			const char * pcString;
+			size_t iSize;
+		} string;
 		framework::BiaMember * pMember;
 		BiaTempCounter::counter_type temporaryResultIndex;
 		bool bTestValue;	/**	Defines the constant test value.	*/
@@ -148,7 +152,9 @@ private:
 	}
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
+	void HandleString(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
+	const char * GetStringLocation(Value::String p_string);
 	//framework::BiaMember * GetAddressOfVariable();
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)

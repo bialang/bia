@@ -1,5 +1,6 @@
 #include "biaInstantiate.hpp"
 #include "biaInt.hpp"
+#include "biaCString.h"
 
 #include <new>
 
@@ -81,6 +82,13 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateDouble(framework::BiaMember *
 
 	//Create new int object
 	//new(p_pMember) framework::BiaNativeVariable<double>(p_rValue);
+}
+
+BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateCString(framework::BiaMember *p_pMember, const char *p_szString))
+{
+	p_pMember->~BiaMember();
+
+	new(p_pMember) framework::BiaCString(p_szString);
 }
 
 }

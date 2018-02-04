@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <map>
+#include <set>
 #include <string>
 
 #include "biaConfig.hpp"
@@ -30,10 +31,10 @@ inline int lulu(int y)
 
 typedef int(*rra)(int);
 
-inline rra heyho(int a, int b)
+inline rra heyho(const char * b)
 {
 	puts("heyho");
-	printf("your param: %i, %i\n", a, b);
+	printf("your param: %s\n", b);
 
 	return &lulu;
 }
@@ -73,6 +74,8 @@ BiaMachineContext() : m_storage(34)
 	variable_index m_index;	/**	Stores all pointers to the known variables.	*/
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
+	std::set<std::string> m_stringAddresses;	/**	Stores all string addresses.	*/
+
 	BiaStorage<16> m_storage;
 	//BiaTemporaryStorage<framework::BiaMember, 16> m_temporaryStorage;
 
@@ -97,6 +100,7 @@ BiaMachineContext() : m_storage(34)
 	 * @param	[in,out]	p_ppAddresses	Defines the addresses that should be freed.
 	*/
 	void DestructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppAddresses);
+	const char * StringAddressOf(std::string p_stString);
 	/**
 	 * Returns the address of the member.
 	 *
