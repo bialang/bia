@@ -92,6 +92,10 @@ public:
 	 * @see	BiaMember::Test().
 	*/
 	virtual int32_t Test() override;
+	/**
+	 * @see	BiaMember::GetMember().
+	*/
+	virtual BiaMember * GetMember(const char * p_szName) override;
 
 protected:
 	/**

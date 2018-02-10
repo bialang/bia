@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <unordered_set>
 
 #include "biaAllocator.hpp"
@@ -14,11 +13,17 @@ namespace machine
 class BiaStringManager
 {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * @param	[in]	p_pAllocator	Defines the memory allocator.
+	*/
 	BiaStringManager(BiaAllocator * p_pAllocator);
 	BiaStringManager(BiaStringManager && p_move);
 	BiaStringManager(const BiaStringManager&) = delete;
 	~BiaStringManager();
 	const char * GetStringAddress(const char * p_pcString, size_t p_iSize);
+
 private:
 	struct StringEntry
 	{
@@ -46,9 +51,9 @@ private:
 		}
 	};
 
-	BiaAllocator * m_pAllocator;
+	BiaAllocator * m_pAllocator;	/**	Defines the memory allocator.	*/
 
-	std::unordered_set<StringEntry, StringHasher> m_index;
+	std::unordered_set<StringEntry, StringHasher> m_index;	/**	Defines the index holding all allocated names.	*/
 };
 
 }

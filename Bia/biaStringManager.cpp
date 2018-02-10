@@ -33,9 +33,11 @@ const char * BiaStringManager::GetStringAddress(const char * p_pcString, size_t 
 	//Create new entry
 	if (pResult == m_index.end())
 	{
-		auto pcString = static_cast<char*>(m_pAllocator->Allocate(p_iSize));
+		auto pcString = static_cast<char*>(m_pAllocator->Allocate(p_iSize + 1));
 
+		//Copy string
 		memcpy(pcString, p_pcString, p_iSize);
+		pcString[p_iSize] = 0;
 
 		pResult = m_index.insert(StringEntry(pcString, p_iSize)).first;
 	}

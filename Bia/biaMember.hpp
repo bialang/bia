@@ -81,6 +81,9 @@ public:
 	}
 
 
+	/**
+	 * Undefines this object.
+	*/
 	virtual void Undefine() = 0;
 	/**
 	 * Prints the contents of this object.
@@ -139,6 +142,11 @@ public:
 	 * @throws	exception::OperatorException
 	*/
 	virtual void OperatorSelfCall(uint32_t p_unOperator) = 0;
+	/**
+	 * Clones the contents of this object to the destination.
+	 *
+	 * @param	[in,out]	p_pDestination	Defines the destination.
+	*/
 	virtual void Clone(BiaMember * p_pDestination) = 0;
 	/**
 	 * Checks whether the specified type matches this object.
@@ -149,7 +157,22 @@ public:
 	*/
 	virtual bool IsType(const std::type_info & p_type) const = 0;
 	virtual int GetNativeType() const = 0;
+	/**
+	 * Tests the content of this object.
+	 *
+	 * @return	A non-zero value for a successful result, otherwise 0.
+	*/
 	virtual int32_t Test() = 0;
+	/**
+	 * Returns the member address matching the given name.
+	 *
+	 * @param	p_szName	Defines the zero-terminated name.
+	 *
+	 * @throws	exception::SymbolException	Thrown when the member is not known.
+	 *
+	 * @return	The address of the member.
+	*/
+	virtual BiaMember * GetMember(const char * p_szName) = 0;
 	template<typename T, typename _T = typename std::remove_reference<T>::type>
 	inline _T * Cast()
 	{
@@ -189,7 +212,7 @@ protected:
 		CUSTOM
 	};
 
-	bool m_bInitialized;
+	bool m_bInitialized;	/**	If true this object was initialized, otherwise not.	*/
 
 	/**
 	 * Returns the data depending on the native type.
@@ -212,6 +235,7 @@ protected:
 	 * @return	The address to the data.
 	*/
 	virtual void * GetData(const std::type_info & p_type, bool p_bConst) = 0;
+
 private:
 	template<typename T>
 	inline constexpr static NATIVE_TYPE NativeType()

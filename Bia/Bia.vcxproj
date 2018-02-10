@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="biaAllocator.cpp" />
     <ClCompile Include="biaCompiler.cpp" />
+    <ClCompile Include="biaCString.cpp" />
     <ClCompile Include="biaInstantiate.cpp" />
     <ClCompile Include="biaInterpreterRule.cpp" />
     <ClCompile Include="biaMachineCode.cpp" />

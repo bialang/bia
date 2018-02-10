@@ -17,25 +17,26 @@ namespace framework
 class BiaCString : public BiaMember
 {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * @param	p_szConstantString	Defines a string address that has to be valid until the end of the lifetime of this object.
+	*/
 	inline explicit BiaCString(const char * p_szConstantString) : m_szString(p_szConstantString) {}
+	/**
+	 * Dummy-Constructor in order to prevent compiler errors.
+	*/
 	template<typename _DUMMY>
 	inline explicit BiaCString(_DUMMY)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
 	}
-	inline ~BiaCString() = default;
+	~BiaCString() = default;
 
 	/**
 	 * @see	BiaMember::Undefine().
 	*/
-	virtual void Undefine() override
-	{
-		//Destroy this
-		this->~BiaCString();
-
-		//Undefine
-		new(this) BiaUndefined();
-	}
+	virtual void Undefine() override;
 	/**
 	 * @see	BiaMember::Print().
 	*/
@@ -46,10 +47,7 @@ public:
 	/**
 	 * @see	BiaMember::Call().
 	*/
-	inline virtual void Call(BiaMember*) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
+	virtual void Call(BiaMember*) override;
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
@@ -162,31 +160,20 @@ public:
 		return false;
 		//return reinterpret_cast<int32_t*>(&m_llValue)[0] | reinterpret_cast<int32_t*>(&m_llValue)[1];
 	}
+	virtual BiaMember * GetMember(const char * p_szName) override;
 
 protected:
 	/**
 	 * @see	BiaMember::GetNativeData().
 	*/
-	inline virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override
-	{
-		switch (p_nativeType)
-		{
-		case NATIVE_TYPE::CONST_STRING:
-			return &m_szString;
-		default:
-			throw exception::BadCastException("Native type is not supported.");
-		}
-	}
+	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override;
 	/**
 	 * @see	BiaMember::GetData().
 	*/
-	inline virtual void * GetData(const std::type_info & p_type, bool p_bConst) override
-	{
-		throw exception::BadCastException("Type is not supported.");
-	}
+	virtual void * GetData(const std::type_info & p_type, bool p_bConst) override;
 
 private:
-	const char * m_szString;
+	const char * m_szString;	/**	Defines the constant address of the string. Must not be modified.	*/
 };
 
 }

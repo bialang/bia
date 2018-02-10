@@ -1,7 +1,6 @@
 #include "biaMachineDecoder.hpp"
 #include "biaConfig.hpp"
 #include "biaLink.hpp"
-#include "biaMachineContext.hpp"
 
 #include <cstdio>
 
@@ -18,9 +17,83 @@ namespace disassembler
 std::vector<BiaMachineDecoder::Instruction> BiaMachineDecoder::m_svInstructions;
 std::map<const void*, std::string> BiaMachineDecoder::m_sFunctions;
 
+BiaMachineDecoder::BiaMachineDecoder(const BiaMachineContext * p_pMachineContextAddress, variable_index & p_index) : m_index(p_index)
+{
+	m_pMachineContextAddress = p_pMachineContextAddress;
+
+	if (m_svInstructions.empty())
+		Initialize();
+}
+
+void BiaMachineDecoder::Disassemble(const void * p_pMachineCode, size_t p_iSize)
+{
+	auto pBuffer = static_cast<const uint8_t*>(p_pMachineCode);
+
+	while (p_iSize)
+	{
+		//Check all instruction
+		for (auto & instruction : m_svInstructions)
+		{
+			if (instruction.ucSize <= p_iSize)
+			{
+				uint64_t ullCode = 0;
+
+				memcpy(&ullCode, pBuffer, std::min<uint8_t>(8, instruction.ucSize));
+
+				//This it the instruction
+				if ((ullCode & instruction.ullMask) == instruction.ullInstruction)
+				{
+					printf("%p: ", pBuffer);
+
+					instruction.callback(this, pBuffer);
+
+					pBuffer += instruction.ucSize;
+					p_iSize -= instruction.ucSize;
+
+					goto gt_continue;
+				}
+			}
+		}
+
+		throw exception::Exception("hi");
+
+		break;
+
+	gt_continue:;
+	}
+}
+
+const char * BiaMachineDecoder::GetVariableName(const void * p_pAddress)
+{
+	if (p_pAddress == m_pMachineContextAddress)
+		return "this";
+
+	auto pResult = m_sFunctions.find(p_pAddress);
+
+	if (pResult != m_sFunctions.end())
+		return pResult->second.c_str();
+
+	for (auto & element : m_index)
+	{
+		if (element.second == p_pAddress)
+			return element.first.data();
+	}
+
+	return nullptr;
+}
+
 void BiaMachineDecoder::Initialize()
 {
 #if defined(BIA_ARCHITECTURE_MG32)
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_32);
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_64);
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt0);
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateIntP1);
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateIntN1);
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateFloat);
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateDouble);
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateCopy);
+
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Print);
 	BIA_FUNCTION_ENTRY(machine::link::Print_i);
 	BIA_FUNCTION_ENTRY(machine::link::Print_I);
@@ -34,15 +107,6 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Call);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::CallCount);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::CallFormat);
-
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_32);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_64);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt0);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateIntP1);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateIntN1);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateFloat);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateDouble);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateCopy);
 
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCall);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCallInt_32);
@@ -62,7 +126,9 @@ void BiaMachineDecoder::Initialize()
 
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorSelfCall);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Test);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::GetMember);
 
+	//Machine context functions
 	BIA_FUNCTION_ENTRY(BiaMachineContext::ConstructTemporaryAddresses);
 	BIA_FUNCTION_ENTRY(BiaMachineContext::DestructTemporaryAddresses);
 
@@ -198,6 +264,11 @@ void BiaMachineDecoder::Initialize()
 		printf("jne\t%p\n", p_pBuffer + 2 + static_cast<int8_t>(p_pBuffer[1]));
 	});
 #endif
+}
+
+void BiaMachineDecoder::AddInstruction(uint64_t p_ullInstruction, uint8_t p_ucFirstBitCount, uint8_t p_ucInstructionSize, std::function<void(BiaMachineDecoder*, const uint8_t*)> p_callback)
+{
+	m_svInstructions.push_back({ _byteswap_uint64(p_ullInstruction) >> (8 - p_ucInstructionSize) * 8, ~(~0ull << (p_ucFirstBitCount & 0xf8)) | (0xff00ull >> (p_ucFirstBitCount & 0x7) & 0xff) << (p_ucFirstBitCount & 0xf8), p_callback, p_ucInstructionSize });
 }
 
 }

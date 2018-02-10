@@ -104,6 +104,11 @@ int32_t BiaUndefined::Test()
 	throw exception::SymbolException("Undefined symbol.");
 }
 
+BiaMember * BiaUndefined::GetMember(const char * p_szName)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
 void * BiaUndefined::GetNativeData(NATIVE_TYPE)
 {
 	throw exception::SymbolException("Undefined symbol.");

@@ -10,6 +10,7 @@
 #include "biaInputStream.hpp"
 #include "biaException.hpp"
 #include "biaVariableHandler.hpp"
+#include "biaMachineContext.hpp"
 
 
 namespace bia
@@ -22,68 +23,33 @@ namespace disassembler
 class BiaMachineDecoder
 {
 public:
-	BiaMachineDecoder(const void * p_pMachineContextAddress, variable_index & p_index) : m_index(p_index)
-	{
-		m_pMachineContextAddress = p_pMachineContextAddress;
+	/**
+	 * Constructor.
+	 *
+	 * @param	p_pMachineContextAddress	Defines the address of the machine context.
+	 * @param	[in]	p_index	Defines the index for all known global variables.
+	*/
+	BiaMachineDecoder(const BiaMachineContext * p_pMachineContextAddress, variable_index & p_index);
+	/**
+	 * Disassembles the machine code and prints the assembly code.
+	 *
+	 * @since	3.53.114.661
+	 * @date	10-Feb-18
+	 *
+	 * @param	p_pMachineCode	Defines the machine code.
+	 * @param	p_iSize	Defines the size of the machine code.
+	*/
+	void Disassemble(const void * p_pMachineCode, size_t p_iSize);
+	/**
+	 * Returns the name of the variable matching the address.
+	 *
+	 * @since	3.53.114.661
+	 * @date	10-Feb-18
+	 *
+	 * @return	The name of the variable if it succeeds, otherwise null.
+	*/
+	const char * GetVariableName(const void * p_pAddress);
 
-		if (m_svInstructions.empty())
-			Initialize();
-	}
-	void Disassemble(const void * p_pMachineCode, size_t p_iSize)
-	{
-		auto pBuffer = static_cast<const uint8_t*>(p_pMachineCode);
-
-		while (p_iSize)
-		{
-			//Check all instruction
-			for (auto & instruction : m_svInstructions)
-			{
-				if (instruction.ucSize <= p_iSize)
-				{
-					uint64_t ullCode = 0;
-
-					memcpy(&ullCode, pBuffer, std::min<uint8_t>(8, instruction.ucSize));
-
-					//This it the instruction
-					if ((ullCode & instruction.ullMask) == instruction.ullInstruction)
-					{
-						printf("%p: ", pBuffer);
-
-						instruction.callback(this, pBuffer);
-
-						pBuffer += instruction.ucSize;
-						p_iSize -= instruction.ucSize;
-
-						goto gt_continue;
-					}
-				}
-			}
-
-			throw exception::Exception("hi");
-
-			break;
-
-		gt_continue:;
-		}
-	}
-	const char * GetVariableName(const void * p_pAddress)
-	{
-		if (p_pAddress == m_pMachineContextAddress)
-			return "this";
-
-		auto pResult = m_sFunctions.find(p_pAddress);
-
-		if (pResult != m_sFunctions.end())
-			return pResult->second.c_str();
-
-		for (auto & element : m_index)
-		{
-			if (element.second == p_pAddress)
-				return element.first.data();
-		}
-
-		return nullptr;
-	}
 private:
 	struct Instruction
 	{
@@ -93,18 +59,32 @@ private:
 		uint8_t ucSize;
 	};
 
-	const void * m_pMachineContextAddress;
-	variable_index & m_index;
+	const BiaMachineContext * m_pMachineContextAddress;	/**	Defines the address of the machine context.	*/
+	variable_index & m_index;	/**	Defines the index holding all global variables.	*/
 
-	static std::vector<Instruction> m_svInstructions;
-	static std::map<const void*, std::string> m_sFunctions;
+	static std::vector<Instruction> m_svInstructions;	/**	Defines all known machine instructions.	*/
+	static std::map<const void*, std::string> m_sFunctions;	/**	Defines all known functions.	*/
 
 
+	/**
+	 * Initializes the disassembler.
+	 *
+	 * @since	3.53.114.661
+	 * @date	10-Feb-18
+	*/
 	static void Initialize();
-	static void AddInstruction(uint64_t p_ullInstruction, uint8_t p_ucFirstBitCount, uint8_t p_ucInstructionSize, std::function<void(BiaMachineDecoder*, const uint8_t*)> p_callback)
-	{
-		m_svInstructions.push_back({ _byteswap_uint64(p_ullInstruction) >> (8 - p_ucInstructionSize) * 8, ~(~0ull << (p_ucFirstBitCount & 0xf8)) | (0xff00ull >> (p_ucFirstBitCount & 0x7) & 0xff) << (p_ucFirstBitCount & 0xf8), p_callback, p_ucInstructionSize });
-	}
+	/**
+	 * Adds an instruction to the set.
+	 *
+	 * @since	3.53.114.661
+	 * @date	10-Feb-18
+	 *
+	 * @param	p_ullInstruction	Defines the instruction code.
+	 * @param	p_ucFirstBitCount	Defines how many of the first bit are constant.
+	 * @param	p_ucInstructionSize	Defines the total instruction size in bytes.
+	 * @param	p_callback	Defines the callback function that should be called upon recognition ot the instruction.
+	*/
+	static void AddInstruction(uint64_t p_ullInstruction, uint8_t p_ucFirstBitCount, uint8_t p_ucInstructionSize, std::function<void(BiaMachineDecoder*, const uint8_t*)> p_callback);
 };
 
 }

@@ -93,6 +93,9 @@
     <ClCompile Include="biaStringManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="biaCString.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaConfig.hpp">
