@@ -1,6 +1,7 @@
 #pragma once
 
 #include <new>
+#include <string>
 
 #include "biaMember.hpp"
 #include "biaPrint.hpp"
@@ -66,32 +67,32 @@ public:
 	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
-	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, void * p_pDestination) override
+	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
 	{
 		throw exception::OperatorException("Invalid type on native operation.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallInt_32().
 	*/
-	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, void * p_pDestination) override
+	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
 	{
 	}
 	/**
 	 * @see	BiaMember::OperatorCallInt_64().
 	*/
-	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, void * p_pDestination) override
+	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override
 	{
 	}
 	/**
 	 * @see	BiaMember::OperatorCallFloat().
 	*/
-	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, void * p_pDestination) override
+	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override
 	{
 	}
 	/**
 	 * @see	BiaMember::OperatorCallDouble().
 	*/
-	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, void * p_pDestination) override
+	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override
 	{
 	}
 	/**
@@ -135,9 +136,9 @@ public:
 	/**
 	 * @see	BiaMember::Clone().
 	*/
-	inline virtual void Clone(void * p_pDestination) override
+	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		new(p_pDestination) BiaCString(m_szString);
+		p_pDestination->ReplaceObject<BiaCString>(m_szString);
 	}
 	/**
 	 * @see	BiaMember::IsType().

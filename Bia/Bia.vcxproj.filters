@@ -90,6 +90,9 @@
     <ClCompile Include="biaAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="biaStringManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaConfig.hpp">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="biaCString.h">
       <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="biaStringManager.hpp">
+      <Filter>Header Files\machine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

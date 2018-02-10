@@ -29,27 +29,27 @@ void BiaUndefined::CallFormat(BiaMember*, const char*, ...)
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::OperatorCall(uint32_t, BiaMember*, void*)
+void BiaUndefined::OperatorCall(uint32_t, BiaMember*, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::OperatorCallInt_32(uint32_t, int32_t, void*)
+void BiaUndefined::OperatorCallInt_32(uint32_t, int32_t, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::OperatorCallInt_64(uint32_t, int64_t, void*)
+void BiaUndefined::OperatorCallInt_64(uint32_t, int64_t, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::OperatorCallFloat(uint32_t, float, void*)
+void BiaUndefined::OperatorCallFloat(uint32_t, float, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::OperatorCallDouble(uint32_t, double, void*)
+void BiaUndefined::OperatorCallDouble(uint32_t, double, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
@@ -84,7 +84,7 @@ void BiaUndefined::OperatorSelfCall(uint32_t)
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::Clone(void*)
+void BiaUndefined::Clone(BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }

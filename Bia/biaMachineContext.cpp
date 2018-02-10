@@ -59,6 +59,11 @@ void BiaMachineContext::DestructTemporaryAddresses(int8_t p_cCount, framework::B
 	m_pAllocator->DeallocateBlocks(*p_ppAddresses, p_cCount);
 }
 
+const char * BiaMachineContext::NameAddressOf(const char * p_pcName, size_t p_iSize)
+{
+	return m_stringManager.GetStringAddress(p_pcName, p_iSize);
+}
+
 const char * BiaMachineContext::StringAddressOf(std::string p_stString)
 {
 	auto pResult = m_stringAddresses.find(p_stString);

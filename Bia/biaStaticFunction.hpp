@@ -116,35 +116,35 @@ public:
 	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
-	inline virtual void OperatorCall(uint32_t, BiaMember*, void*) override
+	inline virtual void OperatorCall(uint32_t, BiaMember*, BiaMember*) override
 	{
 		throw exception::OperatorException("Invalid operator call on static function.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallInt_32().
 	*/
-	inline virtual void OperatorCallInt_32(uint32_t, int32_t, void *) override
+	inline virtual void OperatorCallInt_32(uint32_t, int32_t, BiaMember*) override
 	{
 		throw exception::OperatorException("Invalid operator call on static function.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallInt_64().
 	*/
-	inline virtual void OperatorCallInt_64(uint32_t, int64_t, void*) override
+	inline virtual void OperatorCallInt_64(uint32_t, int64_t, BiaMember*) override
 	{
 		throw exception::OperatorException("Invalid operator call on static function.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallFloat().
 	*/
-	inline virtual void OperatorCallFloat(uint32_t, float, void*) override
+	inline virtual void OperatorCallFloat(uint32_t, float, BiaMember*) override
 	{
 		throw exception::OperatorException("Invalid operator call on static function.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallDouble().
 	*/
-	inline virtual void OperatorCallDouble(uint32_t, double, void*) override
+	inline virtual void OperatorCallDouble(uint32_t, double, BiaMember*) override
 	{
 		throw exception::OperatorException("Invalid operator call on static function.");
 	}
@@ -193,7 +193,7 @@ public:
 	/**
 	 * @see	BiaMember::Clone().
 	*/
-	inline virtual void Clone(void * p_pDestination) override
+	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
 		new(p_pDestination) BiaStaticFunction<_RETURN(*)(_ARGS...)>(m_pFunction);
 	}

@@ -325,6 +325,11 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 	m_value.temporaryResultIndex = p_destinationIndex;
 }
 
+const char * BiaCompiler::GetNameAddress(const grammar::Report * p_pReport)
+{
+	return m_context.NameAddressOf(p_pReport->content.token.pcString, p_pReport->content.token.iSize);
+}
+
 const char * BiaCompiler::GetStringLocation(Value::String p_string)
 {
 	std::string stString;

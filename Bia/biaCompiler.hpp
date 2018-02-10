@@ -82,11 +82,13 @@ private:
 		const char * szParameterFormat;
 	};
 
+	char m_acNameBuffer[128];	/**	Defines a buffer for temporarily storing names.	*/
+
 	machine::architecture::BiaToolset m_toolset;	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
 	machine::BiaMachineContext & m_context;	/**	Defines the context for which this script should be compiled.	*/
 
 	BiaLocalVariableHandler m_localVariables;	/**	Handles the local variables.	*/
-	
+
 	machine::architecture::BiaToolset::temp_members m_parameter;	/**	Used for initializing and finalizing the code.	*/
 	BiaTempCounter m_counter;	/**	Defines the temporary address counter for temporary storage.	*/
 
@@ -154,6 +156,7 @@ private:
 	void HandleNumber(const grammar::Report * p_pReport);
 	void HandleString(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
+	const char * GetNameAddress(const grammar::Report * p_pReport);
 	const char * GetStringLocation(Value::String p_string);
 	//framework::BiaMember * GetAddressOfVariable();
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>

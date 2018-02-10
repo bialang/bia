@@ -35,23 +35,23 @@ public:
 	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
-	virtual void OperatorCall(uint32_t, BiaMember*, void*) override;
+	virtual void OperatorCall(uint32_t, BiaMember*, BiaMember*) override;
 	/**
 	 * @see	BiaMember::OperatorCallInt_32().
 	*/
-	virtual void OperatorCallInt_32(uint32_t, int32_t, void*) override;
+	virtual void OperatorCallInt_32(uint32_t, int32_t, BiaMember*) override;
 	/**
 	 * @see	BiaMember::OperatorCallInt_64().
 	*/
-	virtual void OperatorCallInt_64(uint32_t, int64_t, void*) override;
+	virtual void OperatorCallInt_64(uint32_t, int64_t, BiaMember*) override;
 	/**
 	 * @see	BiaMember::OperatorCallFloat().
 	*/
-	virtual void OperatorCallFloat(uint32_t, float, void*) override;
+	virtual void OperatorCallFloat(uint32_t, float, BiaMember*) override;
 	/**
 	 * @see	BiaMember::OperatorCallDouble().
 	*/
-	virtual void OperatorCallDouble(uint32_t, double, void*) override;
+	virtual void OperatorCallDouble(uint32_t, double, BiaMember*) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCall().
 	*/
@@ -79,7 +79,7 @@ public:
 	/**
 	 * @see	BiaMember::Clone().
 	*/
-	virtual void Clone(void*) override;
+	virtual void Clone(BiaMember*) override;
 	/**
 	 * @see	BiaMember::IsType().
 	*/

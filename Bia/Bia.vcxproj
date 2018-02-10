@@ -125,6 +125,7 @@
     <ClCompile Include="biaMachineDecoder.cpp" />
     <ClCompile Include="biaOperator.cpp" />
     <ClCompile Include="biaOutputStreamBuffer.cpp" />
+    <ClCompile Include="biaStringManager.cpp" />
     <ClCompile Include="biaUndefined.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="biaReportBundle.hpp" />
     <ClInclude Include="biaStaticFunction.hpp" />
     <ClInclude Include="biaStorage.hpp" />
+    <ClInclude Include="biaStringManager.hpp" />
     <ClInclude Include="biaTempCounter.hpp" />
     <ClInclude Include="biaTemporaryStorage.hpp" />
     <ClInclude Include="biaToolset.hpp" />

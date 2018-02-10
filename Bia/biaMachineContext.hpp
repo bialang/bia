@@ -14,6 +14,7 @@
 #include "biaInputStream.hpp"
 #include "biaVariableHandler.hpp"
 #include "biaAllocator.hpp"
+#include "biaStringManager.hpp"
 
 
 #include "biaStaticFunction.hpp"
@@ -44,7 +45,7 @@ inline rra heyho(const char * b)
 class BiaMachineContext final
 {
 public:
-BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator))
+BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator)), m_stringManager(m_pAllocator.get())
 {
 
 	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<decltype(&heyho)>>(heyho);
@@ -77,6 +78,7 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
 	std::set<std::string> m_stringAddresses;	/**	Stores all string addresses.	*/
+	BiaStringManager m_stringManager;
 
 	std::shared_ptr<BiaAllocator> m_pAllocator;	/**	Defines the memory allocator.	*/
 
@@ -104,6 +106,7 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	 * @param	[in,out]	p_ppAddresses	Defines the addresses that should be freed.
 	*/
 	void DestructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppAddresses);
+	const char * NameAddressOf(const char * p_pcName, size_t p_iSize);
 	const char * StringAddressOf(std::string p_stString);
 	/**
 	 * Returns the address of the member.
