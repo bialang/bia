@@ -74,5 +74,10 @@ struct AccessViolationException final : Exception
 	inline AccessViolationException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
 };
 
+struct AllocationException final : Exception
+{
+	inline AllocationException(std::string p_stMessage) : Exception(std::move(p_stMessage)) {}
+};
+
 }
 }

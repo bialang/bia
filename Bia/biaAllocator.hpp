@@ -13,41 +13,53 @@ namespace machine
 class BiaAllocator
 {
 public:
-	enum FLAGS
+	enum class MEMORY_TYPE
 	{
-		F_NONE = 0
+		NORMAL,
+		EXECUTABLE_MEMORY
 	};
+
+	template<typename T>
+	struct Allocation
+	{
+		T * pAddress;
+		size_t iSize;
+	};
+
+	typedef Allocation<void> universal_allocation;
 
 	constexpr static auto BLOCK_SIZE = BIA_MAX_MEMBER_SIZE;
 
 
 	virtual ~BiaAllocator() = default;
 
-	virtual void CommitReserveAllocate(void * p_pAddress, size_t p_iSize);
-	virtual void Deallocate(void * p_pAddress);
-	virtual void DeallocateBlocks(void * p_pBlockBegin, size_t p_iBlockCount);
+	virtual void CommitReserveAllocate(universal_allocation p_allocation, size_t p_iSize);
+	virtual void Deallocate(universal_allocation p_allocation, MEMORY_TYPE p_type);
+	virtual void DeallocateBlocks(universal_allocation p_allocation, MEMORY_TYPE p_type);
 	template<typename T>
-	inline void DestroyBlocks(T * p_pInstance, size_t p_iBlockCount)
+	inline void DestroyBlocks(Allocation<T> p_allocation, MEMORY_TYPE p_type)
 	{
-		auto pBlocks = reinterpret_cast<int8_t*>(p_pInstance);
+		auto pBlocks = reinterpret_cast<int8_t*>(p_allocation.pAddress);
+		auto iBlockCount = p_allocation.iSize;
 
-		for (size_t i = 0; i < p_iBlockCount; ++i)
+		for (size_t i = 0; i < iBlockCount; ++i)
 			reinterpret_cast<T*>(pBlocks + i * BLOCK_SIZE)->~T();
 
-		DeallocateBlocks(p_pInstance, p_iBlockCount);
+		DeallocateBlocks({ static_cast<void*>(p_allocation.pAddress), p_allocation.iSize }, p_type);
 	}
-	virtual void * Allocate(size_t p_iSize, int p_fOptions = F_NONE);
-	virtual void * AllocateBlocks(size_t p_iBlockCount, int p_fOptions = F_NONE);
-	virtual void * ReserveAllocate(size_t p_iMaxSize, int p_fOptions = F_NONE);
+	virtual universal_allocation Allocate(size_t p_iSize, MEMORY_TYPE p_type);
+	virtual universal_allocation AllocateBlocks(size_t p_iBlockCount, MEMORY_TYPE p_type);
+	virtual universal_allocation ReserveAllocate(size_t p_iMaxSize, MEMORY_TYPE p_type);
 	template<typename T, typename... _ARGS>
-	inline T * ConstructBlocks(size_t p_iBlockCount, int p_fOptions, _ARGS &&... p_args)
+	inline Allocation<T> ConstructBlocks(size_t p_iBlockCount, MEMORY_TYPE p_type, _ARGS &&... p_args)
 	{
-		auto pBlocks = static_cast<int8_t*>(AllocateBlocks(p_iBlockCount, p_fOptions));
+		auto allocation = AllocateBlocks(p_iBlockCount, p_type);
+		auto pBlocks = static_cast<int8_t*>(allocation.pAddress);
 
 		for (size_t i = 0; i < p_iBlockCount; ++i)
 			new(pBlocks + i * BLOCK_SIZE) T(std::forward<_ARGS>(p_args)...);
 
-		return reinterpret_cast<T*>(pBlocks);
+		return { static_cast<T*>(allocation.pAddress), allocation.iSize };
 	}
 };
 
