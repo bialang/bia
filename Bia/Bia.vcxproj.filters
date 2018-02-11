@@ -102,6 +102,9 @@
     <ClCompile Include="biaNameManager.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
+    <ClCompile Include="biaMachineSchein.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaConfig.hpp">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="biaFunction.hpp">
       <Filter>Header Files\framework\executable</Filter>
+    </ClInclude>
+    <ClInclude Include="biaMachineSchein.hpp">
+      <Filter>Header Files\machine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

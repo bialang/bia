@@ -1,11 +1,7 @@
 #include "biaMachineCode.hpp"
+#include "biaException.hpp"
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <sys/mman.h>
 #include <cstring>
-#endif
 
 
 namespace bia
@@ -13,8 +9,20 @@ namespace bia
 namespace machine
 {
 
-BiaMachineCode::BiaMachineCode(std::pair<const uint8_t*, size_t> p_machineCode)
+BiaMachineCode::BiaMachineCode(std::pair<const uint8_t*, size_t> p_machineCode, BiaMachineSchein p_machineSchein) : m_machineSchein(std::move(p_machineSchein))
 {
+	m_run = m_machineSchein.GetAllocator()->Allocate(p_machineCode.second, BiaAllocator::MEMORY_TYPE::EXECUTABLE_MEMORY);
+
+	//Copy code
+	if (m_run.pAddress)
+	{
+		memcpy(m_run.pAddress, p_machineCode.first, m_run.iSize);
+
+		///Protect memory
+	}
+	else
+		throw exception::AllocationException("Cannot allocate executable memory.");
+	/*
 #ifdef _WIN32
 	//Allocate virtual memory
 	if (auto pCode = VirtualAlloc(nullptr, p_machineCode.second, MEM_COMMIT, PAGE_READWRITE))
@@ -56,36 +64,26 @@ BiaMachineCode::BiaMachineCode(std::pair<const uint8_t*, size_t> p_machineCode)
 		munmap(pCode, m_iSize);
 	}
 #endif
-
-	m_run = nullptr;
-	m_iSize = 0;
+*/
 }
 
-BiaMachineCode::BiaMachineCode(BiaMachineCode && p_move)
+BiaMachineCode::BiaMachineCode(BiaMachineCode && p_move) : m_machineSchein(std::move(p_move.m_machineSchein))
 {
 	m_run = p_move.m_run;
-	m_iSize = p_move.m_iSize;
-
-	p_move.m_run = nullptr;
-	p_move.m_iSize = 0;
+	p_move.m_run = { nullptr, 0 };
 }
 
 BiaMachineCode::~BiaMachineCode()
 {
-#ifdef _WIN32
-	if (m_run)
-		VirtualFree(reinterpret_cast<void*>(m_run), 0, MEM_RELEASE);
-#else
-	if (m_run)
-		munmap(reinterpret_cast<void*>(m_run), m_iSize);
-#endif
+	//Deallocate machine code
+	m_machineSchein.GetAllocator()->Deallocate(m_run, BiaAllocator::MEMORY_TYPE::EXECUTABLE_MEMORY);
 }
 
 void BiaMachineCode::Execute() const
 {
 	try
 	{
-		m_run();
+		static_cast<entry_point>(m_run.pAddress)();
 	}
 	catch (...)
 	{
@@ -97,7 +95,7 @@ void BiaMachineCode::Execute() const
 
 bool BiaMachineCode::IsValid()
 {
-	return m_run && m_iSize;
+	return m_run.pAddress && m_run.iSize;
 }
 
 }
