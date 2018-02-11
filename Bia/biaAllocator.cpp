@@ -53,6 +53,33 @@ void BiaAllocator::DeallocateBlocks(universal_allocation p_allocation, MEMORY_TY
 	}
 }
 
+bool BiaAllocator::ChangeProtection(universal_allocation p_allocation, int p_fProtection)
+{
+#ifdef _WIN32
+	//Protect memory
+	DWORD oldProtect = 0;
+	DWORD newProtect = 0;
+
+	if (p_fProtection & P_READ_WRITE)
+		newProtect |= PAGE_READWRITE;
+
+	if (p_fProtection & P_EXECUTE)
+		newProtect |= PAGE_EXECUTE;
+
+	return VirtualProtect(p_allocation.pAddress, p_allocation.iSize, newProtect, &oldProtect);
+#else
+	int fProtection = 0;
+
+	if (p_fProtection & P_READ_WRITE)
+		fProtection |= PROT_READ | PROT_WRITE;
+
+	if (p_fProtection & P_EXECUTE)
+		fProtection |= PROT_EXEC;
+
+	return mprotect(p_allocation.pAddress, p_allocation.iSize, PROT_EXEC) == 0;
+#endif
+}
+
 BiaAllocator::universal_allocation BiaAllocator::Allocate(size_t p_iSize, MEMORY_TYPE p_type)
 {
 	switch (p_type)
@@ -62,9 +89,9 @@ BiaAllocator::universal_allocation BiaAllocator::Allocate(size_t p_iSize, MEMORY
 	case MEMORY_TYPE::EXECUTABLE_MEMORY:
 	{
 #ifdef _WIN32
-		return { VirtualAlloc(nullptr, p_iSize, MEM_COMMIT, PAGE_READWRITE | PAGE_EXECUTE), p_iSize };
+		return { VirtualAlloc(nullptr, p_iSize, MEM_COMMIT, PAGE_READWRITE), p_iSize };
 #else
-		auto pAllocation = mmap(nullptr, p_iSize, PROT_WRITE | PROT_READ | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+		auto pAllocation = mmap(nullptr, p_iSize, PROT_WRITE | PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
 		if (pAllocation != reinterpret_cast<void*>(-1))
 			return { pAllocation, p_iSize };

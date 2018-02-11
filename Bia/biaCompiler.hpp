@@ -7,6 +7,8 @@
 
 #include "biaOutputStream.hpp"
 #include "biaMachineContext.hpp"
+#include "biaMachineSchein.hpp"
+#include "biaAllocator.hpp"
 #include "biaReportBundle.hpp"
 #include "biaInterpreterIdentifiers.hpp"
 #include "biaLink.hpp"
@@ -32,8 +34,9 @@ public:
 	 *
 	 * @param	[in]	p_output	Defines the output stream for the machine code.
 	 * @param	[in]	p_context	Defines the machine context.
+	 * @param	[in]	p_pAllocator	Defines the memory allocator.
 	 */
-	BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context);
+	BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context, machine::BiaAllocator * p_pAllocator);
 	BiaCompiler(BiaCompiler&&) = delete;
 	BiaCompiler(const BiaCompiler&) = delete;
 	~BiaCompiler();
@@ -42,6 +45,7 @@ public:
 	 * @see	bia::grammar::BiaReportReceiver::Report().
 	 */
 	virtual void Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd) override;
+	machine::BiaMachineSchein GetMachineSchein();
 
 private:
 	enum class VALUE_TYPE
@@ -84,7 +88,8 @@ private:
 	
 	machine::architecture::BiaToolset m_toolset;	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
 	machine::BiaMachineContext & m_context;	/**	Defines the context for which this script should be compiled.	*/
-
+	machine::BiaMachineSchein m_machineSchein;
+	
 	BiaLocalVariableHandler m_localVariables;	/**	Handles the local variables.	*/
 
 	machine::architecture::BiaToolset::temp_members m_parameter;	/**	Used for initializing and finalizing the code.	*/

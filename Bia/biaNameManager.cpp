@@ -23,23 +23,24 @@ BiaNameManager::~BiaNameManager()
 {
 	//Delete all allocated strings
 	for (auto & entry : m_index)
-		m_pAllocator->Deallocate(const_cast<char*>(entry.pcString));
+		m_pAllocator->Deallocate(entry.GetAllocation(), BiaAllocator::MEMORY_TYPE::NORMAL);
 }
 
 const char * BiaNameManager::GetNameAddress(const char * p_pcString, size_t p_iSize)
 {
-	auto pResult = m_index.find(StringEntry(p_pcString, p_iSize));
+	auto pResult = m_index.find({ p_pcString,p_iSize });
 
 	//Create new entry
 	if (pResult == m_index.end())
 	{
-		auto pcString = static_cast<char*>(m_pAllocator->Allocate(p_iSize + 1));
+		auto allocation = m_pAllocator->Allocate(p_iSize + 1, BiaAllocator::MEMORY_TYPE::NORMAL);
+		auto pcString = static_cast<char*>(allocation.pAddress);
 
 		//Copy string
 		memcpy(pcString, p_pcString, p_iSize);
 		pcString[p_iSize] = 0;
 
-		pResult = m_index.insert(StringEntry(pcString, p_iSize)).first;
+		pResult = m_index.insert(StringEntry(allocation)).first;
 	}
 
 	return pResult->pcString;

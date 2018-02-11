@@ -18,7 +18,8 @@ BiaMachineCode::BiaMachineCode(std::pair<const uint8_t*, size_t> p_machineCode, 
 	{
 		memcpy(m_run.pAddress, p_machineCode.first, m_run.iSize);
 
-		///Protect memory
+		//Protect memory
+		m_machineSchein.GetAllocator()->ChangeProtection(m_run, BiaAllocator::P_EXECUTE);
 	}
 	else
 		throw exception::AllocationException("Cannot allocate executable memory.");

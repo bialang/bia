@@ -10,7 +10,7 @@ namespace bia
 namespace compiler
 {
 
-BiaCompiler::BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context) : m_toolset(p_output), m_context(p_context)
+BiaCompiler::BiaCompiler(stream::BiaOutputStream & p_output, machine::BiaMachineContext & p_context, machine::BiaAllocator * p_pAllocator) : m_toolset(p_output), m_context(p_context), m_machineSchein(p_pAllocator)
 {
 	//Reserve temporary members
 	m_parameter = m_toolset.ReserveTemporyMembers();
@@ -30,6 +30,11 @@ BiaCompiler::~BiaCompiler()
 void BiaCompiler::Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
 {
 	HandleRoot(p_pBegin);
+}
+
+machine::BiaMachineSchein BiaCompiler::GetMachineSchein()
+{
+	return std::move(m_machineSchein);
 }
 
 void BiaCompiler::HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator)

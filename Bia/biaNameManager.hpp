@@ -33,6 +33,11 @@ private:
 			pcString = p_pcString;
 			iSize = p_iSize;
 		}
+		inline StringEntry(BiaAllocator::universal_allocation p_allocation)
+		{
+			pcString = static_cast<const char*>(p_allocation.pAddress);
+			iSize = p_allocation.iSize;
+		}
 
 		const char * pcString;
 		size_t iSize;
@@ -41,11 +46,15 @@ private:
 		{
 			return iSize == p_string.iSize ? memcmp(pcString, p_string.pcString, iSize) == 0 : false;
 		}
+		inline BiaAllocator::universal_allocation GetAllocation() const
+		{
+			return { const_cast<char*>(pcString), iSize };
+		}
 	};
 
 	struct StringHasher
 	{
-		inline size_t operator()(StringEntry p_string) const
+		inline size_t operator()(const StringEntry & p_string) const
 		{
 			return utility::BiaHasher<size_t>().operator()(p_string.pcString, p_string.iSize);
 		}

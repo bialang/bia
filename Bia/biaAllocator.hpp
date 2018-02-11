@@ -19,6 +19,12 @@ public:
 		EXECUTABLE_MEMORY
 	};
 
+	enum PROTECTION
+	{
+		P_READ_WRITE = 0x1,
+		P_EXECUTE = 0x2
+	};
+
 	template<typename T>
 	struct Allocation
 	{
@@ -47,6 +53,7 @@ public:
 
 		DeallocateBlocks({ static_cast<void*>(p_allocation.pAddress), p_allocation.iSize }, p_type);
 	}
+	virtual bool ChangeProtection(universal_allocation p_allocation, int p_fProtection);
 	virtual universal_allocation Allocate(size_t p_iSize, MEMORY_TYPE p_type);
 	virtual universal_allocation AllocateBlocks(size_t p_iBlockCount, MEMORY_TYPE p_type);
 	virtual universal_allocation ReserveAllocate(size_t p_iMaxSize, MEMORY_TYPE p_type);

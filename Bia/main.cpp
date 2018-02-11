@@ -87,9 +87,9 @@ int main()
 
 		printf("%f\n", time_taken / 20.0);
 	}*/
-
+	std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 	bia::stream::BiaOutputStreamBuffer buf;
-	bia::machine::BiaMachineContext context(std::shared_ptr<bia::machine::BiaAllocator>(new bia::machine::BiaAllocator()));
+	bia::machine::BiaMachineContext context(pAllocator);
 //var i = 65*65+5*8;
 	char script[] = R"(
 global str = "hi wie gehts?";
@@ -253,11 +253,15 @@ print test(str);
 		toolset.SafeCall(&hi, 34, 5);
 		toolset.SafeCall(a::~a, ptr);
 	}*/
+
+std::unique_ptr<bia::machine::BiaMachineCode> pCode;
+bia::machine::BiaMachineSchein schein(nullptr);
 	try
 	{
-		bia::compiler::BiaCompiler compiler(buf, context);
+		bia::compiler::BiaCompiler compiler(buf, context, pAllocator.get());
 
 		bia::grammar::InitializeRules().Interpret(script, sizeof(script) - 1, compiler);
+		schein = std::move(compiler.GetMachineSchein());
 	}
 	catch (bia::exception::Exception & e)
 	{
@@ -268,11 +272,11 @@ print test(str);
 		return 2;
 	}
 
+	pCode.reset(new bia::machine::BiaMachineCode(buf.GetBuffer(), std::move(schein)));
 	puts(script);
 	
 	printf("address: %p\n", &context);
 
-	bia::machine::BiaMachineCode code(buf.GetBuffer());
 
 	auto buffer = buf.GetBuffer();
 	int t = 0;
@@ -313,7 +317,7 @@ print test(str);
 
 	try
 	{
-		code.Execute();
+		pCode->Execute();
 	}
 	catch (const bia::exception::Exception & e)
 	{

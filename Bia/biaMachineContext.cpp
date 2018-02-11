@@ -23,7 +23,7 @@ void BiaMachineContext::Run(stream::BiaInputStream & p_input)
 		stream::BiaOutputStreamBuffer compiled;
 
 		//Make the compiled buffer executable
-		pMachineCode.reset(new(aucSpace) BiaMachineCode(compiled.GetBuffer()));
+		//pMachineCode.reset(new(aucSpace) BiaMachineCode(compiled.GetBuffer()));
 	}
 
 	//Execute script
@@ -33,7 +33,8 @@ void BiaMachineContext::Run(stream::BiaInputStream & p_input)
 
 void BiaMachineContext::ConstructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppDestination)
 {
-	auto pBlocks = static_cast<int8_t*>(m_pAllocator->AllocateBlocks(p_cCount));
+	auto blocks = m_pAllocator->AllocateBlocks(p_cCount, BiaAllocator::MEMORY_TYPE::NORMAL);
+	auto pBlocks = static_cast<int8_t*>(blocks.pAddress);
 	printf("construct %p\n", p_ppDestination);
 
 	for (int8_t i = 0; i < p_cCount; ++i)
@@ -56,7 +57,7 @@ void BiaMachineContext::DestructTemporaryAddresses(int8_t p_cCount, framework::B
 
 	}
 
-	m_pAllocator->DeallocateBlocks(*p_ppAddresses, p_cCount);
+	m_pAllocator->DeallocateBlocks({ *p_ppAddresses, static_cast<size_t>(p_cCount) }, BiaAllocator::MEMORY_TYPE::NORMAL);
 }
 
 const char * BiaMachineContext::NameAddressOf(const char * p_pcName, size_t p_iSize)
@@ -79,7 +80,7 @@ framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 	//Create address
 	else
 	{
-		auto pAddress = static_cast<framework::BiaMember*>(m_pAllocator->ConstructBlocks<framework::BiaUndefined>(1, BiaAllocator::F_NONE));
+		auto pAddress = static_cast<framework::BiaMember*>(m_pAllocator->ConstructBlocks<framework::BiaUndefined>(1, BiaAllocator::MEMORY_TYPE::NORMAL).pAddress);
 		//auto pAddress = m_storage.CreateElement<framework::BiaUndefined>();
 
 		m_index.insert({ p_name, pAddress });
