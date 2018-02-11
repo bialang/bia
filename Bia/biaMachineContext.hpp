@@ -74,10 +74,9 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 
 	variable_index m_index;	/**	Stores all pointers to the known variables.	*/
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
-
-	BiaNameManager m_nameManager;
-
 	std::shared_ptr<BiaAllocator> m_pAllocator;	/**	Defines the memory allocator.	*/
+	
+	BiaNameManager m_nameManager;
 
 	BiaStorage<16> m_storage;
 	//BiaTemporaryStorage<framework::BiaMember, 16> m_temporaryStorage;

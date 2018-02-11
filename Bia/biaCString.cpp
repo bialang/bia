@@ -21,6 +21,7 @@ void BiaCString::Call(BiaMember *)
 
 BiaMember * BiaCString::GetMember(const char * p_szName)
 {
+	return this;
 	throw exception::SymbolException("Unkown member.");
 }
 

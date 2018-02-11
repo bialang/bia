@@ -242,7 +242,7 @@ public:
 			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::EAX, _REGISTER, int8_t>(*m_pOutput, 0);
 			BiaArchitecture::Operation<OP_CODE::PUSH, REGISTER::EAX>(*m_pOutput);
 		}
-		//No offset
+		//Push register
 		else
 			BiaArchitecture::Operation<OP_CODE::PUSH, _REGISTER>(*m_pOutput);
 
@@ -304,6 +304,10 @@ public:
 	{
 		return RegisterOffset<REGISTER::EAX, void, false>();
 	}
+	inline static RegisterOffset<REGISTER::EAX, void, false> ResultValue()
+	{
+		return RegisterOffset<REGISTER::EAX, void, false>();
+	}
 
 private:
 	stream::BiaOutputStream * m_pOutput;
@@ -327,6 +331,16 @@ private:
 		//Just content
 		else
 			BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::ECX, _REGISTER, _OFFSET>(*m_pOutput, p_offset.offset);
+	}
+	template<REGISTER _REGISTER, bool _EFFECTIVE_ADDRESS>
+	inline void PassInstance(RegisterOffset<_REGISTER, void, _EFFECTIVE_ADDRESS> p_offset)
+	{
+		//Effective address
+		if (_EFFECTIVE_ADDRESS)
+			BiaArchitecture::Operation<OP_CODE::LEA, REGISTER::ECX, _REGISTER, int8_t>(*m_pOutput, 0);
+		//Just content
+		else
+			BiaArchitecture::Operation<OP_CODE::MOVE, REGISTER::ECX, _REGISTER, int8_t>(*m_pOutput, 0);
 	}
 	inline void Pop(pass_count p_pop)
 	{

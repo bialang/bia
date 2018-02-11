@@ -94,10 +94,7 @@ int main()
 	char script[] = R"(
 global str = "hi wie gehts?";
 
-print str;
-print "gut und dir?";
-
-print test(str);
+print str.a;
 )";
 
 	/*
@@ -254,8 +251,9 @@ print test(str);
 		toolset.SafeCall(a::~a, ptr);
 	}*/
 
-std::unique_ptr<bia::machine::BiaMachineCode> pCode;
-bia::machine::BiaMachineSchein schein(nullptr);
+	std::unique_ptr<bia::machine::BiaMachineCode> pCode;
+	bia::machine::BiaMachineSchein schein(nullptr);
+
 	try
 	{
 		bia::compiler::BiaCompiler compiler(buf, context, pAllocator.get());

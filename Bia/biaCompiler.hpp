@@ -61,6 +61,7 @@ private:
 		TEST_VALUE_CONSTANT,	/**	Defines that the test value is known at compile time.	*/
 		PARAMETER_COUNT,
 		PARAMETER_FORMAT,
+		RESULT_REGISTER,	/**	Defines that the result is stored in the result register.	*/
 		NONE,
 	};
 

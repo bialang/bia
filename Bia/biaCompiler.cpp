@@ -579,6 +579,10 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 				m_toolset.SafeCall(&machine::link::Print_false);
 
 			break;
+		case VALUE_TYPE::RESULT_REGISTER:
+			m_toolset.Call(&framework::BiaMember::Print, machine::architecture::BiaToolset::ResultValue());
+
+			break;
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
@@ -592,66 +596,81 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 	++p_reports.pBegin;
 
 	const grammar::Report * pNext = nullptr;
-	VALUE_TYPE parameterType;
-	Value parameterValue;
+	VALUE_TYPE secondType;
+	Value secondValue;
 
 	m_counter.Next();
 
-	//Function call
-	if (p_reports.pBegin + 1 < p_reports.pEnd && p_reports.pBegin[1].unRuleId == grammar::BGR_PARAMETER)
+	do
 	{
-		pNext = HandleParameters(p_reports.pBegin[1].content.children);
-
-		parameterType = m_valueType;
-		parameterValue = m_value;
-	}
-
-	switch (p_reports.pBegin->unTokenId)
-	{
-	/*case grammar::BM_INSTANTIATION:
-		HandleInstantiation(p_reports.pBegin->content.children, p_bPush);
-
-		break;*/
-	case grammar::BM_STRING:
-		HandleString(p_reports.pBegin);
-
-		break;
-	case grammar::BM_IDENTIFIER:
-		m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
-		m_valueType = VALUE_TYPE::MEMBER;
-
-		break;
-	default:
-		BIA_COMPILER_DEV_INVALID
-	}
-
-	//Function call
-	if (pNext)
-	{
-		switch (parameterType)
+		//More than a member
+		if (p_reports.pBegin + 1 < p_reports.pEnd)
 		{
-		case VALUE_TYPE::PARAMETER_COUNT:
+			//Function call
+			if (p_reports.pBegin[1].unRuleId == grammar::BGR_PARAMETER)
+				pNext = HandleParameters(p_reports.pBegin[1].content.children);
+
+			secondType = m_valueType;
+			secondValue = m_value;
+		}
+
+		switch (p_reports.pBegin->unTokenId)
 		{
-			//Call with member parameters only
-			if (parameterValue.parameterCount.parameterCount)
-				m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
-			//Call without any parameters
-			else
-				m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+			/*case grammar::BM_INSTANTIATION:
+				HandleInstantiation(p_reports.pBegin->content.children, p_bPush);
+
+				break;*/
+		case grammar::BM_STRING:
+			HandleString(p_reports.pBegin);
 
 			break;
-		}
-		case VALUE_TYPE::PARAMETER_FORMAT:
-			//m_toolset.Call(&framework::BiaMember::CallFormat, m_value.pMember, parameterValue.szParameterFormat);
+		case grammar::BM_IDENTIFIER:
+			m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
+			m_valueType = VALUE_TYPE::MEMBER;
 
-			//break;
+			break;
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
 
-		m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
-		m_value.temporaryResultIndex = m_counter.Current();
-	}
+		//Function call
+		if (pNext)
+		{
+			switch (secondType)
+			{
+			case VALUE_TYPE::PARAMETER_COUNT:
+			{
+				//Call with member parameters only
+				if (secondValue.parameterCount.parameterCount)
+					m_toolset.Call(secondValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), secondValue.parameterCount.parameterCount);
+				//Call without any parameters
+				else
+					m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+
+				break;
+			}
+			case VALUE_TYPE::PARAMETER_FORMAT:
+				//m_toolset.Call(&framework::BiaMember::CallFormat, m_value.pMember, parameterValue.szParameterFormat);
+
+				//break;
+			default:
+				BIA_COMPILER_DEV_INVALID
+			}
+			
+			m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
+			m_value.temporaryResultIndex = m_counter.Current();
+			pNext = nullptr;
+		}
+		//Get member
+		else if (p_reports.pBegin + 1 < p_reports.pEnd)
+		{
+			m_toolset.Call(&framework::BiaMember::GetMember, m_value.pMember, m_context.NameAddressOf(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+
+			m_valueType = VALUE_TYPE::RESULT_REGISTER;
+		}
+		
+		p_reports.pBegin += 2;
+	} while (p_reports.pBegin < p_reports.pEnd);
 
 	return p_reports.pEnd + 1;
 }
