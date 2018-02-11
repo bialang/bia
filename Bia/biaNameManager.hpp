@@ -3,6 +3,7 @@
 #include <unordered_set>
 
 #include "biaAllocator.hpp"
+#include "biaHash.hpp"
 
 
 namespace bia
@@ -10,7 +11,7 @@ namespace bia
 namespace machine
 {
 
-class BiaStringManager
+class BiaNameManager
 {
 public:
 	/**
@@ -18,11 +19,11 @@ public:
 	 *
 	 * @param	[in]	p_pAllocator	Defines the memory allocator.
 	*/
-	BiaStringManager(BiaAllocator * p_pAllocator);
-	BiaStringManager(BiaStringManager && p_move);
-	BiaStringManager(const BiaStringManager&) = delete;
-	~BiaStringManager();
-	const char * GetStringAddress(const char * p_pcString, size_t p_iSize);
+	BiaNameManager(BiaAllocator * p_pAllocator);
+	BiaNameManager(BiaNameManager && p_move);
+	BiaNameManager(const BiaNameManager&) = delete;
+	~BiaNameManager();
+	const char * GetNameAddress(const char * p_pcString, size_t p_iSize);
 
 private:
 	struct StringEntry
@@ -46,8 +47,7 @@ private:
 	{
 		inline size_t operator()(StringEntry p_string) const
 		{
-			///import 
-			return 0;
+			return utility::BiaHasher<size_t>().operator()(p_string.pcString, p_string.iSize);
 		}
 	};
 

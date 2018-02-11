@@ -15,7 +15,7 @@ struct BiaHasher;
 template<>
 struct BiaHasher<uint32_t>
 {
-	inline uint32_t operator()(const char * p_pcBuffer, uint32_t p_unLength)
+	inline uint32_t operator()(const char * p_pcBuffer, uint32_t p_unLength) const
 	{
 		constexpr auto M = 0x5bd1e995;
 		uint32_t unHash = 0xc70f6907 ^ p_unLength;
@@ -59,7 +59,7 @@ struct BiaHasher<uint32_t>
 template<>
 struct BiaHasher<uint64_t>
 {
-	inline uint64_t Hash64(const char * p_pcBuffer, uint64_t p_ullLength)
+	inline uint64_t Hash64(const char * p_pcBuffer, uint64_t p_ullLength) const
 	{
 		constexpr auto M = (0xc6a4a793ull << 32) + 0x5bd1e995;
 		const auto pcEnd = p_pcBuffer + (p_ullLength & ~0x7);
@@ -96,7 +96,7 @@ struct BiaHasher<uint64_t>
 	}
 
 private:
-	inline uint64_t ShiftMix(uint64_t p_ullValue)
+	inline static uint64_t ShiftMix(uint64_t p_ullValue)
 	{
 		return p_ullValue ^ (p_ullValue >> 47);
 	}

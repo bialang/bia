@@ -81,9 +81,7 @@ private:
 		} parameterCount;
 		const char * szParameterFormat;
 	};
-
-	char m_acNameBuffer[128];	/**	Defines a buffer for temporarily storing names.	*/
-
+	
 	machine::architecture::BiaToolset m_toolset;	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
 	machine::BiaMachineContext & m_context;	/**	Defines the context for which this script should be compiled.	*/
 

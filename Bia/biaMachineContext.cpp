@@ -61,18 +61,12 @@ void BiaMachineContext::DestructTemporaryAddresses(int8_t p_cCount, framework::B
 
 const char * BiaMachineContext::NameAddressOf(const char * p_pcName, size_t p_iSize)
 {
-	return m_stringManager.GetStringAddress(p_pcName, p_iSize);
+	return m_nameManager.GetNameAddress(p_pcName, p_iSize);
 }
 
 const char * BiaMachineContext::StringAddressOf(std::string p_stString)
 {
-	auto pResult = m_stringAddresses.find(p_stString);
-
-	//Not found
-	if (pResult == m_stringAddresses.end())
-		pResult = m_stringAddresses.insert(std::move(p_stString)).first;
-
-	return pResult->data();
+	return "dummy";
 }
 
 framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)

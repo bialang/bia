@@ -211,9 +211,16 @@ public:
 	/**
 	 * @see	BiaMember::Test().
 	*/
-	virtual int32_t Test() override
+	inline virtual int32_t Test() override
 	{
 		return reinterpret_cast<int32_t*>(&m_llValue)[0] | reinterpret_cast<int32_t*>(&m_llValue)[1];
+	}
+	/**
+	 * @see	BiaMember::GetMember().
+	*/
+	inline virtual BiaMember * GetMember(const char * p_szName)
+	{
+		throw exception::SymbolException("Unkown member.");
 	}
 
 protected:

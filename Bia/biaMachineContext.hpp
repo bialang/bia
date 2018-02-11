@@ -2,9 +2,7 @@
 
 #include <unordered_map>
 #include <map>
-#include <set>
 #include <memory>
-#include <string>
 
 #include "biaConfig.hpp"
 #include "biaMember.hpp"
@@ -14,7 +12,7 @@
 #include "biaInputStream.hpp"
 #include "biaVariableHandler.hpp"
 #include "biaAllocator.hpp"
-#include "biaStringManager.hpp"
+#include "biaNameManager.hpp"
 
 
 #include "biaStaticFunction.hpp"
@@ -45,7 +43,7 @@ inline rra heyho(const char * b)
 class BiaMachineContext final
 {
 public:
-BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator)), m_stringManager(m_pAllocator.get())
+BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
 {
 
 	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<decltype(&heyho)>>(heyho);
@@ -77,8 +75,7 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	variable_index m_index;	/**	Stores all pointers to the known variables.	*/
 	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 
-	std::set<std::string> m_stringAddresses;	/**	Stores all string addresses.	*/
-	BiaStringManager m_stringManager;
+	BiaNameManager m_nameManager;
 
 	std::shared_ptr<BiaAllocator> m_pAllocator;	/**	Defines the memory allocator.	*/
 
