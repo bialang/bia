@@ -46,7 +46,7 @@ public:
 BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
 {
 
-	auto pAddress = m_storage.CreateElement<framework::BiaStaticFunction<decltype(&heyho)>>(heyho);
+	auto pAddress = m_storage.CreateElement<framework::executable::BiaStaticFunction<decltype(&heyho)>>(heyho);
 
 	m_index.insert({ "test", pAddress });
 }

@@ -139,6 +139,7 @@
     <ClInclude Include="biaDisassembler.hpp" />
     <ClInclude Include="biaDisguisedCalled.hpp" />
     <ClInclude Include="biaException.hpp" />
+    <ClInclude Include="biaFunction.hpp" />
     <ClInclude Include="biaGrammar.hpp" />
     <ClInclude Include="biaHash.hpp" />
     <ClInclude Include="biaHasher.hpp" />

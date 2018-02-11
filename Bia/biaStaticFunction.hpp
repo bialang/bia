@@ -3,7 +3,7 @@
 #include <new>
 #include <type_traits>
 
-#include "biaMember.hpp"
+#include "biaFunction.hpp"
 #include "biaUndefined.hpp"
 #include "biaException.hpp"
 #include "biaDisguisedCalled.hpp"
@@ -12,6 +12,8 @@
 namespace bia
 {
 namespace framework
+{
+namespace executable
 {
 
 template<typename _RETURN, typename... _ARGS>
@@ -26,7 +28,7 @@ public:
 };
 
 template<typename _RETURN, typename... _ARGS>
-class BiaStaticFunction<_RETURN(*)(_ARGS...)> final : public BiaMember
+class BiaStaticFunction<_RETURN(*)(_ARGS...)> final : public BiaFunction
 {
 public:
 	/**
@@ -114,83 +116,6 @@ public:
 		va_end(parameters);*/
 	}
 	/**
-	 * @see	BiaMember::OperatorCall().
-	*/
-	inline virtual void OperatorCall(uint32_t, BiaMember*, BiaMember*) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorCallInt_32().
-	*/
-	inline virtual void OperatorCallInt_32(uint32_t, int32_t, BiaMember*) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorCallInt_64().
-	*/
-	inline virtual void OperatorCallInt_64(uint32_t, int64_t, BiaMember*) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorCallFloat().
-	*/
-	inline virtual void OperatorCallFloat(uint32_t, float, BiaMember*) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorCallDouble().
-	*/
-	inline virtual void OperatorCallDouble(uint32_t, double, BiaMember*) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorAssignCall().
-	*/
-	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorAssignCallInt_32().
-	*/
-	inline virtual void OperatorAssignCallInt_32(uint32_t, int32_t) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorAssignCallInt_64().
-	*/
-	inline virtual void OperatorAssignCallInt_64(uint32_t, int64_t) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorAssignCallFloat().
-	*/
-	inline virtual void OperatorAssignCallFloat(uint32_t, float) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorAssignCallDouble().
-	*/
-	inline virtual void OperatorAssignCallDouble(uint32_t, double) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
-	 * @see	BiaMember::OperatorSelfCall().
-	*/
-	inline virtual void OperatorSelfCall(uint32_t) override
-	{
-		throw exception::OperatorException("Invalid operator call on static function.");
-	}
-	/**
 	 * @see	BiaMember::Clone().
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
@@ -205,13 +130,6 @@ public:
 		return false;
 	}
 	/**
-	 * @see	BiaMember::GetNativeType().
-	*/
-	inline virtual int GetNativeType() const override
-	{
-		return NTF_NONE;
-	}
-	/**
 	 * @see	BiaMember::Test().
 	*/
 	virtual int32_t Test() override
@@ -220,13 +138,6 @@ public:
 	}
 
 protected:
-	/**
-	 * @see	BiaMember::GetNativeData().
-	*/
-	inline virtual void * GetNativeData(NATIVE_TYPE) override
-	{
-		throw exception::BadCastException("Native type is not supported.");
-	}
 	/**
 	 * @see	BiaMember::GetData().
 	*/
@@ -239,5 +150,6 @@ private:
 	_RETURN(*m_pFunction)(_ARGS...);
 };
 
+}
 }
 }

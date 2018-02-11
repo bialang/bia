@@ -92,6 +92,7 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateIntN1);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateFloat);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateDouble);
+	BIA_FUNCTION_ENTRY(machine::link::InstantiateCString);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateCopy);
 
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Print);

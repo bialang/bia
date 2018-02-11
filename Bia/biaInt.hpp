@@ -218,7 +218,7 @@ public:
 	/**
 	 * @see	BiaMember::GetMember().
 	*/
-	inline virtual BiaMember * GetMember(const char * p_szName)
+	inline virtual BiaMember * GetMember(const char * p_szName) override
 	{
 		throw exception::SymbolException("Unkown member.");
 	}

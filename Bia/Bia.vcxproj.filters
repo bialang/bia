@@ -58,6 +58,9 @@
     <Filter Include="Header Files\utility">
       <UniqueIdentifier>{157f94e7-ac36-4cfe-8f0e-71ba9f4118bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\framework\executable">
+      <UniqueIdentifier>{c8f3c24a-0d9a-4c7b-917f-74e54e2ee5dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -209,9 +212,6 @@
     <ClInclude Include="biaDisguisedCalled.hpp">
       <Filter>Header Files\force</Filter>
     </ClInclude>
-    <ClInclude Include="biaStaticFunction.hpp">
-      <Filter>Header Files\framework</Filter>
-    </ClInclude>
     <ClInclude Include="biaUndefined.hpp">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
@@ -226,6 +226,12 @@
     </ClInclude>
     <ClInclude Include="biaNameManager.hpp">
       <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="biaStaticFunction.hpp">
+      <Filter>Header Files\framework\executable</Filter>
+    </ClInclude>
+    <ClInclude Include="biaFunction.hpp">
+      <Filter>Header Files\framework\executable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
