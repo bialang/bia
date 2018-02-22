@@ -261,10 +261,11 @@ private:
 			case grammar::BGR_IF:
 				return HandleIf(p_pReport->content.children);
 			case grammar::BGR_PRINT:
-			case grammar::BGR_VALUE:
 				return HandlePrint(p_pReport->content.children);
 			case grammar::BGR_WHILE:
 				return HandlePreTestLoop(p_pReport->content.children);
+			case grammar::BGR_VALUE:
+				return HandleValue<false>(p_pReport->content.children, [] {});
 			default:
 				BIA_COMPILER_DEV_INVALID
 			}

@@ -28,7 +28,12 @@ BiaCompiler::~BiaCompiler()
 }
 
 void BiaCompiler::Report(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
-{
+{/*
+	for (auto i = p_pBegin; i < p_pEnd; ++i)
+	{
+		printf("ID: %ui TK: %ui\n", i->unRuleId, i->unTokenId);
+	}
+	*/
 	HandleRoot(p_pBegin);
 }
 
@@ -536,7 +541,7 @@ const grammar::Report * BiaCompiler::HandleIf(grammar::report_range p_reports)
 const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_range p_reports)
 {
 	//Handle value to print
-	HandleValue<false>(p_reports, [this] {
+	HandleValue<false>(p_reports.pBegin[1].content.children, [this] {
 		//Call print
 		switch (m_valueType)
 		{
@@ -596,12 +601,13 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 	++p_reports.pBegin;
 
 	const grammar::Report * pNext = nullptr;
+	auto bFirst = true;
 	VALUE_TYPE secondType;
 	Value secondValue;
 
 	m_counter.Next();
 
-	do
+	while(p_reports.pBegin < p_reports.pEnd)
 	{
 		//More than a member
 		if (p_reports.pBegin + 1 < p_reports.pEnd)
@@ -614,23 +620,30 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 			secondValue = m_value;
 		}
 
-		switch (p_reports.pBegin->unTokenId)
+		//Handle first value
+		if (bFirst)
 		{
-			/*case grammar::BM_INSTANTIATION:
-				HandleInstantiation(p_reports.pBegin->content.children, p_bPush);
+			switch (p_reports.pBegin->unTokenId)
+			{
+				/*case grammar::BM_INSTANTIATION:
+					HandleInstantiation(p_reports.pBegin->content.children, p_bPush);
 
-				break;*/
-		case grammar::BM_STRING:
-			HandleString(p_reports.pBegin);
+					break;*/
+			case grammar::BM_STRING:
+				HandleString(p_reports.pBegin);
 
-			break;
-		case grammar::BM_IDENTIFIER:
-			m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
-			m_valueType = VALUE_TYPE::MEMBER;
+				break;
+			case grammar::BM_IDENTIFIER:
+				m_valueType = VALUE_TYPE::MEMBER;
+				m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
 
-			break;
-		default:
-			BIA_COMPILER_DEV_INVALID
+				break;
+			default:
+				BIA_COMPILER_DEV_INVALID
+			}
+
+			++p_reports.pBegin;
+			bFirst = false;
 		}
 
 		//Function call
@@ -664,13 +677,23 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 		//Get member
 		else if (p_reports.pBegin + 1 < p_reports.pEnd)
 		{
-			m_toolset.Call(&framework::BiaMember::GetMember, m_value.pMember, m_context.NameAddressOf(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+			switch (m_valueType)
+			{
+			case VALUE_TYPE::MEMBER:
+				m_toolset.Call(&framework::BiaMember::GetMember, m_value.pMember, m_context.NameAddressOf(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
+
+				break;
+			case VALUE_TYPE::RESULT_REGISTER:
+				m_toolset.Call(&framework::BiaMember::GetMember, machine::architecture::BiaToolset::ResultValue(), m_context.NameAddressOf(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
+
+				break;
+			}
 
 			m_valueType = VALUE_TYPE::RESULT_REGISTER;
 		}
 		
-		p_reports.pBegin += 2;
-	} while (p_reports.pBegin < p_reports.pEnd);
+		++p_reports.pBegin;
+	}
 
 	return p_reports.pEnd + 1;
 }

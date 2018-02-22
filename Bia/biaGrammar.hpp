@@ -36,7 +36,8 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
 		RulePointerToken<BGR_IF, FILLER_TOKEN>,
 		RulePointerToken<BGR_WHILE, FILLER_TOKEN>,
-		RulePointerToken<BGR_PRINT, FILLER_TOKEN>
+		RulePointerToken<BGR_PRINT, FILLER_TOKEN>,
+		RulePointerToken<BGR_VALUE, FILLER_TOKEN>
 		}));
 
 	//Variable declaration
@@ -96,7 +97,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		}));
 
 	//Print
-	interpreter.SetRule(BGR_PRINT, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
+	interpreter.SetRule(BGR_PRINT, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Keyword_print, FILLER_TOKEN>,
 		WHITESPACE_REQUIRED,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN>,
@@ -260,7 +261,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		WHITESPACE_OPTIONAL,
 		IdentifierToken<NONE>,
 		WHITESPACE_OPTIONAL,
-		RulePointerToken<BGR_MEMBER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>
+		RulePointerToken<BGR_MEMBER_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
 		}));
 
 	//Member helper 2
