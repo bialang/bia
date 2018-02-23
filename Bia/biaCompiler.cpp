@@ -602,27 +602,41 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 	const grammar::Report * pNext = nullptr;
 	auto bFirst = true;
-	VALUE_TYPE secondType;
-	Value secondValue;
+	VALUE_TYPE parameterType;
+	Value parameterValue;
 
 	m_counter.Next();
 
 	while(p_reports.pBegin < p_reports.pEnd)
 	{
-		//More than a member
-		if (p_reports.pBegin + 1 < p_reports.pEnd)
+		//Function call
+		if (p_reports.pBegin->unRuleId == grammar::BGR_PARAMETER)
+		{
+			auto tmpValue = m_value;
+			auto tmpType = m_valueType;
+
+			pNext = HandleParameters(p_reports.pBegin->content.children);
+
+			parameterType = m_valueType;
+			parameterValue = m_value;
+			m_valueType = tmpType;
+			m_value = tmpValue;
+		}
+		//Handle first value
+		else if (bFirst)
 		{
 			//Function call
-			if (p_reports.pBegin[1].unRuleId == grammar::BGR_PARAMETER)
-				pNext = HandleParameters(p_reports.pBegin[1].content.children);
+			if (p_reports.pBegin + 1 < p_reports.pEnd)
+			{
+				//Function call
+				if (p_reports.pBegin[1].unRuleId == grammar::BGR_PARAMETER)
+				{
+					pNext = HandleParameters(p_reports.pBegin[1].content.children);
+					parameterType = m_valueType;
+					parameterValue = m_value;
+				}
+			}
 
-			secondType = m_valueType;
-			secondValue = m_value;
-		}
-
-		//Handle first value
-		if (bFirst)
-		{
 			switch (p_reports.pBegin->unTokenId)
 			{
 				/*case grammar::BM_INSTANTIATION:
@@ -649,16 +663,48 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 		//Function call
 		if (pNext)
 		{
-			switch (secondType)
+			switch (parameterType)
 			{
 			case VALUE_TYPE::PARAMETER_COUNT:
 			{
-				//Call with member parameters only
-				if (secondValue.parameterCount.parameterCount)
-					m_toolset.Call(secondValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), secondValue.parameterCount.parameterCount);
-				//Call without any parameters
-				else
-					m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+				switch (m_valueType)
+				{
+				case VALUE_TYPE::MEMBER:
+				{
+					//Call with member parameters only
+					if (parameterValue.parameterCount.parameterCount)
+						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
+					//Call without any parameters
+					else
+						m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+
+					break;
+				}
+				case VALUE_TYPE::TEMPORARY_MEMBER:
+				{
+					//Call with member parameters only
+					if (parameterValue.parameterCount.parameterCount)
+						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
+					//Call without any parameters
+					else
+						m_toolset.Call(&framework::BiaMember::Call, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+
+					break;
+				}
+				case VALUE_TYPE::RESULT_REGISTER:
+				{
+					//Call with member parameters only
+					if (parameterValue.parameterCount.parameterCount)
+						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, machine::architecture::BiaToolset::ResultValue(), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
+					//Call without any parameters
+					else
+						m_toolset.Call(&framework::BiaMember::Call, machine::architecture::BiaToolset::ResultValue(), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+
+					break;
+				}
+				default:
+					BIA_COMPILER_DEV_INVALID
+				}
 
 				break;
 			}
@@ -672,10 +718,13 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 			
 			m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
 			m_value.temporaryResultIndex = m_counter.Current();
+			p_reports.pBegin = pNext;
 			pNext = nullptr;
+
+			continue;
 		}
 		//Get member
-		else if (p_reports.pBegin + 1 < p_reports.pEnd)
+		else if (p_reports.pBegin < p_reports.pEnd)
 		{
 			switch (m_valueType)
 			{

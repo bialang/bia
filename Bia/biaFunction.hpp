@@ -103,6 +103,7 @@ public:
 	*/
 	inline virtual BiaMember * GetMember(const char * p_szName) override
 	{
+		return this;
 		throw exception::SymbolException("Unkown member.");
 	}
 
