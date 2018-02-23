@@ -598,13 +598,12 @@ const grammar::Report * bia::compiler::BiaCompiler::HandlePrint(grammar::report_
 
 const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_reports)
 {
-	++p_reports.pBegin;
-
 	const grammar::Report * pNext = nullptr;
 	auto bFirst = true;
 	VALUE_TYPE parameterType;
 	Value parameterValue;
 
+	++p_reports.pBegin;
 	m_counter.Next();
 
 	while(p_reports.pBegin < p_reports.pEnd)
@@ -615,6 +614,7 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 			auto tmpValue = m_value;
 			auto tmpType = m_valueType;
 
+			//Push parameters
 			pNext = HandleParameters(p_reports.pBegin->content.children);
 
 			parameterType = m_valueType;
@@ -631,7 +631,9 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 				//Function call
 				if (p_reports.pBegin[1].unRuleId == grammar::BGR_PARAMETER)
 				{
+					//Push parameters
 					pNext = HandleParameters(p_reports.pBegin[1].content.children);
+
 					parameterType = m_valueType;
 					parameterValue = m_value;
 				}

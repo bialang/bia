@@ -476,6 +476,10 @@ private:
 			auto leftType = m_valueType;
 			auto leftValue = m_value;
 
+			//Pop if not used
+			if (m_valueType != VALUE_TYPE::TEMPORARY_MEMBER)
+				m_counter.Pop(currentCounter);
+
 			do
 			{
 				//Move string operator to int 32 bit value
@@ -485,6 +489,10 @@ private:
 
 				//Handle first right math term
 				i = (this->*NEXT)(i[1].content.children);
+
+				//Pop if not used
+				if (m_valueType != VALUE_TYPE::TEMPORARY_MEMBER)
+					m_counter.Pop(currentCounter);
 
 				//Call operator
 				if (leftType == VALUE_TYPE::MEMBER || leftType == VALUE_TYPE::TEMPORARY_MEMBER || 
