@@ -34,7 +34,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	interpreter.SetRule(BGR_ROOT_HELPER_SINGLE_STATEMENT, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
 		RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
 		RulePointerToken<BGR_IF, FILLER_TOKEN>,
-		RulePointerToken<BGR_WHILE, FILLER_TOKEN>,
+		RulePointerToken<BGR_PRE_TEST_LOOP, FILLER_TOKEN>,
 		RulePointerToken<BGR_PRINT, FILLER_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN>
 		}));
@@ -89,19 +89,19 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 		KeywordToken<Operator_semicolon, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
-	//While
-	interpreter.SetRule(BGR_WHILE, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
-		KeywordToken<Keyword_while, FILLER_TOKEN>,
+	//Pre test loop
+	interpreter.SetRule(BGR_PRE_TEST_LOOP, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
+		RulePointerToken<BGR_PRE_TEST_LOOP_HELPER_0, FILLER_TOKEN>,
 		KeywordToken<Operator_bracket_open, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		KeywordToken<Operator_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
-	//While helper 0
-	interpreter.SetRule(BGR_WHILE_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
-		KeywordToken<Keyword_while, NONE>,
-		KeywordToken<Keyword_until, NONE>
+	//Pre test loop helper 0
+	interpreter.SetRule(BGR_PRE_TEST_LOOP_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
+		KeywordToken<Keyword_while, NONE, LT_WHILE>,
+		KeywordToken<Keyword_until, NONE, LT_UNTIL>
 		}));
 
 	//Value raw (must be wrapped because of math factor)

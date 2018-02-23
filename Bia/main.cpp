@@ -93,7 +93,7 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 
-while (true)
+until (i)
 	print "hi";
 
 )";

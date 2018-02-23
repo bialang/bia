@@ -234,7 +234,7 @@ private:
 			case grammar::BGR_IF:
 			case grammar::BGR_PRINT:
 			case grammar::BGR_VALUE:
-			case grammar::BGR_WHILE:
+			case grammar::BGR_PRE_TEST_LOOP:
 				return p_pReport->content.children.pEnd + 1;
 			default:
 				BIA_COMPILER_DEV_INVALID
@@ -262,7 +262,7 @@ private:
 				return HandleIf(p_pReport->content.children);
 			case grammar::BGR_PRINT:
 				return HandlePrint(p_pReport->content.children);
-			case grammar::BGR_WHILE:
+			case grammar::BGR_PRE_TEST_LOOP:
 				return HandlePreTestLoop(p_pReport->content.children);
 			case grammar::BGR_VALUE:
 				return HandleValue<false>(p_pReport->content.children, [] {});
@@ -538,7 +538,7 @@ private:
 	const grammar::Report * HandleMember(grammar::report_range p_reports);
 	const grammar::Report * HandleParameters(grammar::report_range p_reports);
 	const grammar::Report * HandlePreTestLoop(grammar::report_range p_reports);
-	const grammar::Report * HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition);
+	const grammar::Report * HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition, machine::architecture::BiaToolset::JUMP p_jumpType);
 } ;
 
 }

@@ -827,9 +827,12 @@ const grammar::Report * BiaCompiler::HandlePreTestLoop(grammar::report_range p_r
 	//Write jump to end condition
 	machine::architecture::BiaToolset::position position;
 	auto firstJump = m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP);
+	auto jumpType = p_reports.pBegin[1].unTokenId == grammar::LT_WHILE ? machine::architecture::BiaToolset::JUMP::JUMP_IF_TRUE : machine::architecture::BiaToolset::JUMP::JUMP_IF_FALSE;
+
+	++p_reports.pBegin;
 
 	//Handle loop
-	HandlePostTestLoop(p_reports, &position);
+	HandlePostTestLoop(p_reports, &position, jumpType);
 
 	//Update jump condition
 	if (position != -1)
@@ -841,12 +844,11 @@ const grammar::Report * BiaCompiler::HandlePreTestLoop(grammar::report_range p_r
 	return p_reports.pEnd + 1;
 }
 
-const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition)
+const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition, machine::architecture::BiaToolset::JUMP p_jumpType)
 {
 	auto & originalBuffer = m_toolset.GetBuffer();
 	stream::BiaOutputStreamBuffer conditionBuffer;
 	machine::architecture::BiaToolset::position conditionJumpPosition;
-	machine::architecture::BiaToolset::JUMP jumpType;
 	auto bCompile = true;
 
 	//Redirect conditional code to a temporary buffer
@@ -868,14 +870,12 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 				return;
 			}
 
-			jumpType = machine::architecture::BiaToolset::JUMP::JUMP;
+			p_jumpType = machine::architecture::BiaToolset::JUMP::JUMP;
 		}
-		else if (m_valueType == VALUE_TYPE::TEST_VALUE_REGISTER)
-			jumpType = machine::architecture::BiaToolset::JUMP::JUMP_IF_TRUE;
-		else
+		else if (m_valueType != VALUE_TYPE::TEST_VALUE_REGISTER)
 			BIA_COMPILER_DEV_INVALID;
 
-		conditionJumpPosition = m_toolset.WriteJump(jumpType);
+		conditionJumpPosition = m_toolset.WriteJump(p_jumpType);
 	});
 
 	//Reset output buffer
@@ -900,7 +900,7 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 		originalBuffer.WriteStream(conditionBuffer);
 
 		//Upate jump offset
-		m_toolset.WriteJump(jumpType, jumpPosition, conditionJumpPosition);
+		m_toolset.WriteJump(p_jumpType, jumpPosition, conditionJumpPosition);
 	}
 
 	return p_reports.pEnd + 1;
