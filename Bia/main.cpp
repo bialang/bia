@@ -92,9 +92,10 @@ int main()
 	bia::machine::BiaMachineContext context(pAllocator);
 //var i = 65*65+5*8;
 	char script[] = R"(
-global str = "hi wie gehts?";
-str*str+str*str;
-print str.a;
+
+while (true)
+	print "hi";
+
 )";
 
 	/*

@@ -12,11 +12,14 @@ namespace bia
 namespace grammar
 {
 
-constexpr uint64_t NONE = 0;
-constexpr uint64_t FILLER_TOKEN = 0x1;
-constexpr uint64_t OPTIONAL_TOKEN = 0x2;
-constexpr uint64_t LOOPING_TOKEN = 0x4;
-constexpr uint64_t STARTING_WHITESPACE_OPT_TOKEN = 0x8;
+typedef uint64_t flag_type;
+
+constexpr flag_type NONE = 0;
+constexpr flag_type FILLER_TOKEN = 0x1;
+constexpr flag_type OPTIONAL_TOKEN = 0x2;
+constexpr flag_type LOOPING_TOKEN = 0x4;
+constexpr flag_type STARTING_WHITESPACE_TOKEN = 0x8;
+constexpr flag_type STARTING_WHITESPACE_OPTIONAL_TOKEN = 0x10;
 
 enum class ACTION
 {

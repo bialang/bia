@@ -31,7 +31,52 @@ inline bool FastFind(char p_cWhat, const char * p_pcSortedString)
 	return false;
 }
 
-template<typename T, uint64_t _FLAGS, int _FOR_CLARITY = 0>
+inline size_t WhitespaceSkipper(const char * p_pcBuffer, size_t p_iSize)
+{
+	const auto ciSize = p_iSize;
+
+	while (p_iSize)
+	{
+		switch (*p_pcBuffer++)
+		{
+		case ' ':
+		case '\t':
+		case '\r':
+		case '\n':
+			--p_iSize;
+
+			break;
+		default:
+			return ciSize - p_iSize;
+		}
+	}
+
+	return ciSize - p_iSize;
+}
+
+template<flag_type _FLAGS>
+inline bool WhitespaceDeleter(const char *& p_pcBuffer, size_t & p_iSize, TokenOutput & p_output)
+{
+	if ((_FLAGS & (STARTING_WHITESPACE_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN)) != 0)
+	{
+		auto iWhitespaces = WhitespaceSkipper(p_pcBuffer, p_iSize);
+
+		//Whitespace found
+		if (iWhitespaces)
+		{
+			p_pcBuffer += iWhitespaces;
+			p_iSize -= iWhitespaces;
+			p_output.iBufferOffset = iWhitespaces;
+		}
+		//No whitespace found
+		else if ((_FLAGS & STARTING_WHITESPACE_TOKEN) != 0)
+			return false;
+	}
+
+	return true;
+}
+
+template<typename T, flag_type _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
@@ -39,7 +84,8 @@ inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, TokenParams,
 
 	if (p_iSize >= T::Size())
 	{
-		if (memcmp(p_pcBuffer, T::Token(), T::Size()))
+		//Starting whitespaces and compare token
+		if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output) || memcmp(p_pcBuffer, T::Token(), T::Size()))
 			return ERROR;
 		else
 		{
@@ -52,11 +98,15 @@ inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, TokenParams,
 		return ERROR;
 }
 
-template<typename T, uint64_t _FLAGS, size_t _MIN = 0, size_t _MAX = 0>
+template<typename T, flag_type _FLAGS, size_t _MIN = 0, size_t _MAX = 0>
 inline ACTION CharsetToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? ACTION::DONT_REPORT : ACTION::REPORT;
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
+
+	//Starting whitespaces
+	if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output))
+		return ERROR;
 
 	while (p_iSize)
 	{
@@ -69,26 +119,15 @@ inline ACTION CharsetToken(const char * p_pcBuffer, size_t p_iSize, TokenParams,
 	return p_output.iTokenSize ? SUCCESS : ERROR;
 }
 
-template<uint32_t _RULE, uint64_t _FLAGS, uint64_t _CUSTOM = 0, int _FOR_CLARITY = 0>
+template<uint32_t _RULE, flag_type _FLAGS, uint64_t _CUSTOM = 0, int _FOR_CLARITY = 0>
 inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, TokenParams p_params, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 	constexpr auto ERROR = _FLAGS & (OPTIONAL_TOKEN | LOOPING_TOKEN) ? ACTION::DONT_REPORT : ACTION::ERROR;
 
-	//Starting whitespace
-	if (_FLAGS & STARTING_WHITESPACE_OPT_TOKEN)
-	{
-		TokenOutput output{};
-
-		CharsetToken<Charset_whitespace, OPTIONAL_TOKEN>(p_pcBuffer, p_iSize, p_params, output);
-
-		if (output.iTokenSize)
-		{
-			p_pcBuffer += output.iTokenSize;
-			p_output.iBufferOffset += output.iTokenSize;
-			p_iSize -= output.iTokenSize;
-		}
-	}
+	//Starting whitespaces
+	if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output))
+		return ERROR;
 
 	p_output.iTokenSize = p_params.pRules[_RULE].RunRule(p_pcBuffer, p_iSize, p_params);
 	p_output.iCustom = _CUSTOM;
@@ -96,15 +135,15 @@ inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 	return p_output.iTokenSize ? SUCCESS : ERROR;
 }
 
-template<uint64_t _FLAGS, int _FOR_CLARITY = 0>
+template<flag_type _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION IdentifierToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
 
-	//Limit length
-	/*if (p_iSize > BIA_MAX_IDENTIFIER_LENGTH)
-		p_output.iTokenSize = BIA_MAX_IDENTIFIER_LENGTH;*/
+	//Starting whitespaces
+	if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output))
+		return ERROR;
 
 	if (p_output.iTokenSize < p_iSize)
 	{
@@ -132,7 +171,7 @@ inline ACTION IdentifierToken(const char * p_pcBuffer, size_t p_iSize, TokenPara
 	return SUCCESS;
 }
 
-template<uint64_t _FLAGS, int _FOR_CLARITY = 0>
+template<flag_type _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
@@ -148,6 +187,10 @@ inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 	auto pcDelimitor = "";
 	size_t iDelimitor = 0;
 	uint32_t fFlags = 0;
+
+	//Starting whitespaces
+	if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output))
+		return ERROR;
 
 	//Determine delimitor and quote
 	while (p_iSize--)
@@ -294,11 +337,15 @@ gt_break:;
 	return ERROR;
 }
 
-template<uint64_t _FLAGS>
+template<flag_type _FLAGS>
 inline ACTION CustomOperatorToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR);
+
+	//Starting whitespaces
+	if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output))
+		return ERROR;
 
 	if (p_iSize > 4)
 		p_iSize = 4;
@@ -330,11 +377,15 @@ inline ACTION CustomOperatorToken(const char * p_pcBuffer, size_t p_iSize, Token
 	return ERROR;
 }
 
-template<uint64_t _FLAGS, int _FOR_CLARITY = 0>
+template<flag_type _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR);
+
+	//Starting whitespaces
+	if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output))
+		return ERROR;
 
 	//Check for minus
 	if (p_iSize && *p_pcBuffer == '-')
