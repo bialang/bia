@@ -1,18 +1,44 @@
-#include "stdafx.h"
 #include "CppUnitTest.h"
+#include "stdafx.h"
+
+#include <biaMachineContext.hpp>
+#include <string>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
 
 namespace MathExpressionTest
 {		
 	TEST_CLASS(MathExpressionTest)
 	{
 	public:
-		
-		TEST_METHOD(TestDotFirst)
+		inline MathExpressionTest() : m_context(std::shared_ptr<bia::machine::BiaAllocator>(new bia::machine::BiaAllocator()))
 		{
-			Assert::AreEqual(3 + 4, 7);
+
+		}
+		
+		TEST_METHOD(TestDotFirstConstant)
+		{
+			auto szScript = "global test_dot_first_constant = 652 - 2 + 6956 * 998 / 53;";
+
+			m_context.Run(szScript, std::char_traits<char>::length(szScript));
+
+			//Get variable
+			auto pVariable = m_context.GetGlobal("test_dot_first_constant");
+
+			Assert::IsNotNull(pVariable, L"Variable not found.");
+
+			//Get value
+			auto pValue = pVariable->Cast<int>();
+
+			Assert::IsNotNull(pValue, L"Invalid type.");
+
+			//Test value
+			Assert::AreEqual(*pValue, 652 - 2 + 6956 * 998 / 53);
 		}
 
+
+	private:
+		bia::machine::BiaMachineContext m_context;
 	};
 }
