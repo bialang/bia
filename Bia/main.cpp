@@ -93,8 +93,7 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 
-until (i)
-	print "hi";
+global i = 34;
 
 )";
 
@@ -317,6 +316,8 @@ until (i)
 	try
 	{
 		pCode->Execute();
+
+		//printf("Retrieved i: %i\n", *context.GetGlobal("i")->Cast<int>());
 	}
 	catch (const bia::exception::Exception & e)
 	{

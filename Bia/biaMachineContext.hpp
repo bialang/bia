@@ -54,6 +54,8 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	//void RemoveScript(std::string p_stScriptName);
 	//void Run(std::string p_stScriptName);
 	void Run(stream::BiaInputStream & p_script);
+	framework::BiaMember * GetGlobal(const std::string & p_stVariable);
+	framework::BiaMember * GetLocal(const std::string & p_stScriptName, const std::string & p_stVariable) = delete;
 
 //private:
 	//friend BiaCompiler;

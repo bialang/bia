@@ -31,6 +31,14 @@ void BiaMachineContext::Run(stream::BiaInputStream & p_input)
 		pMachineCode->Execute();
 }
 
+framework::BiaMember * BiaMachineContext::GetGlobal(const std::string & p_stVariable)
+{
+	auto pResult = m_index.find(p_stVariable);
+
+	//Address found
+	return pResult != m_index.end() ? pResult->second : nullptr;
+}
+
 void BiaMachineContext::ConstructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppDestination)
 {
 	auto blocks = m_pAllocator->AllocateBlocks(p_cCount, BiaAllocator::MEMORY_TYPE::NORMAL);
