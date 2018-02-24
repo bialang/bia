@@ -284,6 +284,18 @@ struct Operator_dot
 	}
 };
 
+struct Operator_arrow_access
+{
+	constexpr static const char * Token()
+	{
+		return "->";
+	}
+	constexpr static size_t Size()
+	{
+		return 2;
+	}
+};
+
 struct Operator_comma
 {
 	constexpr static const char * Token()

@@ -411,6 +411,10 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 			m_toolset.Call(&machine::link::InstantiateCopy, pVariable, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
 
 			break;
+		case VALUE_TYPE::RESULT_REGISTER:
+			m_toolset.Call(&machine::link::InstantiateCopy, pVariable, machine::architecture::BiaToolset::ResultValue());
+
+			break;
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
@@ -736,19 +740,33 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 			biaInstanceType = m_valueType;
 			biaInstanceValue = m_value;
 
-			switch (m_valueType)
+			//Arrow access
+			if (p_reports.pBegin->unTokenId == grammar::BAO_ARROW_ACCESS)
 			{
-			case VALUE_TYPE::MEMBER:
-				m_toolset.Call(&framework::BiaMember::GetMember, m_value.pMember, m_context.NameAddressOf(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
+				++p_reports.pBegin;
 
-				break;
-			case VALUE_TYPE::RESULT_REGISTER:
-				m_toolset.Call(&framework::BiaMember::GetMember, machine::architecture::BiaToolset::ResultValue(), m_context.NameAddressOf(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
-
-				break;
+				m_valueType = VALUE_TYPE::MEMBER;
+				m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
 			}
+			//Dot access
+			else
+			{
+				switch (m_valueType)
+				{
+				case VALUE_TYPE::MEMBER:
+					m_toolset.Call(&framework::BiaMember::GetMember, m_value.pMember, m_context.NameAddressOf(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
 
-			m_valueType = VALUE_TYPE::RESULT_REGISTER;
+					break;
+				case VALUE_TYPE::RESULT_REGISTER:
+					m_toolset.Call(&framework::BiaMember::GetMember, machine::architecture::BiaToolset::ResultValue(), m_context.NameAddressOf(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
+
+					break;
+				default:
+					BIA_COMPILER_DEV_INVALID
+				}
+
+				m_valueType = VALUE_TYPE::RESULT_REGISTER;
+			}
 		}
 		
 		++p_reports.pBegin;

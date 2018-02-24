@@ -225,7 +225,7 @@ void BiaGrammar::InitializeRules()
 
 	//Member helper 1
 	m_interpreter.SetRule(BGR_MEMBER_HELPER_1, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
-		KeywordToken<Operator_dot, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_MEMBER_HELPER_3, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		IdentifierToken<STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		RulePointerToken<BGR_MEMBER_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
 		}));
@@ -235,6 +235,12 @@ void BiaGrammar::InitializeRules()
 		RulePointerToken<BGR_INSTANTIATION, FILLER_TOKEN, 0, BM_INSTANTIATION>,
 		StringValueToken<NONE, BM_STRING>,
 		IdentifierToken<NONE, BM_IDENTIFIER>
+		}));
+
+	//Member helper 3
+	m_interpreter.SetRule(BGR_MEMBER_HELPER_3, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
+		KeywordToken<Operator_arrow_access, NONE, BAO_ARROW_ACCESS>,
+		KeywordToken<Operator_dot, FILLER_TOKEN, BAO_DOT>
 		}));
 }
 

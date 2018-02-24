@@ -94,8 +94,8 @@ int main()
 	char script[] = R"(
 
 global a = "hi";
-
-test.a(a);
+global f = test.a;
+test->f(a);
 
 )";
 
