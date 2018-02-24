@@ -69,7 +69,7 @@ inline BiaInterpreter<BGR_RULE_COUNT> & InitializeRules()
 	//If helper 0
 	interpreter.SetRule(BGR_IF_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
 		KeywordToken<Keyword_else, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		KeywordToken<Keyword_if, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		KeywordToken<Keyword_if, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
 		KeywordToken<Operator_bracket_open, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		KeywordToken<Operator_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
