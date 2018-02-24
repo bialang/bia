@@ -60,7 +60,7 @@ public:
 	/**
 	 * @see	BiaMember::Call().
 	*/
-	inline virtual void Call(BiaMember * p_pDestination) override
+	inline virtual void Call(BiaMember*, BiaMember * p_pDestination) override
 	{
 		//Parameters are required
 		if (sizeof...(_ARGS))
@@ -71,7 +71,7 @@ public:
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	inline virtual void CallCount(BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
+	inline virtual void CallCount(BiaMember*, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
 	{
 		va_list args;
 		va_start(args, p_unParameterCount);
@@ -83,7 +83,7 @@ public:
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	inline virtual void CallFormat(BiaMember * p_pDestination, const char * p_szFormat, ...) override
+	inline virtual void CallFormat(BiaMember*, BiaMember * p_pDestination, const char * p_szFormat, ...) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");
 		/*va_list parameters;

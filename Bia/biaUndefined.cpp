@@ -14,17 +14,17 @@ void BiaUndefined::Print()
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::Call(BiaMember*)
+void BiaUndefined::Call(BiaMember*, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::CallCount(BiaMember*, parameter_count, ...)
+void BiaUndefined::CallCount(BiaMember*, BiaMember*, parameter_count, ...)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::CallFormat(BiaMember*, const char*, ...)
+void BiaUndefined::CallFormat(BiaMember*, BiaMember*, const char*, ...)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }

@@ -601,7 +601,9 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 	const grammar::Report * pNext = nullptr;
 	auto bFirst = true;
 	VALUE_TYPE parameterType;
+	VALUE_TYPE biaInstanceType = VALUE_TYPE::NONE;
 	Value parameterValue;
+	Value biaInstanceValue;
 
 	++p_reports.pBegin;
 	m_counter.Next();
@@ -611,8 +613,8 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 		//Function call
 		if (p_reports.pBegin->unRuleId == grammar::BGR_PARAMETER)
 		{
-			auto tmpValue = m_value;
 			auto tmpType = m_valueType;
+			auto tmpValue = m_value;
 
 			//Push parameters
 			pNext = HandleParameters(p_reports.pBegin->content.children);
@@ -673,34 +675,37 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 				{
 				case VALUE_TYPE::MEMBER:
 				{
+					HandleFunctionCall(parameterValue.parameterCount, m_value.pMember, static_cast<framework::BiaMember*>(0));
 					//Call with member parameters only
-					if (parameterValue.parameterCount.parameterCount)
+					/*if (parameterValue.parameterCount.parameterCount)
 						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
 					//Call without any parameters
 					else
-						m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+						m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));*/
 
 					break;
 				}
 				case VALUE_TYPE::TEMPORARY_MEMBER:
 				{
+					HandleFunctionCall(parameterValue.parameterCount, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), static_cast<framework::BiaMember*>(0));
 					//Call with member parameters only
-					if (parameterValue.parameterCount.parameterCount)
+					/*if (parameterValue.parameterCount.parameterCount)
 						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
 					//Call without any parameters
 					else
-						m_toolset.Call(&framework::BiaMember::Call, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+						m_toolset.Call(&framework::BiaMember::Call, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));*/
 
 					break;
 				}
 				case VALUE_TYPE::RESULT_REGISTER:
 				{
+					HandleFunctionCall(parameterValue.parameterCount, machine::architecture::BiaToolset::ResultValue(), static_cast<framework::BiaMember*>(0));
 					//Call with member parameters only
-					if (parameterValue.parameterCount.parameterCount)
+					/*if (parameterValue.parameterCount.parameterCount)
 						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, machine::architecture::BiaToolset::ResultValue(), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
 					//Call without any parameters
 					else
-						m_toolset.Call(&framework::BiaMember::Call, machine::architecture::BiaToolset::ResultValue(), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+						m_toolset.Call(&framework::BiaMember::Call, machine::architecture::BiaToolset::ResultValue(), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));*/
 
 					break;
 				}
@@ -728,6 +733,9 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 		//Get member
 		else if (p_reports.pBegin < p_reports.pEnd)
 		{
+			biaInstanceType = m_valueType;
+			biaInstanceValue = m_value;
+
 			switch (m_valueType)
 			{
 			case VALUE_TYPE::MEMBER:

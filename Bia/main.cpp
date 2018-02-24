@@ -93,7 +93,9 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 
-global i = 34;
+global a = "hi";
+
+test.a(a);
 
 )";
 
@@ -104,7 +106,7 @@ global i = 34;
 
 
 	define foo(x, y)
-	(default=local) {
+	{
 		//Alle variablen hier sind lokal
 		var i = 0;
 		local i = 0;

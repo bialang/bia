@@ -47,18 +47,18 @@ public:
 	/**
 	 * @see	BiaMember::Call().
 	*/
-	virtual void Call(BiaMember*) override;
+	virtual void Call(BiaMember*, BiaMember*) override;
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	inline virtual void CallCount(BiaMember*, parameter_count, ...) override
+	inline virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");
 	}
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	inline virtual void CallFormat(BiaMember*, const char*, ...) override
+	inline virtual void CallFormat(BiaMember*, BiaMember*, const char*, ...) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");
 	}

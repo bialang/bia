@@ -96,8 +96,9 @@ public:
 	 *
 	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
 	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	 * @throws	exception::InstanceException	Thrown when the passed instance is invalid.
 	*/
-	virtual void Call(BiaMember * p_pDestination) = 0;
+	virtual void Call(BiaMember * p_pInstance, BiaMember * p_pDestination) = 0;
 	/**
 	 * Calls this function with only members as parameters.
 	 *
@@ -108,8 +109,9 @@ public:
 	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
 	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
 	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	 * @throws	exception::InstanceException	Thrown when the passed instance is invalid.
 	*/
-	virtual void CallCount(BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) = 0;
+	virtual void CallCount(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) = 0;
 	/**
 	 * Calls this function with any type as parameter.
 	 *
@@ -120,8 +122,9 @@ public:
 	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
 	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
 	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	 * @throws	exception::InstanceException	Thrown when the passed instance is invalid.
 	*/
-	virtual void CallFormat(BiaMember * p_pDestination, const char * p_szFormat, ...) = 0;
+	virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, const char * p_szFormat, ...) = 0;
 	/**
 	 * @throws	exception::OperatorException
 	*/

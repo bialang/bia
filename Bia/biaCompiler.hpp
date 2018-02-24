@@ -79,7 +79,7 @@ private:
 		framework::BiaMember * pMember;
 		BiaTempCounter::counter_type temporaryResultIndex;
 		bool bTestValue;	/**	Defines the constant test value.	*/
-		struct
+		struct Parameter
 		{
 			framework::BiaMember::parameter_count parameterCount;
 			machine::architecture::BiaToolset::pass_count quartetsPassed;
@@ -160,6 +160,15 @@ private:
 	void HandleNumber(const grammar::Report * p_pReport);
 	void HandleString(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
+	template<typename _INSTANCE, typename _BIA_INSTANCE>
+	inline void HandleFunctionCall(Value::Parameter p_paramter, _INSTANCE p_instance, _BIA_INSTANCE p_biaInstance)
+	{
+		if (p_paramter.parameterCount)
+			m_toolset.Call(p_paramter.quartetsPassed, &framework::BiaMember::CallCount, p_instance, p_biaInstance, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), p_paramter.parameterCount);
+		//Call without any parameters
+		else
+			m_toolset.Call(&framework::BiaMember::Call, p_instance, p_biaInstance, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+	}
 	const char * GetNameAddress(const grammar::Report * p_pReport);
 	const char * GetStringLocation(Value::String p_string);
 	//framework::BiaMember * GetAddressOfVariable();

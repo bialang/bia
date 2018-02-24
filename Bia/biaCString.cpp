@@ -14,7 +14,7 @@ void BiaCString::Undefine()
 	new(this) BiaUndefined();
 }
 
-void BiaCString::Call(BiaMember *)
+void BiaCString::Call(BiaMember*, BiaMember *)
 {
 	throw exception::BadCallException("Invalid function call on native type.");
 }

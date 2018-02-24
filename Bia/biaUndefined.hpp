@@ -23,15 +23,15 @@ public:
 	/**
 	 * @see	BiaMember::Call().
 	*/
-	virtual void Call(BiaMember*) override;
+	virtual void Call(BiaMember*, BiaMember*) override;
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	virtual void CallCount(BiaMember*, parameter_count, ...) override;
+	virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override;
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	virtual void CallFormat(BiaMember*, const char*, ...) override;
+	virtual void CallFormat(BiaMember*, BiaMember*, const char*, ...) override;
 	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
