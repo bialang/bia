@@ -258,7 +258,7 @@ global i = 34;
 	{
 		bia::compiler::BiaCompiler compiler(buf, context, pAllocator.get());
 
-		bia::grammar::InitializeRules().Interpret(script, sizeof(script) - 1, compiler);
+		bia::grammar::BiaGrammar::GetGrammar().Interpret(script, sizeof(script) - 1, compiler);
 		schein = std::move(compiler.GetMachineSchein());
 	}
 	catch (bia::exception::Exception & e)
@@ -317,7 +317,8 @@ global i = 34;
 	{
 		pCode->Execute();
 
-		//printf("Retrieved i: %i\n", *context.GetGlobal("i")->Cast<int>());
+		context.Run("global o = 61;", 14);
+		printf("Retrieved i: %i\n", *context.GetGlobal("o")->Cast<int>());
 	}
 	catch (const bia::exception::Exception & e)
 	{

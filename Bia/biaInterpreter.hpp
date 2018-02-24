@@ -13,6 +13,11 @@ template<Report::rule_id _RULES>
 class BiaInterpreter
 {
 public:
+	inline BiaInterpreter() = default;
+	inline BiaInterpreter(void(*p_pInitializerFunction)())
+	{
+		p_pInitializerFunction();
+	}
 	/**
 	 * Sets a rule.
 	 *
@@ -31,7 +36,7 @@ public:
 		else
 			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid rule id.");
 	}
-	inline size_t Interpret(const char * p_pcBuffer, size_t p_iSize, BiaReportReceiver & p_receiver)
+	inline size_t Interpret(const char * p_pcBuffer, size_t p_iSize, BiaReportReceiver & p_receiver) const
 	{
 		const auto ciSize = p_iSize;
 		BiaReportBundle bundle;
@@ -89,7 +94,7 @@ public:
 	}
 
 private:
-	BiaInterpreterRule m_aRules[_RULES];
+	mutable BiaInterpreterRule m_aRules[_RULES];
 };
 
 }

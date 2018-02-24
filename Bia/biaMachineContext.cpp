@@ -1,5 +1,7 @@
 #include "biaMachineContext.hpp"
 #include "biaOutputStreamBuffer.hpp"
+#include "biaCompiler.hpp"
+#include "biaGrammar.hpp"
 #include "biaUndefined.hpp"
 
 #include <memory>
@@ -11,24 +13,30 @@ namespace bia
 namespace machine
 {
 
-void BiaMachineContext::Run(stream::BiaInputStream & p_input)
+void BiaMachineContext::Run(const void * p_pScript, size_t p_iSize)
 {
-	uint8_t aucSpace[sizeof(BiaMachineCode)];
-	std::unique_ptr<BiaMachineCode, void(*)(BiaMachineCode*)> pMachineCode(nullptr, [](BiaMachineCode * p_pCode) {
-		p_pCode->~BiaMachineCode();
+	int8_t acMachineScheinSpace[sizeof(BiaMachineSchein)];
+
+	std::unique_ptr<BiaMachineSchein, void(*)(BiaMachineSchein*)> pMachineSchein(nullptr, [](BiaMachineSchein * p_pMachineSchein) {
+		p_pMachineSchein->~BiaMachineSchein();
 	});
+	stream::BiaOutputStreamBuffer compiled;
 
+	//Interpret and compile
 	{
-		//Compile
-		stream::BiaOutputStreamBuffer compiled;
+		compiler::BiaCompiler compiler(compiled, *this, m_pAllocator.get());
 
-		//Make the compiled buffer executable
-		//pMachineCode.reset(new(aucSpace) BiaMachineCode(compiled.GetBuffer()));
+		grammar::BiaGrammar::GetGrammar().Interpret(static_cast<const char*>(p_pScript), p_iSize, compiler);
+
+		pMachineSchein.reset(new(acMachineScheinSpace) BiaMachineSchein(compiler.GetMachineSchein()));
 	}
 
+	//Make the compiled buffer executable
+	BiaMachineCode code(compiled.GetBuffer(), std::move(*pMachineSchein));
+
 	//Execute script
-	if (pMachineCode->IsValid())
-		pMachineCode->Execute();
+	if (code.IsValid())
+		code.Execute();
 }
 
 framework::BiaMember * BiaMachineContext::GetGlobal(const std::string & p_stVariable)

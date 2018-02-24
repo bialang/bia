@@ -9,7 +9,6 @@
 #include "biaStorage.hpp"
 #include "biaTemporaryStorage.hpp"
 #include "biaMachineCode.hpp"
-#include "biaInputStream.hpp"
 #include "biaVariableHandler.hpp"
 #include "biaAllocator.hpp"
 #include "biaNameManager.hpp"
@@ -53,7 +52,7 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	//void AddScript(std::string p_stScriptName, script);
 	//void RemoveScript(std::string p_stScriptName);
 	//void Run(std::string p_stScriptName);
-	void Run(stream::BiaInputStream & p_script);
+	void Run(const void * p_pScript, size_t p_iSize);
 	framework::BiaMember * GetGlobal(const std::string & p_stVariable);
 	framework::BiaMember * GetLocal(const std::string & p_stScriptName, const std::string & p_stVariable) = delete;
 

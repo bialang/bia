@@ -105,6 +105,9 @@
     <ClCompile Include="biaMachineSchein.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="biaGrammar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaConfig.hpp">
