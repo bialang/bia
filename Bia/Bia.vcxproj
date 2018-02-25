@@ -134,6 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaAllocator.hpp" />
+    <ClInclude Include="biaClass.hpp" />
+    <ClInclude Include="biaClassTemplate.hpp" />
     <ClInclude Include="biaCompiler.hpp" />
     <ClInclude Include="biaConfig.hpp" />
     <ClInclude Include="biaConstantOperation.hpp" />

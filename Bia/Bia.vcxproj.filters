@@ -61,6 +61,9 @@
     <Filter Include="Header Files\framework\executable">
       <UniqueIdentifier>{c8f3c24a-0d9a-4c7b-917f-74e54e2ee5dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\framework\object">
+      <UniqueIdentifier>{7ee261cb-4157-4079-a001-26ce0906ad04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -241,6 +244,12 @@
     </ClInclude>
     <ClInclude Include="biaMachineSchein.hpp">
       <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClass.hpp">
+      <Filter>Header Files\framework\object</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClassTemplate.hpp">
+      <Filter>Header Files\framework\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

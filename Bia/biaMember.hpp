@@ -163,6 +163,8 @@ public:
 	/**
 	 * Tests the content of this object.
 	 *
+	 * @throws	exception::BadCallException	Thrown when the member cannot be tested.
+	 *
 	 * @return	A non-zero value for a successful result, otherwise 0.
 	*/
 	virtual int32_t Test() = 0;
