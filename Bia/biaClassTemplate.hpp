@@ -7,6 +7,8 @@
 #include "biaUndefined.hpp"
 #include "biaStaticFunction.hpp"
 #include "biaException.hpp"
+#include "biaClassContext.hpp"
+#include "biaClass.hpp"
 
 
 namespace bia
@@ -20,9 +22,8 @@ template<typename _CLASS>
 class BiaClassTemplate : public BiaMember
 {
 public:
-	inline BiaClassTemplate()
+	inline BiaClassTemplate(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager) : m_pClassContext(new BiaClassContext(p_pAllocator, p_pNameManager))
 	{
-
 	}
 
 	// Inherited via BiaMember
@@ -36,9 +37,20 @@ public:
 	{
 		printf("<%s at %p>", typeid(decltype(*this)).name(), this);
 	}
-	virtual void Call(BiaMember * p_pInstance, BiaMember * p_pDestination) override;
-	virtual void CallCount(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override;
-	virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, const char * p_szFormat, ...) override;
+	inline virtual void Call(BiaMember*, BiaMember * p_pDestination) override
+	{
+		p_pDestination->~BiaMember();
+
+		new(p_pDestination) BiaClass<_CLASS>(m_pClassContext);
+	}
+	inline virtual void CallCount(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
+	{
+		///TODO
+	}
+	inline virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, const char * p_szFormat, ...) override
+	{
+		///TODO
+	}
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
 	{
 		throw exception::OperatorException("Unsupported operation on class template.");
@@ -87,8 +99,14 @@ public:
 	{
 		new(p_pDestination) BiaClassTemplate<_CLASS>(*this);
 	}
-	virtual bool IsType(const std::type_info & p_type) const override;
-	virtual int GetNativeType() const override;
+	inline virtual bool IsType(const std::type_info & p_type) const override
+	{
+		return false;
+	}
+	inline virtual int GetNativeType() const override
+	{
+		return NTF_NONE;
+	}
 	inline virtual int32_t Test() override
 	{
 		throw exception::BadCallException("Cannot be tested.");
@@ -97,12 +115,25 @@ public:
 	{
 		throw exception::SymbolException("Unknown member.");
 	}
+	/**
+	 * Sets a static function.
+	 *
+	 * @since	3.55.116.671
+	 * @date	25-Feb-18
+	 *
+	 * @param	p_stName	Defines the name of the member.
+	 * @param	p_pFunction	
+	 *
+	 * @return	This.
+	*/
 	template<typename _RETURN, typename... _ARGS>
-	inline BiaClassTemplate * SetFunction(std::string p_stName, _RETURN(*p_pFunction)(_ARGS...))
+	inline BiaClassTemplate * SetFunction(const std::string & p_stName, _RETURN(*p_pFunction)(_ARGS...))
 	{
-		executable::BiaStaticFunction<_RETURN, _ARGS...> foo(p_pFunction);
+		///TODO: check name
 
-	
+		auto pMember = new(m_pClassContext->GetAllocator()->AllocateBlocks(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL)) executable::BiaStaticFunction<_RETURN, _ARGS...>(p_pFunction);
+
+		m_pClassContext->SetMember(p_stName, pMember);
 
 		return this;
 	}
@@ -118,7 +149,7 @@ public:
 	}
 
 private:
-	std::shared_ptr<void> m_pMembers;
+	std::shared_ptr<BiaClassContext> m_pClassContext;
 };
 
 }

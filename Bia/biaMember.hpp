@@ -216,6 +216,7 @@ protected:
 		CONST_STRING,
 		CUSTOM
 	};
+
 	/**	If true this object was initialized, otherwise not.	*/
 	bool m_bInitialized;
 

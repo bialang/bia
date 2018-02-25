@@ -19,6 +19,13 @@ void BiaClassContext::SetMember(const std::string & p_stName, BiaMember * p_pMem
 	m_members.insert_or_assign(m_pNameManager->GetNameAddress(p_stName.c_str(), p_stName.length()), p_pMember);
 }
 
+BiaMember * BiaClassContext::GetMember(const char * p_szName)
+{
+	auto pResult = m_members.find(p_szName);
+
+	return pResult != m_members.end() ? pResult->second : nullptr;
+}
+
 machine::BiaAllocator * BiaClassContext::GetAllocator()
 {
 	return m_pAllocator;

@@ -36,6 +36,17 @@ public:
 	*/
 	void SetMember(const std::string & p_stName, BiaMember * p_pMember);
 	/**
+	 * Retrieves the member associated with the name.
+	 *
+	 * @since	3.55.116.671
+	 * @date	25-Feb-18
+	 *
+	 * @param	p_szName	Defines the name of the member.
+	 *
+	 * @return	The member if it known, otherwise null.
+	*/
+	BiaMember * GetMember(const char * p_szName);
+	/**
 	 * Returns the allocator.
 	 *
 	 * @since	3.55.116.671
@@ -46,10 +57,13 @@ public:
 	machine::BiaAllocator * GetAllocator();
 
 private:
-	std::unordered_map<const char*, BiaMember*> m_members;	/**	Stores all known members of a class.	*/
+	/**	Stores all known members of a class.	*/
+	std::unordered_map<const char*, BiaMember*> m_members;
 
-	machine::BiaAllocator * m_pAllocator;	/**	Defines the allocator used to allocate memory for the members.	*/
-	machine::BiaNameManager * m_pNameManager;	/**	Defines the name manager used for the name of the members.	*/
+	/**	Defines the allocator used to allocate memory for the members.	*/
+	machine::BiaAllocator * m_pAllocator;
+	/**	Defines the name manager used for the name of the members.	*/
+	machine::BiaNameManager * m_pNameManager;
 };
 
 }
