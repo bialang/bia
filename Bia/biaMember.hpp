@@ -126,7 +126,7 @@ public:
 	*/
 	virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, const char * p_szFormat, ...) = 0;
 	/**
-	 * @throws	exception::OperatorException
+	 * @throws	exception::OperatorException	Thrown when the operation is not supported.
 	*/
 	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) = 0;
 	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) = 0;

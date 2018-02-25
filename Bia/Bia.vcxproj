@@ -117,6 +117,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="biaAllocator.cpp" />
+    <ClCompile Include="biaClassContext.cpp" />
     <ClCompile Include="biaCompiler.cpp" />
     <ClCompile Include="biaCString.cpp" />
     <ClCompile Include="biaGrammar.cpp" />
@@ -135,6 +136,7 @@
   <ItemGroup>
     <ClInclude Include="biaAllocator.hpp" />
     <ClInclude Include="biaClass.hpp" />
+    <ClInclude Include="biaClassContext.hpp" />
     <ClInclude Include="biaClassTemplate.hpp" />
     <ClInclude Include="biaCompiler.hpp" />
     <ClInclude Include="biaConfig.hpp" />

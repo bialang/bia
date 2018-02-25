@@ -5,6 +5,7 @@
 
 #include "biaMember.hpp"
 #include "biaUndefined.hpp"
+#include "biaStaticFunction.hpp"
 #include "biaException.hpp"
 
 
@@ -92,11 +93,29 @@ public:
 	{
 		throw exception::BadCallException("Cannot be tested.");
 	}
-	virtual BiaMember * GetMember(const char * p_szName) override;
+	inline virtual BiaMember * GetMember(const char * p_szName) override
+	{
+		throw exception::SymbolException("Unknown member.");
+	}
+	template<typename _RETURN, typename... _ARGS>
+	inline BiaClassTemplate * SetFunction(std::string p_stName, _RETURN(*p_pFunction)(_ARGS...))
+	{
+		executable::BiaStaticFunction<_RETURN, _ARGS...> foo(p_pFunction);
+
+	
+
+		return this;
+	}
 
 public:
-	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override;
-	virtual void * GetData(const std::type_info & p_type, bool p_bConst) override;
+	inline virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override
+	{
+		throw exception::BadCastException("Invalid cast on uncastable object.");
+	}
+	inline virtual void * GetData(const std::type_info & p_type, bool p_bConst) override
+	{
+		throw exception::BadCastException("Invalid cast on uncastable object.");
+	}
 
 private:
 	std::shared_ptr<void> m_pMembers;
