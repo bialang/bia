@@ -216,8 +216,8 @@ protected:
 		CONST_STRING,
 		CUSTOM
 	};
-
-	bool m_bInitialized;	/**	If true this object was initialized, otherwise not.	*/
+	/**	If true this object was initialized, otherwise not.	*/
+	bool m_bInitialized;
 
 	/**
 	 * Returns the data depending on the native type.
