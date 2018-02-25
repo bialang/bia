@@ -377,6 +377,45 @@ inline ACTION CustomOperatorToken(const char * p_pcBuffer, size_t p_iSize, Token
 	return ERROR;
 }
 
+template<flag_type _FLAGS>
+inline ACTION AssignOperatorToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
+{
+	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
+	constexpr auto ERROR = _FLAGS & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR);
+
+	//Starting whitespaces
+	if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output))
+		return ERROR;
+
+	if (p_iSize > 4)
+		p_iSize = 4;
+
+	for (auto i = p_pcBuffer; p_output.iTokenSize++ < p_iSize; ++i)
+	{
+		switch (*i)
+		{
+		case '>':
+		case '<':
+		case '+':
+		case '-':
+		case '^':
+			//case '�':
+		case '~':
+		case '#':
+		case '!':
+			//case '�':
+		case '$':
+			break;
+		case '=':
+			return SUCCESS;
+		default:
+			return ERROR;
+		}
+	}
+
+	return ERROR;
+}
+
 template<flag_type _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {

@@ -93,9 +93,9 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 
-global a = "hi";
-global f = test.a;
-test->f(a);
+global a=4;
+
+
 
 )";
 
@@ -320,7 +320,7 @@ test->f(a);
 		pCode->Execute();
 
 		context.Run("global o = 61;", 14);
-		printf("Retrieved i: %i\n", *context.GetGlobal("o")->Cast<int>());
+		printf("Retrieved i: %i\n", *context.GetGlobal("a")->Cast<int>());
 	}
 	catch (const bia::exception::Exception & e)
 	{

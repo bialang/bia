@@ -157,14 +157,20 @@ public:
 	*/
 	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
-		m_llValue = compiler::ConstantOperationIntegral(m_llValue, p_nRight, p_unOperator);
+		if (p_unOperator == O_ASSIGN)
+			m_llValue = p_nRight;
+		else
+			m_llValue = compiler::ConstantOperationIntegral(m_llValue, p_nRight, p_unOperator);
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallInt_64().
 	*/
 	inline virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
 	{
-		m_llValue = compiler::ConstantOperationIntegral(m_llValue, p_llRight, p_unOperator);
+		if (p_unOperator == O_ASSIGN)
+			m_llValue = p_llRight;
+		else
+			m_llValue = compiler::ConstantOperationIntegral(m_llValue, p_llRight, p_unOperator);
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallFloat().

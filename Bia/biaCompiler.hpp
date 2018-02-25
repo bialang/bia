@@ -311,6 +311,40 @@ private:
 	template<bool _TEST>
 	inline const grammar::Report * HandleValue(grammar::report_range p_reports)
 	{
+		switch (p_reports.pBegin[1].unRuleId)
+		{
+		case grammar::BGR_VALUE_EXPRESSION:
+			HandleValueExpression<_TEST>(p_reports.pBegin[1].content.children);
+
+			break;
+		case grammar::BGR_VALUE_HELPER_0:
+		{
+			Value destination;
+			uint32_t unOperator = 0;
+			
+			//Get address of destination
+			destination.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin[1].content.token.pcString, p_reports.pBegin[1].content.token.iSize));
+
+			//Convert operator
+			memcpy(&unOperator, p_reports.pBegin[2].content.token.pcString, std::min(sizeof(unOperator), p_reports.pBegin[2].content.token.iSize));
+
+			//Handle right hand value
+			HandleValueExpression<_TEST>(p_reports.pBegin[3].content.children);
+
+			//Operate
+			HandleOperator(VALUE_TYPE::MEMBER, destination, unOperator, -1);
+
+			break;
+		}
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+
+		return p_reports.pEnd + 1;
+	}
+	template<bool _TEST>
+	inline const grammar::Report * HandleValueExpression(grammar::report_range p_reports)
+	{
 		using JUMP = machine::architecture::BiaToolset::JUMP;
 
 		//Handle all logical operators

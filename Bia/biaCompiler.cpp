@@ -234,27 +234,45 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 		switch (m_valueType)
 		{
 		case VALUE_TYPE::INT_32:
-			m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, m_value.nInt, BiaToolset::TemporaryMember(p_destinationIndex));
+			if (p_destinationIndex != -1)
+				m_toolset.Call(&framework::BiaMember::OperatorCallInt_32, p_leftValue.pMember, p_unOperator, m_value.nInt, BiaToolset::TemporaryMember(p_destinationIndex));
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallInt_32, p_leftValue.pMember, p_unOperator, m_value.nInt);
 
 			break;
 		case VALUE_TYPE::INT_64:
-			m_toolset.Call(&framework::BiaMember::OperatorCallInt_64, p_leftValue.pMember, p_unOperator, m_value.llInt, BiaToolset::TemporaryMember(p_destinationIndex));
+			if (p_destinationIndex != -1)
+				m_toolset.Call(&framework::BiaMember::OperatorCallInt_64, p_leftValue.pMember, p_unOperator, m_value.llInt, BiaToolset::TemporaryMember(p_destinationIndex));
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallInt_64, p_leftValue.pMember, p_unOperator, m_value.llInt);
 
 			break;
 		case VALUE_TYPE::FLOAT:
-			m_toolset.Call(&framework::BiaMember::OperatorCallFloat, p_leftValue.pMember, p_unOperator, m_value.rFloat, BiaToolset::TemporaryMember(p_destinationIndex));
+			if (p_destinationIndex != -1)
+				m_toolset.Call(&framework::BiaMember::OperatorCallFloat, p_leftValue.pMember, p_unOperator, m_value.rFloat, BiaToolset::TemporaryMember(p_destinationIndex));
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallFloat, p_leftValue.pMember, p_unOperator, m_value.rFloat);
 
 			break;
 		case VALUE_TYPE::DOUBLE:
-			m_toolset.Call(&framework::BiaMember::OperatorCallDouble, p_leftValue.pMember, p_unOperator, m_value.rDouble, BiaToolset::TemporaryMember(p_destinationIndex));
+			if (p_destinationIndex != -1)
+				m_toolset.Call(&framework::BiaMember::OperatorCallDouble, p_leftValue.pMember, p_unOperator, m_value.rDouble, BiaToolset::TemporaryMember(p_destinationIndex));
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallDouble, p_leftValue.pMember, p_unOperator, m_value.rDouble);
 
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+			if (p_destinationIndex != -1)
+				m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCall, p_leftValue.pMember, p_unOperator, m_value.pMember);
 
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
+			if (p_destinationIndex != -1)
+				m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCall, p_leftValue.pMember, p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
 
 			break;
 		default:

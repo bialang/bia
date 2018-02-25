@@ -50,10 +50,7 @@ public:
 			{
 				TokenOutput output{};
 
-				CharsetToken<Charset_whitespace, OPTIONAL_TOKEN>(p_pcBuffer, p_iSize, {}, output);
-
-				p_pcBuffer += output.iTokenSize;
-				p_iSize -= output.iTokenSize;
+				WhitespaceDeleter<STARTING_WHITESPACE_OPTIONAL_TOKEN>(p_pcBuffer, p_iSize, output);
 			}
 
 			//Start with rule 0

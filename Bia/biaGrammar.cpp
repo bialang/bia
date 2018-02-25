@@ -191,22 +191,36 @@ void BiaGrammar::InitializeRules()
 		RulePointerToken<BGR_MATH_TERM, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
-	//Value
-	m_interpreter.SetRule(BGR_VALUE, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
+	//Value expression
+	m_interpreter.SetRule(BGR_VALUE_EXPRESSION, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN>,
-		RulePointerToken<BGR_VALUE_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
+		RulePointerToken<BGR_VALUE_EXPRESSION_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
+		}));
+
+	//Value expression helper 0
+	m_interpreter.SetRule(BGR_VALUE_EXPRESSION_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
+		RulePointerToken<BGR_VALUE_EXPRESSION_HELPER_1, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		}));
+
+	//Value expression helper 1
+	m_interpreter.SetRule(BGR_VALUE_EXPRESSION_HELPER_1, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
+		KeywordToken<Operator_logical_and, NONE, BVO_LOGICAL_AND>,
+		KeywordToken<Operator_logical_or, NONE, BVO_LOGICAL_OR>
+		}));
+
+	//Value
+	m_interpreter.SetRule(BGR_VALUE, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP | BiaInterpreterRule::F_OR, {
+		//RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
+		RulePointerToken<BGR_VALUE_HELPER_0, FILLER_TOKEN>,
+		RulePointerToken<BGR_VALUE_EXPRESSION, FILLER_TOKEN>
 		}));
 
 	//Value helper 0
 	m_interpreter.SetRule(BGR_VALUE_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
-		RulePointerToken<BGR_VALUE_HELPER_1, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
-		}));
-
-	//Value helper 1
-	m_interpreter.SetRule(BGR_VALUE_HELPER_1, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
-		KeywordToken<Operator_logical_and, NONE, BVO_LOGICAL_AND>,
-		KeywordToken<Operator_logical_or, NONE, BVO_LOGICAL_OR>
+		IdentifierToken<NONE>,
+		AssignOperatorToken<STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_VALUE_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
 	//Member
