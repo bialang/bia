@@ -165,6 +165,7 @@
     <ClInclude Include="biaMachineSchein.hpp" />
     <ClInclude Include="biaMember.hpp" />
     <ClInclude Include="biaMemberCreator.hpp" />
+    <ClInclude Include="biaNativeOperator.hpp" />
     <ClInclude Include="biaNativeVariable.hpp" />
     <ClInclude Include="biaOperator.hpp" />
     <ClInclude Include="biaOutputStream.hpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="biaTemporaryStorage.hpp" />
     <ClInclude Include="biaToolset.hpp" />
     <ClInclude Include="biaArchitecture.hpp" />
+    <ClInclude Include="biaTypeTraits.hpp" />
     <ClInclude Include="biaUndefined.hpp" />
     <ClInclude Include="biaVariableHandler.hpp" />
     <ClInclude Include="resource.h" />

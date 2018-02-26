@@ -95,7 +95,7 @@ int main()
 
 global a=4;
 
-
+a +=34;
 
 )";
 

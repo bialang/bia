@@ -4,16 +4,18 @@
 #include <type_traits>
 
 #include "biaNativeVariable.hpp"
+#include "biaNativeOperator.hpp"
 #include "biaMember.hpp"
 #include "biaPrint.hpp"
 #include "biaException.hpp"
-#include "biaConstantOperation.hpp"
 #include "biaUndefined.hpp"
 
 
 namespace bia
 {
 namespace framework
+{
+namespace native
 {
 
 template<>
@@ -104,7 +106,7 @@ public:
 	{
 		static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
 
-		new(p_pDestination) BiaNativeVariable(compiler::ConstantOperationIntegral(m_llValue, p_nRight, p_unOperator));
+		new(p_pDestination) BiaNativeVariable(IntegralOperation(m_llValue, p_nRight, p_unOperator));
 	}
 	/**
 	 * @see	BiaMember::OperatorCallInt_64().
@@ -113,7 +115,7 @@ public:
 	{
 		static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
 
-		new(p_pDestination) BiaNativeVariable(compiler::ConstantOperationIntegral(m_llValue, p_llRight, p_unOperator));
+		new(p_pDestination) BiaNativeVariable(IntegralOperation(m_llValue, p_llRight, p_unOperator));
 	}
 	/**
 	 * @see	BiaMember::OperatorCallFloat().
@@ -157,34 +159,28 @@ public:
 	*/
 	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
-		if (p_unOperator == O_ASSIGN)
-			m_llValue = p_nRight;
-		else
-			m_llValue = compiler::ConstantOperationIntegral(m_llValue, p_nRight, p_unOperator);
+		m_llValue = IntegralOperation(m_llValue, p_nRight, p_unOperator);
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallInt_64().
 	*/
 	inline virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
 	{
-		if (p_unOperator == O_ASSIGN)
-			m_llValue = p_llRight;
-		else
-			m_llValue = compiler::ConstantOperationIntegral(m_llValue, p_llRight, p_unOperator);
+		m_llValue = IntegralOperation(m_llValue, p_llRight, p_unOperator);
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallFloat().
 	*/
 	inline virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override
 	{
-		m_llValue = static_cast<int64_t>(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
+		m_llValue = static_cast<int64_t>(ArithmeticOperation(m_llValue, p_rRight, p_unOperator));
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallDouble().
 	*/
 	inline virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override
 	{
-		m_llValue = static_cast<int64_t>(compiler::ConstantOperationBasic(m_llValue, p_rRight, p_unOperator));
+		m_llValue = static_cast<int64_t>(ArithmeticOperation(m_llValue, p_rRight, p_unOperator));
 	}
 	/**
 	 * @see	BiaMember::OperatorSelfCall().
@@ -262,7 +258,9 @@ private:
 	int64_t m_llValue;
 };
 
-typedef BiaNativeVariable<int64_t> BiaInt;
+}
+
+typedef native::BiaNativeVariable<int64_t> BiaInt;
 
 }
 }

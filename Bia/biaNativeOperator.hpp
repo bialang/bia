@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <type_traits>
 
 #include "biaMember.hpp"
@@ -10,16 +9,20 @@
 
 namespace bia
 {
-namespace compiler
+namespace framework
+{
+namespace native
 {
 
 template<typename _LEFT, typename _RIGHT>
-inline typename utility::OperationResult<_LEFT, _RIGHT>::type ConstantOperationBasic(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
+inline typename utility::OperationResult<_LEFT, _RIGHT>::type ArithmeticOperation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
 {
 	using namespace framework;
 
 	switch (p_unOperator)
 	{
+	case BiaMember::O_ASSIGN:
+		return p_right;
 	case BiaMember::O_PLUS:
 	case BiaMember::O_ASSIGN_PLUS:
 		return p_left + p_right;
@@ -38,7 +41,7 @@ inline typename utility::OperationResult<_LEFT, _RIGHT>::type ConstantOperationB
 }
 
 template<typename _LEFT, typename _RIGHT>
-inline typename utility::OperationResult<_LEFT, _RIGHT>::type ConstantOperationIntegral(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
+inline typename utility::OperationResult<_LEFT, _RIGHT>::type IntegralOperation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
 {
 	using namespace framework;
 
@@ -66,9 +69,10 @@ inline typename utility::OperationResult<_LEFT, _RIGHT>::type ConstantOperationI
 	case BiaMember::O_BITWISE_ASSIGN_LOGICAL_RIGHT_SHIFT:
 		return static_cast<std::make_unsigned<_LEFT>::type>(p_left) >> p_right;
 	default:
-		return ConstantOperationBasic(p_left, p_right, p_unOperator);
+		return ArithmeticOperation(p_left, p_right, p_unOperator);
 	}
 }
 
+}
 }
 }

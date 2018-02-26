@@ -64,6 +64,9 @@
     <Filter Include="Header Files\framework\object">
       <UniqueIdentifier>{7ee261cb-4157-4079-a001-26ce0906ad04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\framework\native">
+      <UniqueIdentifier>{d78ba02e-fd6b-4b8a-9130-2b3312803e66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -209,12 +212,6 @@
     <ClInclude Include="biaVariableHandler.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
-    <ClInclude Include="biaNativeVariable.hpp">
-      <Filter>Header Files\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="biaInt.hpp">
-      <Filter>Header Files\framework</Filter>
-    </ClInclude>
     <ClInclude Include="biaOperator.hpp">
       <Filter>Header Files\machine\link</Filter>
     </ClInclude>
@@ -256,6 +253,18 @@
     </ClInclude>
     <ClInclude Include="biaClassContext.hpp">
       <Filter>Header Files\framework\object</Filter>
+    </ClInclude>
+    <ClInclude Include="biaNativeOperator.hpp">
+      <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="biaTypeTraits.hpp">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="biaNativeVariable.hpp">
+      <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="biaInt.hpp">
+      <Filter>Header Files\framework\native</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
