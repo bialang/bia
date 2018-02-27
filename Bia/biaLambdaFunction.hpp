@@ -1,8 +1,11 @@
 #pragma once
 
 #include <new>
+#include <memory>
+#include <utility>
 
 #include "biaFunction.hpp"
+#include "biaUndefined.hpp"
 #include "biaException.hpp"
 #include "biaDisguisedCalled.hpp"
 
@@ -14,19 +17,8 @@ namespace framework
 namespace executable
 {
 
-template<typename, typename...>
-class BiaStaticFunction
-{
-public:
-	template<typename _DUMMY>
-	inline explicit BiaStaticFunction(_DUMMY)
-	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
-	}
-};
-
-template<typename _RETURN, typename... _ARGS>
-class BiaStaticFunction<_RETURN(*)(_ARGS...)> final : public BiaFunction
+template<typename _LAMBDA>
+class BiaLambdaFunction final : public BiaFunction
 {
 public:
 	/**
@@ -34,22 +26,25 @@ public:
 	 *
 	 * @param	p_pFunction	Defines the static function.
 	*/
-	inline explicit BiaStaticFunction(_RETURN(*p_pFunction)(_ARGS...)) : m_pFunction(p_pFunction) {}
-	inline ~BiaStaticFunction() = default;
+	inline explicit BiaLambdaFunction(_LAMBDA && p_lambda) : m_pLambda(new _LAMBDA(std::move(p_lambda))) {}
+	inline explicit BiaLambdaFunction(std::shared_ptr<_LAMBDA> p_pLambda) : m_pLambda(std::move(p_pLambda)) {}
+	inline ~BiaLambdaFunction() = default;
 
 	/**
 	 * @see	BiaMember::Print().
 	*/
 	inline virtual void Print() override
 	{
-		puts(typeid(m_pFunction).name());
+		puts(typeid(&_LAMBDA::operator()).name());
 	}
 	/**
 	 * @see	BiaMember::Call().
 	*/
 	inline virtual void Call(BiaMember*, BiaMember * p_pDestination) override
 	{
-		force::DisguisedCaller(m_pFunction, p_pDestination);
+		(*m_pLambda)();
+		//throw exception::AccessViolationException("hdaosdhloasdj");
+		//force::DisguisedCaller(m_pFunction, p_pDestination);
 	}
 	/**
 	 * @see	BiaMember::CallCount().
@@ -59,7 +54,7 @@ public:
 		va_list args;
 		va_start(args, p_unParameterCount);
 
-		force::DisguisedCallerCount(m_pFunction, p_pDestination, p_unParameterCount, args);
+		//force::DisguisedCallerCount(m_pFunction, p_pDestination, p_unParameterCount, args);
 
 		va_end(args);
 	}
@@ -75,7 +70,7 @@ public:
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		new(p_pDestination) BiaStaticFunction<_RETURN(*)(_ARGS...)>(m_pFunction);
+		new(p_pDestination) BiaLambdaFunction<_LAMBDA>(*this);
 	}
 	/**
 	 * @see	BiaMember::IsType().
@@ -95,8 +90,7 @@ protected:
 	}
 
 private:
-	/**	Defines the address to the static function.	*/
-	_RETURN(*m_pFunction)(_ARGS...);
+	std::shared_ptr<_LAMBDA> m_pLambda;
 };
 
 }

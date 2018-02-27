@@ -111,6 +111,13 @@ public:
 		return NTF_NONE;
 	}
 	/**
+	 * @see	BiaMember::Test().
+	*/
+	inline virtual int32_t Test() override
+	{
+		throw exception::BadCallException("Functions cannot be tested.");
+	}
+	/**
 	 * @see	BiaMember::GetMember().
 	*/
 	inline virtual BiaMember * GetMember(const char * p_szName) override

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <new>
-#include <type_traits>
 
 #include "biaFunction.hpp"
 #include "biaUndefined.hpp"
@@ -15,9 +14,6 @@ namespace framework
 {
 namespace executable
 {
-/*
-template<typename, typename, typename...>
-class BiaMemberFunction;*/
 
 template<typename, typename = void, typename...>
 class BiaMemberFunction
@@ -58,7 +54,7 @@ public:
 		//force::DisguisedCaller(m_pFunction, p_pDestination);
 	}
 	/**
-	* @see	BiaMember::CallCount().
+	 * @see	BiaMember::CallCount().
 	*/
 	inline virtual void CallCount(BiaMember*, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
 	{
@@ -70,37 +66,30 @@ public:
 		va_end(args);
 	}
 	/**
-	* @see	BiaMember::CallFormat().
+	 * @see	BiaMember::CallFormat().
 	*/
 	inline virtual void CallFormat(BiaMember*, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");
 	}
 	/**
-	* @see	BiaMember::Clone().
+	 * @see	BiaMember::Clone().
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
 		new(p_pDestination) BiaMemberFunction<_RETURN(_CLASS::*)(_ARGS...)>(m_pFunction);
 	}
 	/**
-	* @see	BiaMember::IsType().
+	 * @see	BiaMember::IsType().
 	*/
 	inline virtual bool IsType(const std::type_info & p_type) const override
 	{
 		return false;
 	}
-	/**
-	* @see	BiaMember::Test().
-	*/
-	virtual int32_t Test() override
-	{
-		return static_cast<int32_t>(m_pFunction != nullptr);
-	}
 
 protected:
 	/**
-	* @see	BiaMember::GetData().
+	 * @see	BiaMember::GetData().
 	*/
 	inline virtual void * GetData(const std::type_info & p_type, bool p_bConst) override
 	{
@@ -108,6 +97,7 @@ protected:
 	}
 
 private:
+	/**	Defines the address to the member function.	*/
 	_RETURN(_CLASS::*m_pFunction)(_ARGS...);
 };
 

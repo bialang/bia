@@ -95,9 +95,9 @@ int main()
 
 global a=4;
 
-lul(3);
+wd();
 
-a +=34;
+a += 34;
 
 
 )";

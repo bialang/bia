@@ -269,6 +269,9 @@
     <ClInclude Include="biaMemberFunction.hpp">
       <Filter>Header Files\framework\executable</Filter>
     </ClInclude>
+    <ClInclude Include="biaLambdaFunction.hpp">
+      <Filter>Header Files\framework\executable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

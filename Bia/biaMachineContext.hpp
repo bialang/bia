@@ -16,6 +16,7 @@
 
 #include "biaStaticFunction.hpp"
 #include "biaMemberFunction.hpp"
+#include "biaLambdaFunction.hpp"
 
 
 namespace bia
@@ -53,6 +54,13 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	auto pasd = m_storage.CreateElement<framework::executable::BiaMemberFunction<decltype(&BiaMachineContext::lul)>>(&BiaMachineContext::lul);
 
 	m_index.insert({ "lul", pasd });
+
+	auto lul = []() {
+		puts("hiasd askdw");
+	};
+	auto wd = m_storage.CreateElement<framework::executable::BiaLambdaFunction<decltype(lul)>>(std::move(lul));
+
+	m_index.insert({ "wd", wd });
 }
 	//void AddScript(std::string p_stScriptName, script);
 	//void RemoveScript(std::string p_stScriptName);
