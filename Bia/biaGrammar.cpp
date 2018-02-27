@@ -21,23 +21,29 @@ void BiaGrammar::InitializeRules()
 
 	//Root
 	m_interpreter.SetRule(BGR_ROOT, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
-		RulePointerToken<BGR_ROOT_HELPER_SINGLE_STATEMENT, FILLER_TOKEN>,
+		RulePointerToken<BGR_ROOT_HELPER_1, FILLER_TOKEN>,
 		RulePointerToken<BGR_ROOT_HELPER_0, FILLER_TOKEN> }));
 
 	//Root helper 0
 	m_interpreter.SetRule(BGR_ROOT_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Operator_scope_open, FILLER_TOKEN>,
-		RulePointerToken<BGR_ROOT_HELPER_SINGLE_STATEMENT, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_ROOT_HELPER_1, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		KeywordToken<Operator_scope_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
-	//Root helper single statement
-	m_interpreter.SetRule(BGR_ROOT_HELPER_SINGLE_STATEMENT, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
+	//Root helper 1
+	m_interpreter.SetRule(BGR_ROOT_HELPER_1, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
 		RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
 		RulePointerToken<BGR_IF, FILLER_TOKEN>,
 		RulePointerToken<BGR_PRE_TEST_LOOP, FILLER_TOKEN>,
 		RulePointerToken<BGR_PRINT, FILLER_TOKEN>,
-		RulePointerToken<BGR_VALUE, FILLER_TOKEN>
+		RulePointerToken<BGR_ROOT_HELPER_2, FILLER_TOKEN>
+		}));
+
+	//Root helper 2
+	m_interpreter.SetRule(BGR_ROOT_HELPER_2, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
+		RulePointerToken<BGR_VALUE, FILLER_TOKEN>,
+		KeywordToken<Operator_semicolon, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
 	//Variable declaration
