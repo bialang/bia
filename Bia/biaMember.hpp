@@ -116,7 +116,8 @@ public:
 	 * Calls this function with any type as parameter.
 	 *
 	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
-	 * @param	p_szFormat	Defines the type order of the parameters.
+	 * @param	p_unParameterCount	Defines how many parameters are passed.
+	 * @param	p_pcFormat	Defines the type order of the parameters.
 	 * @param	...	Defines the passed parameters.
 	 *
 	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
@@ -124,7 +125,7 @@ public:
 	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
 	 * @throws	exception::InstanceException	Thrown when the passed instance is invalid.
 	*/
-	virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, const char * p_szFormat, ...) = 0;
+	virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) = 0;
 	/**
 	 * @throws	exception::OperatorException	Thrown when the operation is not supported.
 	*/

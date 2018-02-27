@@ -165,6 +165,7 @@
     <ClInclude Include="biaMachineSchein.hpp" />
     <ClInclude Include="biaMember.hpp" />
     <ClInclude Include="biaMemberCreator.hpp" />
+    <ClInclude Include="biaMemberFunction.hpp" />
     <ClInclude Include="biaNativeOperator.hpp" />
     <ClInclude Include="biaNativeVariable.hpp" />
     <ClInclude Include="biaOperator.hpp" />

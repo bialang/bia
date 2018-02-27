@@ -33,12 +33,11 @@ const char * BiaNameManager::GetNameAddress(const char * p_pcString, size_t p_iS
 	//Create new entry
 	if (pResult == m_index.end())
 	{
-		auto allocation = m_pAllocator->Allocate(p_iSize + 1, BiaAllocator::MEMORY_TYPE::NORMAL);
+		auto allocation = m_pAllocator->Allocate(p_iSize, BiaAllocator::MEMORY_TYPE::NORMAL);
 		auto pcString = static_cast<char*>(allocation.pAddress);
 
 		//Copy string
 		memcpy(pcString, p_pcString, p_iSize);
-		pcString[p_iSize] = 0;
 
 		pResult = m_index.insert(StringEntry(allocation)).first;
 	}

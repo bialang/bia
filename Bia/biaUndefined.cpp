@@ -24,7 +24,7 @@ void BiaUndefined::CallCount(BiaMember*, BiaMember*, parameter_count, ...)
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void BiaUndefined::CallFormat(BiaMember*, BiaMember*, const char*, ...)
+void BiaUndefined::CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }

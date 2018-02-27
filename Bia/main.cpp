@@ -95,7 +95,10 @@ int main()
 
 global a=4;
 
+lul(3);
+
 a +=34;
+
 
 )";
 

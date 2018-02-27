@@ -31,7 +31,7 @@ public:
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	virtual void CallFormat(BiaMember*, BiaMember*, const char*, ...) override;
+	virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override;
 	/**
 	 * @see	BiaMember::OperatorCall().
 	*/

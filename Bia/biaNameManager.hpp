@@ -23,6 +23,7 @@ public:
 	BiaNameManager(BiaNameManager && p_move);
 	BiaNameManager(const BiaNameManager&) = delete;
 	~BiaNameManager();
+
 	const char * GetNameAddress(const char * p_pcString, size_t p_iSize);
 
 private:

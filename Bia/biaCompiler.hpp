@@ -59,8 +59,7 @@ private:
 		TEMPORARY_MEMBER,
 		TEST_VALUE_REGISTER,	/**	Defines that the test value is stored in the test register.	*/
 		TEST_VALUE_CONSTANT,	/**	Defines that the test value is known at compile time.	*/
-		PARAMETER_COUNT,
-		PARAMETER_FORMAT,
+		PARAMETER,
 		RESULT_REGISTER,	/**	Defines that the result is stored in the result register.	*/
 		NONE,
 	};
@@ -81,10 +80,10 @@ private:
 		bool bTestValue;	/**	Defines the constant test value.	*/
 		struct Parameter
 		{
+			const char * pcFormat;
 			framework::BiaMember::parameter_count parameterCount;
 			machine::architecture::BiaToolset::pass_count quartetsPassed;
-		} parameterCount;
-		const char * szParameterFormat;
+		} parameter;
 	};
 	
 	machine::architecture::BiaToolset m_toolset;	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
@@ -161,16 +160,39 @@ private:
 	void HandleString(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
 	template<typename _INSTANCE, typename _BIA_INSTANCE>
-	inline void HandleFunctionCall(Value::Parameter p_paramter, _INSTANCE p_instance, _BIA_INSTANCE p_biaInstance)
+	inline void HandleFunctionCall(Value::Parameter p_paramter, _INSTANCE p_instance, _BIA_INSTANCE p_biaInstance, BiaTempCounter::counter_type p_destination)
 	{
+		//Parameters were passed
 		if (p_paramter.parameterCount)
-			m_toolset.Call(p_paramter.quartetsPassed, &framework::BiaMember::CallCount, p_instance, p_biaInstance, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), p_paramter.parameterCount);
+		{
+			//Formatted parameters
+			if (p_paramter.pcFormat)
+				m_toolset.Call(p_paramter.quartetsPassed, &framework::BiaMember::CallFormat, p_instance, p_biaInstance, machine::architecture::BiaToolset::TemporaryMember(p_destination), p_paramter.parameterCount, p_paramter.pcFormat);
+			//Pure members
+			else
+				m_toolset.Call(p_paramter.quartetsPassed, &framework::BiaMember::CallCount, p_instance, p_biaInstance, machine::architecture::BiaToolset::TemporaryMember(p_destination), p_paramter.parameterCount);
+		}
 		//Call without any parameters
 		else
-			m_toolset.Call(&framework::BiaMember::Call, p_instance, p_biaInstance, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));
+			m_toolset.Call(&framework::BiaMember::Call, p_instance, p_biaInstance, machine::architecture::BiaToolset::TemporaryMember(p_destination));
+
+
+		m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
+		m_value.temporaryResultIndex = p_destination;
 	}
 	const char * GetNameAddress(const grammar::Report * p_pReport);
 	const char * GetStringLocation(Value::String p_string);
+	/**
+	 * Returns the format string address bound to the context.
+	 *
+	 * @since	3.56.116.672
+	 * @date	27-Feb-18
+	 *
+	 * @param	p_string	Defines the string that should be copied.
+	 *
+	 * @return	The format address bound to the context.
+	*/
+	const char * GetParameterFormat(Value::String p_string);
 	//framework::BiaMember * GetAddressOfVariable();
 	template<uint32_t _RULE_ID, uint32_t _DEPTH, bool _LEFT>
 	inline const grammar::Report * FindNextChild(const grammar::Report * p_pBegin, const grammar::Report * p_pEnd)
@@ -297,6 +319,8 @@ private:
 	template<bool _TEST, typename _LAMBDA>
 	inline const grammar::Report * HandleValue(grammar::report_range p_reports, _LAMBDA && p_callback)
 	{
+		auto lastCurrent = m_counter.PeekCurrent();
+
 		//Handle value
 		HandleValue<_TEST>(p_reports);
 
@@ -304,7 +328,7 @@ private:
 		p_callback();
 		
 		//Pop value
-		m_counter.Pop();
+		m_counter.Pop(lastCurrent);
 		
 		return p_reports.pEnd + 1;
 	}

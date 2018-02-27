@@ -58,7 +58,7 @@ public:
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	inline virtual void CallFormat(BiaMember*, BiaMember*, const char*, ...) override
+	inline virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");
 	}

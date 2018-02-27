@@ -4,6 +4,7 @@
 #include <type_traits>
 
 #include "biaFunction.hpp"
+#include "biaUndefined.hpp"
 #include "biaException.hpp"
 #include "biaDisguisedCalled.hpp"
 
@@ -14,20 +15,23 @@ namespace framework
 {
 namespace executable
 {
+/*
+template<typename, typename, typename...>
+class BiaMemberFunction;*/
 
-template<typename, typename...>
-class BiaStaticFunction
+template<typename, typename = void, typename...>
+class BiaMemberFunction
 {
 public:
 	template<typename _DUMMY>
-	inline explicit BiaStaticFunction(_DUMMY)
+	inline explicit BiaMemberFunction(_DUMMY)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
 	}
 };
 
-template<typename _RETURN, typename... _ARGS>
-class BiaStaticFunction<_RETURN(*)(_ARGS...)> final : public BiaFunction
+template<typename _CLASS, typename _RETURN, typename... _ARGS>
+class BiaMemberFunction<_RETURN(_CLASS::*)(_ARGS...)> final : public BiaFunction
 {
 public:
 	/**
@@ -35,8 +39,8 @@ public:
 	 *
 	 * @param	p_pFunction	Defines the static function.
 	*/
-	inline explicit BiaStaticFunction(_RETURN(*p_pFunction)(_ARGS...)) : m_pFunction(p_pFunction) {}
-	inline ~BiaStaticFunction() = default;
+	inline explicit BiaMemberFunction(_RETURN(_CLASS::*p_pFunction)(_ARGS...)) : m_pFunction(p_pFunction) {}
+	inline ~BiaMemberFunction() = default;
 
 	/**
 	 * @see	BiaMember::Print().
@@ -50,71 +54,44 @@ public:
 	*/
 	inline virtual void Call(BiaMember*, BiaMember * p_pDestination) override
 	{
-		force::DisguisedCaller(m_pFunction, p_pDestination);
+		throw exception::AccessViolationException("hdaosdhloasdj");
+		//force::DisguisedCaller(m_pFunction, p_pDestination);
 	}
 	/**
-	 * @see	BiaMember::CallCount().
+	* @see	BiaMember::CallCount().
 	*/
 	inline virtual void CallCount(BiaMember*, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
 	{
 		va_list args;
 		va_start(args, p_unParameterCount);
 
-		force::DisguisedCallerCount(m_pFunction, p_pDestination, p_unParameterCount, args);
+		//force::DisguisedCallerCount(m_pFunction, p_pDestination, p_unParameterCount, args);
 
 		va_end(args);
 	}
 	/**
-	 * @see	BiaMember::CallFormat().
+	* @see	BiaMember::CallFormat().
 	*/
 	inline virtual void CallFormat(BiaMember*, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");
-		/*va_list parameters;
-		va_start(parameters, p_szFormat);
-
-		while (true)
-		{
-			switch (*p_szFormat++)
-			{
-			case 0:
-				goto gt_break;
-			case 'M':
-				va_arg(parameters, BiaMember*);
-			case 'i':
-				va_arg(parameters, int32_t);
-			case 'I':
-				va_arg(parameters, int64_t);
-			case 'f':
-				va_arg(parameters, float);
-			case 'd':
-				va_arg(parameters, double);
-			case 's':
-			default:
-				break;
-			}
-		}
-
-	gt_break:;
-
-		va_end(parameters);*/
 	}
 	/**
-	 * @see	BiaMember::Clone().
+	* @see	BiaMember::Clone().
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		new(p_pDestination) BiaStaticFunction<_RETURN(*)(_ARGS...)>(m_pFunction);
+		new(p_pDestination) BiaMemberFunction<_RETURN(_CLASS::*)(_ARGS...)>(m_pFunction);
 	}
 	/**
-	 * @see	BiaMember::IsType().
+	* @see	BiaMember::IsType().
 	*/
 	inline virtual bool IsType(const std::type_info & p_type) const override
 	{
 		return false;
 	}
 	/**
-	 * @see	BiaMember::Test().
+	* @see	BiaMember::Test().
 	*/
 	virtual int32_t Test() override
 	{
@@ -123,7 +100,7 @@ public:
 
 protected:
 	/**
-	 * @see	BiaMember::GetData().
+	* @see	BiaMember::GetData().
 	*/
 	inline virtual void * GetData(const std::type_info & p_type, bool p_bConst) override
 	{
@@ -131,7 +108,7 @@ protected:
 	}
 
 private:
-	_RETURN(*m_pFunction)(_ARGS...);
+	_RETURN(_CLASS::*m_pFunction)(_ARGS...);
 };
 
 }

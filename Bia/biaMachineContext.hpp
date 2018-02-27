@@ -15,6 +15,7 @@
 
 
 #include "biaStaticFunction.hpp"
+#include "biaMemberFunction.hpp"
 
 
 namespace bia
@@ -48,6 +49,10 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	auto pAddress = m_storage.CreateElement<framework::executable::BiaStaticFunction<decltype(&heyho)>>(heyho);
 
 	m_index.insert({ "test", pAddress });
+
+	auto pasd = m_storage.CreateElement<framework::executable::BiaMemberFunction<decltype(&BiaMachineContext::lul)>>(&BiaMachineContext::lul);
+
+	m_index.insert({ "lul", pasd });
 }
 	//void AddScript(std::string p_stScriptName, script);
 	//void RemoveScript(std::string p_stScriptName);
@@ -55,7 +60,10 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	void Run(const void * p_pScript, size_t p_iSize);
 	framework::BiaMember * GetGlobal(const std::string & p_stVariable);
 	framework::BiaMember * GetLocal(const std::string & p_stScriptName, const std::string & p_stVariable) = delete;
+	void lul()
+	{
 
+	}
 //private:
 	//friend BiaCompiler;
 

@@ -19,7 +19,7 @@ struct Exception
 	virtual ~Exception() = default;
 	inline virtual void Print() const
 	{
-		printf("%s\n", stMessage.c_str());
+		printf("%s: %s\n", typeid(*this).name(), stMessage.c_str());
 	}
 };
 

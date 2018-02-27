@@ -365,9 +365,14 @@ const char * BiaCompiler::GetStringLocation(Value::String p_string)
 	stString.reserve(p_string.iSize);
 
 	//Parse string
-	stString.append(p_string.pcString, p_string.iSize);
+	stString.assign(p_string.pcString, p_string.iSize);
 
 	return m_context.StringAddressOf(std::move(stString));
+}
+
+const char * BiaCompiler::GetParameterFormat(Value::String p_string)
+{
+	return m_context.NameAddressOf(p_string.pcString, p_string.iSize);
 }
 
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
@@ -691,43 +696,25 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 		{
 			switch (parameterType)
 			{
-			case VALUE_TYPE::PARAMETER_COUNT:
+			case VALUE_TYPE::PARAMETER:
 			{
 				switch (m_valueType)
 				{
 				case VALUE_TYPE::MEMBER:
 				{
-					HandleFunctionCall(parameterValue.parameterCount, m_value.pMember, static_cast<framework::BiaMember*>(0));
-					//Call with member parameters only
-					/*if (parameterValue.parameterCount.parameterCount)
-						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
-					//Call without any parameters
-					else
-						m_toolset.Call(&framework::BiaMember::Call, m_value.pMember, machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));*/
+					HandleFunctionCall(parameterValue.parameter, m_value.pMember, static_cast<framework::BiaMember*>(0), m_counter.Current());
 
 					break;
 				}
 				case VALUE_TYPE::TEMPORARY_MEMBER:
 				{
-					HandleFunctionCall(parameterValue.parameterCount, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), static_cast<framework::BiaMember*>(0));
-					//Call with member parameters only
-					/*if (parameterValue.parameterCount.parameterCount)
-						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
-					//Call without any parameters
-					else
-						m_toolset.Call(&framework::BiaMember::Call, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));*/
+					HandleFunctionCall(parameterValue.parameter, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), static_cast<framework::BiaMember*>(0), m_counter.Current());
 
 					break;
 				}
 				case VALUE_TYPE::RESULT_REGISTER:
 				{
-					HandleFunctionCall(parameterValue.parameterCount, machine::architecture::BiaToolset::ResultValue(), static_cast<framework::BiaMember*>(0));
-					//Call with member parameters only
-					/*if (parameterValue.parameterCount.parameterCount)
-						m_toolset.Call(parameterValue.parameterCount.quartetsPassed, &framework::BiaMember::CallCount, machine::architecture::BiaToolset::ResultValue(), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()), parameterValue.parameterCount.parameterCount);
-					//Call without any parameters
-					else
-						m_toolset.Call(&framework::BiaMember::Call, machine::architecture::BiaToolset::ResultValue(), machine::architecture::BiaToolset::TemporaryMember(m_counter.Current()));*/
+					HandleFunctionCall(parameterValue.parameter, machine::architecture::BiaToolset::ResultValue(), static_cast<framework::BiaMember*>(0), m_counter.Current());
 
 					break;
 				}
@@ -737,16 +724,10 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 				break;
 			}
-			case VALUE_TYPE::PARAMETER_FORMAT:
-				//m_toolset.Call(&framework::BiaMember::CallFormat, m_value.pMember, parameterValue.szParameterFormat);
-
-				//break;
 			default:
 				BIA_COMPILER_DEV_INVALID
 			}
 			
-			m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
-			m_value.temporaryResultIndex = m_counter.Current();
 			p_reports.pBegin = pNext;
 			pNext = nullptr;
 
@@ -811,13 +792,18 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 			switch (m_valueType)
 			{
 			case VALUE_TYPE::INT_32:
+				quartetsPassed += m_toolset.Pass(m_value.nInt);
+				stFormat += 'i';
+				bUseCounter = false;
+
+				break;
 			case VALUE_TYPE::INT_64:
 				quartetsPassed += m_toolset.Pass(m_value.llInt);
 				stFormat += 'I';
 				bUseCounter = false;
 
 				break;
-			/*case VALUE_TYPE::FLOAT:
+			case VALUE_TYPE::FLOAT:
 				quartetsPassed += m_toolset.Pass(m_value.rFloat);
 				stFormat += 'f';
 				bUseCounter = false;
@@ -828,8 +814,13 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 				stFormat += 'd';
 				bUseCounter = false;
 
-				break;*/
-			//case VALUE_TYPE::STRING:
+				break;
+			case VALUE_TYPE::STRING:
+				quartetsPassed += m_toolset.Pass(GetStringLocation(m_value.string));
+				stFormat += 's';
+				bUseCounter = false;
+
+				break;
 			case VALUE_TYPE::MEMBER:
 				quartetsPassed += m_toolset.Pass(m_value.pMember);
 				stFormat += 'M';
@@ -847,20 +838,22 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 	}
 
 	//Only members or nothing was passed
+	m_valueType = VALUE_TYPE::PARAMETER;
+
+	//Pure
 	if (bUseCounter)
 	{
-		m_valueType = VALUE_TYPE::PARAMETER_COUNT;
-		m_value.parameterCount.parameterCount = parameterCounter;
-		m_value.parameterCount.quartetsPassed = quartetsPassed;
+		m_value.parameter.pcFormat = nullptr;
+		m_value.parameter.parameterCount = parameterCounter;
+		m_value.parameter.quartetsPassed = quartetsPassed;
 	}
-	//Mixed
+	//Formatted
 	else
 	{
 		//Allocate string
-		const char * szParameterFormat = nullptr;
-
-		m_valueType = VALUE_TYPE::PARAMETER_FORMAT;
-		m_value.szParameterFormat = szParameterFormat;
+		m_value.parameter.pcFormat = GetParameterFormat({ stFormat.c_str(), stFormat.length() });
+		m_value.parameter.parameterCount = parameterCounter;
+		m_value.parameter.quartetsPassed = quartetsPassed;
 	}
 
 	return p_reports.pEnd + 1;

@@ -2,6 +2,7 @@
 
 #include "biaMember.hpp"
 #include "biaException.hpp"
+#include "biaUndefined.hpp"
 
 
 namespace bia
@@ -14,6 +15,17 @@ namespace executable
 class BiaFunction : public BiaMember
 {
 public:
+	/**
+	 * @see	BiaMember::Undefine().
+	*/
+	virtual void Undefine() override
+	{
+		//Destroy this
+		this->~BiaFunction();
+
+		//Undefine
+		new(this) BiaUndefined();
+	}
 	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
