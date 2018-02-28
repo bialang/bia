@@ -55,8 +55,8 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 
 	m_index.insert({ "lul", pasd });
 
-	auto lul = []() {
-		puts("hiasd askdw");
+	auto lul = [](int32_t i) {
+		printf("hiasd askdw %i\n", i);
 	};
 	auto wd = m_storage.CreateElement<framework::executable::BiaLambdaFunction<decltype(lul)>>(std::move(lul));
 

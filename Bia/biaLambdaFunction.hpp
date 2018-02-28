@@ -42,9 +42,7 @@ public:
 	*/
 	inline virtual void Call(BiaMember*, BiaMember * p_pDestination) override
 	{
-		(*m_pLambda)();
-		//throw exception::AccessViolationException("hdaosdhloasdj");
-		//force::DisguisedCaller(m_pFunction, p_pDestination);
+		force::DisguisedCaller(&_LAMBDA::operator(), m_pLambda.get(), p_pDestination);
 	}
 	/**
 	 * @see	BiaMember::CallCount().
@@ -54,7 +52,7 @@ public:
 		va_list args;
 		va_start(args, p_unParameterCount);
 
-		//force::DisguisedCallerCount(m_pFunction, p_pDestination, p_unParameterCount, args);
+		force::DisguisedCallerCount(&_LAMBDA::operator(), m_pLambda.get(), p_pDestination, p_unParameterCount, args);
 
 		va_end(args);
 	}
@@ -63,7 +61,12 @@ public:
 	*/
 	inline virtual void CallFormat(BiaMember*, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
 	{
-		throw exception::BadCallException("Invalid function call on native type.");
+		va_list args;
+		va_start(args, p_pcFormat);
+
+		force::DisguisedCallerFormat(&_LAMBDA::operator(), m_pLambda.get(), p_pDestination, p_unParameterCount, p_pcFormat, args);
+
+		va_end(args);
 	}
 	/**
 	 * @see	BiaMember::Clone().

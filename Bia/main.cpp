@@ -95,10 +95,7 @@ int main()
 
 global a=4;
 
-wd();
-
-a += 34;
-
+wd(a);
 
 )";
 
