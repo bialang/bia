@@ -55,8 +55,8 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 
 	m_index.insert({ "lul", pasd });
 
-	auto lul = [](long i) {
-		printf("hiasd askdw %i\n", i);
+	auto lul = [](int i, const char*, int) {
+		//printf("hiasd askdw %f\n", *(float*)&i);
 	};
 	auto wd = m_storage.CreateElement<framework::executable::BiaLambdaFunction<decltype(lul)>>(std::move(lul));
 
@@ -120,6 +120,7 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	*/
 	void DestructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppAddresses);
 	const char * NameAddressOf(const char * p_pcName, size_t p_iSize);
+	const char * FormatAddressOf(const char * p_pcName, size_t p_iSize);
 	const char * StringAddressOf(std::string p_stString);
 	/**
 	 * Returns the address of the member.

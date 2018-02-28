@@ -174,7 +174,9 @@ public:
 	template<typename T, typename... _ARGS>
 	inline pass_count Pass(T p_value, _ARGS... p_args)
 	{
-		return Pass(p_args...) + Pass(p_value);
+		auto passed = Pass(p_args...);
+
+		return passed + Pass(p_value);
 	}
 	template<typename T>
 	inline pass_count Pass(T p_value)

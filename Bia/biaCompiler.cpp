@@ -372,7 +372,7 @@ const char * BiaCompiler::GetStringLocation(Value::String p_string)
 
 const char * BiaCompiler::GetParameterFormat(Value::String p_string)
 {
-	return m_context.NameAddressOf(p_string.pcString, p_string.iSize);
+	return m_context.FormatAddressOf(p_string.pcString, p_string.iSize);
 }
 
 const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_range p_reports)
@@ -850,7 +850,6 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 	//Formatted
 	else
 	{
-		//Allocate string
 		m_value.parameter.pcFormat = GetParameterFormat({ stFormat.c_str(), stFormat.length() });
 		m_value.parameter.parameterCount = parameterCounter;
 		m_value.parameter.quartetsPassed = quartetsPassed;

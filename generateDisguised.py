@@ -207,11 +207,11 @@ inline void {function_name}({return}({class_signature}*p_pFunction)({args}){inst
 			filler["template_middle"] += ("" if not filler["template_begin"] else ", ") + "typename _" + str(i)
 
 			if type == "count":
-				filler["preparations"] += """
-	_{0} v{0} = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * {0}))->Cast<_{0}>();""".format(i)
+				filler["preparations"] = """
+	_{0} v{0} = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * {0}))->Cast<_{0}>();""".format(i) + filler["preparations"]
 			else:
-				filler["preparations"] += """
-	_{0} v{0} = FormatCast<_{0}>(p_args, p_pcFormat);""".format(i)
+				filler["preparations"] = """
+	_{0} v{0} = FormatCast<_{0}>(p_args, p_pcFormat);""".format(i) + filler["preparations"]
 			
 			if template == "static_void":
 				filler["template_begin"] = "template<"

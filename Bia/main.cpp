@@ -57,6 +57,23 @@ void Run(void(*foo)(_ARGS...), int n, ...)
 	va_end(vl);
 }
 
+template<typename _LAMBDA>
+inline void Test(int p_nCount, _LAMBDA && p_lambda)
+{
+	auto time_taken = 0ll;
+
+	for (auto k = 0; k < p_nCount; ++k)
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+
+		p_lambda();
+
+		time_taken += std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
+	}
+
+	printf("Time taken: %f ms\n", time_taken / static_cast<double>(p_nCount));
+}
+//7573
 int main()
 {
 	/*Run(test, 2, 4, 434);
@@ -94,9 +111,15 @@ int main()
 	char script[] = R"(
 
 global a=4;
+global i = 10000000;
+global d = 34;
+global s = "hi";
 
-wd(34);
-
+while(i)
+{
+wd(34, "hi", d);
+i = i -1;
+}
 )";
 
 	/*
@@ -317,7 +340,9 @@ wd(34);
 
 	try
 	{
-		pCode->Execute();
+		Test(5, [&] {
+			pCode->Execute();
+		});
 
 		context.Run("global o = 61;", 14);
 		printf("Retrieved i: %i\n", *context.GetGlobal("a")->Cast<int>());

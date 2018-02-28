@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <utility>
+#include <algorithm>
 
 
 namespace bia
@@ -38,6 +39,26 @@ const char * BiaNameManager::GetNameAddress(const char * p_pcString, size_t p_iS
 
 		//Copy string
 		memcpy(pcString, p_pcString, p_iSize);
+
+		pResult = m_index.insert(StringEntry(allocation)).first;
+	}
+
+	return pResult->pcString;
+}
+
+const char * BiaNameManager::GetFormatAddress(const char * p_pcString, size_t p_iSize)
+{
+	auto pResult = m_index.find({ p_pcString,p_iSize });
+
+	//Create new entry
+	if (pResult == m_index.end())
+	{
+		auto allocation = m_pAllocator->Allocate(p_iSize, BiaAllocator::MEMORY_TYPE::NORMAL);
+		auto pcString = static_cast<char*>(allocation.pAddress);
+
+		//Copy string
+		for (size_t i = 0; p_iSize--; ++i)
+			pcString[i] = p_pcString[p_iSize];
 
 		pResult = m_index.insert(StringEntry(allocation)).first;
 	}

@@ -27,7 +27,7 @@ void BiaGrammar::InitializeRules()
 	//Root helper 0
 	m_interpreter.SetRule(BGR_ROOT_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Operator_scope_open, FILLER_TOKEN>,
-		RulePointerToken<BGR_ROOT_HELPER_1, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_ROOT_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		KeywordToken<Operator_scope_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 

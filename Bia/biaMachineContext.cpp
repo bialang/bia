@@ -81,6 +81,11 @@ const char * BiaMachineContext::NameAddressOf(const char * p_pcName, size_t p_iS
 	return m_nameManager.GetNameAddress(p_pcName, p_iSize);
 }
 
+const char * BiaMachineContext::FormatAddressOf(const char * p_pcName, size_t p_iSize)
+{
+	return m_nameManager.GetFormatAddress(p_pcName, p_iSize);
+}
+
 const char * BiaMachineContext::StringAddressOf(std::string p_stString)
 {
 	return "dummy";

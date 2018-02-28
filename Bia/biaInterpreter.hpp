@@ -68,6 +68,8 @@ public:
 				break;
 		}
 
+		puts(p_pcBuffer);
+
 		return ciSize - p_iSize;
 	}
 	/**

@@ -25,6 +25,7 @@ public:
 	~BiaNameManager();
 
 	const char * GetNameAddress(const char * p_pcString, size_t p_iSize);
+	const char * GetFormatAddress(const char * p_pcString, size_t p_iSize);
 
 private:
 	struct StringEntry
