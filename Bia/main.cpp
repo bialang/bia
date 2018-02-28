@@ -110,16 +110,9 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 
-global a=4;
-global i = 10000000;
-global d = 34;
-global s = "hi";
-
-while(i)
-{
-wd(34, "hi", d);
-i = i -1;
-}
+global t = obj();
+print t;
+t.hey("lul");
 )";
 
 	/*
@@ -340,12 +333,12 @@ i = i -1;
 
 	try
 	{
-		Test(5, [&] {
+		Test(1, [&] {
 			pCode->Execute();
 		});
 
-		context.Run("global o = 61;", 14);
-		printf("Retrieved i: %i\n", *context.GetGlobal("a")->Cast<int>());
+		//context.Run("global o = 61;", 14);
+		//printf("Retrieved i: %i\n", *context.GetGlobal("a")->Cast<int>());
 	}
 	catch (const bia::exception::Exception & e)
 	{

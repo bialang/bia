@@ -13,7 +13,6 @@ namespace machine
 namespace link
 {
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateCopy(framework::BiaMember * p_pMember, framework::BiaMember * p_pSource));
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_32(framework::BiaMember * p_pMember, int32_t p_nValue));
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_64(framework::BiaMember * p_pMember, int64_t p_llValue));
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt0(framework::BiaMember * p_pMember));

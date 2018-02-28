@@ -194,7 +194,7 @@ public:
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		new(p_pDestination) BiaNativeVariable(m_llValue);
+		p_pDestination->ReplaceObject<BiaNativeVariable<int64_t>>(m_llValue);
 	}
 	/**
 	 * @see	BiaMember::IsType().

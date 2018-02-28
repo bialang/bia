@@ -12,15 +12,6 @@ namespace machine
 namespace link
 {
 
-BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateCopy(framework::BiaMember * p_pMember, framework::BiaMember * p_pSource))
-{
-	//Destruct old object
-	p_pMember->~BiaMember();
-
-	//Clone
-	p_pSource->Clone(p_pMember);
-}
-
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateInt_32(framework::BiaMember * p_pMember, int32_t p_nValue))
 {
 	//Destruct old object

@@ -17,6 +17,7 @@
 #include "biaStaticFunction.hpp"
 #include "biaMemberFunction.hpp"
 #include "biaLambdaFunction.hpp"
+#include "biaClassTemplate.hpp"
 
 
 namespace bia
@@ -61,6 +62,18 @@ BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m
 	auto wd = m_storage.CreateElement<framework::executable::BiaLambdaFunction<decltype(lul)>>(std::move(lul));
 
 	m_index.insert({ "wd", wd });
+
+	class MyClass
+	{
+	public:
+		~MyClass() {
+			puts("im getting deleted");
+		}
+	};
+
+	auto adw = m_storage.CreateElement<framework::object::BiaClassTemplate<MyClass>>(m_pAllocator.get(), &m_nameManager);
+	adw->SetFunction("hey", heyho);
+	m_index.insert({ "obj", adw });
 }
 	//void AddScript(std::string p_stScriptName, script);
 	//void RemoveScript(std::string p_stScriptName);

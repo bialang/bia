@@ -93,7 +93,6 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateFloat);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateDouble);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateCString);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateCopy);
 
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Print);
 	BIA_FUNCTION_ENTRY(machine::link::Print_i);
@@ -127,6 +126,7 @@ void BiaMachineDecoder::Initialize()
 
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorSelfCall);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Test);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::Clone);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::GetMember);
 
 	//Machine context functions

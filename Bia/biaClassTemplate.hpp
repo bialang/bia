@@ -2,6 +2,8 @@
 
 #include <cstdio>
 #include <memory>
+#include <new>
+#include <string>
 
 #include "biaMember.hpp"
 #include "biaUndefined.hpp"
@@ -19,7 +21,7 @@ namespace object
 {
 
 template<typename _CLASS>
-class BiaClassTemplate : public BiaMember
+class BiaClassTemplate final : public BiaMember
 {
 public:
 	inline BiaClassTemplate(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager) : m_pClassContext(new BiaClassContext(p_pAllocator, p_pNameManager))
@@ -29,9 +31,7 @@ public:
 	// Inherited via BiaMember
 	inline virtual void Undefine() override
 	{
-		this->~BiaClassWrapper();
-
-		new(this) BiaUndefined();
+		ReplaceObject<BiaUndefined>();
 	}
 	inline virtual void Print() override
 	{
@@ -39,15 +39,13 @@ public:
 	}
 	inline virtual void Call(BiaMember*, BiaMember * p_pDestination) override
 	{
-		p_pDestination->~BiaMember();
-
-		new(p_pDestination) BiaClass<_CLASS>(m_pClassContext);
+		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pClassContext, std::shared_ptr<_CLASS>(new _CLASS()));
 	}
 	inline virtual void CallCount(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
 	{
 		///TODO
 	}
-	inline virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, const char * p_szFormat, ...) override
+	inline virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
 	{
 		///TODO
 	}
@@ -97,7 +95,7 @@ public:
 	}
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		new(p_pDestination) BiaClassTemplate<_CLASS>(*this);
+		p_pDestination->ReplaceObject<BiaClassTemplate<_CLASS>>(*this);
 	}
 	inline virtual bool IsType(const std::type_info & p_type) const override
 	{
@@ -131,7 +129,7 @@ public:
 	{
 		///TODO: check name
 
-		auto pMember = new(m_pClassContext->GetAllocator()->AllocateBlocks(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL)) executable::BiaStaticFunction<_RETURN, _ARGS...>(p_pFunction);
+		auto pMember = new(m_pClassContext->GetAllocator()->AllocateBlocks(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL).pAddress) executable::BiaStaticFunction<_RETURN(*)(_ARGS...)>(p_pFunction);
 
 		m_pClassContext->SetMember(p_stName, pMember);
 

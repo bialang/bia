@@ -73,7 +73,7 @@ public:
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		new(p_pDestination) BiaLambdaFunction<_LAMBDA>(*this);
+		p_pDestination->ReplaceObject<BiaLambdaFunction<_LAMBDA>>(*this);
 	}
 	/**
 	 * @see	BiaMember::IsType().

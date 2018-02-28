@@ -427,15 +427,15 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 
 			break;
 		case VALUE_TYPE::MEMBER:
-			m_toolset.SafeCall(&machine::link::InstantiateCopy, pVariable, m_value.pMember);
+			m_toolset.SafeCall(&framework::BiaMember::Clone, m_value.pMember, pVariable);
 	
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&machine::link::InstantiateCopy, pVariable, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+			m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), pVariable);
 
 			break;
 		case VALUE_TYPE::RESULT_REGISTER:
-			m_toolset.Call(&machine::link::InstantiateCopy, pVariable, machine::architecture::BiaToolset::ResultValue());
+			m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::ResultValue(), pVariable);
 
 			break;
 		default:
@@ -754,6 +754,10 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 				{
 				case VALUE_TYPE::MEMBER:
 					m_toolset.Call(&framework::BiaMember::GetMember, m_value.pMember, m_context.NameAddressOf(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
+
+					break;
+				case VALUE_TYPE::TEMPORARY_MEMBER:
+					m_toolset.Call(&framework::BiaMember::GetMember, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), m_context.NameAddressOf(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
 
 					break;
 				case VALUE_TYPE::RESULT_REGISTER:

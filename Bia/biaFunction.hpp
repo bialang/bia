@@ -20,11 +20,7 @@ public:
 	*/
 	virtual void Undefine() override
 	{
-		//Destroy this
-		this->~BiaFunction();
-
-		//Undefine
-		new(this) BiaUndefined();
+		ReplaceObject<BiaUndefined>();
 	}
 	/**
 	 * @see	BiaMember::OperatorCall().

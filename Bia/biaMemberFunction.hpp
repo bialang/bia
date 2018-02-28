@@ -81,7 +81,7 @@ public:
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		new(p_pDestination) BiaMemberFunction<_RETURN(_CLASS::*)(_ARGS...)>(m_pFunction);
+		p_pDestination->ReplaceObject<BiaMemberFunction<_RETURN(_CLASS::*)(_ARGS...)>>(m_pFunction);
 	}
 	/**
 	 * @see	BiaMember::IsType().

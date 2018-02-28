@@ -80,7 +80,7 @@ public:
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		new(p_pDestination) BiaStaticFunction<_RETURN(*)(_ARGS...)>(m_pFunction);
+		p_pDestination->ReplaceObject<BiaStaticFunction<_RETURN(*)(_ARGS...)>>(m_pFunction);
 	}
 	/**
 	 * @see	BiaMember::IsType().
