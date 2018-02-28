@@ -62,5 +62,26 @@ struct OperationResult<_LEFT, float, typename std::enable_if<Negation<std::is_sa
 	typedef float type;
 };
 
+template<bool _CHOOSE, typename, typename>
+struct Chooser;
+
+template<typename _RETURN, typename T>
+struct Chooser<true, _RETURN, T>
+{
+	inline _RETURN Choose(T p_value)
+	{
+		return static_cast<_RETURN>(p_value);
+	}
+};
+
+template<typename _RETURN, typename T>
+struct Chooser<false, _RETURN, T>
+{
+	inline _RETURN Choose(T p_value)
+	{
+		return _RETURN();
+	}
+};
+
 }
 }

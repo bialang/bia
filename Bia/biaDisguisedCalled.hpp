@@ -7,6 +7,7 @@
 #include "biaMember.hpp"
 #include "biaException.hpp"
 #include "biaMemberCreator.hpp"
+#include "biaTypeTraits.hpp"
 
 
 namespace bia
@@ -17,6 +18,8 @@ namespace force
 template<typename _RETURN>
 inline _RETURN FormatCast(va_list & p_args, const char *& p_szFormat)
 {
+	using namespace utility;
+
 	switch (*p_szFormat++)
 	{
 	case 'i':
@@ -24,7 +27,7 @@ inline _RETURN FormatCast(va_list & p_args, const char *& p_szFormat)
 		constexpr auto NUMBER = std::is_integral<_RETURN>::value || std::is_floating_point<_RETURN>::value;
 
 		if (NUMBER)
-			return static_cast<std::conditional<NUMBER, _RETURN, int32_t>::type>(va_arg(p_args, int32_t));
+			return Chooser<NUMBER, _RETURN, int32_t>().Choose(va_arg(p_args, int32_t));
 		else
 			throw exception::BadCastException("Invalid cast.");
 	}
@@ -33,7 +36,7 @@ inline _RETURN FormatCast(va_list & p_args, const char *& p_szFormat)
 		constexpr auto NUMBER = std::is_integral<_RETURN>::value || std::is_floating_point<_RETURN>::value;
 
 		if (NUMBER)
-			return static_cast<std::conditional<NUMBER, _RETURN, int64_t>::type>(va_arg(p_args, int64_t));
+			return Chooser<NUMBER, _RETURN, int64_t>().Choose(va_arg(p_args, int64_t));
 		else
 			throw exception::BadCastException("Invalid cast.");
 	}
@@ -42,7 +45,7 @@ inline _RETURN FormatCast(va_list & p_args, const char *& p_szFormat)
 		constexpr auto NUMBER = std::is_integral<_RETURN>::value || std::is_floating_point<_RETURN>::value;
 
 		if (NUMBER)
-			return static_cast<std::conditional<NUMBER, _RETURN, float>::type>(va_arg(p_args, float));
+			return Chooser<NUMBER, _RETURN, float>().Choose(va_arg(p_args, float));
 		else
 			throw exception::BadCastException("Invalid cast.");
 	}
@@ -51,14 +54,16 @@ inline _RETURN FormatCast(va_list & p_args, const char *& p_szFormat)
 		constexpr auto NUMBER = std::is_integral<_RETURN>::value || std::is_floating_point<_RETURN>::value;
 
 		if (NUMBER)
-			return static_cast<std::conditional<NUMBER, _RETURN, double>::type>(va_arg(p_args, double));
+			return Chooser<NUMBER, _RETURN, double>().Choose(va_arg(p_args, double));
 		else
 			throw exception::BadCastException("Invalid cast.");
 	}
 	case 's':
 	{
-		if (std::is_same<_RETURN, const char*>::value)
-			return reinterpret_cast<_RETURN>(va_arg(p_args, const char*));
+		constexpr auto STRING = std::is_same<_RETURN, const char*>::value;
+
+		if (STRING)
+			return Chooser<STRING, _RETURN, const char*>().Choose(va_arg(p_args, const char*));
 		else
 			throw exception::BadCastException("Invalid cast.");
 	}

@@ -48,31 +48,31 @@ public:
 	/**
 	 * @see	BiaMember::Call().
 	*/
-	inline virtual void Call(BiaMember*, BiaMember * p_pDestination) override
+	inline virtual void Call(BiaMember * p_pInstance, BiaMember * p_pDestination) override
 	{
-		force::DisguisedCaller(m_pFunction, nullptr, p_pDestination);
+		force::DisguisedCaller(m_pFunction, GetInstance(p_pInstance), p_pDestination);
 	}
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	inline virtual void CallCount(BiaMember*, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
+	inline virtual void CallCount(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
 	{
 		va_list args;
 		va_start(args, p_unParameterCount);
 
-		force::DisguisedCallerCount(m_pFunction, nullptr, p_pDestination, p_unParameterCount, args);
+		force::DisguisedCallerCount(m_pFunction, GetInstance(p_pInstance), p_pDestination, p_unParameterCount, args);
 
 		va_end(args);
 	}
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	inline virtual void CallFormat(BiaMember*, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
+	inline virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
 	{
 		va_list args;
 		va_start(args, p_pcFormat);
 
-		force::DisguisedCallerFormat(m_pFunction, nullptr, p_pDestination, p_unParameterCount, p_pcFormat, args);
+		force::DisguisedCallerFormat(m_pFunction, GetInstance(p_pInstance), p_pDestination, p_unParameterCount, p_pcFormat, args);
 
 		va_end(args);
 	}
@@ -103,6 +103,33 @@ protected:
 private:
 	/**	Defines the address to the member function.	*/
 	_RETURN(_CLASS::*m_pFunction)(_ARGS...);
+
+
+	/**
+	 * Retrieves the needed instance from the member.
+	 *
+	 * @since	3.56.117.675
+	 * @date	28-Feb-18
+	 *
+	 * @param	[in]	p_pInstance	Defines the member.
+	 *
+	 * @throws	exception::BadCastException	Thrown when the member does not hold a valid instance.
+	 * @throws	exception::ArgumentException	Thrown when a nullpointer was passed.
+	 *
+	 * @return	The instance.
+	*/
+	inline _CLASS * GetInstance(BiaMember * p_pInstance)
+	{
+		if (p_pInstance)
+		{
+			if (auto pInstance = p_pInstance->Cast<_CLASS>())
+				return pInstance;
+			else
+				throw exception::BadCastException("Invalid instance passed.");
+		}
+		else
+			throw exception::ArgumentException("Nullpointer instance is not valid.");
+	}
 };
 
 }
