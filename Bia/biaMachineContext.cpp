@@ -88,7 +88,7 @@ const char * BiaMachineContext::FormatAddressOf(const char * p_pcName, size_t p_
 
 const char * BiaMachineContext::StringAddressOf(std::string p_stString)
 {
-	return "dummy";
+	return "hi";
 }
 
 framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)

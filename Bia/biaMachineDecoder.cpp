@@ -132,6 +132,7 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallInt_64);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallFloat);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallDouble);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallString);
 
 	BIA_FUNCTION_ENTRY(framework::BiaMember::Clone);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::GetMember);

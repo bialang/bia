@@ -139,6 +139,13 @@ public:
 	{
 		return 0;
 	}
+	/**
+	 * @see	BiaMember::TestCallString().
+	*/
+	inline virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override
+	{
+		return 0;
+	}
 	inline virtual BiaMember * GetMember(const char * p_szName) override
 	{
 		if (auto pMember = m_pClassContext->GetMember(p_szName))

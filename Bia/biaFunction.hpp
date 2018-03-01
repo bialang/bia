@@ -149,6 +149,13 @@ public:
 		throw exception::BadCallException("Functions cannot be tested.");
 	}
 	/**
+	 * @see	BiaMember::TestCallString().
+	*/
+	inline virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override
+	{
+		throw exception::BadCallException("Functions cannot be tested.");
+	}
+	/**
 	 * @see	BiaMember::GetMember().
 	*/
 	inline virtual BiaMember * GetMember(const char * p_szName) override

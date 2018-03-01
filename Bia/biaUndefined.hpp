@@ -113,6 +113,10 @@ public:
 	*/
 	virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) override;
 	/**
+	 * @see	BiaMember::TestCallString().
+	*/
+	virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override;
+	/**
 	 * @see	BiaMember::GetMember().
 	*/
 	virtual BiaMember * GetMember(const char * p_szName) override;

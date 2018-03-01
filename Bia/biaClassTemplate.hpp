@@ -144,6 +144,13 @@ public:
 	{
 		throw exception::BadCallException("Cannot be tested.");
 	}
+	/**
+	 * @see	BiaMember::TestCallString().
+	*/
+	inline virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override
+	{
+		throw exception::BadCallException("Cannot be tested.");
+	}
 	inline virtual BiaMember * GetMember(const char * p_szName) override
 	{
 		throw exception::SymbolException("Unknown member.");

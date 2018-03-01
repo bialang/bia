@@ -175,6 +175,15 @@ public:
 	virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) = 0;
 	virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) = 0;
 	/**
+	 * Compares this object to the right hand value.
+	 *
+	 * @throws	exception::BadCallException	Thrown when the member cannot be tested.
+	 * @throws	exception::OperatorException	Thrown when the operation is not valid.
+	 *
+	 * @return	A non-zero value for a successful result, otherwise 0.
+	*/
+	virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) = 0;
+	/**
 	 * Returns the member address matching the given name.
 	 *
 	 * @param	p_szName	Defines the zero-terminated name.

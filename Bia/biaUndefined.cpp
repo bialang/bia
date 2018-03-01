@@ -129,6 +129,11 @@ int32_t BiaUndefined::TestCallDouble(uint32_t p_unOperator, double p_rRight)
 	throw exception::SymbolException("Undefined symbol.");
 }
 
+int32_t BiaUndefined::TestCallString(uint32_t p_unOperator, const char * p_szRight)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
 BiaMember * BiaUndefined::GetMember(const char * p_szName)
 {
 	throw exception::SymbolException("Undefined symbol.");

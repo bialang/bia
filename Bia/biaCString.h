@@ -157,7 +157,7 @@ public:
 	*/
 	virtual int32_t Test() override
 	{
-		return false;
+		throw exception::BadCallException("Cannot be tested.");
 		//return reinterpret_cast<int32_t*>(&m_llValue)[0] | reinterpret_cast<int32_t*>(&m_llValue)[1];
 	}
 	/**
@@ -172,28 +172,35 @@ public:
 	*/
 	inline virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
-		return 0;
+		throw exception::OperatorException("Cannot compare a string to a number.");
 	}
 	/**
 	 * @see	BiaMember::TestCallInt_64().
 	*/
 	inline virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
 	{
-		return 0;
+		throw exception::OperatorException("Cannot compare a string to a number.");
 	}
 	/**
 	 * @see	BiaMember::TestCallFloat().
 	*/
 	inline virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) override
 	{
-		return 0;
+		throw exception::OperatorException("Cannot compare a string to a number.");
 	}
 	/**
 	 * @see	BiaMember::TestCallDouble().
 	*/
 	inline virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) override
 	{
-		return 0;
+		throw exception::OperatorException("Cannot compare a string to a number.");
+	}
+	/**
+	 * @see	BiaMember::TestCallString().
+	*/
+	inline virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override
+	{
+		return static_cast<int32_t>(m_szString == p_szRight);
 	}
 	virtual BiaMember * GetMember(const char * p_szName) override;
 

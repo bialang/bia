@@ -99,6 +99,11 @@ private:
 	Value m_value;	/**	Defines the value of the last operation result.	*/
 
 
+	inline void SetValue(bool p_bValue)
+	{
+		m_valueType = VALUE_TYPE::TEST_VALUE_CONSTANT;
+		m_value.bTestValue = p_bValue;
+	}
 	inline void SetValue(int32_t p_nValue)
 	{
 		m_valueType = VALUE_TYPE::INT_32;
@@ -155,6 +160,68 @@ private:
 			break;
 		}
 	}
+	/**
+	 * Handles the constant compare operation and stores the result in m_value.
+	 *
+	 * @since	3.57.118.681
+	 * @date	1-Mar-18
+	 *
+	 * @param	p_left	Defines the left hand value.
+	 * @param	p_right	Defines the right hand value.
+	 * @param	p_unOperator	Defines the compare operator.
+	*/
+	template<typename _LEFT, typename _RIGHT>
+	inline void HandleConstantCompareOperation(_LEFT && p_left, _RIGHT && p_right, uint32_t p_unOperator)
+	{
+		using namespace framework;
+
+		switch (p_unOperator)
+		{
+		case BiaMember::O_EQUALS:
+			return SetValue(p_left == p_right);
+		case BiaMember::O_EQUALS_NOT:
+			return SetValue(p_left != p_right);
+		case BiaMember::O_LESS_THAN:
+			return SetValue(p_left < p_right);
+		case BiaMember::O_LESS_EQUALS:
+			return SetValue(p_left <= p_right);
+		case BiaMember::O_GREATER_THAN:
+			return SetValue(p_left > p_right);
+		case BiaMember::O_GREATER_EQUALS:
+			return SetValue(p_left >= p_right);
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+	}
+	/**
+	 * Handles the constant compare operation and stores the result in m_value.
+	 *
+	 * @since	3.57.118.681
+	 * @date	1-Mar-18
+	 *
+	 * @param	p_leftType	Defines the type of the left hand value.
+	 * @param	p_leftValue	Defines the left hand value.
+	 * @param	p_right	Defines the right hand value.
+	 * @param	p_unOperator	Defines the compare operator.
+	*/
+	template<typename _RIGHT>
+	inline void HandleConstantCompareOperation(VALUE_TYPE p_leftType, Value p_leftValue, _RIGHT && p_right, uint32_t p_unOperator)
+	{
+		switch (p_leftType)
+		{
+		case VALUE_TYPE::INT_32:
+			return HandleConstantCompareOperation(p_leftValue.nInt, p_right, p_unOperator);
+		case VALUE_TYPE::INT_64:
+			return HandleConstantCompareOperation(p_leftValue.llInt, p_right, p_unOperator);
+		case VALUE_TYPE::FLOAT:
+			return HandleConstantCompareOperation(p_leftValue.rFloat, p_right, p_unOperator);
+		case VALUE_TYPE::DOUBLE:
+			return HandleConstantCompareOperation(p_leftValue.rDouble, p_right, p_unOperator);
+			//case VALUE_TYPE::STRING:
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+	}
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
 	void HandleString(const grammar::Report * p_pReport);
@@ -180,6 +247,57 @@ private:
 
 		m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
 		m_value.temporaryResultIndex = p_destination;
+	}
+	/**
+	 * Handles the compare operator call for left hand members. The left hand value is stored in m_value.
+	 *
+	 * @since	3.57.118.681
+	 * @date	1-Mar-18
+	 *
+	 * @param	p_instance	Defines the member.
+	 * @param	p_unOperator	Defines the compare operator.
+	*/
+	template<typename _INSTANCE>
+	inline void HandleCompareOperatorCall(_INSTANCE && p_instance, uint32_t p_unOperator)
+	{
+		//Right value
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::INT_32:
+			m_toolset.Call(&framework::BiaMember::TestCallInt_32, p_instance, p_unOperator, m_value.nInt);
+
+			break;
+		case VALUE_TYPE::INT_64:
+			m_toolset.Call(&framework::BiaMember::TestCallInt_64, p_instance, p_unOperator, m_value.llInt);
+
+			break;
+		case VALUE_TYPE::FLOAT:
+			m_toolset.Call(&framework::BiaMember::TestCallFloat, p_instance, p_unOperator, m_value.rFloat);
+
+			break;
+		case VALUE_TYPE::DOUBLE:
+			m_toolset.Call(&framework::BiaMember::TestCallDouble, p_instance, p_unOperator, m_value.rDouble);
+
+			break;
+		case VALUE_TYPE::STRING:
+			m_toolset.Call(&framework::BiaMember::TestCallString, p_instance, p_unOperator, GetStringLocation(m_value.string));
+
+			break;
+		case VALUE_TYPE::MEMBER:
+			m_toolset.Call(&framework::BiaMember::TestCall, p_instance, p_unOperator, m_value.pMember);
+
+			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&framework::BiaMember::TestCall, p_instance, p_unOperator, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+
+			break;
+		case VALUE_TYPE::RESULT_REGISTER:
+			m_toolset.Call(&framework::BiaMember::TestCall, p_instance, p_unOperator, machine::architecture::BiaToolset::ResultValue());
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
 	}
 	const char * GetNameAddress(const grammar::Report * p_pReport);
 	const char * GetStringLocation(Value::String p_string);

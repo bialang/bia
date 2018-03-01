@@ -253,6 +253,13 @@ public:
 		return 0;
 	}
 	/**
+	 * @see	BiaMember::TestCallString().
+	*/
+	inline virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override
+	{
+		throw exception::OperatorException("Cannot compare an integral to a string.");
+	}
+	/**
 	 * @see	BiaMember::GetMember().
 	*/
 	inline virtual BiaMember * GetMember(const char * p_szName) override

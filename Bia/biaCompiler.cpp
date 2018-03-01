@@ -3,6 +3,7 @@
 #include "biaOutputStreamBuffer.hpp"
 
 #include <vector>
+#include <algorithm>
 
 
 namespace bia
@@ -355,45 +356,50 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 
 void BiaCompiler::HandleCompareOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator)
 {
-	using namespace machine::architecture;
+gt_redo:;
 
 	switch (p_leftType)
 	{
-	case VALUE_TYPE::MEMBER:
+	case VALUE_TYPE::INT_32:
+	case VALUE_TYPE::INT_64:
+	case VALUE_TYPE::FLOAT:
+	case VALUE_TYPE::DOUBLE:
+	case VALUE_TYPE::STRING:
 	{
-		//Right value
 		switch (m_valueType)
 		{
 		case VALUE_TYPE::INT_32:
-			m_toolset.SafeCall(&framework::BiaMember::TestCallInt_32, p_leftValue.pMember, p_unOperator, m_value.nInt);
-
-			break;
+			return HandleConstantCompareOperation(p_leftType, p_leftValue, m_value.nInt, p_unOperator);
 		case VALUE_TYPE::INT_64:
-			m_toolset.SafeCall(&framework::BiaMember::TestCallInt_64, p_leftValue.pMember, p_unOperator, m_value.llInt);
-
-			break;
+			return HandleConstantCompareOperation(p_leftType, p_leftValue, m_value.llInt, p_unOperator);
 		case VALUE_TYPE::FLOAT:
-			m_toolset.SafeCall(&framework::BiaMember::TestCallFloat, p_leftValue.pMember, p_unOperator, m_value.rFloat);
-
-			break;
+			return HandleConstantCompareOperation(p_leftType, p_leftValue, m_value.rFloat, p_unOperator);
 		case VALUE_TYPE::DOUBLE:
-			m_toolset.SafeCall(&framework::BiaMember::TestCallDouble, p_leftValue.pMember, p_unOperator, m_value.rDouble);
-
-			break;
+			return HandleConstantCompareOperation(p_leftType, p_leftValue, m_value.rDouble, p_unOperator);
+		//case VALUE_TYPE::STRING:
 		case VALUE_TYPE::MEMBER:
-			m_toolset.SafeCall(&framework::BiaMember::TestCall, p_leftValue.pMember, p_unOperator, m_value.pMember);
-
-			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&framework::BiaMember::TestCall, p_leftValue.pMember, p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+		case VALUE_TYPE::RESULT_REGISTER:
+			std::swap(m_valueType, p_leftType);
+			std::swap(m_value, p_leftValue);
 
-			break;
+			goto gt_redo;
 		default:
 			BIA_COMPILER_DEV_INVALID
 		}
+	}
+	case VALUE_TYPE::MEMBER:
+		HandleCompareOperatorCall(m_value.pMember, p_unOperator);
 
 		break;
-	}
+	case VALUE_TYPE::TEMPORARY_MEMBER:
+		HandleCompareOperatorCall(machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), p_unOperator);
+
+		break;
+	case VALUE_TYPE::RESULT_REGISTER:
+		HandleCompareOperatorCall(machine::architecture::BiaToolset::ResultValue(), p_unOperator);
+
+		break;
 	default:
 		BIA_COMPILER_DEV_INVALID
 	}
@@ -408,14 +414,21 @@ const char * BiaCompiler::GetNameAddress(const grammar::Report * p_pReport)
 
 const char * BiaCompiler::GetStringLocation(Value::String p_string)
 {
-	std::string stString;
+	if (p_string.iSize)
+	{
+		auto allocation = m_machineSchein.GetAllocator()->Allocate(p_string.iSize + 1, machine::BiaAllocator::MEMORY_TYPE::NORMAL);
 
-	stString.reserve(p_string.iSize);
+		m_machineSchein.RegisterAllocation(allocation);
 
-	//Parse string
-	stString.assign(p_string.pcString, p_string.iSize);
+		//Copy string
+		memcpy(allocation.pAddress, p_string.pcString, p_string.iSize);
+		static_cast<char*>(allocation.pAddress)[p_string.iSize] = 0;
 
-	return m_context.StringAddressOf(std::move(stString));
+		return static_cast<const char*>(allocation.pAddress);
+	}
+	//Empty string
+	else
+		return "";
 }
 
 const char * BiaCompiler::GetParameterFormat(Value::String p_string)
