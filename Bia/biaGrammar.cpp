@@ -197,16 +197,28 @@ void BiaGrammar::InitializeRules()
 		RulePointerToken<BGR_MATH_TERM, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
+	//Condition expression
+	m_interpreter.SetRule(BGR_CONDITION_EXPRESSION, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
+		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN>,
+		RulePointerToken<BGR_CONDITION_EXPRESSION_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		}));
+
+	//Condition expression helper 0
+	m_interpreter.SetRule(BGR_CONDITION_EXPRESSION_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
+		CompareOperatorToken<NONE>,
+		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		}));
+
 	//Value expression
 	m_interpreter.SetRule(BGR_VALUE_EXPRESSION, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
-		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN>,
+		RulePointerToken<BGR_CONDITION_EXPRESSION, FILLER_TOKEN>,
 		RulePointerToken<BGR_VALUE_EXPRESSION_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
 		}));
 
 	//Value expression helper 0
 	m_interpreter.SetRule(BGR_VALUE_EXPRESSION_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
 		RulePointerToken<BGR_VALUE_EXPRESSION_HELPER_1, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		RulePointerToken<BGR_CONDITION_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
 	//Value expression helper 1

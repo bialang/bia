@@ -169,6 +169,11 @@ public:
 	 * @return	A non-zero value for a successful result, otherwise 0.
 	*/
 	virtual int32_t Test() = 0;
+	virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) = 0;
+	virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) = 0;
+	virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) = 0;
+	virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) = 0;
+	virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) = 0;
 	/**
 	 * Returns the member address matching the given name.
 	 *

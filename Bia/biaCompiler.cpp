@@ -160,7 +160,7 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 	using namespace machine::architecture;
 
 	//Mark current
-	m_counter.Current();
+	//m_counter.Current();
 
 	switch (p_leftType)
 	{
@@ -353,6 +353,54 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 	m_value.temporaryResultIndex = p_destinationIndex;
 }
 
+void BiaCompiler::HandleCompareOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator)
+{
+	using namespace machine::architecture;
+
+	switch (p_leftType)
+	{
+	case VALUE_TYPE::MEMBER:
+	{
+		//Right value
+		switch (m_valueType)
+		{
+		case VALUE_TYPE::INT_32:
+			m_toolset.SafeCall(&framework::BiaMember::TestCallInt_32, p_leftValue.pMember, p_unOperator, m_value.nInt);
+
+			break;
+		case VALUE_TYPE::INT_64:
+			m_toolset.SafeCall(&framework::BiaMember::TestCallInt_64, p_leftValue.pMember, p_unOperator, m_value.llInt);
+
+			break;
+		case VALUE_TYPE::FLOAT:
+			m_toolset.SafeCall(&framework::BiaMember::TestCallFloat, p_leftValue.pMember, p_unOperator, m_value.rFloat);
+
+			break;
+		case VALUE_TYPE::DOUBLE:
+			m_toolset.SafeCall(&framework::BiaMember::TestCallDouble, p_leftValue.pMember, p_unOperator, m_value.rDouble);
+
+			break;
+		case VALUE_TYPE::MEMBER:
+			m_toolset.SafeCall(&framework::BiaMember::TestCall, p_leftValue.pMember, p_unOperator, m_value.pMember);
+
+			break;
+		case VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&framework::BiaMember::TestCall, p_leftValue.pMember, p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID
+		}
+
+		break;
+	}
+	default:
+		BIA_COMPILER_DEV_INVALID
+	}
+
+	m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
+}
+
 const char * BiaCompiler::GetNameAddress(const grammar::Report * p_pReport)
 {
 	return m_context.NameAddressOf(p_pReport->content.token.pcString, p_pReport->content.token.iSize);
@@ -442,6 +490,31 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 			BIA_COMPILER_DEV_INVALID
 		}
 	});
+
+	return p_reports.pEnd + 1;
+}
+
+const grammar::Report * BiaCompiler::HandleConditionExpression(grammar::report_range p_reports)
+{
+	//Handle left value
+	p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
+
+	//Condition expression
+	if (p_reports.pBegin < p_reports.pEnd)
+	{
+		auto leftType = m_valueType;
+		auto leftValue = m_value;
+
+		//Handle right value
+		HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
+
+		//Call compare operator
+		uint32_t unOperator = 0;
+
+		memcpy(&unOperator, p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize);
+
+		HandleCompareOperator(leftType, leftValue, unOperator);
+	}
 
 	return p_reports.pEnd + 1;
 }

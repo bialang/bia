@@ -114,6 +114,41 @@ public:
 		throw exception::BadCallException("Functions cannot be tested.");
 	}
 	/**
+	 * @see	BiaMember::TestCall().
+	*/
+	inline virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) override
+	{
+		throw exception::BadCallException("Functions cannot be tested.");
+	}
+	/**
+	 * @see	BiaMember::TestCallInt_32().
+	*/
+	inline virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
+	{
+		throw exception::BadCallException("Functions cannot be tested.");
+	}
+	/**
+	 * @see	BiaMember::TestCallInt_64().
+	*/
+	inline virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
+	{
+		throw exception::BadCallException("Functions cannot be tested.");
+	}
+	/**
+	 * @see	BiaMember::TestCallFloat().
+	*/
+	inline virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) override
+	{
+		throw exception::BadCallException("Functions cannot be tested.");
+	}
+	/**
+	 * @see	BiaMember::TestCallDouble().
+	*/
+	inline virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) override
+	{
+		throw exception::BadCallException("Functions cannot be tested.");
+	}
+	/**
 	 * @see	BiaMember::GetMember().
 	*/
 	inline virtual BiaMember * GetMember(const char * p_szName) override

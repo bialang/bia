@@ -111,7 +111,7 @@ int main()
 	char script[] = R"(
 
 global t = obj();
-print t;
+print t==t;
 t.hey("lul");
 )";
 

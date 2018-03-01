@@ -159,6 +159,7 @@ private:
 	void HandleNumber(const grammar::Report * p_pReport);
 	void HandleString(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
+	void HandleCompareOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator);
 	template<typename _INSTANCE, typename _BIA_INSTANCE>
 	inline void HandleFunctionCall(Value::Parameter p_paramter, _INSTANCE p_instance, _BIA_INSTANCE p_biaInstance, BiaTempCounter::counter_type p_destination)
 	{
@@ -355,7 +356,7 @@ private:
 			//Handle right hand value
 			HandleValueExpression<_TEST>(p_reports.pBegin[3].content.children);
 
-			//Operate
+			//Call assign operator
 			HandleOperator(VALUE_TYPE::MEMBER, destination, unOperator, -1);
 
 			break;
@@ -407,7 +408,7 @@ private:
 
 		gt_start:;
 			//Handle first expression
-			p_reports.pBegin = HandleMathExpressionTerm(p_reports.pBegin[1].content.children);
+			p_reports.pBegin = HandleConditionExpression(p_reports.pBegin[1].content.children);
 
 			//Test
 			if (_TEST || bTest || p_reports.pBegin < p_reports.pEnd)
@@ -526,6 +527,7 @@ private:
 
 		return p_reports.pEnd + 1;
 	}
+	const grammar::Report * HandleConditionExpression(grammar::report_range p_reports);
 	const grammar::Report * HandleValueRaw(grammar::report_range p_reports);
 	template<bool _START = true>
 	inline const grammar::Report * HandleMathExpressionTerm(grammar::report_range p_reports)
