@@ -19,6 +19,21 @@ void BiaCString::Call(BiaMember*, BiaMember *)
 	throw exception::BadCallException("Invalid function call on native type.");
 }
 
+void BiaCString::Instantiate(BiaMember *)
+{
+	throw exception::BadCallException("Invalid instantiation call.");
+}
+
+void BiaCString::InstantiateCount(BiaMember *, parameter_count, ...)
+{
+	throw exception::BadCallException("Invalid instantiation call.");
+}
+
+void BiaCString::InstantiateFormat(BiaMember *, parameter_count, const char *, ...)
+{
+	throw exception::BadCallException("Invalid instantiation call.");
+}
+
 BiaMember * BiaCString::GetMember(const char * p_szName)
 {
 	return this;

@@ -109,10 +109,7 @@ int main()
 	bia::machine::BiaMachineContext context(pAllocator);
 //var i = 65*65+5*8;
 	char script[] = R"(
-
-global t = obj();
-print 2*2<4;
-t.hey("lul");
+new obj().hey("luh");
 )";
 
 	/*

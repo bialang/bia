@@ -719,13 +719,15 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 {
 	const grammar::Report * pNext = nullptr;
 	auto bFirst = true;
-	VALUE_TYPE parameterType;
+	VALUE_TYPE parameterType = VALUE_TYPE::NONE;
 	VALUE_TYPE biaInstanceType = VALUE_TYPE::NONE;
 	Value parameterValue;
 	Value biaInstanceValue;
 
 	++p_reports.pBegin;
 	m_counter.Next();
+
+	BiaTempCounter::counter_type destination = -1;
 
 	while(p_reports.pBegin < p_reports.pEnd)
 	{
@@ -762,23 +764,22 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 			switch (p_reports.pBegin->unTokenId)
 			{
-				/*case grammar::BM_INSTANTIATION:
-					HandleInstantiation(p_reports.pBegin->content.children, p_bPush);
+			case grammar::BM_INSTANTIATION:
+				p_reports.pBegin = HandleInstantiation(p_reports.pBegin->content.children);
 
-					break;*/
+				break;
 			case grammar::BM_STRING:
-				HandleString(p_reports.pBegin);
+				HandleString(p_reports.pBegin++);
 
 				break;
 			case grammar::BM_IDENTIFIER:
-				HandleIdentifier(p_reports.pBegin);
+				HandleIdentifier(p_reports.pBegin++);
 
 				break;
 			default:
 				BIA_COMPILER_DEV_INVALID
 			}
-
-			++p_reports.pBegin;
+			
 			bFirst = false;
 		}
 
@@ -789,23 +790,26 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 			{
 			case VALUE_TYPE::PARAMETER:
 			{
+				if (destination == -1)
+					destination = m_counter.Current();
+
 				switch (m_valueType)
 				{
 				case VALUE_TYPE::MEMBER:
 				{
-					HandleFunctionCall(parameterValue.parameter, m_value.pMember, static_cast<framework::BiaMember*>(0), m_counter.Current());
+					HandleFunctionCall(parameterValue.parameter, m_value.pMember, static_cast<framework::BiaMember*>(0), destination);
 
 					break;
 				}
 				case VALUE_TYPE::TEMPORARY_MEMBER:
 				{
-					HandleFunctionCall(parameterValue.parameter, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), static_cast<framework::BiaMember*>(0), m_counter.Current());
+					HandleFunctionCall(parameterValue.parameter, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), static_cast<framework::BiaMember*>(0), destination);
 
 					break;
 				}
 				case VALUE_TYPE::RESULT_REGISTER:
 				{
-					HandleFunctionCall(parameterValue.parameter, machine::architecture::BiaToolset::ResultValue(), static_cast<framework::BiaMember*>(0), m_counter.Current());
+					HandleFunctionCall(parameterValue.parameter, machine::architecture::BiaToolset::ResultValue(), static_cast<framework::BiaMember*>(0), destination);
 
 					break;
 				}
@@ -1028,6 +1032,32 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 		//Upate jump offset
 		m_toolset.WriteJump(p_jumpType, jumpPosition, conditionJumpPosition);
 	}
+
+	return p_reports.pEnd + 1;
+}
+
+const grammar::Report * BiaCompiler::HandleInstantiation(grammar::report_range p_reports)
+{
+	//Handle identifier
+	HandleIdentifier(p_reports.pBegin + 1);
+	
+	auto pIdentifier = m_value.pMember;
+	
+	//Handle parameters
+	HandleParameters(p_reports.pBegin[2].content.children);
+
+	if (m_valueType != VALUE_TYPE::PARAMETER)
+		BIA_COMPILER_DEV_INVALID;
+
+	auto parameter = m_value.parameter;
+
+	//Call instantiation function
+	m_counter.Next();
+
+	m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
+	m_value.temporaryResultIndex = m_counter.Current();
+
+	HandleInstantiationCall(parameter, pIdentifier, m_value.temporaryResultIndex);
 
 	return p_reports.pEnd + 1;
 }

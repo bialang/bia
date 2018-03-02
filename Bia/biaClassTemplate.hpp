@@ -39,15 +39,36 @@ public:
 	}
 	inline virtual void Call(BiaMember*, BiaMember * p_pDestination) override
 	{
-		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pClassContext, std::shared_ptr<_CLASS>(new _CLASS()));
+		throw exception::BadCallException("not implemented");
 	}
 	inline virtual void CallCount(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
 	{
-		///TODO
+		throw exception::BadCallException("not implemented");
 	}
 	inline virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
 	{
-		///TODO
+		throw exception::BadCallException("not implemented");
+	}
+	/**
+	 * @see	BiaMember::Instantiate().
+	*/
+	inline virtual void Instantiate(BiaMember * p_pDestination) override
+	{
+		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pClassContext, std::shared_ptr<_CLASS>(new _CLASS()));
+	}
+	/**
+	 * @see	BiaMember::InstantiateCount().
+	*/
+	inline virtual void InstantiateCount(BiaMember*, parameter_count, ...) override
+	{
+		throw exception::BadCallException("Invalid instantiation call.");
+	}
+	/**
+	 * @see	BiaMember::InstantiateFormat().
+	*/
+	inline virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override
+	{
+		throw exception::BadCallException("Invalid instantiation call.");
 	}
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
 	{

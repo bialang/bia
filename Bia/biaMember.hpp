@@ -127,6 +127,40 @@ public:
 	*/
 	virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) = 0;
 	/**
+	 * Creates an instance without any parameters.
+	 *
+	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
+	 *
+	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
+	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	*/
+	virtual void Instantiate(BiaMember * p_pDestination) = 0;
+	/**
+	 * Creates an instance with only members as parameters.
+	 *
+	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
+	 * @param	p_unParameterCount	Defines how many parameters are passed.
+	 * @param	...	Defines the passed parameters.
+	 *
+	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
+	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
+	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	*/
+	virtual void InstantiateCount(BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) = 0;
+	/**
+	 * Creates an instance with any type as parameter.
+	 *
+	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
+	 * @param	p_unParameterCount	Defines how many parameters are passed.
+	 * @param	p_pcFormat	Defines the type order of the parameters.
+	 * @param	...	Defines the passed parameters.
+	 *
+	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
+	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
+	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
+	*/
+	virtual void InstantiateFormat(BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) = 0;
+	/**
 	 * @throws	exception::OperatorException	Thrown when the operation is not supported.
 	*/
 	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) = 0;

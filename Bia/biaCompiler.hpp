@@ -259,6 +259,27 @@ private:
 		m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
 		m_value.temporaryResultIndex = p_destination;
 	}
+	template<typename _INSTANCE>
+	inline void HandleInstantiationCall(Value::Parameter p_paramter, _INSTANCE p_instance, BiaTempCounter::counter_type p_destination)
+	{
+		//Parameters were passed
+		if (p_paramter.parameterCount)
+		{
+			//Formatted parameters
+			if (p_paramter.pcFormat)
+				m_toolset.Call(p_paramter.quartetsPassed, &framework::BiaMember::InstantiateFormat, p_instance, machine::architecture::BiaToolset::TemporaryMember(p_destination), p_paramter.parameterCount, p_paramter.pcFormat);
+			//Pure members
+			else
+				m_toolset.Call(p_paramter.quartetsPassed, &framework::BiaMember::InstantiateCount, p_instance, machine::architecture::BiaToolset::TemporaryMember(p_destination), p_paramter.parameterCount);
+		}
+		//Call without any parameters
+		else
+			m_toolset.Call(&framework::BiaMember::Instantiate, p_instance, machine::architecture::BiaToolset::TemporaryMember(p_destination));
+
+
+		m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
+		m_value.temporaryResultIndex = p_destination;
+	}
 	/**
 	 * Handles the compare operator call for left hand members. The left hand value is stored in m_value.
 	 *
@@ -737,6 +758,7 @@ private:
 	const grammar::Report * HandleParameters(grammar::report_range p_reports);
 	const grammar::Report * HandlePreTestLoop(grammar::report_range p_reports);
 	const grammar::Report * HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition, machine::architecture::BiaToolset::JUMP p_jumpType);
+	const grammar::Report * HandleInstantiation(grammar::report_range p_reports);
 } ;
 
 }

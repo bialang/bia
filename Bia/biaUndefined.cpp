@@ -29,6 +29,21 @@ void BiaUndefined::CallFormat(BiaMember*, BiaMember*, parameter_count, const cha
 	throw exception::SymbolException("Undefined symbol.");
 }
 
+void BiaUndefined::Instantiate(BiaMember *)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void BiaUndefined::InstantiateCount(BiaMember *, parameter_count, ...)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void BiaUndefined::InstantiateFormat(BiaMember *, parameter_count, const char *, ...)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
 void BiaUndefined::OperatorCall(uint32_t, BiaMember*, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");

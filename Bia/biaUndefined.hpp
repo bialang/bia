@@ -33,6 +33,18 @@ public:
 	*/
 	virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override;
 	/**
+	 * @see	BiaMember::Instantiate().
+	*/
+	virtual void Instantiate(BiaMember*) override;
+	/**
+	 * @see	BiaMember::InstantiateCount().
+	*/
+	virtual void InstantiateCount(BiaMember*, parameter_count, ...) override;
+	/**
+	 * @see	BiaMember::InstantiateFormat().
+	*/
+	virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override;
+	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
 	virtual void OperatorCall(uint32_t, BiaMember*, BiaMember*) override;

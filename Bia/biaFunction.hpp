@@ -23,6 +23,27 @@ public:
 		ReplaceObject<BiaUndefined>();
 	}
 	/**
+	 * @see	BiaMember::Instantiate().
+	*/
+	inline virtual void Instantiate(BiaMember*) override
+	{
+		throw exception::BadCallException("Invalid instantiation call.");
+	}
+	/**
+	 * @see	BiaMember::InstantiateCount().
+	*/
+	inline virtual void InstantiateCount(BiaMember*, parameter_count, ...) override
+	{
+		throw exception::BadCallException("Invalid instantiation call.");
+	}
+	/**
+	 * @see	BiaMember::InstantiateFormat().
+	*/
+	inline virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override
+	{
+		throw exception::BadCallException("Invalid instantiation call.");
+	}
+	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
 	inline virtual void OperatorCall(uint32_t, BiaMember*, BiaMember*) override

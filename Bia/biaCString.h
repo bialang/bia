@@ -63,6 +63,18 @@ public:
 		throw exception::BadCallException("Invalid function call on native type.");
 	}
 	/**
+	 * @see	BiaMember::Instantiate().
+	*/
+	virtual void Instantiate(BiaMember*) override;
+	/**
+	 * @see	BiaMember::InstantiateCount().
+	*/
+	virtual void InstantiateCount(BiaMember*, parameter_count, ...) override;
+	/**
+	 * @see	BiaMember::InstantiateFormat().
+	*/
+	virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override;
+	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override

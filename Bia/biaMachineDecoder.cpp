@@ -108,6 +108,10 @@ void BiaMachineDecoder::Initialize()
 	BIA_FUNCTION_ENTRY(framework::BiaMember::CallCount);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::CallFormat);
 
+	BIA_FUNCTION_ENTRY(framework::BiaMember::Instantiate);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::InstantiateCount);
+	BIA_FUNCTION_ENTRY(framework::BiaMember::InstantiateFormat);
+
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCall);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCallInt_32);
 	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCallInt_64);
