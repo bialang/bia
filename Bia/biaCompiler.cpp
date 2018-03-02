@@ -156,6 +156,12 @@ void BiaCompiler::HandleString(const grammar::Report * p_pReport)
 	m_value.string.iSize = p_pReport->content.token.iSize;
 }
 
+void BiaCompiler::HandleIdentifier(const grammar::Report * p_pReport)
+{
+	m_valueType = VALUE_TYPE::MEMBER;
+	m_value.pMember = m_context.AddressOf(machine::StringKey(p_pReport->content.token.pcString, p_pReport->content.token.iSize));
+}
+
 void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex)
 {
 	using namespace machine::architecture;
@@ -765,8 +771,7 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 				break;
 			case grammar::BM_IDENTIFIER:
-				m_valueType = VALUE_TYPE::MEMBER;
-				m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
+				HandleIdentifier(p_reports.pBegin);
 
 				break;
 			default:
@@ -827,12 +832,7 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 
 			//Arrow access
 			if (p_reports.pBegin->unTokenId == grammar::BAO_ARROW_ACCESS)
-			{
-				++p_reports.pBegin;
-
-				m_valueType = VALUE_TYPE::MEMBER;
-				m_value.pMember = m_context.AddressOf(machine::StringKey(p_reports.pBegin->content.token.pcString, p_reports.pBegin->content.token.iSize));
-			}
+				HandleIdentifier(++p_reports.pBegin);
 			//Dot access
 			else
 			{

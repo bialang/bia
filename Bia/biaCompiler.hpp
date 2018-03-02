@@ -225,6 +225,17 @@ private:
 	void HandleConstantOperation(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator);
 	void HandleNumber(const grammar::Report * p_pReport);
 	void HandleString(const grammar::Report * p_pReport);
+	/**
+	 * Handles the identifier and stores the address to m_value.
+	 *
+	 * @remarks	VALUE_TYPE::MEMBER is guaranteed to be returned.
+	 *
+	 * @since	3.57.118.681
+	 * @date	2-Mar-18
+	 *
+	 * @param	p_pReport	Defines the identifier report.
+	*/
+	void HandleIdentifier(const grammar::Report * p_pReport);
 	void HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex);
 	void HandleCompareOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator);
 	template<typename _INSTANCE, typename _BIA_INSTANCE>

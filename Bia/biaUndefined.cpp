@@ -104,37 +104,37 @@ int32_t BiaUndefined::Test()
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-int32_t BiaUndefined::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
+int32_t BiaUndefined::TestCall(uint32_t, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-int32_t BiaUndefined::TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
+int32_t BiaUndefined::TestCallInt_32(uint32_t, int32_t)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-int32_t BiaUndefined::TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
+int32_t BiaUndefined::TestCallInt_64(uint32_t, int64_t)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-int32_t BiaUndefined::TestCallFloat(uint32_t p_unOperator, float p_rRight)
+int32_t BiaUndefined::TestCallFloat(uint32_t, float)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-int32_t BiaUndefined::TestCallDouble(uint32_t p_unOperator, double p_rRight)
+int32_t BiaUndefined::TestCallDouble(uint32_t, double)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-int32_t BiaUndefined::TestCallString(uint32_t p_unOperator, const char * p_szRight)
+int32_t BiaUndefined::TestCallString(uint32_t, const char*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-BiaMember * BiaUndefined::GetMember(const char * p_szName)
+BiaMember * BiaUndefined::GetMember(const char*)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }

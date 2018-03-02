@@ -95,31 +95,31 @@ public:
 	/**
 	 * @see	BiaMember::TestCall().
 	*/
-	virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) override;
+	virtual int32_t TestCall(uint32_t, BiaMember*) override;
 	/**
 	 * @see	BiaMember::TestCallInt_32().
 	*/
-	virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override;
+	virtual int32_t TestCallInt_32(uint32_t, int32_t) override;
 	/**
 	 * @see	BiaMember::TestCallInt_64().
 	*/
-	virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override;
+	virtual int32_t TestCallInt_64(uint32_t, int64_t) override;
 	/**
 	 * @see	BiaMember::TestCallFloat().
 	*/
-	virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) override;
+	virtual int32_t TestCallFloat(uint32_t, float) override;
 	/**
 	 * @see	BiaMember::TestCallDouble().
 	*/
-	virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) override;
+	virtual int32_t TestCallDouble(uint32_t, double) override;
 	/**
 	 * @see	BiaMember::TestCallString().
 	*/
-	virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override;
+	virtual int32_t TestCallString(uint32_t, const char*) override;
 	/**
 	 * @see	BiaMember::GetMember().
 	*/
-	virtual BiaMember * GetMember(const char * p_szName) override;
+	virtual BiaMember * GetMember(const char*) override;
 
 protected:
 	/**

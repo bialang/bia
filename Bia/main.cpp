@@ -132,12 +132,6 @@ t.hey("lul");
 
 	foo(3, 4);
 
-	//Scopes übernehmen immer die eigenschaften der Parentscopes, außer es wird anders definiert
-	(default=global)
-	{
-
-	}
-
 	//Alle variablen hier sind global
 	var immerGlobal = 0;
 	global immerGloabl = 0;
