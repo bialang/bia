@@ -67,6 +67,15 @@
     <Filter Include="Header Files\framework\native">
       <UniqueIdentifier>{d78ba02e-fd6b-4b8a-9130-2b3312803e66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\grammar">
+      <UniqueIdentifier>{f2abf7ed-e624-43d4-a584-25d26a5f1d83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\framework\object">
+      <UniqueIdentifier>{56119e15-c7e9-49b7-a905-50de3c96e66b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\machine\disassembler">
+      <UniqueIdentifier>{aa5af436-3779-4647-9b92-05c8a9109130}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,41 +90,41 @@
     <ClCompile Include="biaOutputStreamBuffer.cpp">
       <Filter>Source Files\stream</Filter>
     </ClCompile>
-    <ClCompile Include="biaMachineDecoder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="biaCompiler.cpp">
       <Filter>Source Files\compiler</Filter>
     </ClCompile>
     <ClCompile Include="biaInstantiate.cpp">
       <Filter>Source Files\machine\link</Filter>
     </ClCompile>
-    <ClCompile Include="biaOperator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="biaInterpreterRule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="biaUndefined.cpp">
       <Filter>Source Files\framework</Filter>
-    </ClCompile>
-    <ClCompile Include="biaAllocator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="biaCString.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="biaNameManager.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
-    <ClCompile Include="biaMachineSchein.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="biaGrammar.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="biaOperator.cpp">
+      <Filter>Source Files\machine\link</Filter>
+    </ClCompile>
+    <ClCompile Include="biaCString.cpp">
+      <Filter>Source Files\framework</Filter>
     </ClCompile>
     <ClCompile Include="biaClassContext.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\framework\object</Filter>
+    </ClCompile>
+    <ClCompile Include="biaInterpreterRule.cpp">
+      <Filter>Source Files\grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="biaAllocator.cpp">
+      <Filter>Source Files\machine</Filter>
+    </ClCompile>
+    <ClCompile Include="biaMachineDecoder.cpp">
+      <Filter>Source Files\machine\disassembler</Filter>
+    </ClCompile>
+    <ClCompile Include="biaMachineSchein.cpp">
+      <Filter>Source Files\machine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
