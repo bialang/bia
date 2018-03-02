@@ -12,14 +12,14 @@ std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllo
 bia::machine::BiaMachineContext context(pAllocator);
 
 //Bia script
-auto testCode = u8R"(
+std::string stTestCode = R"(
 
 print "Hello, World! - Bia";
 
 )";
 
 //Run
-context.Run(testCode, sizeof(testCode) - 1);
+context.Run(stTestCode.c_str(), stTestCode.length());
 ```
 
 # Language features

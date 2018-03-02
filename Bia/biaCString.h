@@ -40,10 +40,7 @@ public:
 	/**
 	 * @see	BiaMember::Print().
 	*/
-	inline virtual void Print() override
-	{
-		machine::link::Print_s(m_szString);
-	}
+	virtual void Print() override;
 	/**
 	 * @see	BiaMember::Call().
 	*/
@@ -51,17 +48,11 @@ public:
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	inline virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
+	virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override;
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	inline virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
+	virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override;
 	/**
 	 * @see	BiaMember::Instantiate().
 	*/
@@ -77,143 +68,90 @@ public:
 	/**
 	 * @see	BiaMember::OperatorCall().
 	*/
-	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
-	{
-		throw exception::OperatorException("Invalid type on native operation.");
-	}
+	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override;
 	/**
 	 * @see	BiaMember::OperatorCallInt_32().
 	*/
-	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
-	{
-	}
+	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override;
 	/**
 	 * @see	BiaMember::OperatorCallInt_64().
 	*/
-	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override
-	{
-	}
+	virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override;
 	/**
 	 * @see	BiaMember::OperatorCallFloat().
 	*/
-	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override
-	{
-	}
+	virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override;
 	/**
 	 * @see	BiaMember::OperatorCallDouble().
 	*/
-	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override
-	{
-	}
+	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCall().
 	*/
-	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
-	{
-		throw exception::OperatorException("Invalid type on native operation.");
-	}
+	virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCallInt_32().
 	*/
-	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
-	{
-	}
+	virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCallInt_64().
 	*/
-	inline virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
-	{
-	}
+	virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCallFloat().
 	*/
-	inline virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override
-	{
-	}
+	virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override;
 	/**
 	 * @see	BiaMember::OperatorAssignCallDouble().
 	*/
-	inline virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override
-	{
-	}
+	virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override;
 	/**
 	 * @see	BiaMember::OperatorSelfCall().
 	*/
-	inline virtual void OperatorSelfCall(uint32_t p_unOperator) override
-	{
-
-	}
+	virtual void OperatorSelfCall(uint32_t p_unOperator) override;
 	/**
 	 * @see	BiaMember::Clone().
 	*/
-	inline virtual void Clone(BiaMember * p_pDestination) override
-	{
-		p_pDestination->ReplaceObject<BiaCString>(m_szString);
-	}
+	virtual void Clone(BiaMember * p_pDestination) override;
 	/**
 	 * @see	BiaMember::IsType().
 	*/
-	inline virtual bool IsType(const std::type_info & p_type) const override
-	{
-		return false;
-	}
+	virtual bool IsType(const std::type_info & p_type) const override;
 	/**
 	 * @see	BiaMember::GetNativeType().
 	*/
-	inline virtual int GetNativeType() const override
-	{
-		return NTF_STRING;
-	}
+	virtual int GetNativeType() const override;
 	/**
 	 * @see	BiaMember::Test().
 	*/
-	virtual int32_t Test() override
-	{
-		throw exception::BadCallException("Cannot be tested.");
-		//return reinterpret_cast<int32_t*>(&m_llValue)[0] | reinterpret_cast<int32_t*>(&m_llValue)[1];
-	}
+	virtual int32_t Test() override;
 	/**
 	 * @see	BiaMember::TestCall().
 	*/
-	inline virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) override
-	{
-		return 0;
-	}
+	virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) override;
 	/**
 	 * @see	BiaMember::TestCallInt_32().
 	*/
-	inline virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
-	{
-		throw exception::OperatorException("Cannot compare a string to a number.");
-	}
+	virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override;
 	/**
 	 * @see	BiaMember::TestCallInt_64().
 	*/
-	inline virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
-	{
-		throw exception::OperatorException("Cannot compare a string to a number.");
-	}
+	virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override;
 	/**
 	 * @see	BiaMember::TestCallFloat().
 	*/
-	inline virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) override
-	{
-		throw exception::OperatorException("Cannot compare a string to a number.");
-	}
+	virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) override;
 	/**
 	 * @see	BiaMember::TestCallDouble().
 	*/
-	inline virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) override
-	{
-		throw exception::OperatorException("Cannot compare a string to a number.");
-	}
+	virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) override;
 	/**
 	 * @see	BiaMember::TestCallString().
 	*/
-	inline virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override
-	{
-		return static_cast<int32_t>(m_szString == p_szRight);
-	}
+	virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override;
+	/**
+	 * @see	BiaMember::GetMember().
+	*/
 	virtual BiaMember * GetMember(const char * p_szName) override;
 
 protected:
@@ -227,7 +165,8 @@ protected:
 	virtual void * GetData(const std::type_info & p_type, bool p_bConst) override;
 
 private:
-	const char * m_szString;	/**	Defines the constant address of the string. Must not be modified.	*/
+	/**	Defines the constant address of the string. Must not be modified.	*/
+	const char * m_szString;
 };
 
 }
