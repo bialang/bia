@@ -109,6 +109,7 @@ int main()
 	bia::machine::BiaMachineContext context(pAllocator);
 //var i = 65*65+5*8;
 	char script[] = R"(
+import std;
 new obj().hey("luh");
 )";
 

@@ -35,8 +35,9 @@ void BiaGrammar::InitializeRules()
 	m_interpreter.SetRule(BGR_ROOT_HELPER_1, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
 		RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
 		RulePointerToken<BGR_IF, FILLER_TOKEN>,
-		RulePointerToken<BGR_PRE_TEST_LOOP, FILLER_TOKEN>,
 		RulePointerToken<BGR_PRINT, FILLER_TOKEN>,
+		RulePointerToken<BGR_PRE_TEST_LOOP, FILLER_TOKEN>,
+		RulePointerToken<BGR_IMPORT, FILLER_TOKEN>,
 		RulePointerToken<BGR_ROOT_HELPER_2, FILLER_TOKEN>
 		}));
 
@@ -109,6 +110,13 @@ void BiaGrammar::InitializeRules()
 	m_interpreter.SetRule(BGR_PRE_TEST_LOOP_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
 		KeywordToken<Keyword_while, NONE, LT_WHILE>,
 		KeywordToken<Keyword_until, NONE, LT_UNTIL>
+		}));
+
+	//Import
+	m_interpreter.SetRule(BGR_IMPORT, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
+		KeywordToken<Keyword_import, FILLER_TOKEN>,
+		IdentifierToken<STARTING_WHITESPACE_TOKEN>,
+		KeywordToken<Operator_semicolon, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
 	//Value raw (must be wrapped because of math factor)

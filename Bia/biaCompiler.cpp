@@ -1036,6 +1036,12 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 	return p_reports.pEnd + 1;
 }
 
+const grammar::Report * BiaCompiler::HandleImport(grammar::report_range p_reports)
+{
+	//TODO
+	return p_reports.pEnd + 1;
+}
+
 const grammar::Report * BiaCompiler::HandleInstantiation(grammar::report_range p_reports)
 {
 	//Handle identifier

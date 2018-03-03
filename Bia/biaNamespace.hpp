@@ -17,8 +17,23 @@ namespace framework
 class BiaNamespace : public BiaMember
 {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * @param	[in]	p_pAllocator	Defines the member allocator.
+	 * @param	[in]	p_pNameManager	Defines the name manager.
+	*/
 	BiaNamespace(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager);
 	
+	/**
+	 * Sets or adds a member.
+	 *
+	 * @since	3.58.119.683
+	 * @date	3-Mar-18
+	 *
+	 * @param	p_stName	Defines the name.
+	 * @param	p_args	Defines the args that should be passed to the instance.
+	*/
 	template<typename T, typename... _ARGS>
 	inline typename std::enable_if<std::is_base_of<BiaMember, T>::value>::type SetMember(const std::string & p_stName, _ARGS &&... p_args)
 	{
