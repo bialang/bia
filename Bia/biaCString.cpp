@@ -117,7 +117,7 @@ int BiaCString::GetNativeType() const
 
 int32_t BiaCString::Test()
 {
-	return static_cast<int32_t>(m_szString[0] != 0);
+	return static_cast<int32_t>(m_szString[0]);
 }
 
 int32_t BiaCString::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
