@@ -127,6 +127,7 @@
     <ClCompile Include="biaMachineContext.cpp" />
     <ClCompile Include="biaMachineDecoder.cpp" />
     <ClCompile Include="biaMachineSchein.cpp" />
+    <ClCompile Include="biaModule.cpp" />
     <ClCompile Include="biaNamespace.cpp" />
     <ClCompile Include="biaOperator.cpp" />
     <ClCompile Include="biaOutputStreamBuffer.cpp" />
@@ -137,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="biaAllocator.hpp" />
     <ClInclude Include="biaClass.hpp" />
+    <ClInclude Include="biaClassRaw.hpp" />
     <ClInclude Include="biaMemberHolder.hpp" />
     <ClInclude Include="biaClassTemplate.hpp" />
     <ClInclude Include="biaCompiler.hpp" />
@@ -168,6 +170,8 @@
     <ClInclude Include="biaMember.hpp" />
     <ClInclude Include="biaMemberCreator.hpp" />
     <ClInclude Include="biaMemberFunction.hpp" />
+    <ClInclude Include="biaModule.hpp" />
+    <ClInclude Include="biaModuleHandler.hpp" />
     <ClInclude Include="biaNamespace.hpp" />
     <ClInclude Include="biaNativeOperator.hpp" />
     <ClInclude Include="biaNativeVariable.hpp" />

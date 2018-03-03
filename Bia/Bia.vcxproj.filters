@@ -73,6 +73,9 @@
     <Filter Include="Source Files\machine\disassembler">
       <UniqueIdentifier>{aa5af436-3779-4647-9b92-05c8a9109130}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\machine\modular">
+      <UniqueIdentifier>{ab3d6e83-449b-4d19-bfad-51fa7a6b4156}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -125,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="biaMemberHolder.cpp">
       <Filter>Source Files\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="biaModule.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +289,15 @@
     </ClInclude>
     <ClInclude Include="biaMemberHolder.hpp">
       <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="biaModuleHandler.hpp">
+      <Filter>Header Files\machine\modular</Filter>
+    </ClInclude>
+    <ClInclude Include="biaModule.hpp">
+      <Filter>Header Files\machine\modular</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClassRaw.hpp">
+      <Filter>Header Files\framework\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
