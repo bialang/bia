@@ -12,10 +12,8 @@ namespace bia
 {
 namespace framework
 {
-namespace object
-{
 
-class BiaClassContext
+class BiaMemberHolder
 {
 public:
 	/**
@@ -24,7 +22,7 @@ public:
 	 * @param	[in]	p_pAllocator	Defines the allocator used to allocate memory for members.
 	 * @param	[in]	p_pNameManager	Defines the name manager.
 	*/
-	BiaClassContext(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager);
+	BiaMemberHolder(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager);
 	/**
 	 * Adds a member or overwrites the existing one.
 	 *
@@ -32,9 +30,9 @@ public:
 	 * @date	25-Feb-18
 	 *
 	 * @param	p_stName	Defines the name of the member.
-	 * @param	[in]	p_pMember	Defines the member.
+	 * @param	p_memberAllocation	Defines the member.
 	*/
-	void SetMember(const std::string & p_stName, BiaMember * p_pMember);
+	void SetMember(const std::string & p_stName, machine::BiaAllocator::universal_allocation p_memberAllocation);
 	/**
 	 * Retrieves the member associated with the name.
 	 *
@@ -58,7 +56,7 @@ public:
 
 private:
 	/**	Stores all known members of a class.	*/
-	std::unordered_map<const char*, BiaMember*> m_members;
+	std::unordered_map<const char*, machine::BiaAllocator::universal_allocation> m_members;
 
 	/**	Defines the allocator used to allocate memory for the members.	*/
 	machine::BiaAllocator * m_pAllocator;
@@ -66,6 +64,5 @@ private:
 	machine::BiaNameManager * m_pNameManager;
 };
 
-}
 }
 }
