@@ -70,9 +70,6 @@
     <Filter Include="Source Files\grammar">
       <UniqueIdentifier>{f2abf7ed-e624-43d4-a584-25d26a5f1d83}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\framework\object">
-      <UniqueIdentifier>{56119e15-c7e9-49b7-a905-50de3c96e66b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\machine\disassembler">
       <UniqueIdentifier>{aa5af436-3779-4647-9b92-05c8a9109130}</UniqueIdentifier>
     </Filter>
@@ -111,9 +108,6 @@
     <ClCompile Include="biaCString.cpp">
       <Filter>Source Files\framework</Filter>
     </ClCompile>
-    <ClCompile Include="biaClassContext.cpp">
-      <Filter>Source Files\framework\object</Filter>
-    </ClCompile>
     <ClCompile Include="biaInterpreterRule.cpp">
       <Filter>Source Files\grammar</Filter>
     </ClCompile>
@@ -125,6 +119,12 @@
     </ClCompile>
     <ClCompile Include="biaMachineSchein.cpp">
       <Filter>Source Files\machine</Filter>
+    </ClCompile>
+    <ClCompile Include="biaNamespace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="biaMemberHolder.cpp">
+      <Filter>Source Files\framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +260,6 @@
     <ClInclude Include="biaClassTemplate.hpp">
       <Filter>Header Files\framework\object</Filter>
     </ClInclude>
-    <ClInclude Include="biaClassContext.hpp">
-      <Filter>Header Files\framework\object</Filter>
-    </ClInclude>
     <ClInclude Include="biaNativeOperator.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
@@ -280,6 +277,12 @@
     </ClInclude>
     <ClInclude Include="biaLambdaFunction.hpp">
       <Filter>Header Files\framework\executable</Filter>
+    </ClInclude>
+    <ClInclude Include="biaNamespace.hpp">
+      <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="biaMemberHolder.hpp">
+      <Filter>Header Files\framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

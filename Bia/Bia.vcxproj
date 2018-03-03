@@ -117,7 +117,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="biaAllocator.cpp" />
-    <ClCompile Include="biaClassContext.cpp" />
+    <ClCompile Include="biaMemberHolder.cpp" />
     <ClCompile Include="biaCompiler.cpp" />
     <ClCompile Include="biaCString.cpp" />
     <ClCompile Include="biaGrammar.cpp" />
@@ -127,6 +127,7 @@
     <ClCompile Include="biaMachineContext.cpp" />
     <ClCompile Include="biaMachineDecoder.cpp" />
     <ClCompile Include="biaMachineSchein.cpp" />
+    <ClCompile Include="biaNamespace.cpp" />
     <ClCompile Include="biaOperator.cpp" />
     <ClCompile Include="biaOutputStreamBuffer.cpp" />
     <ClCompile Include="biaNameManager.cpp" />
@@ -136,7 +137,7 @@
   <ItemGroup>
     <ClInclude Include="biaAllocator.hpp" />
     <ClInclude Include="biaClass.hpp" />
-    <ClInclude Include="biaClassContext.hpp" />
+    <ClInclude Include="biaMemberHolder.hpp" />
     <ClInclude Include="biaClassTemplate.hpp" />
     <ClInclude Include="biaCompiler.hpp" />
     <ClInclude Include="biaConfig.hpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="biaMember.hpp" />
     <ClInclude Include="biaMemberCreator.hpp" />
     <ClInclude Include="biaMemberFunction.hpp" />
+    <ClInclude Include="biaNamespace.hpp" />
     <ClInclude Include="biaNativeOperator.hpp" />
     <ClInclude Include="biaNativeVariable.hpp" />
     <ClInclude Include="biaOperator.hpp" />
