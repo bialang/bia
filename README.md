@@ -1,11 +1,7 @@
 # Bia
 Embedded C++ Scripting Language
 
-# Supported platforms
-Currently the x86 architecture with the MSVC compiler is supported. Additional support for x64, ARM, GCC and Clang is planned.
-
 # Embedded example
-Bia is still in development thus this example may not be final.
 ```
 //Create context with default settings
 std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
@@ -35,7 +31,7 @@ context.Run(stTestCode.c_str(), stTestCode.length());
 - Optimized member function call. This is more efficient in loops:
 ```
 global function_pointer = object.function;
-object->function();
+object->function_pointer();
 ```
 ***
 **Loops**
@@ -62,3 +58,6 @@ else if (some_value == 3) {
   print false;
 }
 ```
+
+# Supported platforms
+Currently the x86 architecture with the MSVC compiler is supported. Additional support for x64, ARM, GCC and Clang is planned.
