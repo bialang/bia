@@ -9,7 +9,7 @@
 #include "biaUndefined.hpp"
 #include "biaStaticFunction.hpp"
 #include "biaException.hpp"
-#include "biaClassContext.hpp"
+#include "biaMemberHolder.hpp"
 #include "biaClass.hpp"
 
 
@@ -24,7 +24,7 @@ template<typename _CLASS>
 class BiaClassTemplate final : public BiaMember
 {
 public:
-	inline BiaClassTemplate(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager) : m_pClassContext(new BiaClassContext(p_pAllocator, p_pNameManager))
+	inline BiaClassTemplate(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager) : m_pMemberHolder(new BiaMemberHolder(p_pAllocator, p_pNameManager))
 	{
 	}
 
@@ -54,7 +54,7 @@ public:
 	*/
 	inline virtual void Instantiate(BiaMember * p_pDestination) override
 	{
-		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pClassContext, std::shared_ptr<_CLASS>(new _CLASS()));
+		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pMemberHolder, std::shared_ptr<_CLASS>(new _CLASS()));
 	}
 	/**
 	 * @see	BiaMember::InstantiateCount().
@@ -192,9 +192,9 @@ public:
 	{
 		///TODO: check name
 
-		auto pMember = new(m_pClassContext->GetAllocator()->AllocateBlocks(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL).pAddress) executable::BiaStaticFunction<_RETURN(*)(_ARGS...)>(p_pFunction);
+		auto allocation = m_pMemberHolder->GetAllocator()->ConstructBlocks<executable::BiaStaticFunction<_RETURN(*)(_ARGS...)>>(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL, p_pFunction);
 
-		m_pClassContext->SetMember(p_stName, pMember);
+		m_pMemberHolder->SetMember(p_stName, machine::BiaAllocator::ToUniversalAllocation(allocation));
 
 		return this;
 	}
@@ -210,7 +210,7 @@ public:
 	}
 
 private:
-	std::shared_ptr<BiaClassContext> m_pClassContext;
+	std::shared_ptr<BiaMemberHolder> m_pMemberHolder;
 };
 
 }

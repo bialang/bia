@@ -57,9 +57,16 @@ public:
 	virtual universal_allocation Allocate(size_t p_iSize, MEMORY_TYPE p_type);
 	virtual universal_allocation AllocateBlocks(size_t p_iBlockCount, MEMORY_TYPE p_type);
 	virtual universal_allocation ReserveAllocate(size_t p_iMaxSize, MEMORY_TYPE p_type);
+	template<typename T>
+	inline static universal_allocation ToUniversalAllocation(Allocation<T> p_allocation)
+	{
+		return { p_allocation.pAddress, p_allocation.iSize };
+	}
 	template<typename T, typename... _ARGS>
 	inline Allocation<T> ConstructBlocks(size_t p_iBlockCount, MEMORY_TYPE p_type, _ARGS &&... p_args)
 	{
+		static_assert(sizeof(T) <= BLOCK_SIZE, "Type exceeds block size.");
+
 		auto allocation = AllocateBlocks(p_iBlockCount, p_type);
 		auto pBlocks = static_cast<int8_t*>(allocation.pAddress);
 
