@@ -22,8 +22,8 @@ context.Run(stTestCode.c_str(), stTestCode.length());
 # Language features
 **Native types**
 - Integrals with a range from -2^32 to 2^32-1
-- 32-bit floating point
-- Zero terminated string
+- 32-bit floating points
+- Zero terminated strings
 
 **Variable Declaration:**
 - Global variables `global`: `global i = 0;`
@@ -32,6 +32,7 @@ context.Run(stTestCode.c_str(), stTestCode.length());
 - Instantiation: `global obj = new MyClass();`
 - The types of the variables will be deducted from the value
 - Once a variable has a tpye it cannot be changed, unless it is redeclared:
+
 ```
 global var = "hello"; # var is now a string
 
@@ -46,6 +47,7 @@ var = 34; # this is now valid
 - Normal function call: `normal_function();`
 - Member function call: `object.function();`
 - Optimized member function call. This is more efficient in loops:
+
 ```
 global function_pointer = object.function;
 object->function_pointer();
@@ -53,12 +55,15 @@ object->function_pointer();
 
 **Loops**
 - While loop:
+
 ```
 while (true) {
   print "hi";
 }
 ```
+
 - Until loop. These loops are just like `while` loops but with negated condition:
+
 ```
 until (false) {
   print "hi";
@@ -67,6 +72,7 @@ until (false) {
 
 **Conditional statements**
 - If statements. Conditions that can be evaluated at compile time will be optimized away:
+
 ```
 if (true) {
   print true;
