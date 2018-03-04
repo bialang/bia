@@ -14,9 +14,20 @@
 #define BIA_STATIC_CALLING_CONEVENTION __cdecl
 #define BIA_COMPILER_MSCV 1
 
+//Export
+#ifdef BIA_IMPORT
+#define BIA_EXPORT __declspec(dllimport)
+#else
+#define BIA_EXPORT __declspec(dllexport)
+#endif
+
+//32 Bit
 #if defined(_M_IX86)
 #define BIA_ARCHITECTURE_MG32 1
+
+//64 Bit
 #elif defined(_M_X64)
+
 
 #endif
 
