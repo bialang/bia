@@ -1,9 +1,6 @@
 #pragma once
 
 #include "biaNativeVariable.hpp"
-#include "biaNativeOperator.hpp"
-#include "biaMember.hpp"
-#include "biaPrint.hpp"
 
 
 namespace bia

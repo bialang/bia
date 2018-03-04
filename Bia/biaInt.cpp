@@ -1,4 +1,7 @@
 #include "biaInt.hpp"
+#include "biaNativeOperator.hpp"
+#include "biaPrint.hpp"
+#include "biaFloat.hpp"
 
 
 namespace bia
@@ -42,20 +45,17 @@ void BiaInt::OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember
 
 void BiaInt::OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination)
 {
-	static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
-
-	new(p_pDestination) BiaInt(IntegralOperation(m_llValue, p_nRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaInt>(IntegralOperation(m_llValue, p_nRight, p_unOperator));
 }
 
 void BiaInt::OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination)
 {
-	static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
-
-	new(p_pDestination) BiaInt(IntegralOperation(m_llValue, p_llRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaInt>(IntegralOperation(m_llValue, p_llRight, p_unOperator));
 }
 
 void BiaInt::OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination)
 {
+	p_pDestination->ReplaceObject<BiaFloat>(ArithmeticOperation(m_llValue, p_rRight, p_unOperator));
 }
 
 void BiaInt::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination)
