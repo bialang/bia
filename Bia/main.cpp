@@ -109,12 +109,9 @@ int main()
 	bia::machine::BiaMachineContext context(pAllocator);
 //var i = 65*65+5*8;
 	char script[] = R"(
-global i = 100000000;
-global int = 43;
+global float = 343.4f;
 
-while(i){
-int+5;
-i -=1;
+print float;
 }
 )";
 	/*

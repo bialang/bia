@@ -1,6 +1,7 @@
 #include "biaCompiler.hpp"
 #include "biaException.hpp"
 #include "biaOutputStreamBuffer.hpp"
+#include "biaFloat.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -483,7 +484,7 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 			break;
 		case VALUE_TYPE::FLOAT:
 			m_toolset.SafeCall(&machine::link::InstantiateFloat, pVariable, m_value.rFloat);
-	
+
 			break;
 		case VALUE_TYPE::DOUBLE:
 			m_toolset.SafeCall(&machine::link::InstantiateDouble, pVariable, m_value.rDouble);

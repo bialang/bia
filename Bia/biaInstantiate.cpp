@@ -1,5 +1,6 @@
 #include "biaInstantiate.hpp"
 #include "biaInt.hpp"
+#include "biaFloat.hpp"
 #include "biaCString.h"
 
 
@@ -37,11 +38,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateIntN1(framework::BiaMember * 
 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateFloat(framework::BiaMember *p_pMember, float p_rValue))
 {
-	//Destruct old object
-	p_pMember->~BiaMember();
-
-	//Create new int object
-	//new(p_pMember) framework::BiaNativeVariable<float>(p_rValue);
+	p_pMember->ReplaceObject<framework::native::BiaFloat>(p_rValue);
 }
 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateDouble(framework::BiaMember *p_pMember, double p_rValue))
