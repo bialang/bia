@@ -76,6 +76,9 @@
     <Filter Include="Header Files\machine\modular">
       <UniqueIdentifier>{ab3d6e83-449b-4d19-bfad-51fa7a6b4156}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\framework\native">
+      <UniqueIdentifier>{9cfba5be-3273-41b7-ac08-daeff9bb6f0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,20 +126,20 @@
     <ClCompile Include="biaMachineSchein.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
-    <ClCompile Include="biaNamespace.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="biaMemberHolder.cpp">
       <Filter>Source Files\framework</Filter>
     </ClCompile>
     <ClCompile Include="biaModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="biaNativeVariable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="biaInt.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="biaNamespace.cpp">
+      <Filter>Source Files\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="biaFloat.cpp">
+      <Filter>Source Files\framework\native</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="biaClassRaw.hpp">
       <Filter>Header Files\framework\object</Filter>
+    </ClInclude>
+    <ClInclude Include="biaFloat.hpp">
+      <Filter>Header Files\framework\native</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
