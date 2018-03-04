@@ -1,7 +1,8 @@
 #include "biaInt.hpp"
+#include "biaFloat.hpp"
+#include "biaDouble.hpp"
 #include "biaNativeOperator.hpp"
 #include "biaPrint.hpp"
-#include "biaFloat.hpp"
 
 
 namespace bia
@@ -60,6 +61,7 @@ void BiaInt::OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember 
 
 void BiaInt::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination)
 {
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_llValue, p_rRight, p_unOperator));
 }
 
 void BiaInt::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)

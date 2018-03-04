@@ -476,24 +476,21 @@ inline ACTION CommentToken(const char * p_pcBuffer, size_t p_iSize, TokenParams,
 	constexpr auto SUCCESS = ACTION::DONT_REPORT;
 	constexpr auto ERROR = ACTION::ERROR;
 
-	if (p_iSize >= 1)
+	//Check if this is a comment
+	if (p_iSize >= 1 && *p_pcBuffer++ == '#')
 	{
-		//Check this is a comment
-		if (*p_pcBuffer++ == '#')
+		++p_output.iTokenSize;
+
+		//Ignore every character until line break
+		while (--p_iSize)
 		{
 			++p_output.iTokenSize;
 
-			//Ignore until line break
-			while (--p_iSize)
-			{
-				++p_output.iTokenSize;
-
-				if (*p_pcBuffer++ == '\n')
-					break;
-			}
-
-			return SUCCESS;
+			if (*p_pcBuffer++ == '\n')
+				break;
 		}
+
+		return SUCCESS;
 	}
 
 	return ERROR;

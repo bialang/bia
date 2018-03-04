@@ -1,4 +1,3 @@
-#include "biaFloat.hpp"
 #include "biaDouble.hpp"
 #include "biaNativeOperator.hpp"
 #include "biaPrint.hpp"
@@ -11,12 +10,12 @@ namespace framework
 namespace native
 {
 
-void BiaFloat::Print()
+void BiaDouble::Print()
 {
-	machine::link::Print_f(m_rValue);
+	machine::link::Print_d(m_rValue);
 }
 
-void BiaFloat::OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination)
+void BiaDouble::OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination)
 {
 	auto fRightNativeType = p_pRight->GetNativeType();
 
@@ -43,27 +42,27 @@ void BiaFloat::OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMemb
 	throw exception::OperatorException("Invalid type on native operation.");
 }
 
-void BiaFloat::OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination)
+void BiaDouble::OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaFloat>(ArithmeticOperation(m_rValue, p_nRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_nRight, p_unOperator));
 }
 
-void BiaFloat::OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination)
+void BiaDouble::OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaFloat>(ArithmeticOperation(m_rValue, p_llRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_llRight, p_unOperator));
 }
 
-void BiaFloat::OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination)
-{
-	p_pDestination->ReplaceObject<BiaFloat>(ArithmeticOperation(m_rValue, p_rRight, p_unOperator));
-}
-
-void BiaFloat::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination)
+void BiaDouble::OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination)
 {
 	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_rRight, p_unOperator));
 }
 
-void BiaFloat::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)
+void BiaDouble::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination)
+{
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_rRight, p_unOperator));
+}
+
+void BiaDouble::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)
 {
 	auto fRightNativeType = p_pRight->GetNativeType();
 
@@ -80,81 +79,81 @@ void BiaFloat::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)
 	throw exception::OperatorException("Invalid type on native operation.");
 }
 
-void BiaFloat::OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
+void BiaDouble::OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
 {
 	m_rValue = ArithmeticOperation(m_rValue, p_nRight, p_unOperator);
 }
 
-void BiaFloat::OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
+void BiaDouble::OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
 {
 	m_rValue = ArithmeticOperation(m_rValue, p_llRight, p_unOperator);
 }
 
-void BiaFloat::OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight)
+void BiaDouble::OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight)
 {
 	m_rValue = ArithmeticOperation(m_rValue, p_rRight, p_unOperator);
 }
 
-void BiaFloat::OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight)
+void BiaDouble::OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight)
 {
-	m_rValue = static_cast<float>(ArithmeticOperation(m_rValue, p_rRight, p_unOperator));
+	m_rValue = ArithmeticOperation(m_rValue, p_rRight, p_unOperator);
 }
 
-void BiaFloat::OperatorSelfCall(uint32_t p_unOperator)
+void BiaDouble::OperatorSelfCall(uint32_t p_unOperator)
 {
 }
 
-void BiaFloat::Clone(BiaMember * p_pDestination)
+void BiaDouble::Clone(BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaFloat>(m_rValue);
+	p_pDestination->ReplaceObject<BiaDouble>(m_rValue);
 }
 
-int BiaFloat::GetNativeType() const
+int BiaDouble::GetNativeType() const
 {
-	return NTF_FLOAT;
+	return NTF_DOUBLE;
 }
 
-int32_t BiaFloat::Test()
+int32_t BiaDouble::Test()
 {
-	return static_cast<int32_t>(m_rValue != 0.0f);
+	return static_cast<int32_t>(m_rValue != 0.0);
 }
 
-int32_t BiaFloat::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
-{
-	return int32_t();
-}
-
-int32_t BiaFloat::TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
+int32_t BiaDouble::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
 {
 	return int32_t();
 }
 
-int32_t BiaFloat::TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
+int32_t BiaDouble::TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
 {
 	return int32_t();
 }
 
-int32_t BiaFloat::TestCallFloat(uint32_t p_unOperator, float p_rRight)
+int32_t BiaDouble::TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
 {
 	return int32_t();
 }
 
-int32_t BiaFloat::TestCallDouble(uint32_t p_unOperator, double p_rRight)
+int32_t BiaDouble::TestCallFloat(uint32_t p_unOperator, float p_rRight)
 {
 	return int32_t();
 }
 
-int32_t BiaFloat::TestCallString(uint32_t p_unOperator, const char * p_szRight)
+int32_t BiaDouble::TestCallDouble(uint32_t p_unOperator, double p_rRight)
+{
+	return int32_t();
+}
+
+int32_t BiaDouble::TestCallString(uint32_t p_unOperator, const char * p_szRight)
 {
 	throw exception::OperatorException("Cannot compare an floating point to a string.");
 }
 
-void * BiaFloat::GetNativeData(NATIVE_TYPE p_nativeType)
+void * BiaDouble::GetNativeData(NATIVE_TYPE p_nativeType)
 {
 	switch (p_nativeType)
 	{
-	case NATIVE_TYPE::FLOAT:
-	case NATIVE_TYPE::CONST_FLOAT:
+	case NATIVE_TYPE::DOUBLE:
+	case NATIVE_TYPE::CONST_DOUBLE:
 		return &m_rValue;
 	default:
 		throw exception::BadCastException("Native type is not supported.");

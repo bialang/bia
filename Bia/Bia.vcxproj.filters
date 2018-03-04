@@ -141,6 +141,9 @@
     <ClCompile Include="biaFloat.cpp">
       <Filter>Source Files\framework\native</Filter>
     </ClCompile>
+    <ClCompile Include="biaDouble.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaConfig.hpp">
@@ -309,6 +312,9 @@
       <Filter>Header Files\framework\object</Filter>
     </ClInclude>
     <ClInclude Include="biaFloat.hpp">
+      <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="biaDouble.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
   </ItemGroup>
