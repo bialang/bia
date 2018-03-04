@@ -38,6 +38,7 @@ void BiaGrammar::InitializeRules()
 		RulePointerToken<BGR_PRINT, FILLER_TOKEN>,
 		RulePointerToken<BGR_PRE_TEST_LOOP, FILLER_TOKEN>,
 		RulePointerToken<BGR_IMPORT, FILLER_TOKEN>,
+		CommentToken,
 		RulePointerToken<BGR_ROOT_HELPER_2, FILLER_TOKEN>
 		}));
 

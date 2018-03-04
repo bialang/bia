@@ -471,6 +471,34 @@ inline ACTION CompareOperatorToken(const char * p_pcBuffer, size_t p_iSize, Toke
 	return ERROR;
 }
 
+inline ACTION CommentToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
+{
+	constexpr auto SUCCESS = ACTION::DONT_REPORT;
+	constexpr auto ERROR = ACTION::ERROR;
+
+	if (p_iSize >= 1)
+	{
+		//Check this is a comment
+		if (*p_pcBuffer++ == '#')
+		{
+			++p_output.iTokenSize;
+
+			//Ignore until line break
+			while (--p_iSize)
+			{
+				++p_output.iTokenSize;
+
+				if (*p_pcBuffer++ == '\n')
+					break;
+			}
+
+			return SUCCESS;
+		}
+	}
+
+	return ERROR;
+}
+
 template<flag_type _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION NumberValueToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
