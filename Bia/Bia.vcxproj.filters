@@ -254,9 +254,6 @@
     <ClInclude Include="biaMemberCreator.hpp">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
-    <ClInclude Include="biaCString.h">
-      <Filter>Header Files\framework</Filter>
-    </ClInclude>
     <ClInclude Include="biaHash.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
@@ -315,6 +312,9 @@
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
     <ClInclude Include="biaDouble.hpp">
+      <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="biaCString.h">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
   </ItemGroup>

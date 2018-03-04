@@ -49,7 +49,7 @@ BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateDouble(framework::BiaMember *
 
 BIA_INSTRUCTION_CALLING_CONVETION(void, InstantiateCString(framework::BiaMember *p_pMember, const char *p_szString))
 {
-	p_pMember->ReplaceObject<framework::BiaCString>(p_szString);
+	p_pMember->ReplaceObject<framework::native::BiaCString>(p_szString);
 }
 
 }

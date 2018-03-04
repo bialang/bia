@@ -1,48 +1,17 @@
 #include "biaCString.h"
+#include "biaPrint.hpp"
+
 
 namespace bia
 {
 namespace framework
 {
-
-void BiaCString::Undefine()
+namespace native
 {
-	ReplaceObject<BiaUndefined>();
-}
 
 void BiaCString::Print()
 {
 	machine::link::Print_s(m_szString);
-}
-
-void BiaCString::Call(BiaMember*, BiaMember *)
-{
-	throw exception::BadCallException("Invalid function call on native type.");
-}
-
-void BiaCString::CallCount(BiaMember *, BiaMember *, parameter_count, ...)
-{
-	throw exception::BadCallException("Invalid function call on native type.");
-}
-
-void BiaCString::CallFormat(BiaMember *, BiaMember *, parameter_count, const char *, ...)
-{
-	throw exception::BadCallException("Invalid function call on native type.");
-}
-
-void BiaCString::Instantiate(BiaMember *)
-{
-	throw exception::BadCallException("Invalid instantiation call.");
-}
-
-void BiaCString::InstantiateCount(BiaMember *, parameter_count, ...)
-{
-	throw exception::BadCallException("Invalid instantiation call.");
-}
-
-void BiaCString::InstantiateFormat(BiaMember *, parameter_count, const char *, ...)
-{
-	throw exception::BadCallException("Invalid instantiation call.");
 }
 
 void BiaCString::OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination)
@@ -105,11 +74,6 @@ void BiaCString::Clone(BiaMember * p_pDestination)
 	p_pDestination->ReplaceObject<BiaCString>(m_szString);
 }
 
-bool BiaCString::IsType(const std::type_info & p_type) const
-{
-	return false;
-}
-
 int BiaCString::GetNativeType() const
 {
 	return NTF_STRING;
@@ -155,11 +119,6 @@ int32_t BiaCString::TestCallString(uint32_t p_unOperator, const char * p_szRight
 	throw exception::OperatorException("Invalid compare operator.");
 }
 
-BiaMember * BiaCString::GetMember(const char*)
-{
-	throw exception::SymbolException("Unkown member.");
-}
-
 void * BiaCString::GetNativeData(NATIVE_TYPE p_nativeType)
 {
 	switch (p_nativeType)
@@ -171,10 +130,6 @@ void * BiaCString::GetNativeData(NATIVE_TYPE p_nativeType)
 	}
 }
 
-void * BiaCString::GetData(const std::type_info & p_type, bool p_bConst)
-{
-	throw exception::BadCastException("Type is not supported.");
 }
-
 }
 }

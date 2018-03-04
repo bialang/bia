@@ -1,72 +1,31 @@
 #pragma once
 
-#include <new>
-#include <string>
-
-#include "biaMember.hpp"
-#include "biaPrint.hpp"
-#include "biaException.hpp"
-#include "biaUndefined.hpp"
+#include "biaNativeVariable.hpp"
 
 
 namespace bia
 {
 namespace framework
 {
+namespace native
+{
 
-class BiaCString : public BiaMember
+class BiaCString final : public BiaNativeVariable
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @param	p_szConstantString	Defines a string address that has to be valid until the end of the lifetime of this object.
-	*/
-	inline explicit BiaCString(const char * p_szConstantString) : m_szString(p_szConstantString) {}
-	/**
-	 * Dummy-Constructor in order to prevent compiler errors.
-	*/
+	inline explicit BiaCString(const char * p_szString) : m_szString(p_szString) {}
 	template<typename _DUMMY>
 	inline explicit BiaCString(_DUMMY)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
 	}
-	~BiaCString() = default;
 
-	/**
-	 * @see	BiaMember::Undefine().
-	*/
-	virtual void Undefine() override;
 	/**
 	 * @see	BiaMember::Print().
 	*/
 	virtual void Print() override;
 	/**
-	 * @see	BiaMember::Call().
-	*/
-	virtual void Call(BiaMember*, BiaMember*) override;
-	/**
-	 * @see	BiaMember::CallCount().
-	*/
-	virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override;
-	/**
-	 * @see	BiaMember::CallFormat().
-	*/
-	virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override;
-	/**
-	 * @see	BiaMember::Instantiate().
-	*/
-	virtual void Instantiate(BiaMember*) override;
-	/**
-	 * @see	BiaMember::InstantiateCount().
-	*/
-	virtual void InstantiateCount(BiaMember*, parameter_count, ...) override;
-	/**
-	 * @see	BiaMember::InstantiateFormat().
-	*/
-	virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override;
-	/**
-	 * @see	BiaMember::OperatorCall().
+	* @see	BiaMember::OperatorCall().
 	*/
 	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override;
 	/**
@@ -114,10 +73,6 @@ public:
 	*/
 	virtual void Clone(BiaMember * p_pDestination) override;
 	/**
-	 * @see	BiaMember::IsType().
-	*/
-	virtual bool IsType(const std::type_info & p_type) const override;
-	/**
 	 * @see	BiaMember::GetNativeType().
 	*/
 	virtual int GetNativeType() const override;
@@ -149,25 +104,17 @@ public:
 	 * @see	BiaMember::TestCallString().
 	*/
 	virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override;
-	/**
-	 * @see	BiaMember::GetMember().
-	*/
-	virtual BiaMember * GetMember(const char * p_szName) override;
 
 protected:
 	/**
 	 * @see	BiaMember::GetNativeData().
 	*/
 	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override;
-	/**
-	 * @see	BiaMember::GetData().
-	*/
-	virtual void * GetData(const std::type_info & p_type, bool p_bConst) override;
 
 private:
-	/**	Defines the constant address of the string. Must not be modified.	*/
 	const char * m_szString;
 };
 
+}
 }
 }

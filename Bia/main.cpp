@@ -110,6 +110,7 @@ int main()
 //var i = 65*65+5*8;
 	char script[] = R"(
 global float = 343.4f;
+float = 3;
 #print to sceen
 #servus
 print float;
