@@ -1,14 +1,9 @@
 #pragma once
 
-#include <new>
-#include <type_traits>
-
 #include "biaNativeVariable.hpp"
 #include "biaNativeOperator.hpp"
 #include "biaMember.hpp"
 #include "biaPrint.hpp"
-#include "biaException.hpp"
-#include "biaUndefined.hpp"
 
 
 namespace bia
@@ -18,78 +13,23 @@ namespace framework
 namespace native
 {
 
-template<>
-class BiaNativeVariable<int64_t> final : public BiaMember
+class BiaInt final : public BiaNativeVariable
 {
 public:
-	inline explicit BiaNativeVariable(int64_t p_llValue) : m_llValue(p_llValue) {}
-	inline explicit BiaNativeVariable(int32_t p_nValue) : m_llValue(p_nValue) {}
+	inline explicit BiaInt(int64_t p_llValue) : m_llValue(p_llValue) {}
+	inline explicit BiaInt(int32_t p_nValue) : m_llValue(p_nValue) {}
 	template<typename _DUMMY>
-	inline explicit BiaNativeVariable(_DUMMY)
+	inline explicit BiaInt(_DUMMY)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
 	}
-	inline ~BiaNativeVariable() = default;
 
-	/**
-	 * @see	BiaMember::Undefine().
-	*/
-	virtual void Undefine() override
-	{
-		//Destroy this
-		this->~BiaNativeVariable();
-
-		//Undefine
-		new(this) BiaUndefined();
-	}
 	/**
 	 * @see	BiaMember::Print().
 	*/
 	inline virtual void Print() override
 	{
 		machine::link::Print_I(m_llValue);
-	}
-	/**
-	 * @see	BiaMember::Call().
-	*/
-	inline virtual void Call(BiaMember*, BiaMember*) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
-	/**
-	 * @see	BiaMember::CallCount().
-	*/
-	inline virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
-	/**
-	 * @see	BiaMember::CallFormat().
-	*/
-	inline virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
-	/**
-	 * @see	BiaMember::Instantiate().
-	*/
-	inline virtual void Instantiate(BiaMember*) override
-	{
-		throw exception::BadCallException("Invalid instantiation call.");
-	}
-	/**
-	 * @see	BiaMember::InstantiateCount().
-	*/
-	inline virtual void InstantiateCount(BiaMember*, parameter_count, ...) override
-	{
-		throw exception::BadCallException("Invalid instantiation call.");
-	}
-	/**
-	 * @see	BiaMember::InstantiateFormat().
-	*/
-	inline virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override
-	{
-		throw exception::BadCallException("Invalid instantiation call.");
 	}
 	/**
 	* @see	BiaMember::OperatorCall().
@@ -127,7 +67,7 @@ public:
 	{
 		static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
 
-		new(p_pDestination) BiaNativeVariable(IntegralOperation(m_llValue, p_nRight, p_unOperator));
+		new(p_pDestination) BiaInt(IntegralOperation(m_llValue, p_nRight, p_unOperator));
 	}
 	/**
 	 * @see	BiaMember::OperatorCallInt_64().
@@ -136,7 +76,7 @@ public:
 	{
 		static_cast<framework::BiaMember*>(p_pDestination)->~BiaMember();
 
-		new(p_pDestination) BiaNativeVariable(IntegralOperation(m_llValue, p_llRight, p_unOperator));
+		new(p_pDestination) BiaInt(IntegralOperation(m_llValue, p_llRight, p_unOperator));
 	}
 	/**
 	 * @see	BiaMember::OperatorCallFloat().
@@ -215,14 +155,7 @@ public:
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		p_pDestination->ReplaceObject<BiaNativeVariable<int64_t>>(m_llValue);
-	}
-	/**
-	 * @see	BiaMember::IsType().
-	*/
-	inline virtual bool IsType(const std::type_info & p_type) const override
-	{
-		return false;
+		p_pDestination->ReplaceObject<BiaInt>(m_llValue);
 	}
 	/**
 	 * @see	BiaMember::GetNativeType().
@@ -280,13 +213,6 @@ public:
 	{
 		throw exception::OperatorException("Cannot compare an integral to a string.");
 	}
-	/**
-	 * @see	BiaMember::GetMember().
-	*/
-	inline virtual BiaMember * GetMember(const char * p_szName) override
-	{
-		throw exception::SymbolException("Unkown member.");
-	}
 
 protected:
 	/**
@@ -309,21 +235,11 @@ protected:
 			throw exception::BadCastException("Native type is not supported.");
 		}
 	}
-	/**
-	 * @see	BiaMember::GetData().
-	*/
-	inline virtual void * GetData(const std::type_info & p_type, bool p_bConst) override
-	{
-		throw exception::BadCastException("Type is not supported.");
-	}
 
 private:
 	int64_t m_llValue;
 };
 
 }
-
-typedef native::BiaNativeVariable<int64_t> BiaInt;
-
 }
 }
