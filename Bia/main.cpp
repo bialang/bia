@@ -113,7 +113,7 @@ global i = 100000000;
 global int = 43;
 
 while(i){
-int.a;
+int+5;
 i -=1;
 }
 )";

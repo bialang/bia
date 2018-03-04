@@ -694,6 +694,7 @@ private:
 		{
 			//Handle leftmost math term
 			auto currentCounter = m_counter.Next();
+			BiaTempCounter::counter_type destination = -1;
 			const grammar::Report * i = (this->*NEXT)(p_reports.pBegin[1].content.children);
 			auto leftType = m_valueType;
 			auto leftValue = m_value;
@@ -717,9 +718,19 @@ private:
 					m_counter.Pop(currentCounter);
 
 				//Call operator
-				if (leftType == VALUE_TYPE::MEMBER || leftType == VALUE_TYPE::TEMPORARY_MEMBER || 
+				if (leftType == VALUE_TYPE::MEMBER || leftType == VALUE_TYPE::TEMPORARY_MEMBER ||
 					m_valueType == VALUE_TYPE::MEMBER || m_valueType == VALUE_TYPE::TEMPORARY_MEMBER)
-					HandleOperator(leftType, leftValue, unOperator, currentCounter);
+				{
+					//Set destination if needed
+					if (destination == -1)
+					{
+						m_counter.Current();
+
+						destination = currentCounter;
+					}
+
+					HandleOperator(leftType, leftValue, unOperator, destination);
+				}
 				//Both operands can be optimized
 				else
 					HandleConstantOperation(leftType, leftValue, unOperator);
