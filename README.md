@@ -33,17 +33,13 @@ context.Run(stTestCode.c_str(), stTestCode.length());
 - The types of the variables will be deducted from the value
 - Once a variable has a tpye it cannot be changed, unless it is redeclared:
 ```
-# var is now a string
-global var = "hello";
+global var = "hello"; # var is now a string
 
-# this is invalid
-var = 34;
+var = 34; # this is invalid
 
-# redeclare as an integral
-global var = 0;
+global var = 0; # redeclare as an integral
 
-# this is now valid
-var = 34;
+var = 34; # this is now valid
 ```
 
 **Function Calls**
