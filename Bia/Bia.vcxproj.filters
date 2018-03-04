@@ -132,6 +132,12 @@
     <ClCompile Include="biaModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="biaNativeVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="biaInt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaConfig.hpp">

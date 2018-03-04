@@ -167,7 +167,7 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 	using namespace machine::architecture;
 
 	//Mark current
-	//m_counter.Current();
+	m_counter.Current();
 
 	switch (p_leftType)
 	{

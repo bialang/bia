@@ -1,8 +1,6 @@
 #pragma once
 
 #include "biaMember.hpp"
-#include "biaUndefined.hpp"
-#include "biaException.hpp"
 
 
 namespace bia
@@ -18,75 +16,45 @@ public:
 	/**
 	 * @see	BiaMember::Undefine().
 	*/
-	virtual void Undefine() override
-	{
-		ReplaceObject<BiaUndefined>();
-	}
+	virtual void Undefine() override;
 	/**
 	 * @see	BiaMember::Call().
 	*/
-	inline virtual void Call(BiaMember*, BiaMember*) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
+	virtual void Call(BiaMember*, BiaMember*) override;
 	/**
 	 * @see	BiaMember::CallCount().
 	*/
-	inline virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
+	virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override;
 	/**
 	 * @see	BiaMember::CallFormat().
 	*/
-	inline virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
+	virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override;
 	/**
 	 * @see	BiaMember::Instantiate().
 	*/
-	inline virtual void Instantiate(BiaMember*) override
-	{
-		throw exception::BadCallException("Invalid instantiation call on native type.");
-	}
+	virtual void Instantiate(BiaMember*) override;
 	/**
 	 * @see	BiaMember::InstantiateCount().
 	*/
-	inline virtual void InstantiateCount(BiaMember*, parameter_count, ...) override
-	{
-		throw exception::BadCallException("Invalid instantiation call on native type.");
-	}
+	virtual void InstantiateCount(BiaMember*, parameter_count, ...) override;
 	/**
 	 * @see	BiaMember::InstantiateFormat().
 	*/
-	inline virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override
-	{
-		throw exception::BadCallException("Invalid instantiation call on native type.");
-	}
+	virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override;
 	/**
 	 * @see	BiaMember::IsType().
 	*/
-	inline virtual bool IsType(const std::type_info & p_type) const override
-	{
-		return false;
-	}
+	virtual bool IsType(const std::type_info & p_type) const override;
 	/**
 	 * @see	BiaMember::GetMember().
 	*/
-	inline virtual BiaMember * GetMember(const char * p_szName) override
-	{
-		throw exception::SymbolException("Unkown member.");
-	}
+	virtual BiaMember * GetMember(const char * p_szName) override;
 
 protected:
 	/**
 	 * @see	BiaMember::GetData().
 	*/
-	inline virtual void * GetData(const std::type_info & p_type, bool p_bConst) override
-	{
-		throw exception::BadCastException("Type is not supported.");
-	}
+	virtual void * GetData(const std::type_info & p_type, bool p_bConst) override;
 };
 
 }

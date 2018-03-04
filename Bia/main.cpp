@@ -109,9 +109,23 @@ int main()
 	bia::machine::BiaMachineContext context(pAllocator);
 //var i = 65*65+5*8;
 	char script[] = R"(
-import std;
-new obj().hey("luh");
+global i = 100000000;
+global int = 43;
+
+while(i){
+int.a;
+i -=1;
+}
 )";
+	/*
+	Code1
+	global i = 10000000;
+	global int = 43;
+
+	while(i){
+	int+6455;
+	i -=1;
+	*/
 
 	/*
 	//Nur für diesen Skript
@@ -325,7 +339,7 @@ new obj().hey("luh");
 
 	try
 	{
-		Test(1, [&] {
+		Test(20, [&] {
 			pCode->Execute();
 		});
 
