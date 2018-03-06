@@ -28,7 +28,7 @@ void BiaGrammar::InitializeRules()
 	m_interpreter.SetRule(BGR_ROOT_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Operator_scope_open, FILLER_TOKEN>,
 		RulePointerToken<BGR_ROOT_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		KeywordToken<Operator_scope_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		KeywordToken<Operator_scope_close, FILLER_TOKEN>
 		}));
 
 	//Root helper 1
@@ -45,7 +45,7 @@ void BiaGrammar::InitializeRules()
 	//Root helper 2
 	m_interpreter.SetRule(BGR_ROOT_HELPER_2, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN>,
-		KeywordToken<Operator_semicolon, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		CommandEndToken
 		}));
 
 	//Variable declaration
@@ -55,7 +55,7 @@ void BiaGrammar::InitializeRules()
 		RulePointerToken<BGR_VARIABLE_DECLARATION_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>,
 		KeywordToken<Operator_equals, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		KeywordToken<Operator_semicolon, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		CommandEndToken
 		}));
 
 	//Variable declaration helper 0
@@ -95,7 +95,7 @@ void BiaGrammar::InitializeRules()
 	m_interpreter.SetRule(BGR_PRINT, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Keyword_print, FILLER_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		KeywordToken<Operator_semicolon, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		CommandEndToken
 		}));
 
 	//Pre test loop
@@ -117,7 +117,7 @@ void BiaGrammar::InitializeRules()
 	m_interpreter.SetRule(BGR_IMPORT, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Keyword_import, FILLER_TOKEN>,
 		IdentifierToken<STARTING_WHITESPACE_TOKEN>,
-		KeywordToken<Operator_semicolon, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		CommandEndToken
 		}));
 
 	//Value raw (must be wrapped because of math factor)
@@ -138,20 +138,20 @@ void BiaGrammar::InitializeRules()
 	//Parameter
 	m_interpreter.SetRule(BGR_PARAMETER, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Operator_bracket_open, FILLER_TOKEN>,
-		RulePointerToken<BGR_PARAMETER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_PARAMETER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>,
 		KeywordToken<Operator_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
 	//Parameter item access
 	m_interpreter.SetRule(BGR_PARAMETER_ITEM_ACCESS, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Operator_square_bracket_open, FILLER_TOKEN>,
-		RulePointerToken<BGR_PARAMETER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_PARAMETER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>,
 		KeywordToken<Operator_square_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 
 	//Parameter list helper 0
 	m_interpreter.SetRule(BGR_PARAMETER_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
-		RulePointerToken<BGR_VALUE, FILLER_TOKEN>,
+		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		RulePointerToken<BGR_PARAMETER_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN>
 		}));
 
@@ -209,12 +209,12 @@ void BiaGrammar::InitializeRules()
 	//Condition expression
 	m_interpreter.SetRule(BGR_CONDITION_EXPRESSION, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN>,
-		RulePointerToken<BGR_CONDITION_EXPRESSION_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		RulePointerToken<BGR_CONDITION_EXPRESSION_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>
 		}));
 
 	//Condition expression helper 0
 	m_interpreter.SetRule(BGR_CONDITION_EXPRESSION_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
-		CompareOperatorToken<NONE>,
+		CompareOperatorToken<STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		RulePointerToken<BGR_MATH_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
 		}));
 

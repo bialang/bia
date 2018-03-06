@@ -108,14 +108,8 @@ int main()
 	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context(pAllocator);
 //var i = 65*65+5*8;
-	char script[] = R"(
-global float = 343.4f;
-float = 3;
-#print to sceen
-#servus
-print float;
-#}
-)";
+	char script[] = R"delim(
+print i)delim";
 	/*
 	Code1
 	global i = 10000000;

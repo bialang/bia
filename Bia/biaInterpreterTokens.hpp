@@ -76,6 +76,29 @@ inline bool WhitespaceDeleter(const char *& p_pcBuffer, size_t & p_iSize, TokenO
 	return true;
 }
 
+inline ACTION CommandEndToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
+{
+	constexpr auto SUCCESS = ACTION::DONT_REPORT;
+	constexpr auto ERROR = ACTION::ERROR;
+
+	while (p_output.iTokenSize < p_iSize)
+	{
+		switch (p_pcBuffer[p_output.iTokenSize++])
+		{
+		case ' ':
+		case '\t':
+		case '\r':
+			break;
+		case '\n':
+			return SUCCESS;
+		default:
+			return ERROR;
+		}
+	}
+
+	return SUCCESS;
+}
+
 template<typename T, flag_type _FLAGS, int _FOR_CLARITY = 0>
 inline ACTION KeywordToken(const char * p_pcBuffer, size_t p_iSize, TokenParams, TokenOutput & p_output)
 {
