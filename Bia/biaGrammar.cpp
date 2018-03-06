@@ -67,10 +67,8 @@ void BiaGrammar::InitializeRules()
 	//If
 	m_interpreter.SetRule(BGR_IF, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Keyword_if, FILLER_TOKEN>,
-		KeywordToken<Operator_bracket_open, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		KeywordToken<Operator_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
+		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
 		RulePointerToken<BGR_IF_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>,
 		RulePointerToken<BGR_IF_HELPER_1, FILLER_TOKEN | OPTIONAL_TOKEN>
 		}));
@@ -79,10 +77,8 @@ void BiaGrammar::InitializeRules()
 	m_interpreter.SetRule(BGR_IF_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
 		KeywordToken<Keyword_else, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
 		KeywordToken<Keyword_if, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		KeywordToken<Operator_bracket_open, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		KeywordToken<Operator_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
+		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>
 		}));
 
 	//If helper 1
@@ -101,10 +97,8 @@ void BiaGrammar::InitializeRules()
 	//Pre test loop
 	m_interpreter.SetRule(BGR_PRE_TEST_LOOP, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		RulePointerToken<BGR_PRE_TEST_LOOP_HELPER_0, FILLER_TOKEN>,
-		KeywordToken<Operator_bracket_open, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		KeywordToken<Operator_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
+		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>
 		}));
 
 	//Pre test loop helper 0
