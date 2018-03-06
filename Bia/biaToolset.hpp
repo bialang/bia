@@ -208,9 +208,7 @@ public:
 	template<typename T>
 	inline pass_count Pass(T * p_pAddress)
 	{
-		BiaArchitecture::Operation32<OP_CODE::PUSH>(*m_pOutput, reinterpret_cast<int32_t>(p_pAddress));
-
-		return 1;
+		return Pass(reinterpret_cast<intptr_t>(p_pAddress));
 	}
 	template<REGISTER _REGISTER, typename _OFFSET, bool _EFFECTIVE_ADDRESS>
 	inline pass_count Pass(RegisterOffset<_REGISTER, _OFFSET, _EFFECTIVE_ADDRESS> p_offset)

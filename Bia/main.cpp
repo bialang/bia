@@ -116,10 +116,9 @@ global pre = find_between(source, R"(<link rel="canonical" href=")", R"(")") + "
 global images = find_all_between(source, R"(<td><a href="images)", R"(")")
 
 global i = 0
-global save = con.save
 
 while check_size(i, images) {
-	con->save(pre + images.at(i))
+	con.save(pre + images.at(i))
 	
 	i += 1
 }
