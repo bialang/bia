@@ -11,7 +11,7 @@ bia::machine::BiaMachineContext context(pAllocator);
 std::string stTestCode = R"(
 
 # Print 'Hello, World' to the console
-print "Hello, World! - Bia";
+print "Hello, World! - Bia"
 
 )";
 
@@ -22,51 +22,55 @@ context.Run(stTestCode.c_str(), stTestCode.length());
 # Language features
 **Native types**
 - Integrals with a range from -2^32 to 2^32-1
-- 32-bit floating points
+- 32- and 64-Bit floating points
 - Zero terminated strings
 
 **Variable Declaration:**
-- Global variables `global`: `global i = 0;`
+- Global variables `global`: `global i = 0`
 
   Global variables can be access by any script in the same context at any time.
-- Instantiation: `global obj = new MyClass();`
+- Instantiation: `global obj = new MyClass()`
 - The types of the variables will be deducted from the value
 - Once a variable has a tpye it cannot be changed, unless it is redeclared:
 
 ```
-global var = "hello"; # var is now a string
+# var is now a string
+global var = "hello"
 
-var = 34; # this is invalid
+# this is invalid
+var = 34
 
-global var = 0; # redeclare as an integral
+# redeclare as an integral
+global var = 0
 
-var = 34; # this is now valid
+# this is now valid
+var = 34
 ```
 
 **Function Calls**
-- Normal function call: `normal_function();`
-- Member function call: `object.function();`
+- Normal function call: `normal_function()`
+- Member function call: `object.function()`
 - Optimized member function call. This is more efficient in loops:
 
 ```
-global function_pointer = object.function;
-object->function_pointer();
+global function_pointer = object.function
+object->function_pointer()
 ```
 
 **Loops**
 - While loop:
 
 ```
-while (true) {
-  print "hi";
+while true {
+  print "hi"
 }
 ```
 
 - Until loop. These loops are just like `while` loops but with negated condition:
 
 ```
-until (false) {
-  print "hi";
+until false {
+  print "hi"
 }
 ```
 
@@ -74,11 +78,11 @@ until (false) {
 - If statements. Conditions that can be evaluated at compile time will be optimized away:
 
 ```
-if (true) {
-  print true;
+if 1 == 0 {
+  print true
 }
-else if (some_value == 3) {
-  print false;
+else if some_value == 3 {
+  print false
 }
 ```
 
