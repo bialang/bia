@@ -110,12 +110,18 @@ int main()
 //var i = 65*65+5*8;
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
-global i = 5
+# Bia v3
+global source = con.get_source()
+global pre = find_between(source, R"(<link rel="canonical" href=")", R"(")") + "images"
+global images = find_all_between(source, R"(<td><a href="images)", R"(")")
 
-do while i != 0
-{
-print i
-i -= 1
+global i = 0
+global save = con.save
+
+while check_size(i, images) {
+	con->save(pre + images.at(i))
+	
+	i += 1
 }
 )delim";
 	/*

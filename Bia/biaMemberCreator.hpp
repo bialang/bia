@@ -9,6 +9,7 @@
 #include "biaDouble.hpp"
 #include "biaCString.h"
 #include "biaStaticFunction.hpp"
+#include "biaClassRaw.hpp"
 
 
 namespace bia
@@ -41,8 +42,10 @@ inline void MemberCreator(BiaMember * p_pDestination, T && p_value)
 	//Static function
 	else if (std::is_pointer<T>::value && std::is_function<std::remove_pointer<T>::type>::value)
 		;// p_pDestination->ReplaceObject<executable::BiaStaticFunction<std::add_pointer<std::remove_pointer<_TYPE>::type>::type>>(std::forward<T>(p_value));
+	//Wrap into raw class
 	else
-		throw BIA_IMPLEMENTATION_EXCEPTION("Value not supported.");
+		p_pDestination->ReplaceObject<object::BiaClassRaw<_TYPE>>(std::shared_ptr<_TYPE>(new _TYPE(std::forward<T>(p_value))));
+		//throw BIA_IMPLEMENTATION_EXCEPTION("Value not supported.");
 }
 
 }

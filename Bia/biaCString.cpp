@@ -39,6 +39,11 @@ void BiaCString::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaM
 	throw exception::BadCallException("Not implemented.");
 }
 
+void BiaCString::OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination)
+{
+	throw exception::BadCallException("String values are not supported.");
+}
+
 void BiaCString::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)
 {
 	throw exception::BadCallException("Not implemented.");
@@ -62,6 +67,11 @@ void BiaCString::OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight)
 void BiaCString::OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight)
 {
 	throw exception::BadCallException("Not implemented.");
+}
+
+void BiaCString::OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight)
+{
+	throw exception::BadCallException("String values are not supported.");
 }
 
 void BiaCString::OperatorSelfCall(uint32_t p_unOperator)

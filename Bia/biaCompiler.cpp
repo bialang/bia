@@ -270,6 +270,13 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 				m_toolset.Call(&framework::BiaMember::OperatorAssignCallDouble, p_leftValue.pMember, p_unOperator, m_value.rDouble);
 
 			break;
+		case VALUE_TYPE::STRING:
+			if (p_destinationIndex != -1)
+				m_toolset.Call(&framework::BiaMember::OperatorCallString, p_leftValue.pMember, p_unOperator, GetStringLocation(m_value.string), BiaToolset::TemporaryMember(p_destinationIndex));
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallString, p_leftValue.pMember, p_unOperator, GetStringLocation(m_value.string));
+
+			break;
 		case VALUE_TYPE::MEMBER:
 			if (p_destinationIndex != -1)
 				m_toolset.Call(&framework::BiaMember::OperatorCall, p_leftValue.pMember, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
@@ -328,6 +335,15 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 			//Normal operator call with new destination
 			else
 				m_toolset.Call(&framework::BiaMember::OperatorCallDouble, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, m_value.rDouble, BiaToolset::TemporaryMember(p_destinationIndex));
+
+			break;
+		case VALUE_TYPE::STRING:
+			//Assign call if destination is the left hand side
+			if (p_leftValue.temporaryResultIndex == p_destinationIndex)
+				m_toolset.Call(&framework::BiaMember::OperatorAssignCallString, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, GetStringLocation(m_value.string));
+			//Normal operator call with new destination
+			else
+				m_toolset.Call(&framework::BiaMember::OperatorCallString, BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator, GetStringLocation(m_value.string), BiaToolset::TemporaryMember(p_destinationIndex));
 
 			break;
 		case VALUE_TYPE::MEMBER:

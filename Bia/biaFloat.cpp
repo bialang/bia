@@ -63,6 +63,11 @@ void BiaFloat::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMem
 	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_rRight, p_unOperator));
 }
 
+void BiaFloat::OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination)
+{
+	throw exception::BadCallException("String values are not supported.");
+}
+
 void BiaFloat::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)
 {
 	auto fRightNativeType = p_pRight->GetNativeType();
@@ -98,6 +103,11 @@ void BiaFloat::OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight)
 void BiaFloat::OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight)
 {
 	m_rValue = static_cast<float>(ArithmeticOperation(m_rValue, p_rRight, p_unOperator));
+}
+
+void BiaFloat::OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight)
+{
+	throw exception::BadCallException("String values are not supported.");
 }
 
 void BiaFloat::OperatorSelfCall(uint32_t p_unOperator)

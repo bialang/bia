@@ -85,6 +85,10 @@ public:
 	{
 		throw exception::BadCallException("A raw class cannot have operator functions.");
 	}
+	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
+	{
+		throw exception::BadCallException("A raw class cannot have operator functions.");
+	}
 	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
 		throw exception::BadCallException("A raw class cannot have operator functions.");
@@ -102,6 +106,10 @@ public:
 		throw exception::BadCallException("A raw class cannot have operator functions.");
 	}
 	inline virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override
+	{
+		throw exception::BadCallException("A raw class cannot have operator functions.");
+	}
+	inline virtual void OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight) override
 	{
 		throw exception::BadCallException("A raw class cannot have operator functions.");
 	}

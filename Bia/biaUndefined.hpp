@@ -65,6 +65,10 @@ public:
 	*/
 	virtual void OperatorCallDouble(uint32_t, double, BiaMember*) override;
 	/**
+	 * @see	BiaMember::OperatorCallString().
+	*/
+	virtual void OperatorCallString(uint32_t, const char*, BiaMember*) override;
+	/**
 	 * @see	BiaMember::OperatorAssignCall().
 	*/
 	virtual void OperatorAssignCall(uint32_t, BiaMember*) override;
@@ -84,6 +88,10 @@ public:
 	 * @see	BiaMember::OperatorAssignCallDouble().
 	*/
 	virtual void OperatorAssignCallDouble(uint32_t, double) override;
+	/**
+	 * @see	BiaMember::OperatorAssignCallString().
+	*/
+	virtual void OperatorAssignCallString(uint32_t, const char*) override;
 	/**
 	 * @see	BiaMember::OperatorSelfCall().
 	*/

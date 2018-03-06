@@ -48,77 +48,91 @@ public:
 	*/
 	inline virtual void OperatorCall(uint32_t, BiaMember*, BiaMember*) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallInt_32().
 	*/
 	inline virtual void OperatorCallInt_32(uint32_t, int32_t, BiaMember*) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallInt_64().
 	*/
 	inline virtual void OperatorCallInt_64(uint32_t, int64_t, BiaMember*) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallFloat().
 	*/
 	inline virtual void OperatorCallFloat(uint32_t, float, BiaMember*) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorCallDouble().
 	*/
 	inline virtual void OperatorCallDouble(uint32_t, double, BiaMember*) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
+	}
+	/**
+	 * @see	BiaMember::OperatorCallString().
+	*/
+	inline virtual void OperatorCallString(uint32_t, const char*, BiaMember*) override
+	{
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCall().
 	*/
 	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallInt_32().
 	*/
 	inline virtual void OperatorAssignCallInt_32(uint32_t, int32_t) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallInt_64().
 	*/
 	inline virtual void OperatorAssignCallInt_64(uint32_t, int64_t) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallFloat().
 	*/
 	inline virtual void OperatorAssignCallFloat(uint32_t, float) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorAssignCallDouble().
 	*/
 	inline virtual void OperatorAssignCallDouble(uint32_t, double) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
+	}
+	/**
+	 * @see	BiaMember::OperatorAssignCallDouble().
+	*/
+	inline virtual void OperatorAssignCallString(uint32_t, const char*) override
+	{
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::OperatorSelfCall().
 	*/
 	inline virtual void OperatorSelfCall(uint32_t) override
 	{
-		throw exception::OperatorException("Invalid operator call to a function.");
+		throw exception::BadCallException("Functions do not support operators.");
 	}
 	/**
 	 * @see	BiaMember::GetNativeType().

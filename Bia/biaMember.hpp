@@ -161,13 +161,15 @@ public:
 	*/
 	virtual void InstantiateFormat(BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) = 0;
 	/**
-	 * @throws	exception::OperatorException	Thrown when the operation is not supported.
+	 * @throws	exception::OperatorException	Thrown when the operator is not supported.
+	 * @throws	exception::BadCallException	Thrown when operations are not supported.
 	*/
 	virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) = 0;
 	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) = 0;
 	virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) = 0;
 	virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) = 0;
 	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) = 0;
+	virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) = 0;
 	/**
 	 * @throws	exception::OperatorException
 	*/
@@ -176,6 +178,7 @@ public:
 	virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) = 0;
 	virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) = 0;
 	virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) = 0;
+	virtual void OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight) = 0;
 	/**
 	 * @throws	exception::OperatorException
 	*/

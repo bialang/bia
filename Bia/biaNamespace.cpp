@@ -76,6 +76,11 @@ void BiaNamespace::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, Bi
 	throw exception::BadCallException("Invalid operator call on namespace.");
 }
 
+void BiaNamespace::OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination)
+{
+	throw exception::BadCallException("Invalid operator call on namespace.");
+}
+
 void BiaNamespace::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)
 {
 	throw exception::BadCallException("Invalid operator call on namespace.");
@@ -97,6 +102,11 @@ void BiaNamespace::OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight
 }
 
 void BiaNamespace::OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight)
+{
+	throw exception::BadCallException("Invalid operator call on namespace.");
+}
+
+void BiaNamespace::OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight)
 {
 	throw exception::BadCallException("Invalid operator call on namespace.");
 }

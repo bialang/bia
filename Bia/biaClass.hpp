@@ -85,6 +85,13 @@ public:
 	{
 		throw exception::BadCallException("Not implemented.");
 	}
+	/**
+	 * @see	BiaMember::OperatorCallString().
+	*/
+	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
+	{
+		throw exception::BadCallException("Not implemented.");
+	}
 	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
 		throw exception::BadCallException("Not implemented.");
@@ -102,6 +109,10 @@ public:
 		throw exception::BadCallException("Not implemented.");
 	}
 	inline virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override
+	{
+		throw exception::BadCallException("Not implemented.");
+	}
+	inline virtual void OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight) override
 	{
 		throw exception::BadCallException("Not implemented.");
 	}

@@ -69,6 +69,11 @@ void BiaUndefined::OperatorCallDouble(uint32_t, double, BiaMember*)
 	throw exception::SymbolException("Undefined symbol.");
 }
 
+void BiaUndefined::OperatorCallString(uint32_t, const char *, BiaMember *)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
 void BiaUndefined::OperatorAssignCall(uint32_t, BiaMember*)
 {
 	throw exception::SymbolException("Undefined symbol.");
@@ -90,6 +95,11 @@ void BiaUndefined::OperatorAssignCallFloat(uint32_t, float)
 }
 
 void BiaUndefined::OperatorAssignCallDouble(uint32_t, double)
+{
+	throw exception::SymbolException("Undefined symbol.");
+}
+
+void BiaUndefined::OperatorAssignCallString(uint32_t, const char *)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }
