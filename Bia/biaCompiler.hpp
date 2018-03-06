@@ -507,7 +507,7 @@ private:
 			memcpy(&unOperator, p_reports.pBegin[2].content.token.pcString, std::min(sizeof(unOperator), p_reports.pBegin[2].content.token.iSize));
 
 			//Handle right hand value
-			HandleValueExpression<_TEST>(p_reports.pBegin[3].content.children);
+			HandleValueExpression<false>(p_reports.pBegin[3].content.children);
 
 			//Call assign operator
 			HandleOperator(VALUE_TYPE::MEMBER, destination, unOperator, -1);

@@ -147,7 +147,7 @@ inline ACTION RulePointerToken(const char * p_pcBuffer, size_t p_iSize, TokenPar
 {
 	constexpr auto SUCCESS = _FLAGS & FILLER_TOKEN ? (_FLAGS & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_FLAGS & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 	constexpr auto ERROR = _FLAGS & (OPTIONAL_TOKEN | LOOPING_TOKEN) ? ACTION::DONT_REPORT : ACTION::ERROR;
-
+	
 	//Starting whitespaces
 	if (!WhitespaceDeleter<_FLAGS>(p_pcBuffer, p_iSize, p_output))
 		return ERROR;
@@ -423,7 +423,7 @@ inline ACTION AssignOperatorToken(const char * p_pcBuffer, size_t p_iSize, Token
 		case '%':
 		case '+':
 		case '-':
-		case '!':
+		//case '!':
 		case '~':
 		case '^':
 		case '&':

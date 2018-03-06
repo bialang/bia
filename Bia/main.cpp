@@ -108,8 +108,16 @@ int main()
 	bia::stream::BiaOutputStreamBuffer buf;
 	bia::machine::BiaMachineContext context(pAllocator);
 //var i = 65*65+5*8;
+	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
-print i)delim";
+global i = 5
+
+while i != 0
+{
+print i
+i -= 1
+}
+)delim";
 	/*
 	Code1
 	global i = 10000000;
@@ -332,7 +340,7 @@ print i)delim";
 
 	try
 	{
-		Test(20, [&] {
+		Test(TEST_TIMES, [&] {
 			pCode->Execute();
 		});
 

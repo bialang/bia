@@ -396,11 +396,11 @@ gt_redo:;
 		}
 	}
 	case VALUE_TYPE::MEMBER:
-		HandleCompareOperatorCall(m_value.pMember, p_unOperator);
+		HandleCompareOperatorCall(p_leftValue.pMember, p_unOperator);
 
 		break;
 	case VALUE_TYPE::TEMPORARY_MEMBER:
-		HandleCompareOperatorCall(machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), p_unOperator);
+		HandleCompareOperatorCall(machine::architecture::BiaToolset::TemporaryMember(p_leftValue.temporaryResultIndex), p_unOperator);
 
 		break;
 	case VALUE_TYPE::RESULT_REGISTER:
@@ -500,6 +500,17 @@ const grammar::Report * BiaCompiler::HandleVariableDeclaration(grammar::report_r
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
 			m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), pVariable);
+
+			break;
+		case VALUE_TYPE::TEST_VALUE_REGISTER:
+			m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, machine::architecture::BiaToolset::TestValueResult());
+
+			break;
+		case VALUE_TYPE::TEST_VALUE_CONSTANT:
+			if(m_value.bTestValue)
+				m_toolset.SafeCall(&machine::link::InstantiateIntP1, pVariable);
+			else
+				m_toolset.SafeCall(&machine::link::InstantiateInt0, pVariable);
 
 			break;
 		case VALUE_TYPE::RESULT_REGISTER:
