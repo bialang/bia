@@ -36,7 +36,7 @@ void BiaGrammar::InitializeRules()
 		RulePointerToken<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
 		RulePointerToken<BGR_IF, FILLER_TOKEN>,
 		RulePointerToken<BGR_PRINT, FILLER_TOKEN>,
-		RulePointerToken<BGR_PRE_TEST_LOOP, FILLER_TOKEN>,
+		RulePointerToken<BGR_TEST_LOOP, FILLER_TOKEN>,
 		RulePointerToken<BGR_IMPORT, FILLER_TOKEN>,
 		CommentToken,
 		RulePointerToken<BGR_ROOT_HELPER_2, FILLER_TOKEN>
@@ -94,15 +94,16 @@ void BiaGrammar::InitializeRules()
 		CommandEndToken
 		}));
 
-	//Pre test loop
-	m_interpreter.SetRule(BGR_PRE_TEST_LOOP, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
-		RulePointerToken<BGR_PRE_TEST_LOOP_HELPER_0, FILLER_TOKEN>,
+	//Test loop
+	m_interpreter.SetRule(BGR_TEST_LOOP, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
+		KeywordToken<Keyword_do, OPTIONAL_TOKEN | ENDING_WHITESPACE_TOKEN>,
+		RulePointerToken<BGR_TEST_LOOP_HELPER_0, FILLER_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
 		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>
 		}));
 
-	//Pre test loop helper 0
-	m_interpreter.SetRule(BGR_PRE_TEST_LOOP_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
+	//Test loop helper 0
+	m_interpreter.SetRule(BGR_TEST_LOOP_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
 		KeywordToken<Keyword_while, NONE, LT_WHILE>,
 		KeywordToken<Keyword_until, NONE, LT_UNTIL>
 		}));

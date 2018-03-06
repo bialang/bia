@@ -415,7 +415,7 @@ private:
 			case grammar::BGR_VARIABLE_DECLARATION:
 			case grammar::BGR_IF:
 			case grammar::BGR_PRINT:
-			case grammar::BGR_PRE_TEST_LOOP:
+			case grammar::BGR_TEST_LOOP:
 			case grammar::BGR_IMPORT:
 			case grammar::BGR_VALUE:
 				return p_pReport->content.children.pEnd + 1;
@@ -445,8 +445,8 @@ private:
 				return HandleIf(p_pReport->content.children);
 			case grammar::BGR_PRINT:
 				return HandlePrint(p_pReport->content.children);
-			case grammar::BGR_PRE_TEST_LOOP:
-				return HandlePreTestLoop(p_pReport->content.children);
+			case grammar::BGR_TEST_LOOP:
+				return HandleTestLoop(p_pReport->content.children);
 			case grammar::BGR_IMPORT:
 				return HandleImport(p_pReport->content.children);
 			case grammar::BGR_VALUE:
@@ -770,8 +770,7 @@ private:
 	const grammar::Report * HandlePrint(grammar::report_range p_reports);
 	const grammar::Report * HandleMember(grammar::report_range p_reports);
 	const grammar::Report * HandleParameters(grammar::report_range p_reports);
-	const grammar::Report * HandlePreTestLoop(grammar::report_range p_reports);
-	const grammar::Report * HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition, machine::architecture::BiaToolset::JUMP p_jumpType);
+	const grammar::Report * HandleTestLoop(grammar::report_range p_reports);
 	const grammar::Report * HandleImport(grammar::report_range p_reports);
 	const grammar::Report * HandleInstantiation(grammar::report_range p_reports);
 } ;

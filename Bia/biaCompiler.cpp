@@ -2,6 +2,7 @@
 #include "biaException.hpp"
 #include "biaOutputStreamBuffer.hpp"
 #include "biaFloat.hpp"
+#include "biaInterpreterStringSet.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -964,40 +965,39 @@ const grammar::Report * BiaCompiler::HandleParameters(grammar::report_range p_re
 	return p_reports.pEnd + 1;
 }
 
-const grammar::Report * BiaCompiler::HandlePreTestLoop(grammar::report_range p_reports)
+const grammar::Report * BiaCompiler::HandleTestLoop(grammar::report_range p_reports)
 {
-	//Write jump to end condition
-	machine::architecture::BiaToolset::position position;
-	auto firstJump = m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP);
-	auto jumpType = p_reports.pBegin[1].unTokenId == grammar::LT_WHILE ? machine::architecture::BiaToolset::JUMP::JUMP_IF_TRUE : machine::architecture::BiaToolset::JUMP::JUMP_IF_FALSE;
+	using namespace machine::architecture;
 
 	++p_reports.pBegin;
 
-	//Handle loop
-	HandlePostTestLoop(p_reports, &position, jumpType);
+	//Pre test or post test loop and loop type
+	BiaToolset::position preTestJumpPosition;
 
-	//Update jump condition
-	if (position != -1)
-		m_toolset.WriteJump(machine::architecture::BiaToolset::JUMP::JUMP, position, firstJump);
-	//Discard jump
+	if (p_reports.pBegin->content.token.iSize == grammar::Keyword_do::Size())
+	{
+		preTestJumpPosition = -1;
+		++p_reports.pBegin;
+	}
+	//Write pre test jump
 	else
-		m_toolset.GetBuffer().SetPosition(firstJump);
+		preTestJumpPosition = m_toolset.WriteJump(BiaToolset::JUMP::JUMP);
 
-	return p_reports.pEnd + 1;
-}
 
-const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_reports, machine::architecture::BiaToolset::position * p_pConditionPosition, machine::architecture::BiaToolset::JUMP p_jumpType)
-{
-	auto & originalBuffer = m_toolset.GetBuffer();
+	//Loop jump type
+	auto jumpType = p_reports.pBegin++->unTokenId == grammar::LT_WHILE ? machine::architecture::BiaToolset::JUMP::JUMP_IF_TRUE : machine::architecture::BiaToolset::JUMP::JUMP_IF_FALSE;
+
+	//Handle loop condition
+	BiaToolset::position conditionJumpPosition = -1;
 	stream::BiaOutputStreamBuffer conditionBuffer;
-	machine::architecture::BiaToolset::position conditionJumpPosition;
+	auto & originalBuffer = m_toolset.GetBuffer();
 	auto bCompile = true;
 
 	//Redirect conditional code to a temporary buffer
 	m_toolset.SetOutput(conditionBuffer);
 
-	//Handle condition and test it
-	auto pLoopBegin = HandleValue<true>(p_reports.pBegin[1].content.children, [&] {
+	//Loop condition
+	p_reports.pBegin = HandleValue<true>(p_reports.pBegin->content.children, [&] {
 		//Constant condition
 		if (m_valueType == VALUE_TYPE::TEST_VALUE_CONSTANT)
 		{
@@ -1006,18 +1006,17 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 			{
 				bCompile = false;
 
-				if (p_pConditionPosition)
-					*p_pConditionPosition = -1;
-
 				return;
 			}
 
-			p_jumpType = machine::architecture::BiaToolset::JUMP::JUMP;
+			//Change to unconditional jump
+			jumpType = machine::architecture::BiaToolset::JUMP::JUMP;
 		}
+		//Not a test register
 		else if (m_valueType != VALUE_TYPE::TEST_VALUE_REGISTER)
 			BIA_COMPILER_DEV_INVALID;
 
-		conditionJumpPosition = m_toolset.WriteJump(p_jumpType);
+		conditionJumpPosition = m_toolset.WriteJump(jumpType);
 	});
 
 	//Reset output buffer
@@ -1026,24 +1025,28 @@ const grammar::Report * BiaCompiler::HandlePostTestLoop(grammar::report_range p_
 	//Compile loop
 	if (bCompile)
 	{
-		auto jumpPosition = originalBuffer.GetPosition();
+		auto loopStartPosition = originalBuffer.GetPosition();
 
-		HandleRoot(pLoopBegin);
-		
+		HandleRoot(p_reports.pBegin);
+
 		//Update jump positions
-		machine::architecture::BiaToolset::position tempPos;
-		
-		p_pConditionPosition = p_pConditionPosition ? p_pConditionPosition : &tempPos;
-		*p_pConditionPosition = originalBuffer.GetPosition();
+		auto loopEndPosition = originalBuffer.GetPosition();
 
-		conditionJumpPosition += *p_pConditionPosition;
+		conditionJumpPosition += loopEndPosition;
 
 		//Write loop condition
 		originalBuffer.WriteStream(conditionBuffer);
 
-		//Upate jump offset
-		m_toolset.WriteJump(p_jumpType, jumpPosition, conditionJumpPosition);
+		//Upate jump offset for loop jump
+		m_toolset.WriteJump(jumpType, loopStartPosition, conditionJumpPosition);
+
+		//Upate jump offset for pre test
+		if (preTestJumpPosition != -1)
+			m_toolset.WriteJump(BiaToolset::JUMP::JUMP, loopEndPosition, preTestJumpPosition);
 	}
+	//Discard pre test jump
+	else if(preTestJumpPosition != -1)
+		m_toolset.GetBuffer().SetPosition(preTestJumpPosition);
 
 	return p_reports.pEnd + 1;
 }

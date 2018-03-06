@@ -112,7 +112,7 @@ int main()
 	char script[] = R"delim(
 global i = 5
 
-while i != 0
+do while i != 0
 {
 print i
 i -= 1

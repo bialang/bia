@@ -50,7 +50,7 @@ public:
 			{
 				TokenOutput output{};
 
-				WhitespaceDeleter<STARTING_WHITESPACE_OPTIONAL_TOKEN>(p_pcBuffer, p_iSize, output);
+				WhitespaceDeleter<STARTING_WHITESPACE_OPTIONAL_TOKEN, true>(p_pcBuffer, p_iSize, output);
 			}
 
 			//Start with rule 0
