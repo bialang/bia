@@ -79,6 +79,12 @@
     <Filter Include="Source Files\framework\native">
       <UniqueIdentifier>{9cfba5be-3273-41b7-ac08-daeff9bb6f0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\machine\modular">
+      <UniqueIdentifier>{e3966599-d66f-4794-9b00-654ff3c2f869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\exception">
+      <UniqueIdentifier>{5b2d5c39-c07e-429c-8b66-ab870366829f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="biaMachineContext.cpp">
@@ -108,9 +114,6 @@
     <ClCompile Include="biaOperator.cpp">
       <Filter>Source Files\machine\link</Filter>
     </ClCompile>
-    <ClCompile Include="biaCString.cpp">
-      <Filter>Source Files\framework</Filter>
-    </ClCompile>
     <ClCompile Include="biaInterpreterRule.cpp">
       <Filter>Source Files\grammar</Filter>
     </ClCompile>
@@ -125,9 +128,6 @@
     </ClCompile>
     <ClCompile Include="biaMemberHolder.cpp">
       <Filter>Source Files\framework</Filter>
-    </ClCompile>
-    <ClCompile Include="biaModule.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="biaInt.cpp">
       <Filter>Source Files\framework\native</Filter>
@@ -144,15 +144,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="biaCString.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="biaModule.cpp">
+      <Filter>Source Files\machine\modular</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="biaConfig.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaException.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="biaHasher.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -245,9 +245,6 @@
     <ClInclude Include="biaLocalVariableHandler.hpp">
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
-    <ClInclude Include="biaDisguisedCalled.hpp">
-      <Filter>Header Files\force</Filter>
-    </ClInclude>
     <ClInclude Include="biaUndefined.hpp">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
@@ -316,6 +313,15 @@
     </ClInclude>
     <ClInclude Include="biaCString.h">
       <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="biaDisguisedCaller.hpp">
+      <Filter>Header Files\force</Filter>
+    </ClInclude>
+    <ClInclude Include="biaException.hpp">
+      <Filter>Header Files\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="biaHasher.hpp">
+      <Filter>Header Files\utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

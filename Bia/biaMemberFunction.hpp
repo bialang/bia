@@ -5,7 +5,7 @@
 #include "biaFunction.hpp"
 #include "biaUndefined.hpp"
 #include "biaException.hpp"
-#include "biaDisguisedCalled.hpp"
+#include "biaDisguisedCaller.hpp"
 
 
 namespace bia
