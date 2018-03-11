@@ -131,27 +131,39 @@ int32_t BiaFloat::Test()
 
 int32_t BiaFloat::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
 {
-	return int32_t();
+	auto fRightNativeType = p_pRight->GetNativeType();
+
+	//64 bit int operand
+	if (fRightNativeType & NTF_INT_64)
+		return TestCallInt_64(p_unOperator, *p_pRight->Cast<int64_t>());
+	//Float
+	else if (fRightNativeType & NTF_FLOAT)
+		return TestCallFloat(p_unOperator, *p_pRight->Cast<float>());
+	//Double
+	else if (fRightNativeType & NTF_DOUBLE)
+		return TestCallDouble(p_unOperator, *p_pRight->Cast<double>());
+
+	throw exception::OperatorException("Invalid type on native operation.");
 }
 
 int32_t BiaFloat::TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
 {
-	return int32_t();
+	return CompareOperation(m_rValue, p_nRight, p_unOperator);
 }
 
 int32_t BiaFloat::TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
 {
-	return int32_t();
+	return CompareOperation(m_rValue, p_llRight, p_unOperator);
 }
 
 int32_t BiaFloat::TestCallFloat(uint32_t p_unOperator, float p_rRight)
 {
-	return int32_t();
+	return CompareOperation(m_rValue, p_rRight, p_unOperator);
 }
 
 int32_t BiaFloat::TestCallDouble(uint32_t p_unOperator, double p_rRight)
 {
-	return int32_t();
+	return CompareOperation(m_rValue, p_rRight, p_unOperator);
 }
 
 int32_t BiaFloat::TestCallString(uint32_t p_unOperator, const char * p_szRight)
