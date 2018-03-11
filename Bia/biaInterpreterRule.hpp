@@ -21,6 +21,8 @@ constexpr flag_type LOOPING_TOKEN = 0x4;
 constexpr flag_type STARTING_WHITESPACE_TOKEN = 0x8;
 constexpr flag_type STARTING_WHITESPACE_OPTIONAL_TOKEN = 0x10;
 constexpr flag_type ENDING_WHITESPACE_TOKEN = 0x20;
+constexpr flag_type STARTING_PADDING_TOKEN = 0x40;
+constexpr flag_type STARTING_PADDING_OPTIONAL_TOKEN = 0x80;
 
 enum class ACTION
 {

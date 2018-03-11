@@ -27,7 +27,7 @@ void BiaGrammar::InitializeRules()
 	//Root helper 0
 	m_interpreter.SetRule(BGR_ROOT_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Operator_scope_open, FILLER_TOKEN>,
-		RulePointerToken<BGR_ROOT_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_ROOT_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN>,
 		KeywordToken<Operator_scope_close, FILLER_TOKEN>
 		}));
 
@@ -47,6 +47,11 @@ void BiaGrammar::InitializeRules()
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN>,
 		CommandEndToken
 		}));
+
+	//Statement
+	m_interpreter.SetRule(BGR_NORMAL_STATEMENT, BiaInterpreterRule(BiaInterpreterRule::F_OR, {
+		RulePointerToken<BGR_ROOT_HELPER_1, FILLER_TOKEN | STARTING_PADDING_TOKEN>,
+		RulePointerToken<BGR_ROOT_HELPER_0, FILLER_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN> }));
 
 	//Variable declaration
 	m_interpreter.SetRule(BGR_VARIABLE_DECLARATION, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
@@ -68,23 +73,23 @@ void BiaGrammar::InitializeRules()
 	m_interpreter.SetRule(BGR_IF, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
 		KeywordToken<Keyword_if, FILLER_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
+		RulePointerToken<BGR_NORMAL_STATEMENT, FILLER_TOKEN>,
 		RulePointerToken<BGR_IF_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>,
 		RulePointerToken<BGR_IF_HELPER_1, FILLER_TOKEN | OPTIONAL_TOKEN>
 		}));
 
 	//If helper 0
 	m_interpreter.SetRule(BGR_IF_HELPER_0, BiaInterpreterRule(BiaInterpreterRule::F_NONE, {
-		KeywordToken<Keyword_else, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+		KeywordToken<Keyword_else, FILLER_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN>,
 		KeywordToken<Keyword_if, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>
+		RulePointerToken<BGR_NORMAL_STATEMENT, FILLER_TOKEN>
 		}));
 
 	//If helper 1
 	m_interpreter.SetRule(BGR_IF_HELPER_1, BiaInterpreterRule(BiaInterpreterRule::F_WRAP_UP, {
-		KeywordToken<Keyword_else, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+		KeywordToken<Keyword_else, FILLER_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN>,
+		RulePointerToken<BGR_NORMAL_STATEMENT, FILLER_TOKEN>
 		}));
 
 	//Print
@@ -99,7 +104,7 @@ void BiaGrammar::InitializeRules()
 		KeywordToken<Keyword_do, OPTIONAL_TOKEN | ENDING_WHITESPACE_TOKEN>,
 		RulePointerToken<BGR_TEST_LOOP_HELPER_0, FILLER_TOKEN>,
 		RulePointerToken<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		RulePointerToken<BGR_ROOT, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>
+		RulePointerToken<BGR_NORMAL_STATEMENT, FILLER_TOKEN>
 		}));
 
 	//Test loop helper 0

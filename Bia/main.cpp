@@ -111,12 +111,11 @@ int main()
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
 global i = 2
+
 global a = 2
 
-if i == a
+if i == a 
 	print "Hi"
-else
-	print "nO"
 
 #rest
 global source = con.get_source()
@@ -132,13 +131,8 @@ while check_size(i, images) {
 }
 )delim";
 	/*
-	Code1
-	global i = 10000000;
-	global int = 43;
+	
 
-	while(i){
-	int+6455;
-	i -=1;
 	*/
 
 	/*

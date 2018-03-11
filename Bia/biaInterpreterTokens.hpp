@@ -42,6 +42,28 @@ inline size_t WhitespaceSkipper(const char * p_pcBuffer, size_t p_iSize)
 		case ' ':
 		case '\t':
 		case '\r':
+			--p_iSize;
+
+			break;
+		default:
+			return ciSize - p_iSize;
+		}
+	}
+
+	return ciSize - p_iSize;
+}
+
+inline size_t PaddingSkipper(const char * p_pcBuffer, size_t p_iSize)
+{
+	const auto ciSize = p_iSize;
+
+	while (p_iSize)
+	{
+		switch (*p_pcBuffer++)
+		{
+		case ' ':
+		case '\t':
+		case '\r':
 		case '\n':
 			--p_iSize;
 
@@ -57,10 +79,11 @@ inline size_t WhitespaceSkipper(const char * p_pcBuffer, size_t p_iSize)
 template<flag_type _FLAGS, bool _START>
 inline bool WhitespaceDeleter(const char *& p_pcBuffer, size_t & p_iSize, TokenOutput & p_output)
 {
-	if (_START && (_FLAGS & (STARTING_WHITESPACE_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN)) ||
+	if (_START && (_FLAGS & (STARTING_WHITESPACE_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN | STARTING_PADDING_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN)) ||
 		!_START && (_FLAGS & ENDING_WHITESPACE_TOKEN))
 	{
-		auto iWhitespaces = WhitespaceSkipper(p_pcBuffer, p_iSize);
+		constexpr auto SKIPPER = _FLAGS & (STARTING_PADDING_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN) ? PaddingSkipper : WhitespaceSkipper;
+		auto iWhitespaces = SKIPPER(p_pcBuffer, p_iSize);
 
 		//Whitespace found
 		if (iWhitespaces)
@@ -74,7 +97,7 @@ inline bool WhitespaceDeleter(const char *& p_pcBuffer, size_t & p_iSize, TokenO
 				p_output.iBufferPadding += iWhitespaces;
 		}
 		//No whitespace found
-		else if (_START && (_FLAGS & STARTING_WHITESPACE_TOKEN) ||
+		else if (_START && (_FLAGS & (STARTING_WHITESPACE_TOKEN | STARTING_PADDING_TOKEN)) ||
 			!_START && (_FLAGS & ENDING_WHITESPACE_TOKEN))
 			return false;
 	}
