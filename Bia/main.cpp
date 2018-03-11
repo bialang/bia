@@ -6,7 +6,7 @@
 #include "biaCompiler.hpp"
 #include "biaMachineDecoder.hpp"
 #include <chrono>
-#include "biaDisguisedCalled.hpp"
+#include "biaDisguisedCaller.hpp"
 #include "biaInt.hpp"
 
 
@@ -110,7 +110,15 @@ int main()
 //var i = 65*65+5*8;
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
-# Bia v3
+global i = 2
+global a = 2
+
+if i == a
+	print "Hi"
+else
+	print "nO"
+
+#rest
 global source = con.get_source()
 global pre = find_between(source, R"(<link rel="canonical" href=")", R"(")") + "images"
 global images = find_all_between(source, R"(<td><a href="images)", R"(")")

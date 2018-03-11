@@ -428,6 +428,8 @@ gt_redo:;
 		BIA_COMPILER_DEV_INVALID
 	}
 
+	m_toolset.WriteTest();
+
 	m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
 }
 
