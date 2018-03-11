@@ -13,6 +13,12 @@ namespace bia
 namespace machine
 {
 
+BiaMachineContext::~BiaMachineContext()
+{
+	for (auto & member : m_index)
+		m_pAllocator->DestroyBlocks(member.second, BiaAllocator::MEMORY_TYPE::NORMAL);
+}
+
 void BiaMachineContext::Run(const void * p_pScript, size_t p_iSize)
 {
 	int8_t acMachineScheinSpace[sizeof(BiaMachineSchein)];
@@ -44,7 +50,7 @@ framework::BiaMember * BiaMachineContext::GetGlobal(const std::string & p_stVari
 	auto pResult = m_index.find(p_stVariable);
 
 	//Address found
-	return pResult != m_index.end() ? pResult->second : nullptr;
+	return pResult != m_index.end() ? pResult->second.pAddress : nullptr;
 }
 
 void BiaMachineContext::ConstructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppDestination)
@@ -97,16 +103,16 @@ framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 
 	//Address found
 	if (pResult != m_index.end())
-		return pResult->second;
+		return pResult->second.pAddress;
 	//Create address
 	else
 	{
-		auto pAddress = static_cast<framework::BiaMember*>(m_pAllocator->ConstructBlocks<framework::BiaUndefined>(1, BiaAllocator::MEMORY_TYPE::NORMAL).pAddress);
+		auto allocation = m_pAllocator->ConstructBlocks<framework::BiaMember, framework::BiaUndefined>(1, BiaAllocator::MEMORY_TYPE::NORMAL);
 		//auto pAddress = m_storage.CreateElement<framework::BiaUndefined>();
 
-		m_index.insert({ p_name, pAddress });
+		m_index.insert({ p_name, allocation });
 
-		return pAddress;
+		return allocation.pAddress;
 	}
 }
 

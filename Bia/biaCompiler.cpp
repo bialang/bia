@@ -182,7 +182,7 @@ void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint3
 
 			break;
 		case VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&machine::link::OperatorCallInt_32, p_leftValue.nInt, p_unOperator, m_value.pMember, BiaToolset::TemporaryMember(p_destinationIndex));
+			m_toolset.Call(&machine::link::OperatorCallInt_32, p_leftValue.nInt, p_unOperator, BiaToolset::TemporaryMember(m_value.temporaryResultIndex), BiaToolset::TemporaryMember(p_destinationIndex));
 
 			break;
 		}
@@ -796,7 +796,10 @@ const grammar::Report * BiaCompiler::HandleMember(grammar::report_range p_report
 			switch (p_reports.pBegin->unTokenId)
 			{
 			case grammar::BM_INSTANTIATION:
-				p_reports.pBegin = HandleInstantiation(p_reports.pBegin->content.children);
+				if (destination == -1)
+					destination = m_counter.Current();
+
+				p_reports.pBegin = HandleInstantiation(p_reports.pBegin->content.children, destination);
 
 				break;
 			case grammar::BM_STRING:
@@ -1075,7 +1078,7 @@ const grammar::Report * BiaCompiler::HandleImport(grammar::report_range p_report
 	return p_reports.pEnd + 1;
 }
 
-const grammar::Report * BiaCompiler::HandleInstantiation(grammar::report_range p_reports)
+const grammar::Report * BiaCompiler::HandleInstantiation(grammar::report_range p_reports, BiaTempCounter::counter_type p_destination)
 {
 	//Handle identifier
 	HandleIdentifier(p_reports.pBegin + 1);
@@ -1091,10 +1094,8 @@ const grammar::Report * BiaCompiler::HandleInstantiation(grammar::report_range p
 	auto parameter = m_value.parameter;
 
 	//Call instantiation function
-	m_counter.Next();
-
 	m_valueType = VALUE_TYPE::TEMPORARY_MEMBER;
-	m_value.temporaryResultIndex = m_counter.Current();
+	m_value.temporaryResultIndex = p_destination;
 
 	HandleInstantiationCall(parameter, pIdentifier, m_value.temporaryResultIndex);
 

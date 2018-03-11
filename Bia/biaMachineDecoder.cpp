@@ -75,7 +75,7 @@ const char * BiaMachineDecoder::GetVariableName(const void * p_pAddress)
 
 	for (auto & element : m_index)
 	{
-		if (element.second == p_pAddress)
+		if (element.second.pAddress == p_pAddress)
 			return element.first.data();
 	}
 

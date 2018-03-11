@@ -45,36 +45,41 @@ inline rra heyho(const char * b)
 class BiaMachineContext final
 {
 public:
-BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
-{
-
-	auto pAddress = m_storage.CreateElement<framework::executable::BiaStaticFunction<decltype(&heyho)>>(heyho);
-
-	m_index.insert({ "test", pAddress });
-
-	auto pasd = m_storage.CreateElement<framework::executable::BiaMemberFunction<decltype(&BiaMachineContext::lul)>>(&BiaMachineContext::lul);
-
-	m_index.insert({ "lul", pasd });
-
-	auto lul = [](int i, const char*, int) {
-		//printf("hiasd askdw %f\n", *(float*)&i);
-	};
-	auto wd = m_storage.CreateElement<framework::executable::BiaLambdaFunction<decltype(lul)>>(std::move(lul));
-
-	m_index.insert({ "wd", wd });
-
-	class MyClass
+	BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
 	{
-	public:
-		~MyClass() {
-			puts("im getting deleted");
-		}
-	};
 
-	auto adw = m_storage.CreateElement<framework::object::BiaClassTemplate<MyClass>>(m_pAllocator.get(), &m_nameManager);
-	adw->SetFunction("hey", heyho);
-	m_index.insert({ "obj", adw });
-}
+		/*auto pAddress = m_storage.CreateElement<framework::executable::BiaStaticFunction<decltype(&heyho)>>(heyho);
+
+		m_index.insert({ "test", pAddress });
+
+		auto pasd = m_storage.CreateElement<framework::executable::BiaMemberFunction<decltype(&BiaMachineContext::lul)>>(&BiaMachineContext::lul);
+
+		m_index.insert({ "lul", pasd });
+
+		auto lul = [](int i, const char*, int) {
+			//printf("hiasd askdw %f\n", *(float*)&i);
+		};
+		auto wd = m_storage.CreateElement<framework::executable::BiaLambdaFunction<decltype(lul)>>(std::move(lul));
+
+		m_index.insert({ "wd", wd });
+		*/
+		class MyClass
+		{
+		public:
+			MyClass() {
+				puts("im getting constructed");
+			}
+			~MyClass() {
+				puts("im getting deleted");
+			}
+		};
+
+		//auto adw = m_storage.CreateElement<framework::object::BiaClassTemplate<MyClass>>(m_pAllocator.get(), &m_nameManager);
+		auto adw = m_pAllocator->ConstructBlocks<framework::BiaMember, framework::object::BiaClassTemplate<MyClass>>(1, BiaAllocator::MEMORY_TYPE::NORMAL, m_pAllocator.get(), &m_nameManager);
+		static_cast<framework::object::BiaClassTemplate<MyClass>*>(adw.pAddress)->SetFunction("hey", heyho);
+		m_index.insert({ "obj", adw });
+	}
+	~BiaMachineContext();
 	//void AddScript(std::string p_stScriptName, script);
 	//void RemoveScript(std::string p_stScriptName);
 	//void Run(std::string p_stScriptName);

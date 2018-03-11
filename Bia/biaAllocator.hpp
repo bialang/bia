@@ -62,18 +62,18 @@ public:
 	{
 		return { p_allocation.pAddress, p_allocation.iSize };
 	}
-	template<typename T, typename... _ARGS>
-	inline Allocation<T> ConstructBlocks(size_t p_iBlockCount, MEMORY_TYPE p_type, _ARGS &&... p_args)
+	template<typename _BASE, typename _DERIVIATE = _BASE, typename... _ARGS>
+	inline Allocation<_BASE> ConstructBlocks(size_t p_iBlockCount, MEMORY_TYPE p_type, _ARGS &&... p_args)
 	{
-		static_assert(sizeof(T) <= BLOCK_SIZE, "Type exceeds block size.");
+		static_assert(sizeof(_DERIVIATE) <= BLOCK_SIZE, "Type exceeds block size.");
 
 		auto allocation = AllocateBlocks(p_iBlockCount, p_type);
 		auto pBlocks = static_cast<int8_t*>(allocation.pAddress);
 
 		for (size_t i = 0; i < p_iBlockCount; ++i)
-			new(pBlocks + i * BLOCK_SIZE) T(std::forward<_ARGS>(p_args)...);
+			new(pBlocks + i * BLOCK_SIZE) _DERIVIATE(std::forward<_ARGS>(p_args)...);
 
-		return { static_cast<T*>(allocation.pAddress), allocation.iSize };
+		return { static_cast<_BASE*>(allocation.pAddress), allocation.iSize };
 	}
 };
 

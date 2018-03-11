@@ -772,7 +772,7 @@ private:
 	const grammar::Report * HandleParameters(grammar::report_range p_reports);
 	const grammar::Report * HandleTestLoop(grammar::report_range p_reports);
 	const grammar::Report * HandleImport(grammar::report_range p_reports);
-	const grammar::Report * HandleInstantiation(grammar::report_range p_reports);
+	const grammar::Report * HandleInstantiation(grammar::report_range p_reports, BiaTempCounter::counter_type p_destination);
 } ;
 
 }

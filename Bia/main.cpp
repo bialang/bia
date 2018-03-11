@@ -106,29 +106,26 @@ int main()
 	}*/
 	std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 	bia::stream::BiaOutputStreamBuffer buf;
-	bia::machine::BiaMachineContext context(pAllocator);
+	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
 //var i = 65*65+5*8;
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
-global i = 2
-
-global a = 2
-
-if i == a 
-	print "Hi"
+global i = 0
+global j = new obj()
+p=0+i*i
 
 #rest
-global source = con.get_source()
-global pre = find_between(source, R"(<link rel="canonical" href=")", R"(")") + "images"
-global images = find_all_between(source, R"(<td><a href="images)", R"(")")
-
-global i = 0
-
-while check_size(i, images) {
-	con.save(pre + images.at(i))
-	
-	i += 1
-}
+#global source = con.get_source()
+#global pre = find_between(source, R"(<link rel="canonical" href=")", R"(")") + "images"
+#global images = find_all_between(source, R"(<td><a href="images)", R"(")")
+#
+#global i = 0
+#
+#while check_size(i, images) {
+#	con.save(pre + images.at(i))
+#	
+#	i += 1
+#}
 )delim";
 	/*
 	
@@ -288,7 +285,7 @@ while check_size(i, images) {
 
 	try
 	{
-		bia::compiler::BiaCompiler compiler(buf, context, pAllocator.get());
+		bia::compiler::BiaCompiler compiler(buf, *pContext.get(), pAllocator.get());
 
 		bia::grammar::BiaGrammar::GetGrammar().Interpret(script, sizeof(script) - 1, compiler);
 		schein = std::move(compiler.GetMachineSchein());
@@ -305,7 +302,7 @@ while check_size(i, images) {
 	pCode.reset(new bia::machine::BiaMachineCode(buf.GetBuffer(), std::move(schein)));
 	puts(script);
 	
-	printf("address: %p\n", &context);
+	printf("address: %p\n", pContext.get());
 
 
 	auto buffer = buf.GetBuffer();
@@ -332,7 +329,7 @@ while check_size(i, images) {
 	buffer = buf.GetBuffer();
 	try
 	{
-		bia::machine::disassembler::BiaMachineDecoder decoder(&context, context.m_index);
+		bia::machine::disassembler::BiaMachineDecoder decoder(pContext.get(), pContext->m_index);
 		decoder.Disassemble(buffer.first, buffer.second);
 	}
 	catch (const bia::exception::Exception & e)
@@ -366,5 +363,6 @@ while check_size(i, images) {
 	{
 		puts("Something was thrown");
 	}
+	pContext.reset();
 	system("pause");
 }
