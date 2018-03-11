@@ -67,7 +67,7 @@ target_sources(Bia PRIVATE ${Bia_SOURCE_FILES_GRAMMAR})
 
 
 # machine namespace
-set(Bia_HEADER_FILES_MACHINE "Bia/biaAllocator.hpp" "Bia/biaMachineCode.hpp" "Bia/biaMachineContext.hpp" "Bia/biaMachineSchein.hpp" "Bia/biaNameManager.hpp" "Bia/biaStorage.hpp" "Bia/biaTemporaryStorage.hpp" "Bia/biaVariableHandler.hpp")
+set(Bia_HEADER_FILES_MACHINE "Bia/biaAllocator.hpp" "Bia/biaMachineCode.hpp" "Bia/biaMachineContext.hpp" "Bia/biaMachineSchein.hpp" "Bia/biaNameManager.hpp" "Bia/biaTemporaryStorage.hpp" "Bia/biaVariableHandler.hpp")
 set(Bia_SOURCE_FILES_MACHINE "Bia/biaAllocator.cpp" "Bia/biaMachineCode.cpp" "Bia/biaMachineContext.cpp" "Bia/biaMachineSchein.cpp" "Bia/biaNameManager.cpp")
 
 source_group("Header Files\\machine" FILES ${Bia_HEADER_FILES_MACHINE})

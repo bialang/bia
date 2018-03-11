@@ -200,9 +200,6 @@
     <ClInclude Include="biaReportBundle.hpp">
       <Filter>Header Files\grammar</Filter>
     </ClInclude>
-    <ClInclude Include="biaStorage.hpp">
-      <Filter>Header Files\machine</Filter>
-    </ClInclude>
     <ClInclude Include="biaInstantiate.hpp">
       <Filter>Header Files\machine\link</Filter>
     </ClInclude>

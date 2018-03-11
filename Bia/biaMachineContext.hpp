@@ -6,7 +6,6 @@
 
 #include "biaConfig.hpp"
 #include "biaMember.hpp"
-#include "biaStorage.hpp"
 #include "biaTemporaryStorage.hpp"
 #include "biaMachineCode.hpp"
 #include "biaVariableHandler.hpp"
@@ -45,7 +44,7 @@ inline rra heyho(const char * b)
 class BiaMachineContext final
 {
 public:
-	BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_storage(34), m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
+	BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
 	{
 
 		/*auto pAddress = m_storage.CreateElement<framework::executable::BiaStaticFunction<decltype(&heyho)>>(heyho);
@@ -113,7 +112,6 @@ public:
 	
 	BiaNameManager m_nameManager;
 
-	BiaStorage<16> m_storage;
 	//BiaTemporaryStorage<framework::BiaMember, 16> m_temporaryStorage;
 
 
