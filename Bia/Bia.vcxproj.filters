@@ -314,7 +314,10 @@
     <ClInclude Include="biaHasher.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="biaClassContext.hpp">
+    <ClInclude Include="biaInitiator.hpp">
+      <Filter>Header Files\force</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClassMemberHolder.hpp">
       <Filter>Header Files\framework\object</Filter>
     </ClInclude>
   </ItemGroup>

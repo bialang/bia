@@ -197,10 +197,11 @@
   <ItemGroup>
     <ClInclude Include="biaAllocator.hpp" />
     <ClInclude Include="biaClass.hpp" />
-    <ClInclude Include="biaClassContext.hpp" />
+    <ClInclude Include="biaClassMemberHolder.hpp" />
     <ClInclude Include="biaClassRaw.hpp" />
     <ClInclude Include="biaDouble.hpp" />
     <ClInclude Include="biaFloat.hpp" />
+    <ClInclude Include="biaInitiator.hpp" />
     <ClInclude Include="biaMemberHolder.hpp" />
     <ClInclude Include="biaClassTemplate.hpp" />
     <ClInclude Include="biaCompiler.hpp" />
