@@ -15,15 +15,15 @@ public:
 	virtual ~BiaInitiator() = default;
 	inline virtual void * Instantiate()
 	{
-		throw exception::AccessViolationException("Cannot instantiate class without a constructor.");
+		throw exception::BadCallException("Cannot instantiate class without a constructor.");
 	}
-	inline virtual void * InstantiateCount(framework::BiaMember::parameter_count p_unParameterCount, ...)
+	inline virtual void * InstantiateCount(framework::BiaMember::parameter_count p_unParameterCount, va_list p_args)
 	{
-		throw exception::AccessViolationException("Cannot instantiate class without a constructor.");
+		throw exception::BadCallException("Cannot instantiate class without a constructor.");
 	}
-	inline virtual void * InstantiateFormat(framework::BiaMember::parameter_count p_unParameterCount, const char * p_pcFormat, ...)
+	inline virtual void * InstantiateFormat(framework::BiaMember::parameter_count p_unParameterCount, const char * p_pcFormat, va_list p_args)
 	{
-		throw exception::AccessViolationException("Cannot instantiate class without a constructor.");
+		throw exception::BadCallException("Cannot instantiate class without a constructor.");
 	}
 };
 
@@ -33,15 +33,15 @@ class BiaInitiatorDeriviate final : BiaInitiator
 public:
 	inline virtual void * Instantiate() override
 	{
-		return nullptr;
+		return BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
 	}
-	inline virtual void * InstantiateCount(framework::BiaMember::parameter_count p_unParameterCount, ...) override
+	inline virtual void * InstantiateCount(framework::BiaMember::parameter_count p_unParameterCount, va_list p_args) override
 	{
-		return nullptr;
+		return BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
 	}
-	inline virtual void * InstantiateFormat(framework::BiaMember::parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
+	inline virtual void * InstantiateFormat(framework::BiaMember::parameter_count p_unParameterCount, const char * p_pcFormat, va_list p_args) override
 	{
-		return nullptr;
+		return BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
 	}
 };
 

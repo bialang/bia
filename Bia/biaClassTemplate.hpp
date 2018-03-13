@@ -54,21 +54,37 @@ public:
 	*/
 	inline virtual void Instantiate(BiaMember * p_pDestination) override
 	{
-		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pClassMemberHolder, std::shared_ptr<_CLASS>(new _CLASS()));
+		auto pInstance = static_cast<_CLASS*>(m_pClassMemberHolder->GetInitiator()->Instantiate());
+
+		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pClassMemberHolder, std::shared_ptr<_CLASS>(pInstance));
 	}
 	/**
 	 * @see	BiaMember::InstantiateCount().
 	*/
-	inline virtual void InstantiateCount(BiaMember*, parameter_count, ...) override
+	inline virtual void InstantiateCount(BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) override
 	{
-		throw exception::BadCallException("Invalid instantiation call.");
+		va_list args;
+		va_start(args, p_unParameterCount);
+
+		auto pInstance = static_cast<_CLASS*>(m_pClassMemberHolder->GetInitiator()->InstantiateCount(p_unParameterCount, args));
+
+		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pClassMemberHolder, std::shared_ptr<_CLASS>(pInstance));
+
+		va_end(args);
 	}
 	/**
 	 * @see	BiaMember::InstantiateFormat().
 	*/
-	inline virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override
+	inline virtual void InstantiateFormat(BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) override
 	{
-		throw exception::BadCallException("Invalid instantiation call.");
+		va_list args;
+		va_start(args, p_pcFormat);
+
+		auto pInstance = static_cast<_CLASS*>(m_pClassMemberHolder->GetInitiator()->InstantiateFormat(p_unParameterCount, p_pcFormat, args));
+
+		p_pDestination->ReplaceObject<BiaClass<_CLASS>>(m_pClassMemberHolder, std::shared_ptr<_CLASS>(pInstance));
+
+		va_end(args);
 	}
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
 	{
