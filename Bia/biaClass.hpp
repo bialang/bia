@@ -5,7 +5,7 @@
 
 #include "biaMember.hpp"
 #include "biaUndefined.hpp"
-#include "biaClassContext.hpp"
+#include "biaClassMemberHolder.hpp"
 
 
 namespace bia
@@ -19,7 +19,7 @@ template<typename _CLASS>
 class BiaClass : public BiaMember
 {
 public:
-	inline BiaClass(std::shared_ptr<BiaClassContext> p_pClassContext, std::shared_ptr<_CLASS> p_pInstance) : m_pClassContext(std::move(p_pClassContext)), m_instance(std::move(p_pInstance))
+	inline BiaClass(std::shared_ptr<BiaClassMemberHolder> p_pClassMemberHolder, std::shared_ptr<_CLASS> p_pInstance) : m_pClassMemberHolder(std::move(p_pClassMemberHolder)), m_instance(std::move(p_pInstance))
 	{
 	}
 
@@ -180,7 +180,7 @@ public:
 	}
 	inline virtual BiaMember * GetMember(const char * p_szName) override
 	{
-		if (auto pMember = m_pClassContext->GetMember(p_szName))
+		if (auto pMember = m_pClassMemberHolder->GetMember(p_szName))
 			return pMember;
 
 		throw exception::SymbolException("Unknown member.");
@@ -213,7 +213,7 @@ private:
 		_CLASS * pInstance;
 	};
 
-	std::shared_ptr<BiaClassContext> m_pClassContext;
+	std::shared_ptr<BiaClassMemberHolder> m_pClassMemberHolder;
 	
 	ObjectContainer m_instance;
 };
