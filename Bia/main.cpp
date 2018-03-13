@@ -76,7 +76,7 @@ inline void Test(int p_nCount, _LAMBDA && p_lambda)
 //7573
 int main()
 {
-	/*Run(test, 2, 4, 434);
+	//Run(test, 2, 4, 434);
 	{
 		auto time_taken = 0ll;
 
@@ -103,14 +103,29 @@ int main()
 		}
 
 		printf("%f\n", time_taken / 20.0);
-	}*/
+	}
 	std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 	bia::stream::BiaOutputStreamBuffer buf;
 	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
 //var i = 65*65+5*8;
-	constexpr auto TEST_TIMES = 1;
+	constexpr auto TEST_TIMES = 20;
 	char script[] = R"delim(
+global sum = 0
 global i = 0
+
+while i < 1000000 {
+	if i % 2
+		sum += (i - 1) * 3
+	else
+		sum += (i + 1) * 2
+
+	i += 1
+}
+
+print sum
+)delim";
+	/*
+	global i = 0
 global j = new obj()
 p=0+i*i
 
@@ -126,9 +141,6 @@ p=0+i*i
 #	
 #	i += 1
 #}
-)delim";
-	/*
-	
 
 	*/
 

@@ -22,7 +22,16 @@ public:
 	 * @param	[in]	p_pAllocator	Defines the allocator used to allocate memory for members.
 	 * @param	[in]	p_pNameManager	Defines the name manager.
 	*/
-	BiaMemberHolder(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager);
+	inline BiaMemberHolder(machine::BiaAllocator * p_pAllocator, machine::BiaNameManager * p_pNameManager)
+	{
+		m_pAllocator = p_pAllocator;
+		m_pNameManager = p_pNameManager;
+	}
+	inline virtual ~BiaMemberHolder()
+	{
+		for (auto & allocation : m_members)
+			m_pAllocator->DestroyBlocks(allocation.second, machine::BiaAllocator::MEMORY_TYPE::NORMAL);
+	}
 	/**
 	 * Adds a member or overwrites the existing one.
 	 *
@@ -32,7 +41,13 @@ public:
 	 * @param	p_stName	Defines the name of the member.
 	 * @param	p_memberAllocation	Defines the member.
 	*/
-	void SetMember(const std::string & p_stName, machine::BiaAllocator::universal_allocation p_memberAllocation);
+	template<typename T, typename... _ARGS>
+	inline void SetMember(const std::string & p_stName, _ARGS &&... p_args)
+	{
+		auto allocation = m_pAllocator->ConstructBlocks<BiaMember, T>(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL, std::forward<_ARGS>(p_args)...);
+
+		m_members.insert_or_assign(m_pNameManager->GetNameAddress(p_stName.c_str(), p_stName.length()), allocation);
+	}
 	/**
 	 * Retrieves the member associated with the name.
 	 *
@@ -43,7 +58,12 @@ public:
 	 *
 	 * @return	The member if it known, otherwise null.
 	*/
-	BiaMember * GetMember(const char * p_szName);
+	inline BiaMember * GetMember(const char * p_szName)
+	{
+		auto pResult = m_members.find(p_szName);
+
+		return pResult != m_members.end() ?pResult->second.pAddress : nullptr;
+	}
 	/**
 	 * Returns the allocator.
 	 *
@@ -52,11 +72,15 @@ public:
 	 *
 	 * @return	The allocator.
 	*/
-	machine::BiaAllocator * GetAllocator();
+	/*inline machine::BiaAllocator * GetAllocator()
+	{
+		return m_pAllocator;
+	}*/
+
 
 private:
 	/**	Stores all known members of a class.	*/
-	std::unordered_map<const char*, machine::BiaAllocator::universal_allocation> m_members;
+	std::unordered_map<const char*, machine::BiaAllocator::Allocation<BiaMember>> m_members;
 
 	/**	Defines the allocator used to allocate memory for the members.	*/
 	machine::BiaAllocator * m_pAllocator;

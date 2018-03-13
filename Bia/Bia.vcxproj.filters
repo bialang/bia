@@ -126,9 +126,6 @@
     <ClCompile Include="biaMachineSchein.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
-    <ClCompile Include="biaMemberHolder.cpp">
-      <Filter>Source Files\framework</Filter>
-    </ClCompile>
     <ClCompile Include="biaInt.cpp">
       <Filter>Source Files\framework\native</Filter>
     </ClCompile>
@@ -227,9 +224,6 @@
     <ClInclude Include="biaAllocator.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
-    <ClInclude Include="biaDisassembler.hpp">
-      <Filter>Header Files\machine\disassembler</Filter>
-    </ClInclude>
     <ClInclude Include="biaMachineDecoder.hpp">
       <Filter>Header Files\machine\disassembler</Filter>
     </ClInclude>
@@ -319,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="biaHasher.hpp">
       <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="biaClassContext.hpp">
+      <Filter>Header Files\framework\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

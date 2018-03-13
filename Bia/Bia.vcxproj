@@ -175,7 +175,6 @@
     <ClCompile Include="biaDouble.cpp" />
     <ClCompile Include="biaFloat.cpp" />
     <ClCompile Include="biaInt.cpp" />
-    <ClCompile Include="biaMemberHolder.cpp" />
     <ClCompile Include="biaCompiler.cpp" />
     <ClCompile Include="biaCString.cpp" />
     <ClCompile Include="biaGrammar.cpp" />
@@ -198,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="biaAllocator.hpp" />
     <ClInclude Include="biaClass.hpp" />
+    <ClInclude Include="biaClassContext.hpp" />
     <ClInclude Include="biaClassRaw.hpp" />
     <ClInclude Include="biaDouble.hpp" />
     <ClInclude Include="biaFloat.hpp" />
@@ -207,7 +207,6 @@
     <ClInclude Include="biaConfig.hpp" />
     <ClInclude Include="biaConstantOperation.hpp" />
     <ClInclude Include="biaCString.h" />
-    <ClInclude Include="biaDisassembler.hpp" />
     <ClInclude Include="biaDisguisedCaller.hpp" />
     <ClInclude Include="biaException.hpp" />
     <ClInclude Include="biaFunction.hpp" />
