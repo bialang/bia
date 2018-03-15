@@ -1,12 +1,15 @@
-image:
- - Visual Studio 2017
-clone_folder: c:\project\source
-build_script:
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration:
+- Debug
+- Release
+platform: x86
+before_build:
 - cmd: >-
     mkdir build
-    
+
     cd build
-    
-    cmake c:\project\source -G "Visual Studio 15"
-    
-    cmake --build . --config "Release"
+
+    cmake c:\project\bia -G "Visual Studio 15"
+build:
+  verbosity: minimal
