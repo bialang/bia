@@ -12,5 +12,7 @@ before_build:
     cd build
 
     cmake c:\project\source -G "Visual Studio 15"
+
+    cmake --build .
 build:
   verbosity: minimal
