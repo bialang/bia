@@ -1,9 +1,5 @@
 version: 1.0.{build}
 image: Visual Studio 2017
-configuration:
-- Debug
-- Release
-platform: x86
 clone_folder: c:\project\source
 before_build:
 - cmd: >-
@@ -13,6 +9,6 @@ before_build:
 
     cmake c:\project\source -G "Visual Studio 15"
 
-    cmake --build .
-build:
-  verbosity: minimal
+    cmake --build . --config "Release"
+test_script:
+  - c:\project\source\build\tests\Release\MathExpressionTest.exe
