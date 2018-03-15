@@ -4,12 +4,13 @@ configuration:
 - Debug
 - Release
 platform: x86
+clone_folder: c:\project\source
 before_build:
 - cmd: >-
     mkdir build
 
     cd build
 
-    cmake c:\project\bia -G "Visual Studio 15"
+    cmake c:\project\source -G "Visual Studio 15"
 build:
   verbosity: minimal
