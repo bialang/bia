@@ -302,9 +302,6 @@
     <ClInclude Include="biaDouble.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="biaCString.h">
-      <Filter>Header Files\framework\native</Filter>
-    </ClInclude>
     <ClInclude Include="biaDisguisedCaller.hpp">
       <Filter>Header Files\force</Filter>
     </ClInclude>
@@ -319,6 +316,9 @@
     </ClInclude>
     <ClInclude Include="biaClassMemberHolder.hpp">
       <Filter>Header Files\framework\object</Filter>
+    </ClInclude>
+    <ClInclude Include="biaCString.hpp">
+      <Filter>Header Files\framework\native</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

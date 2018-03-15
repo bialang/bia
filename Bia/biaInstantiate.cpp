@@ -2,7 +2,7 @@
 #include "biaInt.hpp"
 #include "biaFloat.hpp"
 #include "biaDouble.hpp"
-#include "biaCString.h"
+#include "biaCString.hpp"
 
 
 namespace bia

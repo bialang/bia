@@ -7,7 +7,7 @@
 #include "biaInt.hpp"
 #include "biaFloat.hpp"
 #include "biaDouble.hpp"
-#include "biaCString.h"
+#include "biaCString.hpp"
 #include "biaStaticFunction.hpp"
 #include "biaClassRaw.hpp"
 
@@ -25,7 +25,7 @@ inline void MemberCreator(BiaMember * p_pDestination)
 template<typename T>
 inline void MemberCreator(BiaMember * p_pDestination, T && p_value)
 {
-	using _TYPE = std::remove_reference<T>::type;
+	using _TYPE = typename std::remove_reference<T>::type;
 
 	//Integral type
 	if (std::is_integral<T>::value)

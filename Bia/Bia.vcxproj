@@ -207,7 +207,7 @@
     <ClInclude Include="biaCompiler.hpp" />
     <ClInclude Include="biaConfig.hpp" />
     <ClInclude Include="biaConstantOperation.hpp" />
-    <ClInclude Include="biaCString.h" />
+    <ClInclude Include="biaCString.hpp" />
     <ClInclude Include="biaDisguisedCaller.hpp" />
     <ClInclude Include="biaException.hpp" />
     <ClInclude Include="biaFunction.hpp" />
