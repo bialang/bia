@@ -3,7 +3,7 @@
 int main()
 {
 	bia::machine::BiaMachineContext m_context(std::shared_ptr<bia::machine::BiaAllocator>(new bia::machine::BiaAllocator()));
-			auto szScript = "global test_dot_first_constant = 652 - 2 + 6956 * 998 / 53;";
+			auto szScript = "global test_dot_first_constant = 652 - 2 + 6956 * 998 / 53";
 			
 			m_context.Run(szScript, std::char_traits<char>::length(szScript));
 
