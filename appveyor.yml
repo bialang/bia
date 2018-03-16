@@ -11,4 +11,5 @@ before_build:
 
     cmake --build . --config "Release"
 test_script:
-  - c:\project\source\build\tests\Release\MathExpressionTest.exe
+  - cd c:\project\source\build
+  - ctest
