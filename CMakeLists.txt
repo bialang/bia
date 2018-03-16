@@ -8,4 +8,8 @@ set(Bia_VERSION_MINOR 60)
 include_directories(Bia)
 
 add_subdirectory(Bia)
+
+# Tests
+enable_testing()
+
 add_subdirectory(tests)
