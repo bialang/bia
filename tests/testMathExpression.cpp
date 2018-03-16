@@ -1,60 +1,75 @@
 #include <biaMachineContext.hpp>
 
-int main()
+enum
 {
-	bia::machine::BiaMachineContext m_context(std::shared_ptr<bia::machine::BiaAllocator>(new bia::machine::BiaAllocator()));
+	UPDATE_ERRORS = 0x01,
+	CONFIGURE_ERRORS = 0x02,
+	BUILD_ERRORS = 0x04,
+	TEST_ERRORS = 0x08,
+	MEMORY_ERRORS = 0x10,
+	COVERAGE_ERRORS = 0x20,
+	SUBMIT_ERRORS = 0x40
+};
+
+int main(int argc, char ** argv)
+{
+	if (argc > 1)
+	{
+		bia::machine::BiaMachineContext context(std::shared_ptr<bia::machine::BiaAllocator>(new bia::machine::BiaAllocator()));
+
+		if (!std::strcmp(argv[1], "constant"))
+		{
 			auto szScript = "global test_dot_first_constant = 652 - 2 + 6956 * 998 / 53";
-			
-			m_context.Run(szScript, std::char_traits<char>::length(szScript));
+
+			context.Run(szScript, std::char_traits<char>::length(szScript));
 
 			//Get variable
-			auto pVariable = m_context.GetGlobal("test_dot_first_constant");
+			auto pVariable = context.GetGlobal("test_dot_first_constant");
 
-			//Assert::IsNotNull(pVariable, L"Variable not found.");
-			if(!pVariable)
-				return 3;
+			if (!pVariable)
+				return BUILD_ERRORS;
 
 			//Get value
 			auto pValue = pVariable->Cast<int>();
 
 			//Assert::IsNotNull(pValue, L"Invalid type.");
-			if(!pValue)
-				return 2;
+			if (!pValue)
+				return BUILD_ERRORS;
 
 			//Test value
-			if(*pValue != 652 - 2 + 6956 * 998 / 53)
-				return 1;
-		/*}
-
-		TEST_METHOD(TestDotFirstMixed)
+			if (*pValue != 652 - 2 + 6956 * 998 / 53)
+				return TEST_ERRORS;
+		}
+		else if (!std::strcmp(argv[1], "mixed"))
 		{
 			auto szScript = R"(
-global a = 652;
-global b = 6956;
-global c = 998;
-global d = 53;
-global test_dot_first_mixed = a - 2 + b * c / d;)";
+global a = 652
+global b = 6956
+global c = 998
+global d = 53
+global test_dot_first_mixed = a - 2 + b * c / d
+)";
 
-			m_context.Run(szScript, std::char_traits<char>::length(szScript));
+			context.Run(szScript, std::char_traits<char>::length(szScript));
 
 			//Get variable
-			auto pVariable = m_context.GetGlobal("test_dot_first_mixed");
+			auto pVariable = context.GetGlobal("test_dot_first_mixed");
 
-			Assert::IsNotNull(pVariable, L"Variable not found.");
+			if (!pVariable)
+				return BUILD_ERRORS;
 
 			//Get value
 			auto pValue = pVariable->Cast<int>();
 
-			Assert::IsNotNull(pValue, L"Invalid type.");
+			//Assert::IsNotNull(pValue, L"Invalid type.");
+			if (!pValue)
+				return BUILD_ERRORS;
 
 			//Test value
-			Assert::AreEqual(*pValue, 652 - 2 + 6956 * 998 / 53);
+			if (*pValue != 652 - 2 + 6956 * 998 / 53)
+				return TEST_ERRORS;
 		}
+	}
 
-
-	private:
-		bia::machine::BiaMachineContext m_context;
-	};
-}*/
 	return 0;
 }

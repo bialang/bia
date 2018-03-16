@@ -2,4 +2,5 @@ cmake_minimum_required(VERSION 3.1)
 
 add_executable(MathExpressionTest testMathExpression.cpp)
 target_link_libraries(MathExpressionTest Bia)
-add_test(MathExpressionTest MathExpressionTest)
+add_test(MathExpressionTestConstant MathExpressionTest constant)
+add_test(MathExpressionTestMixed MathExpressionTest mixed)
