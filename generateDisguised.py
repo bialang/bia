@@ -125,6 +125,18 @@ inline void DisguisedCaller(_RETURN(_CLASS::*)(_ARGS...) const, _CLASS*, framewo
 	throw exception::ArgumentException("Arguments expected.");
 }
 
+template<typename _CLASS>
+inline _CLASS * DisguisedCaller()
+{
+	return new _CLASS();
+}
+
+template<typename _CLASS, typename... _ARGS>
+inline _CLASS * DisguisedCaller()
+{
+	throw exception::ArgumentException("Arguments expected.");
+}
+
 """)
 
 for type in ["count", "format"]:
@@ -139,72 +151,113 @@ for type in ["count", "format"]:
 		upper["preparations"] = ""
 		upper["format_param"] = ", const char * p_pcFormat"
 
-	for template in ["static", "static_void", "member_void", "member_void_const", "member", "member_const"]:
+	for template in ["static", "static_void", "member", "member_void", "member_const", "member_void_const", "initiator"]:
 		filler = upper.copy()
 
 		if template == "static":
 			filler["template_begin"] = "template<typename _RETURN"
+			filler["template_middle"] = ""
 			filler["template_end"] = ">"
-			filler["return"] = "_RETURN"
-			filler["pre_call"] = "framework::MemberCreator(p_pDestination, "
-			filler["post_call"] = ")"
-			filler["post_function"] = ""
-			filler["instance_arg"] = ""
-			filler["class_signature"] = ""
+			filler["function_return"] = "void"
+			filler["param1"] = "_RETURN(*p_pFunction)("
+			filler["param2"] = ""
+			filler["param3"] = "), framework::BiaMember * p_pDestination, "
+			filler["body1"] = "framework::MemberCreator(p_pDestination, p_pFunction("
+			filler["body2"] = ""
+			filler["body3"] = "));"
 		elif template == "static_void":
 			filler["template_begin"] = ""
+			filler["template_middle"] = ""
 			filler["template_end"] = ""
-			filler["return"] = "void"
-			filler["pre_call"] = ""
-			filler["post_call"] = """;
+			filler["function_return"] = "void"
+			filler["param1"] = "void(*p_pFunction)("
+			filler["param2"] = ""
+			filler["param3"] = "), framework::BiaMember * p_pDestination, "
+			filler["body1"] = "p_pFunction("
+			filler["body2"] = ""
+			filler["body3"] = """);
 
-	framework::MemberCreator(p_pDestination)"""
-			filler["post_function"] = ""
-			filler["instance_arg"] = ""
-			filler["class_signature"] = ""
-		elif template.startswith("member_void"):
+	framework::MemberCreator(p_pDestination);"""
+		elif template == "member":
+			filler["template_begin"] = "template<typename _CLASS, typename _RETURN"
+			filler["template_middle"] = ""
+			filler["template_end"] = ">"
+			filler["function_return"] = "void"
+			filler["param1"] = "_RETURN(_CLASS::*p_pFunction)("
+			filler["param2"] = ""
+			filler["param3"] = "), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, "
+			filler["body1"] = "framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)("
+			filler["body2"] = ""
+			filler["body3"] = "));"
+		elif template == "member_void":
 			filler["template_begin"] = "template<typename _CLASS"
+			filler["template_middle"] = ""
 			filler["template_end"] = ">"
-			filler["return"] = "void"
-			filler["pre_call"] = "(p_pInstance->*"
-			filler["post_call"] = """;
+			filler["function_return"] = "void"
+			filler["param1"] = "void(_CLASS::*p_pFunction)("
+			filler["param2"] = ""
+			filler["param3"] = "), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, "
+			filler["body1"] = "(p_pInstance->*p_pFunction)("
+			filler["body2"] = ""
+			filler["body3"] = """);
 
-	framework::MemberCreator(p_pDestination)"""
-			filler["post_function"] = ")"
-			filler["instance_arg"] = (" const, const" if template == "member_void_const" else ",") + " _CLASS * p_pInstance"
-			filler["class_signature"] = "_CLASS::"
-		elif template.startswith("member"):
-			filler["template_begin"] = "template<typename _RETURN, typename _CLASS"
+	framework::MemberCreator(p_pDestination);"""
+		elif template == "member_const":
+			filler["template_begin"] = "template<typename _CLASS, typename _RETURN"
+			filler["template_middle"] = ""
 			filler["template_end"] = ">"
-			filler["return"] = "_RETURN"
-			filler["pre_call"] = "framework::MemberCreator(p_pDestination, (p_pInstance->*"
-			filler["post_call"] = ")"
-			filler["post_function"] = ")"
-			filler["instance_arg"] = (" const, const" if template == "member_const" else ",") + " _CLASS * p_pInstance"
-			filler["class_signature"] = "_CLASS::"
-			
-		filler["args"] = ""
-		filler["arg_count"] = 0
-		filler["arg_pass"] = ""
-		filler["template_middle"] = ""
+			filler["function_return"] = "void"
+			filler["param1"] = "_RETURN(_CLASS::*p_pFunction)("
+			filler["param2"] = ""
+			filler["param3"] = ") const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, "
+			filler["body1"] = "framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)("
+			filler["body2"] = ""
+			filler["body3"] = "));"
+		elif template == "member_void_const":
+			filler["template_begin"] = "template<typename _CLASS"
+			filler["template_middle"] = ""
+			filler["template_end"] = ">"
+			filler["function_return"] = "void"
+			filler["param1"] = "void(_CLASS::*p_pFunction)("
+			filler["param2"] = ""
+			filler["param3"] = ") const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, "
+			filler["body1"] = "(p_pInstance->*p_pFunction)("
+			filler["body2"] = ""
+			filler["body3"] = """);
+
+	framework::MemberCreator(p_pDestination);"""
+		elif template == "initiator":
+			filler["template_begin"] = "template<typename _CLASS"
+			filler["template_middle"] = ""
+			filler["template_end"] = ">"
+			filler["function_return"] = "_CLASS *"
+			filler["param1"] = ""
+			filler["param2"] = ""
+			filler["param3"] = ""
+			filler["body1"] = "return new _CLASS("
+			filler["body2"] = ""
+			filler["body3"] = ");"
 
 		for i in range(0, max_args + 1):
+			filler["arg_count"] = i
+
 			f.write("""{template_begin}{template_middle}{template_end}
-inline void {function_name}({return}({class_signature}*p_pFunction)({args}){instance_arg}, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count{format_param}, va_list p_args)
+inline {function_return} {function_name}({param1}{param2}{param3}framework::BiaMember::parameter_count p_count{format_param}, va_list p_args)
 {{
 	if (p_count != {arg_count})
 		throw exception::ArgumentException("Argument count does not match.");
 {preparations}
-
-	{pre_call}p_pFunction{post_function}({arg_pass}){post_call};
+	{body1}{body2}{body3}
 }}
 
 """.format(**filler).encode())
 
-			filler["arg_count"] += 1
-			filler["arg_pass"] += (", " if i != 0 else "") + "std::forward<_{0}>(v{0})".format(i)
-			filler["args"] += (", " if i != 0 else "") + "_" + str(i)
 			filler["template_middle"] += ("" if not filler["template_begin"] else ", ") + "typename _" + str(i)
+			
+			if template != "initiator":
+				filler["param2"] += (", " if i != 0 else "") + "_" + str(i)
+			
+			filler["body2"] += (", " if i != 0 else "") + "std::forward<_{0}>(v{0})".format(i)
 
 			if type == "count":
 				filler["preparations"] = """
