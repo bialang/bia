@@ -17,7 +17,7 @@ namespace machine
 namespace architecture
 {
 
-#if defined(BIA_ARCHITECTURE_MG32)
+#if defined(BIA_ARCHITECTURE_X86)
 enum class REGISTER
 {
 	AL,

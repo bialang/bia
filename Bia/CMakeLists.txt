@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+#cmake_minimum_required(VERSION 3.1)
 
 set(Bia_HEADER_FILES "biaConfig.hpp" "utf8.h")
 set(Bia_SOURCE_FILES "")

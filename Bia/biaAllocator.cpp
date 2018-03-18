@@ -1,8 +1,8 @@
 #include "biaAllocator.hpp"
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
+#if defined(BIA_OS_WINDOWS)
+#include <windows.h>
+#elif defined(BIA_OS_LINUX)
 #include <sys/mman.h>
 #endif
 
@@ -25,9 +25,9 @@ void BiaAllocator::Deallocate(universal_allocation p_allocation, MEMORY_TYPE p_t
 
 		break;
 	case MEMORY_TYPE::EXECUTABLE_MEMORY:
-#ifdef _WIN32
+#if defined(BIA_OS_WINDOWS)
 		VirtualFree(p_allocation.pAddress, 0, MEM_RELEASE);
-#else
+#elif defined(BIA_OS_LINUX)
 		munmap(p_allocation.pAddress, p_allocation.iSize);
 #endif
 		break;
@@ -43,9 +43,9 @@ void BiaAllocator::DeallocateBlocks(universal_allocation p_allocation, MEMORY_TY
 
 		break;
 	case MEMORY_TYPE::EXECUTABLE_MEMORY:
-#ifdef _WIN32
+#if defined(BIA_OS_WINDOWS)
 		VirtualFree(p_allocation.pAddress, 0, MEM_RELEASE);
-#else
+#elif defined(BIA_OS_LINUX)
 		munmap(p_allocation.pAddress, p_allocation.iSize * BLOCK_SIZE);
 #endif
 
@@ -55,7 +55,7 @@ void BiaAllocator::DeallocateBlocks(universal_allocation p_allocation, MEMORY_TY
 
 bool BiaAllocator::ChangeProtection(universal_allocation p_allocation, int p_fProtection)
 {
-#ifdef _WIN32
+#if defined(BIA_OS_WINDOWS)
 	//Protect memory
 	DWORD oldProtect = 0;
 	DWORD newProtect = 0;
@@ -67,7 +67,7 @@ bool BiaAllocator::ChangeProtection(universal_allocation p_allocation, int p_fPr
 		newProtect |= PAGE_EXECUTE;
 
 	return VirtualProtect(p_allocation.pAddress, p_allocation.iSize, newProtect, &oldProtect);
-#else
+#elif defined(BIA_OS_LINUX)
 	int fProtection = 0;
 
 	if (p_fProtection & P_READ_WRITE)
@@ -88,9 +88,9 @@ BiaAllocator::universal_allocation BiaAllocator::Allocate(size_t p_iSize, MEMORY
 		return { malloc(p_iSize), p_iSize };
 	case MEMORY_TYPE::EXECUTABLE_MEMORY:
 	{
-#ifdef _WIN32
+#if defined(BIA_OS_WINDOWS)
 		return { VirtualAlloc(nullptr, p_iSize, MEM_COMMIT, PAGE_READWRITE), p_iSize };
-#else
+#elif defined(BIA_OS_LINUX)
 		auto pAllocation = mmap(nullptr, p_iSize, PROT_WRITE | PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
 		if (pAllocation != reinterpret_cast<void*>(-1))

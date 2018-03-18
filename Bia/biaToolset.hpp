@@ -17,7 +17,7 @@ namespace machine
 namespace architecture
 {
 
-#if defined(BIA_ARCHITECTURE_MG32)
+#if defined(BIA_COMPILER_MSVC) || defined(BIA_COMPILER_GNU)
 class BiaToolset
 {
 public:
@@ -73,7 +73,8 @@ public:
 	inline void SafeCall(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS... p_args)
 	{
 		//Push all parameters
-		Pass(p_args...);
+		auto passed = Pass(p_args...);
+		
 		PassInstance(p_pInstance);
 
 		union
@@ -87,6 +88,11 @@ public:
 		//Move the address of the function into EAX and call it
 		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*m_pOutput, reinterpret_cast<int32_t>(address.pAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
+
+#if defined(BIA_COMPILER_GNU)
+		//Pop
+		Pop(passed);
+#endif
 	}
 	template<typename _RETURN, typename _CLASS, typename _INSTANCE, typename... _ARGS, typename... _ARGS2>
 	inline void Call(pass_count p_passed, _RETURN(BIA_MEMBER_VARARG_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS..., ...), _INSTANCE p_instance, _ARGS2... p_args)
@@ -126,7 +132,7 @@ public:
 	inline void Call(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _INSTANCE p_instance, _ARGS2... p_args)
 	{
 		//Push all parameters
-		Pass(p_args...);
+		auto passed = Pass(p_args...);
 		PassInstance(p_instance);
 
 		union
@@ -140,6 +146,11 @@ public:
 		//Move the address of the function into EAX and call it
 		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*m_pOutput, reinterpret_cast<int32_t>(address.pAddress));
 		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*m_pOutput);
+
+#if defined(BIA_COMPILER_GNU)
+		//Pop
+		Pop(passed);
+#endif
 	}
 	inline void CommitTemporaryMembers(BiaMachineContext & p_context, temp_members p_parameter, int8_t p_cCount)
 	{
