@@ -2,6 +2,8 @@
 
 #include <utility>
 
+#include "biaConfig.hpp"
+
 #define BIA_MAX_MEMBER_SIZE 50
 
 

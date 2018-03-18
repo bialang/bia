@@ -226,7 +226,7 @@ inline void DisguisedCallerCount(void(*p_pFunction)(_0, _1, _2), framework::BiaM
 }
 
 template<typename _CLASS, typename _RETURN>
-inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
+inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {
 	if (p_count != 0)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -235,7 +235,7 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(), _CLASS * p_pFu
 }
 
 template<typename _CLASS, typename _RETURN, typename _0>
-inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
+inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {
 	if (p_count != 1)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -245,7 +245,7 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0), _CLASS * p_p
 }
 
 template<typename _CLASS, typename _RETURN, typename _0, typename _1>
-inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
+inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -256,7 +256,7 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1), _CLASS *
 }
 
 template<typename _CLASS, typename _RETURN, typename _0, typename _1, typename _2>
-inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
+inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -318,7 +318,7 @@ inline void DisguisedCallerCount(void(_CLASS::*p_pFunction)(_0, _1, _2), _CLASS 
 }
 
 template<typename _CLASS, typename _RETURN>
-inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)() const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
+inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)() const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {
 	if (p_count != 0)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -327,7 +327,7 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)() const, const _C
 }
 
 template<typename _CLASS, typename _RETURN, typename _0>
-inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0) const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
+inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0) const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {
 	if (p_count != 1)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -337,7 +337,7 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0) const, const 
 }
 
 template<typename _CLASS, typename _RETURN, typename _0, typename _1>
-inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1) const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
+inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1) const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -348,7 +348,7 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1) const, co
 }
 
 template<typename _CLASS, typename _RETURN, typename _0, typename _1, typename _2>
-inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2) const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
+inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2) const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, va_list p_args)
 {
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -544,7 +544,7 @@ inline void DisguisedCallerFormat(void(*p_pFunction)(_0, _1, _2), framework::Bia
 }
 
 template<typename _CLASS, typename _RETURN>
-inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
+inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
 {
 	if (p_count != 0)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -553,7 +553,7 @@ inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(), _CLASS * p_pF
 }
 
 template<typename _CLASS, typename _RETURN, typename _0>
-inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
+inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
 {
 	if (p_count != 1)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -563,7 +563,7 @@ inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0), _CLASS * p_
 }
 
 template<typename _CLASS, typename _RETURN, typename _0, typename _1>
-inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
+inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
 {
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -574,7 +574,7 @@ inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1), _CLASS 
 }
 
 template<typename _CLASS, typename _RETURN, typename _0, typename _1, typename _2>
-inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2), _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
+inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
 {
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -636,7 +636,7 @@ inline void DisguisedCallerFormat(void(_CLASS::*p_pFunction)(_0, _1, _2), _CLASS
 }
 
 template<typename _CLASS, typename _RETURN>
-inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)() const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
+inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)() const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
 {
 	if (p_count != 0)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -645,7 +645,7 @@ inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)() const, const _
 }
 
 template<typename _CLASS, typename _RETURN, typename _0>
-inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0) const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
+inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0) const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
 {
 	if (p_count != 1)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -655,7 +655,7 @@ inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0) const, const
 }
 
 template<typename _CLASS, typename _RETURN, typename _0, typename _1>
-inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1) const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
+inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1) const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
 {
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
@@ -666,7 +666,7 @@ inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1) const, c
 }
 
 template<typename _CLASS, typename _RETURN, typename _0, typename _1, typename _2>
-inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2) const, const _CLASS * p_pFunction, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
+inline void DisguisedCallerFormat(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2) const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, framework::BiaMember::parameter_count p_count, const char * p_pcFormat, va_list p_args)
 {
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");

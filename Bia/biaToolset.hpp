@@ -259,34 +259,34 @@ public:
 
 		return 1;
 	}
-	inline position WriteJump(JUMP p_jump, int32_t p_nOffset = 0, position p_position = -1)
+	inline position WriteJump(JUMP p_jump, position p_destination = 0, position p_start = -1)
 	{
 		auto oldPos = m_pOutput->GetPosition();
 
 		//Override
-		if (p_position != -1)
-			m_pOutput->SetPosition(p_position);
+		if (p_start != -1)
+			m_pOutput->SetPosition(p_start);
 		
 		auto pos = m_pOutput->GetPosition();
 
 		switch (p_jump)
 		{
 		case JUMP::JUMP:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_RELATIVE>(*m_pOutput, p_nOffset - 5 - p_position);
+			BiaArchitecture::Operation32<OP_CODE::JUMP_RELATIVE>(*m_pOutput, p_destination - 5 - p_start);
 
 			break;
 		case JUMP::JUMP_IF_TRUE:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_NOT_EQUAL>(*m_pOutput, p_nOffset - 6 - p_position);
+			BiaArchitecture::Operation32<OP_CODE::JUMP_NOT_EQUAL>(*m_pOutput, p_destination - 6 - p_start);
 
 			break;
 		case JUMP::JUMP_IF_FALSE:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_EQUAL>(*m_pOutput, p_nOffset - 6 - p_position);
+			BiaArchitecture::Operation32<OP_CODE::JUMP_EQUAL>(*m_pOutput, p_destination - 6 - p_start);
 
 			break;
 		}
 
 		//Go back
-		if (p_position != -1)
+		if (p_start != -1)
 			m_pOutput->SetPosition(oldPos);
 
 		return pos;
