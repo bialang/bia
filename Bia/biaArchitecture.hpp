@@ -268,8 +268,10 @@ private:
 		case REGISTER::EBP:
 			return 5;
 		default:
-			return 0;
+			break;
 		}
+		
+		return 0;
 	}
 	template<REGISTER _REGISTER>
 	inline constexpr static int RegisterSize()
@@ -286,8 +288,10 @@ private:
 		case REGISTER::EBP:
 			return 32;
 		default:
-			return 0;
+			break;
 		}
+		
+		return 0;
 	}
 };
 #endif

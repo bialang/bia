@@ -84,7 +84,7 @@ void BiaMachineCode::Execute() const
 {
 	try
 	{
-		static_cast<entry_point>(m_run.pAddress)();
+		reinterpret_cast<entry_point>(m_run.pAddress)();
 	}
 	catch (...)
 	{

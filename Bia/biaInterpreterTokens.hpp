@@ -15,8 +15,8 @@ namespace grammar
 
 enum STRING_CUSTOM_PARAMETER_FLAGS : uint64_t
 {
-	SCPF_RAW_STRING = 1ui64 << 63,
-	SCPF_MASK = 0xffffffffui64
+	SCPF_RAW_STRING = 1ull << 63,
+	SCPF_MASK = 0xffffffffull
 };
 
 template<size_t _SIZE>

@@ -6,6 +6,8 @@
 #include <sys/mman.h>
 #endif
 
+#include <cstdlib>
+
 
 namespace bia
 {

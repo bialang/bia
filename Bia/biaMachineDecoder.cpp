@@ -279,9 +279,18 @@ void BiaMachineDecoder::Initialize()
 #endif
 }
 
+inline uint64_t byteswap_(uint64_t a)
+{
+#if defined(BIA_COMPILER_MSVC)
+	return _byteswap_uint64(a);
+#elif defined(BIA_COMPILER_GNU)
+	return a;
+#endif
+}
+
 void BiaMachineDecoder::AddInstruction(uint64_t p_ullInstruction, uint8_t p_ucFirstBitCount, uint8_t p_ucInstructionSize, std::function<void(BiaMachineDecoder*, const uint8_t*)> p_callback)
 {
-	m_svInstructions.push_back({ _byteswap_uint64(p_ullInstruction) >> (8 - p_ucInstructionSize) * 8, ~(~0ull << (p_ucFirstBitCount & 0xf8)) | (0xff00ull >> (p_ucFirstBitCount & 0x7) & 0xff) << (p_ucFirstBitCount & 0xf8), p_callback, p_ucInstructionSize });
+	m_svInstructions.push_back({ byteswap_(p_ullInstruction) >> (8 - p_ucInstructionSize) * 8, ~(~0ull << (p_ucFirstBitCount & 0xf8)) | (0xff00ull >> (p_ucFirstBitCount & 0x7) & 0xff) << (p_ucFirstBitCount & 0xf8), p_callback, p_ucInstructionSize });
 }
 
 }

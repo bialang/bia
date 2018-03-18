@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-#include <stdio.h>
+#include <cstdio>
+#include <typeinfo>
 
 #define BIA_IMPLEMENTATION_EXCEPTION(msg) bia::exception::ImplementationException(msg, __FILE__, __LINE__)
 

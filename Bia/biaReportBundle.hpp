@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <cstddef>
 
 
 namespace bia
@@ -129,7 +130,7 @@ public:
 	*/
 	inline Report * Begin()
 	{
-		return m_unSize > SIZE ? m_vReports.begin()._Ptr : m_aReports;
+		return m_unSize > SIZE ? &*m_vReports.begin() : m_aReports;
 	}
 	/**
 	 * Returns a pointer to the end.
@@ -141,7 +142,7 @@ public:
 	*/
 	inline Report * End()
 	{
-		return m_unSize > SIZE ? m_vReports.end()._Ptr : m_aReports + m_unSize;
+		return m_unSize > SIZE ? &*m_vReports.begin() : m_aReports + m_unSize;
 	}
 
 private:

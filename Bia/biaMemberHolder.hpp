@@ -46,7 +46,11 @@ public:
 	{
 		auto allocation = m_pAllocator->ConstructBlocks<BiaMember, T>(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL, std::forward<_ARGS>(p_args)...);
 
-		m_members.insert_or_assign(m_pNameManager->GetNameAddress(p_stName.c_str(), p_stName.length()), allocation);
+#if defined(BIA_CPP_17)
+		m_members.insert_or_assign(m_pNameManager->GetNameAddress(p_stName.c_str(), p_stName.length()), std::move(allocation));
+#else
+		m_members[m_pNameManager->GetNameAddress(p_stName.c_str(), p_stName.length())] = std::move(allocation);
+#endif
 	}
 	/**
 	 * Retrieves the member associated with the name.

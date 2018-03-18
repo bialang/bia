@@ -54,7 +54,7 @@
 
 //Calling conventions
 #define BIA_INSTRUCTION_CALLING_CONVETION(_return, _signature) __attribute__((cdecl)) _return _signature
-#define BIA_MEMBER_CALLING_CONVENTION __attribute__((thiscall))
+#define BIA_MEMBER_CALLING_CONVENTION
 #define BIA_MEMBER_VARARG_CALLING_CONVENTION __attribute__((cdecl))
 #define BIA_STATIC_CALLING_CONEVENTION __attribute__((cdecl))
 

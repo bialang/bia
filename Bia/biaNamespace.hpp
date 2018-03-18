@@ -37,9 +37,7 @@ public:
 	template<typename T, typename... _ARGS>
 	inline typename std::enable_if<std::is_base_of<BiaMember, T>::value>::type SetMember(const std::string & p_stName, _ARGS &&... p_args)
 	{
-		auto allocation = m_pMemberHolder->GetAllocator()->ConstructBlocks<T>(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL, std::forward<_ARGS>(p_args)...);
-
-		m_pMemberHolder->SetMember(p_stName, machine::BiaAllocator::ToUniversalAllocation(allocation));
+		m_pMemberHolder->SetMember<T>(p_stName, std::forward<_ARGS>(p_args)...);
 	}
 	/**
 	 * @see	BiaMember::Undefine().

@@ -61,13 +61,13 @@ inline typename utility::OperationResult<_LEFT, _RIGHT>::type IntegralOperation(
 		return p_left ^ p_right;
 	case BiaMember::O_BITWISE_ARITHMETIC_LEFT_SHIFT:
 	case BiaMember::O_BITWISE_ASSIGN_ARITHMETIC_LEFT_SHIFT:
-		return static_cast<utility::OperationResult<_LEFT, _RIGHT>::type>(p_left) << p_right;
+		return static_cast<typename utility::OperationResult<_LEFT, _RIGHT>::type>(p_left) << p_right;
 	case BiaMember::O_BITWISE_ARITHMETIC_RIGHT_SHIFT:
 	case BiaMember::O_BITWISE_ASSIGN_ARITHMETIC_RIGHT_SHIFT:
 		return p_left >> p_right;
 	case BiaMember::O_BITWISE_LOGICAL_RIGHT_SHIFT:
 	case BiaMember::O_BITWISE_ASSIGN_LOGICAL_RIGHT_SHIFT:
-		return static_cast<std::make_unsigned<_LEFT>::type>(p_left) >> p_right;
+		return static_cast<typename std::make_unsigned<_LEFT>::type>(p_left) >> p_right;
 	default:
 		return ArithmeticOperation(p_left, p_right, p_unOperator);
 	}

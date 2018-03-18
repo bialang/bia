@@ -40,7 +40,7 @@ inline void MemberCreator(BiaMember * p_pDestination, T && p_value)
 	else if (std::is_same<T, const char*>::value)
 		p_pDestination->ReplaceObject<native::BiaCString>(std::forward<T>(p_value));
 	//Static function
-	else if (std::is_pointer<T>::value && std::is_function<std::remove_pointer<T>::type>::value)
+	else if (std::is_pointer<T>::value && std::is_function<typename std::remove_pointer<T>::type>::value)
 		;// p_pDestination->ReplaceObject<executable::BiaStaticFunction<std::add_pointer<std::remove_pointer<_TYPE>::type>::type>>(std::forward<T>(p_value));
 	//Wrap into raw class
 	else

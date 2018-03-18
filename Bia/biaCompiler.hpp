@@ -352,7 +352,7 @@ private:
 		{
 			for (uint32_t unDepth = 0; p_pBegin < p_pEnd; ++p_pBegin)
 			{
-				if (p_pBegin->type == grammar::Report::TYPE::BEGIN)
+				if (static_cast<grammar::Report::TYPE>(p_pBegin->type) == grammar::Report::TYPE::BEGIN)
 				{
 					//Skip
 					if (unDepth > _DEPTH)
@@ -364,7 +364,7 @@ private:
 					else
 						++unDepth;
 				}
-				else if (p_pBegin->type == grammar::Report::TYPE::END)
+				else if (static_cast<grammar::Report::TYPE>(p_pBegin->type) == grammar::Report::TYPE::END)
 					--unDepth;
 			}
 		}
@@ -374,7 +374,7 @@ private:
 
 			while (p_pEnd-- > p_pBegin)
 			{
-				if (p_pEnd->type == grammar::Report::TYPE::END)
+				if (static_cast<grammar::Report::TYPE>(p_pEnd->type) == grammar::Report::TYPE::END)
 				{
 					//Skip
 					if (unDepth > _DEPTH)
@@ -386,7 +386,7 @@ private:
 					else
 						++unDepth;
 				}
-				else if (p_pEnd->type == grammar::Report::TYPE::BEGIN)
+				else if (static_cast<grammar::Report::TYPE>(p_pEnd->type) == grammar::Report::TYPE::BEGIN)
 					--unDepth;
 			}
 		}

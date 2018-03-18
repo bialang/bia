@@ -2,6 +2,7 @@
 
 #include "biaReportBundle.hpp"
 #include "biaInterpreterRule.hpp"
+#include "biaInterpreterTokens.hpp"
 
 
 namespace bia
