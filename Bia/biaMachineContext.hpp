@@ -122,6 +122,38 @@ public:
 	{
 		return SetMember<framework::executable::BiaStaticFunction< _RETURN(*)(_ARGS...)>>(std::move(p_name), p_pFunction);
 	}
+	/**
+	 * Sets a lambda function.
+	 *
+	 * @since	3.61.122.691
+	 * @date	20-Mar-18
+	 *
+	 * @param	p_name	Defines the name of the member.
+	 * @param	p_lambda	Defines the lambda function.
+	 *
+	 * @return	The pointer to the lambda function. Do not ever delete the pointer.
+	*/
+	template<typename _LAMBDA>
+	inline framework::executable::BiaLambdaFunction<_LAMBDA> * SetLambda(StringKey p_name, _LAMBDA p_lambda)
+	{
+		return SetMember<framework::executable::BiaLambdaFunction<_LAMBDA>>(std::move(p_name), std::move(p_lambda));
+	}
+	/**
+	 * Sets a lambda function.
+	 *
+	 * @since	3.61.122.691
+	 * @date	20-Mar-18
+	 *
+	 * @param	p_name	Defines the name of the member.
+	 * @param	p_pLambda	Defines the address of the lambda function.
+	 *
+	 * @return	The pointer to the lambda function. Do not ever delete the pointer.
+	*/
+	template<typename _LAMBDA>
+	inline framework::executable::BiaLambdaFunction<_LAMBDA> * SetLambda(StringKey p_name, std::shared_ptr<_LAMBDA> p_pLambda)
+	{
+		return SetMember<framework::executable::BiaLambdaFunction<_LAMBDA>>(std::move(p_name), p_pLambda);
+	}
 //private:
 	//friend BiaCompiler;
 

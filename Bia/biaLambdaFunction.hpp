@@ -26,7 +26,7 @@ public:
 	 *
 	 * @param	p_pFunction	Defines the static function.
 	*/
-	inline explicit BiaLambdaFunction(_LAMBDA && p_lambda) : m_pLambda(new _LAMBDA(std::move(p_lambda))) {}
+	inline explicit BiaLambdaFunction(_LAMBDA p_lambda) : m_pLambda(new _LAMBDA(std::move(p_lambda))) {}
 	inline explicit BiaLambdaFunction(std::shared_ptr<_LAMBDA> p_pLambda) : m_pLambda(std::move(p_pLambda)) {}
 	inline ~BiaLambdaFunction() = default;
 

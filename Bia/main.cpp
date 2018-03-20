@@ -108,10 +108,15 @@ int main()
 	bia::stream::BiaOutputStreamBuffer buf;
 	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
 	pContext->SetFunction("lua", &lua);
+	pContext->SetLambda("lel", [](const char * a) {
+		puts("lelelelelaasddasjkldjalsd");
+		puts(a);
+	});
 //var i = 65*65+5*8;
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
 lua(43, 34.4f)
+lel("sick")
 )delim";
 	/*
 	global i = 0
