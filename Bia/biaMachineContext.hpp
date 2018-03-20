@@ -65,8 +65,8 @@ public:
 		class MyClass
 		{
 		public:
-			MyClass() {
-				puts("im getting constructed");
+			MyClass(int a) {
+				printf("im getting %i constructed\n", a);
 			}
 			~MyClass() {
 				puts("im getting deleted");
@@ -76,6 +76,7 @@ public:
 		//auto adw = m_storage.CreateElement<framework::object::BiaClassTemplate<MyClass>>(m_pAllocator.get(), &m_nameManager);
 		auto adw = m_pAllocator->ConstructBlocks<framework::BiaMember, framework::object::BiaClassTemplate<MyClass>>(1, BiaAllocator::MEMORY_TYPE::NORMAL, m_pAllocator.get(), &m_nameManager);
 		static_cast<framework::object::BiaClassTemplate<MyClass>*>(adw.pAddress)->SetFunction("hey", heyho);
+		static_cast<framework::object::BiaClassTemplate<MyClass>*>(adw.pAddress)->SetConstructor<int>();
 		m_index.insert({ "obj", adw });
 	}
 	~BiaMachineContext();

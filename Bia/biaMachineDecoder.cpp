@@ -1,5 +1,4 @@
 #include "biaMachineDecoder.hpp"
-#include "biaConfig.hpp"
 #include "biaLink.hpp"
 
 #include <cstdio>
@@ -84,7 +83,7 @@ const char * BiaMachineDecoder::GetVariableName(const void * p_pAddress)
 
 void BiaMachineDecoder::Initialize()
 {
-#if defined(BIA_ARCHITECTURE_MG32)
+#if defined(BIA_ARCHITECTURE_X86)
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_32);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_64);
 	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt0);

@@ -1,7 +1,10 @@
 #pragma once
 
+#include <cstdarg>
+
 #include "biaMember.hpp"
 #include "biaException.hpp"
+#include "biaDisguisedCaller.hpp"
 
 
 namespace bia
@@ -28,20 +31,20 @@ public:
 };
 
 template<typename T, typename... _ARGS>
-class BiaInitiatorDeriviate final : BiaInitiator
+class BiaInitiatorDeriviate final : public BiaInitiator
 {
 public:
 	inline virtual void * Instantiate() override
 	{
-		return BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		return force::DisguisedCaller<T, _ARGS...>();
 	}
 	inline virtual void * InstantiateCount(framework::BiaMember::parameter_count p_unParameterCount, va_list p_args) override
 	{
-		return BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		return force::DisguisedCallerCount<T, _ARGS...>(p_unParameterCount, p_args);
 	}
 	inline virtual void * InstantiateFormat(framework::BiaMember::parameter_count p_unParameterCount, const char * p_pcFormat, va_list p_args) override
 	{
-		return BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		return force::DisguisedCallerFormat<T, _ARGS...>(p_unParameterCount, p_pcFormat, p_args);
 	}
 };
 

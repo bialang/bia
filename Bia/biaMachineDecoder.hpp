@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 
+#include "biaConfig.hpp"
 #include "biaInputStream.hpp"
 #include "biaException.hpp"
 #include "biaVariableHandler.hpp"
