@@ -107,11 +107,11 @@ int main()
 	std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 	bia::stream::BiaOutputStreamBuffer buf;
 	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
+	pContext->SetFunction("lua", &lua);
 //var i = 65*65+5*8;
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
-global ob = new obj(2)
-ob.hey("hi")
+lua(43, 34.4f)
 )delim";
 	/*
 	global i = 0

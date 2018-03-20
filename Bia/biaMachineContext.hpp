@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <map>
 #include <memory>
+#include <type_traits>
 
 #include "biaConfig.hpp"
 #include "biaMember.hpp"
@@ -11,8 +12,6 @@
 #include "biaVariableHandler.hpp"
 #include "biaAllocator.hpp"
 #include "biaNameManager.hpp"
-
-
 #include "biaStaticFunction.hpp"
 #include "biaMemberFunction.hpp"
 #include "biaLambdaFunction.hpp"
@@ -46,38 +45,18 @@ class BiaMachineContext final
 public:
 	BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
 	{
-
-		/*auto pAddress = m_storage.CreateElement<framework::executable::BiaStaticFunction<decltype(&heyho)>>(heyho);
-
-		m_index.insert({ "test", pAddress });
-
-		auto pasd = m_storage.CreateElement<framework::executable::BiaMemberFunction<decltype(&BiaMachineContext::lul)>>(&BiaMachineContext::lul);
-
-		m_index.insert({ "lul", pasd });
-
-		auto lul = [](int i, const char*, int) {
-			//printf("hiasd askdw %f\n", *(float*)&i);
-		};
-		auto wd = m_storage.CreateElement<framework::executable::BiaLambdaFunction<decltype(lul)>>(std::move(lul));
-
-		m_index.insert({ "wd", wd });
-		*/
 		class MyClass
 		{
 		public:
-			MyClass(int a) {
-				printf("im getting %i constructed\n", a);
+			MyClass(int a, const char * p) {
+				printf("im getting %i cons %s tructed\n", a, p);
 			}
 			~MyClass() {
 				puts("im getting deleted");
 			}
 		};
 
-		//auto adw = m_storage.CreateElement<framework::object::BiaClassTemplate<MyClass>>(m_pAllocator.get(), &m_nameManager);
-		auto adw = m_pAllocator->ConstructBlocks<framework::BiaMember, framework::object::BiaClassTemplate<MyClass>>(1, BiaAllocator::MEMORY_TYPE::NORMAL, m_pAllocator.get(), &m_nameManager);
-		static_cast<framework::object::BiaClassTemplate<MyClass>*>(adw.pAddress)->SetFunction("hey", heyho);
-		static_cast<framework::object::BiaClassTemplate<MyClass>*>(adw.pAddress)->SetConstructor<int>();
-		m_index.insert({ "obj", adw });
+		SetTemplate<MyClass>("obj")->SetFunction("hey", &heyho)->SetConstructor<int, const char*>();
 	}
 	~BiaMachineContext();
 	//void AddScript(std::string p_stScriptName, script);
@@ -86,9 +65,62 @@ public:
 	BIA_EXPORT void Run(const void * p_pScript, size_t p_iSize);
 	BIA_EXPORT framework::BiaMember * GetGlobal(const std::string & p_stVariable);
 	BIA_EXPORT framework::BiaMember * GetLocal(const std::string & p_stScriptName, const std::string & p_stVariable) = delete;
-	void lul()
+	/**
+	 * Sets a member directly.
+	 *
+	 * @remarks	The member type must be a deriviate of framework::BiaMember.
+	 *
+	 * @since	3.61.122.691
+	 * @date	20-Mar-18
+	 *
+	 * @param	p_name	Defines the name of the member.
+	 * @param	p_args	Defines the arguments needed to create the member.
+	 *
+	 * @return	The pointer to the member. Do not ever delete the pointer.
+	*/
+	template<typename T, typename... _ARGS>
+	inline T * SetMember(StringKey p_name, _ARGS &&... p_args)
 	{
+		auto allocation = m_pAllocator->ConstructBlocks<framework::BiaMember, T>(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL, std::forward<_ARGS>(p_args)...);
 
+#if defined(BIA_CPP_17)
+		//m_members.insert_or_assign(m_pNameManager->GetNameAddress(p_stName.c_str(), p_stName.length()), std::move(allocation));
+#else
+		m_index[std::move(p_name)] = std::move(allocation);
+#endif
+
+		return static_cast<T*>(allocation.pAddress);
+	}
+	/**
+	 * Sets a class template.
+	 *
+	 * @since	3.61.122.691
+	 * @date	20-Mar-18
+	 *
+	 * @param	p_name	Defines the name of the member.
+	 *
+	 * @return	The pointer to the class template. Do not ever delete the pointer.
+	*/
+	template<typename T>
+	inline framework::object::BiaClassTemplate<T> * SetTemplate(StringKey p_name)
+	{
+		return SetMember<framework::object::BiaClassTemplate<T>>(std::move(p_name), m_pAllocator.get(), &m_nameManager);
+	}
+	/**
+	 * Sets a static function.
+	 *
+	 * @since	3.61.122.691
+	 * @date	20-Mar-18
+	 *
+	 * @param	p_name	Defines the name of the member.
+	 * @param	p_pFunction	Defines the address of the function.
+	 *
+	 * @return	The pointer to the static function. Do not ever delete the pointer.
+	*/
+	template<typename _RETURN, typename... _ARGS>
+	inline framework::executable::BiaStaticFunction< _RETURN(*)(_ARGS...)> * SetFunction(StringKey p_name, _RETURN(*p_pFunction)(_ARGS...))
+	{
+		return SetMember<framework::executable::BiaStaticFunction< _RETURN(*)(_ARGS...)>>(std::move(p_name), p_pFunction);
 	}
 //private:
 	//friend BiaCompiler;
