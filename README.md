@@ -4,6 +4,7 @@ Embedded C++ Scripting Language
 [![Build status](https://ci.appveyor.com/api/projects/status/hgg15mmsrffx3dua/branch/master?svg=true)](https://ci.appveyor.com/project/terrakuh/bia/branch/master)
 
 # Embedded Example
+
 ```
 //Create a context with the default memory allocator
 std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
@@ -114,6 +115,7 @@ else if some_value == 3 {
 
 # The Simple C++ Interface
 - Adding a normal function to your `context`:
+
 ```
 //A static C++ function
 int square(int base)
@@ -126,6 +128,7 @@ context.SetFunction("square", &square);
 ```
 
 - Adding a C++ class:
+
 ```
 //A C++ class
 class MyClass
