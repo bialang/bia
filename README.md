@@ -3,11 +3,17 @@ Embedded C++ Scripting Language
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hgg15mmsrffx3dua/branch/master?svg=true)](https://ci.appveyor.com/project/terrakuh/bia/branch/master)
 
-# Embedded example
+# Embedded Example
+
 ```
-//Create a context with default memory allocator
+//Create a context with the default memory allocator
 std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 bia::machine::BiaMachineContext context(pAllocator);
+
+//Add a lambda function
+context.SetLambda("hello_world", [] {
+  puts("Hello, World! - C++");
+});
 
 //Bia script
 std::string stTestCode = R"(
@@ -15,13 +21,16 @@ std::string stTestCode = R"(
 # Print 'Hello, World' to the console
 print "Hello, World! - Bia"
 
+# Call the C++ function and print 'Hello, World' to the console
+hello_world()
+
 )";
 
 //Run
 context.Run(stTestCode.c_str(), stTestCode.length());
 ```
 
-# Language features
+# Language Features
 **Native types**
 - Integrals with a range from -2^32 to 2^32-1
 - 32- and 64-Bit floating points
@@ -68,6 +77,14 @@ while true {
 }
 ```
 
+- Do-While loop:
+
+```
+do while true {
+  print "hi"
+}
+```
+
 - Until loop. These loops are just like `while` loops but with negated condition:
 
 ```
@@ -76,7 +93,15 @@ until false {
 }
 ```
 
-**Conditional statements**
+- Do-Until loop.
+
+```
+do until false {
+  print "hi"
+}
+```
+
+**Conditional Statements**
 - If statements. Conditions that can be evaluated at compile time will be optimized away:
 
 ```
@@ -88,8 +113,39 @@ else if some_value == 3 {
 }
 ```
 
-# How it works
+# The Simple C++ Interface
+- Adding a normal function to your `context`:
+
+```
+//A static C++ function
+int square(int base)
+{
+  return a * a;
+}
+
+//Adding the function
+context.SetFunction("square", &square);
+```
+
+- Adding a C++ class:
+
+```
+//A C++ class
+class MyClass
+{
+public:
+  MyClass(int someValue)
+  {
+    printf("your value: %i\n", someValue);
+  }
+};
+
+//Adding the class
+context.SetTemplate<MyClass>("my_class")->SetConstructor<int>();
+```
+
+# How It Works
 Bia compiles the script directly to memory before the first run and executes it as a normal C++ function. This technique allows very fast run times since the code is directly executed on the CPU.
 
-# Supported platforms
+# Supported Platforms
 Currently the x86 architecture with the MSVC compiler is supported. Additional support for x64, ARM, GCC and Clang is planned.
