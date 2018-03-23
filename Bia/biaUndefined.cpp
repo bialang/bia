@@ -164,7 +164,7 @@ BiaMember * BiaUndefined::GetMember(const char*)
 	throw exception::SymbolException("Undefined symbol.");
 }
 
-void * BiaUndefined::GetNativeData(NATIVE_TYPE)
+void * BiaUndefined::GetNativeData(native::NATIVE_TYPE)
 {
 	throw exception::SymbolException("Undefined symbol.");
 }

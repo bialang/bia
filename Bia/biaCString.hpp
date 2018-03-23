@@ -117,7 +117,7 @@ protected:
 	/**
 	 * @see	BiaMember::GetNativeData().
 	*/
-	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override;
+	virtual void * GetNativeData(native::NATIVE_TYPE p_nativeType) override;
 
 private:
 	const char * m_szString;

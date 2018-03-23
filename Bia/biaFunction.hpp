@@ -203,7 +203,7 @@ protected:
 	/**
 	 * @see	BiaMember::GetNativeData().
 	*/
-	inline virtual void * GetNativeData(NATIVE_TYPE) override
+	inline virtual void * GetNativeData(native::NATIVE_TYPE) override
 	{
 		throw exception::BadCastException("Native type is not supported.");
 	}

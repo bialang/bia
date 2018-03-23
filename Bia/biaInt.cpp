@@ -172,7 +172,7 @@ int32_t BiaInt::TestCallString(uint32_t p_unOperator, const char * p_szRight)
 	throw exception::OperatorException("Cannot compare an integral to a string.");
 }
 
-void * BiaInt::GetNativeData(NATIVE_TYPE p_nativeType)
+void * BiaInt::GetNativeData(native::NATIVE_TYPE p_nativeType)
 {
 	switch (p_nativeType)
 	{

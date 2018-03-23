@@ -145,7 +145,7 @@ protected:
 	/**
 	 * @see	BiaMember::GetNativeData().
 	*/
-	virtual void * GetNativeData(NATIVE_TYPE) override;
+	virtual void * GetNativeData(native::NATIVE_TYPE) override;
 	/**
 	 * @see	BiaMember::GetData().
 	*/

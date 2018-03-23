@@ -170,7 +170,7 @@ int32_t BiaDouble::TestCallString(uint32_t p_unOperator, const char * p_szRight)
 	throw exception::OperatorException("Cannot compare an floating point to a string.");
 }
 
-void * BiaDouble::GetNativeData(NATIVE_TYPE p_nativeType)
+void * BiaDouble::GetNativeData(native::NATIVE_TYPE p_nativeType)
 {
 	switch (p_nativeType)
 	{

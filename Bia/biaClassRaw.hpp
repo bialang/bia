@@ -181,7 +181,7 @@ public:
 	}
 
 protected:
-	inline virtual void * GetNativeData(NATIVE_TYPE p_nativeType) override
+	inline virtual void * GetNativeData(native::NATIVE_TYPE p_nativeType) override
 	{
 		throw exception::BadCastException("Not implemented.");
 	}

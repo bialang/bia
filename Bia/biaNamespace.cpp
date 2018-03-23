@@ -174,7 +174,7 @@ BiaMember * BiaNamespace::GetMember(const char * p_szName)
 	throw exception::SymbolException("Unkown member.");
 }
 
-void * BiaNamespace::GetNativeData(NATIVE_TYPE p_nativeType)
+void * BiaNamespace::GetNativeData(native::NATIVE_TYPE p_nativeType)
 {
 	throw exception::BadCastException("Invalid cast on namespace.");
 }

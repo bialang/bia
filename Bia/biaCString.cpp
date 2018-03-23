@@ -129,7 +129,7 @@ int32_t BiaCString::TestCallString(uint32_t p_unOperator, const char * p_szRight
 	throw exception::OperatorException("Invalid compare operator.");
 }
 
-void * BiaCString::GetNativeData(NATIVE_TYPE p_nativeType)
+void * BiaCString::GetNativeData(native::NATIVE_TYPE p_nativeType)
 {
 	switch (p_nativeType)
 	{

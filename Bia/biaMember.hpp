@@ -7,6 +7,9 @@
 #include <type_traits>
 #include <utility>
 
+#include "biaConfig.hpp"
+#include "biaNativeType.hpp"
+
 
 namespace bia
 {
@@ -234,8 +237,8 @@ public:
 	inline _T * Cast()
 	{
 		//Native type
-		if (NativeType<_T>() != NATIVE_TYPE::CUSTOM)
-			return static_cast<_T*>(GetNativeData(NativeType<_T>()));
+		if (native::DetermineNativeType<_T>() != native::NATIVE_TYPE::CUSTOM)
+			return static_cast<_T*>(GetNativeData(native::DetermineNativeType<_T>()));
 		//Custom type
 		else
 			return static_cast<_T*>(GetData(typeid(_T), std::is_const<_T>::value));
@@ -251,23 +254,7 @@ public:
 	}
 
 protected:
-	enum class NATIVE_TYPE
-	{
-		INT_8,
-		CONST_INT_8,
-		INT_16,
-		CONST_INT_16,
-		INT_32,
-		CONST_INT_32,
-		INT_64,
-		CONST_INT_64,
-		FLOAT,
-		CONST_FLOAT,
-		DOUBLE,
-		CONST_DOUBLE,
-		CONST_STRING,
-		CUSTOM
-	};
+	
 
 	/**	If true this object was initialized, otherwise not.	*/
 	bool m_bInitialized;
@@ -281,7 +268,7 @@ protected:
 	 *
 	 * @return	The address to the data.
 	*/
-	virtual void * GetNativeData(NATIVE_TYPE p_nativeType) = 0;
+	virtual void * GetNativeData(native::NATIVE_TYPE p_nativeType) = 0;
 	/**
 	 * Returns the data depending on the type.
 	 *
@@ -295,7 +282,9 @@ protected:
 	virtual void * GetData(const std::type_info & p_type, bool p_bConst) = 0;
 
 private:
-	template<typename T>
+	
+
+	/*template<typename T>
 	inline constexpr static NATIVE_TYPE NativeType()
 	{
 		if (std::is_integral<T>::value)
@@ -320,7 +309,7 @@ private:
 			return NATIVE_TYPE::CONST_STRING;
 
 		return NATIVE_TYPE::CUSTOM;
-	}
+	}*/
 };
 
 }

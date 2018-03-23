@@ -171,7 +171,7 @@ int32_t BiaFloat::TestCallString(uint32_t p_unOperator, const char * p_szRight)
 	throw exception::OperatorException("Cannot compare an floating point to a string.");
 }
 
-void * BiaFloat::GetNativeData(NATIVE_TYPE p_nativeType)
+void * BiaFloat::GetNativeData(native::NATIVE_TYPE p_nativeType)
 {
 	switch (p_nativeType)
 	{

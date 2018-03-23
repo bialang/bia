@@ -107,16 +107,19 @@ int main()
 	std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 	bia::stream::BiaOutputStreamBuffer buf;
 	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
-	pContext->SetFunction("lua", &lua);
-	pContext->SetLambda("lel", [](const char * a) {
-		puts("lelelelelaasddasjkldjalsd");
-		puts(a);
+	pContext->SetLambda("hello_world", [] {
+		puts("Hello, World! - C++");
 	});
 //var i = 65*65+5*8;
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
-lua(43, 34.4f)
-lel("sick")
+
+# Print from Bia
+print "Hello, World! - Bia"
+
+# Print from C++
+hello_world()
+
 )delim";
 	/*
 	global i = 0
@@ -137,154 +140,6 @@ p=0+i*i
 #}
 
 	*/
-
-	/*
-	//Nur für diesen Skript
-	include einAnderesSkript;
-	import einModul;
-
-
-	define foo(x, y)
-	{
-		//Alle variablen hier sind lokal
-		var i = 0;
-		local i = 0;
-		global j = 0;
-
-	}
-
-	foo(3, 4);
-
-	//Alle variablen hier sind global
-	var immerGlobal = 0;
-	global immerGloabl = 0;
-	local lokalFürDiesenSkript = 0;
-
-	//Verfügbare Datentypen
-	var int = 0;
-	var float = 0.3f;
-	var double = 0.43423;
-	var instanz = new MeinObjekt();
-	var kopieInt = int;
-	var callback = foo;
-
-	//Array mit 6 elementen
-	var array = [6];
-	var array = { 1, 0x2 ,03 ,4.f ,5., "sechs"};
-
-	array.length();
-	array.append();
-	array[3];
-
-	//Pointer
-	var memory = allocate(25);
-
-	//Cast
-	var int = *(int*)memory;
-
-	//Referenzen
-	var variable = "hi";
-	var referenzZumWert = :variable;
-	var * refenzezZurVariable = &variable;
-
-	//Verfügbare Abzweigungen
-	if (true)
-	{
-	}
-	else if (true)
-	{
-	}
-	else
-	{
-	}
-
-	var i = true ? 1 : "kartoffel";
-
-	switch (i)
-	{
-	case 1:
-		break;
-	case "kartoffel":
-		break;
-	default:
-		break;
-	}
-
-	//Verfügbare Schleifen
-	for (pure i = 0; i < 10; ++i)
-	{
-
-	}
-
-	do
-	{
-
-	} while(true);
-
-	do
-	{
-
-	} until(true);
-
-	while(true)
-	{
-
-	}
-
-	until(true)
-	{
-	}
-
-	for each (var i in array)
-	{
-	}
-
-	//Variablen können redeklariert werden
-	var einString = "kartoffel";
-
-	//Nicht möglich
-	einString = 0;
-
-	//Aber
-	var einString = 0;
-
-	//Variablen können auch gelöscht werden
-	delete einString;
-	
-	//Exceptions
-	try
-	{
-	}
-	catch(exception e)
-	{
-	}
-	catch all
-	{
-	}
-	finally
-	{
-	}
-
-	//Anderes
-	print "hallo, ";
-	println "welt";
-
-	//String format
-	println "hi #0! ich bims der #1" # ("welt", "yunus");
-
-	//Jederzeit das Skript stoppen
-	exit;
-
-	*/
-/*
-	a * ptr = new a();
-	printf("ad: %p\n", ptr);
-
-	{
-		bia::machine::architecture::BiaToolset toolset(buf);
-		toolset.SafeCall(&hi, 34, 5);
-		toolset.SafeCall(a::~a, ptr);
-	}*/
 
 	std::unique_ptr<bia::machine::BiaMachineCode> pCode;
 	bia::machine::BiaMachineSchein schein(nullptr);
