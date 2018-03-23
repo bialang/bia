@@ -107,8 +107,10 @@ int main()
 	std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 	bia::stream::BiaOutputStreamBuffer buf;
 	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
-	pContext->SetLambda("hello_world", [] {
-		puts("Hello, World! - C++");
+	int my_var = 3;
+	pContext->SetLambda("hello_world", [&]() -> int& {
+		printf("Hello, World! - C++ %p\n", &my_var);
+		return my_var;
 	});
 //var i = 65*65+5*8;
 	constexpr auto TEST_TIMES = 1;
@@ -118,7 +120,9 @@ int main()
 print "Hello, World! - Bia"
 
 # Print from C++
-hello_world()
+global a = hello_world()
+
+print a
 
 )delim";
 	/*

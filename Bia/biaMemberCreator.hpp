@@ -5,6 +5,7 @@
 
 #include "biaMember.hpp"
 #include "biaInt.hpp"
+#include "biaIntRef.hpp"
 #include "biaFloat.hpp"
 #include "biaDouble.hpp"
 #include "biaCString.hpp"
@@ -30,6 +31,9 @@ inline void MemberCreator(BiaMember * p_pDestination, T && p_value)
 	//Integral type
 	if (std::is_integral<T>::value)
 		p_pDestination->ReplaceObject<native::BiaInt>(std::forward<T>(p_value));
+	//Integral reference
+	else if ((std::is_reference<T>::value && std::is_integral<typename std::remove_reference<T>::type>::value))
+		p_pDestination->ReplaceObject<native::BiaIntRef<_TYPE>>(std::forward<T>(p_value));
 	//Float
 	else if (std::is_same<T, float>::value)
 		p_pDestination->ReplaceObject<native::BiaFloat>(std::forward<T>(p_value));
