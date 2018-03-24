@@ -15,7 +15,7 @@ namespace native
 {
 
 template<typename T>
-inline int32_t TestOperation(T)
+inline int32_t TestOperation(T p_value)
 {
 	throw exception::BadCallException("Type cannot be tested.");
 }

@@ -49,7 +49,11 @@ public:
 
 	}
 	inline virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override {}
-	inline virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override {}
+	inline virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override
+	{
+		//only if result is not void and reference is not const
+		*m_pValue = ArithmeticReferenceOperation(*m_pValue, p_rRight, p_unOperator);
+	}
 	inline virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override {}
 	inline virtual void OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight) override {}
 	inline virtual void OperatorSelfCall(uint32_t p_unOperator) override {}

@@ -124,6 +124,8 @@ global a = hello_world()
 
 print a
 
+a += 0.4f
+
 if a print true
 else print false
 

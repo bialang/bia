@@ -14,7 +14,7 @@ namespace compiler
 {
 
 template<typename _LEFT, typename _RIGHT>
-inline typename utility::OperationResult<_LEFT, _RIGHT>::type ConstantOperationBasic(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
+inline typename utility::NativeOperationResult<_LEFT, _RIGHT>::type ConstantOperationBasic(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
 {
 	using namespace framework;
 
@@ -38,7 +38,7 @@ inline typename utility::OperationResult<_LEFT, _RIGHT>::type ConstantOperationB
 }
 
 template<typename _LEFT, typename _RIGHT>
-inline typename utility::OperationResult<_LEFT, _RIGHT>::type ConstantOperationIntegral(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
+inline typename utility::NativeOperationResult<_LEFT, _RIGHT>::type ConstantOperationIntegral(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
 {
 	using namespace framework;
 
@@ -58,7 +58,7 @@ inline typename utility::OperationResult<_LEFT, _RIGHT>::type ConstantOperationI
 		return p_left ^ p_right;
 	case BiaMember::O_BITWISE_ARITHMETIC_LEFT_SHIFT:
 	case BiaMember::O_BITWISE_ASSIGN_ARITHMETIC_LEFT_SHIFT:
-		return static_cast<typename utility::OperationResult<_LEFT, _RIGHT>::type>(p_left) << p_right;
+		return static_cast<typename utility::NativeOperationResult<_LEFT, _RIGHT>::type>(p_left) << p_right;
 	case BiaMember::O_BITWISE_ARITHMETIC_RIGHT_SHIFT:
 	case BiaMember::O_BITWISE_ASSIGN_ARITHMETIC_RIGHT_SHIFT:
 		return p_left >> p_right;
