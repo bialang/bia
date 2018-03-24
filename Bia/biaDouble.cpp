@@ -45,22 +45,22 @@ void BiaDouble::OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMem
 
 void BiaDouble::OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_nRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation<false>(m_rValue, p_nRight, p_unOperator));
 }
 
 void BiaDouble::OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_llRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation<false>(m_rValue, p_llRight, p_unOperator));
 }
 
 void BiaDouble::OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_rRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation<false>(m_rValue, p_rRight, p_unOperator));
 }
 
 void BiaDouble::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_rValue, p_rRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation<false>(m_rValue, p_rRight, p_unOperator));
 }
 
 void BiaDouble::OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination)
@@ -87,22 +87,22 @@ void BiaDouble::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)
 
 void BiaDouble::OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
 {
-	m_rValue = ArithmeticOperation(m_rValue, p_nRight, p_unOperator);
+	m_rValue = ArithmeticOperation<true>(m_rValue, p_nRight, p_unOperator);
 }
 
 void BiaDouble::OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
 {
-	m_rValue = ArithmeticOperation(m_rValue, p_llRight, p_unOperator);
+	m_rValue = ArithmeticOperation<true>(m_rValue, p_llRight, p_unOperator);
 }
 
 void BiaDouble::OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight)
 {
-	m_rValue = ArithmeticOperation(m_rValue, p_rRight, p_unOperator);
+	m_rValue = ArithmeticOperation<true>(m_rValue, p_rRight, p_unOperator);
 }
 
 void BiaDouble::OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight)
 {
-	m_rValue = ArithmeticOperation(m_rValue, p_rRight, p_unOperator);
+	m_rValue = ArithmeticOperation<true>(m_rValue, p_rRight, p_unOperator);
 }
 
 void BiaDouble::OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight)

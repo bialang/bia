@@ -47,22 +47,22 @@ void BiaInt::OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember
 
 void BiaInt::OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaInt>(IntegralOperation(m_llValue, p_nRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaInt>(IntegralOperation<false>(m_llValue, p_nRight, p_unOperator));
 }
 
 void BiaInt::OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaInt>(IntegralOperation(m_llValue, p_llRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaInt>(IntegralOperation<false>(m_llValue, p_llRight, p_unOperator));
 }
 
 void BiaInt::OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaFloat>(ArithmeticOperation(m_llValue, p_rRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaFloat>(ArithmeticOperation<false>(m_llValue, p_rRight, p_unOperator));
 }
 
 void BiaInt::OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination)
 {
-	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation(m_llValue, p_rRight, p_unOperator));
+	p_pDestination->ReplaceObject<BiaDouble>(ArithmeticOperation<false>(m_llValue, p_rRight, p_unOperator));
 }
 
 void BiaInt::OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination)
@@ -89,22 +89,22 @@ void BiaInt::OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight)
 
 void BiaInt::OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
 {
-	m_llValue = IntegralOperation(m_llValue, p_nRight, p_unOperator);
+	m_llValue = IntegralOperation<true>(m_llValue, p_nRight, p_unOperator);
 }
 
 void BiaInt::OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
 {
-	m_llValue = IntegralOperation(m_llValue, p_llRight, p_unOperator);
+	m_llValue = IntegralOperation<true>(m_llValue, p_llRight, p_unOperator);
 }
 
 void BiaInt::OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight)
 {
-	m_llValue = static_cast<int64_t>(ArithmeticOperation(m_llValue, p_rRight, p_unOperator));
+	m_llValue = static_cast<int64_t>(ArithmeticOperation<true>(m_llValue, p_rRight, p_unOperator));
 }
 
 void BiaInt::OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight)
 {
-	m_llValue = static_cast<int64_t>(ArithmeticOperation(m_llValue, p_rRight, p_unOperator));
+	m_llValue = static_cast<int64_t>(ArithmeticOperation<true>(m_llValue, p_rRight, p_unOperator));
 }
 
 void BiaInt::OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight)

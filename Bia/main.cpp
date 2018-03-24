@@ -109,7 +109,7 @@ int main()
 	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
 	int my_var = 10;
 	pContext->SetLambda("hello_world", [&]() -> int& {
-		printf("Hello, World! - C++ %p\n", &my_var);
+		printf("Hello, World! - C++ %p is %i\n", &my_var, my_var);
 		return my_var;
 	});
 //var i = 65*65+5*8;
@@ -124,10 +124,9 @@ global a = hello_world()
 
 print a
 
-a += 0.4f
+a += 5
 
-if a print true
-else print false
+hello_world()
 
 )delim";
 	/*
