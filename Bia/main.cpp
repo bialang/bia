@@ -107,7 +107,7 @@ int main()
 	std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 	bia::stream::BiaOutputStreamBuffer buf;
 	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
-	int my_var = 3;
+	int my_var = 10;
 	pContext->SetLambda("hello_world", [&]() -> int& {
 		printf("Hello, World! - C++ %p\n", &my_var);
 		return my_var;
@@ -123,6 +123,9 @@ print "Hello, World! - Bia"
 global a = hello_world()
 
 print a
+
+if a print true
+else print false
 
 )delim";
 	/*

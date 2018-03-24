@@ -1,5 +1,6 @@
 #include "biaDouble.hpp"
 #include "biaNativeOperator.hpp"
+#include "biaNativeTestOperator.hpp"
 #include "biaPrint.hpp"
 
 
@@ -125,7 +126,8 @@ int BiaDouble::GetNativeType() const
 
 int32_t BiaDouble::Test()
 {
-	return static_cast<int32_t>(m_rValue != 0.0);
+	return native::Test(m_rValue);
+	//return static_cast<int32_t>(m_rValue != 0.0);
 }
 
 int32_t BiaDouble::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
@@ -147,22 +149,22 @@ int32_t BiaDouble::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
 
 int32_t BiaDouble::TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
 {
-	return CompareOperation(m_rValue, p_nRight, p_unOperator);
+	return TestOperation(m_rValue, p_nRight, p_unOperator);
 }
 
 int32_t BiaDouble::TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
 {
-	return CompareOperation(m_rValue, p_llRight, p_unOperator);
+	return TestOperation(m_rValue, p_llRight, p_unOperator);
 }
 
 int32_t BiaDouble::TestCallFloat(uint32_t p_unOperator, float p_rRight)
 {
-	return CompareOperation(m_rValue, p_rRight, p_unOperator);
+	return TestOperation(m_rValue, p_rRight, p_unOperator);
 }
 
 int32_t BiaDouble::TestCallDouble(uint32_t p_unOperator, double p_rRight)
 {
-	return CompareOperation(m_rValue, p_rRight, p_unOperator);
+	return TestOperation(m_rValue, p_rRight, p_unOperator);
 }
 
 int32_t BiaDouble::TestCallString(uint32_t p_unOperator, const char * p_szRight)

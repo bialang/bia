@@ -2,6 +2,7 @@
 #include "biaFloat.hpp"
 #include "biaDouble.hpp"
 #include "biaNativeOperator.hpp"
+#include "biaNativeTestOperator.hpp"
 #include "biaPrint.hpp"
 
 
@@ -127,7 +128,8 @@ int BiaInt::GetNativeType() const
 
 int32_t BiaInt::Test()
 {
-	return reinterpret_cast<int32_t*>(&m_llValue)[0] | reinterpret_cast<int32_t*>(&m_llValue)[1];
+	return native::Test(m_llValue);
+	//return reinterpret_cast<int32_t*>(&m_llValue)[0] | reinterpret_cast<int32_t*>(&m_llValue)[1];
 }
 
 int32_t BiaInt::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
@@ -149,22 +151,22 @@ int32_t BiaInt::TestCall(uint32_t p_unOperator, BiaMember * p_pRight)
 
 int32_t BiaInt::TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight)
 {
-	return CompareOperation(m_llValue, p_nRight, p_unOperator);
+	return TestOperation(m_llValue, p_nRight, p_unOperator);
 }
 
 int32_t BiaInt::TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight)
 {
-	return CompareOperation(m_llValue, p_llRight, p_unOperator);
+	return TestOperation(m_llValue, p_llRight, p_unOperator);
 }
 
 int32_t BiaInt::TestCallFloat(uint32_t p_unOperator, float p_rRight)
 {
-	return CompareOperation(m_llValue, p_rRight, p_unOperator);
+	return TestOperation(m_llValue, p_rRight, p_unOperator);
 }
 
 int32_t BiaInt::TestCallDouble(uint32_t p_unOperator, double p_rRight)
 {
-	return CompareOperation(m_llValue, p_rRight, p_unOperator);
+	return TestOperation(m_llValue, p_rRight, p_unOperator);
 }
 
 int32_t BiaInt::TestCallString(uint32_t p_unOperator, const char * p_szRight)

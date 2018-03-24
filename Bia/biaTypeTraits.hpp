@@ -83,5 +83,35 @@ struct Chooser<false, _RETURN, T>
 	}
 };
 
+template<typename T, bool _INTEGRAL, size_t _SIZE>
+struct IntegralPromoter
+{
+	typedef T type;
+};
+
+template<typename T>
+struct IntegralPromoter<T, true, 8>
+{
+	typedef int64_t type;
+};
+
+template<typename T>
+struct IntegralPromoter<T, true, 4>
+{
+	typedef int32_t type;
+};
+
+template<typename T>
+struct IntegralPromoter<T, true, 2>
+{
+	typedef int32_t type;
+};
+
+template<typename T>
+struct IntegralPromoter<T, true, 1>
+{
+	typedef int32_t type;
+};
+
 }
 }

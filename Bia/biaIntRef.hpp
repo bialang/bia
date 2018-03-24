@@ -3,6 +3,9 @@
 #include <type_traits>
 
 #include "biaNativeVariable.hpp"
+#include "biaInt.hpp"
+#include "biaNativeTestOperator.hpp"
+#include "biaNativeReferenceOperator.hpp"
 
 
 namespace bia
@@ -32,13 +35,19 @@ public:
 		printf("%p\n", m_pValue);
 	}
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override {}
-	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override {}
+	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
+	{
+		//p_pDestination->ReplaceObject<BiaInt>(static_cast<int32_t>(ArithmeticReferenceOperation(m_pValue, p_nRight, p_unOperator)));
+	}
 	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override {}
 	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override {}
 	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override {}
 	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override {}
 	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override {}
-	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override {}
+	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
+	{
+
+	}
 	inline virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override {}
 	inline virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override {}
 	inline virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override {}
@@ -54,7 +63,7 @@ public:
 	}
 	inline virtual int32_t Test() override
 	{
-		return 0;
+		return native::Test(*m_pValue);
 	}
 	inline virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
@@ -63,6 +72,7 @@ public:
 	inline virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
 		return 0;
+		//return TestOperation(*m_pValue, p_nRight, p_unOperator);
 	}
 	inline virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
 	{

@@ -73,28 +73,6 @@ inline typename utility::OperationResult<_LEFT, _RIGHT>::type IntegralOperation(
 	}
 }
 
-template<typename _LEFT, typename _RIGHT>
-inline int32_t CompareOperation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
-{
-	switch (p_unOperator)
-	{
-	case BiaMember::O_EQUALS:
-		return static_cast<int32_t>(p_left == p_right);
-	case BiaMember::O_EQUALS_NOT:
-		return static_cast<int32_t>(p_left != p_right);
-	case BiaMember::O_LESS_THAN:
-		return static_cast<int32_t>(p_left < p_right);
-	case BiaMember::O_LESS_EQUALS:
-		return static_cast<int32_t>(p_left <= p_right);
-	case BiaMember::O_GREATER_THAN:
-		return static_cast<int32_t>(p_left > p_right);
-	case BiaMember::O_GREATER_EQUALS:
-		return static_cast<int32_t>(p_left >= p_right);
-	default:
-		throw exception::OperatorException("Invalid operation on native type.");
-	}
-}
-
 }
 }
 }
