@@ -16,20 +16,17 @@ namespace native
 {
 
 template<typename T>
-class BiaIntRef final : public BiaNativeVariable
+class BiaNativeReference final : public BiaNativeVariable
 {
 public:
-	inline explicit BiaIntRef(T * p_pPointer) : m_pValue(p_pPointer) {}
-	inline explicit BiaIntRef(T & p_reference) : m_pValue(&p_reference) {}
+	inline explicit BiaNativeReference(T * p_pPointer) : m_pValue(p_pPointer) {}
+	inline explicit BiaNativeReference(T & p_reference) : m_pValue(&p_reference) {}
 	template<typename _DUMMY>
-	inline explicit BiaIntRef(_DUMMY)
+	inline explicit BiaNativeReference(_DUMMY)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
 	}
 
-	/**
-	* @see	BiaMember::Print().
-	*/
 	inline virtual void Print() override
 	{
 		printf("%p\n", m_pValue);
@@ -40,19 +37,19 @@ public:
 	}
 	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		reference_chooser<T>::Operation(p_pDestination, *m_pValue, p_unOperator, p_nRight);
 	}
 	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		reference_chooser<T>::Operation(p_pDestination, *m_pValue, p_unOperator, p_nRight);
 	}
 	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		reference_chooser<T>::Operation(p_pDestination, *m_pValue, p_unOperator, p_nRight);
 	}
 	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		reference_chooser<T>::Operation(p_pDestination, *m_pValue, p_unOperator, p_nRight);
 	}
 	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
 	{
@@ -88,7 +85,7 @@ public:
 	}
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		p_pDestination->ReplaceObject<BiaIntRef<T>>(m_pValue);
+		p_pDestination->ReplaceObject<BiaNativeReference<T>>(m_pValue);
 	}
 	inline virtual int GetNativeType() const override
 	{

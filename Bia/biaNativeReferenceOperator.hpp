@@ -42,7 +42,7 @@ inline typename utility::NativeOperationResult<double, _RIGHT>::type ArithmeticR
 template<bool _ALLOW_ASSIGN, typename _LEFT, typename _RIGHT>
 inline typename utility::NativeOperationResult<_LEFT, _RIGHT>::type ArithmeticReferenceOperation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
 {
-	typedef typename utility::IntegralPromoter<_LEFT, std::is_integral<_LEFT>::value, sizeof(_LEFT)>::type type;
+	typedef typename utility::NativeTypeAdapter<_LEFT, std::is_integral<_LEFT>::value, sizeof(_LEFT)>::type type;
 
 	return ArithmeticReference<_ALLOW_ASSIGN>(static_cast<type>(p_left), p_right, p_unOperator);
 }
@@ -55,7 +55,7 @@ struct ReferenceOperationChooser
 	{
 		p_pDestination->Undefine();
 
-		ArithmeticReferenceOperation<true>(p_left, p_right, p_unOperator);
+		ArithmeticReferenceOperation<false>(p_left, p_right, p_unOperator);
 	}
 	template<typename _RIGHT>
 	inline static void Operation(T & p_left, uint32_t p_unOperator, _RIGHT p_right)

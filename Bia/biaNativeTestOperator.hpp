@@ -43,13 +43,11 @@ inline int32_t TestOperation(double p_rValue)
 template<typename T>
 inline int32_t Test(T p_value)
 {
-	typedef typename utility::IntegralPromoter<T, std::is_integral<T>::value, sizeof(T)>::type type;
-
-	return TestOperation(static_cast<type>(p_value));
+	return TestOperation(static_cast<typename utility::NativeTypeAdapter<T, std::is_integral<T>::value, sizeof(T)>::type>(p_value));
 }
 
 template<typename _LEFT, typename _RIGHT>
-inline int32_t TestOperation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
+inline int32_t TestOperation(_LEFT p_left, uint32_t p_unOperator, _RIGHT p_right)
 {
 	switch (p_unOperator)
 	{
