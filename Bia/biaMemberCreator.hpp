@@ -5,7 +5,7 @@
 
 #include "biaMember.hpp"
 #include "biaInt.hpp"
-#include "biaIntRef.hpp"
+#include "biaNativeReference.hpp"
 #include "biaFloat.hpp"
 #include "biaDouble.hpp"
 #include "biaCString.hpp"

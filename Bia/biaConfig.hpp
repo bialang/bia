@@ -35,7 +35,7 @@
 #if defined(BIA_COMPILER_MSVC)
 
 //Calling conventions
-#define BIA_INSTRUCTION_CALLING_CONVETION(_return, _signature) _return __cdecl _signature
+#define BIA_INSTRUCTION_CALLING_CONVETION(_prop, _return, _signature) _prop _return __cdecl _signature
 #define BIA_MEMBER_CALLING_CONVENTION __thiscall
 #define BIA_MEMBER_VARARG_CALLING_CONVENTION __cdecl
 #define BIA_STATIC_CALLING_CONEVENTION __cdecl

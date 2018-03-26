@@ -37,19 +37,19 @@ public:
 	}
 	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
 	{
-		reference_chooser<T>::Operation(p_pDestination, *m_pValue, p_unOperator, p_nRight);
+		reference_chooser<T>::Operation(*m_pValue, p_unOperator, p_nRight, p_pDestination);
 	}
 	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override
 	{
-		reference_chooser<T>::Operation(p_pDestination, *m_pValue, p_unOperator, p_nRight);
+		reference_chooser<T>::Operation(*m_pValue, p_unOperator, p_llRight, p_pDestination);
 	}
 	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override
 	{
-		reference_chooser<T>::Operation(p_pDestination, *m_pValue, p_unOperator, p_nRight);
+		reference_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight, p_pDestination);
 	}
 	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override
 	{
-		reference_chooser<T>::Operation(p_pDestination, *m_pValue, p_unOperator, p_nRight);
+		reference_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight, p_pDestination);
 	}
 	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
 	{

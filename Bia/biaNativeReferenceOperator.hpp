@@ -51,7 +51,7 @@ template<typename T, bool _CONST_REFERENCE, bool _INTEGRAL_REFERENCE>
 struct ReferenceOperationChooser
 {
 	template<typename _RIGHT>
-	inline static void Operation(framework::BiaMember * p_pDestination, T p_left, uint32_t p_unOperator, _RIGHT p_right)
+	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
 	{
 		p_pDestination->Undefine();
 
@@ -68,7 +68,7 @@ template<typename T>
 struct ReferenceOperationChooser<T, true, true>
 {
 	template<typename _RIGHT>
-	inline static void Operation(framework::BiaMember * p_pDestination, T p_left, uint32_t p_unOperator, _RIGHT p_right)
+	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
 	{
 		ArithmeticReferenceOperation<false>(p_left, p_right, p_unOperator);
 	}
@@ -83,7 +83,7 @@ template<typename T, bool _CONST_REFERENCE>
 struct ReferenceOperationChooser<T, _CONST_REFERENCE, false>
 {
 	template<typename _RIGHT>
-	inline static void Operation(framework::BiaMember * p_pDestination, T p_left, uint32_t p_unOperator, _RIGHT p_right)
+	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Should not have happened.");
 	}
