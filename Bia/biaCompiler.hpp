@@ -512,6 +512,9 @@ private:
 			//Call assign operator
 			HandleOperator(VALUE_TYPE::MEMBER, destination, unOperator, -1);
 
+			m_valueType = VALUE_TYPE::MEMBER;
+			m_value = destination;
+
 			break;
 		}
 		default:

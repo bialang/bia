@@ -166,7 +166,7 @@ void BiaCompiler::HandleIdentifier(const grammar::Report * p_pReport)
 void BiaCompiler::HandleOperator(VALUE_TYPE p_leftType, Value p_leftValue, uint32_t p_unOperator, BiaTempCounter::counter_type p_destinationIndex)
 {
 	using namespace machine::architecture;
-
+	///needs change!!
 	//Mark current
 	//m_counter.Current();
 
