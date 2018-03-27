@@ -29,11 +29,24 @@ public:
 
 	inline virtual void Print() override
 	{
+		puts("Not implemented.");
 		//printf("%p\n", m_pValue);
 	}
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		auto fRightNativeType = p_pRight->GetNativeType();
+
+		//64 bit int operand
+		if (fRightNativeType & NTF_INT_64)
+			return OperatorCallInt_64(p_unOperator, *p_pRight->Cast<int64_t>(), p_pDestination);
+		//Float
+		else if (fRightNativeType & NTF_FLOAT)
+			return OperatorCallFloat(p_unOperator, *p_pRight->Cast<float>(), p_pDestination);
+		//Double
+		else if (fRightNativeType & NTF_DOUBLE)
+			return OperatorCallDouble(p_unOperator, *p_pRight->Cast<double>(), p_pDestination);
+
+		throw exception::OperatorException("Invalid type on native operation.");
 	}
 	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
 	{
@@ -53,11 +66,23 @@ public:
 	}
 	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		throw exception::BadCallException("String values are not supported.");
 	}
 	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		auto fRightNativeType = p_pRight->GetNativeType();
+
+		//64 bit int operand
+		if (fRightNativeType & NTF_INT_64)
+			return OperatorAssignCallInt_64(p_unOperator, *p_pRight->Cast<int64_t>());
+		//Float
+		else if (fRightNativeType & NTF_FLOAT)
+			return OperatorAssignCallFloat(p_unOperator, *p_pRight->Cast<float>());
+		//Double
+		else if (fRightNativeType & NTF_DOUBLE)
+			return OperatorAssignCallDouble(p_unOperator, *p_pRight->Cast<double>());
+
+		throw exception::OperatorException("Invalid type on native operation.");
 	}
 	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
@@ -77,7 +102,7 @@ public:
 	}
 	inline virtual void OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		throw exception::BadCallException("String values are not supported.");
 	}
 	inline virtual void OperatorSelfCall(uint32_t p_unOperator) override
 	{
@@ -89,6 +114,16 @@ public:
 	}
 	inline virtual int GetNativeType() const override
 	{
+		//Integral
+		if (std::is_same<T, int64_t>::value)
+			return NTF_INT_8 | NTF_INT_16 | NTF_INT_32 | NTF_INT_64;
+		//Float
+		else if (std::is_same<T, float>::value)
+			return NTF_FLOAT;
+		//Double
+		else if (std::is_same<T, double>::value)
+			return NTF_DOUBLE;
+
 		return NTF_NONE;
 	}
 	inline virtual int32_t Test() override
@@ -97,7 +132,19 @@ public:
 	}
 	inline virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		auto fRightNativeType = p_pRight->GetNativeType();
+
+		//64 bit int operand
+		if (fRightNativeType & NTF_INT_64)
+			return TestCallInt_64(p_unOperator, *p_pRight->Cast<int64_t>());
+		//Float
+		else if (fRightNativeType & NTF_FLOAT)
+			return TestCallFloat(p_unOperator, *p_pRight->Cast<float>());
+		//Double
+		else if (fRightNativeType & NTF_DOUBLE)
+			return TestCallDouble(p_unOperator, *p_pRight->Cast<double>());
+
+		throw exception::OperatorException("Invalid type on native operation.");
 	}
 	inline virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
@@ -123,7 +170,50 @@ public:
 protected:
 	inline virtual void * GetNativeData(native::NATIVE_TYPE p_nativeType) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented");
+		//Integral
+		if (std::is_same<T, int64_t>::value)
+		{
+			switch (p_nativeType)
+			{
+			case NATIVE_TYPE::INT_8:
+			case NATIVE_TYPE::CONST_INT_8:
+			case NATIVE_TYPE::INT_16:
+			case NATIVE_TYPE::CONST_INT_16:
+			case NATIVE_TYPE::INT_32:
+			case NATIVE_TYPE::CONST_INT_32:
+			case NATIVE_TYPE::INT_64:
+			case NATIVE_TYPE::CONST_INT_64:
+				return &m_value;
+			default:
+				break;
+			}
+		}
+		//Float
+		else if (std::is_same<T, float>::value)
+		{
+			switch (p_nativeType)
+			{
+			case NATIVE_TYPE::FLOAT:
+			case NATIVE_TYPE::CONST_FLOAT:
+				return &m_value;
+			default:
+				break;
+			}
+		}
+		//Double
+		else if (std::is_same<T, float>::value)
+		{
+			switch (p_nativeType)
+			{
+			case NATIVE_TYPE::DOUBLE:
+			case NATIVE_TYPE::CONST_DOUBLE:
+				return &m_value;
+			default:
+				break;
+			}
+		}
+
+		throw exception::BadCastException("Native type is not supported.");
 	}
 
 private:
