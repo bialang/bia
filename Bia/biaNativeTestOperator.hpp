@@ -68,7 +68,7 @@ inline int32_t TestOperation(_LEFT p_left, uint32_t p_unOperator, _RIGHT p_right
 	}
 }
 
-template<bool _BOTH_ARITHMETIC>
+template<bool _ARITHMETIC>
 struct TestOperationChooser
 {
 	template<typename _LEFT, typename _RIGHT>

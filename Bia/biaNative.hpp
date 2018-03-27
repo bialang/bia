@@ -21,7 +21,7 @@ class BiaNative final : public BiaNativeVariable
 public:
 	template<typename = typename std::enable_if<std::is_integral<T>::value>::type>
 	inline explicit BiaNative(T p_value) : m_value(p_value) {}
-	template<typename _DUMMY, typename = typename std::enable_if<utility::Negation<std::is_integral<T>::value>::value>::type>
+	template<typename _DUMMY, typename = typename std::enable_if<utility::Negation<std::is_integral<_DUMMY>::value>::value>::type>
 	inline explicit BiaNative(_DUMMY)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");

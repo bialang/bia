@@ -26,8 +26,11 @@ inline void MemberCreator(BiaMember * p_pDestination, T && p_value)
 {
 	using _TYPE = typename std::remove_reference<T>::type;
 
-	//Arithmetic type
-	if (std::is_arithmetic<T>::value)
+	//Integral type
+	if (std::is_integral<T>::value)
+		p_pDestination->ReplaceObject<native::BiaInt>(std::forward<T>(p_value));
+	//Floating point type
+	else if (std::is_floating_point<T>::value)
 		p_pDestination->ReplaceObject<native::BiaNative<_TYPE>>(std::forward<T>(p_value));
 	//Arithmetic reference
 	else if ((std::is_reference<T>::value && std::is_integral<typename std::remove_reference<T>::type>::value))
