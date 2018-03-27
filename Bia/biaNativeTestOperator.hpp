@@ -69,7 +69,7 @@ inline int32_t TestOperation(_LEFT p_left, uint32_t p_unOperator, _RIGHT p_right
 }
 
 template<bool _BOTH_ARITHMETIC>
-struct ReferenceTestOperationChooser
+struct TestOperationChooser
 {
 	template<typename _LEFT, typename _RIGHT>
 	inline static int32_t Operation(_LEFT p_left, uint32_t p_unOperator, _RIGHT p_right)
@@ -79,7 +79,7 @@ struct ReferenceTestOperationChooser
 };
 
 template<>
-struct ReferenceTestOperationChooser<false>
+struct TestOperationChooser<false>
 {
 	template<typename _LEFT, typename _RIGHT>
 	inline static int32_t Operation(_LEFT p_left, uint32_t p_unOperator, _RIGHT p_right)
@@ -89,7 +89,7 @@ struct ReferenceTestOperationChooser<false>
 };
 
 template<typename T>
-using reference_test_chooser = ReferenceTestOperationChooser<std::is_arithmetic<T>::value>;
+using test_operation_chooser = TestOperationChooser<std::is_arithmetic<T>::value>;
 
 }
 }

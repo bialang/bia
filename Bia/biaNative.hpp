@@ -2,9 +2,10 @@
 
 #include <type_traits>
 
+#include "biaTypeTraits.hpp"
 #include "biaNativeVariable.hpp"
+#include "biaNativeOperator.hpp"
 #include "biaNativeTestOperator.hpp"
-#include "biaNativeReferenceOperator.hpp"
 
 
 namespace bia
@@ -15,20 +16,20 @@ namespace native
 {
 
 template<typename T>
-class BiaNativeReference final : public BiaNativeVariable
+class BiaNative final : public BiaNativeVariable
 {
 public:
-	inline explicit BiaNativeReference(T * p_pPointer) : m_pValue(p_pPointer) {}
-	inline explicit BiaNativeReference(T & p_reference) : m_pValue(&p_reference) {}
-	template<typename _DUMMY>
-	inline explicit BiaNativeReference(_DUMMY)
+	template<typename = typename std::enable_if<std::is_integral<T>::value>::type>
+	inline explicit BiaNative(T p_value) : m_value(p_value) {}
+	template<typename _DUMMY, typename = typename std::enable_if<utility::Negation<std::is_integral<T>::value>::value>::type>
+	inline explicit BiaNative(_DUMMY)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
 	}
 
 	inline virtual void Print() override
 	{
-		printf("%p\n", m_pValue);
+		//printf("%p\n", m_pValue);
 	}
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
 	{
@@ -36,19 +37,19 @@ public:
 	}
 	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
 	{
-		reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_nRight, p_pDestination);
+		//operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_nRight, p_pDestination);
 	}
 	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override
 	{
-		reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_llRight, p_pDestination);
+		//operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_llRight, p_pDestination);
 	}
 	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override
 	{
-		reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight, p_pDestination);
+		//operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight, p_pDestination);
 	}
 	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override
 	{
-		reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight, p_pDestination);
+		//operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight, p_pDestination);
 	}
 	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
 	{
@@ -60,19 +61,19 @@ public:
 	}
 	inline virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
-		reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_nRight);
+		//reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_nRight);
 	}
 	inline virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
 	{
-		reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_llRight);
+		//reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_llRight);
 	}
 	inline virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) override
 	{
-		reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight);
+		//reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight);
 	}
 	inline virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) override
 	{
-		reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight);
+		//reference_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight);
 	}
 	inline virtual void OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight) override
 	{
@@ -84,7 +85,7 @@ public:
 	}
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		p_pDestination->ReplaceObject<BiaNativeReference<T>>(m_pValue);
+		p_pDestination->ReplaceObject<BiaNative<T>>(m_value);
 	}
 	inline virtual int GetNativeType() const override
 	{
@@ -92,7 +93,7 @@ public:
 	}
 	inline virtual int32_t Test() override
 	{
-		return native::Test(*m_pValue);
+		return native::Test(m_value);
 	}
 	inline virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
@@ -100,19 +101,19 @@ public:
 	}
 	inline virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
 	{
-		return test_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_nRight);
+		return test_operation_chooser<T>::Operation(m_value, p_unOperator, p_nRight);
 	}
 	inline virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
 	{
-		return test_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_llRight);
+		return test_operation_chooser<T>::Operation(m_value, p_unOperator, p_llRight);
 	}
 	inline virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) override
 	{
-		return test_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight);
+		return test_operation_chooser<T>::Operation(m_value, p_unOperator, p_rRight);
 	}
 	inline virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) override
 	{
-		return test_operation_chooser<T>::Operation(*m_pValue, p_unOperator, p_rRight);
+		return test_operation_chooser<T>::Operation(m_value, p_unOperator, p_rRight);
 	}
 	inline virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override
 	{
@@ -126,8 +127,12 @@ protected:
 	}
 
 private:
-	T * m_pValue;
+	T m_value;
 };
+
+using BiaInt = BiaNative<int64_t>;
+using BiaFloat = BiaNative<float>;
+using BiaDouble = BiaNative<double>;
 
 }
 }

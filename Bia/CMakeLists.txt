@@ -41,8 +41,8 @@ set(Bia_HEADER_FILES_EXECUTABLE "biaFunction.hpp" "biaStaticFunction.hpp" "biaMe
 
 source_group("Header Files\\framework\\executable" FILES ${Bia_HEADER_FILES_EXECUTABLE})
 
-set(Bia_HEADER_FILES_NATIVE "biaCString.hpp" "biaDouble.hpp" "biaFloat.hpp" "biaInt.hpp" "biaNativeOperator.hpp" "biaNativeReference.hpp" "biaNativeReferenceOperator.hpp" "biaNativeTestOperator.hpp" "biaNativeType.hpp" "biaNativeVariable.hpp")
-set(Bia_SOURCE_FILES_NATIVE "biaCString.cpp" "biaDouble.cpp" "biaFloat.cpp" "biaInt.cpp")
+set(Bia_HEADER_FILES_NATIVE "biaCString.hpp" "biaNative.hpp" "biaNativeOperator.hpp" "biaNativeReference.hpp" "biaNativeReferenceOperator.hpp" "biaNativeTestOperator.hpp" "biaNativeType.hpp" "biaNativeVariable.hpp")
+set(Bia_SOURCE_FILES_NATIVE "biaCString.cpp")
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
 source_group("Source Files\\framework\\native" FILES ${Bia_SOURCE_FILES_NATIVE})

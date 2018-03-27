@@ -4,10 +4,8 @@
 #include <type_traits>
 
 #include "biaMember.hpp"
-#include "biaInt.hpp"
+#include "biaNative.hpp"
 #include "biaNativeReference.hpp"
-#include "biaFloat.hpp"
-#include "biaDouble.hpp"
 #include "biaCString.hpp"
 #include "biaStaticFunction.hpp"
 #include "biaClassRaw.hpp"
@@ -28,18 +26,12 @@ inline void MemberCreator(BiaMember * p_pDestination, T && p_value)
 {
 	using _TYPE = typename std::remove_reference<T>::type;
 
-	//Integral type
-	if (std::is_integral<T>::value)
-		p_pDestination->ReplaceObject<native::BiaInt>(std::forward<T>(p_value));
-	//Integral reference
+	//Arithmetic type
+	if (std::is_arithmetic<T>::value)
+		p_pDestination->ReplaceObject<native::BiaNative<_TYPE>>(std::forward<T>(p_value));
+	//Arithmetic reference
 	else if ((std::is_reference<T>::value && std::is_integral<typename std::remove_reference<T>::type>::value))
 		p_pDestination->ReplaceObject<native::BiaNativeReference<_TYPE>>(std::forward<T>(p_value));
-	//Float
-	else if (std::is_same<T, float>::value)
-		p_pDestination->ReplaceObject<native::BiaFloat>(std::forward<T>(p_value));
-	//Double
-	else if (std::is_same<T, double>::value)
-		p_pDestination->ReplaceObject<native::BiaDouble>(std::forward<T>(p_value));
 	//CString
 	else if (std::is_same<T, const char*>::value)
 		p_pDestination->ReplaceObject<native::BiaCString>(std::forward<T>(p_value));

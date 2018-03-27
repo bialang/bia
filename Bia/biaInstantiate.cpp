@@ -1,7 +1,5 @@
 #include "biaInstantiate.hpp"
-#include "biaInt.hpp"
-#include "biaFloat.hpp"
-#include "biaDouble.hpp"
+#include "biaNative.hpp"
 #include "biaCString.hpp"
 
 

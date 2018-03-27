@@ -1,7 +1,6 @@
 #include "biaCompiler.hpp"
 #include "biaException.hpp"
 #include "biaOutputStreamBuffer.hpp"
-#include "biaFloat.hpp"
 #include "biaInterpreterStringSet.hpp"
 
 #include <vector>

@@ -23,12 +23,12 @@ struct ReferenceOperationChooser
 	{
 		p_pDestination->Undefine();
 
-		OperationTypeChooser<std::is_integral<T>::value && std::is_integral<_RIGHT>::value>::ReferenceOperation<false>(p_left, p_right, p_unOperator);
+		operation_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
 	}
 	template<typename _RIGHT>
 	inline static void Operation(T & p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		p_left = OperationTypeChooser<std::is_integral<T>::value && std::is_integral<_RIGHT>::value>::ReferenceOperation<true>(p_left, p_right, p_unOperator);
+		p_left = operation_chooser<T, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator);
 	}
 };
 
@@ -38,12 +38,12 @@ struct ReferenceOperationChooser<T, true, true>
 	template<typename _RIGHT>
 	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
 	{
-		OperationTypeChooser<std::is_integral<T>::value && std::is_integral<_RIGHT>::value>::ReferenceOperation<false>(p_left, p_right, p_unOperator);
+		operation_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
 	}
 	template<typename _RIGHT>
 	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		OperationTypeChooser<std::is_integral<T>::value && std::is_integral<_RIGHT>::value>::ReferenceOperation<false>(p_left, p_right, p_unOperator);
+		operation_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
 	}
 };
 
