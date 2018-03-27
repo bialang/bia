@@ -102,6 +102,26 @@ inline typename utility::NativeOperationResult<_LEFT, _RIGHT>::type IntegralOper
 	throw exception::AccessViolationException("Assign operations are not allowed.");
 }
 
+template<bool _BOTH_INTEGRAL>
+struct OperationTypeChooser
+{
+	template<bool _ALLOW_ASSIGN, typename _LEFT, typename _RIGHT>
+	inline static typename utility::NativeOperationResult<_LEFT, _RIGHT>::type ReferenceOperation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
+	{
+		return IntegralOperation<_ALLOW_ASSIGN>(static_cast<typename utility::NativeTypeAdapter<_LEFT, true, sizeof(_LEFT)>::type>(p_left), p_right, p_unOperator);
+	}
+};
+
+template<>
+struct OperationTypeChooser<false>
+{
+	template<bool _ALLOW_ASSIGN, typename _LEFT, typename _RIGHT>
+	inline static typename utility::NativeOperationResult<_LEFT, _RIGHT>::type ReferenceOperation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
+	{
+		return ArithmeticOperation<_ALLOW_ASSIGN>(static_cast<typename utility::NativeTypeAdapter<_LEFT, std::is_integral<_LEFT>::value, sizeof(_LEFT)>::type>(p_left), p_right, p_unOperator);
+	}
+};
+
 }
 }
 }

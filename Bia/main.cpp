@@ -124,7 +124,7 @@ global a = hello_world()
 
 print a
 
-a += 5
+a &= 9
 
 hello_world()
 
