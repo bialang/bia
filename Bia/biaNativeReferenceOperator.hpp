@@ -63,7 +63,7 @@ struct ReferenceOperationChooser<T, _CONST_REFERENCE, false>
 };
 
 template<typename T>
-using reference_chooser = ReferenceOperationChooser<T, std::is_const<T>::value, std::is_arithmetic<T>::value>;
+using reference_operation_chooser = ReferenceOperationChooser<T, std::is_const<T>::value, std::is_arithmetic<T>::value>;
 
 }
 }

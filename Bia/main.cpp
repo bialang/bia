@@ -124,7 +124,10 @@ global a = hello_world()
 
 print a
 
-a &= 9
+if a == 10.
+	print "hi"
+else
+	print "bye"
 
 hello_world()
 
