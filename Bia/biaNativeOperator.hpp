@@ -103,7 +103,7 @@ inline typename utility::NativeOperationResult<_LEFT, _RIGHT>::type IntegralOper
 }
 
 template<bool _BOTH_INTEGRAL>
-struct OperationChooser
+struct OperationTypeChooser
 {
 	template<bool _ALLOW_ASSIGN, typename _LEFT, typename _RIGHT>
 	inline static typename utility::NativeOperationResult<_LEFT, _RIGHT>::type Operation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
@@ -113,7 +113,7 @@ struct OperationChooser
 };
 
 template<>
-struct OperationChooser<false>
+struct OperationTypeChooser<false>
 {
 	template<bool _ALLOW_ASSIGN, typename _LEFT, typename _RIGHT>
 	inline static typename utility::NativeOperationResult<_LEFT, _RIGHT>::type Operation(_LEFT p_left, _RIGHT p_right, uint32_t p_unOperator)
@@ -123,7 +123,58 @@ struct OperationChooser<false>
 };
 
 template<typename _LEFT, typename _RIGHT>
-using operation_chooser = OperationChooser<std::is_integral<_LEFT>::value && std::is_integral<_RIGHT>::value>;
+using operation_type_chooser = OperationTypeChooser<std::is_integral<_LEFT>::value && std::is_integral<_RIGHT>::value>;
+
+
+template<typename T, bool _ALLOW_ASSIGN, bool _INTEGRAL_REFERENCE>
+struct OperationChooser
+{
+	template<typename _RIGHT>
+	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
+	{
+		p_pDestination->Undefine();
+
+		operation_type_chooser<T, _RIGHT>::Operation<_ALLOW_ASSIGN>(p_left, p_right, p_unOperator);
+	}
+	template<typename _RIGHT>
+	inline static void Operation(T & p_left, uint32_t p_unOperator, _RIGHT p_right)
+	{
+		p_left = operation_type_chooser<T, _RIGHT>::Operation<_ALLOW_ASSIGN>(p_left, p_right, p_unOperator);
+	}
+};
+
+template<typename T>
+struct OperationChooser<T, false, true>
+{
+	template<typename _RIGHT>
+	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
+	{
+		operation_type_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
+	}
+	template<typename _RIGHT>
+	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right)
+	{
+		operation_type_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
+	}
+};
+
+template<typename T, bool _ALLOW_ASSIGN>
+struct OperationChooser<T, _ALLOW_ASSIGN, false>
+{
+	template<typename _RIGHT>
+	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
+	{
+		throw BIA_IMPLEMENTATION_EXCEPTION("Should not have happened.");
+	}
+	template<typename _RIGHT>
+	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right)
+	{
+		throw BIA_IMPLEMENTATION_EXCEPTION("Should not have happened.");
+	}
+};
+
+template<typename T, bool _ALLOW_ASSIGN = utility::Negation<std::is_const<T>::value>::value>
+using operation_chooser = OperationChooser<T, _ALLOW_ASSIGN, std::is_arithmetic<T>::value>;
 
 }
 }

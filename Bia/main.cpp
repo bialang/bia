@@ -115,20 +115,9 @@ int main()
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
 
-# Print from Bia
-print "Hello, World! - Bia"
+global i = 2
 
-# Print from C++
-global a = hello_world()
-
-print a
-
-if a == 10.
-	print "hi"
-else
-	print "bye"
-
-hello_world()
+print i += 3
 
 )delim";
 	/*
