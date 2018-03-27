@@ -115,9 +115,14 @@ int main()
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
 
-global i = 2
+global a = 652
+global b = 6956
+global c = 998
+global d = 53
+print c
+global test_dot_first_mixed = a - 2 + b * c / d
 
-print i += 3
+print test_dot_first_mixed
 
 )delim";
 	/*

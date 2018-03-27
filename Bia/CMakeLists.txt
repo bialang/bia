@@ -1,6 +1,6 @@
 #cmake_minimum_required(VERSION 3.1)
 
-set(Bia_HEADER_FILES "biaConfig.hpp" "utf8.h")
+set(Bia_HEADER_FILES "biaConfig.hpp" "biaDeclarations.hpp" "utf8.h")
 set(Bia_SOURCE_FILES "")
 
 # compiler namespace

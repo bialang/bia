@@ -3,6 +3,7 @@
 #include <utility>
 #include <type_traits>
 
+#include "biaDeclarations.hpp"
 #include "biaMember.hpp"
 #include "biaNative.hpp"
 #include "biaNativeReference.hpp"
