@@ -2,6 +2,7 @@
 
 #include <type_traits>
 
+#include "biaNative.hpp"
 #include "biaNativeVariable.hpp"
 #include "biaNativeOperator.hpp"
 #include "biaNativeTestOperator.hpp"
@@ -37,23 +38,23 @@ public:
 	}
 	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
 	{
-		operation_chooser<T>::OperationResult(*m_pValue, p_unOperator, p_nRight);
+		CreateResultMember(operation_chooser<T>::OperationResult(*m_pValue, p_unOperator, p_nRight), p_pDestination);
 	}
 	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override
 	{
-		operation_chooser<T>::OperationResult(*m_pValue, p_unOperator, p_llRight);
+		CreateResultMember(operation_chooser<T>::OperationResult(*m_pValue, p_unOperator, p_llRight), p_pDestination);
 	}
 	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override
 	{
-		operation_chooser<T>::OperationResult(*m_pValue, p_unOperator, p_rRight);
+		CreateResultMember(operation_chooser<T>::OperationResult(*m_pValue, p_unOperator, p_rRight), p_pDestination);
 	}
 	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override
 	{
-		operation_chooser<T>::OperationResult(*m_pValue, p_unOperator, p_rRight);
+		CreateResultMember(operation_chooser<T>::OperationResult(*m_pValue, p_unOperator, p_rRight), p_pDestination);
 	}
 	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		throw exception::BadCallException("String values are not supported.");
 	}
 	inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	{
@@ -77,7 +78,7 @@ public:
 	}
 	inline virtual void OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight) override
 	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+		throw exception::BadCallException("String values are not supported.");
 	}
 	inline virtual void OperatorSelfCall(uint32_t p_unOperator) override
 	{
@@ -128,6 +129,19 @@ protected:
 
 private:
 	T * m_pValue;
+
+	template<typename T>
+	inline static void CreateResultMember(T && p_value, BiaMember * p_pDestination)
+	{
+		if (std::is_integral<T>::value)
+			p_pDestination->ReplaceObject<BiaInt>(p_value);
+		else if (std::is_same<T, float>::value)
+			p_pDestination->ReplaceObject<BiaFloat>(p_value);
+		else if (std::is_same<T, double>::value)
+			p_pDestination->ReplaceObject<BiaDouble>(p_value);
+		else
+			throw BIA_IMPLEMENTATION_EXCEPTION("Implementation error.");
+	}
 };
 
 }

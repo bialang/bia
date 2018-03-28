@@ -137,12 +137,12 @@ struct OperationChooser
 	template<typename _RIGHT>
 	inline static type<_RIGHT> OperationResult(T p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		return operation_type_chooser<T, _RIGHT>::Operation<_ALLOW_ASSIGN>(p_left, p_right, p_unOperator);
+		return operation_type_chooser<T, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator);
 	}
 	template<typename _RIGHT>
 	inline static void Operation(T & p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		p_left = static_cast<T>(operation_type_chooser<T, _RIGHT>::Operation<_ALLOW_ASSIGN>(p_left, p_right, p_unOperator));
+		p_left = static_cast<T>(operation_type_chooser<T, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator));
 	}
 };
 
@@ -155,7 +155,7 @@ struct OperationChooser<T, false, true>
 	template<typename _RIGHT>
 	inline static type<_RIGHT> OperationResult(T p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		return operation_type_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
+		return operation_type_chooser<T, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator);
 	}
 	template<typename _RIGHT>
 	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right)
