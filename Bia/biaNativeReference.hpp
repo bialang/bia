@@ -3,8 +3,8 @@
 #include <type_traits>
 
 #include "biaNativeVariable.hpp"
+#include "biaNativeOperator.hpp"
 #include "biaNativeTestOperator.hpp"
-#include "biaNativeReferenceOperator.hpp"
 #include "biaPrint.hpp"
 
 
