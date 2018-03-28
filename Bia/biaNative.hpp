@@ -6,6 +6,7 @@
 #include "biaNativeVariable.hpp"
 #include "biaNativeOperator.hpp"
 #include "biaNativeTestOperator.hpp"
+#include "biaPrint.hpp"
 
 
 namespace bia
@@ -29,8 +30,7 @@ public:
 
 	inline virtual void Print() override
 	{
-		puts("Not implemented.");
-		//printf("%p\n", m_pValue);
+		machine::link::Print(m_value);
 	}
 	inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
 	{

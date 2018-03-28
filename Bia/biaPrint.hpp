@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cstdio>
+#include <cstdint>
 
 #include "biaConfig.hpp"
-#include "biaMember.hpp"
 
 
 namespace bia
@@ -12,6 +12,28 @@ namespace machine
 {
 namespace link
 {
+
+BIA_INSTRUCTION_CALLING_CONVETION(inline, void, Print(int64_t p_llValue))
+{
+	printf("%lli\n", p_llValue);
+}
+
+BIA_INSTRUCTION_CALLING_CONVETION(inline, void, Print(float p_rValue))
+{
+	printf("%f\n", p_rValue);
+}
+
+BIA_INSTRUCTION_CALLING_CONVETION(inline, void, Print(double p_rValue))
+{
+	printf("%f\n", p_rValue);
+}
+
+template<typename T>
+BIA_INSTRUCTION_CALLING_CONVETION(inline, void, Print(T))
+{
+	printf("%s\n", typeid(T).name());
+}
+
 
 BIA_INSTRUCTION_CALLING_CONVETION(inline, void, Print_i(int32_t p_nValue))
 {
