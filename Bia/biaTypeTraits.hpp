@@ -28,7 +28,7 @@ struct NativeOperationResult
 		double,
 		typename std::conditional<std::is_same<_RIGHT, float>::value,
 		float,
-		typename std::conditional<sizeof(_LEFT) >= sizeof(_RIGHT), _LEFT, _RIGHT>::type>::type>::type, void>::type type;
+		typename std::conditional<sizeof(_LEFT) >= sizeof(_RIGHT), _LEFT, _RIGHT>::type>::type>::type, void*>::type type;
 };
 
 template<typename _RIGHT>
@@ -36,13 +36,13 @@ struct NativeOperationResult<float, _RIGHT>
 {
 	typedef typename std::conditional<std::is_same<double, _RIGHT>::value, 
 		double, 
-		typename std::conditional<std::is_arithmetic<_RIGHT>::value, float, void>::type>::type type;
+		typename std::conditional<std::is_arithmetic<_RIGHT>::value, float, void*>::type>::type type;
 };
 
 template<typename _RIGHT>
 struct NativeOperationResult<double, _RIGHT>
 {
-	typedef typename std::conditional<std::is_arithmetic<_RIGHT>::value, double, void>::type type;
+	typedef typename std::conditional<std::is_arithmetic<_RIGHT>::value, double, void*>::type type;
 };
 
 template<bool _CHOOSE, typename, typename>

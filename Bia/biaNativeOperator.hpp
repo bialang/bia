@@ -5,7 +5,6 @@
 #include "biaMember.hpp"
 #include "biaTypeTraits.hpp"
 #include "biaException.hpp"
-#include "biaDeclarations.hpp"
 
 
 namespace bia
@@ -133,9 +132,12 @@ template<typename T, bool _ALLOW_ASSIGN, bool _INTEGRAL_REFERENCE>
 struct OperationChooser
 {
 	template<typename _RIGHT>
-	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
+	using type = typename utility::NativeOperationResult<T, _RIGHT>::type;
+
+	template<typename _RIGHT>
+	inline static type<_RIGHT> OperationResult(T p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		framework::MemberCreator(p_pDestination, operation_type_chooser<T, _RIGHT>::Operation<_ALLOW_ASSIGN>(p_left, p_right, p_unOperator));
+		return operation_type_chooser<T, _RIGHT>::Operation<_ALLOW_ASSIGN>(p_left, p_right, p_unOperator);
 	}
 	template<typename _RIGHT>
 	inline static void Operation(T & p_left, uint32_t p_unOperator, _RIGHT p_right)
@@ -148,9 +150,12 @@ template<typename T>
 struct OperationChooser<T, false, true>
 {
 	template<typename _RIGHT>
-	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
+	using type = typename utility::NativeOperationResult<T, _RIGHT>::type;
+
+	template<typename _RIGHT>
+	inline static type<_RIGHT> OperationResult(T p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		operation_type_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
+		return operation_type_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
 	}
 	template<typename _RIGHT>
 	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right)
@@ -163,7 +168,10 @@ template<typename T, bool _ALLOW_ASSIGN>
 struct OperationChooser<T, _ALLOW_ASSIGN, false>
 {
 	template<typename _RIGHT>
-	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right, framework::BiaMember * p_pDestination)
+	using type = typename utility::NativeOperationResult<T, _RIGHT>::type;
+
+	template<typename _RIGHT>
+	inline static type<_RIGHT> OperationResult(T p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Should not have happened.");
 	}

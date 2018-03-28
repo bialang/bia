@@ -19,9 +19,9 @@ template<typename T>
 class BiaNative final : public BiaNativeVariable
 {
 public:
-	template<typename = typename std::enable_if<std::is_integral<T>::value>::type>
+	template<typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 	inline explicit BiaNative(T p_value) : m_value(p_value) {}
-	template<typename _DUMMY, typename = typename std::enable_if<utility::Negation<std::is_integral<_DUMMY>::value>::value>::type>
+	template<typename _DUMMY, typename = typename std::enable_if<utility::Negation<std::is_arithmetic<_DUMMY>::value>::value>::type>
 	inline explicit BiaNative(_DUMMY)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
@@ -50,19 +50,19 @@ public:
 	}
 	inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
 	{
-		operation_chooser<T>::Operation(m_value, p_unOperator, p_nRight, p_pDestination);
+		CreateResultMember(operation_chooser<T>::OperationResult(m_value, p_unOperator, p_nRight), p_pDestination);
 	}
 	inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override
 	{
-		operation_chooser<T>::Operation(m_value, p_unOperator, p_llRight, p_pDestination);
+		CreateResultMember(operation_chooser<T>::OperationResult(m_value, p_unOperator, p_llRight), p_pDestination);
 	}
 	inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override
 	{
-		operation_chooser<T>::Operation(m_value, p_unOperator, p_rRight, p_pDestination);
+		CreateResultMember(operation_chooser<T>::OperationResult(m_value, p_unOperator, p_rRight), p_pDestination);
 	}
 	inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override
 	{
-		operation_chooser<T>::Operation(m_value, p_unOperator, p_rRight, p_pDestination);
+		CreateResultMember(operation_chooser<T>::OperationResult(m_value, p_unOperator, p_rRight), p_pDestination);
 	}
 	inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
 	{
@@ -218,6 +218,20 @@ protected:
 
 private:
 	T m_value;
+
+
+	template<typename T>
+	inline static void CreateResultMember(T && p_value, BiaMember * p_pDestination)
+	{
+		if (std::is_integral<T>::value)
+			p_pDestination->ReplaceObject<BiaNative<int64_t>>(p_value);
+		else if (std::is_same<T, float>::value)
+			p_pDestination->ReplaceObject<BiaNative<float>>(p_value);
+		else if (std::is_same<T, double>::value)
+			p_pDestination->ReplaceObject<BiaNative<double>>(p_value);
+		else
+			throw BIA_IMPLEMENTATION_EXCEPTION("Implementation error.");
+	}
 };
 
 using BiaInt = BiaNative<int64_t>;
