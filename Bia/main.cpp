@@ -212,7 +212,7 @@ p=0+i*i
 		});
 
 		//context.Run("global o = 61;", 14);
-		//printf("Retrieved i: %i\n", *context.GetGlobal("a")->Cast<int>());
+		printf("Retrieved i: %i\n", *pContext->GetGlobal("c")->Cast<int>());
 	}
 	catch (const bia::exception::Exception & e)
 	{

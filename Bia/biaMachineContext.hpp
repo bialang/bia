@@ -57,6 +57,7 @@ public:
 		};
 
 		SetTemplate<MyClass>("obj")->SetFunction("hey", &heyho)->SetConstructor<int, const char*>();
+		SetFunction("heyho", &heyho);
 	}
 	~BiaMachineContext();
 	//void AddScript(std::string p_stScriptName, script);

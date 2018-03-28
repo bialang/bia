@@ -1,6 +1,8 @@
 #cmake_minimum_required(VERSION 3.1)
 
-add_executable(MathExpressionTest testMathExpression.cpp)
-target_link_libraries(MathExpressionTest Bia)
-add_test(MathExpressionTestConstant MathExpressionTest constant)
-add_test(MathExpressionTestMixed MathExpressionTest mixed)
+add_executable(SanityTest test.hpp testFunctions.hpp testSanity.cpp)
+target_link_libraries(SanityTest Bia)
+
+add_test(MathExpressionTestConstant SanityTest math_const)
+add_test(MathExpressionTestMixed SanityTest math_mixed)
+add_test(StaticFunctionTest SanityTest static_function)
