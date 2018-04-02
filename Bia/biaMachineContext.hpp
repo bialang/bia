@@ -119,9 +119,9 @@ public:
 	 * @return	The pointer to the static function. Do not ever delete the pointer.
 	*/
 	template<typename _RETURN, typename... _ARGS>
-	inline framework::executable::BiaStaticFunction< _RETURN(*)(_ARGS...)> * SetFunction(StringKey p_name, _RETURN(*p_pFunction)(_ARGS...))
+	inline framework::executable::BiaStaticFunction< _RETURN, _ARGS...> * SetFunction(StringKey p_name, _RETURN(*p_pFunction)(_ARGS...))
 	{
-		return SetMember<framework::executable::BiaStaticFunction< _RETURN(*)(_ARGS...)>>(std::move(p_name), p_pFunction);
+		return SetMember<framework::executable::BiaStaticFunction< _RETURN, _ARGS...>>(std::move(p_name), p_pFunction);
 	}
 	/**
 	 * Sets a lambda function.

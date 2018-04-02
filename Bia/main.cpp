@@ -70,9 +70,62 @@ inline void Test(int p_nCount, _LAMBDA && p_lambda)
 
 	printf("Time taken: %f ms\n", time_taken / static_cast<double>(p_nCount));
 }
+
+//template<typename T>
+//inline typename std::enable_if<std::is_integral<T>::value>::type Creat(T p_value)
+//{
+//	puts("int");
+//}
+//
+//template<typename T>
+//inline typename std::enable_if<std::is_floating_point<T>::value>::type Creat(T p_value)
+//{
+//	puts("float");
+//}
+//
+//template<typename T>
+//inline typename std::enable_if<std::is_arithmetic<T>::value && bia::utility::Negation<std::is_same<T, const char>::value>::value>::type Creat(T * p_pValue)
+//{
+//	puts(typeid(T).name());
+//	puts("reference*");
+//}
+//
+//template<typename T>
+//inline typename std::enable_if<std::is_arithmetic<T>::value>::type Creat(T & p_value)
+//{
+//	puts("reference&");
+//}
+//
+//template<typename T>
+//inline typename std::enable_if<std::is_same<T, const char*>::value>::type Creat(T p_value)
+//{
+//	puts("string");
+//}
+//
+//template<typename T, typename... l>
+//inline void Creat(T(*p_value)(l...))
+//{
+//	puts("sfunc");
+//}
+//
+//template<typename T>
+//inline typename std::enable_if<bia::utility::Negation<std::is_arithmetic<T>::value || std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<T>::type>::type>::value>::value>::type Creat(T)
+//{
+//	puts("other");
+//}
+//
+//inline void aer()
+//{
+//	volatile const char * w = "";
+//	Creat(w);
+//}
+//
+
 //7573
 int main()
 {
+	/*system("pause");
+	return 0;
 	//Run(test, 2, 4, 434);
 	/*{
 		auto time_taken = 0ll;
@@ -109,6 +162,7 @@ int main()
 		printf("Hello, World! - C++ %p is %i\n", &my_var, my_var);
 		return my_var;
 	});
+
 //var i = 65*65+5*8;
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(

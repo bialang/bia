@@ -14,19 +14,8 @@ namespace framework
 namespace executable
 {
 
-template<typename, typename...>
-class BiaStaticFunction
-{
-public:
-	template<typename _DUMMY>
-	inline explicit BiaStaticFunction(_DUMMY)
-	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid parameter.");
-	}
-};
-
 template<typename _RETURN, typename... _ARGS>
-class BiaStaticFunction<_RETURN(*)(_ARGS...)> final : public BiaFunction
+class BiaStaticFunction final : public BiaFunction
 {
 public:
 	/**
@@ -80,7 +69,7 @@ public:
 	*/
 	inline virtual void Clone(BiaMember * p_pDestination) override
 	{
-		p_pDestination->ReplaceObject<BiaStaticFunction<_RETURN(*)(_ARGS...)>>(m_pFunction);
+		p_pDestination->ReplaceObject<BiaStaticFunction<_RETURN, _ARGS...>>(m_pFunction);
 	}
 	/**
 	 * @see	BiaMember::IsType().

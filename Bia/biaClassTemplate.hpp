@@ -216,7 +216,7 @@ public:
 	{
 		///TODO: check name
 
-		m_pClassMemberHolder->SetMember<executable::BiaStaticFunction<_RETURN(*)(_ARGS...)>>(p_stName, p_pFunction);
+		m_pClassMemberHolder->SetMember<executable::BiaStaticFunction<_RETURN, _ARGS...>>(p_stName, p_pFunction);
 
 		return this;
 	}
