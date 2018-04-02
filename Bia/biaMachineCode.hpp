@@ -53,6 +53,7 @@ public:
 	 * @return	true if the machine code is valid, otherwise false.
 	 */
 	bool IsValid();
+	BiaMachineCode & operator=(BiaMachineCode && p_move);
 
 private:
 	typedef void(*entry_point)();

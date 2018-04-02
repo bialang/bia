@@ -13,36 +13,64 @@ namespace bia
 namespace machine
 {
 
+BiaMachineContext::BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
+{
+}
+
 BiaMachineContext::~BiaMachineContext()
 {
 	for (auto & member : m_index)
 		m_pAllocator->DestroyBlocks(member.second, BiaAllocator::MEMORY_TYPE::NORMAL);
 }
 
-void BiaMachineContext::Run(const void * p_pScript, size_t p_iSize)
+bool BiaMachineContext::SetScript(std::string p_stScriptName, const char * p_pcScript, size_t p_iSize)
 {
-	int8_t acMachineScheinSpace[sizeof(BiaMachineSchein)];
+	auto machineCode = CompileScript(p_pcScript, p_iSize);
 
-	std::unique_ptr<BiaMachineSchein, void(*)(BiaMachineSchein*)> pMachineSchein(nullptr, [](BiaMachineSchein * p_pMachineSchein) {
-		p_pMachineSchein->~BiaMachineSchein();
-	});
-	stream::BiaOutputStreamBuffer compiled;
+	if (!machineCode.IsValid())
+		return false;
 
-	//Interpret and compile
-	{
-		compiler::BiaCompiler compiler(compiled, *this, m_pAllocator.get());
+	//Set script
+#if defined(BIA_CPP_17)
+	m_scripts.insert_or_assign(std::move(p_stScriptName), std::move(machineCode));
+#else
+	m_scripts[std::move(p_stScriptName)] = std::move(machineCode);
+#endif
 
-		grammar::BiaGrammar::GetGrammar().Interpret(static_cast<const char*>(p_pScript), p_iSize, compiler);
+	return true;
+}
 
-		pMachineSchein.reset(new(acMachineScheinSpace) BiaMachineSchein(compiler.GetMachineSchein()));
-	}
+bool BiaMachineContext::Execute(const char * p_pcScript, size_t p_iSize)
+{
+	auto machineCode = CompileScript(p_pcScript, p_iSize);
 
-	//Make the compiled buffer executable
-	BiaMachineCode code(compiled.GetBuffer(), std::move(*pMachineSchein));
+	if (!machineCode.IsValid())
+		return false;
 
-	//Execute script
-	if (code.IsValid())
-		code.Execute();
+	//Execute
+	machineCode.Execute();
+
+	return true;
+}
+
+bool BiaMachineContext::ExecuteScript(const std::string & p_stScriptName)
+{
+	auto pResult = m_scripts.find(p_stScriptName);
+
+	if (pResult == m_scripts.end())
+		return false;
+
+	//Execute
+	pResult->second.Execute();
+
+	return true;
+}
+
+BiaMachineCode * BiaMachineContext::GetScript(const std::string & p_stScriptName)
+{
+	auto pResult = m_scripts.find(p_stScriptName);
+
+	return pResult == m_scripts.end() ? nullptr : &pResult->second;
 }
 
 framework::BiaMember * BiaMachineContext::GetGlobal(const std::string & p_stVariable)
@@ -114,6 +142,24 @@ framework::BiaMember * BiaMachineContext::AddressOf(StringKey p_name)
 
 		return allocation.pAddress;
 	}
+}
+
+BiaMachineCode BiaMachineContext::CompileScript(const void * p_pScript, size_t p_iSize)
+{
+	BiaMachineSchein machineSchein(m_pAllocator.get());
+	stream::BiaOutputStreamBuffer compiled;
+
+	//Interpret and compile
+	{
+		compiler::BiaCompiler compiler(compiled, *this, m_pAllocator.get());
+
+		grammar::BiaGrammar::GetGrammar().Interpret(static_cast<const char*>(p_pScript), p_iSize, compiler);
+
+		machineSchein = compiler.GetMachineSchein();
+	}
+
+	//Make the compiled buffer executable
+	return BiaMachineCode(compiled.GetBuffer(), std::move(machineSchein));
 }
 
 }

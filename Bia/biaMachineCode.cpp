@@ -99,5 +99,18 @@ bool BiaMachineCode::IsValid()
 	return m_run.pAddress && m_run.iSize;
 }
 
+BiaMachineCode & BiaMachineCode::operator=(BiaMachineCode && p_move)
+{
+	//Deallocate machine code
+	m_machineSchein.GetAllocator()->Deallocate(m_run, BiaAllocator::MEMORY_TYPE::EXECUTABLE_MEMORY);
+
+	//Move
+	m_machineSchein = std::move(p_move.m_machineSchein);
+	m_run = p_move.m_run;
+	p_move.m_run = { nullptr, 0 };
+
+	return *this;
+}
+
 }
 }

@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <type_traits>
+#include <istream>
 
 #include "biaConfig.hpp"
 #include "biaMember.hpp"
@@ -23,49 +24,69 @@ namespace bia
 namespace machine
 {
 
-inline int lulu(int y)
-{
-	printf("lulululu %i\n", y);
-
-	return y * 34;
-}
-
-typedef int(*rra)(int);
-
-inline rra heyho(const char * b)
-{
-	puts("heyho");
-	printf("your param: %s\n", b);
-
-	return &lulu;
-}
-
 class BiaMachineContext final
 {
 public:
-	BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator) : m_pAllocator(std::move(p_pAllocator)), m_nameManager(m_pAllocator.get())
-	{
-		class MyClass
-		{
-		public:
-			MyClass(int a, const char * p) {
-				printf("im getting %i cons %s tructed\n", a, p);
-			}
-			~MyClass() {
-				puts("im getting deleted");
-			}
-		};
-
-		SetTemplate<MyClass>("obj")->SetFunction("hey", &heyho)->SetConstructor<int, const char*>();
-		SetFunction("heyho", &heyho);
-	}
+	/**
+	 * Constructor.
+	 *
+	 * @param	p_pAllocator	Defines the memory allocator.
+	*/
+	BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator);
 	~BiaMachineContext();
-	//void AddScript(std::string p_stScriptName, script);
-	//void RemoveScript(std::string p_stScriptName);
-	//void Run(std::string p_stScriptName);
-	BIA_EXPORT void Run(const void * p_pScript, size_t p_iSize);
-	BIA_EXPORT framework::BiaMember * GetGlobal(const std::string & p_stVariable);
-	BIA_EXPORT framework::BiaMember * GetLocal(const std::string & p_stScriptName, const std::string & p_stVariable) = delete;
+	//void AddScript(std::string p_stScriptName, std::istream & p_script);
+	/**
+	 * Sets the script under the given name.
+	 *
+	 * @remarks	If a script with the name exists, the old script will be overriden.
+	 *
+	 * @since	3.63.123.707
+	 * @date	2-Apr-18
+	 *
+	 * @param	p_stScriptName	Defines the name of the script.
+	 * @param	p_pcScript	Defines the script.
+	 * @param	p_iSize	Defines the size of the script in bytes.
+	 *
+	 * @return	true if the script was set, otherwise false.
+	*/
+	bool SetScript(std::string p_stScriptName, const char * p_pcScript, size_t p_iSize);
+	//bool Execute(std::istream & p_script);
+	/**
+	 * Executes the given script.
+	 *
+	 * @since	3.63.123.707
+	 * @date	2-Apr-18
+	 *
+	 * @param	p_pcScript	Defines the script.
+	 * @param	p_iSize	Defines the size of the script in bytes.
+	 *
+	 * @return	true if the script was executed, otherwise false.
+	*/
+	bool Execute(const char * p_pcScript, size_t p_iSize);
+	/**
+	 * Executes the script associated with the name.
+	 *
+	 * @since	3.63.123.707
+	 * @date	2-Apr-18
+	 *
+	 * @param	p_stScriptName	Defines the name of the script.
+	 *
+	 * @return	true if the script was executed, otherwise false.
+	*/
+	bool ExecuteScript(const std::string & p_stScriptName);
+	/**
+	 * Returns the script associated with the name.
+	 *
+	 * @since	3.63.123.707
+	 * @date	2-Apr-18
+	 *
+	 * @param	p_stScriptName	Defines the name of the script.
+	 *
+	 * @return	The pointer to the executable machine code if it succeeds, otherwise null.
+	*/
+	BiaMachineCode * GetScript(const std::string & p_stScriptName);
+	framework::BiaMember * GetGlobal(const std::string & p_stVariable);
+	framework::BiaMember * GetLocal(const std::string & p_stScriptName, const std::string & p_stVariable) = delete;
 	/**
 	 * Sets a member directly.
 	 *
@@ -173,7 +194,7 @@ public:
 	};*/
 
 	variable_index m_index;	/**	Stores all pointers to the known variables.	*/
-	std::map<StringKey, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
+	std::map<std::string, BiaMachineCode> m_scripts;	/**	Stores all scripts associated with this context.	*/
 	std::shared_ptr<BiaAllocator> m_pAllocator;	/**	Defines the memory allocator.	*/
 	
 	BiaNameManager m_nameManager;
@@ -215,6 +236,18 @@ public:
 	 * @return	The address.
 	*/
 	framework::BiaMember * AddressOf(StringKey p_name);
+	/**
+	 * Compiles the script and returns the executable machine code.
+	 *
+	 * @since	3.63.123.707
+	 * @date	2-Apr-18
+	 *
+	 * @param	p_pScript	Defines the script.
+	 * @param	p_iSize	Defines the size of the script in bytes.
+	 *
+	 * @return	The executable machine code.
+	*/
+	BiaMachineCode CompileScript(const void * p_pScript, size_t p_iSize);
 };
 
 }

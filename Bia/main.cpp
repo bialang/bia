@@ -167,14 +167,9 @@ int main()
 	constexpr auto TEST_TIMES = 1;
 	char script[] = R"delim(
 
-global a = 652
-global b = 6956
-global c = 998
-global d = 53
-print c
-global test_dot_first_mixed = a - 2 + b * c / d
-
-print test_dot_first_mixed
+global v = hello_world()
+v = 6374
+hello_world()
 
 )delim";
 	/*
@@ -266,7 +261,7 @@ p=0+i*i
 		});
 
 		//context.Run("global o = 61;", 14);
-		printf("Retrieved i: %i\n", *pContext->GetGlobal("c")->Cast<int>());
+		//printf("Retrieved i: %i\n", *pContext->GetGlobal("c")->Cast<int>());
 	}
 	catch (const bia::exception::Exception & e)
 	{
