@@ -26,7 +26,7 @@ int main(int argc, char ** argv)
 			{
 				auto szScript = "global result = 652 - 2 + 6956 * 998 / 53";
 
-				context.Run(szScript, std::char_traits<char>::length(szScript));
+				context.Execute(szScript, std::char_traits<char>::length(szScript));
 
 				TestValue(context, "result", 652 - 2 + 6956 * 998 / 53);
 			}
@@ -40,7 +40,7 @@ global d = 53
 global result = a - 2 + b * c / d
 )";
 
-				context.Run(szScript, std::char_traits<char>::length(szScript));
+				context.Execute(szScript, std::char_traits<char>::length(szScript));
 
 				TestValue(context, "result", 652 - 2 + 6956 * 998 / 53);
 			}
@@ -58,7 +58,7 @@ global d = foo4()(43, 57)
 				context.SetFunction("foo3", &foo3);
 				context.SetFunction("foo4", &foo4);
 
-				context.Run(szScript, std::char_traits<char>::length(szScript));
+				context.Execute(szScript, std::char_traits<char>::length(szScript));
 
 				//Test results
 				TestValue(context, "a", 61);
