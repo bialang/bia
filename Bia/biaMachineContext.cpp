@@ -34,7 +34,12 @@ bool BiaMachineContext::SetScript(std::string p_stScriptName, const char * p_pcS
 #if defined(BIA_CPP_17)
 	m_scripts.insert_or_assign(std::move(p_stScriptName), std::move(machineCode));
 #else
-	m_scripts[std::move(p_stScriptName)] = std::move(machineCode);
+	auto pResult = m_scripts.find(p_stScriptName);
+
+	if (pResult == m_scripts.end())
+		m_scripts.insert({ std::move(p_stScriptName), std::move(machineCode) });
+	else
+		m_scripts.at(p_stScriptName) = std::move(machineCode);
 #endif
 
 	return true;
