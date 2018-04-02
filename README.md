@@ -26,8 +26,8 @@ hello_world()
 
 )";
 
-//Run
-context.Run(stTestCode.c_str(), stTestCode.length());
+//Execute
+context.Execute(stTestCode.c_str(), stTestCode.length());
 ```
 
 # Language Features
@@ -114,7 +114,7 @@ else if some_value == 3 {
 ```
 
 # The Simple C++ Interface
-- Adding a normal function to your `context`:
+- Adding a static function to your `context`:
 
 ```
 //A static C++ function
@@ -125,6 +125,15 @@ int square(int base)
 
 //Adding the function
 context.SetFunction("square", &square);
+```
+
+- Adding a lambda function:
+
+```
+//Adding the function
+context.SetLambda("int_sqrt", [] (double v) {
+  return static_cast<int>(sqrt(v));
+});
 ```
 
 - Adding a C++ class:
