@@ -175,6 +175,10 @@ protected:
 		{
 			switch (p_nativeType)
 			{
+			case NATIVE_TYPE::BOOL:
+				m_bNonZero = static_cast<bool>(m_value);
+
+				return &m_bNonZero;
 			case NATIVE_TYPE::INT_8:
 			case NATIVE_TYPE::CONST_INT_8:
 			case NATIVE_TYPE::INT_16:
@@ -193,6 +197,10 @@ protected:
 		{
 			switch (p_nativeType)
 			{
+			case NATIVE_TYPE::BOOL:
+				m_bNonZero = static_cast<bool>(m_value);
+
+				return &m_bNonZero;
 			case NATIVE_TYPE::FLOAT:
 			case NATIVE_TYPE::CONST_FLOAT:
 				return &m_value;
@@ -205,6 +213,10 @@ protected:
 		{
 			switch (p_nativeType)
 			{
+			case NATIVE_TYPE::BOOL:
+				m_bNonZero = static_cast<bool>(m_value);
+
+				return &m_bNonZero;
 			case NATIVE_TYPE::DOUBLE:
 			case NATIVE_TYPE::CONST_DOUBLE:
 				return &m_value;
@@ -217,7 +229,10 @@ protected:
 	}
 
 private:
+	/**	The arithmetic value of type: int64_t, float or double.	*/
 	T m_value;
+	/**	True if the value is non zero.	*/
+	bool m_bNonZero;
 
 
 	template<typename T>

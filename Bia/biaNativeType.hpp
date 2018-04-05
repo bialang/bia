@@ -12,6 +12,7 @@ namespace native
 
 enum class NATIVE_TYPE
 {
+	BOOL,
 	INT_8,
 	CONST_INT_8,
 	INT_16,
@@ -33,7 +34,25 @@ struct NativeType
 {
 	inline constexpr static NATIVE_TYPE Type()
 	{
-		return NATIVE_TYPE::CONST_STRING;
+		return NATIVE_TYPE::CUSTOM;
+	}
+};
+
+template<>
+struct NativeType<bool, true, false, 1>
+{
+	inline constexpr static NATIVE_TYPE Type()
+	{
+		return NATIVE_TYPE::BOOL;
+	}
+};
+
+template<>
+struct NativeType<bool, true, true, 1>
+{
+	inline constexpr static NATIVE_TYPE Type()
+	{
+		return NATIVE_TYPE::BOOL;
 	}
 };
 

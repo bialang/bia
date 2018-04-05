@@ -5,6 +5,7 @@
 #include "biaGrammar.hpp"
 
 #include <chrono>
+#include <iostream>
 
 
 struct a
@@ -154,6 +155,15 @@ int main()
 
 		printf("%f\n", time_taken / 20.0);
 	}*/
+	{
+		bia::framework::native::BiaInt myint(0x5000);
+		std::is_arithmetic<bool>::value;
+		std::cout << *myint.Cast<bool>() << std::endl;
+
+
+		system("pause");
+		return 0;
+	}
 	std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
 	bia::stream::BiaOutputStreamBuffer buf;
 	std::unique_ptr<bia::machine::BiaMachineContext> pContext(new bia::machine::BiaMachineContext(pAllocator));
