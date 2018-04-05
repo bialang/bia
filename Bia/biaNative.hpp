@@ -209,7 +209,7 @@ protected:
 			}
 		}
 		//Double
-		else if (std::is_same<T, float>::value)
+		else if (std::is_same<T, double>::value)
 		{
 			switch (p_nativeType)
 			{
