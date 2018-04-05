@@ -1,7 +1,15 @@
-#include <biaMachineContext.hpp>
-
 #include "test.hpp"
 #include "testFunctions.hpp"
+
+#include <memory>
+#include <string>
+#include <biaMachineContext.hpp>
+#include <biaClassRaw.hpp>
+
+using namespace bia;
+using namespace bia::framework::native;
+using namespace bia::framework::object;
+
 
 enum
 {
@@ -65,6 +73,36 @@ global d = foo4()(43, 57)
 				TestValue(context, "b", -61);
 				TestValue(context, "c", -100);
 				TestValue(context, "d", 100);
+			}
+			else if (!std::strcmp(argv[1], "type_cast"))
+			{
+				//Integral test
+				TestValue(BiaInt(0), 0);
+				TestValue(BiaInt(0x6100), 0x6100);
+				TestValue(BiaInt(~0ll), ~0ll);
+				TestValue(BiaInt(-1), -1);
+				TestValue(BiaInt(0x6100), true);
+
+				//Float test
+				TestValue(BiaFloat(0.0f), 0.0f);
+				TestValue(BiaFloat(-0.0f), -0.0f);
+				TestValue(BiaFloat(1.01f), 1.01f);
+				TestValue(BiaFloat(65825.987f), 65825.987f);
+				TestValue(BiaFloat(0.05f), true);
+
+				//Double test
+				TestValue(BiaDouble(0.0), 0.0);
+				TestValue(BiaDouble(-0.0), -0.0);
+				TestValue(BiaDouble(1.01), 1.01);
+				TestValue(BiaDouble(65825.987), 65825.987);
+				TestValue(BiaDouble(0.05), true);
+
+				//C-String test
+				TestValue(BiaCString(""), "");
+				TestValue(BiaCString("hi"), "hi");
+
+				//Custom
+				TestValue(BiaClassRaw<std::string>(std::make_shared<std::string>("hello")), std::string("hello"));
 			}
 		}
 	}
