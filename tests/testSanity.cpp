@@ -30,27 +30,21 @@ int main(int argc, char ** argv)
 		
 		if (argc > 1)
 		{
-			if (!std::strcmp(argv[1], "math_const"))
-			{
-				auto szScript = "global result = 652 - 2 + 6956 * 998 / 53";
-
-				context.Execute(szScript, std::char_traits<char>::length(szScript));
-
-				TestValue(context, "result", 652 - 2 + 6956 * 998 / 53);
-			}
-			else if (!std::strcmp(argv[1], "math_mixed"))
+			if (!std::strcmp(argv[1], "math_expression"))
 			{
 				auto szScript = R"(
 global a = 652
 global b = 6956
 global c = 998
 global d = 53
-global result = a - 2 + b * c / d
+global result_const = 652 - 2 + 6956 * 998 / 53
+global result_mixed = a - 2 + b * c / d
 )";
 
 				context.Execute(szScript, std::char_traits<char>::length(szScript));
 
-				TestValue(context, "result", 652 - 2 + 6956 * 998 / 53);
+				TestValue(context, "result_const", 652 - 2 + 6956 * 998 / 53);
+				TestValue(context, "result_mixed", 652 - 2 + 6956 * 998 / 53);
 			}
 			else if (!std::strcmp(argv[1], "execute"))
 			{
@@ -63,6 +57,42 @@ print "Hello, World"
 
 				context.SetScript("test", szScript, std::char_traits<char>::length(szScript));
 				context.ExecuteScript("test");
+			}
+			else if (!std::strcmp(argv[1], "passing_order"))
+			{
+				auto szScript = R"(
+global a = "a"
+global b = "b"
+global c = "c"
+
+# Static function order
+static_order1(a, b)
+static_order1("a", b)
+static_order2(a, b, c)
+static_order2(a, "b", c)
+static_order2("a", b, "c")
+
+# Member function order
+member_order1(a, b)
+member_order1("a", b)
+member_order2(a, b, c)
+member_order2(a, "b", c)
+member_order2("a", b, "c")
+)";
+
+				context.SetFunction("static_order1", &static_order1);
+				context.SetFunction("static_order2", &static_order2);
+				context.SetLambda("member_order1", [] (const char * a, const char * b) {
+					BIA_ASSERT(std::strcmp(a, "a") == 0, "Strings don't match");
+					BIA_ASSERT(std::strcmp(b, "b") == 0, "Strings don't match");
+				});
+				context.SetLambda("member_order2", [] (const char * a, const char * b, const char * c) {
+					BIA_ASSERT(std::strcmp(a, "a") == 0, "Strings don't match");
+					BIA_ASSERT(std::strcmp(b, "b") == 0, "Strings don't match");
+					BIA_ASSERT(std::strcmp(c, "c") == 0, "Strings don't match");
+				});
+
+				context.Execute(szScript, std::char_traits<char>::length(szScript));
 			}
 			else if (!std::strcmp(argv[1], "static_function"))
 			{
