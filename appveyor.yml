@@ -10,6 +10,9 @@ before_build:
     cmake c:\project\source -G "Visual Studio 15"
 
     cmake --build . --config "Release"
+    
+    cmake --build . --config "Debug"
 test_script:
   - cd c:\project\source\build
-  - ctest
+  - ctest -C "Debug"
+  - ctest -C "Release"
