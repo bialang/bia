@@ -14,6 +14,7 @@ namespace bia
 {
 namespace force
 {
+
 template<typename _RETURN>
 inline _RETURN FormatCast(va_list & p_args, const char *& p_szFormat)
 {
@@ -174,8 +175,8 @@ inline void DisguisedCallerCount(_RETURN(*p_pFunction)(_0, _1), framework::BiaMe
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_1>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_0>();
 	framework::MemberCreator(p_pDestination, p_pFunction(std::forward<_0>(v0), std::forward<_1>(v1)));
 }
 
@@ -185,9 +186,9 @@ inline void DisguisedCallerCount(_RETURN(*p_pFunction)(_0, _1, _2), framework::B
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_2>();
+	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_2>();
 	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_0>();
 	framework::MemberCreator(p_pDestination, p_pFunction(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2)));
 }
 
@@ -220,8 +221,8 @@ inline void DisguisedCallerCount(void(*p_pFunction)(_0, _1), framework::BiaMembe
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_1>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_0>();
 	p_pFunction(std::forward<_0>(v0), std::forward<_1>(v1));
 
 	framework::MemberCreator(p_pDestination);
@@ -233,9 +234,9 @@ inline void DisguisedCallerCount(void(*p_pFunction)(_0, _1, _2), framework::BiaM
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_2>();
+	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_2>();
 	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_0>();
 	p_pFunction(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 
 	framework::MemberCreator(p_pDestination);
@@ -266,8 +267,8 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1), _CLASS *
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_1>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_0>();
 	framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)(std::forward<_0>(v0), std::forward<_1>(v1)));
 }
 
@@ -277,9 +278,9 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2), _CLA
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_2>();
+	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_2>();
 	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_0>();
 	framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2)));
 }
 
@@ -312,8 +313,8 @@ inline void DisguisedCallerCount(void(_CLASS::*p_pFunction)(_0, _1), _CLASS * p_
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_1>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_0>();
 	(p_pInstance->*p_pFunction)(std::forward<_0>(v0), std::forward<_1>(v1));
 
 	framework::MemberCreator(p_pDestination);
@@ -325,9 +326,9 @@ inline void DisguisedCallerCount(void(_CLASS::*p_pFunction)(_0, _1, _2), _CLASS 
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_2>();
+	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_2>();
 	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_0>();
 	(p_pInstance->*p_pFunction)(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 
 	framework::MemberCreator(p_pDestination);
@@ -358,8 +359,8 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1) const, co
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_1>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_0>();
 	framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)(std::forward<_0>(v0), std::forward<_1>(v1)));
 }
 
@@ -369,9 +370,9 @@ inline void DisguisedCallerCount(_RETURN(_CLASS::*p_pFunction)(_0, _1, _2) const
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_2>();
+	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_2>();
 	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_0>();
 	framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2)));
 }
 
@@ -404,8 +405,8 @@ inline void DisguisedCallerCount(void(_CLASS::*p_pFunction)(_0, _1) const, const
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_1>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_0>();
 	(p_pInstance->*p_pFunction)(std::forward<_0>(v0), std::forward<_1>(v1));
 
 	framework::MemberCreator(p_pDestination);
@@ -417,9 +418,9 @@ inline void DisguisedCallerCount(void(_CLASS::*p_pFunction)(_0, _1, _2) const, c
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_2>();
+	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_2>();
 	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_0>();
 	(p_pInstance->*p_pFunction)(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 
 	framework::MemberCreator(p_pDestination);
@@ -450,8 +451,8 @@ inline _CLASS * DisguisedCallerCount(framework::BiaMember::parameter_count p_cou
 	if (p_count != 2)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_1>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_0>();
 	return new _CLASS(std::forward<_0>(v0), std::forward<_1>(v1));
 }
 
@@ -461,9 +462,9 @@ inline _CLASS * DisguisedCallerCount(framework::BiaMember::parameter_count p_cou
 	if (p_count != 3)
 		throw exception::ArgumentException("Argument count does not match.");
 
-	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_2>();
+	_2 v2 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_2>();
 	_1 v1 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 1))->Cast<_1>();
-	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_0>();
+	_0 v0 = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 2))->Cast<_0>();
 	return new _CLASS(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 }
 
@@ -784,7 +785,6 @@ inline _CLASS * DisguisedCallerFormat(framework::BiaMember::parameter_count p_co
 	_0 v0 = FormatCast<_0>(p_args, p_pcFormat);
 	return new _CLASS(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 }
-
 
 }
 }

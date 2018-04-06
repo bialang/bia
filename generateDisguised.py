@@ -1,8 +1,41 @@
+import re
+
 max_args = 3
 
-f = open("disguised.txt", "wb")
+def move_position(s):
+	def c(x):
+		return " * " + str(next(c.counter)) + ")"
+		
+	numbers = []
+	
+	for n in range(1, max_args + 1):
+		numbers.append(n)
+		
+	c.counter = iter(numbers)
+	
+	return re.sub(""" \* \d+\)""", c, s)
 
-f.write(b"""template<typename _RETURN>
+
+f = open("Bia/biaDisguisedCaller.hpp", "wb")
+
+f.write(b"""#pragma once
+
+#include <cstdarg>
+#include <cstdint>
+#include <type_traits>
+
+#include "biaMember.hpp"
+#include "biaException.hpp"
+#include "biaMemberCreator.hpp"
+#include "biaTypeTraits.hpp"
+
+
+namespace bia
+{
+namespace force
+{
+
+template<typename _RETURN>
 inline _RETURN FormatCast(va_list & p_args, const char *& p_szFormat)
 {
 	using namespace utility;
@@ -260,8 +293,9 @@ inline {function_return} {function_name}({param1}{param2}{param3}framework::BiaM
 			filler["body2"] += (", " if i != 0 else "") + "std::forward<_{0}>(v{0})".format(i)
 
 			if type == "count":
+
 				filler["preparations"] = """
-	_{0} v{0} = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * {0}))->Cast<_{0}>();""".format(i) + filler["preparations"]
+	_{0} v{0} = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_{0}>();""".format(i) + move_position(filler["preparations"])
 			else:
 				filler["preparations"] = """
 	_{0} v{0} = FormatCast<_{0}>(p_args, p_pcFormat);""".format(i) + filler["preparations"]
@@ -270,4 +304,5 @@ inline {function_return} {function_name}({param1}{param2}{param3}framework::BiaM
 				filler["template_begin"] = "template<"
 				filler["template_end"] = ">"
 
+f.write(b"}\n}")
 f.close()
