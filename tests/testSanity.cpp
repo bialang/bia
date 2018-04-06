@@ -52,6 +52,18 @@ global result = a - 2 + b * c / d
 
 				TestValue(context, "result", 652 - 2 + 6956 * 998 / 53);
 			}
+			else if (!std::strcmp(argv[1], "execute"))
+			{
+				auto szScript = R"(
+print foo1()
+print "Hello, World"
+)";
+
+				context.SetFunction("foo1", &foo1);
+
+				context.SetScript("test", szScript, std::char_traits<char>::length(szScript));
+				context.ExecuteScript("test");
+			}
 			else if (!std::strcmp(argv[1], "static_function"))
 			{
 				auto szScript = R"(
