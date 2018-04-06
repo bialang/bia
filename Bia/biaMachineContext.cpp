@@ -19,8 +19,12 @@ BiaMachineContext::BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator)
 
 BiaMachineContext::~BiaMachineContext()
 {
+	//Destroy all global variables
 	for (auto & member : m_index)
 		m_pAllocator->DestroyBlocks(member.second, BiaAllocator::MEMORY_TYPE::NORMAL);
+
+	//Delete all scripts
+	m_scripts.clear();
 }
 
 bool BiaMachineContext::SetScript(std::string p_stScriptName, const char * p_pcScript, size_t p_iSize)
