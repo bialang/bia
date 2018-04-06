@@ -20,14 +20,17 @@ void BiaAllocator::CommitReserveAllocate(universal_allocation p_allocation, size
 
 void BiaAllocator::Deallocate(universal_allocation p_allocation, MEMORY_TYPE p_type)
 {
+	printf("ptr: %p of size %zi\n", p_allocation.pAddress, p_allocation.iSize);
 	switch (p_type)
 	{
 	case MEMORY_TYPE::NORMAL:
+		puts("free");
 		free(p_allocation.pAddress);
 
 		break;
 	case MEMORY_TYPE::EXECUTABLE_MEMORY:
 #if defined(BIA_OS_WINDOWS)
+		puts("virtual free");
 		VirtualFree(p_allocation.pAddress, 0, MEM_RELEASE);
 #elif defined(BIA_OS_LINUX)
 		munmap(p_allocation.pAddress, p_allocation.iSize);
@@ -91,7 +94,7 @@ BiaAllocator::universal_allocation BiaAllocator::Allocate(size_t p_iSize, MEMORY
 	case MEMORY_TYPE::EXECUTABLE_MEMORY:
 	{
 #if defined(BIA_OS_WINDOWS)
-		return { VirtualAlloc(nullptr, p_iSize, MEM_COMMIT, PAGE_READWRITE), p_iSize };
+		return { VirtualAlloc(nullptr, p_iSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE), p_iSize };
 #elif defined(BIA_OS_LINUX)
 		auto pAllocation = mmap(nullptr, p_iSize, PROT_WRITE | PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 

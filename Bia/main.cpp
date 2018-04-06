@@ -173,6 +173,8 @@ v = 6374
 hello_world()
 
 )delim";
+	pContext->SetScript("test", script, sizeof(script) - 1);
+	pContext->ExecuteScript("test");
 	/*
 	global i = 0
 global j = new obj()
