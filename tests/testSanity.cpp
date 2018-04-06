@@ -26,10 +26,10 @@ int main(int argc, char ** argv)
 {
 	try
 	{
+		bia::machine::BiaMachineContext context(std::shared_ptr<bia::machine::BiaAllocator>(new bia::machine::BiaAllocator()));
+		
 		if (argc > 1)
 		{
-			bia::machine::BiaMachineContext context(std::shared_ptr<bia::machine::BiaAllocator>(new bia::machine::BiaAllocator()));
-
 			if (!std::strcmp(argv[1], "math_const"))
 			{
 				auto szScript = "global result = 652 - 2 + 6956 * 998 / 53";

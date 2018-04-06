@@ -77,7 +77,8 @@ BiaMachineCode::BiaMachineCode(BiaMachineCode && p_move) : m_machineSchein(std::
 BiaMachineCode::~BiaMachineCode()
 {
 	//Deallocate machine code
-	m_machineSchein.GetAllocator()->Deallocate(m_run, BiaAllocator::MEMORY_TYPE::EXECUTABLE_MEMORY);
+	if (m_run.pAddress)
+		m_machineSchein.GetAllocator()->Deallocate(m_run, BiaAllocator::MEMORY_TYPE::EXECUTABLE_MEMORY);
 }
 
 void BiaMachineCode::Execute() const
