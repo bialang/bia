@@ -14,8 +14,8 @@ namespace framework
 namespace native
 {
 
-template<typename T>
-inline int32_t TestOperation(T p_value)
+template<typename _Ty>
+inline int32_t TestOperation(_Ty p_value)
 {
 	throw exception::BadCallException("Type cannot be tested.");
 }
@@ -40,10 +40,10 @@ inline int32_t TestOperation(double p_rValue)
 	return static_cast<int32_t>(p_rValue != 0.0);
 }
 
-template<typename T>
-inline int32_t Test(T p_value)
+template<typename _Ty>
+inline int32_t Test(_Ty p_value)
 {
-	return TestOperation(static_cast<typename utility::NativeTypeAdapter<T, std::is_integral<T>::value, sizeof(T)>::type>(p_value));
+	return TestOperation(static_cast<typename utility::NativeTypeAdapter<_Ty, std::is_integral<_Ty>::value, sizeof(_Ty)>::type>(p_value));
 }
 
 template<typename _LEFT, typename _RIGHT>
@@ -88,8 +88,8 @@ struct TestOperationChooser<false>
 	}
 };
 
-template<typename T>
-using test_operation_chooser = TestOperationChooser<std::is_arithmetic<T>::value>;
+template<typename _Ty>
+using test_operation_chooser = TestOperationChooser<std::is_arithmetic<_Ty>::value>;
 
 }
 }

@@ -128,62 +128,62 @@ template<typename _LEFT, typename _RIGHT>
 using operation_type_chooser = OperationTypeChooser<std::is_integral<_LEFT>::value && std::is_integral<_RIGHT>::value>;
 
 
-template<typename T, bool _ALLOW_ASSIGN, bool _INTEGRAL_REFERENCE>
+template<typename _Ty, bool _ALLOW_ASSIGN, bool _INTEGRAL_REFERENCE>
 struct OperationChooser
 {
 	template<typename _RIGHT>
-	using type = typename utility::NativeOperationResult<T, _RIGHT>::type;
+	using type = typename utility::NativeOperationResult<_Ty, _RIGHT>::type;
 
 	template<typename _RIGHT>
-	inline static type<_RIGHT> OperationResult(T p_left, uint32_t p_unOperator, _RIGHT p_right)
+	inline static type<_RIGHT> OperationResult(_Ty p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		return operation_type_chooser<T, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator);
+		return operation_type_chooser<_Ty, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator);
 	}
 	template<typename _RIGHT>
-	inline static void Operation(T & p_left, uint32_t p_unOperator, _RIGHT p_right)
+	inline static void Operation(_Ty & p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
-		p_left = static_cast<T>(operation_type_chooser<T, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator));
-	}
-};
-
-template<typename T>
-struct OperationChooser<T, false, true>
-{
-	template<typename _RIGHT>
-	using type = typename utility::NativeOperationResult<T, _RIGHT>::type;
-
-	template<typename _RIGHT>
-	inline static type<_RIGHT> OperationResult(T p_left, uint32_t p_unOperator, _RIGHT p_right)
-	{
-		return operation_type_chooser<T, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator);
-	}
-	template<typename _RIGHT>
-	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right)
-	{
-		operation_type_chooser<T, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
+		p_left = static_cast<_Ty>(operation_type_chooser<_Ty, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator));
 	}
 };
 
-template<typename T, bool _ALLOW_ASSIGN>
-struct OperationChooser<T, _ALLOW_ASSIGN, false>
+template<typename _Ty>
+struct OperationChooser<_Ty, false, true>
 {
 	template<typename _RIGHT>
-	using type = typename utility::NativeOperationResult<T, _RIGHT>::type;
+	using type = typename utility::NativeOperationResult<_Ty, _RIGHT>::type;
 
 	template<typename _RIGHT>
-	inline static type<_RIGHT> OperationResult(T p_left, uint32_t p_unOperator, _RIGHT p_right)
+	inline static type<_RIGHT> OperationResult(_Ty p_left, uint32_t p_unOperator, _RIGHT p_right)
+	{
+		return operation_type_chooser<_Ty, _RIGHT>::Operation<true>(p_left, p_right, p_unOperator);
+	}
+	template<typename _RIGHT>
+	inline static void Operation(_Ty p_left, uint32_t p_unOperator, _RIGHT p_right)
+	{
+		operation_type_chooser<_Ty, _RIGHT>::Operation<false>(p_left, p_right, p_unOperator);
+	}
+};
+
+template<typename _Ty, bool _ALLOW_ASSIGN>
+struct OperationChooser<_Ty, _ALLOW_ASSIGN, false>
+{
+	template<typename _RIGHT>
+	using type = typename utility::NativeOperationResult<_Ty, _RIGHT>::type;
+
+	template<typename _RIGHT>
+	inline static type<_RIGHT> OperationResult(_Ty p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Should not have happened.");
 	}
 	template<typename _RIGHT>
-	inline static void Operation(T p_left, uint32_t p_unOperator, _RIGHT p_right)
+	inline static void Operation(_Ty p_left, uint32_t p_unOperator, _RIGHT p_right)
 	{
 		throw BIA_IMPLEMENTATION_EXCEPTION("Should not have happened.");
 	}
 };
 
-template<typename T, bool _ALLOW_ASSIGN = utility::Negation<std::is_const<T>::value>::value>
-using operation_chooser = OperationChooser<T, _ALLOW_ASSIGN, std::is_arithmetic<T>::value>;
+template<typename _Ty, bool _ALLOW_ASSIGN = utility::Negation<std::is_const<_Ty>::value>::value>
+using operation_chooser = OperationChooser<_Ty, _ALLOW_ASSIGN, std::is_arithmetic<_Ty>::value>;
 
 }
 }

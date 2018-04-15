@@ -12,7 +12,7 @@ namespace bia
 namespace machine
 {
 
-template<typename T, size_t _ELEMENT_SIZE>
+template<typename _Ty, size_t _ELEMENT_SIZE>
 class BiaTemporaryStorage
 {
 public:
@@ -49,7 +49,7 @@ public:
 	{
 		for (auto i = p_unLowerIndex; i < m_unUpperIndex; ++i)
 		{
-			auto pObject = static_cast<T*>(m_vpucStorage[i / m_unElementCount].get() + i % m_unElementCount * _ELEMENT_SIZE);
+			auto pObject = static_cast<_Ty*>(m_vpucStorage[i / m_unElementCount].get() + i % m_unElementCount * _ELEMENT_SIZE);
 
 			//Destruct and set it to zero
 			pObject->~T();
@@ -68,7 +68,7 @@ public:
 	 *
 	 * @return	The pointer.
 	*/
-	inline T * GetSpace(uint32_t p_unIndex)
+	inline _Ty * GetSpace(uint32_t p_unIndex)
 	{
 		//Add row
 		if (!(p_unIndex % m_unElementCount))
@@ -77,7 +77,7 @@ public:
 		if (p_unIndex + 1> m_unUpperIndex)
 			m_unUpperIndex = p_unIndex + 1;
 
-		return new(m_vpucStorage[p_unIndex / m_unElementCount].get() + p_unIndex % m_unElementCount * _ELEMENT_SIZE) T();
+		return new(m_vpucStorage[p_unIndex / m_unElementCount].get() + p_unIndex % m_unElementCount * _ELEMENT_SIZE) _Ty();
 	}
 
 private:

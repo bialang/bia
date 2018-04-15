@@ -34,10 +34,10 @@ public:
 	 * @param	p_stName	Defines the name.
 	 * @param	p_args	Defines the args that should be passed to the instance.
 	*/
-	template<typename T, typename... _ARGS>
-	inline typename std::enable_if<std::is_base_of<BiaMember, T>::value>::type SetMember(const std::string & p_stName, _ARGS &&... p_args)
+	template<typename _Ty, typename... _ARGS>
+	inline typename std::enable_if<std::is_base_of<BiaMember, _Ty>::value>::type SetMember(const std::string & p_stName, _ARGS &&... p_args)
 	{
-		m_pMemberHolder->SetMember<T>(p_stName, std::forward<_ARGS>(p_args)...);
+		m_pMemberHolder->SetMember<_Ty>(p_stName, std::forward<_ARGS>(p_args)...);
 	}
 	/**
 	 * @see	BiaMember::Undefine().

@@ -41,7 +41,7 @@ public:
 	 * @param	p_stName	Defines the name of the member.
 	 * @param	p_memberAllocation	Defines the member.
 	*/
-	template<typename T, typename... _ARGS>
+	template<typename _Ty, typename... _ARGS>
 	inline void SetMember(const std::string & p_stName, _ARGS &&... p_args)
 	{
 		auto allocation = m_pAllocator->ConstructBlocks<BiaMember, T>(1, machine::BiaAllocator::MEMORY_TYPE::NORMAL, std::forward<_ARGS>(p_args)...);

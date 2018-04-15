@@ -34,10 +34,10 @@ public:
 	 * @since	3.60.122.690
 	 * @date	13-Mar-18
 	*/
-	template<typename T, typename... _ARGS>
+	template<typename _Ty, typename... _ARGS>
 	inline void SetConstructor()
 	{
-		m_pInitiator.reset(new force::BiaInitiatorDeriviate<T, _ARGS...>());
+		m_pInitiator.reset(new force::BiaInitiatorDeriviate<_Ty, _ARGS...>());
 	}
 	/**
 	 * Returns the initiator.
