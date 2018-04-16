@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "report_bundle.hpp"
+#include "input_stream.hpp"
 
 
 namespace bia
@@ -39,19 +40,17 @@ class interpreter_rule;
 struct token_param
 {
 	report_bundle * bundle;
-	interpreter_rule * rules;
+	const interpreter_rule * rules;
 	report::token_type token_id;
 };
 
 struct token_output
 {
-	size_t length;
-	size_t offset;
-	size_t padding;
+	report content;
 	report::custom_type custom;
 };
 
-typedef ACTION(*bia_token_function)(const char *, size_t, token_param, token_output &);
+typedef ACTION(*bia_token_function)(stream::input_stream&, token_param, token_output&);
 
 class interpreter_rule
 {
@@ -75,10 +74,14 @@ public:
 	/**
 	 * Constructor.
 	 *
+	 * @since	3.64.127.716
+	 * @date	7-Apr-18
+	 *
+	 * @param	_id	Defines the id of this rule.
 	 * @param	_flags	Defines the flags.
 	 * @param	[in]	_tokens	Defines the tokens for this rule.
 	*/
-	interpreter_rule(uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
+	interpreter_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
 	/**
 	 * Runs this rule.
 	 *
@@ -91,13 +94,19 @@ public:
 	 *
 	 * @return	The amount of bytes processed of the buffer.
 	*/
-	size_t run_rule(const char * _buffer, size_t _size, token_param _params) const;
+	void run_rule(stream::input_stream & _input, token_param _token_param) const;
+	report::rule_type get_id() const;
 
 private:
+	/**	Defines the id of this rule.	*/
+	report::rule_type _id;
 	/**	Defines the flags set for this rule.	*/
 	uint32_t _flags;
 	/**	Holds all tokens for this rule.	*/
 	std::vector<bia_token_function> _tokens;
+
+
+	void begin_wrap_up(token_param _token_param) const;
 };
 
 }

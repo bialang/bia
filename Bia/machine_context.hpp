@@ -30,10 +30,10 @@ public:
 	/**
 	 * Constructor.
 	 *
-	 * @param	p_pAllocator	Defines the memory allocator.
+	 * @param	_allocator	Defines the memory allocator.
 	*/
-	BiaMachineContext(std::shared_ptr<BiaAllocator> p_pAllocator);
-	~BiaMachineContext();
+	machine_context(std::shared_ptr<allocator> _allocator);
+	~machine_context();
 	//void AddScript(std::string p_stScriptName, std::istream & p_script);
 	/**
 	 * Sets the script under the given name.
@@ -223,9 +223,9 @@ public:
 	 * @param	[in,out]	p_ppAddresses	Defines the addresses that should be freed.
 	*/
 	void DestructTemporaryAddresses(int8_t p_cCount, framework::BiaMember ** p_ppAddresses);
-	const char * NameAddressOf(const char * p_pcName, size_t p_iSize);
-	const char * FormatAddressOf(const char * p_pcName, size_t p_iSize);
-	const char * StringAddressOf(std::string p_stString);
+	const char * name_address(const char * p_pcName, size_t p_iSize);
+	const char * format_address(const char * p_pcName, size_t p_iSize);
+	const char * string_address(std::string p_stString);
 	/**
 	 * Returns the address of the member.
 	 *
@@ -236,7 +236,7 @@ public:
 	 *
 	 * @return	The address.
 	*/
-	framework::BiaMember * AddressOf(StringKey p_name);
+	framework::member * member_address(StringKey p_name);
 	/**
 	 * Compiles the script and returns the executable machine code.
 	 *
@@ -248,7 +248,7 @@ public:
 	 *
 	 * @return	The executable machine code.
 	*/
-	BiaMachineCode CompileScript(const void * p_pScript, size_t p_iSize);
+	machine_code compile_script(const void * p_pScript, size_t p_iSize);
 };
 
 }

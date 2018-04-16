@@ -1,5 +1,6 @@
 #include "syntax.hpp"
 #include "interpreter_token.hpp"
+#include "interpreter_ids.hpp"
 #include "interpreter_strings.hpp"
 
 
@@ -21,13 +22,13 @@ interpreter syntax::init_rules()
 	interpreter _interpreter;
 
 	// Root
-	_interpreter.set_rule(BGR_ROOT, interpreter_rule(interpreter_rule::F_OR, {
+	_interpreter.set_rule(interpreter_rule(BGR_ROOT, interpreter_rule::F_OR, {
 		token_rule<BGR_ROOT_HELPER_1, FILLER_TOKEN>,
 		token_rule<BGR_ROOT_HELPER_0, FILLER_TOKEN> 
 		}));
 
 	// Root helper 0
-	_interpreter.set_rule(BGR_ROOT_HELPER_0, interpreter_rule(interpreter_rule::F_WRAP_UP, {
+	_interpreter.set_rule(interpreter_rule(BGR_ROOT_HELPER_0, interpreter_rule::F_WRAP_UP, {
 		token_keyword<operator_scope_open, FILLER_TOKEN>,
 		token_rule<BGR_ROOT_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN>,
 		token_keyword<operator_scope_close, FILLER_TOKEN>
@@ -125,7 +126,7 @@ interpreter syntax::init_rules()
 	// Value raw (must be wrapped because of math factor)
 	_interpreter.set_rule(BGR_VALUE_RAW, interpreter_rule(interpreter_rule::F_OR | interpreter_rule::F_WRAP_UP, {
 		interpreter_token::number, // BV_NUMBER
-		token_keyword<keyword_true, NONE, BV_TRUE>,
+		interpreter_token::keyword<keyword_true, NONE, BV_TRUE>,
 		token_keyword<keyword_false, NONE, BV_FALSE>,
 		token_rule<BGR_MEMBER, FILLER_TOKEN, 0, BV_MEMBER>
 		}));

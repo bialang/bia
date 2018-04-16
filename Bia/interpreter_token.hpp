@@ -7,6 +7,7 @@
 
 #include "interpreter_rule.hpp"
 #include "interpreter_ids.hpp"
+#include "input_stream.hpp"
 #include "utf8.h"
 
 

@@ -1,4 +1,7 @@
 #include "interpreter_rule.hpp"
+#include "exception.hpp"
+
+#include <memory>
 
 
 namespace bia
@@ -8,217 +11,132 @@ namespace grammar
 
 interpreter_rule::interpreter_rule() noexcept
 {
+	_id = 0;
 	_flags = F_NONE;
 }
 
-interpreter_rule::interpreter_rule(uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept : _tokens(std::move(_tokens))
+interpreter_rule::interpreter_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept : _tokens(std::move(_tokens))
 {
+	this->_id = _id;
 	this->_flags = _flags;
 }
 
-size_t interpreter_rule::run_rule(const char * _buffer, size_t _size, token_param _params) const
+void interpreter_rule::run_rule(stream::input_stream & _input, token_param _token_param) const
 {
-	report::token_type _cursor = 0;
-	const auto _size_to_begin = _params.bundle->size();
-	auto _rule_id = static_cast<report::rule_type>(this - _params.rules);
+	const auto _begin_size = _token_param.bundle->size();
+	const auto _begin_mark = _input.mark();
+	auto _wrapper_function = [&](void*) {
+		auto _added = _token_param.bundle->size() - _begin_size;
 
-	const auto iSizeToBegin = p_params.pBundle->Size();
-	Report::token_id iCursor = 0;
-	auto iRuleId = static_cast<Report::rule_id>(this - p_params.pRules);
-	auto WrapUp = [&] {
-		auto unTokenAdded = p_params.pBundle->Size() - iSizeToBegin;
+		if (_flags & F_WRAP_UP) {
+			// Wrap up
+			if (_added > 1) {
+				// Update begin
+				auto _begin = _token_param.bundle->begin() + _begin_size;
 
-		if (m_fFlags & F_WRAP_UP)
-		{
-			if (unTokenAdded > 1)
-			{
-				//Edit beginning token
-				auto pBegin = p_params.pBundle->Begin() + iSizeToBegin;
+				_begin->content.children.begin = _begin;
+				_begin->content.children.end = _token_param.bundle->end();
 
-				pBegin->content.children = { pBegin, p_params.pBundle->End() };
+				// Add end
+				auto _end = *_begin;
 
-				//End
-				auto end = *pBegin;
+				_end.type = report::TYPE::END;
 
-				end.type = Report::TYPE::END;
+				_token_param.bundle->add(_end);
+			} // Don't report empty children
+			else if (_flags & F_DONT_REPORT_EMPTY) {
+				if (_added) {
+					_token_param.bundle->rollback(_begin_size);
+				}
+			} // Emtpy child
+			else {
+				auto _begin = _token_param.bundle->begin() + _begin_size;
 
-				p_params.pBundle->AddReport(std::move(end));
-			}
-			//Dont report empty child
-			else if (m_fFlags & F_DONT_REPORT_EMPTY)
-			{
-				if (unTokenAdded)
-					p_params.pBundle->Reset(iSizeToBegin);
-			}
-			//Empty child
-			else if (unTokenAdded == 1)
-			{
-				//Edit beginning token
-				auto pBegin = p_params.pBundle->Begin() + iSizeToBegin;
-
-				pBegin->content.children = { pBegin, pBegin };
-				pBegin->type = Report::TYPE::EMPTY_CHILD;
+				_begin->type = report::TYPE::EMPTY_CHILD;
+				_begin->content.children.begin = _begin;
+				_begin->content.children.end = _begin;
 			}
 		}
 	};
+	std::unique_ptr<void, decltype(_wrapper_function)> _auto_wrapper(nullptr, _wrapper_function);
+	
+	// Begin of wrap up
+	begin_wrap_up(_token_param);
 
-	// Wrap up
-	if (_flags & F_WRAP_UP)
-	{
+	// Match all tokens
+	for (size_t i = 0, cond = _tokens.size(); i < cond; ++i) {
+		// Set current id if for token
+		_token_param.token_id = i + 1;
+
+		do {
+			token_output _output{};
+
+			// Mark position in case of an error
+			auto _mark = _input.mark();
+
+			// Match token
+			switch (_tokens[i](_input, _token_param, _output)) {
+			case ACTION::REPORT:
+			{
+				_output.content.rule_id = _id;
+				_output.content.token_id = _token_param.token_id;
+
+				_token_param.bundle->add(_output.content);
+			}
+			case ACTION::DONT_REPORT:
+			{
+				// One match suffices
+				if (_flags & F_OR) {
+					return;
+				}
+
+				// Move on
+				break;
+			}
+			case ACTION::REPORT_AND_LOOP:
+			{
+				_output.content.rule_id = _id;
+				_output.content.token_id = _token_param.token_id;
+
+				_token_param.bundle->add(_output.content);
+			}
+			case ACTION::DONT_REPORT_AND_LOOP:
+				continue;
+			case ACTION::ERROR:
+			{
+				// Can't match rest of the rule
+				_token_param.bundle->rollback(_begin_size);
+
+				// OK, move on
+				if (_flags & F_OR) {
+					_input.reset(_mark);
+
+					break;
+				}
+
+				_input.reset(_begin_mark);
+
+				return;
+			}
+			default:
+				throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
+			}
+
+			break;
+		} while (true);
+	}
+}
+
+void interpreter_rule::begin_wrap_up(token_param _token_param) const
+{
+	if (_flags & F_WRAP_UP) {
 		report begin{};
 
 		begin.type = report::TYPE::BEGIN;
-		begin.rule_id = iRuleId;
-		begin.token_id = _params.token_id;
+		begin.rule_id = _id;
+		begin.token_id = _token_param.token_id;
 
-		_params.bundle->add_report(std::move(begin));
-	}
-
-	//Or loop
-	if (m_fFlags & F_OR)
-	{
-		size_t iAccount = 0;
-		bool bLoop;
-
-		while (iCursor < m_vTokens.size())
-		{
-			do
-			{
-				token_output output{};
-
-				p_params.iTokenId = iCursor + 1;
-				
-				switch (m_vTokens.begin()[iCursor++](p_pcBuffer, p_iSize, p_params, output))
-				{
-				case ACTION::REPORT:
-				{
-					Report token{};
-
-					token.type = Report::TYPE::TOKEN;
-					token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
-					token.unRuleId = iRuleId;
-					token.unTokenId = iCursor;
-					token.unCustomParameter = output.iCustom;
-
-					p_params.pBundle->AddReport(std::move(token));
-				}
-				case ACTION::DONT_REPORT:
-					WrapUp();
-
-					return output.iTokenSize + output.iBufferOffset + output.iBufferPadding + iAccount;
-				case ACTION::REPORT_AND_LOOP:
-				{
-					Report token{};
-
-					token.type = Report::TYPE::TOKEN;
-					token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
-					token.unRuleId = iRuleId;
-					token.unTokenId = iCursor;
-					token.unCustomParameter = output.iCustom;
-
-					p_params.pBundle->AddReport(std::move(token));
-				}
-				case ACTION::DONT_REPORT_AND_LOOP:
-				{
-					auto iOffset = output.iTokenSize + output.iBufferOffset + output.iBufferPadding;
-
-					iAccount += iOffset;
-					p_pcBuffer += iOffset;
-					p_iSize -= iOffset;
-
-					bLoop = true;
-					--iCursor;
-
-					continue;
-				}
-				case ACTION::ERROR:
-					break;
-				}
-
-				bLoop = false;
-			} while (bLoop);
-		}
-
-		//Clear errors
-		p_params.pBundle->Reset(iSizeToBegin);
-
-		return 0;
-	}
-	//And loop
-	else
-	{
-		const auto ciSize = p_iSize;
-		bool bLoop;
-
-		while (iCursor < m_vTokens.size())
-		{
-			do
-			{
-				token_output output{};
-
-				p_params.iTokenId = iCursor + 1;
-
-				switch (m_vTokens.begin()[iCursor++](p_pcBuffer, p_iSize, p_params, output))
-				{
-				case ACTION::REPORT:
-				{
-					Report token{};
-
-					token.type = Report::TYPE::TOKEN;
-					token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
-					token.unRuleId = iRuleId;
-					token.unTokenId = iCursor;
-					token.unCustomParameter = output.iCustom;
-
-					p_params.pBundle->AddReport(std::move(token));
-				}
-				case ACTION::DONT_REPORT:
-				{
-					auto iOffset = output.iTokenSize + output.iBufferOffset + output.iBufferPadding;
-
-					p_pcBuffer += iOffset;
-					p_iSize -= iOffset;
-
-					break;
-				}
-				case ACTION::REPORT_AND_LOOP:
-				{
-					Report token{};
-
-					token.type = Report::TYPE::TOKEN;
-					token.content.token = { p_pcBuffer + output.iBufferOffset, output.iTokenSize };
-					token.unRuleId = iRuleId;
-					token.unTokenId = iCursor;
-					token.unCustomParameter = output.iCustom;
-
-					p_params.pBundle->AddReport(std::move(token));
-				}
-				case ACTION::DONT_REPORT_AND_LOOP:
-				{
-					auto iOffset = output.iTokenSize + output.iBufferOffset + output.iBufferPadding;
-
-					p_pcBuffer += iOffset;
-					p_iSize -= iOffset;
-
-					bLoop = true;
-					--iCursor;
-
-					continue;
-				}
-				case ACTION::ERROR:
-					//Clear errors
-					p_params.pBundle->Reset(iSizeToBegin);
-
-					return 0;
-				}
-
-				bLoop = false;
-			} while (bLoop);
-		}
-
-		WrapUp();
-
-		return ciSize - p_iSize;
+		_token_param.bundle->add(begin);
 	}
 }
 

@@ -1,5 +1,5 @@
 #include "interpreter.hpp"
-#include "interpreter_tokens.hpp"
+#include "interpreter_token.hpp"
 #include "exception.hpp"
 
 
@@ -8,17 +8,46 @@ namespace bia
 namespace grammar
 {
 
-void interpreter::set_rule(report::rule_type _rule_id, interpreter_rule && _rule)
+void interpreter::set_rule(interpreter_rule && _rule)
 {
-	if (_rule_id < _Rule_count) {
+	auto _rule_id = _rule.get_id();
+
+	if (_rule_id < BGR_RULE_COUNT) {
 		_rules[_rule_id] = std::move(_rule);
 	} else {
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid rule id.");
 	}
 }
 
-size_t interpreter::interpret(const char * _buffer, size_t _length, report_receiver & _receiver) const
+void interpreter::interpret(stream::input_stream & _input, report_receiver & _receiver) const
 {
+	report_bundle _bundle;
+
+	while (_input.available()) {
+		_bundle.reset();
+
+		// Remove all leading whitespaces
+		{
+			token_output _output{};
+
+			//
+		}
+
+		// Mark input buffer start
+
+		// Run root
+		token_param _param;
+
+		_param.bundle = &_bundle;
+		_param.rules = _rules;
+		_param.token_id = 0;
+
+		_rules[BGR_ROOT].run_rule(_input, _param);
+
+		// Report
+		_receiver.report(_bundle.begin(), _bundle.end());
+	}
+	/*
 	const auto _start_length = _length;
 	report_bundle _bundle;
 
@@ -47,7 +76,7 @@ size_t interpreter::interpret(const char * _buffer, size_t _length, report_recei
 		}
 	}
 
-	return _start_length - _length;
+	return _start_length - _length;*/
 }
 
 }

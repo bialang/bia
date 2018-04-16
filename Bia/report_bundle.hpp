@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <cstddef>
 
+#include "member.hpp"
+#include "operator.hpp"
+
 
 namespace bia
 {
@@ -30,7 +33,12 @@ struct report
 
 	enum class TYPE : uint32_t
 	{
-		TOKEN,
+		STRING,
+		INT_VALUE,
+		FLOAT_VALUE,
+		DOUBLE_VALUE,
+		MEMBER,
+		OPERATOR_CODE,
 		BEGIN,
 		END,
 		EMPTY_CHILD
@@ -42,12 +50,13 @@ struct report
 	uint32_t token_id : token_bits;
 	union
 	{
-		struct
-		{
-			const char * string;
-			size_t length;
-		} token;
+		const char * string;
+		int64_t intValue;
+		float floatValue;
+		double doubleValue;
 		report_range children;
+		framework::member * member;
+		framework::OPERATOR operatorCode;
 	} content;
 };
 
@@ -70,20 +79,17 @@ public:
 	 * @since	2.39.82.486
 	 * @date	16-Sep-17
 	 *
-	 * @param	p_report	Defines the report.
+	 * @param	_report	Defines the report.
+	 *
+	 * @throws	
 	*/
-	inline void AddReport(report p_report)
+	void add(report _report)
 	{
-		if (_size < SIZE)
-		{
-			_report_array[_size++] = std::move(p_report);
-
-			return;
+		if (_size >= _max_size) {
+			throw "";
 		}
-		else if (_size == SIZE)
-			_report_vector.assign(_report_array, _report_array + _size++);
 
-		_report_vector.push_back(std::move(p_report));
+		_reports[_size++] = _report;
 	}
 	/**
 	 * Clears the bundle completly.
@@ -91,25 +97,21 @@ public:
 	 * @since	2.39.82.486
 	 * @date	16-Sep-17
 	*/
-	void clear() noexcept
+	void reset() noexcept
 	{
 		_size = 0;
-		_report_vector.clear();
 	}
 	/**
-	 * Resets the bundle to a previous state.
+	 * Rolls the bundle back to the old size.
 	 *
 	 * @since	2.39.82.486
 	 * @date	16-Sep-17
 	 *
-	 * @param	p_unOldState	Defines the previous state.
+	 * @param	_old_size	Defines the old size.
 	*/
-	inline void Reset(uint32_t p_unOldState)
+	void rollback(uint32_t _old_size) noexcept
 	{
-		if (_size > SIZE)
-			_report_vector.erase(_report_vector.begin() + p_unOldState, _report_vector.end());
-		else
-			_size = p_unOldState;
+		_size = _old_size;
 	}
 	/**
 	 * Returns the current size of the bundle.
@@ -121,7 +123,7 @@ public:
 	*/
 	uint32_t size() const noexcept
 	{
-		return _size > SIZE ? _report_vector.size() : _size;
+		return _size;
 	}
 	/**
 	 * Returns a pointer to the beginning.
@@ -133,7 +135,7 @@ public:
 	*/
 	report * begin() noexcept
 	{
-		return _size > SIZE ? &*_report_vector.begin() : _report_array;
+		return _reports;
 	}
 	/**
 	 * Returns a pointer to the end.
@@ -145,17 +147,16 @@ public:
 	*/
 	report * end() noexcept
 	{
-		return _size > SIZE ? &*_report_vector.begin() : _report_array + _size;
+		return _reports + _size;
 	}
 
 private:
-	constexpr static uint32_t SIZE = 512;
+	constexpr static uint32_t _max_size = 512;
 
+	/**	Defines the amount of the currently held reports.	*/
 	uint32_t _size;
-
-	report _report_array[SIZE];
-
-	std::vector<report> _report_vector;	/**	Stores the report when the array is full.	*/
+	/**	Hols all reports.	*/
+	report _reports[_max_size];
 };
 
 class report_receiver
