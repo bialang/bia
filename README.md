@@ -7,16 +7,16 @@ Embedded C++ Scripting Language
 
 ```
 //Create a context with the default memory allocator
-std::shared_ptr<bia::machine::BiaAllocator> pAllocator(new bia::machine::BiaAllocator());
-bia::machine::BiaMachineContext context(pAllocator);
+std::shared_ptr<bia::machine::allocator> _allocator(new bia::machine::allocator());
+bia::machine::machine_context _context(_allocator);
 
 //Add a lambda function
-context.SetLambda("hello_world", [] {
+_context.set_lambda("hello_world", [] {
   puts("Hello, World! - C++");
 });
 
 //Bia script
-std::string stTestCode = R"(
+std::string _code = R"(
 
 # Print 'Hello, World' to the console
 print "Hello, World! - Bia"
@@ -27,7 +27,7 @@ hello_world()
 )";
 
 //Execute
-context.Execute(stTestCode.c_str(), stTestCode.length());
+_context.execute(_code.c_str(), _code.length());
 ```
 
 # Language Features
@@ -40,7 +40,7 @@ context.Execute(stTestCode.c_str(), stTestCode.length());
 - Global variables `global`: `global i = 0`
 
   Global variables can be access by any script in the same context at any time.
-- Instantiation: `global obj = new MyClass()`
+- Instantiation: `global obj = new my_class()`
 - The types of the variables will be deducted from the value
 - Once a variable has a tpye it cannot be changed, unless it is redeclared:
 
@@ -114,25 +114,25 @@ else if some_value == 3 {
 ```
 
 # The Simple C++ Interface
-- Adding a static function to your `context`:
+- Adding a static function to your `_context`:
 
 ```
 //A static C++ function
-int square(int base)
+int square(int _base)
 {
-  return a * a;
+  return _base * _base;
 }
 
 //Adding the function
-context.SetFunction("square", &square);
+_context.set_function("square", &square);
 ```
 
 - Adding a lambda function:
 
 ```
 //Adding the function
-context.SetLambda("int_sqrt", [] (double v) {
-  return static_cast<int>(sqrt(v));
+_context.set_lambda("int_sqrt", [] (double _value) {
+  return static_cast<int>(sqrt(_value));
 });
 ```
 
@@ -140,17 +140,17 @@ context.SetLambda("int_sqrt", [] (double v) {
 
 ```
 //A C++ class
-class MyClass
+class my_class
 {
 public:
-  MyClass(int someValue)
+  my_class(int _value)
   {
-    printf("your value: %i\n", someValue);
+    printf("your value: %i\n", _value);
   }
 };
 
 //Adding the class
-context.SetTemplate<MyClass>("my_class")->SetConstructor<int>();
+_context.set_class<my_class>("my_class")->set_constructor<int>();
 ```
 
 # How It Works
