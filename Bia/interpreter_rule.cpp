@@ -28,7 +28,7 @@ void interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 	auto _wrapper_function = [&](void*) {
 		auto _added = _token_param.bundle->size() - _begin_size;
 
-		if (_flags & F_WRAP_UP) {
+		if (_flags & F_WRAP_UP && _added) {
 			// Wrap up
 			if (_added > 1) {
 				// Update begin
@@ -45,9 +45,7 @@ void interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 				_token_param.bundle->add(_end);
 			} // Don't report empty children
 			else if (_flags & F_DONT_REPORT_EMPTY) {
-				if (_added) {
-					_token_param.bundle->rollback(_begin_size);
-				}
+				_token_param.bundle->rollback(_begin_size);
 			} // Emtpy child
 			else {
 				auto _begin = _token_param.bundle->begin() + _begin_size;

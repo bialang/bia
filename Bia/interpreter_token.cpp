@@ -31,7 +31,7 @@ int64_t interpreter_token::parse_integer(const char * _number, size_t _length, r
 	return _result;
 }
 
-ACTION interpreter_token::number(const char * _buffer, size_t _length, token_param _params, token_output & _output) noexcept
+ACTION interpreter_token::number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -50,6 +50,16 @@ ACTION interpreter_token::number(const char * _buffer, size_t _length, token_par
 		_group = _results[2];
 
 		if (_group.length()) {
+			// Float
+			if (_results[2].length()) {
+				_output.content.type = report::TYPE::FLOAT_VALUE;
+				_output.content.content.floatValue = parse_floating_point<float>(nullptr, 0, _output.custom);
+			} // Double
+			else {
+				_output.content.type = report::TYPE::DOUBLE_VALUE;
+				_output.content.content.doubleValue = parse_floating_point<double>(nullptr, 0, _output.custom);
+			}
+
 			_output.length = _group.length();
 			_output.custom |= (_output.padding = _results[2].length()) ? grammar::NI_FLOAT : grammar::NI_DOUBLE;
 
@@ -103,12 +113,32 @@ ACTION interpreter_token::number(const char * _buffer, size_t _length, token_par
 	return error;
 }
 
-ACTION interpreter_token::comment(const char * _buffer, size_t _length, token_param _params, token_output & _output) noexcept
+ACTION interpreter_token::comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
 
 	// Check if this is a comment
+	auto _buffer = _input.get_buffer();
+	stream::input_stream::cursor_type _read = 0;
+
+	if (_buffer.second >= 1 && *_buffer.first == '#') {
+		++_read;
+
+		// Ignore every character until a line break
+		while (true) {
+			if (_read == _buffer.second) {
+				// There is still more
+				if (_input.has_next()) {
+					_input.skip(_read);
+
+					_buffer = _input.get_buffer();
+					_read = 0;
+				}
+			}
+		}
+	}
+
 	if (_length >= 1 && *_buffer++ == '#') {
 		++_output.length;
 

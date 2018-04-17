@@ -545,7 +545,7 @@ public:
 	 *
 	 * @return	Defines the success code. See ::ACTION.
 	*/
-	static ACTION number(const char * _buffer, size_t _length, token_param _params, token_output & _output) noexcept;
+	static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
 	/**
 	 * Matches a single line comment token.
 	 *
@@ -559,7 +559,7 @@ public:
 	 *
 	 * @return	Defines the success code. See ::ACTION.
 	*/
-	static ACTION comment(const char * _buffer, size_t _length, token_param _params, token_output & _output) noexcept;
+	static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
 	/**
 	 * Matches a command end token.
 	 *
