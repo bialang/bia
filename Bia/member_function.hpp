@@ -16,9 +16,7 @@ template<typename _Class, typename _Return = void, typename... _Args>
 class member_function;
 
 /**
- * @brief A member function.
- *
- * A member function member.
+ * @brief A member function member.
  *
  * @tparam _Class The class of the function.
  * @tparam _Return The return type of the function.

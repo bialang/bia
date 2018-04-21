@@ -45,10 +45,13 @@ private:
 		STRING,
 		MEMBER,
 		TEMPORARY_MEMBER,
-		TEST_VALUE_REGISTER,	/**	Defines that the test _value is stored in the test register.	*/
-		TEST_VALUE_CONSTANT,	/**	Defines that the test _value is known at compile time.	*/
+		/** Defines that the test value is stored in the test register. */
+		TEST_VALUE_REGISTER,
+		/** Defines that the test value is known at compile time. */
+		TEST_VALUE_CONSTANT,
 		PARAMETER,
-		RESULT_REGISTER,	/**	Defines that the result is stored in the result register.	*/
+		/** Defines that the result is stored in the result register. */
+		RESULT_REGISTER,
 		NONE,
 	};
 

@@ -12,6 +12,11 @@ namespace framework
 namespace executable
 {
 
+/**
+ * @brief A function member interface.
+ *
+ * Functions have only basic functionality and can be executed.
+*/
 class function : public member
 {
 public:

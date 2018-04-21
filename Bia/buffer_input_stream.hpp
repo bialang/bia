@@ -29,7 +29,7 @@ public:
 	 * @param _buffer The input buffer.
 	 * @param _length The length of the buffer.
 	 *
-	 * @throws exception::arguemtn_error If either the buffer or the length is invalid.
+	 * @throws exception::argument_error If either the buffer or the length is invalid.
 	*/
 	buffer_input_stream(const std::shared_ptr<const void> & _buffer, size_t _length);
 	/**
@@ -41,7 +41,7 @@ public:
 	 * @param _buffer The input buffer.
 	 * @param _length The length of the buffer.
 	 *
-	 * @throws exception::arguemtn_error If either the buffer or the length is invalid.
+	 * @throws exception::argument_error If either the buffer or the length is invalid.
 	*/
 	buffer_input_stream(std::shared_ptr<const void> && _buffer, size_t _length);
 

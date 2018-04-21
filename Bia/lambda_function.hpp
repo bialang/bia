@@ -15,9 +15,7 @@ namespace executable
 {
 
 /**
- * @brief A lambda function.
- *
- * A lambda function member.
+ * @brief A lambda function member.
  *
  * @tparam _Lambda The lambda function.
 */

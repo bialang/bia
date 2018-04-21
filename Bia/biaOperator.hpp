@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-#include "biaConfig.hpp"
-#include "biaMember.hpp"
+#include "config.hpp"
+#include "member.hpp"
 
 
 namespace bia

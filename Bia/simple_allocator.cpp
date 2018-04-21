@@ -58,7 +58,7 @@ void simple_allocator::deallocate_blocks(universal_allocation _allocation, MEMOR
 void simple_allocator::change_protection(universal_allocation _allocation, int _protection)
 {
 #if defined(BIA_OS_WINDOWS)
-	//Set protections flags
+	// Set protections flags
 	DWORD _old = 0;
 	DWORD _new = 0;
 
@@ -107,7 +107,7 @@ simple_allocator::universal_allocation simple_allocator::allocate(size_t _size, 
 
 simple_allocator::universal_allocation simple_allocator::allocate_blocks(size_t _count, MEMORY_TYPE _type)
 {
-	return { allocate(_count * BLOCK_SIZE, _type).address, _count };
+	return { allocate(_count * block_size, _type).address, _count };
 }
 
 simple_allocator::universal_allocation simple_allocator::reserve_allocation(size_t _max_size, MEMORY_TYPE _type)

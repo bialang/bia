@@ -14,6 +14,12 @@ namespace framework
 namespace executable
 {
 
+/**
+ * @brief A static function member.
+ *
+ * @tparam _Return The return type of the function.
+ * @tparam _Args The arguments of the function.
+*/
 template<typename _Return, typename... _Args>
 class static_function final : public function
 {

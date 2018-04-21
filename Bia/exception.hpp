@@ -74,7 +74,7 @@ public:
  *
  * Every runtime exception of Bia will inherit this.
  *
- * @see @ref logical_error
+ * @see @ref logic_error
 */
 class runtime_error : public bia_error, public std::runtime_error
 {
