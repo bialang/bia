@@ -1,8 +1,6 @@
 #pragma once
 
-#include <utility>
 #include <cstddef>
-#include <cstdint>
 
 #include "config.hpp"
 
@@ -10,6 +8,8 @@
 namespace bia
 {
 namespace machine
+{
+namespace memory
 {
 
 class allocator
@@ -40,9 +40,9 @@ public:
 
 
 	virtual ~allocator() = default;
-	virtual void commit_allocation(universal_allocation _allocation, size_t _size);
-	virtual void deallocate(universal_allocation _allocation, MEMORY_TYPE _type);
-	virtual void deallocate_blocks(universal_allocation _allocation, MEMORY_TYPE _type);
+	virtual void commit_allocation(universal_allocation _allocation, size_t _size) = 0;
+	virtual void deallocate(universal_allocation _allocation, MEMORY_TYPE _type) = 0;
+	virtual void deallocate_blocks(universal_allocation _allocation, MEMORY_TYPE _type) = 0;
 	template<typename _Ty>
 	void destroy_blocks(allocation<_Ty> _allocation, MEMORY_TYPE _type)
 	{
@@ -55,10 +55,10 @@ public:
 
 		deallocate_blocks(cast_allocation<void>(_allocation), _type);
 	}
-	virtual void change_protection(universal_allocation _allocation, int _protection);
-	virtual universal_allocation allocate(size_t _size, MEMORY_TYPE _type);
-	virtual universal_allocation allocate_blocks(size_t _count, MEMORY_TYPE _type);
-	virtual universal_allocation reserve_allocation(size_t _max_size, MEMORY_TYPE _type);
+	virtual void change_protection(universal_allocation _allocation, int _protection) = 0;
+	virtual universal_allocation allocate(size_t _size, MEMORY_TYPE _type) = 0;
+	virtual universal_allocation allocate_blocks(size_t _count, MEMORY_TYPE _type) = 0;
+	virtual universal_allocation reserve_allocation(size_t _max_size, MEMORY_TYPE _type) = 0;
 	/**
 	 * Casts an allocation to an universal_allocation
 	 *
@@ -78,7 +78,7 @@ public:
 	allocation<_Base> construct_blocks(size_t _count, MEMORY_TYPE _type, _Args&&... _args)
 	{
 		static_assert(sizeof(_Deriviate) <= BLOCK_SIZE, "Type exceeds block size.");
-		
+
 		auto allocation = allocate_blocks(_count, _type);
 		auto ptr = static_cast<int8_t*>(allocation.address);
 
@@ -91,5 +91,6 @@ public:
 	}
 };
 
+}
 }
 }

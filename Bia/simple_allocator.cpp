@@ -1,4 +1,4 @@
-#include "allocator.hpp"
+#include "simple_allocator.hpp"
 
 #if defined(BIA_OS_WINDOWS)
 #include <windows.h>
@@ -13,15 +13,16 @@ namespace bia
 {
 namespace machine
 {
+namespace memory
+{
 
-void allocator::commit_allocation(universal_allocation _allocation, size_t _size)
+void simple_allocator::commit_allocation(universal_allocation _allocation, size_t _size)
 {
 }
 
-void allocator::deallocate(universal_allocation _allocation, MEMORY_TYPE _type)
+void simple_allocator::deallocate(universal_allocation _allocation, MEMORY_TYPE _type)
 {
-	switch (_type)
-	{
+	switch (_type) {
 	case MEMORY_TYPE::NORMAL:
 		free(_allocation.address);
 
@@ -36,10 +37,9 @@ void allocator::deallocate(universal_allocation _allocation, MEMORY_TYPE _type)
 	}
 }
 
-void allocator::deallocate_blocks(universal_allocation _allocation, MEMORY_TYPE _type)
+void simple_allocator::deallocate_blocks(universal_allocation _allocation, MEMORY_TYPE _type)
 {
-	switch (_type)
-	{
+	switch (_type) {
 	case MEMORY_TYPE::NORMAL:
 		free(_allocation.address);
 
@@ -55,7 +55,7 @@ void allocator::deallocate_blocks(universal_allocation _allocation, MEMORY_TYPE 
 	}
 }
 
-void allocator::change_protection(universal_allocation _allocation, int _protection)
+void simple_allocator::change_protection(universal_allocation _allocation, int _protection)
 {
 #if defined(BIA_OS_WINDOWS)
 	//Set protections flags
@@ -82,10 +82,9 @@ void allocator::change_protection(universal_allocation _allocation, int _protect
 #endif
 }
 
-allocator::universal_allocation allocator::allocate(size_t _size, MEMORY_TYPE _type)
+simple_allocator::universal_allocation simple_allocator::allocate(size_t _size, MEMORY_TYPE _type)
 {
-	switch (_type)
-	{
+	switch (_type) {
 	case MEMORY_TYPE::NORMAL:
 		return { malloc(_size), _size };
 	case MEMORY_TYPE::EXECUTABLE_MEMORY:
@@ -106,16 +105,17 @@ allocator::universal_allocation allocator::allocate(size_t _size, MEMORY_TYPE _t
 	return { nullptr, 0 };
 }
 
-allocator::universal_allocation allocator::allocate_blocks(size_t _count, MEMORY_TYPE _type)
+simple_allocator::universal_allocation simple_allocator::allocate_blocks(size_t _count, MEMORY_TYPE _type)
 {
 	return { allocate(_count * BLOCK_SIZE, _type).address, _count };
 }
 
-allocator::universal_allocation allocator::reserve_allocation(size_t _max_size, MEMORY_TYPE _type)
+simple_allocator::universal_allocation simple_allocator::reserve_allocation(size_t _max_size, MEMORY_TYPE _type)
 {
 	return allocate(_max_size, _type);
 
 }
 
+}
 }
 }

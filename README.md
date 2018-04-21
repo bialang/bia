@@ -7,7 +7,7 @@ Embedded C++ Scripting Language
 
 ```
 //Create a context with the default memory allocator
-std::shared_ptr<bia::machine::allocator> _allocator(new bia::machine::allocator());
+std::shared_ptr<bia::machine::memory::allocator> _allocator(new bia::machine::memory::simple_allocator());
 bia::machine::machine_context _context(_allocator);
 
 //Add a lambda function
