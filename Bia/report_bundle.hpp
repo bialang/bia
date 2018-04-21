@@ -6,6 +6,7 @@
 
 #include "member.hpp"
 #include "operator.hpp"
+#include "exception.hpp"
 
 
 namespace bia
@@ -13,6 +14,13 @@ namespace bia
 namespace grammar
 {
 
+/**
+ * @brief A report from the interpreter.
+ *
+ * A report holding information about the structure of the Bia source code.
+ *
+ * @see @ref report_bundle
+*/
 struct report
 {
 	typedef uint32_t custom_type;
@@ -53,7 +61,11 @@ struct report
 };
 
 /**
- * A bundle that holds reports which can be compiled.
+ * @brief A bunch of reports.
+ *
+ * A bundle of reports which define the structure of a Bia command.
+ *
+ * @see @ref report
 */
 class report_bundle
 {
@@ -76,13 +88,13 @@ public:
 	 *
 	 * @param _report Defines the report.
 	 *
-	 * @throws	
+	 * @throws exception::limitation_error If no more reports can be stored.
 	*/
 	void add(report _report)
 	{
 		// Limit reached
 		if (_size >= _max_size) {
-			throw "";
+			throw exception::limitation_error(BIA_EM_REPORT_LIMIT);
 		}
 
 		_reports[_size++] = _report;
@@ -155,10 +167,32 @@ private:
 	report _reports[_max_size];
 };
 
+/**
+ * @brief A report receiver interface.
+ *
+ * An interface for receiving the interpreted reports to process them.
+ *
+ * @see @ref compiler::compiler
+*/
 class report_receiver
 {
 public:
-	virtual ~report_receiver() = default;
+	/**
+	 * Destructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 8-Apr-18
+	*/
+	virtual ~report_receiver() noexcept = default;
+	/**
+	 * A function to report a range of reports.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @param _begin The beginnig of the report range.
+	 * @param _end The ending of the report range.
+	*/
 	virtual void report(const report * _begin, const report * _end) = 0;
 };
 

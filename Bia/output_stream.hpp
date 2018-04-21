@@ -10,8 +10,6 @@ namespace bia
 namespace stream
 {
 
-class BiaOutputStreamBuffer;
-
 class output_stream
 {
 public:

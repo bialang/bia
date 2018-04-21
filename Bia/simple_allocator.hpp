@@ -10,6 +10,11 @@ namespace machine
 namespace memory
 {
 
+/**
+ * @brief A simple implementation of @ref allocator.
+ *
+ * A simple allocator which does no checking. All memory will be allocated using standard function without caching.
+*/
 class simple_allocator : public allocator
 {
 public:

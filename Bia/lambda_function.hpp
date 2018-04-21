@@ -14,6 +14,13 @@ namespace framework
 namespace executable
 {
 
+/**
+ * @brief A lambda function.
+ *
+ * A lambda function member.
+ *
+ * @tparam _Lambda The lambda function.
+*/
 template<typename _Lambda>
 class lambda_function final : public function
 {

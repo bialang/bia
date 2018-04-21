@@ -15,6 +15,15 @@ namespace executable
 template<typename _Class, typename _Return = void, typename... _Args>
 class member_function;
 
+/**
+ * @brief A member function.
+ *
+ * A member function member.
+ *
+ * @tparam _Class The class of the function.
+ * @tparam _Return The return type of the function.
+ * @tparam _Args The arguemnt types of the function.
+*/
 template<typename _Class, typename _Return, typename... _Args>
 class member_function<_Return(_Class::*)(_Args...)> final : public function
 {
@@ -64,6 +73,15 @@ private:
 	}
 };
 
+/**
+ * @brief A member function.
+ *
+ * A constant member function member.
+ *
+ * @tparam _Class The class of the function.
+ * @tparam _Return The return type of the function.
+ * @tparam _Args The arguemnt types of the function.
+*/
 template<typename _Class, typename _Return, typename... _Args>
 class member_function<_Return(_Class::*)(_Args...) const> final : public function
 {

@@ -74,6 +74,7 @@ public:
 	 * @throws exception::symbol_error If the member is not valid.
 	*/
 	virtual void print() const = 0;
+	//virtual void introduce(template_table * _table) = 0;
 	/**
 	 * Calls this function without any parameters.
 	 *

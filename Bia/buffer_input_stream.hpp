@@ -11,7 +11,11 @@ namespace stream
 {
 
 /**
- * A buffered input which streams from a constant memory address with a fixed size.
+ * @brief A buffer input stream.
+ *
+ * A input stream which receives the input from a fixed sized buffer.
+ *
+ * @see @ref buffered_input_stream
 */
 class buffer_input_stream : public input_stream
 {
@@ -24,8 +28,22 @@ public:
 	 *
 	 * @param _buffer The input buffer.
 	 * @param _length The length of the buffer.
+	 *
+	 * @throws exception::arguemtn_error If either the buffer or the length is invalid.
 	*/
-	buffer_input_stream(std::shared_ptr<const void> _buffer, size_t _length);
+	buffer_input_stream(const std::shared_ptr<const void> & _buffer, size_t _length);
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 18-Apr-18
+	 *
+	 * @param _buffer The input buffer.
+	 * @param _length The length of the buffer.
+	 *
+	 * @throws exception::arguemtn_error If either the buffer or the length is invalid.
+	*/
+	buffer_input_stream(std::shared_ptr<const void> && _buffer, size_t _length);
 
 	virtual void reset(cursor_type _mark) override;
 	virtual void skip(cursor_type _length) override;
