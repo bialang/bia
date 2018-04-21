@@ -12,18 +12,31 @@ namespace bia
 namespace grammar
 {
 
+/**
+ * Flags used for token specialization.
+*/
 struct flags
 {
 	typedef uint64_t flag_type;
+
+	/** No flag. */
 	constexpr static flag_type none = 0;
+	/** The token will not be reported. */
 	constexpr static flag_type filler_token = 0x1;
+	/** The token is optional. */
 	constexpr static flag_type opt_token = 0x2;
+	/** The token will be looped and is optional. */
 	constexpr static flag_type looping_token = 0x4;
+	/** At least one whitespace character at the beginning is required. */
 	constexpr static flag_type starting_ws_token = 0x8;
+	/** Whitespace at the beginning is optional. */
 	constexpr static flag_type starting_ws_opt_token = 0x10;
+	/** At least one whitespace character at the end is required. */
 	constexpr static flag_type ending_ws_token = 0x20;
-	constexpr static flag_type starting_padding_token = 0x40;
-	constexpr static flag_type starting_padding_opt_token = 0x80;
+	/** Whitespace at the end is optional. */
+	constexpr static flag_type ending_ws_opt_token = 0x40;
+	constexpr static flag_type starting_padding_token = 0x80;
+	constexpr static flag_type starting_padding_opt_token = 0x100;
 };
 
 enum class ACTION
@@ -52,6 +65,9 @@ struct token_output
 
 typedef ACTION(*bia_token_function)(stream::input_stream&, token_param, token_output&);
 
+/**
+ * A rule for the grammar.
+*/
 class interpreter_rule
 {
 public:
@@ -67,45 +83,62 @@ public:
 	/**
 	 * Constructor.
 	 *
-	 * @since	3.64.127.716
-	 * @date	7-Apr-18
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
 	*/
 	interpreter_rule() noexcept;
 	/**
 	 * Constructor.
 	 *
-	 * @since	3.64.127.716
-	 * @date	7-Apr-18
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
 	 *
-	 * @param	_id	Defines the id of this rule.
-	 * @param	_flags	Defines the flags.
-	 * @param	[in]	_tokens	Defines the tokens for this rule.
+	 * @param _id The id of this rule.
+	 * @param _flags The flags.
+	 * @param [in] _tokens The tokens for this rule.
 	*/
 	interpreter_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
 	/**
-	 * Runs this rule.
+	 * Runs this rule. If this function fails, the input stream will be resetted to its original position.
 	 *
-	 * @since	2.39.82.486
-	 * @date	16-Sep-17
+	 * @since 2.39.82.486
+	 * @date 16-Sep-17
 	 *
-	 * @param	p_pcBuffer	Defines a buffer which this rule should be run on.
-	 * @param	p_iSize	Defines the size of the buffer.
-	 * @param	p_params	Defines parameters for the token functions.
+	 * @param [in] _input The input stream.
+	 * @param _token_param Token parameter for this rule.
 	 *
-	 * @return	The amount of bytes processed of the buffer.
+	 * @return true if it succeeded, otherwise false.
+	 *
+	 * @throws
 	*/
-	void run_rule(stream::input_stream & _input, token_param _token_param) const;
-	report::rule_type get_id() const;
+	bool run_rule(stream::input_stream & _input, token_param _token_param) const;
+	/**
+	 * Returns the id of this rule.
+	 *
+	 * @since 3.64.127.716
+	 * @date 16-Apr-18
+	 *
+	 * @return The id.
+	*/
+	report::rule_type get_id() const noexcept;
 
 private:
-	/**	Defines the id of this rule.	*/
+	/** The id of this rule. */
 	report::rule_type _id;
-	/**	Defines the flags set for this rule.	*/
+	/** Specialization flags. */
 	uint32_t _flags;
-	/**	Holds all tokens for this rule.	*/
+	/** Holds all tokens for this rule. */
 	std::vector<bia_token_function> _tokens;
 
 
+	/**
+	 * Adds the beginning of a wrap up if required.
+	 *
+	 * @since 3.64.127.716
+	 * @date 16-Apr-18
+	 *
+	 * @param _token_param The parameter.
+	*/
 	void begin_wrap_up(token_param _token_param) const;
 };
 

@@ -8,28 +8,7 @@ namespace bia
 namespace grammar
 {
 
-const std::regex interpreter_token::_number_pattern(R"delim(^(-|+)?(?:(\d['0-9]+\.(?:\d['0-9]*)?)(f|F)?|(?:0b([01]['01]*))|(?:0x([0-9a-fA-F]['0-9a-fA-F]*))|(?:0([0-7]['0-7]*))|(\d['0-9]*)))delim");
-
-
-int64_t interpreter_token::parse_integer(const char * _number, size_t _length, report::custom_type _custom) noexcept
-{
-	int64_t _result = 0;
-	auto _base = _custom & grammar::NI_BASE_MASK;
-	size_t i = 0;
-
-	for (; i < _length; ++i) {
-		if (_number[i] != '\'') {
-			_result = _result * _base + get_value(_number[i]);
-		}
-	}
-
-	// Negative
-	if (_custom & grammar::NI_NEGATIVE_NUMBER) {
-		return _result * -1;
-	}
-
-	return _result;
-}
+const std::regex interpreter_token::_number_pattern(R"delim(^(-|+)?(?:(\d['0-9]+\.(?:\d['0-9]*)?)(f|F)?|(?:0(?:b|B)([01]['01]*))|(?:0(?:x|X)([0-9a-fA-F]['0-9a-fA-F]*))|(?:0([0-7]['0-7]*))|(\d['0-9]*)))delim");
 
 ACTION interpreter_token::number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
 {
@@ -186,6 +165,26 @@ int interpreter_token::get_value(char _digit) noexcept
 
 	// Is hex digit
 	return std::tolower(_digit) - 'a' + 10;
+}
+
+int64_t interpreter_token::parse_integer(const char * _number, size_t _length, report::custom_type _custom) noexcept
+{
+	int64_t _result = 0;
+	auto _base = _custom & grammar::NI_BASE_MASK;
+	size_t i = 0;
+
+	for (; i < _length; ++i) {
+		if (_number[i] != '\'') {
+			_result = _result * _base + get_value(_number[i]);
+		}
+	}
+
+	// Negative
+	if (_custom & grammar::NI_NEGATIVE_NUMBER) {
+		return _result * -1;
+	}
+
+	return _result;
 }
 
 }

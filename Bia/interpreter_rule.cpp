@@ -21,7 +21,7 @@ interpreter_rule::interpreter_rule(report::rule_type _id, uint32_t _flags, std::
 	this->_flags = _flags;
 }
 
-void interpreter_rule::run_rule(stream::input_stream & _input, token_param _token_param) const
+bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _token_param) const
 {
 	const auto _begin_size = _token_param.bundle->size();
 	const auto _begin_mark = _input.mark();
@@ -85,7 +85,7 @@ void interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 			{
 				// One match suffices
 				if (_flags & F_OR) {
-					return;
+					return true;
 				}
 
 				// Move on
@@ -112,9 +112,10 @@ void interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 					break;
 				}
 
+				// Hard reset
 				_input.reset(_begin_mark);
 
-				return;
+				return false;
 			}
 			default:
 				throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.");
@@ -123,6 +124,13 @@ void interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 			break;
 		} while (true);
 	}
+
+	return true;
+}
+
+report::rule_type interpreter_rule::get_id() const noexcept
+{
+	return _id;
 }
 
 void interpreter_rule::begin_wrap_up(token_param _token_param) const

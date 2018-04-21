@@ -467,9 +467,144 @@ inline ACTION CompareOperatorToken(const char * p_pcBuffer, size_t p_iSize, toke
 }
 
 
-class interpreter_token
+class interpreter_token final
 {
 public:
+	interpreter_token() = delete;
+	/**
+	 * Matches a number token.
+	 *
+	 * @since	3.64.127.716
+	 * @date	9-Apr-18
+	 *
+	 * @param	_buffer	Defines the buffer that should be matched.
+	 * @param	_length	Defines the length of the buffer.
+	 * @param	_params	(Not used)	Defines additional interpreter information.
+	 * @param	[out]	_output	Defines the token result.
+	 *
+	 * @return	Defines the success code. See ::ACTION.
+	*/
+	static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
+	static ACTION string(stream::input_stream & _input, token_param _params, token_output & _output);
+	static ACTION identifier(stream::input_stream & _input, token_param _params, token_output & _output);
+	static ACTION assign_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	/**
+	 * Matches a single line comment token.
+	 *
+	 * @since	3.64.127.716
+	 * @date	9-Apr-18
+	 *
+	 * @param	_buffer	Defines the buffer that should be matched.
+	 * @param	_length	Defines the length of the buffer.
+	 * @param	_params	(Not used)	Defines additional interpreter information.
+	 * @param	[out]	_output	Defines the token result.
+	 *
+	 * @return	Defines the success code. See ::ACTION.
+	*/
+	static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
+	/**
+	 * Matches a command end token.
+	 *
+	 * @since	3.64.127.716
+	 * @date	9-Apr-18
+	 *
+	 * @param	_buffer	Defines the buffer that should be matched.
+	 * @param	_length	Defines the length of the buffer.
+	 * @param	_params	(Not used)	Defines additional interpreter information.
+	 * @param	[out]	_output	Defines the token result.
+	 *
+	 * @return	Defines the success code. See ::ACTION.
+	*/
+	static ACTION command_end(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
+	/**
+	 * Matches a keyword token.
+	 *
+	 * @remarks	_Ty defines the keyword. Flags are defined under grammar::flags.
+	 *
+	 * @since	3.64.127.716
+	 * @date	9-Apr-18
+	 *
+	 * @param	_buffer	Defines the buffer that should be matched.
+	 * @param	_length	Defines the length of the buffer.
+	 * @param	_params	(Not used)	Defines additional interpreter information.
+	 * @param	[out]	_output	Defines the token result.
+	 *
+	 * @return	Defines the success code. See ::ACTION.
+	*/
+	template<typename _Ty, flags::flag_type _Flags = flags::none>
+	static ACTION keyword(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
+	{
+		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
+		constexpr auto error = _Flags & flags::opt_token ? ACTION::DONT_REPORT : (_Flags & flags::looping_token ? ACTION::DONT_REPORT : ACTION::ERROR);
+
+		if (_length >= _Ty::size()) {
+			// Starting whitespaces and compare token
+			if (!whitespace_deleter<_Flags, true>(_buffer, _length, _output) || std::memcmp(_buffer, _Ty::token(), _Ty::size())) {
+				return error;
+			}
+
+			_output.length = _Ty::size();
+			_buffer += _Ty::size();
+			_length -= _Ty::size();
+
+			//Ending whitespaces
+			if (!whitespace_deleter<_Flags, false>(_buffer, _length, _output)) {
+				return error;
+			}
+
+			return success;
+		}
+
+		return error;
+	}
+	/**
+	 * Matches a rule pointer token.
+	 *
+	 * @remarks	_Rule defines the rule id. Flags are defined under grammar::flags.
+	 *
+	 * @since	3.64.127.716
+	 * @date	9-Apr-18
+	 *
+	 * @param	_buffer	Defines the buffer that should be matched.
+	 * @param	_length	Defines the length of the buffer.
+	 * @param	_params	(Not used)	Defines additional interpreter information.
+	 * @param	[out]	_output	Defines the token result.
+	 *
+	 * @throws	?
+	 *
+	 * @return	Defines the success code. See ::ACTION.
+	*/
+	template<report::rule_type _Rule, flags::flag_type _Flags = flags::filler_token, report::custom_type _Custom = 0>
+	static ACTION rule_pointer(stream::input_stream & _input, token_param _params, token_output & _output)
+	{
+		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
+		constexpr auto error = _Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
+
+		//Starting whitespaces
+		if (!whitespace_deleter<_Flags, true>(_input, _output)) {
+			return error;
+		}
+
+		_params.rules[_Rule].run_rule(_input, _params);
+		_output.custom = _Custom;
+
+		return _output.length ? success : error;
+	}
+
+private:
+	 /*
+	1: sign information
+	2: float/double value
+	3: float literal
+	4: binary value
+	5: hex value
+	6: octal value
+	7: decimal value
+	*/
+	const static std::regex _number_pattern;
+
+	static int get_value(char _digit) noexcept;
 	/**
 	 * Parses the integer that was matched by interpreter_token::number().
 	 *
@@ -532,136 +667,6 @@ public:
 
 		return _result;
 	}
-	/**
-	 * Matches a number token.
-	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
-	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
-	 *
-	 * @return	Defines the success code. See ::ACTION.
-	*/
-	static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
-	/**
-	 * Matches a single line comment token.
-	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
-	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
-	 *
-	 * @return	Defines the success code. See ::ACTION.
-	*/
-	static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
-	/**
-	 * Matches a command end token.
-	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
-	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
-	 *
-	 * @return	Defines the success code. See ::ACTION.
-	*/
-	static ACTION command_end(const char * _buffer, size_t _length, token_param _params, token_output & _output) noexcept;
-	/**
-	 * Matches a keyword token.
-	 *
-	 * @remarks	_Ty defines the keyword. Flags are defined under grammar::flags.
-	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
-	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
-	 *
-	 * @return	Defines the success code. See ::ACTION.
-	*/
-	template<typename _Ty, flags::flag_type _Flags>
-	static ACTION keyword(const char * _buffer, size_t _length, token_param _params, token_output & _output) noexcept
-	{
-		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-		constexpr auto error = _Flags & flags::opt_token ? ACTION::DONT_REPORT : (_Flags & flags::looping_token ? ACTION::DONT_REPORT : ACTION::ERROR);
-
-		if (_length >= _Ty::size()) {
-			// Starting whitespaces and compare token
-			if (!whitespace_deleter<_Flags, true>(_buffer, _length, _output) || std::memcmp(_buffer, _Ty::token(), _Ty::size())) {
-				return error;
-			}
-
-			_output.length = _Ty::size();
-			_buffer += _Ty::size();
-			_length -= _Ty::size();
-
-			//Ending whitespaces
-			if (!whitespace_deleter<_Flags, false>(_buffer, _length, _output)) {
-				return error;
-			}
-
-			return success;
-		}
-
-		return error;
-	}
-	/**
-	 * Matches a rule pointer token.
-	 *
-	 * @remarks	_Rule defines the rule id. Flags are defined under grammar::flags.
-	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
-	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
-	 *
-	 * @throws	?
-	 *
-	 * @return	Defines the success code. See ::ACTION.
-	*/
-	template<report::rule_type _Rule, flags::flag_type _Flags, report::custom_type _Custom = 0>
-	static ACTION rule_pointer(const char * _buffer, size_t _length, token_param _params, token_output & _output)
-	{
-		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-		constexpr auto error = _Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
-
-		//Starting whitespaces
-		if (!whitespace_deleter<_Flags, true>(_buffer, _length, _output)) {
-			return error;
-		}
-
-		_output.length = _params.rules[_Rule].run_rule(_buffer, _length, _params);
-		_output.custom = _Custom;
-
-		return _output.length ? success : error;
-	}
-
-private:
-	 /*
-	1: sign information
-	2: float/double value
-	3: float literal
-	4: binary value
-	5: hex value
-	6: octal value
-	7: decimal value
-	*/
-	const static std::regex _number_pattern;
-
-	static int get_value(char _digit) noexcept;
 };
 
 }

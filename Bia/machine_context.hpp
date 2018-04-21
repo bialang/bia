@@ -177,7 +177,8 @@ public:
 	{
 		return SetMember<framework::executable::BiaLambdaFunction<_LAMBDA>>(std::move(p_name), p_pLambda);
 	}
-//private:
+
+private:
 	//friend BiaCompiler;
 
 	/*struct StringKey

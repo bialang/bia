@@ -23,268 +23,268 @@ interpreter syntax::init_rules()
 
 	// Root
 	_interpreter.set_rule(interpreter_rule(BGR_ROOT, interpreter_rule::F_OR, {
-		token_rule<BGR_ROOT_HELPER_1, FILLER_TOKEN>,
-		token_rule<BGR_ROOT_HELPER_0, FILLER_TOKEN> 
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_1>,
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_0>
 		}));
 
 	// Root helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_ROOT_HELPER_0, interpreter_rule::F_WRAP_UP, {
-		token_keyword<operator_scope_open, FILLER_TOKEN>,
-		token_rule<BGR_ROOT_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN>,
-		token_keyword<operator_scope_close, FILLER_TOKEN>
+		interpreter_token::keyword<operator_scope_open, flags::filler_token>,
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_1, flags::filler_token | flags::looping_token | STARTING_PADDING_OPTIONAL_TOKEN>,
+		interpreter_token::keyword<operator_scope_close, flags::filler_token>
 		}));
 
 	// Root helper 1
-	_interpreter.set_rule(BGR_ROOT_HELPER_1, interpreter_rule(interpreter_rule::F_OR, {
-		token_rule<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
-		token_rule<BGR_IF, FILLER_TOKEN>,
-		token_rule<BGR_PRINT, FILLER_TOKEN>,
-		token_rule<BGR_TEST_LOOP, FILLER_TOKEN>,
-		token_rule<BGR_IMPORT, FILLER_TOKEN>,
+	_interpreter.set_rule(interpreter_rule(BGR_ROOT_HELPER_1, interpreter_rule::F_OR, {
+		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION>,
+		interpreter_token::rule_pointer<BGR_IF>,
+		interpreter_token::rule_pointer<BGR_PRINT>,
+		interpreter_token::rule_pointer<BGR_TEST_LOOP>,
+		interpreter_token::rule_pointer<BGR_IMPORT>,
 		interpreter_token::comment,
-		token_rule<BGR_ROOT_HELPER_2, FILLER_TOKEN>
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_2>
 		}));
 
 	// Root helper 2
-	_interpreter.set_rule(BGR_ROOT_HELPER_2, interpreter_rule(interpreter_rule::F_NONE, {
-		token_rule<BGR_VALUE, FILLER_TOKEN>,
+	_interpreter.set_rule(interpreter_rule(BGR_ROOT_HELPER_2, interpreter_rule::F_NONE, {
+		interpreter_token::rule_pointer<BGR_VALUE>,
 		interpreter_token::command_end
 		}));
 
 	// Statement
-	_interpreter.set_rule(BGR_NORMAL_STATEMENT, interpreter_rule(interpreter_rule::F_OR, {
-		token_rule<BGR_ROOT_HELPER_1, FILLER_TOKEN | STARTING_PADDING_TOKEN>,
-		token_rule<BGR_ROOT_HELPER_0, FILLER_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN> }));
+	_interpreter.set_rule(interpreter_rule(BGR_NORMAL_STATEMENT, interpreter_rule::F_OR, {
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_1, flags::filler_token | flags::starting_ws_token>,
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_0, flags::filler_token | flags::starting_ws_opt_token> }));
 
 	// Variable declaration
-	_interpreter.set_rule(BGR_VARIABLE_DECLARATION, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<keyword_global, FILLER_TOKEN>,
-		IdentifierToken<STARTING_WHITESPACE_TOKEN>,
-		token_rule<BGR_VARIABLE_DECLARATION_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>,
-		token_keyword<operator_equals, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
+	_interpreter.set_rule(interpreter_rule(BGR_VARIABLE_DECLARATION, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<keyword_global, flags::filler_token | flags::ending_ws_token>,
+		interpreter_token::identifier,
+		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION_HELPER_0, flags::filler_token | flags::looping_token>,
+		interpreter_token::keyword<operator_equals, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>,
 		interpreter_token::command_end
 		}));
 
 	// Variable declaration helper 0
-	_interpreter.set_rule(BGR_VARIABLE_DECLARATION_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		token_keyword<operator_comma, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		IdentifierToken<STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_VARIABLE_DECLARATION_HELPER_0, interpreter_rule::F_NONE, {
+		interpreter_token::keyword<operator_comma, flags::filler_token | flags::starting_ws_opt_token | flags::ending_ws_opt_token>,
+		interpreter_token::identifier
 		}));
 
 	// If
-	_interpreter.set_rule(BGR_IF, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<keyword_if, FILLER_TOKEN>,
-		token_rule<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		token_rule<BGR_NORMAL_STATEMENT, FILLER_TOKEN>,
-		token_rule<BGR_IF_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>,
-		token_rule<BGR_IF_HELPER_1, FILLER_TOKEN | OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_IF, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<keyword_if, flags::filler_token>,
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_token>,
+		interpreter_token::rule_pointer<BGR_NORMAL_STATEMENT>,
+		interpreter_token::rule_pointer<BGR_IF_HELPER_0, flags::filler_token | flags::looping_token>,
+		interpreter_token::rule_pointer<BGR_IF_HELPER_1, flags::filler_token | flags::opt_token>
 		}));
 
 	// If helper 0
-	_interpreter.set_rule(BGR_IF_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		token_keyword<keyword_else, FILLER_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN>,
-		token_keyword<keyword_if, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		token_rule<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		token_rule<BGR_NORMAL_STATEMENT, FILLER_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_IF_HELPER_0, interpreter_rule::F_NONE, {
+		interpreter_token::keyword<keyword_else, flags::filler_token | STARTING_PADDING_OPTIONAL_TOKEN>,
+		interpreter_token::keyword<keyword_if, flags::filler_token | flags::starting_ws_token>,
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_token>,
+		interpreter_token::rule_pointer<BGR_NORMAL_STATEMENT>
 		}));
 
 	// If helper 1
-	_interpreter.set_rule(BGR_IF_HELPER_1, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<keyword_else, FILLER_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN>,
-		token_rule<BGR_NORMAL_STATEMENT, FILLER_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_IF_HELPER_1, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<keyword_else, flags::filler_token | STARTING_PADDING_OPTIONAL_TOKEN>,
+		interpreter_token::rule_pointer<BGR_NORMAL_STATEMENT>
 		}));
 
 	// Print
-	_interpreter.set_rule(BGR_PRINT, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<keyword_print, FILLER_TOKEN>,
-		token_rule<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
+	_interpreter.set_rule(interpreter_rule(BGR_PRINT, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<keyword_print, flags::filler_token>,
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_token>,
 		interpreter_token::command_end
 		}));
 
 	// Test loop
-	_interpreter.set_rule(BGR_TEST_LOOP, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<keyword_do, OPTIONAL_TOKEN | ENDING_WHITESPACE_TOKEN>,
-		token_rule<BGR_TEST_LOOP_HELPER_0, FILLER_TOKEN>,
-		token_rule<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_TOKEN>,
-		token_rule<BGR_NORMAL_STATEMENT, FILLER_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_TEST_LOOP, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<keyword_do, flags::opt_token | flags::ending_ws_token>,
+		interpreter_token::rule_pointer<BGR_TEST_LOOP_HELPER_0>,
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_token>,
+		interpreter_token::rule_pointer<BGR_NORMAL_STATEMENT>
 		}));
 
 	// Test loop helper 0
-	_interpreter.set_rule(BGR_TEST_LOOP_HELPER_0, interpreter_rule(interpreter_rule::F_OR, {
-		token_keyword<keyword_while, NONE, LT_WHILE>,
-		token_keyword<keyword_until, NONE, LT_UNTIL>
+	_interpreter.set_rule(interpreter_rule(BGR_TEST_LOOP_HELPER_0, interpreter_rule::F_OR, {
+		interpreter_token::keyword<keyword_while>, // LT_WHILE
+		interpreter_token::keyword<keyword_until> // LT_UNTIL
 		}));
 
 	// Import
-	_interpreter.set_rule(BGR_IMPORT, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<keyword_import, FILLER_TOKEN>,
-		IdentifierToken<STARTING_WHITESPACE_TOKEN>,
+	_interpreter.set_rule(interpreter_rule(BGR_IMPORT, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<keyword_import, flags::filler_token | flags::ending_ws_token>,
+		interpreter_token::identifier,
 		interpreter_token::command_end
 		}));
 
 	// Value raw (must be wrapped because of math factor)
-	_interpreter.set_rule(BGR_VALUE_RAW, interpreter_rule(interpreter_rule::F_OR | interpreter_rule::F_WRAP_UP, {
+	_interpreter.set_rule(interpreter_rule(BGR_VALUE_RAW, interpreter_rule::F_OR | interpreter_rule::F_WRAP_UP, {
 		interpreter_token::number, // BV_NUMBER
-		interpreter_token::keyword<keyword_true, NONE, BV_TRUE>,
-		token_keyword<keyword_false, NONE, BV_FALSE>,
-		token_rule<BGR_MEMBER, FILLER_TOKEN, 0, BV_MEMBER>
+		interpreter_token::keyword<keyword_true>, // BV_TRUE
+		interpreter_token::keyword<keyword_false>, // BV_FALSE
+		interpreter_token::rule_pointer<BGR_MEMBER> // BV_MEMBER
 		}));
 
 	// Instantiation
-	_interpreter.set_rule(BGR_INSTANTIATION, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<keyword_new, FILLER_TOKEN>,
-		IdentifierToken<STARTING_WHITESPACE_TOKEN>,
-		token_rule<BGR_PARAMETER, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_INSTANTIATION, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<keyword_new, flags::filler_token | flags::ending_ws_token>,
+		interpreter_token::identifier,
+		interpreter_token::rule_pointer<BGR_PARAMETER, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Parameter
-	_interpreter.set_rule(BGR_PARAMETER, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<operator_bracket_open, FILLER_TOKEN>,
-		token_rule<BGR_PARAMETER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>,
-		token_keyword<operator_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_PARAMETER, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<operator_bracket_open, flags::filler_token>,
+		interpreter_token::rule_pointer<BGR_PARAMETER_HELPER_0, flags::filler_token | flags::opt_token>,
+		interpreter_token::keyword<operator_bracket_close, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Parameter item access
-	_interpreter.set_rule(BGR_PARAMETER_ITEM_ACCESS, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_keyword<operator_square_bracket_open, FILLER_TOKEN>,
-		token_rule<BGR_PARAMETER_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>,
-		token_keyword<operator_square_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_PARAMETER_ITEM_ACCESS, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::keyword<operator_square_bracket_open, flags::filler_token>,
+		interpreter_token::rule_pointer<BGR_PARAMETER_HELPER_0, flags::filler_token | flags::opt_token>,
+		interpreter_token::keyword<operator_square_bracket_close, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Parameter list helper 0
-	_interpreter.set_rule(BGR_PARAMETER_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		token_rule<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_PARAMETER_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_PARAMETER_HELPER_0, interpreter_rule::F_NONE, {
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_PARAMETER_HELPER_1, flags::filler_token | flags::looping_token>
 		}));
 
 	// Parameter list helper 1
-	_interpreter.set_rule(BGR_PARAMETER_HELPER_1, interpreter_rule(interpreter_rule::F_NONE, {
-		token_keyword<operator_comma, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_PARAMETER_HELPER_1, interpreter_rule::F_NONE, {
+		interpreter_token::keyword<operator_comma, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Math factor
-	_interpreter.set_rule(BGR_MATH_FACTOR, interpreter_rule(interpreter_rule::F_OR | interpreter_rule::F_WRAP_UP, {
-		token_rule<BGR_VALUE_RAW, FILLER_TOKEN>,
-		token_rule<BGR_MATH_FACTOR_HELPER_0, FILLER_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MATH_FACTOR, interpreter_rule::F_OR | interpreter_rule::F_WRAP_UP, {
+		interpreter_token::rule_pointer<BGR_VALUE_RAW>,
+		interpreter_token::rule_pointer<BGR_MATH_FACTOR_HELPER_0>
 		}));
 
 	// Math factor helper 0
-	_interpreter.set_rule(BGR_MATH_FACTOR_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		token_keyword<operator_bracket_open, FILLER_TOKEN>,
-		token_rule<BGR_VALUE, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_keyword<operator_bracket_close, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MATH_FACTOR_HELPER_0, interpreter_rule::F_NONE, {
+		interpreter_token::keyword<operator_bracket_open, flags::filler_token>,
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::keyword<operator_bracket_close, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Math term
-	_interpreter.set_rule(BGR_MATH_TERM, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_rule<BGR_MATH_FACTOR, FILLER_TOKEN>,
-		token_rule<BGR_MATH_TERM_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MATH_TERM, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::rule_pointer<BGR_MATH_FACTOR>,
+		interpreter_token::rule_pointer<BGR_MATH_TERM_HELPER_0, flags::filler_token | flags::looping_token>
 		}));
 
 	// Math term helper 0
-	_interpreter.set_rule(BGR_MATH_TERM_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		token_rule<BGR_MATH_TERM_HELPER_1, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_MATH_FACTOR, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MATH_TERM_HELPER_0, interpreter_rule::F_NONE, {
+		interpreter_token::rule_pointer<BGR_MATH_TERM_HELPER_1, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_MATH_FACTOR, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Math term helper 1
-	_interpreter.set_rule(BGR_MATH_TERM_HELPER_1, interpreter_rule(interpreter_rule::F_OR, {
-		token_keyword<operator_times, NONE>,
-		token_keyword<operator_divide, NONE>,
-		token_keyword<operator_double_divide, NONE>,
-		token_keyword<operator_modulus, NONE>
+	_interpreter.set_rule(interpreter_rule(BGR_MATH_TERM_HELPER_1, interpreter_rule::F_OR, {
+		interpreter_token::keyword<operator_times>,
+		interpreter_token::keyword<operator_divide>,
+		interpreter_token::keyword<operator_double_divide>,
+		interpreter_token::keyword<operator_modulus>
 		}));
 
 	// Math expression (must be wrapped because of math factor)
-	_interpreter.set_rule(BGR_MATH_EXPRESSION, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_rule<BGR_MATH_TERM, FILLER_TOKEN>,
-		token_rule<BGR_MATH_EXPRESSION_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MATH_EXPRESSION, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::rule_pointer<BGR_MATH_TERM>,
+		interpreter_token::rule_pointer<BGR_MATH_EXPRESSION_HELPER_0, flags::filler_token | flags::looping_token>
 		}));
 
 	// Math expression helper 0
-	_interpreter.set_rule(BGR_MATH_EXPRESSION_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		CustomOperatorToken<STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_MATH_TERM, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MATH_EXPRESSION_HELPER_0, interpreter_rule::F_NONE, {
+		CustomOperatorToken<flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_MATH_TERM, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Condition expression
-	_interpreter.set_rule(BGR_CONDITION_EXPRESSION, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_rule<BGR_MATH_EXPRESSION, FILLER_TOKEN>,
-		token_rule<BGR_CONDITION_EXPRESSION_HELPER_0, FILLER_TOKEN | OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_CONDITION_EXPRESSION, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::rule_pointer<BGR_MATH_EXPRESSION>,
+		interpreter_token::rule_pointer<BGR_CONDITION_EXPRESSION_HELPER_0, flags::filler_token | flags::opt_token>
 		}));
 
 	// Condition expression helper 0
-	_interpreter.set_rule(BGR_CONDITION_EXPRESSION_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		CompareOperatorToken<STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_MATH_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_CONDITION_EXPRESSION_HELPER_0, interpreter_rule::F_NONE, {
+		CompareOperatorToken<flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_MATH_EXPRESSION, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Value expression
-	_interpreter.set_rule(BGR_VALUE_EXPRESSION, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		token_rule<BGR_CONDITION_EXPRESSION, FILLER_TOKEN>,
-		token_rule<BGR_VALUE_EXPRESSION_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_VALUE_EXPRESSION, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::rule_pointer<BGR_CONDITION_EXPRESSION>,
+		interpreter_token::rule_pointer<BGR_VALUE_EXPRESSION_HELPER_0, flags::filler_token | flags::looping_token>
 		}));
 
 	// Value expression helper 0
-	_interpreter.set_rule(BGR_VALUE_EXPRESSION_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		token_rule<BGR_VALUE_EXPRESSION_HELPER_1, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_CONDITION_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_VALUE_EXPRESSION_HELPER_0, interpreter_rule::F_NONE, {
+		interpreter_token::rule_pointer<BGR_VALUE_EXPRESSION_HELPER_1, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_CONDITION_EXPRESSION, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Value expression helper 1
-	_interpreter.set_rule(BGR_VALUE_EXPRESSION_HELPER_1, interpreter_rule(interpreter_rule::F_OR, {
-		token_keyword<operator_logical_and, NONE, BVO_LOGICAL_AND>,
-		token_keyword<operator_logical_or, NONE, BVO_LOGICAL_OR>
+	_interpreter.set_rule(interpreter_rule(BGR_VALUE_EXPRESSION_HELPER_1, interpreter_rule::F_OR, {
+		interpreter_token::keyword<operator_logical_and>, // BVO_LOGICAL_AND
+		interpreter_token::keyword<operator_logical_or> // BVO_LOGICAL_OR
 		}));
 
 	// Value
-	_interpreter.set_rule(BGR_VALUE, interpreter_rule(interpreter_rule::F_WRAP_UP | interpreter_rule::F_OR, {
-		// token_rule<BGR_VARIABLE_DECLARATION, FILLER_TOKEN>,
-		token_rule<BGR_VALUE_HELPER_0, FILLER_TOKEN>,
-		token_rule<BGR_VALUE_EXPRESSION, FILLER_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_VALUE, interpreter_rule::F_WRAP_UP | interpreter_rule::F_OR, {
+		// interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION, flags::filler_token>,
+		interpreter_token::rule_pointer<BGR_VALUE_HELPER_0>,
+		interpreter_token::rule_pointer<BGR_VALUE_EXPRESSION>
 		}));
 
 	// Value helper 0
-	_interpreter.set_rule(BGR_VALUE_HELPER_0, interpreter_rule(interpreter_rule::F_NONE, {
-		IdentifierToken<NONE>,
-		AssignOperatorToken<STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_VALUE_EXPRESSION, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_VALUE_HELPER_0, interpreter_rule::F_NONE, {
+		interpreter_token::identifier,
+		AssignOperatorToken<flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_VALUE_EXPRESSION, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Member
-	_interpreter.set_rule(BGR_MEMBER, interpreter_rule(interpreter_rule::F_WRAP_UP, {
-		CustomOperatorToken<OPTIONAL_TOKEN>,
-		token_rule<BGR_MEMBER_HELPER_2, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_MEMBER_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>,
-		token_rule<BGR_MEMBER_HELPER_1, FILLER_TOKEN | LOOPING_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MEMBER, interpreter_rule::F_WRAP_UP, {
+		CustomOperatorToken<flags::opt_token>,
+		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_2, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_0, flags::filler_token | flags::looping_token>,
+		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_1, flags::filler_token | flags::looping_token>
 		}));
 
 	// Member helper 0
-	_interpreter.set_rule(BGR_MEMBER_HELPER_0, interpreter_rule(interpreter_rule::F_OR, {
-		token_rule<BGR_PARAMETER, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_PARAMETER_ITEM_ACCESS, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_0, interpreter_rule::F_OR, {
+		interpreter_token::rule_pointer<BGR_PARAMETER, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_PARAMETER_ITEM_ACCESS, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
 	// Member helper 1
-	_interpreter.set_rule(BGR_MEMBER_HELPER_1, interpreter_rule(interpreter_rule::F_NONE, {
-		token_rule<BGR_MEMBER_HELPER_3, FILLER_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		IdentifierToken<STARTING_WHITESPACE_OPTIONAL_TOKEN>,
-		token_rule<BGR_MEMBER_HELPER_0, FILLER_TOKEN | LOOPING_TOKEN>
+	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_1, interpreter_rule::F_NONE, {
+		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_3, flags::filler_token | flags::starting_ws_opt_token | flags::ending_ws_opt_token>,
+		interpreter_token::identifier,
+		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_0, flags::filler_token | flags::looping_token>
 		}));
 
 	// Member helper 2
-	_interpreter.set_rule(BGR_MEMBER_HELPER_2, interpreter_rule(interpreter_rule::F_OR, {
-		token_rule<BGR_INSTANTIATION, FILLER_TOKEN, 0, BM_INSTANTIATION>,
-		StringValueToken<NONE, BM_STRING>,
-		IdentifierToken<NONE, BM_IDENTIFIER>
+	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_2, interpreter_rule::F_OR, {
+		interpreter_token::rule_pointer<BGR_INSTANTIATION>, // BM_INSTANTIATION
+		interpreter_token::string, // BM_STRING
+		interpreter_token::identifier // BM_IDENTIFIER
 		}));
 
 	// Member helper 3
-	_interpreter.set_rule(BGR_MEMBER_HELPER_3, interpreter_rule(interpreter_rule::F_OR, {
-		token_keyword<operator_arrow_access, NONE, BAO_ARROW_ACCESS>,
-		token_keyword<operator_dot, FILLER_TOKEN, BAO_DOT>
+	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_3, interpreter_rule::F_OR, {
+		interpreter_token::keyword<operator_arrow_access>, // BAO_ARROW_ACCESS
+		interpreter_token::keyword<operator_dot, flags::filler_token> // BAO_DOT
 		}));
 
 	return _interpreter;

@@ -34,6 +34,7 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 		}
 
 		// Mark input buffer start
+		auto _mark = _input.mark();
 
 		// Run root
 		token_param _param;

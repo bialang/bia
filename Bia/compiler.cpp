@@ -7,10 +7,9 @@ namespace bia
 namespace compiler
 {
 
-using namespace grammar;
+using namespace bia::grammar;
 
-
-compiler::compiler(stream::output_stream & _output) : _toolset(_output), _context(_context), _machine_schein(_context.get_allocator())
+compiler::compiler(stream::output_stream & _output)// : _toolset(_output), _context(_context), _machine_schein(_context.get_allocator())
 {
 }
 
@@ -21,6 +20,7 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 
 const grammar::report * compiler::handle_root(const grammar::report * _report)
 {
+
 	switch (_report->rule_id) {
 	case BGR_ROOT_HELPER_0:
 	{
@@ -76,9 +76,9 @@ const grammar::report *  compiler::handle_number(const grammar::report * _report
 	return _report;
 }
 
-const grammar::report * compiler::handle_raw_value(grammar::report_range _reports)
+const grammar::report * compiler::handle_raw_value(const grammar::report * _report)
 {
-	switch (_reports.begin[1].token_id) {
+	switch (_report[1].token_id) {
 	case BV_NUMBER:
 		break;
 	case BV_TRUE:
@@ -90,19 +90,33 @@ const grammar::report * compiler::handle_raw_value(grammar::report_range _report
 
 		break;
 	case BV_MEMBER:
-		handle_member(_reports.begin[1].content.children);
+		handle_member(_report + 1);
 
 		break;
 	default:
 		BIA_COMPILER_DEV_INVALID;
 	}
 
-	return _reports.end + 1;
+	return _report->content.end;
 }
 
-const grammar::report * compiler::handle_member(grammar::report_range _reports)
+const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
-	return _reports.end + 1;
+	
+
+	return _report->content.end;
+}
+
+const grammar::report * compiler::handle_instantiation(const grammar::report * _report)
+{
+	// Set identifier
+	set_return(_report[1].content.member);
+
+	// Handle parameters
+
+	// Instantiate
+
+	return _report->content.end;
 }
 
 }

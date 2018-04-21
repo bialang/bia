@@ -13,14 +13,6 @@ namespace bia
 namespace grammar
 {
 
-struct report;
-
-typedef struct
-{
-	const report * begin;
-	const report * end;
-} report_range;
-
 struct report
 {
 	typedef uint32_t custom_type;
@@ -54,20 +46,23 @@ struct report
 		int64_t intValue;
 		float floatValue;
 		double doubleValue;
-		report_range children;
+		const report *  end;
 		framework::member * member;
 		framework::OPERATOR operatorCode;
 	} content;
 };
 
+/**
+ * A bundle that holds reports which can be compiled.
+*/
 class report_bundle
 {
 public:
 	/**
 	 * Constructor.
 	 *
-	 * @since	3.64.127.716
-	 * @date	7-Apr-18
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
 	*/
 	report_bundle() noexcept
 	{
@@ -76,15 +71,16 @@ public:
 	/**
 	 * Adds a report to the bundle.
 	 *
-	 * @since	2.39.82.486
-	 * @date	16-Sep-17
+	 * @since 2.39.82.486
+	 * @date 16-Sep-17
 	 *
-	 * @param	_report	Defines the report.
+	 * @param _report Defines the report.
 	 *
 	 * @throws	
 	*/
 	void add(report _report)
 	{
+		// Limit reached
 		if (_size >= _max_size) {
 			throw "";
 		}
@@ -94,8 +90,8 @@ public:
 	/**
 	 * Clears the bundle completly.
 	 *
-	 * @since	2.39.82.486
-	 * @date	16-Sep-17
+	 * @since 2.39.82.486
+	 * @date 16-Sep-17
 	*/
 	void reset() noexcept
 	{
@@ -104,10 +100,10 @@ public:
 	/**
 	 * Rolls the bundle back to the old size.
 	 *
-	 * @since	2.39.82.486
-	 * @date	16-Sep-17
+	 * @since 2.39.82.486
+	 * @date 16-Sep-17
 	 *
-	 * @param	_old_size	Defines the old size.
+	 * @param _old_size Defines the old size.
 	*/
 	void rollback(uint32_t _old_size) noexcept
 	{
@@ -116,10 +112,10 @@ public:
 	/**
 	 * Returns the current size of the bundle.
 	 *
-	 * @since	2.39.82.486
-	 * @date	16-Sep-17
+	 * @since 2.39.82.486
+	 * @date 16-Sep-17
 	 *
-	 * @return	The current size.
+	 * @return The current size.
 	*/
 	uint32_t size() const noexcept
 	{
@@ -128,10 +124,10 @@ public:
 	/**
 	 * Returns a pointer to the beginning.
 	 *
-	 * @since	2.39.82.486
-	 * @date	16-Sep-17
+	 * @since 2.39.82.486
+	 * @date 16-Sep-17
 	 *
-	 * @return	A pointer to the beginning.
+	 * @return A pointer to the beginning.
 	*/
 	report * begin() noexcept
 	{
@@ -140,10 +136,10 @@ public:
 	/**
 	 * Returns a pointer to the end.
 	 *
-	 * @since	2.39.82.486
-	 * @date	16-Sep-17
+	 * @since 2.39.82.486
+	 * @date 16-Sep-17
 	 *
-	 * @return	A pointer to the end.
+	 * @return A pointer to the end.
 	*/
 	report * end() noexcept
 	{
@@ -153,9 +149,9 @@ public:
 private:
 	constexpr static uint32_t _max_size = 512;
 
-	/**	Defines the amount of the currently held reports.	*/
+	/** Defines the amount of the currently held reports. */
 	uint32_t _size;
-	/**	Hols all reports.	*/
+	/** Hols all reports. */
 	report _reports[_max_size];
 };
 

@@ -1,9 +1,14 @@
 #pragma once
 
+#include <cstdint>
+
 #include "exception.hpp"
 #include "output_stream.hpp"
-#include "report_bundle.hpp"
 #include "toolset.hpp"
+#include "member.hpp"
+#include "report_bundle.hpp"
+#include "interpreter.hpp"
+#include "interpreter_rule.hpp"
 
 #define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.")
 
@@ -13,7 +18,7 @@ namespace bia
 namespace compiler
 {
 
-class compiler  : public grammar::report_receiver
+class compiler : public grammar::report_receiver
 {
 public:
 	/**
@@ -28,7 +33,7 @@ public:
 	compiler(compiler && _rvalue) = delete;
 	~compiler();
 	virtual void report(const grammar::report * _begin, const grammar::report * _end) override;
-	machine::machine_schein get_machine_schein();
+	//machine::machine_schein get_machine_schein();
 
 private:
 	enum class VALUE_TYPE
@@ -60,23 +65,23 @@ private:
 			size_t length;
 		} rt_string;
 		framework::member * rt_member;
-		temp_counter::counter_type rt_temp_member;
+	//	temp_counter::counter_type rt_temp_member;
 		struct parameter
 		{
 			const char * format;
 			framework::member::parameter_count parameter_count;
-			machine::platform::toolset::pass_count passed_quartets;
+		//	machine::platform::toolset::pass_count passed_quartets;
 		} rt_parameter;
 	};
-	
-	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
-	machine::platform::toolset _toolset;
-	/**	Defines the context for which this script should be compiled.	*/
-	machine::machine_context & _context;
-	machine::machine_schein _machine_schein;
 
-	machine::platform::toolset::temp_members parameter;	/**	Used for initializing and finalizing the code.	*/
-	temp_counter temp_variable_counter;	/**	Defines the temporary address counter for temporary storage.	*/
+	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
+	//machine::platform::toolset _toolset;
+	/**	Defines the context for which this script should be compiled.	*/
+	//machine::machine_context & _context;
+	//machine::machine_schein _machine_schein;
+
+	//machine::platform::toolset::temp_members parameter;	/**	Used for initializing and finalizing the code.	*/
+	//temp_counter temp_variable_counter;	/**	Defines the temporary address counter for temporary storage.	*/
 
 	VALUE_TYPE _return_type;	/**	Defines the type of the last operation result.	*/
 	return_value _return_value;	/**	Defines the _value of the last operation result.	*/
@@ -200,9 +205,11 @@ private:
 		_return_value.rt_parameter = _value;
 	}
 	const grammar::report * handle_root(const grammar::report * _report);
-	const grammar::report *  handle_number(const grammar::report * _report);
-	const grammar::report * compiler::handle_raw_value(grammar::report_range _reports)
-} ;
+	const grammar::report * handle_number(const grammar::report * _report);
+	const grammar::report * handle_raw_value(const grammar::report * _report);
+	const grammar::report * handle_member(const grammar::report * _report);
+	const grammar::report * handle_instantiation(const grammar::report * _report);
+};
 
 }
 }
