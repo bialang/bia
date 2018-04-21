@@ -2,9 +2,9 @@
 
 #include <cstdarg>
 
-#include "biaMember.hpp"
-#include "biaException.hpp"
-#include "biaDisguisedCaller.hpp"
+#include "member.hpp"
+#include "exception.hpp"
+#include "disguised_caller.hpp"
 
 
 namespace bia

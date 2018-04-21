@@ -37,15 +37,15 @@ public:
 	/**
 	 * Constructor.
 	 *
-	 * @param	[in]	p_output	Defines the output stream.
+	 * @param [in] _output Defines the output stream.
 	*/
-	inline toolset(stream::output_stream & _output) : _output(&_output)
+	toolset(stream::output_stream & _output) : _output(&_output)
 	{
 		_passed = 0;
 
-		//Create new stack frame for this entry point
-		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*_output);
-		architecture::add_instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(*_output, 0);
+		// Create new stack frame for this entry point
+		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*this->_output);
+		architecture::add_instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(*this->_output, 0);
 	}
 	~toolset()
 	{

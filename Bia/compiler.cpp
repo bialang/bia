@@ -1,6 +1,5 @@
 #include "compiler.hpp"
-#include "output_stream_buffer.hpp"
-#include "interpreter_token.hpp"
+#include "interpreter_ids.hpp"
 
 
 namespace bia
@@ -8,7 +7,10 @@ namespace bia
 namespace compiler
 {
 
-compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) :_toolset(_output), _context(_context), _machine_schein(_context.get_allocator())
+using namespace grammar;
+
+
+compiler::compiler(stream::output_stream & _output) : _toolset(_output), _context(_context), _machine_schein(_context.get_allocator())
 {
 }
 
@@ -17,40 +19,77 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 	handle_root(_begin);
 }
 
-void compiler::handle_number(const grammar::report * _report)
+const grammar::report * compiler::handle_root(const grammar::report * _report)
 {
-	switch (_report->custom_parameter & grammar::NI_NUMBER_ID_MASK) {
-	case grammar::NI_INTEGER:
-		set_return(grammar::interpreter_token::parse_integer(_report->content.token.string, _report->content.token.length, _report->custom_parameter));
+	switch (_report->rule_id) {
+	case BGR_ROOT_HELPER_0:
+	{
+		auto _end = _report->content.end;
 
-		break;
-	case grammar::NI_FLOAT:
-		set_return(grammar::interpreter_token::parse_floating_point<float>(_report->content.token.string, _report->content.token.length, _report->custom_parameter));
+		++_report;
 
-		break;
-	case grammar::NI_DOUBLE:
-		set_return(grammar::interpreter_token::parse_floating_point<double>(_report->content.token.string, _report->content.token.length, _report->custom_parameter));
+		// Handle all reports
+		while (_report < _end) {
+			_report = handle_root(_report) + 1;
+		}
 
-		break;
+		return _end;
+	}
+	case BGR_VARIABLE_DECLARATION:
+		//return HandleVariableDeclaration(p_pReport->content.children);
+	case BGR_IF:
+		//return HandleIf(p_pReport->content.children);
+	case BGR_PRINT:
+		//return HandlePrint(p_pReport->content.children);
+	case BGR_TEST_LOOP:
+		//return HandleTestLoop(p_pReport->content.children);
+	case BGR_IMPORT:
+		//return HandleImport(p_pReport->content.children);
+	case BGR_VALUE:
+		// HandleValue<false>(p_pReport->content.children, [] {});
 	default:
 		BIA_COMPILER_DEV_INVALID;
 	}
 }
 
+const grammar::report *  compiler::handle_number(const grammar::report * _report)
+{
+	using TYPE = report::TYPE;
+
+	switch (_report->type) {
+	case TYPE::INT_VALUE:
+		set_return(_report->content.intValue);
+
+		break;
+	case TYPE::FLOAT_VALUE:
+		set_return(_report->content.floatValue);
+
+		break;
+	case TYPE::DOUBLE_VALUE:
+		set_return(_report->content.doubleValue);
+
+		break;
+	default:
+		BIA_COMPILER_DEV_INVALID;
+	}
+
+	return _report;
+}
+
 const grammar::report * compiler::handle_raw_value(grammar::report_range _reports)
 {
 	switch (_reports.begin[1].token_id) {
-	case grammar::BV_NUMBER:
+	case BV_NUMBER:
 		break;
-	case grammar::BV_TRUE:
+	case BV_TRUE:
 		set_return(true);
 
 		break;
-	case grammar::BV_FALSE:
+	case BV_FALSE:
 		set_return(false);
 
 		break;
-	case grammar::BV_MEMBER:
+	case BV_MEMBER:
 		handle_member(_reports.begin[1].content.children);
 
 		break;

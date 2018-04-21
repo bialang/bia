@@ -21,18 +21,18 @@ public:
 	/**
 	 * Writes all the passed arguments to the stream.
 	 *
-	 * @since	3.64.127.716
-	 * @date	7-Apr-18
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
 	 *
-	 * @param	p_args	Defines the parameters.
+	 * @param _args Defines the parameters.
 	*/
 	template<typename... _Args>
-	void write_all(_Args&&... args)
+	void write_all(_Args &&... _args)
 	{
-		//Prepare underlying implementation
+		// Prepare underlying implementation
 		reserve(size<_Args...>());
 
-		write(std::forward<_Args>(args)...);
+		write(std::forward<_Args>(_args)...);
 	}
 	virtual void write_stream(const stream::BiaOutputStreamBuffer & p_stream) = 0;
 	/**
@@ -91,10 +91,10 @@ private:
 	/**
 	 * Returns the size of the arguments at compile time.
 	 *
-	 * @since	3.64.127.716
-	 * @date	7-Apr-18
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
 	 *
-	 * @return	The total size in bytes.
+	 * @return The total size in bytes.
 	*/
 	template<typename _Ty>
 	constexpr static size_t size() noexcept
@@ -104,10 +104,10 @@ private:
 	/**
 	 * Returns the size of the arguments at compile time.
 	 *
-	 * @since	3.64.127.716
-	 * @date	7-Apr-18
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
 	 *
-	 * @return	The total size in bytes.
+	 * @return The total size in bytes.
 	*/
 	template<typename _Ty, typename... _Args>
 	constexpr static size_t size() noexcept

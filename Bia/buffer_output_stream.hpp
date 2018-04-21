@@ -10,7 +10,7 @@ namespace bia
 namespace stream
 {
 
-class output_stream_buffer : public output_stream
+class buffer_output_stream : public output_stream
 {
 public:
 	/**
@@ -18,11 +18,7 @@ public:
 	 *
 	 * @param	p_iReserve	(Optional)	Defines the initial reserved size.
 	*/
-	output_stream_buffer(size_t p_iReserve = 0);
-
-	/**
-	 * @see	BiaOutputStream::WriteStream.
-	*/
+	buffer_output_stream(size_t p_iReserve = 0);
 	virtual void WriteStream(const BiaOutputStreamBuffer & p_stream) override;
 	/**
 	 * @see	BiaOutputStream::SetPosition().
