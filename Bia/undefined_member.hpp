@@ -11,6 +11,7 @@ namespace framework
 class undefined_member final : public member
 {
 public:
+	~undefined_member() noexcept = default;
 	virtual void undefine() noexcept override;
 	virtual void print() const override;
 	virtual void call(member * _instance, member * _destination) override;
