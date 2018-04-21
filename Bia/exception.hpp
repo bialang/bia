@@ -3,8 +3,11 @@
 #include <string>
 #include <cstdio>
 #include <typeinfo>
+#include <exception>
 
 #define BIA_IMPLEMENTATION_EXCEPTION(msg) bia::exception::implementation_error(msg, __FILE__, __LINE__)
+#define BIA_EM_UNSUPPORTED_TYPE "Type is not supported."
+#define BIA_EM_UNDEFINED_MEMBER "Undefined member."
 
 
 namespace bia
@@ -12,105 +15,52 @@ namespace bia
 namespace exception
 {
 
-struct Exception
+class bia_error
 {
-	std::string stMessage;
-
-	inline Exception(std::string p_stMessage) : stMessage(std::move(p_stMessage))
-	{
-	}
-	virtual ~Exception() = default;
-	inline virtual void Print() const
-	{
-		printf("%s: %s\n", typeid(*this).name(), stMessage.c_str());
-	}
+public:
+	virtual ~bia_error() = default;
 };
 
-/**
- * @brief	Thrown when an implementation related error occurred. These kind of error should be reported to the maintainer of the code.
-*/
-struct implementation_error final : Exception
+class logic_error : public bia_error, public std::logic_error
 {
-	inline implementation_error(std::string p_stMessage, const char * p_pszFile, int p_nLine) : Exception(p_pszFile + std::string(":") + std::to_string(p_nLine) + ": " + std::move(p_stMessage))
+public:
+	explicit logic_error(const std::string & _message) : std::logic_error(_message)
+	{
+	}
+	explicit logic_error(const char * _message) : std::logic_error(_message)
 	{
 	}
 };
 
-/**
- * @brief	Thrown when a operator specific invalid operation was executed (e.g. bitwise operation with floating point values).
-*/
-struct operator_error final : Exception
+class runtime_error : public bia_error, public std::runtime_error
 {
-	operator_error() : Exception("Unsupported operator.")
+public:
+	explicit runtime_error(const std::string & _message) : std::runtime_error(_message)
 	{
 	}
-	operator_error(std::string p_stMessage) : Exception(std::move(p_stMessage))
+	explicit runtime_error(const char * _message) : std::runtime_error(_message)
 	{
 	}
 };
 
-struct NumberException final : Exception
+class invalid_type : public logic_error
 {
-	inline NumberException(std::string p_stMessage) : Exception(std::move(p_stMessage))
+public:
+	explicit invalid_type(const std::string & _message) : logic_error(_message)
+	{
+	}
+	explicit invalid_type(const char * _message) : logic_error(_message)
 	{
 	}
 };
 
-struct LimitationException final : Exception
+class symbol_error final : public runtime_error
 {
-	inline LimitationException(std::string p_stMessage) : Exception(std::move(p_stMessage))
+public:
+	explicit symbol_error(const std::string & _message) : runtime_error(_message)
 	{
 	}
-};
-
-struct bad_cast_error final : Exception
-{
-	bad_cast_error() : Exception("Unsupported cast.")
-	{
-	}
-	bad_cast_error(std::string p_stMessage) : Exception(std::move(p_stMessage))
-	{
-	}
-};
-
-struct BadCallException final : Exception
-{
-	inline BadCallException(std::string p_stMessage) : Exception(std::move(p_stMessage))
-	{
-	}
-};
-
-struct ArgumentException final : Exception
-{
-	inline ArgumentException(std::string p_stMessage) : Exception(std::move(p_stMessage))
-	{
-	}
-};
-
-struct InstanceException final : Exception
-{
-	inline InstanceException(std::string p_stMessage) : Exception(std::move(p_stMessage))
-	{
-	}
-};
-
-struct symbol_error final : Exception
-{
-	symbol_error(std::string p_stMessage) : Exception(std::move(p_stMessage))
-	{
-	}
-};
-
-struct AccessViolationException final : Exception
-{
-	inline AccessViolationException(std::string p_stMessage) : Exception(std::move(p_stMessage))
-	{
-	}
-};
-
-struct AllocationException final : Exception
-{
-	inline AllocationException(std::string p_stMessage) : Exception(std::move(p_stMessage))
+	explicit symbol_error(const char * _message) : runtime_error(_message)
 	{
 	}
 };
