@@ -39,7 +39,7 @@ public:
 	constexpr static auto BLOCK_SIZE = BIA_MAX_MEMBER_SIZE;
 
 
-	virtual ~allocator() = default;
+	virtual ~allocator() noexcept = default;
 	virtual void commit_allocation(universal_allocation _allocation, size_t _size) = 0;
 	virtual void deallocate(universal_allocation _allocation, MEMORY_TYPE _type) = 0;
 	virtual void deallocate_blocks(universal_allocation _allocation, MEMORY_TYPE _type) = 0;

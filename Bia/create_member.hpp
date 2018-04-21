@@ -6,8 +6,8 @@
 #include "member.hpp"
 #include "native_member.hpp"
 #include "biaNativeReference.hpp"
-#include "biaCString.hpp"
-#include "biaStaticFunction.hpp"
+#include "cstring_member.hpp"
+#include "static_function.hpp"
 #include "biaClassRaw.hpp"
 
 

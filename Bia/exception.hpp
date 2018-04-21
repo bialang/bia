@@ -8,6 +8,7 @@
 #define BIA_IMPLEMENTATION_EXCEPTION(msg) bia::exception::implementation_error(msg, __FILE__, __LINE__)
 #define BIA_EM_UNSUPPORTED_TYPE "Type is not supported."
 #define BIA_EM_UNDEFINED_MEMBER "Undefined member."
+#define BIA_EM_NULL_INSTANCE "Cannot access member without an instance."
 
 
 namespace bia
@@ -50,6 +51,17 @@ public:
 	{
 	}
 	explicit invalid_type(const char * _message) : logic_error(_message)
+	{
+	}
+};
+
+class argument_error : public logic_error
+{
+public:
+	explicit argument_error(const std::string & _message) : logic_error(_message)
+	{
+	}
+	explicit argument_error(const char * _message) : logic_error(_message)
 	{
 	}
 };

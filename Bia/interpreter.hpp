@@ -17,10 +17,10 @@ public:
 	/**
 	 * Sets a rule.
 	 *
-	 * @since	2.39.81.472
-	 * @date	10-Sep-17
+	 * @since 2.39.81.472
+	 * @date 10-Sep-17
 	 *
-	 * @param	_rule	Defines the rule.
+	 * @param _rule Defines the rule.
 	*/
 	void set_rule(interpreter_rule && _rule);
 	void interpret(stream::input_stream & _input, report_receiver & _receiver) const;

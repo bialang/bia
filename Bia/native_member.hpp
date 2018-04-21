@@ -26,7 +26,7 @@ public:
 	typedef native_member<float> float_member;
 	typedef native_member<double> double_member;
 
-	native_member(typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, float>::value || std::is_same<_Ty, double>::value, _Ty>::type _value)
+	native_member(typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, float>::value || std::is_same<_Ty, double>::value, _Ty>::type _value) noexcept
 	{
 		this->_value = _value;
 	}
