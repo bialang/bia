@@ -4,7 +4,7 @@
 #include <type_traits>
 
 #include "member.hpp"
-#include "biaNative.hpp"
+#include "native_member.hpp"
 #include "biaNativeReference.hpp"
 #include "biaCString.hpp"
 #include "biaStaticFunction.hpp"
@@ -19,26 +19,58 @@ namespace framework
 /**
  * Creates the member for a void result.
  *
- * @since	3.64.127.716
- * @date	8-Apr-18
+ * @remarks No checking is performed. Invalid arguments can lead to undefined behavior.
  *
- * @param	[in,out]	_destination	Defines the destination of the member.
+ * @since 3.64.127.716
+ * @date 8-Apr-18
+ *
+ * @param [in,out] _destination Defines the destination of the member.
  */
 inline void create_member(member * _destination) noexcept
 {
 	_destination->undefine();
 }
 
+/**
+ * Creates the member for an integral result.
+ *
+ * @remarks No checking is performed. Invalid arguments can lead to undefined behavior.
+ *
+ * @since 3.64.127.716
+ * @date 21-Apr-18
+ *
+ * @tparam _Ty An integral type.
+ *
+ * @param [in,out] _destination Defines the destination of the member.
+ * @param _value The integral value.
+ *
+ * @throws See member::replace_this().
+ */
 template<typename _Ty>
-inline typename std::enable_if<std::is_integral<_Ty>::value>::type create_member(member * _destination, _Ty && _value)
+inline typename std::enable_if<std::is_integral<_Ty>::value>::type create_member(member * _destination, _Ty _value)
 {
-	_destination->replace_this<native::BiaInt>(_value);
+	_destination->replace_this<native::int_member>(static_cast<int64_t>(_value));
 }
 
+/**
+ * Creates the member for a floating point result.
+ *
+ * @remarks No checking is performed. Invalid arguments can lead to undefined behavior.
+ *
+ * @since 3.64.127.716
+ * @date 21-Apr-18
+ *
+ * @tparam _Ty A floating point type.
+ *
+ * @param [in,out] _destination Defines the destination of the member.
+ * @param _value The floating point value.
+ *
+ * @throws See member::replace_this().
+ */
 template<typename _Ty>
-inline typename std::enable_if<std::is_floating_point<_Ty>::value>::type MemberCreator(BiaMember * p_pDestination, _Ty p_value)
+inline typename std::enable_if<std::is_floating_point<_Ty>::value>::type create_member(member * _destination, _Ty _value)
 {
-	p_pDestination->ReplaceObject<native::BiaNative<_Ty>>(p_value);
+	_destination->replace_this<native::native_member<_Ty>>(_value);
 }
 
 template<typename _Ty>

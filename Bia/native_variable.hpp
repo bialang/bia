@@ -19,7 +19,7 @@ public:
 	{
 		replace_this<undefined_member>();
 	}
-	virtual void call(member * _instance, member * _destination) override
+	/*virtual void call(member * _instance, member * _destination) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");
 	}
@@ -50,16 +50,16 @@ public:
 	inline virtual BiaMember * GetMember(const char * p_szName) override
 	{
 		throw exception::SymbolException("Unkown member.");
-	}
+	}*/
 
 protected:
 	virtual void * get_data(const std::type_info & _type) override
 	{
-		throw exception::bad_cast_error();
+		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
 	}
 	virtual const void * get_const_data(const std::type_info & _type) const override
 	{
-		throw exception::bad_cast_error();
+		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
 	}
 };
 
