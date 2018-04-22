@@ -1,6 +1,6 @@
 #pragma once
 
-//Compiler macro
+// Compiler macro
 #if defined(_MSC_VER)
 #define BIA_COMPILER_MSVC 1
 #elif defined(__GNUC__) || defined(__GNUG__)
@@ -22,7 +22,7 @@
 #error "Unsupported operating system."
 #endif
 
-//Architecture
+// Architecture
 #if defined(__i386) || defined(_M_IX86)
 #define BIA_ARCHITECTURE_X86
 //#elif defined(__x86_64__) || defined(_M_X64)
@@ -31,16 +31,16 @@
 #error "Unsupported architecture."
 #endif
 
-//Microsoft
+// Microsoft
 #if defined(BIA_COMPILER_MSVC)
 
-//Calling conventions
+// Calling conventions
 #define BIA_INSTRUCTION_CALLING_CONVETION(_prop, _return, _signature) _prop _return __cdecl _signature
 #define BIA_MEMBER_CALLING_CONVENTION __thiscall
 #define BIA_MEMBER_VARARG_CALLING_CONVENTION __cdecl
 #define BIA_STATIC_CALLING_CONEVENTION __cdecl
 
-//Export
+// Export
 #if defined(BIA_IMPORT)
 #define BIA_EXPORT __declspec(dllimport)
 #elif defined(BIA_BUILD_SHARED)
@@ -49,20 +49,20 @@
 #define BIA_EXPORT
 #endif
 
-//GNU
+// GNU
 #elif defined(BIA_COMPILER_GNU)
 
-//Calling conventions
+// Calling conventions
 #define BIA_INSTRUCTION_CALLING_CONVETION(_return, _signature) __attribute__((cdecl)) _return _signature
 #define BIA_MEMBER_CALLING_CONVENTION
 #define BIA_MEMBER_VARARG_CALLING_CONVENTION __attribute__((cdecl))
 #define BIA_STATIC_CALLING_CONEVENTION __attribute__((cdecl))
 
-//Export
+// Export
 #define BIA_EXPORT
 
 #endif
 
-//Universal macros
-#define BIA_MAX_TEMP_ADDRESSES 2147483648
+// Universal macros
+#define BIA_MAX_TEMP_ADDRESSES 2147483646
 #define BIA_MAX_MEMBER_SIZE 50

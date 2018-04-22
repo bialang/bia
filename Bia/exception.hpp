@@ -10,6 +10,7 @@
 #define BIA_EM_UNDEFINED_MEMBER "Undefined member."
 #define BIA_EM_NULL_INSTANCE "Cannot access member without an instance."
 #define BIA_EM_REPORT_LIMIT "Report bundle limit reached."
+#define BIA_EM_LIMITATION_EXCEEDED "Limitation has been exceeded."
 #define BIA_EM_INVALID_ARGUMENT "Invalid arguments."
 
 

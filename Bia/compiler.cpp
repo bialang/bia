@@ -51,6 +51,36 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 	}
 }
 
+const grammar::report * compiler::handle_root_ignore(const grammar::report * _report)
+{
+	switch (_report->rule_id) {
+	case BGR_ROOT_HELPER_0:
+	{
+		auto _end = _report->content.end;
+
+		++_report;
+
+		// Handle all reports
+		while (_report < _end) {
+			_report = handle_root_ignore(_report) + 1;
+		}
+
+		return _end;
+	}
+	case BGR_VARIABLE_DECLARATION:
+	case BGR_IF:
+	case BGR_PRINT:
+	case BGR_TEST_LOOP:
+	case BGR_IMPORT:
+	case BGR_VALUE:
+		break;
+	default:
+		BIA_COMPILER_DEV_INVALID;
+	}
+
+	return _report->content.end;
+}
+
 const grammar::report *  compiler::handle_number(const grammar::report * _report)
 {
 	using TYPE = report::TYPE;
@@ -101,7 +131,7 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
-	
+
 
 	return _report->content.end;
 }
