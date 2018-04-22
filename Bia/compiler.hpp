@@ -1,16 +1,18 @@
 #pragma once
 
-#include <cstdint>
 
 #include "exception.hpp"
 #include "output_stream.hpp"
 #include "toolset.hpp"
-#include "member.hpp"
-#include "report_bundle.hpp"
+#include "report.hpp"
+#include "interpreter_ids.hpp"
+#include "compiler_value.hpp"
+
 #include "interpreter.hpp"
 #include "interpreter_rule.hpp"
+#include "machine_code.hpp"
 
-#define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Invalid case.")
+#define BIA_COMPILER_DEV_INVALID throw 0 /*BIA_IMPLEMENTATION_EXCEPTION("Invalid case.")*/
 
 
 namespace bia
@@ -33,179 +35,61 @@ public:
 	compiler(compiler && _rvalue) = delete;
 	~compiler();
 	virtual void report(const grammar::report * _begin, const grammar::report * _end) override;
+	void finalize();
+	machine::machine_code get_code();
 	//machine::machine_schein get_machine_schein();
 
 private:
-	enum class VALUE_TYPE
-	{
-		INT_32,
-		INT_64,
-		FLOAT,
-		DOUBLE,
-		STRING,
-		MEMBER,
-		TEMPORARY_MEMBER,
-		/** Defines that the test value is stored in the test register. */
-		TEST_VALUE_REGISTER,
-		/** Defines that the test value is known at compile time. */
-		TEST_VALUE_CONSTANT,
-		PARAMETER,
-		/** Defines that the result is stored in the result register. */
-		RESULT_REGISTER,
-		NONE,
-	};
+	/** The result value for calculating and compiling. */
+	compiler_value _value;
 
-	union return_value
+	
+	/**
+	 * Handles the value rule.
+	 *
+	 * @since 3.64.127.716
+	 * @date 22-Apr-18
+	 *
+	 * @tparam _Test If the result value should be guaranteed testable.
+	 *
+	 * @param _report The corresponding report.
+	 *
+	 * @throws See handle_value_expression().
+	 *
+	 * @return The end of this report.
+	*/
+	template<bool _Test>
+	const grammar::report * handle_value(const grammar::report * _report)
 	{
-		bool rt_test_result;	/**	Defines the constant test _value.	*/
-		int32_t rt_int32;
-		int64_t rt_int64;
-		float rt_float;
-		double rt_double;
-		struct string
+		switch (_report[1].rule_id) {
+		case grammar::BGR_VALUE_EXPRESSION:
+			handle_value_expression<_Test>(_report + 1);
+
+			break;
+		case grammar::BGR_VALUE_HELPER_0:
 		{
-			const char * data;
-			size_t length;
-		} rt_string;
-		framework::member * rt_member;
-	//	temp_counter::counter_type rt_temp_member;
-		struct parameter
-		{
-			const char * format;
-			framework::member::parameter_count parameter_count;
-		//	machine::platform::toolset::pass_count passed_quartets;
-		} rt_parameter;
-	};
+			// Identifier
+			_report[1].content.member;
+			// Operator
+			_report[2].content.operatorCode;
+			
+			// Handle right value expression
+			handle_value_expression<false>(_report + 3);
 
-	/**	Defines the compiler toolset for the specific C++ compiler and architecture.	*/
-	//machine::platform::toolset _toolset;
-	/**	Defines the context for which this script should be compiled.	*/
-	//machine::machine_context & _context;
-	//machine::machine_schein _machine_schein;
+			// Call operator
 
-	//machine::platform::toolset::temp_members parameter;	/**	Used for initializing and finalizing the code.	*/
-	//temp_counter temp_variable_counter;	/**	Defines the temporary address counter for temporary storage.	*/
+			break;
+		}
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
 
-	VALUE_TYPE _return_type;	/**	Defines the type of the last operation result.	*/
-	return_value _return_value;	/**	Defines the _value of the last operation result.	*/
-
-
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::TEST_VALUE_CONSTANT.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(bool _value) noexcept
-	{
-		_return_type = VALUE_TYPE::TEST_VALUE_CONSTANT;
-		_return_value.rt_test_result = _value;
+		return _report->content.end;
 	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::INT_32.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(int32_t _value) noexcept
+	template<bool _Test>
+	const grammar::report * handle_value_expression(const grammar::report * _report)
 	{
-		_return_type = VALUE_TYPE::INT_32;
-		_return_value.rt_int32 = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::INT_64.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(int64_t _value) noexcept
-	{
-		_return_type = VALUE_TYPE::INT_64;
-		_return_value.rt_int64 = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::FLOAT.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(float _value) noexcept
-	{
-		_return_type = VALUE_TYPE::FLOAT;
-		_return_value.rt_float = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::DOUBLE.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(double _value) noexcept
-	{
-		_return_type = VALUE_TYPE::DOUBLE;
-		_return_value.rt_double = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::STRING.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(return_value::string _value) noexcept
-	{
-		_return_type = VALUE_TYPE::STRING;
-		_return_value.rt_string = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::MEMBER.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(framework::member * _value) noexcept
-	{
-		_return_type = VALUE_TYPE::MEMBER;
-		_return_value.rt_member = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::TEMPORARY_MEMBER.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	/*void set_return(temp_counter::counter_type _value) noexcept
-	{
-		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
-		_return_value.rt_temp_member = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::PARAMETER.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(return_value::parameter _value) noexcept
-	{
-		_return_type = VALUE_TYPE::PARAMETER;
-		_return_value.rt_parameter = _value;
+		return _report->content.end;
 	}
 	const grammar::report * handle_root(const grammar::report * _report);
 	const grammar::report * handle_number(const grammar::report * _report);

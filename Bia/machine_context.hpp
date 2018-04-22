@@ -4,6 +4,7 @@
 
 #include "allocator.hpp"
 #include "input_stream.hpp"
+#include "machine_code.hpp"
 
 
 namespace bia
@@ -26,8 +27,10 @@ public:
 	 * @date 21-Apr-18
 	 *
 	 * @param _allocator The memory allocator.
+	 *
+	 * @throws exception::argument_error If the allocator is invalid.
 	*/
-	machine_context(std::shared_ptr<memory::allocator> _allocator) noexcept;
+	machine_context(std::shared_ptr<memory::allocator> _allocator);
 	~machine_context();
 	void execute(stream::input_stream & _script);
 	/**
@@ -43,6 +46,9 @@ public:
 private:
 	/** The memory allocator. */
 	std::shared_ptr<memory::allocator> _allocator;
+
+
+	machine_code compile_script(stream::input_stream & _script);
 };
 
 }

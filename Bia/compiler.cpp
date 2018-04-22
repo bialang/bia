@@ -1,5 +1,4 @@
 #include "compiler.hpp"
-#include "interpreter_ids.hpp"
 
 
 namespace bia
@@ -9,7 +8,7 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output)// : _toolset(_output), _context(_context), _machine_schein(_context.get_allocator())
+compiler::compiler(stream::output_stream & _output)
 {
 }
 
@@ -58,15 +57,15 @@ const grammar::report *  compiler::handle_number(const grammar::report * _report
 
 	switch (_report->type) {
 	case TYPE::INT_VALUE:
-		set_return(_report->content.intValue);
+		_value.set_return(_report->content.intValue);
 
 		break;
 	case TYPE::FLOAT_VALUE:
-		set_return(_report->content.floatValue);
+		_value.set_return(_report->content.floatValue);
 
 		break;
 	case TYPE::DOUBLE_VALUE:
-		set_return(_report->content.doubleValue);
+		_value.set_return(_report->content.doubleValue);
 
 		break;
 	default:
@@ -82,11 +81,11 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 	case BV_NUMBER:
 		break;
 	case BV_TRUE:
-		set_return(true);
+		_value.set_return(true);
 
 		break;
 	case BV_FALSE:
-		set_return(false);
+		_value.set_return(false);
 
 		break;
 	case BV_MEMBER:
@@ -110,7 +109,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 const grammar::report * compiler::handle_instantiation(const grammar::report * _report)
 {
 	// Set identifier
-	set_return(_report[1].content.member);
+	_value.set_return(_report[1].content.member);
 
 	// Handle parameters
 
