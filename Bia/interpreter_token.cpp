@@ -314,22 +314,32 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 	return error;
 }
 
-ACTION interpreter_token::command_end(const char * _buffer, size_t _length, token_param _params, token_output & _output) noexcept
+ACTION interpreter_token::command_end(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
 
-	while (_output.length < _length) {
-		switch (_buffer[_output.length++]) {
-		case ' ':
-		case '\t':
-		case '\r':
-			break;
-		case '\n':
-			return success;
-		default:
-			return error;
+	while (_input.available() > 0) {
+		auto _buffer = _input.get_buffer();
+
+		while (_buffer.first < _buffer.second) {
+			switch (*_buffer.first++) {
+			case ' ':
+			case '\t':
+			case '\r':
+				break;
+			case '\n':
+				// Move cursor
+				_input.skip(_buffer.first);
+
+				return success;
+			default:
+				return error;
+			}
 		}
+
+		// Move cursor
+		_input.skip(_buffer.first);
 	}
 
 	return success;
