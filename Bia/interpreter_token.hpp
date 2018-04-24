@@ -486,6 +486,20 @@ public:
 	*/
 	static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
 	static ACTION string(stream::input_stream & _input, token_param _params, token_output & _output);
+	/**
+	 * Matches an identifier. An identifier conists of alphanumeric characters and an underscore without a leading number.
+	 *
+	 * @since 3.64.127.716
+	 * @date 24-Apr-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param _params Additional interpreter information.
+	 * @param [out] _output The token result.
+	 *
+	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
+	 *
+	 * @return Defines the success code. See ::ACTION.
+	*/
 	static ACTION identifier(stream::input_stream & _input, token_param _params, token_output & _output);
 	static ACTION assign_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);

@@ -5,6 +5,7 @@
 
 #include "report_bundle.hpp"
 #include "input_stream.hpp"
+#include "machine_context.hpp"
 
 
 namespace bia
@@ -55,6 +56,7 @@ struct token_param
 	report_bundle * bundle;
 	const interpreter_rule * rules;
 	report::token_type token_id;
+	machine::machine_context * context;
 };
 
 struct token_output

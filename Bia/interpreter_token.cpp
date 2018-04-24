@@ -234,6 +234,51 @@ gt_break:;
 	return error;
 }
 
+ACTION interpreter_token::identifier(stream::input_stream & _input, token_param _params, token_output & _output)
+{
+	constexpr auto success = ACTION::REPORT;
+	constexpr auto error = ACTION::ERROR;
+
+		// No input
+	if (_input.available() <= 0) {
+		return error;
+	}
+
+	auto _buffer = _input.get_buffer();
+	auto _begin = _buffer.first;
+
+	// First character
+	if (*_buffer.first != '_' && !std::isalpha(*_buffer.first)) {
+		return error;
+	}
+
+	int _length = 1;
+
+	++_buffer.first;
+
+	// Rest
+	while (_buffer.first < _buffer.second) {
+		if (*_buffer.first == '_' || std::isalnum(*_buffer.first)) {
+			++_buffer.first;
+
+			// Max identifier length reached
+			if (++_length > BIA_MAX_IDENTIFIER_LENGTH) {
+				return error;
+			}
+		} else {
+			break;
+		}
+	}
+
+	// Get address
+	_output.content.content.member = _params.context->get_address(_begin);
+
+	// Move cursor
+	_input.skip(_buffer.first);
+
+	return success;
+}
+
 ACTION interpreter_token::comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
 {
 	constexpr auto success = ACTION::DONT_REPORT;

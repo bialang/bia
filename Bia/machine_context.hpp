@@ -48,6 +48,7 @@ private:
 	std::shared_ptr<memory::allocator> _allocator;
 
 
+	framework::member * get_address(const char * _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 
