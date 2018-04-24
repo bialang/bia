@@ -239,7 +239,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
 
-		// No input
+	// No input
 	if (_input.available() <= 0) {
 		return error;
 	}
@@ -284,40 +284,31 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
 
+	auto _first_iter = true;
+
 	// Check if this is a comment
-	auto _buffer = _input.get_buffer();
-	stream::input_stream::cursor_type _read = 0;
+	while (_input.available() > 0) {
+		auto _buffer = _input.get_buffer();
 
-	if (_buffer.second >= 1 && *_buffer.first == '#') {
-		++_read;
-
-		// Ignore every character until a line break
-		while (true) {
-			if (_read == _buffer.second) {
-				// There is still more
-				if (_input.has_next()) {
-					_input.skip(_read);
-
-					_buffer = _input.get_buffer();
-					_read = 0;
-				}
-			}
+		// Check for comment character
+		if (_first_iter && *_buffer.first++ != '#') {
+			return error;
 		}
-	}
 
-	if (_length >= 1 && *_buffer++ == '#') {
-		++_output.length;
+		_first_iter = false;
 
 		// Ignore every character until a line break
-		while (--_length) {
-			++_output.length;
+		while (_buffer.first < _buffer.second) {
+			if (*_buffer.first++ == '\n') {
+				// Move cursor
+				_input.skip(_buffer.first);
 
-			if (*_buffer++ == '\n') {
-				break;
+				return success;
 			}
 		}
 
-		return success;
+		// Move cursor
+		_input.skip(_buffer.first);
 	}
 
 	return error;

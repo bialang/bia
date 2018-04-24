@@ -504,17 +504,18 @@ public:
 	static ACTION assign_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
-	 * Matches a single line comment token.
+	 * Matches a comment which starts with '#' and ends with a line feed.
 	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
+	 * @since 3.64.127.716
+	 * @date 24-Apr-18
 	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
+	 * @param [in] _input The input buffer.
+	 * @param _params (Not used) Additional interpreter information.
+	 * @param [out] _output The token result.
 	 *
-	 * @return	Defines the success code. See ::ACTION.
+	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
+	 *
+	 * @return Defines the success code. See ::ACTION.
 	*/
 	static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
 	/**
