@@ -311,7 +311,7 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 		_input.skip(_buffer.first);
 	}
 
-	return error;
+	return _first_iter ? success : error;
 }
 
 ACTION interpreter_token::command_end(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
