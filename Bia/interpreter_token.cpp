@@ -14,7 +14,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
-	
+
 	std::cmatch _results;
 
 	if (std::regex_search(_buffer, _buffer + _length, _results, _number_pattern)) {
@@ -88,6 +88,148 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 			return success;
 		}
 	}
+
+	return error;
+}
+
+ACTION interpreter_token::string(stream::input_stream & _input, token_param _params, token_output & _output)
+{
+	constexpr auto success = ACTION::REPORT;
+	constexpr auto error = ACTION::ERROR;
+
+	enum FLAGS : uint32_t
+	{
+		F_SINGLE_QUOTE = 0x1,
+		F_QUOTE_SET = 0x2,
+		F_RAW_STRING = 0x4,
+		F_BINARY = 0x8,
+	};
+
+	uint32_t _flags = 0;
+	stream::input_stream::buffer_type _buffer;
+	stream::input_stream::cursor_type _delimitor = 0;
+
+	// Determine delimitor and quote
+	while (true) {
+		// No buffer available
+		if (_input.available() <= 0) {
+			return error;
+		}
+
+		_buffer = _input.get_buffer();
+
+		while (_buffer.first < _buffer.second) {
+			switch (*_buffer.first++) {
+			case 'R':
+			{
+				// Add 'R' to raw string delimitor
+				if (_flags & F_QUOTE_SET) {
+					++_delimitor;
+				} // Start of raw string
+				else if (!(_flags & F_RAW_STRING)) {
+					_flags |= F_RAW_STRING;
+				} else {
+					return error;
+				}
+
+				break;
+			}
+			case '"':
+			{
+				// No quote has been set
+				if (!(_flags & F_QUOTE_SET)) {
+					_flags |= F_QUOTE_SET;
+
+					// Read string now
+					if (!(_flags & F_RAW_STRING)) {
+						goto gt_break;
+					}
+
+					// Read delimitor of raw string now
+				} // Add to delimiter
+				else {
+					++_delimitor;
+				}
+
+				break;
+			}
+			case '\'':
+			{
+				// No quote has been set
+				if (!(_flags & F_QUOTE_SET)) {
+					_flags |= F_QUOTE_SET | F_SINGLE_QUOTE;
+
+					// Read string now
+					if (!(_flags & F_RAW_STRING)) {
+						goto gt_break;
+					}
+
+					// Read delimitor of raw string now
+				} //Add to delimitor
+				else {
+					++_delimitor;
+				}
+
+				break;
+			}
+			case '(':
+			{
+				// Terminate delimitor of raw string
+				if (_flags & F_QUOTE_SET) {
+					goto gt_break;
+				}
+
+				return error;
+			}
+			default:
+			{
+				// No raw string delimitor
+				if (!(_flags & F_QUOTE_SET)) {
+					return error;
+				}
+
+				++_delimitor;
+
+				break;
+			}
+			}
+		}
+
+		// Move cursor
+		_input.skip(_buffer.first);
+	}
+
+gt_break:;
+
+	// Raw string
+	if (_flags & F_RAW_STRING) {
+		while (true) {
+			while (_buffer.first < _buffer.second) {
+				switch (*_buffer.first++) {
+				case ')':
+				{
+					// Compare delimitors
+					if (true) {
+
+					}
+				}
+				default:
+					break;
+				}
+			}
+
+			// Move buffer
+			_input.skip(_buffer.first);
+
+			// No buffer available
+			if (_input.available() <= 0) {
+				return error;
+			}
+
+			_buffer = _input.get_buffer();
+		}
+	} // Normal string
+
 
 	return error;
 }

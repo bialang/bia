@@ -64,7 +64,7 @@ private:
 		auto _old = _counter.peek();
 
 		// Handle value
-		handle_value_insecure(_report);
+		handle_value_insecure<_Test>(_report);
 
 		// Execute callback
 		_callback();

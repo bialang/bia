@@ -3,6 +3,8 @@
 #include <utility>
 #include <cstdint>
 
+#include "config.hpp"
+
 
 namespace bia
 {
@@ -21,6 +23,10 @@ class input_stream
 public:
 	/** The cursor type. */
 	typedef long long cursor_type;
+	/** The buffer type. */
+	typedef std::pair<const int8_t*, const int8_t*> buffer_type;
+
+	constexpr static cursor_type min_buffer_size = BIA_MIN_INPUT_BUFFER_SIZE;
 
 	/**
 	 * Destructor.
@@ -43,9 +49,10 @@ public:
 	*/
 	virtual void reset(cursor_type _mark) = 0;
 	virtual void skip(cursor_type _length) = 0;
+	virtual void skip(buffer_type::first_type _position) = 0;
 	virtual cursor_type mark() const = 0;
 	virtual cursor_type available() const = 0;
-	virtual std::pair<const int8_t*, cursor_type> get_buffer() = 0;
+	virtual buffer_type get_buffer() = 0;
 };
 
 }
