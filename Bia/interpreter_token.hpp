@@ -5,10 +5,11 @@
 #include <regex>
 #include <type_traits>
 
+#include "config.hpp"
 #include "interpreter_rule.hpp"
-#include "interpreter_ids.hpp"
+#include "interpreter_id.hpp"
 #include "input_stream.hpp"
-#include "utf8.h"
+#include "utf.hpp"
 
 
 namespace bia
@@ -510,7 +511,7 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params (Not used) Additional interpreter information.
+	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
@@ -525,7 +526,7 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params (Not used) Additional interpreter information.
+	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
@@ -536,40 +537,49 @@ public:
 	/**
 	 * Matches a keyword token.
 	 *
-	 * @remarks	_Ty defines the keyword. Flags are defined under grammar::flags.
+	 * @since 3.64.127.716
+	 * @date 24-Apr-18
 	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
+	 * @tparam _Ty The keyword. See @file interpreter_id.hpp for all keywords and operators.
+	 * @tparam _Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
+	 * @param [in] _input The input buffer.
+	 * @param _params Additional interpreter information.
+	 * @param [out] _output The token result.
 	 *
-	 * @return	Defines the success code. See ::ACTION.
+	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
+	 *
+	 * @return Defines the success code. See ::ACTION.
 	*/
 	template<typename _Ty, flags::flag_type _Flags = flags::none>
-	static ACTION keyword(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
+	static ACTION keyword(stream::input_stream & _input, token_param _params, token_output & _output)
 	{
 		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = _Flags & flags::opt_token ? ACTION::DONT_REPORT : (_Flags & flags::looping_token ? ACTION::DONT_REPORT : ACTION::ERROR);
 
-		if (_length >= _Ty::size()) {
-			// Starting whitespaces and compare token
-			if (!whitespace_deleter<_Flags, true>(_buffer, _length, _output) || std::memcmp(_buffer, _Ty::token(), _Ty::size())) {
-				return error;
+		static_assert(_Ty::length() <= BIA_MAX_KEYWORD_LENGTH, "Keyword length exceeded.");
+
+		if (_input.available() >= _Ty::length()) {
+			auto _buffer = _input.get_buffer();
+			auto _keyword = _Ty::token();
+			auto _length = _Ty::length();
+
+			while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
+				if (_params.encoder->next(_buffer.first, _buffer.second) != *_keyword++) {
+					break;
+				}
+
+				if (!--_length) {
+					// Set output
+					_output.content.type = report::TYPE::KEYWORD;
+					_output.content.content.keyword = _Ty::string_id();
+
+					// Move cursor
+					_input.skip(_buffer.first);
+
+					return success;
+				}
 			}
-
-			_output.length = _Ty::size();
-			_buffer += _Ty::size();
-			_length -= _Ty::size();
-
-			//Ending whitespaces
-			if (!whitespace_deleter<_Flags, false>(_buffer, _length, _output)) {
-				return error;
-			}
-
-			return success;
 		}
 
 		return error;
@@ -577,21 +587,21 @@ public:
 	/**
 	 * Matches a rule pointer token.
 	 *
-	 * @remarks	_Rule defines the rule id. Flags are defined under grammar::flags.
+	 * @since 3.64.127.716
+	 * @date 9-Apr-18
 	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
+	 * @tparam _Rule The rule id. See @ref BIA_GRAMMAR_RULE.
+	 * @tparam _Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
+	 * @param [in] _input The input buffer.
+	 * @param _params Additional interpreter information.
+	 * @param [out] _output The token result.
 	 *
-	 * @throws	?
+	 * @throws See interpreter_rule::run_rule().
 	 *
-	 * @return	Defines the success code. See ::ACTION.
+	 * @return Defines the success code. See ::ACTION.
 	*/
-	template<report::rule_type _Rule, flags::flag_type _Flags = flags::filler_token, report::custom_type _Custom = 0>
+	template<report::rule_type _Rule, flags::flag_type _Flags = flags::filler_token>
 	static ACTION rule_pointer(stream::input_stream & _input, token_param _params, token_output & _output)
 	{
 		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
@@ -602,10 +612,7 @@ public:
 			return error;
 		}
 
-		_params.rules[_Rule].run_rule(_input, _params);
-		_output.custom = _Custom;
-
-		return _output.length ? success : error;
+		return _params.rules[_Rule].run_rule(_input, _params) ? success : error;
 	}
 
 private:

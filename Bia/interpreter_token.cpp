@@ -1,7 +1,5 @@
 #include "interpreter_token.hpp"
 
-#include <cctype>
-
 
 namespace bia
 {
@@ -304,7 +302,7 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 			if (_params.encoder->next(_buffer.first, _buffer.second) != '#') {
 				return error;
 			}
-
+			
 			_first_iter = false;
 		}
 

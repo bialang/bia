@@ -66,6 +66,7 @@
 // Universal macros
 #define BIA_MAX_TEMP_ADDRESSES 2147483646
 #define BIA_MAX_MEMBER_SIZE 50
+#define BIA_MAX_KEYWORD_LENGTH 16
 /** The minimum buffer size of stream::input_stream::get_buffer(). */
 #define BIA_MIN_INPUT_BUFFER_SIZE 1024
 /** The maximum identifier length. Can be at most as high as @ref BIA_MIN_INPUT_BUFFER / 4. */

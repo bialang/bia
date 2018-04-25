@@ -4,6 +4,7 @@
 
 #include "member.hpp"
 #include "operator.hpp"
+#include "interpreter_string.hpp"
 
 
 namespace bia
@@ -36,6 +37,7 @@ struct report
 		DOUBLE_VALUE,
 		MEMBER,
 		OPERATOR_CODE,
+		KEYWORD,
 		BEGIN,
 		END,
 		EMPTY_CHILD
@@ -54,6 +56,7 @@ struct report
 		const report *  end;
 		framework::member * member;
 		framework::OPERATOR operatorCode;
+		INTERPRETER_STRING keyword;
 	} content;
 };
 
