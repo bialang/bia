@@ -12,6 +12,8 @@
 #define BIA_EM_REPORT_LIMIT "Report bundle limit reached."
 #define BIA_EM_LIMITATION_EXCEEDED "Limitation has been exceeded."
 #define BIA_EM_INVALID_ARGUMENT "Invalid arguments."
+#define BIA_EM_INVALID_ENCODING "Invalid encoding."
+#define BIA_EM_NOT_ENOUGH_SPACE "Not enough space."
 
 
 namespace bia
@@ -132,6 +134,38 @@ public:
 	 * @param _message The message.
 	*/
 	explicit invalid_type(const char * _message) : logic_error(_message)
+	{
+	}
+};
+
+/**
+ * @brief Indicates an invalid encoding.
+ *
+ * Indicates an invalid encoding or an encoding error.
+*/
+class encoding_error : public logic_error
+{
+public:
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @param _message The message.
+	*/
+	explicit encoding_error(const std::string & _message) : logic_error(_message)
+	{
+	}
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @param _message The message.
+	*/
+	explicit encoding_error(const char * _message) : logic_error(_message)
 	{
 	}
 };

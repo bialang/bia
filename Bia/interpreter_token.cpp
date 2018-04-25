@@ -248,19 +248,23 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	auto _begin = _buffer.first;
 
 	// First character
-	if (*_buffer.first != '_' && !std::isalpha(*_buffer.first)) {
+	if (_params.encoder->has_next(_buffer.first, _buffer.second)) {
+		auto _first = _params.encoder->next(_buffer.first, _buffer.second);
+
+		if (_first != '_' && !encoding::utf::is_alpha(_first)) {
+			return error;
+		}
+	} else {
 		return error;
 	}
 
 	int _length = 1;
 
-	++_buffer.first;
-
 	// Rest
-	while (_buffer.first < _buffer.second) {
-		if (*_buffer.first == '_' || std::isalnum(*_buffer.first)) {
-			++_buffer.first;
+	while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
+		auto _char = _params.encoder->next(_buffer.first, _buffer.second);
 
+		if (_char == '_' || encoding::utf::is_alnum(_char)) {
 			// Max identifier length reached
 			if (++_length > BIA_MAX_IDENTIFIER_LENGTH) {
 				return error;
@@ -290,16 +294,23 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 	while (_input.available() > 0) {
 		auto _buffer = _input.get_buffer();
 
-		// Check for comment character
-		if (_first_iter && *_buffer.first++ != '#') {
-			return error;
+		// Has no next character
+		if (!_params.encoder->has_next(_buffer.first, _buffer.second)) {
+			break;
 		}
 
-		_first_iter = false;
+		// Check for comment character
+		if (_first_iter) {
+			if (_params.encoder->next(_buffer.first, _buffer.second) != '#') {
+				return error;
+			}
+
+			_first_iter = false;
+		}
 
 		// Ignore every character until a line break
-		while (_buffer.first < _buffer.second) {
-			if (*_buffer.first++ == '\n') {
+		while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
+			if (_params.encoder->next(_buffer.first, _buffer.second) == '\n') {
 				// Move cursor
 				_input.skip(_buffer.first);
 
@@ -322,13 +333,18 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 	while (_input.available() > 0) {
 		auto _buffer = _input.get_buffer();
 
-		while (_buffer.first < _buffer.second) {
-			switch (*_buffer.first++) {
+		if (!_params.encoder->has_next(_buffer.first, _buffer.second)) {
+			break;
+		}
+
+		do {
+			switch (_params.encoder->next(_buffer.first, _buffer.second)) {
 			case ' ':
 			case '\t':
 			case '\r':
 				break;
 			case '\n':
+			case 0:
 				// Move cursor
 				_input.skip(_buffer.first);
 
@@ -336,7 +352,7 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 			default:
 				return error;
 			}
-		}
+		} while (_params.encoder->has_next(_buffer.first, _buffer.second));
 
 		// Move cursor
 		_input.skip(_buffer.first);
