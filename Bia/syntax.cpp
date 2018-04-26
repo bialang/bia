@@ -1,7 +1,7 @@
 #include "syntax.hpp"
 #include "interpreter_token.hpp"
-#include "interpreter_ids.hpp"
-#include "interpreter_strings.hpp"
+#include "interpreter_id.hpp"
+#include "interpreter_string.hpp"
 
 
 namespace bia
@@ -61,7 +61,7 @@ interpreter syntax::init_rules()
 		interpreter_token::keyword<keyword_global, flags::filler_token | flags::ending_ws_token>,
 		interpreter_token::identifier,
 		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION_HELPER_0, flags::filler_token | flags::looping_token>,
-		interpreter_token::keyword<operator_equals, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::keyword<operator_assign, flags::filler_token | flags::starting_ws_opt_token>,
 		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>,
 		interpreter_token::command_end
 		}));
@@ -249,7 +249,7 @@ interpreter syntax::init_rules()
 	// Value helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_VALUE_HELPER_0, interpreter_rule::F_NONE, {
 		interpreter_token::identifier,
-		AssignOperatorToken<flags::starting_ws_opt_token>,
+		interpreter_token::assign_operator,
 		interpreter_token::rule_pointer<BGR_VALUE_EXPRESSION, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
@@ -283,7 +283,7 @@ interpreter syntax::init_rules()
 
 	// Member helper 3
 	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_3, interpreter_rule::F_OR, {
-		interpreter_token::keyword<operator_arrow_access>, // BAO_ARROW_ACCESS
+		interpreter_token::keyword<operator_arrow>, // BAO_ARROW_ACCESS
 		interpreter_token::keyword<operator_dot, flags::filler_token> // BAO_DOT
 		}));
 

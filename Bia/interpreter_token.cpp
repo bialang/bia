@@ -281,6 +281,54 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	return success;
 }
 
+ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+{
+	constexpr auto success = ACTION::REPORT;
+	constexpr auto error = ACTION::ERROR;
+
+	// Optional starting whitespaces
+
+	if (_input.available() > 0) {
+		auto _max = BIA_MAX_OPERATOR_LENGTH;
+		auto _buffer = _input.get_buffer();
+
+		while (_max-- && _params.encoder->has_next(_buffer.first, _buffer.second)) {
+			auto _char = _params.encoder->next(_buffer.first, _buffer.second);
+
+			switch (_char) {
+			case '*':
+			case '/':
+			case '%':
+			case '+':
+			case '-':
+			case '~':
+			case '^':
+			case '&':
+			case '|':
+			case '$':
+			case '#':
+				_output.content.content.operatorCode = _output.content.content.operatorCode << 8 | _char;
+
+				break;
+			case '=':
+			{
+				_output.content.content.operatorCode = _output.content.content.operatorCode << 8 | '=';
+				_output.content.type = report::TYPE::OPERATOR_CODE;
+
+				// Move cursor
+				_input.skip(_buffer.first);
+
+				return success;
+			}
+			default:
+				return error;
+			}
+		}
+	}
+
+	return error;
+}
+
 ACTION interpreter_token::comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
 {
 	constexpr auto success = ACTION::DONT_REPORT;
@@ -302,7 +350,7 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 			if (_params.encoder->next(_buffer.first, _buffer.second) != '#') {
 				return error;
 			}
-			
+
 			_first_iter = false;
 		}
 
