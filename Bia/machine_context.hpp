@@ -1,10 +1,13 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
 #include "allocator.hpp"
 #include "input_stream.hpp"
 #include "machine_code.hpp"
+#include "string_key.hpp"
+#include "member.hpp"
 
 
 namespace bia
@@ -46,9 +49,11 @@ public:
 private:
 	/** The memory allocator. */
 	std::shared_ptr<memory::allocator> _allocator;
+	/** Holds all known variables, function and other. */
+	std::unordered_map<utility::string_key, machine_code, utility::string_key::hasher> _variable_index;
 
 
-	framework::member * get_address(const char * _name);
+	framework::member * get_address(utility::string_key _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 

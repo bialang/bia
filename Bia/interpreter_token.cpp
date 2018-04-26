@@ -273,7 +273,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	}
 
 	// Get address
-	_output.content.content.member = _params.context->get_address(_begin);
+	_output.content.content.member = _params.context->get_address(utility::string_key(reinterpret_cast<const char*>(_begin), reinterpret_cast<const char*>(_buffer.first)));
 
 	// Move cursor
 	_input.skip(_buffer.first);

@@ -9,19 +9,19 @@ namespace bia
 namespace utility
 {
 
-template<typename>
-struct hasher;
+template<typename _Ty>
+class hasher;
 
 template<>
-struct hasher<uint32_t>
+class hasher<uint32_t>
 {
+public:
 	static uint32_t hash(const char * _buffer, uint32_t _length) noexcept
 	{
 		constexpr auto M = 0x5bd1e995;
 		uint32_t _hash = 0xc70f6907 ^ _length;
 
-		while (_length >= 4)
-		{
+		while (_length >= 4) {
 			uint32_t k = 0;
 
 			memcpy(&k, _buffer, 4);
@@ -37,8 +37,7 @@ struct hasher<uint32_t>
 			_length -= 4;
 		}
 
-		switch (_length)
-		{
+		switch (_length) {
 		case 3:
 			_hash ^= static_cast<uint8_t>(_buffer[2]) << 16;
 		case 2:
@@ -54,23 +53,19 @@ struct hasher<uint32_t>
 
 		return _hash;
 	}
-	uint32_t operator()(const char * _buffer, uint32_t _length) const noexcept
-	{
-		return hash(_buffer, _length);
-	}
 };
 
 template<>
-struct hasher<uint64_t>
+class hasher<uint64_t>
 {
+public:
 	static uint64_t hash(const char * _buffer, uint64_t _length) noexcept
 	{
 		constexpr auto M = (0xc6a4a793ull << 32) + 0x5bd1e995;
 		const auto _end = _buffer + (_length & ~0x7);
 		uint64_t _hash = 0xc70f6907 ^ _length * M;
 
-		while (_buffer < _end)
-		{
+		while (_buffer < _end) {
 			uint64_t _temp = 0;
 
 			memcpy(&_temp, _buffer, 8);
@@ -82,12 +77,12 @@ struct hasher<uint64_t>
 
 		_length &= 0x7;
 
-		if (_length)
-		{
+		if (_length) {
 			uint64_t _temp = 0;
 
-			while (_length-- > 0)
+			while (_length-- > 0) {
 				_temp = (_temp << 8) + static_cast<uint8_t>(_end[_length]);
+			}
 
 			_hash ^= _temp;
 			_hash *= M;
@@ -97,10 +92,6 @@ struct hasher<uint64_t>
 		_hash = shift_mix(_hash);
 
 		return _hash;
-	}
-	uint64_t operator()(const char * _buffer, uint64_t _length) const noexcept
-	{
-		return hash(_buffer, _length);
 	}
 
 private:
