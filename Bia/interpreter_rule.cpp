@@ -34,15 +34,7 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 				// Update begin
 				auto _begin = _token_param.bundle->begin() + _begin_size;
 
-				_begin->content.children.begin = _begin;
-				_begin->content.children.end = _token_param.bundle->end();
-
-				// Add end
-				auto _end = *_begin;
-
-				_end.type = report::TYPE::END;
-
-				_token_param.bundle->add(_end);
+				_begin->content.end = _token_param.bundle->end();
 			} // Don't report empty children
 			else if (_flags & F_DONT_REPORT_EMPTY) {
 				_token_param.bundle->rollback(_begin_size);
@@ -51,8 +43,7 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 				auto _begin = _token_param.bundle->begin() + _begin_size;
 
 				_begin->type = report::TYPE::EMPTY_CHILD;
-				_begin->content.children.begin = _begin;
-				_begin->content.children.end = _begin;
+				_begin->content.end = _begin;
 			}
 		}
 	};

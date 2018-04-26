@@ -15,10 +15,11 @@ namespace grammar
 {
 
 /**
- * Flags used for token specialization.
+ * @brief Flags used for token specialization.
 */
 struct flags
 {
+	/** The flag type. */
 	typedef uint64_t flag_type;
 
 	/** No flag. */
@@ -41,6 +42,7 @@ struct flags
 	constexpr static flag_type starting_padding_opt_token = 0x100;
 };
 
+/** The result of a token. */
 enum class ACTION
 {
 	REPORT,
@@ -52,12 +54,20 @@ enum class ACTION
 
 class interpreter_rule;
 
+/**
+ * @brief Additional token parameters.
+*/
 struct token_param
 {
+	/** The output report bundle. */
 	report_bundle * bundle;
+	/** The available rules. */
 	const interpreter_rule * rules;
+	/** The current token id. */
 	report::token_type token_id;
+	/** The corresponding machine context. */
 	machine::machine_context * context;
+	/** The decoder for the input stream. */
 	encoding::utf * encoder;
 };
 
@@ -67,6 +77,7 @@ struct token_output
 	report::custom_type custom;
 };
 
+/** The interper token signature. */
 typedef ACTION(*bia_token_function)(stream::input_stream&, token_param, token_output&);
 
 /**

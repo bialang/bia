@@ -43,7 +43,12 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 		_param.rules = _rules;
 		_param.token_id = 0;
 
-		_rules[BGR_ROOT].run_rule(_input, _param);
+		try {
+			_rules[BGR_ROOT].run_rule(_input, _param);
+		} catch (const exception::limitation_error & ex) {
+			// Reset
+			_input.reset(_mark);
+		}
 
 		// Report
 		_receiver.report(_bundle.begin(), _bundle.end());

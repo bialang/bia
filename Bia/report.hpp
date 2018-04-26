@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 
 #include "member.hpp"
 #include "operator.hpp"
@@ -55,7 +56,7 @@ struct report
 		double doubleValue;
 		const report *  end;
 		framework::member * member;
-		framework::OPERATOR operatorCode;
+		typename std::underlying_type<framework::OPERATOR>::type operatorCode;
 		INTERPRETER_STRING keyword;
 	} content;
 };

@@ -5,7 +5,7 @@
 #include "output_stream.hpp"
 #include "toolset.hpp"
 #include "report.hpp"
-#include "interpreter_ids.hpp"
+#include "interpreter_id.hpp"
 #include "compiler_value.hpp"
 #include "temp_counter.hpp"
 

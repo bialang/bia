@@ -14,6 +14,9 @@ namespace utility
 class string_key
 {
 public:
+	/**
+	 * @brief The corresponding hasher to @ref string_key.
+	*/
 	class hasher
 	{
 	public:
