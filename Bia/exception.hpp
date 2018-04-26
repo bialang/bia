@@ -14,6 +14,7 @@
 #define BIA_EM_INVALID_ARGUMENT "Invalid arguments."
 #define BIA_EM_INVALID_ENCODING "Invalid encoding."
 #define BIA_EM_NOT_ENOUGH_SPACE "Not enough space."
+#define BIA_EM_INVALID_UNICODE "Invalid unicode character."
 
 
 namespace bia
