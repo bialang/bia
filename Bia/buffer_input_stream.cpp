@@ -61,9 +61,9 @@ buffer_input_stream::cursor_type buffer_input_stream::available() const
 	return _length - _position;
 }
 
-std::pair<const int8_t*, buffer_input_stream::cursor_type> buffer_input_stream::get_buffer()
+buffer_input_stream::buffer_type buffer_input_stream::get_buffer()
 {
-	return { static_cast<const int8_t*>(_buffer.get()), available() };
+	return { static_cast<const int8_t*>(_buffer.get()) + _position, static_cast<const int8_t*>(_buffer.get()) + _length };
 }
 
 }

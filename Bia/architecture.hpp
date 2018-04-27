@@ -74,6 +74,18 @@ struct register_offset<_Register, void, _Effective_address>
 class architecture
 {
 public:
+	/**
+	 * Writes the specified instruction without params to the output stream.
+	 *
+	 * @since 3.64.127.716
+	 * @date 27-Apr-18
+	 *
+	 * @tparam _Op_code The operation code.
+	 *
+	 * @param [out] _output The output stream.
+	 *
+	 * @throws See stream::output_stream::write_all().
+	*/
 	template<OP_CODE _Op_code>
 	static void add_instruction(stream::output_stream & _output)
 	{
@@ -86,6 +98,19 @@ public:
 			return _output.write_all(0xc3_8);
 		}
 	}
+	/**
+	 * Writes the specified instruction with one register to the output stream.
+	 *
+	 * @since 3.64.127.716
+	 * @date 27-Apr-18
+	 *
+	 * @tparam _Op_code The operation code.
+	 * @tparam _Register The register.
+	 *
+	 * @param [out] _output The output stream.
+	 *
+	 * @throws See stream::output_stream::write_all().
+	*/
 	template<OP_CODE _Op_code, REGISTER _Register>
 	static void add_instruction(stream::output_stream & _output)
 	{
@@ -98,6 +123,22 @@ public:
 			return _output.write_all(0xff_8, static_cast<uint8_t>(0320 | get_register_code<_Register>()));
 		}
 	}
+	/**
+	 * Writes the specified instruction with a source and destination register to the output stream.
+	 *
+	 * @since 3.64.127.716
+	 * @date 27-Apr-18
+	 *
+	 * @tparam _Op_code The operation code.
+	 * @tparam _Dest The destination register.
+	 * @tparam _Src The source register.
+	 * @tparam _Offset The destination offset.
+	 *
+	 * @param [out] _output The output stream.
+	 * @param _offset The offset.
+	 *
+	 * @throws See stream::output_stream::write_all().
+	*/
 	template<OP_CODE _Op_code, REGISTER _Dest, REGISTER _Src, typename _Offset>
 	static void add_instruction(stream::output_stream & _output, _Offset _offset)
 	{
@@ -110,12 +151,10 @@ public:
 			// No offset
 			if (_offset == 0) {
 				return _output.write_all(0x89_8, static_cast<uint8_t>(0300 | get_register_code<_Src>() << 3 | get_register_code<_Dest>()));
-			}
-			// 8 bit offset
+			} // 8 bit offset
 			else if (std::is_same<_Offset, int8_t>::value) {
 				return _output.write_all(0x8b_8, static_cast<uint8_t>(0100 | get_register_code<_Src>() | get_register_code<_Dest>() << 3), static_cast<uint8_t>(_offset));
-			}
-// 32 bit offset
+			} // 32 bit offset
 			else {
 				return _output.write_all(0x8b_8, static_cast<uint8_t>(0200 | get_register_code<_Src>() | get_register_code<_Dest>() << 3), static_cast<uint32_t>(_offset));
 			}
@@ -129,8 +168,7 @@ public:
 				// 8 bit offset
 				if (std::is_same<int8_t, _Offset>::value) {
 					return _output.write_all(0x8d_8, static_cast<uint8_t>(0100 | get_register_code<_Src>() | get_register_code<_Dest>() << 3), static_cast<uint8_t>(_offset));
-				}
-// 32 bit offset
+				} // 32 bit offset
 				else {
 					return _output.write_all(0x8d_8, static_cast<uint8_t>(0200 | get_register_code<_Src>() | get_register_code<_Dest>() << 3), static_cast<uint32_t>(_offset));
 				}
@@ -143,8 +181,7 @@ public:
 			// 8 bit register
 			if (RegisterSize<_Dest>() == 8) {
 				return _output.write_all(0x84_8, static_cast<uint8_t>(0300 | get_register_code<_Src>() << 3 | get_register_code<_Dest>()));
-			}
-// 32 bit register
+			} // 32 bit register
 			else {
 				return _output.write_all(0x85_8, static_cast<uint8_t>(0300 | get_register_code<_Src>() << 3 | get_register_code<_Dest>()));
 			}

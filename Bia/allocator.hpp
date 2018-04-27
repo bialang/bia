@@ -65,7 +65,7 @@ public:
 	{
 		auto ptr = reinterpret_cast<int8_t*>(_allocation.address);
 
-		//Destroy all elements
+		// Destroy all elements
 		for (size_t i = 0; i < _allocation.size; ++i) {
 			reinterpret_cast<_Ty*>(ptr + i * BLOCK_SIZE)->~_Ty();
 		}
@@ -122,7 +122,7 @@ public:
 		auto allocation = allocate_blocks(_count, _type);
 		auto ptr = static_cast<int8_t*>(allocation.address);
 
-		//Construct all elements
+		// Construct all elements
 		for (size_t i = 0; i < _count; ++i) {
 			new(ptr + i * block_size) _Deriviate(std::forward<_Args>(_args)...);
 		}
