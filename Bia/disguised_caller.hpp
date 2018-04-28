@@ -7,6 +7,7 @@
 #include "member.hpp"
 #include "exception.hpp"
 #include "create_member.hpp"
+#include "parameter_order.hpp"
 #include "type_traits.hpp"
 
 
@@ -85,7 +86,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 	}
 }
 
-inline void disguised_caller(void(*_function)(), framework::member * _destination)
+inline void disguised_caller(BIA_PO_1_1_2(framework::member * _destination, void(*_function)()))
 {
 	_function();
 

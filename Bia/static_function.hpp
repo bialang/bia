@@ -40,6 +40,10 @@ public:
 	{
 		puts(typeid(_function).name());
 	}
+	virtual void execute(BIA_PO_0_1_2(member * _destination, member * _instance)) override
+	{
+		force::disguised_caller(BIA_PO_1_1_2(_destination, _function));
+	}
 
 private:
 	/** The function pointer. */

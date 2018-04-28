@@ -19,6 +19,10 @@ public:
 	{
 		replace_this<undefined_member>();
 	}
+	virtual void execute(BIA_PO_0_1_2(member * _destination, member * _instance)) override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
+	}
 	/*virtual void call(member * _instance, member * _destination) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");

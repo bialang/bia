@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "config.hpp"
+#include "parameter_order.hpp"
 #include "operator.hpp"
 #include "native_type.hpp"
 #include "type_traits.hpp"
@@ -75,17 +76,19 @@ public:
 	*/
 	virtual void print() const = 0;
 	//virtual void introduce(template_table * _table) = 0;
+
 	/**
-	 * Calls this function without any parameters.
+	 * Executes this object as function.
 	 *
-	 * @param	[in]	_instance	(Optional)	If non-null defines the instance for member functions.
-	 * @param	[in,out]	_destination	Defines the destination of the return result.
+	 * @since 3.64.127.716
+	 * @date 28-Apr-18
 	 *
-	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
-	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
-	 * @throws	exception::InstanceException	Thrown when the passed instance is invalid.
+	 * @param [out] _destination The destination of the return result.
+	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
+	 *
+	 * @throws exception::execution_error If this object cannot be executed.
 	*/
-	//virtual void call(member * _instance, member * _destination) = 0;
+	virtual void execute(BIA_PO_0_1_2(member * _destination, member * _instance)) = 0;
 	/**
 	 * Calls this function with only members as parameters.
 	 *

@@ -50,10 +50,11 @@ private:
 	/** The memory allocator. */
 	std::shared_ptr<memory::allocator> _allocator;
 	/** Holds all known variables, function and other. */
-	std::unordered_map<utility::string_key, machine_code, utility::string_key::hasher> _variable_index;
+	std::unordered_map<utility::string_key, std::unique_ptr<framework::member>, utility::string_key::hasher> _variable_index;
 
 
-	framework::member * get_address(utility::string_key _name);
+	framework::member * get_address_or_create(const utility::string_key & _name);
+	framework::member * get_address_or_create(utility::string_key && _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 

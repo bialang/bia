@@ -14,7 +14,7 @@ public:
 	~undefined_member() noexcept = default;
 	virtual void undefine() noexcept override;
 	virtual void print() const override;
-	virtual void call(member * _instance, member * _destination) override;
+	virtual void execute(BIA_PO_0_1_2(member * _destination, member * _instance)) override;
 	virtual bool is_const() const override;
 
 protected:

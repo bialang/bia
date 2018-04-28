@@ -18,7 +18,7 @@ void undefined_member::print() const
 	BIA_UNDEFINED_ERROR;
 }
 
-void undefined_member::call(member * _instance, member * _destination)
+void undefined_member::execute(BIA_PO_0_1_2(member *_destination, member *_instance))
 {
 	BIA_UNDEFINED_ERROR;
 }
