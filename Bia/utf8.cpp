@@ -38,7 +38,7 @@ void utf8::append(char_type _char, int8_t *& _begin, const int8_t * _end)
 	} // Three bytes
 	else if (_char <= 0xffff) {
 		// Reserved character
-		if (_char > 0xd800 && _char < 0xdfff) {
+		if (is_reserved(_char)) {
 			throw exception::encoding_error(BIA_EM_INVALID_UNICODE);
 		} // Check size
 		else if (_size < 3) {
@@ -52,7 +52,7 @@ void utf8::append(char_type _char, int8_t *& _begin, const int8_t * _end)
 	} // Four bytes
 	else if (_char <= 0x10ffff) {
 		// Reserved character
-		if (_char > 0xd800 && _char < 0xdfff) {
+		if (is_reserved(_char)) {
 			throw exception::encoding_error(BIA_EM_INVALID_UNICODE);
 		} // Check size
 		else if (_size < 4) {
@@ -91,7 +91,7 @@ utf8::char_type utf8::next(const int8_t *& _begin, const int8_t * _end)
 			throw exception::encoding_error(BIA_EM_NOT_ENOUGH_SPACE);
 		}
 
-		_char = (*_begin & 0x1f << 6) | (_begin[1] & 0x3f);
+		_char = (*_begin & 0x1f) << 6 | (_begin[1] & 0x3f);
 
 		// Check char
 		if (_char < 0x80) {
@@ -106,13 +106,13 @@ utf8::char_type utf8::next(const int8_t *& _begin, const int8_t * _end)
 			throw exception::encoding_error(BIA_EM_NOT_ENOUGH_SPACE);
 		}
 
-		_char = (*_begin & 0x0f << 12) | (_begin[1] & 0x3f << 6) | (_begin[2] & 0x3f);
+		_char = (*_begin & 0x0f) << 12 | (_begin[1] & 0x3f) << 6 | (_begin[2] & 0x3f);
 
 		// Check char
 		if (_char < 0x800) {
 			throw exception::encoding_error(BIA_EM_INVALID_ENCODING);
 		} // Reserved character
-		else if (_char > 0xd800 && _char < 0xdfff) {
+		else if (is_reserved(_char)) {
 			throw exception::encoding_error(BIA_EM_INVALID_UNICODE);
 		}
 
@@ -124,13 +124,13 @@ utf8::char_type utf8::next(const int8_t *& _begin, const int8_t * _end)
 			throw exception::encoding_error(BIA_EM_NOT_ENOUGH_SPACE);
 		}
 
-		_char = (*_begin & 0x07 << 18) | (_begin[1] & 0x3f << 12) | (_begin[2] & 0x3f << 6) | (_begin[3] & 0x3f);
+		_char = (*_begin & 0x07) << 18 | (_begin[1] & 0x3f) << 12 | (_begin[2] & 0x3f) << 6 | (_begin[3] & 0x3f);
 
 		// Check char
 		if (_char < 0x10000) {
 			throw exception::encoding_error(BIA_EM_INVALID_ENCODING);
 		} // Reserved character
-		else if (_char > 0xd800 && _char < 0xdfff) {
+		else if (is_reserved(_char)) {
 			throw exception::encoding_error(BIA_EM_INVALID_UNICODE);
 		}
 

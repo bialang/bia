@@ -19,6 +19,10 @@ public:
 	static bool is_alpha(char_type _char);
 	static bool is_digit(char_type _char);
 	static bool is_alnum(char_type _char);
+	static bool is_reserved(char_type _char)
+	{
+		return _char >= 0xd800 && _char <= 0xdfff;
+	}
 	virtual int start(const int8_t * _begin, const int8_t * _end) = 0;
 	virtual char_type next(const int8_t *& _begin, const int8_t * _end) = 0;
 };
