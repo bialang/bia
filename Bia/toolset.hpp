@@ -6,6 +6,7 @@
 #include <initializer_list>
 #include <utility>
 
+#include "config.hpp"
 #include "architecture.hpp"
 #include "output_stream.hpp"
 #include "machine_context.hpp"
@@ -37,7 +38,12 @@ public:
 	/**
 	 * Constructor.
 	 *
-	 * @param [in] _output Defines the output stream.
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @param [in] _output The output stream.
+	 *
+	 * @throws See architecture::add_instruction().
 	*/
 	toolset(stream::output_stream & _output) : _output(&_output)
 	{
@@ -47,63 +53,121 @@ public:
 		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*this->_output);
 		architecture::add_instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(*this->_output, 0);
 	}
-	~toolset()
+	/**
+	 * Adds some necessary cleanup instruction to the output stream.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @throws See architecture::add_instruction().
+	*/
+	void finalize()
 	{
 		// Cleanup stack frame and return
 		architecture::add_instruction<OP_CODE::LEAVE>(*_output);
 		architecture::add_instruction<OP_CODE::RETURN_NEAR>(*_output);
 	}
 	/**
-	 * Sets the output stream
+	 * Sets the output stream.
 	 *
-	 * @remarks	The contents of the old stream will not be copied to the new one.
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
 	 *
-	 * @since	3.64.127.716
-	 * @date	7-Apr-18
-	 *
-	 * @param	[in]	_output	Defines the new output stream.
+	 * @param [in] _output The new output stream.
 	*/
 	void set_output(stream::output_stream & _output) noexcept
 	{
 		this->_output = &_output;
 	}
-	template<typename _RETURN, typename... _ARGS>
-	inline void SafeCall(_RETURN(BIA_STATIC_CALLING_CONEVENTION *p_pFunctionAddress)(_ARGS...), _ARGS... p_args)
+	/**
+	 * Performs a safe static function call.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @tparam _Return The return type of the function.
+	 * @tparam _Args The arguments of the function.
+	 *
+	 * @param _function The function address.
+	 * @param _args The arguments for the function.
+	 *
+	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
+	 * @throws See pass() and pop().
+	*/
+	template<typename _Return, typename... _Args>
+	void safe_call(static_function_signature<_Return, _Args> _function, _Args &&... _args)
 	{
-		//Push all parameters
-		auto passed = Pass(p_args...);
+		// Push all parameters
+		auto _passed = pass(std::forward<_Args>(_args)...);
 
-		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(p_pFunctionAddress));
-		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*_output);
+		// Move the address of the function into EAX and call it
+		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(_function));
+		architecture::add_instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
 
-		//Pop parameter
-		Pop(passed);
+		// Pop parameter
+		pop(_passed);
 	}
-	template<typename _RETURN, typename _CLASS, typename... _ARGS>
-	inline void SafeCall(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _CLASS * p_pInstance, _ARGS... p_args)
+	/**
+	 * Performs a safe member function call.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @tparam _Class The class.
+	 * @tparam _Return The return type of the function.
+	 * @tparam _Args The arguments of the function.
+	 *
+	 * @param _function The function address.
+	 * @param _args The arguments for the function.
+	 *
+	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
+	 * @throws See pass() and pop().
+	*/
+	template<typename _Class, typename _Return, typename... _Args>
+	void safe_call(member_function_signature<_Class, _Return, _Args...> _function, _Class * _instance, _Args &&... _args)
 	{
-		//Push all parameters
-		auto passed = Pass(p_args...);
+		// Push all parameters
+		auto _passed = pass(std::forward<_Args>(_args)...);
 		
-		PassInstance(p_pInstance);
+		pass_instance(_instance);
 
+		// Convert
 		union
 		{
-			_RETURN(_CLASS::*pMember)(_ARGS...);
-			void * pAddress;
+			_Return(_Class::*member)(_Args...);
+			void * address;
 		} address;
 		
-		address.pMember = p_pFunctionAddress;
+		address.member = _function;
 
-		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.pAddress));
-		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*_output);
+		// Move the address of the function into EAX and call it
+		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
+		architecture::add_instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
 
 #if defined(BIA_COMPILER_GNU)
-		//Pop
-		Pop(passed);
+		// Pop
+		pop(_passed);
 #endif
+	}
+	/**
+	 * Performs a static function call without handling parameters.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @tparam _Return The return type of the function.
+	 * @tparam _Args The arguments of the function.
+	 *
+	 * @param _function The function address.
+	 *
+	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
+	*/
+	template<typename _Return, typename... _Args>
+	void call(static_function_signature<_Return, _Args...> _function)
+	{
+		// Move the address of the function into EAX and call it
+		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(_function));
+		architecture::add_instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
 	}
 	template<typename _RETURN, typename _CLASS, typename _INSTANCE, typename... _ARGS, typename... _ARGS2>
 	inline void Call(pass_count p_passed, _RETURN(BIA_MEMBER_VARARG_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS..., ...), _INSTANCE p_instance, _ARGS2... p_args)
@@ -125,19 +189,6 @@ public:
 
 		//Pop
 		Pop(passed + p_passed);
-	}
-	template<typename _Ty, typename... _ARGS>
-	inline void Call(_Ty * p_pFunctionAddress, _ARGS... p_args)
-	{
-		//Push all
-		auto passed = Pass(p_args...);
-
-		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(p_pFunctionAddress));
-		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*_output);
-
-		//Pop all
-		Pop(passed);
 	}
 	template<typename _RETURN, typename _CLASS, typename _INSTANCE, typename... _ARGS, typename... _ARGS2>
 	inline void Call(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _INSTANCE p_instance, _ARGS2... p_args)
@@ -333,7 +384,7 @@ public:
 	}
 
 private:
-	/**	Defines the output stream for the machine code.	*/
+	/** The output stream for the machine code. */
 	stream::output_stream * _output;
 
 	pass_count _passed;

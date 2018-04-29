@@ -56,7 +56,7 @@ struct report
 		double doubleValue;
 		const report *  end;
 		framework::member * member;
-		typename std::underlying_type<framework::OPERATOR>::type operatorCode;
+		framework::member::operator_type operatorCode;
 		INTERPRETER_STRING keyword;
 	} content;
 };

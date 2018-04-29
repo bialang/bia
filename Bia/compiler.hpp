@@ -8,6 +8,7 @@
 #include "interpreter_id.hpp"
 #include "compiler_value.hpp"
 #include "temp_counter.hpp"
+#include "member.hpp"
 
 #include "interpreter.hpp"
 #include "interpreter_rule.hpp"
@@ -34,11 +35,43 @@ public:
 	//machine::machine_schein get_machine_schein();
 
 private:
+	typedef const grammar::report*(compiler::*handle_type)(const grammar::report*);
+
 	/** The result value for calculating and compiling. */
 	compiler_value _value;
 	/** A counter for the needed temporary variables. */
 	temp_counter _counter;
-	
+
+	void operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
+	void constant_operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
+	/**
+	 * Handles a math expression or a math term token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @tparam _Expression true for math expression, otherwise math term.
+	 *
+	 * @param _report The math report.
+	 *
+	 * @throws See handle_math_expression_and_term() and handle_math_factor().
+	 *
+	 * @return The end of the report.
+	*/
+	template<bool _Expression = true>
+	const grammar::report * handle_math_expression_and_term(const grammar::report * _report)
+	{
+		constexpr handle_type next = _Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
+
+		// Only one math expression or term to handle
+		if (_report[1].content.end + 1 == _report->content.end) {
+			(this->*next)(_report + 1);
+		} else {
+			handle_math_expression_and_term(_report, next);
+		}
+
+		return _report->content.end;
+	}
 	/**
 	 * Handles the value rule.
 	 *
@@ -48,10 +81,9 @@ private:
 	 * @tparam _Test If the result value should be guaranteed testable.
 	 * @tparam _Lambda The callback lambda function.
 	 *
-	 * @param _report The corresponding report.
+	 * @param _report The value report.
 	 * @param [in] _callback The callback for safe execution.
 	 *
-	 * @throws See temp_counter::peek().
 	 * @throws See temp_counter::pop().
 	 * @throws See handle_value_insecure().
 	 *
@@ -86,7 +118,7 @@ private:
 	 *
 	 * @param _report The corresponding report.
 	 *
-	 * @throws See handle_value_expression().
+	 * @throws See handle_value_expression() and operation().
 	 *
 	 * @return The end of the report.
 	*/
@@ -100,15 +132,16 @@ private:
 			break;
 		case grammar::BGR_VALUE_HELPER_0:
 		{
-			// Identifier
-			_report[1].content.member;
-			// Operator
-			_report[2].content.operatorCode;
+			// Set identifier
+			compiler_value _left;
+
+			_left.set_return(_report[1].content.member);
 
 			// Handle right value expression
 			handle_value_expression<false>(_report + 3);
 
 			// Call operator
+			operation(_left, _report[2].content.operatorCode, _value);
 
 			break;
 		}
@@ -130,13 +163,64 @@ private:
 	 * @since 3.64.127.716
 	 * @date 22-Apr-18
 	 *
-	 * @param _repot The corresponding report.
+	 * @param _report The root report.
 	 *
 	 * @return The end of the report.
 	*/
 	const grammar::report * handle_root_ignore(const grammar::report * _report);
+	/**
+	 * Handles a math expression or a math term token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @param _report The math report.
+	 * @param _next The next function hop. Should handle_math_expression_and_term<false>() or handle_math_factor().
+	 *
+	 * @throws See operation().
+	 * @throws See temp_counter::next(), temp_counter::current() and temp_counter::pop().
+	 * @throws Whatever @a _next throws.
+	 *
+	 * @return The end of the report.
+	*/
+	const grammar::report * handle_math_expression_and_term(const grammar::report * _report, handle_type _next);
+	/**
+	 * Handles a number token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @param _report The number report.
+	 *
+	 * @return The end of the report.
+	*/
 	const grammar::report * handle_number(const grammar::report * _report);
+	/**
+	 * Handles a raw value token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @param _report The raw value token.
+	 *
+	 * @throws See handle_member().
+	 *
+	 * @return The end of the report.
+	*/
 	const grammar::report * handle_raw_value(const grammar::report * _report);
+	/**
+	 * Handles a math factor token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @param _report The math factor token.
+	 *
+	 * @throws See handle_raw_value() and handle_value_insecure().
+	 *
+	 * @return The end of the report.
+	*/
+	const grammar::report * handle_math_factor(const grammar::report * _report);
 	const grammar::report * handle_member(const grammar::report * _report);
 	const grammar::report * handle_instantiation(const grammar::report * _report);
 };

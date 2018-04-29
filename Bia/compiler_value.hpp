@@ -190,6 +190,30 @@ public:
 		_return_value.rt_parameter = _value;
 	}
 	/**
+	 * Checks wheter the held value is constant.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @return true if the value is constant, otherwise false.
+	*/
+	bool is_const() const noexcept
+	{
+		switch (_return_type) {
+		case VALUE_TYPE::INT_32:
+		case VALUE_TYPE::INT_64:
+		case VALUE_TYPE::FLOAT:
+		case VALUE_TYPE::DOUBLE:
+		case VALUE_TYPE::STRING:
+		case VALUE_TYPE::TEST_VALUE_CONSTANT:
+			return true;
+		default:
+			break;
+		}
+
+		return false;
+	}
+	/**
 	 * Returns the type of the value.
 	 *
 	 * @since 3.64.127.716
