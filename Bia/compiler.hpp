@@ -41,6 +41,8 @@ private:
 	compiler_value _value;
 	/** A counter for the needed temporary variables. */
 	temp_counter _counter;
+	/** The compilers toolset for writing the machine code. */
+	machine::platform::toolset _toolset;
 
 	void operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
 	void constant_operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
@@ -223,6 +225,34 @@ private:
 	const grammar::report * handle_math_factor(const grammar::report * _report);
 	const grammar::report * handle_member(const grammar::report * _report);
 	const grammar::report * handle_instantiation(const grammar::report * _report);
+	/**
+	 * Handles a variable declaration token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @param _report The variable declaration token.
+	 *
+	 * @throws See handle_value().
+	 * @throws See machine::platform::toolset::call().
+	 *
+	 * @return The end of the report.
+	*/
+	const grammar::report * handle_variable_declaration(const grammar::report * _report);
+	/**
+	 * Handles a print token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @param _report The print token.
+	 *
+	 * @throws See handle_value().
+	 * @throws See machine::platform::toolset::call().
+	 *
+	 * @return The end of the report.
+	*/
+	const grammar::report * handle_print(const grammar::report * _report);
 };
 
 }

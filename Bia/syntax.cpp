@@ -60,16 +60,9 @@ interpreter syntax::init_rules()
 	_interpreter.set_rule(interpreter_rule(BGR_VARIABLE_DECLARATION, interpreter_rule::F_WRAP_UP, {
 		interpreter_token::keyword<keyword_global, flags::filler_token | flags::ending_ws_token>,
 		interpreter_token::identifier,
-		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION_HELPER_0, flags::filler_token | flags::looping_token>,
 		interpreter_token::keyword<operator_assign, flags::filler_token | flags::starting_ws_opt_token>,
 		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>,
 		interpreter_token::command_end
-		}));
-
-	// Variable declaration helper 0
-	_interpreter.set_rule(interpreter_rule(BGR_VARIABLE_DECLARATION_HELPER_0, interpreter_rule::F_NONE, {
-		interpreter_token::keyword<operator_comma, flags::filler_token | flags::starting_ws_opt_token | flags::ending_ws_opt_token>,
-		interpreter_token::identifier
 		}));
 
 	// If

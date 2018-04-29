@@ -1,5 +1,5 @@
 #include "compiler.hpp"
-
+#include "link.hpp"
 
 namespace bia
 {
@@ -8,7 +8,7 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output)
+compiler::compiler(stream::output_stream & _output) : _toolset(_output)
 {
 }
 
@@ -51,7 +51,7 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return _end;
 	}
 	case BGR_VARIABLE_DECLARATION:
-		//return HandleVariableDeclaration(p_pReport->content.children);
+		return handle_variable_declaration(_report);
 	case BGR_IF:
 		//return HandleIf(p_pReport->content.children);
 	case BGR_PRINT:
@@ -215,6 +215,147 @@ const grammar::report * compiler::handle_instantiation(const grammar::report * _
 	// Handle parameters
 
 	// Instantiate
+
+	return _report->content.end;
+}
+
+const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)
+{
+	// Handle value and prepare the result for a function call
+	handle_value<false>(_report + 2, [&] {
+		// Make call
+		switch (_value.get_type()) {
+		case compiler_value::VALUE_TYPE::INT_32:
+		{
+			// Optimize common used constant values
+			switch (_value.get_value().rt_int32) {
+			case 0:
+				_toolset.call(&machine::link::instantiate_int_0, _report[1].content.member);
+
+				break;
+			case 1:
+				_toolset.call(&machine::link::instantiate_int_1, _report[1].content.member);
+
+				break;
+			case -1:
+				_toolset.call(&machine::link::instantiate_int_n1, _report[1].content.member);
+
+				break;
+			default:
+				_toolset.call(&machine::link::instantiate_int32, _report[1].content.member, _value.get_value().rt_int32);
+
+				break;
+			}
+
+			break;
+		}
+		case compiler_value::VALUE_TYPE::INT_64:
+			_toolset.call(&machine::link::instantiate_int64, _report[1].content.member, _value.get_value().rt_int64);
+
+			break;
+		case compiler_value::VALUE_TYPE::FLOAT:
+			_toolset.call(&machine::link::instantiate_float, _report[1].content.member, _value.get_value().rt_float);
+
+			break;
+		case compiler_value::VALUE_TYPE::DOUBLE:
+			_toolset.call(&machine::link::instantiate_double, _report[1].content.member, _value.get_value().rt_double);
+
+			break;
+		case compiler_value::VALUE_TYPE::STRING:
+			_toolset.call(&machine::link::instantiate_string, _report[1].content.member, _value.get_value().rt_string.data);
+
+			break;
+		/*case compiler_value::VALUE_TYPE::MEMBER:
+			m_toolset.SafeCall(&framework::BiaMember::Clone, m_value.pMember, pVariable);
+
+			break;
+		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+			m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), pVariable);
+
+			break;
+		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
+			m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, machine::architecture::BiaToolset::TestValueResult());
+
+			break;*/
+		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
+		{
+			if (_value.get_value().rt_test_result) {
+				_toolset.call(&machine::link::instantiate_int_1, _report[1].content.member);
+			} else {
+				_toolset.call(&machine::link::instantiate_int_n1, _report[1].content.member);
+			}
+
+			break;
+		}
+		/*case compiler_value::VALUE_TYPE::RESULT_REGISTER:
+			m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::ResultValue(), pVariable);
+
+			break;*/
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
+	});
+
+	return _report->content.end;
+}
+
+const grammar::report * compiler::handle_print(const grammar::report * _report)
+{
+	// Handle value to print
+	handle_value<false>(_report + 1, [this] {
+		// Call print function
+		switch (_value.get_type()) {
+		case compiler_value::VALUE_TYPE::INT_32:
+			_toolset.call(&machine::link::print_i, _value.get_value().rt_int32);
+
+			break;
+		case compiler_value::VALUE_TYPE::INT_64:
+			_toolset.call(&machine::link::print_I, _value.get_value().rt_int64);
+
+			break;
+		case compiler_value::VALUE_TYPE::FLOAT:
+			_toolset.call(&machine::link::print_f, _value.get_value().rt_float);
+
+			break;
+		case compiler_value::VALUE_TYPE::DOUBLE:
+			_toolset.call(&machine::link::print_d, _value.get_value().rt_double);
+
+			break;
+		case compiler_value::VALUE_TYPE::STRING:
+			_toolset.call(&machine::link::print_s, _value.get_value().rt_string.data);
+
+			break;
+		case compiler_value::VALUE_TYPE::MEMBER:
+			_toolset.call(&framework::member::print, _value.get_value().rt_member);
+
+			break;
+		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+			_toolset.call(&framework::member::print, machine::platform::toolset::to_temp_member(_value.get_value().rt_temp_member));
+
+			break;
+		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
+			_toolset.call(&machine::link::print_b, machine::platform::toolset::get_test_result_value());
+
+			break;
+		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
+		{
+			if (_value.get_value().rt_test_result) {
+				_toolset.call(&machine::link::print_true);
+			} else {
+				_toolset.call(&machine::link::print_false);
+			}
+
+			break;
+		}
+		/*case compiler_value::VALUE_TYPE::RESULT_REGISTER:
+			_toolset.call(&framework::member::print)
+			m_toolset.Call(&framework::BiaMember::Print, machine::architecture::BiaToolset::ResultValue());
+
+			break;*/
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
+	});
 
 	return _report->content.end;
 }

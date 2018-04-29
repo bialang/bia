@@ -4,6 +4,7 @@
 #include <cstddef>
 
 #include "member.hpp"
+#include "temp_counter.hpp"
 
 
 namespace bia
@@ -53,7 +54,7 @@ public:
 			size_t length;
 		} rt_string;
 		framework::member * rt_member;
-	//	temp_counter::counter_type rt_temp_member;
+		temp_counter::counter_type rt_temp_member;
 		struct parameter
 		{
 			const char * format;
@@ -171,7 +172,7 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	/*void set_return(temp_counter::counter_type _value) noexcept
+	void set_return(temp_counter::counter_type _value) noexcept
 	{
 		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
 		_return_value.rt_temp_member = _value;

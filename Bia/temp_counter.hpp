@@ -1,9 +1,10 @@
 #pragma once
 
 #include <cstdint>
+#include <limits>
 
-#include "config.hpp"
 #include "exception.hpp"
+#include "toolset.hpp"
 
 
 namespace bia
@@ -21,7 +22,7 @@ namespace compiler
 class temp_counter
 {
 public:
-	typedef int32_t counter_type;
+	typedef machine::platform::toolset::temp_index_type counter_type;
 
 	/**
 	 * Constructor.
@@ -64,7 +65,7 @@ public:
 	*/
 	counter_type next()
 	{
-		if (_counter + 1 > BIA_MAX_TEMP_ADDRESSES) {
+		if (_counter == std::numeric_limits<counter_type>::max()) {
 			throw exception::limitation_error(BIA_EM_LIMITATION_EXCEEDED);
 		}
 

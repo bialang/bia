@@ -34,6 +34,7 @@ public:
 	typedef std::tuple<position, position, position> temp_members;
 	typedef register_offset<REGISTER::EBP, int8_t, false> temp_result;
 	typedef int32_t pass_count;
+	typedef int32_t temp_index_type;
 
 	/**
 	 * Constructor.
@@ -80,13 +81,16 @@ public:
 		this->_output = &_output;
 	}
 	/**
-	 * Performs a safe static function call.
+	 * Performs a static function call.
+	 *
+	 * @remarks Passing invalid parameters can lead to undefined behavior.
 	 *
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
 	 * @tparam _Return The return type of the function.
 	 * @tparam _Args The arguments of the function.
+	 * @tparam _Args2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
 	 * @param _args The arguments for the function.
@@ -94,11 +98,13 @@ public:
 	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
 	 * @throws See pass() and pop().
 	*/
-	template<typename _Return, typename... _Args>
-	void safe_call(static_function_signature<_Return, _Args> _function, _Args &&... _args)
+	template<typename _Return, typename... _Args, typename... _Args2>
+	void call(static_function_signature<_Return, _Args...> _function, _Args2 &&... _args)
 	{
+		static_assert(sizeof...(_Args) != sizeof...(_Args2), "Argument count does not match.");
+
 		// Push all parameters
-		auto _passed = pass(std::forward<_Args>(_args)...);
+		auto _passed = pass(std::forward<_Args2>(_args)...);
 
 		// Move the address of the function into EAX and call it
 		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(_function));
@@ -108,26 +114,33 @@ public:
 		pop(_passed);
 	}
 	/**
-	 * Performs a safe member function call.
+	 * Performs a member function call.
+	 *
+	 * @remarks Passing invalid parameters can lead to undefined behavior.
 	 *
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
 	 * @tparam _Class The class.
 	 * @tparam _Return The return type of the function.
+	 * @tparam _Instance The instance type.
 	 * @tparam _Args The arguments of the function.
+	 * @tparam _Args2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
+	 * @param [in] _instance The class instance.
 	 * @param _args The arguments for the function.
 	 *
 	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
 	 * @throws See pass() and pop().
 	*/
-	template<typename _Class, typename _Return, typename... _Args>
-	void safe_call(member_function_signature<_Class, _Return, _Args...> _function, _Class * _instance, _Args &&... _args)
+	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
+	void call(member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
 	{
+		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
+
 		// Push all parameters
-		auto _passed = pass(std::forward<_Args>(_args)...);
+		auto _passed = pass(std::forward<_Args2>(_args)...);
 		
 		pass_instance(_instance);
 
@@ -150,68 +163,50 @@ public:
 #endif
 	}
 	/**
-	 * Performs a static function call without handling parameters.
+	 * Performs a member function call.
+	 *
+	 * @remarks Passing invalid parameters can lead to undefined behavior.
 	 *
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
+	 * @tparam _Class The class.
 	 * @tparam _Return The return type of the function.
+	 * @tparam _Instance The instance type.
 	 * @tparam _Args The arguments of the function.
+	 * @tparam _Args2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
+	 * @param _instance The class instance.
+	 * @param _args The arguments for the function.
 	 *
 	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
+	 * @throws See pass() and pop().
 	*/
-	template<typename _Return, typename... _Args>
-	void call(static_function_signature<_Return, _Args...> _function)
+	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
+	void call(const_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
 	{
+		// Push all parameters
+		auto _passed = pass(std::forward<_Args2>(_args)...);
+		
+		pass_instance(_instance);
+
+		// Convert
+		union
+		{
+			_Return(_Class::*member)(_Args...) const;
+			void * address;
+		} address;
+		
+		address.member = _function;
+
 		// Move the address of the function into EAX and call it
-		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(_function));
+		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
 		architecture::add_instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
-	}
-	template<typename _RETURN, typename _CLASS, typename _INSTANCE, typename... _ARGS, typename... _ARGS2>
-	inline void Call(pass_count p_passed, _RETURN(BIA_MEMBER_VARARG_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS..., ...), _INSTANCE p_instance, _ARGS2... p_args)
-	{
-		//Push all parameters
-		auto passed = Pass(p_instance, p_args...);
-
-		union
-		{
-			_RETURN(_CLASS::*pMember)(_ARGS..., ...);
-			void * pAddress;
-		} address;
-
-		address.pMember = p_pFunctionAddress;
-
-		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.pAddress));
-		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*_output);
-
-		//Pop
-		Pop(passed + p_passed);
-	}
-	template<typename _RETURN, typename _CLASS, typename _INSTANCE, typename... _ARGS, typename... _ARGS2>
-	inline void Call(_RETURN(BIA_MEMBER_CALLING_CONVENTION _CLASS::*p_pFunctionAddress)(_ARGS...), _INSTANCE p_instance, _ARGS2... p_args)
-	{
-		//Push all parameters
-		auto passed = Pass(p_args...);
-		PassInstance(p_instance);
-
-		union
-		{
-			_RETURN(_CLASS::*pMember)(_ARGS...);
-			void * pAddress;
-		} address;
-
-		address.pMember = p_pFunctionAddress;
-
-		//Move the address of the function into EAX and call it
-		BiaArchitecture::Operation32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.pAddress));
-		BiaArchitecture::Operation<OP_CODE::CALL, REGISTER::EAX>(*_output);
 
 #if defined(BIA_COMPILER_GNU)
-		//Pop
-		Pop(passed);
+		// Pop
+		pop(_passed);
 #endif
 	}
 	inline void CommitTemporaryMembers(BiaMachineContext & p_context, temp_members p_parameter, int8_t p_cCount)
