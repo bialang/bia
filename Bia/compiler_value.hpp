@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <limits>
 
 #include "member.hpp"
 #include "temp_counter.hpp"
@@ -24,9 +25,7 @@ class compiler_value
 public:
 	enum class VALUE_TYPE
 	{
-		INT_32,
-		INT_64,
-		FLOAT,
+		INT,
 		DOUBLE,
 		STRING,
 		MEMBER,
@@ -44,9 +43,7 @@ public:
 	union return_value
 	{
 		bool rt_test_result;	/**	Defines the constant test _value.	*/
-		int32_t rt_int32;
-		int64_t rt_int64;
-		float rt_float;
+		int64_t rt_int;
 		double rt_double;
 		struct string
 		{
@@ -87,20 +84,7 @@ public:
 		_return_value.rt_test_result = _value;
 	}
 	/**
-	 * Sets the return _value and the type VALUE_TYPE::INT_32.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(int32_t _value) noexcept
-	{
-		_return_type = VALUE_TYPE::INT_32;
-		_return_value.rt_int32 = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::INT_64.
+	 * Sets the return _value and the type VALUE_TYPE::INT.
 	 *
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
@@ -109,21 +93,8 @@ public:
 	*/
 	void set_return(int64_t _value) noexcept
 	{
-		_return_type = VALUE_TYPE::INT_64;
-		_return_value.rt_int64 = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::FLOAT.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(float _value) noexcept
-	{
-		_return_type = VALUE_TYPE::FLOAT;
-		_return_value.rt_float = _value;
+		_return_type = VALUE_TYPE::INT;
+		_return_value.rt_int = _value;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::DOUBLE.
@@ -191,6 +162,18 @@ public:
 		_return_value.rt_parameter = _value;
 	}
 	/**
+	 * Checks whether the int value can be stored in a int32 type.
+	 *
+	 * @since 3.64.127.716
+	 * @date 30-Apr-18
+	 *
+	 * @return true if the int can be stored in a int32 type, otherwise false.
+	*/
+	bool is_int32() const noexcept
+	{
+		return _return_type == VALUE_TYPE::INT && _return_value.rt_int <= std::numeric_limits<int32_t>::max() && _return_value.rt_int >= std::numeric_limits<int32_t>::min();
+	}
+	/**
 	 * Checks wheter the held value is constant.
 	 *
 	 * @since 3.64.127.716
@@ -201,9 +184,7 @@ public:
 	bool is_const() const noexcept
 	{
 		switch (_return_type) {
-		case VALUE_TYPE::INT_32:
-		case VALUE_TYPE::INT_64:
-		case VALUE_TYPE::FLOAT:
+		case VALUE_TYPE::INT:
 		case VALUE_TYPE::DOUBLE:
 		case VALUE_TYPE::STRING:
 		case VALUE_TYPE::TEST_VALUE_CONSTANT:

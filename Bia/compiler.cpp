@@ -225,10 +225,10 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 	handle_value<false>(_report + 2, [&] {
 		// Make call
 		switch (_value.get_type()) {
-		case compiler_value::VALUE_TYPE::INT_32:
+		case compiler_value::VALUE_TYPE::INT:
 		{
 			// Optimize common used constant values
-			switch (_value.get_value().rt_int32) {
+			switch (_value.get_value().rt_int) {
 			case 0:
 				_toolset.call(&machine::link::instantiate_int_0, _report[1].content.member);
 
@@ -242,21 +242,20 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 				break;
 			default:
-				_toolset.call(&machine::link::instantiate_int32, _report[1].content.member, _value.get_value().rt_int32);
+			{
+				// Can be int32
+				if (_value.is_int32()) {
+					_toolset.call(&machine::link::instantiate_int32, _report[1].content.member, static_cast<int32_t>(_value.get_value().rt_int));
+				} else {
+					_toolset.call(&machine::link::instantiate_int64, _report[1].content.member, _value.get_value().rt_int);
+				}
 
 				break;
+			}
 			}
 
 			break;
 		}
-		case compiler_value::VALUE_TYPE::INT_64:
-			_toolset.call(&machine::link::instantiate_int64, _report[1].content.member, _value.get_value().rt_int64);
-
-			break;
-		case compiler_value::VALUE_TYPE::FLOAT:
-			_toolset.call(&machine::link::instantiate_float, _report[1].content.member, _value.get_value().rt_float);
-
-			break;
 		case compiler_value::VALUE_TYPE::DOUBLE:
 			_toolset.call(&machine::link::instantiate_double, _report[1].content.member, _value.get_value().rt_double);
 
@@ -305,18 +304,17 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 	handle_value<false>(_report + 1, [this] {
 		// Call print function
 		switch (_value.get_type()) {
-		case compiler_value::VALUE_TYPE::INT_32:
-			_toolset.call(&machine::link::print_i, _value.get_value().rt_int32);
+		case compiler_value::VALUE_TYPE::INT:
+		{
+			// Can be int32
+			if (_value.is_int32()) {
+				_toolset.call(&machine::link::print_i, static_cast<int32_t>(_value.get_value().rt_int));
+			} else {
+				_toolset.call(&machine::link::print_I, _value.get_value().rt_int);
+			}
 
 			break;
-		case compiler_value::VALUE_TYPE::INT_64:
-			_toolset.call(&machine::link::print_I, _value.get_value().rt_int64);
-
-			break;
-		case compiler_value::VALUE_TYPE::FLOAT:
-			_toolset.call(&machine::link::print_f, _value.get_value().rt_float);
-
-			break;
+		}
 		case compiler_value::VALUE_TYPE::DOUBLE:
 			_toolset.call(&machine::link::print_d, _value.get_value().rt_double);
 

@@ -63,11 +63,6 @@ BIA_STATIC_CALLING_CONVETION(inline void, print_b(int32_t p_nValue))
 		Print_false();
 }
 
-BIA_STATIC_CALLING_CONVETION(inline void, print_f(float p_rValue))
-{
-	printf("%f\n", p_rValue);
-}
-
 BIA_STATIC_CALLING_CONVETION(inline void, print_d(double p_rValue))
 {
 	printf("%f\n", p_rValue);
