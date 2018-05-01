@@ -34,6 +34,37 @@ void compiler::constant_operation(const compiler_value & _left, framework::membe
 	_value.set_return(0);
 }
 
+void compiler::test_compiler_value()
+{
+	switch (_value.get_type()) {
+	case compiler_value::VALUE_TYPE::INT:
+		_value.set_return(_value.get_value().rt_int != 0);
+
+		break;
+	case compiler_value::VALUE_TYPE::DOUBLE:
+		_value.set_return(_value.get_value().rt_double != 0.);
+
+		break;
+		/*case compiler_value::VALUE_TYPE::MEMBER:
+		m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
+		m_toolset.SafeCall(&framework::BiaMember::Test, m_value.pMember);
+		m_toolset.WriteTest();
+
+		break;
+		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+		m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
+		m_toolset.Call(&framework::BiaMember::Test, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
+		m_toolset.WriteTest();
+
+		break;*/
+	case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
+	case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
+		break;
+	default:
+		BIA_COMPILER_DEV_INVALID;
+	}
+}
+
 const grammar::report * compiler::handle_root(const grammar::report * _report)
 {
 	switch (_report->rule_id) {
@@ -132,6 +163,23 @@ const grammar::report * compiler::handle_math_expression_and_term(const grammar:
 	} while (i < _report->content.end);
 
 	return _report->content.end;
+}
+
+const grammar::report * compiler::handle_condition_expression(const grammar::report * _report)
+{
+	// Handle left value
+	auto _operator = handle_math_expression_and_term(_report + 1) + 1;
+
+	// Operator is present
+	if (_operator < _report->content.end) {
+		auto _left = _value;
+
+		// Handle right value
+		handle_math_expression_and_term(_operator + 1);
+
+		// Call operator
+		compare_operation(_left, _operator->content.operatorCode, _value);
+	}
 }
 
 const grammar::report *  compiler::handle_number(const grammar::report * _report)

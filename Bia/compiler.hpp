@@ -46,6 +46,16 @@ private:
 
 	void operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
 	void constant_operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
+	void compare_operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
+	/**
+	 * Tests the compiler value and returns a test value.
+	 *
+	 * @since 3.64.127.716
+	 * @date 1-May-18
+	 *
+	 * @throws 
+	*/
+	void test_compiler_value();
 	/**
 	 * Handles a math expression or a math term token.
 	 *
@@ -156,6 +166,23 @@ private:
 	template<bool _Test>
 	const grammar::report * handle_value_expression(const grammar::report * _report)
 	{
+		using JUMP = machine::platform::toolset::JUMP;
+
+		const auto _end = _report->content.end;
+		auto _test = false;
+		///TODO
+		do {
+			// Handle expression
+			_report = handle_condition_expression(_report + 1) + 1;
+
+			// Create test result
+			if (_Test || _test || _report < _end) {
+				test_compiler_value();
+			}
+
+			_test = true;
+		} while (_report < _end);
+
 		return _report->content.end;
 	}
 	const grammar::report * handle_root(const grammar::report * _report);
@@ -186,6 +213,19 @@ private:
 	 * @return The end of the report.
 	*/
 	const grammar::report * handle_math_expression_and_term(const grammar::report * _report, handle_type _next);
+	/**
+	 * Handles a condition expression token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 1-May-18
+	 *
+	 * @param _report The condition expression token.
+	 *
+	 * @throws See handle_math_expression_and_term() and compare_operation().
+	 *
+	 * @return The end of the report.
+	*/
+	const grammar::report * handle_condition_expression(const grammar::report * _report);
 	/**
 	 * Handles a number token.
 	 *
