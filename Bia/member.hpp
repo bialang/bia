@@ -37,7 +37,6 @@ public:
 	};
 
 	typedef uint32_t parameter_count;
-	typedef typename std::underlying_type<OPERATOR>::type operator_type;
 
 
 	/**

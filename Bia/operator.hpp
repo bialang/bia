@@ -8,7 +8,9 @@ namespace bia
 namespace framework
 {
 
-enum OPERATOR : uint32_t
+typedef uint32_t operator_type;
+
+enum OPERATOR : operator_type
 {
 	/** The `=` operator. */
 	O_ASSIGN = 0x3d,

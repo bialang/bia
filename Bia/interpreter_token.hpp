@@ -652,65 +652,33 @@ private:
 	/**
 	 * Parses the integer that was matched by interpreter_token::number().
 	 *
-	 * @remarks	Do not use this function to parse integers!
+	 * @remarks Do not use this function to parse other integers!
 	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
+	 * @since 3.64.127.716
+	 * @date 9-Apr-18
 	 *
-	 * @param	_number	Defines the data.
-	 * @param	_length	Defines the length of the data.
-	 * @param	_custom	Defines the custom data.
+	 * @param _number Defines the data.
+	 * @param _length Defines the length of the data.
+	 * @param _custom Defines the custom data.
 	 *
-	 * @return	The parsed value.
+	 * @return The parsed value.
 	*/
 	static int64_t parse_integer(const char * _number, size_t _length, report::custom_type _custom) noexcept;
 	/**
-	 * Parses the floating point that was matched by interpreter_token::number().
+	 * Parses the double that was matched by interpreter_token::number().
 	 *
-	 * @remarks	Do not use this function to parse floating point!
+	 * @remarks Do not use this function to parse other doubles!
 	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
+	 * @since 3.64.127.716
+	 * @date 9-Apr-18
 	 *
-	 * @param	_number	Defines the data.
-	 * @param	_length	Defines the length of the data.
-	 * @param	_custom	Defines the custom data.
+	 * @param _number Defines the data.
+	 * @param _length Defines the length of the data.
+	 * @param _custom Defines the custom data.
 	 *
-	 * @return	The parsed value.
+	 * @return The parsed value.
 	*/
-	template<typename _Ty>
-	static typename std::enable_if<std::is_floating_point<_Ty>::value, _Ty>::type parse_floating_point(const char * _number, size_t _length, report::custom_type _custom) noexcept
-	{
-		_Ty _result = static_cast<_Ty>(0.);
-		size_t i = 0;
-
-		// Before dot
-		for (; i < _length; ++i) {
-			if (_number[i] == '.') {
-				++i;
-
-				goto gt_after_dot;
-			} else if (_number[i] != '\'') {
-				_result = _result * static_cast<_Ty>(10.) + static_cast<float>(get_value(_number[i]));
-			}
-		}
-
-	gt_after_dot:;
-		// After dot
-		for (_Ty _factor = static_cast<_Ty>(1.); i < _length; ++i) {
-			if (_number[i] != '\'') {
-				_factor /= static_cast<_Ty>(10.);
-				_result = _result + static_cast<float>(get_value(_number[i])) / _factor;
-			}
-		}
-
-		// Negative
-		if (_custom & grammar::NI_NEGATIVE_NUMBER) {
-			return _result * static_cast<_Ty>(-1.);
-		}
-
-		return _result;
-	}
+	static double parse_double(const char * _number, size_t _length, report::custom_type _custom) noexcept;
 };
 
 }

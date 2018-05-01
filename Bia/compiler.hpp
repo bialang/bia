@@ -8,7 +8,7 @@
 #include "interpreter_id.hpp"
 #include "compiler_value.hpp"
 #include "temp_counter.hpp"
-#include "member.hpp"
+#include "operator.hpp"
 
 #include "interpreter.hpp"
 #include "interpreter_rule.hpp"
@@ -44,9 +44,9 @@ private:
 	/** The compilers toolset for writing the machine code. */
 	machine::platform::toolset _toolset;
 
-	void operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
-	void constant_operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
-	void compare_operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right);
+	void operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
+	void constant_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
+	void compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
 	/**
 	 * Tests the compiler value and returns a test value.
 	 *

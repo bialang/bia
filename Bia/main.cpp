@@ -1,130 +1,57 @@
-#include "biaMachineContext.hpp"
-#include "biaOutputStreamBuffer.hpp"
-#include "biaMachineDecoder.hpp"
-#include "biaCompiler.hpp"
-#include "biaGrammar.hpp"
+#include "machine_context.hpp"
+#include "simple_allocator.hpp"
+#include "compiler.hpp"
+#include "buffer_output_stream.hpp"
+#include "buffer_input_stream.hpp"
+#include "syntax.hpp"
 
 #include <chrono>
 #include <iostream>
 
 
-struct a
+template<typename _Lambda>
+inline void test_and_time(int _count, _Lambda && _lambda)
 {
-	virtual ~a()
-	{
-		puts("destroy a");
-	}
-	virtual void da(int p)
-	{
-		printf("hi from a at %p to %i\n", this, p);
-	}
-};
+	auto _time_taken = 0ll;
 
-struct b : a
-{
-	~b()
+	for (auto k = 0; k < _count; ++k)
 	{
-		puts("destroy b");
-	}
-	virtual void da(int p) override
-	{
-		printf("hi from b at %p to %i\n", this, p);
-	}
-};
+		auto _start = std::chrono::high_resolution_clock::now();
 
-void lua(int a, float b)
-{
-	printf("a: %i b; %f\n", a, b);
+		_lambda();
+
+		_time_taken += std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - _start).count();
+	}
+
+	printf("Time taken: %f ms\n", _time_taken / static_cast<double>(_count));
 }
 
-void test(int a, int b)
-{
-	printf("%i, %i\n", a, b);
-}
-template<typename... _ARGS>
-void Run(void(*foo)(_ARGS...), int n, ...)
-{
-	va_list vl;
-	va_start(vl, n);
-
-	foo(*reinterpret_cast<int*>(vl), *reinterpret_cast<int*>(vl + sizeof(int)));
-	//auto sa = va_arg(vl, int);
-	foo(*(int*)((vl += sizeof(int)) - sizeof(int)), (*(int*)((vl += sizeof(int)) - sizeof(int))));
-	// foo((va_arg(vl, _ARGS),...));
-
-	va_end(vl);
-}
-
-template<typename _LAMBDA>
-inline void Test(int p_nCount, _LAMBDA && p_lambda)
-{
-	auto time_taken = 0ll;
-
-	for (auto k = 0; k < p_nCount; ++k)
-	{
-		auto start = std::chrono::high_resolution_clock::now();
-
-		p_lambda();
-
-		time_taken += std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
-	}
-
-	printf("Time taken: %f ms\n", time_taken / static_cast<double>(p_nCount));
-}
-
-//template<typename T>
-//inline typename std::enable_if<std::is_integral<T>::value>::type Creat(T p_value)
-//{
-//	puts("int");
-//}
-//
-//template<typename T>
-//inline typename std::enable_if<std::is_floating_point<T>::value>::type Creat(T p_value)
-//{
-//	puts("float");
-//}
-//
-//template<typename T>
-//inline typename std::enable_if<std::is_arithmetic<T>::value && bia::utility::Negation<std::is_same<T, const char>::value>::value>::type Creat(T * p_pValue)
-//{
-//	puts(typeid(T).name());
-//	puts("reference*");
-//}
-//
-//template<typename T>
-//inline typename std::enable_if<std::is_arithmetic<T>::value>::type Creat(T & p_value)
-//{
-//	puts("reference&");
-//}
-//
-//template<typename T>
-//inline typename std::enable_if<std::is_same<T, const char*>::value>::type Creat(T p_value)
-//{
-//	puts("string");
-//}
-//
-//template<typename T, typename... l>
-//inline void Creat(T(*p_value)(l...))
-//{
-//	puts("sfunc");
-//}
-//
-//template<typename T>
-//inline typename std::enable_if<bia::utility::Negation<std::is_arithmetic<T>::value || std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<T>::type>::type>::value>::value>::type Creat(T)
-//{
-//	puts("other");
-//}
-//
-//inline void aer()
-//{
-//	volatile const char * w = "";
-//	Creat(w);
-//}
-//
-
-//7573
 int main()
 {
+	std::shared_ptr<bia::machine::memory::allocator> _allocator(new bia::machine::memory::simple_allocator());
+	std::unique_ptr<bia::machine::machine_context> _context(new bia::machine::machine_context(_allocator));
+
+	char _script[] = R"delim(
+
+print "hello"
+
+)delim";
+
+	// Compile
+	bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);
+	bia::stream::buffer_output_stream _output;
+	bia::compiler::compiler _compiler(_output);
+
+	bia::grammar::syntax::get_interpreter().interpret(_input, _compiler);
+
+	_compiler.finalize();
+	
+	bia::machine::machine_code _machine_code = _compiler.get_code();
+
+	if (_machine_code.is_executable()) {
+		_machine_code.execute();
+	}
+
 	/*system("pause");
 	return 0;
 	//Run(test, 2, 4, 434);

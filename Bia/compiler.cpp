@@ -1,5 +1,7 @@
 #include "compiler.hpp"
 #include "link.hpp"
+#include "parameter_order.hpp"
+
 
 namespace bia
 {
@@ -17,7 +19,7 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 	handle_root(_begin);
 }
 
-void compiler::operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right)
+void compiler::operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
 {
 	// Constant operation
 	if (_left.is_const() && _right.is_const()) {
@@ -27,7 +29,7 @@ void compiler::operation(const compiler_value & _left, framework::member::operat
 	}
 }
 
-void compiler::constant_operation(const compiler_value & _left, framework::member::operator_type _operator, const compiler_value & _right)
+void compiler::constant_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
 {
 	///TODO
 
@@ -278,24 +280,24 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			// Optimize common used constant values
 			switch (_value.get_value().rt_int) {
 			case 0:
-				_toolset.call(&machine::link::instantiate_int_0, _report[1].content.member);
+				_toolset.call(&machine::link::instantiate_int_0, BIA_PO_0_1_1(_report[1].content.member));
 
 				break;
 			case 1:
-				_toolset.call(&machine::link::instantiate_int_1, _report[1].content.member);
+				_toolset.call(&machine::link::instantiate_int_1, BIA_PO_0_1_1(_report[1].content.member));
 
 				break;
 			case -1:
-				_toolset.call(&machine::link::instantiate_int_n1, _report[1].content.member);
+				_toolset.call(&machine::link::instantiate_int_n1, BIA_PO_0_1_1(_report[1].content.member));
 
 				break;
 			default:
 			{
 				// Can be int32
 				if (_value.is_int32()) {
-					_toolset.call(&machine::link::instantiate_int32, _report[1].content.member, static_cast<int32_t>(_value.get_value().rt_int));
+					_toolset.call(&machine::link::instantiate_int32, BIA_PO_0_1_2(static_cast<int32_t>(_value.get_value().rt_int), _report[1].content.member));
 				} else {
-					_toolset.call(&machine::link::instantiate_int64, _report[1].content.member, _value.get_value().rt_int);
+					_toolset.call(&machine::link::instantiate_int64, BIA_PO_0_1_2(_value.get_value().rt_int, _report[1].content.member));
 				}
 
 				break;
@@ -305,11 +307,11 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;
 		}
 		case compiler_value::VALUE_TYPE::DOUBLE:
-			_toolset.call(&machine::link::instantiate_double, _report[1].content.member, _value.get_value().rt_double);
+			_toolset.call(&machine::link::instantiate_double, BIA_PO_0_1_2(_value.get_value().rt_double, _report[1].content.member));
 
 			break;
 		case compiler_value::VALUE_TYPE::STRING:
-			_toolset.call(&machine::link::instantiate_string, _report[1].content.member, _value.get_value().rt_string.data);
+			_toolset.call(&machine::link::instantiate_string, BIA_PO_0_2_3(_value.get_value().rt_string.data, _value.get_value().rt_string.length, _report[1].content.member));
 
 			break;
 		/*case compiler_value::VALUE_TYPE::MEMBER:
@@ -327,9 +329,9 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
 		{
 			if (_value.get_value().rt_test_result) {
-				_toolset.call(&machine::link::instantiate_int_1, _report[1].content.member);
+				_toolset.call(&machine::link::instantiate_int_1, BIA_PO_0_1_1(_report[1].content.member));
 			} else {
-				_toolset.call(&machine::link::instantiate_int_n1, _report[1].content.member);
+				_toolset.call(&machine::link::instantiate_int_0, BIA_PO_0_1_1(_report[1].content.member));
 			}
 
 			break;

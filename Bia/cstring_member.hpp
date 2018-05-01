@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "native_variable.hpp"
 #include "print.hpp"
 
@@ -23,6 +25,10 @@ public:
 	 * @param _string The zero-terminated string.
 	*/
 	cstring_member(const char * _string) noexcept
+	{
+		this->_string = _string;
+	}
+	cstring_member(const char * _string, size_t _length) noexcept
 	{
 		this->_string = _string;
 	}

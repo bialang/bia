@@ -1,5 +1,7 @@
 #include "interpreter_token.hpp"
 
+#include <cctype>
+
 
 namespace bia
 {
@@ -432,6 +434,39 @@ int64_t interpreter_token::parse_integer(const char * _number, size_t _length, r
 	// Negative
 	if (_custom & grammar::NI_NEGATIVE_NUMBER) {
 		return _result * -1;
+	}
+
+	return _result;
+}
+
+double interpreter_token::parse_double(const char * _number, size_t _length, report::custom_type _custom) noexcept
+{
+	double _result = 0.;
+	size_t i = 0;
+
+	// Before dot
+	for (; i < _length; ++i) {
+		if (_number[i] == '.') {
+			++i;
+
+			goto gt_after_dot;
+		} else if (_number[i] != '\'') {
+			_result = _result * 10. + static_cast<double>(get_value(_number[i]));
+		}
+	}
+
+gt_after_dot:;
+	// After dot
+	for (double _factor = 1.; i < _length; ++i) {
+		if (_number[i] != '\'') {
+			_factor /= 10.;
+			_result = _result + static_cast<double>(get_value(_number[i])) / _factor;
+		}
+	}
+
+	// Negative
+	if (_custom & grammar::NI_NEGATIVE_NUMBER) {
+		return _result * -1.;
 	}
 
 	return _result;

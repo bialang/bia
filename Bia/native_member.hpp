@@ -5,9 +5,8 @@
 #include "type_traits.hpp"
 #include "native_variable.hpp"
 #include "exception.hpp"
-
-#include "biaNativeOperator.hpp"
-#include "biaNativeTestOperator.hpp"
+#include "native_operator.hpp"
+#include "native_test_operator.hpp"
 #include "print.hpp"
 
 
@@ -23,10 +22,9 @@ class native_member final : public native_variable
 {
 public:
 	typedef native_member<int64_t> int_member;
-	typedef native_member<float> float_member;
 	typedef native_member<double> double_member;
 
-	native_member(typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, float>::value || std::is_same<_Ty, double>::value, _Ty>::type _value) noexcept
+	native_member(typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, double>::value, _Ty>::type _value) noexcept
 	{
 		this->_value = _value;
 	}
@@ -191,21 +189,7 @@ protected:
 			default:
 				break;
 			}
-		}
-		// Float
-		else if (std::is_same<_Ty, float>::value) {
-			switch (_type) {
-			case NATIVE_TYPE::BOOL:
-				_non_zero = static_cast<bool>(_value);
-
-				return &_non_zero;
-			case NATIVE_TYPE::FLOAT:
-				return &_value;
-			default:
-				break;
-			}
-		}
-		// Double
+		} // Double
 		else if (std::is_same<_Ty, double>::value) {
 			switch (_type) {
 			case NATIVE_TYPE::BOOL:
@@ -238,8 +222,6 @@ private:
 	{
 		if (std::is_integral<_Ty>::value) {
 			_destination->replace_this<int_member>(p_value);
-		} else if (std::is_same<_Ty, float>::value) {
-			_destination->replace_this<float_member>(p_value);
 		} else if (std::is_same<_Ty, double>::value) {
 			_destination->replace_this<double_member>(p_value);
 		} else {
@@ -249,7 +231,6 @@ private:
 };
 
 using int_member = native_member<int64_t>;
-using float_member = native_member<float>;
 using double_member = native_member<double>;
 
 }
