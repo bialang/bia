@@ -6,16 +6,15 @@ Embedded C++ Scripting Language
 # Embedded Example
 
 ```
-//Create a context with the default memory allocator
-std::shared_ptr<bia::machine::memory::allocator> _allocator(new bia::machine::memory::simple_allocator());
-bia::machine::machine_context _context(_allocator);
+// Create a context with the default memory allocators
+bia::machine::machine_context _context;
 
-//Add a lambda function
+// Add a lambda function
 _context.set_lambda("hello_world", [] {
   puts("Hello, World! - C++");
 });
 
-//Bia script
+// Bia script
 std::string _code = R"(
 
 # Print 'Hello, World' to the console
@@ -26,15 +25,15 @@ hello_world()
 
 )";
 
-//Execute
+// Execute
 _context.execute(_code.c_str(), _code.length());
 ```
 
 # Language Features
 **Native types**
 - Integrals with a range from -2^32 to 2^32-1
-- 32- and 64-Bit floating points
-- Zero terminated strings
+- 64-Bit floating point numbers
+- Classic C-style string support
 
 **Variable Declaration:**
 - Global variables `global`: `global i = 0`
@@ -117,20 +116,20 @@ else if some_value == 3 {
 - Adding a static function to your `_context`:
 
 ```
-//A static C++ function
+// A static C++ function
 int square(int _base)
 {
   return _base * _base;
 }
 
-//Adding the function
+// Adding the function
 _context.set_function("square", &square);
 ```
 
 - Adding a lambda function:
 
 ```
-//Adding the function
+// Adding the function
 _context.set_lambda("int_sqrt", [] (double _value) {
   return static_cast<int>(sqrt(_value));
 });
@@ -139,7 +138,7 @@ _context.set_lambda("int_sqrt", [] (double _value) {
 - Adding a C++ class:
 
 ```
-//A C++ class
+// A C++ class
 class my_class
 {
 public:
@@ -149,7 +148,7 @@ public:
   }
 };
 
-//Adding the class
+// Adding the class
 _context.set_class<my_class>("my_class")->set_constructor<int>();
 ```
 
