@@ -334,15 +334,15 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			_toolset.call(&machine::link::instantiate_string, BIA_PO_0_2_3(_value.get_value().rt_string.data, _value.get_value().rt_string.length, _destination));
 
 			break;
-		/*case compiler_value::VALUE_TYPE::MEMBER:
-			m_toolset.SafeCall(&framework::BiaMember::Clone, m_value.pMember, pVariable);
+		case compiler_value::VALUE_TYPE::MEMBER:
+			_toolset.call(&framework::member::clone, _value.get_value().rt_member, _destination);
 
 			break;
 		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-			m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex), pVariable);
+			_toolset.call(&framework::member::clone, _toolset.to_temp_member(_value.get_value().rt_temp_member), _destination);
 
 			break;
-		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
+		/*case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
 			m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, machine::architecture::BiaToolset::TestValueResult());
 
 			break;*/

@@ -83,6 +83,7 @@ public:
 	 *
 	 * @param [out] _destination The specified destination.
 	 *
+	 * @throws exception::symbol_error If the member is not valid.
 	 * @throws exception::execution_error If the operation is not supported by the member.
 	 * @throws See replace_this().
 	*/
@@ -97,6 +98,7 @@ public:
 	 * @param [out] _destination The destination of the return result.
 	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
 	 *
+	 * @throws exception::symbol_error If the member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
 	*/
 	virtual void execute(BIA_PO_0_1_2(member * _destination, member * _instance)) = 0;
@@ -185,12 +187,6 @@ public:
 	*/
 	//virtual void OperatorSelfCall(uint32_t p_unOperator) = 0;
 	/**
-	 * Clones the contents of this object to the destination.
-	 *
-	 * @param	[in,out]	p_pDestination	Defines the destination.
-	*/
-	//virtual void Clone(BiaMember * p_pDestination) = 0;
-	/**
 	 * Checks whether the specified type matches this object.
 	 *
 	 * @param	p_type	Defines the type.
@@ -205,6 +201,7 @@ public:
 	 * @date 21-Apr-18
 	 *
 	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If the member is not valid.
 	 *
 	 * @return true if it is const, otherwise false.
 	*/
@@ -216,6 +213,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 5-May-18
 	 *
+	 * @throws exception::symbol_error If the member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
 	*/
 	virtual int32_t test() const = 0;

@@ -7,6 +7,7 @@
 
 #define BIA_IMPLEMENTATION_EXCEPTION(msg) bia::exception::implementation_error(msg, __FILE__, __LINE__)
 #define BIA_EM_UNSUPPORTED_TYPE "Type is not supported."
+#define BIA_EM_UNEXPECTED_TYPE "Unexpected type."
 #define BIA_EM_UNDEFINED_MEMBER "Undefined member."
 #define BIA_EM_NULL_INSTANCE "Cannot access member without an instance."
 #define BIA_EM_REPORT_LIMIT "Report bundle limit reached."
@@ -18,6 +19,7 @@
 #define BIA_EM_UNSUPPORTED_EXECUTE "This type cannot be executed."
 #define BIA_EM_UNSUPPORTED_TEST "This member cannot be tested."
 #define BIA_EM_UNSUPPORTED_TEST_OPERATOR "Unsupported test operator."
+#define BIA_EM_UNSUPPORTED_INSTANTIATION "Instantiation is not supported."
 
 
 namespace bia
