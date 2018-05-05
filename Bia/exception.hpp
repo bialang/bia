@@ -16,6 +16,8 @@
 #define BIA_EM_NOT_ENOUGH_SPACE "Not enough space."
 #define BIA_EM_INVALID_UNICODE "Invalid unicode character."
 #define BIA_EM_UNSUPPORTED_EXECUTE "This type cannot be executed."
+#define BIA_EM_UNSUPPORTED_TEST "This member cannot be tested."
+#define BIA_EM_UNSUPPORTED_TEST_OPERATOR "Unsupported test operator."
 
 
 namespace bia
@@ -296,6 +298,38 @@ public:
 	 * @param _message The message.
 	*/
 	explicit execution_error(const char * _message) : runtime_error(_message)
+	{
+	}
+};
+
+/**
+ * @brief Operator error.
+ *
+ * The operator is invalid or not supported.
+*/
+class operator_error final : public runtime_error
+{
+public:
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @param _message The message.
+	*/
+	explicit operator_error(const std::string & _message) : runtime_error(_message)
+	{
+	}
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @param _message The message.
+	*/
+	explicit operator_error(const char * _message) : runtime_error(_message)
 	{
 	}
 };

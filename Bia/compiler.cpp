@@ -25,7 +25,18 @@ void compiler::operation(const compiler_value & _left, framework::operator_type 
 	if (_left.is_const() && _right.is_const()) {
 		constant_operation(_left, _operator, _right);
 	} else {
-		///TODO
+		switch (_left.get_type()) {
+		case compiler_value::VALUE_TYPE::MEMBER:
+			member_operation(_left.get_value().rt_member, _operator, _right);
+
+			break;
+		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+			member_operation(_toolset.to_temp_member(_left.get_value().rt_temp_member), _operator, _right);
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
 	}
 }
 
@@ -47,18 +58,22 @@ void compiler::test_compiler_value()
 		_value.set_return(_value.get_value().rt_double != 0.);
 
 		break;
-		/*case compiler_value::VALUE_TYPE::MEMBER:
-		m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
-		m_toolset.SafeCall(&framework::BiaMember::Test, m_value.pMember);
-		m_toolset.WriteTest();
+	case compiler_value::VALUE_TYPE::STRING:
+		_value.set_return(_value.get_value().rt_string.length != 0);
 
 		break;
-		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-		m_valueType = VALUE_TYPE::TEST_VALUE_REGISTER;
-		m_toolset.Call(&framework::BiaMember::Test, machine::architecture::BiaToolset::TemporaryMember(m_value.temporaryResultIndex));
-		m_toolset.WriteTest();
+	case compiler_value::VALUE_TYPE::MEMBER:
+		_toolset.call(&framework::member::test, _value.get_value().rt_member);
+		_value.set_return_test();
+		_toolset.write_test();
 
-		break;*/
+		break;
+	case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+		_toolset.call(&framework::member::test, _toolset.to_temp_member(_value.get_value().rt_temp_member));
+		_value.set_return_test();
+		_toolset.write_test();
+
+		break;
 	case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
 	case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
 		break;
@@ -154,9 +169,12 @@ const grammar::report * compiler::handle_math_expression_and_term(const grammar:
 			_counter.pop(_current_count);
 		}
 
-		// Call operator
-		///TODO: destination?
-		operation(_left_value, _operator, _value);
+		// Call operator and set destination
+		auto _right = _value;
+
+		_value.set_return_temp(_current_count);
+
+		operation(_left_value, _operator, _right);
 
 		_left_value = _value;
 
@@ -273,6 +291,8 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 {
 	// Handle value and prepare the result for a function call
 	handle_value<false>(_report + 2, [&] {
+		auto _destination = _report[1].content.member;
+
 		// Make call
 		switch (_value.get_type()) {
 		case compiler_value::VALUE_TYPE::INT:
@@ -280,24 +300,24 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			// Optimize common used constant values
 			switch (_value.get_value().rt_int) {
 			case 0:
-				_toolset.call(&machine::link::instantiate_int_0, BIA_PO_0_1_1(_report[1].content.member));
+				_toolset.call(&machine::link::instantiate_int_0, BIA_PO_0_1_1(_destination));
 
 				break;
 			case 1:
-				_toolset.call(&machine::link::instantiate_int_1, BIA_PO_0_1_1(_report[1].content.member));
+				_toolset.call(&machine::link::instantiate_int_1, BIA_PO_0_1_1(_destination));
 
 				break;
 			case -1:
-				_toolset.call(&machine::link::instantiate_int_n1, BIA_PO_0_1_1(_report[1].content.member));
+				_toolset.call(&machine::link::instantiate_int_n1, BIA_PO_0_1_1(_destination));
 
 				break;
 			default:
 			{
 				// Can be int32
 				if (_value.is_int32()) {
-					_toolset.call(&machine::link::instantiate_int32, BIA_PO_0_1_2(static_cast<int32_t>(_value.get_value().rt_int), _report[1].content.member));
+					_toolset.call(&machine::link::instantiate_int32, BIA_PO_0_1_2(static_cast<int32_t>(_value.get_value().rt_int), _destination));
 				} else {
-					_toolset.call(&machine::link::instantiate_int64, BIA_PO_0_1_2(_value.get_value().rt_int, _report[1].content.member));
+					_toolset.call(&machine::link::instantiate_int64, BIA_PO_0_1_2(_value.get_value().rt_int, _destination));
 				}
 
 				break;
@@ -307,11 +327,11 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;
 		}
 		case compiler_value::VALUE_TYPE::DOUBLE:
-			_toolset.call(&machine::link::instantiate_double, BIA_PO_0_1_2(_value.get_value().rt_double, _report[1].content.member));
+			_toolset.call(&machine::link::instantiate_double, BIA_PO_0_1_2(_value.get_value().rt_double, _destination));
 
 			break;
 		case compiler_value::VALUE_TYPE::STRING:
-			_toolset.call(&machine::link::instantiate_string, BIA_PO_0_2_3(_value.get_value().rt_string.data, _value.get_value().rt_string.length, _report[1].content.member));
+			_toolset.call(&machine::link::instantiate_string, BIA_PO_0_2_3(_value.get_value().rt_string.data, _value.get_value().rt_string.length, _destination));
 
 			break;
 		/*case compiler_value::VALUE_TYPE::MEMBER:
@@ -329,9 +349,9 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
 		{
 			if (_value.get_value().rt_test_result) {
-				_toolset.call(&machine::link::instantiate_int_1, BIA_PO_0_1_1(_report[1].content.member));
+				_toolset.call(&machine::link::instantiate_int_1, BIA_PO_0_1_1(_destination));
 			} else {
-				_toolset.call(&machine::link::instantiate_int_0, BIA_PO_0_1_1(_report[1].content.member));
+				_toolset.call(&machine::link::instantiate_int_0, BIA_PO_0_1_1(_destination));
 			}
 
 			break;

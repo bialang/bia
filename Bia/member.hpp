@@ -75,8 +75,19 @@ public:
 	 * @throws exception::symbol_error If the member is not valid.
 	*/
 	virtual void print() const = 0;
+	/**
+	 * Clones this member to the specified location.
+	 *
+	 * @since 3.64.127.716
+	 * @date 5-May-18
+	 *
+	 * @param [out] _destination The specified destination.
+	 *
+	 * @throws exception::execution_error If the operation is not supported by the member.
+	 * @throws See replace_this().
+	*/
+	virtual void clone(member * _destination) = 0;
 	//virtual void introduce(template_table * _table) = 0;
-
 	/**
 	 * Executes this object as function.
 	 *
@@ -200,14 +211,15 @@ public:
 	virtual bool is_const() const = 0;
 	//virtual int GetNativeType() const = 0;
 	/**
-	 * Tests the content of this object.
+	 * Tests the contents of this member.
 	 *
-	 * @throws	exception::BadCallException	Thrown when the member cannot be tested.
+	 * @since 3.64.127.716
+	 * @date 5-May-18
 	 *
-	 * @return	A non-zero value for a successful result, otherwise 0.
+	 * @throws exception::execution_error If a test call is invalid.
 	*/
-	/*virtual int32_t Test() = 0;
-	virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) = 0;
+	virtual int32_t test() const = 0;
+	/*virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) = 0;
 	virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) = 0;
 	virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) = 0;
 	virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) = 0;

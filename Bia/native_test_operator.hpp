@@ -18,7 +18,7 @@ namespace native
 template<typename _Ty>
 inline int32_t test_operation(_Ty _value)
 {
-	throw exception::BadCallException("Type cannot be tested.");
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 }
 
 inline int32_t test_operation(int32_t _value)
@@ -33,12 +33,12 @@ inline int32_t test_operation(int64_t _value)
 
 inline int32_t test_operation(float _value)
 {
-	return static_cast<int32_t>(_value != 0.0f);
+	return static_cast<int32_t>(_value != 0.f);
 }
 
 inline int32_t test_operation(double _value)
 {
-	return static_cast<int32_t>(_value != 0.0);
+	return static_cast<int32_t>(_value != 0.);
 }
 
 template<typename _Ty>
@@ -65,7 +65,7 @@ inline int32_t test_operation(_Left _left, uint32_t _operator, _Right _right)
 	case O_GREATER_EQUALS:
 		return static_cast<int32_t>(_left >= _right);
 	default:
-		throw exception::OperatorException("Invalid test operator.");
+		throw exception::operator_error(BIA_EM_UNSUPPORTED_TEST_OPERATOR);
 	}
 }
 

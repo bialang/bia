@@ -45,6 +45,29 @@ private:
 	machine::platform::toolset _toolset;
 
 	void operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
+	template<typename _Member>
+	void member_operation(_Member && _left, framework::operator_type _operator, const compiler_value & _right)
+	{
+		switch (_right.get_type()) {
+		case compiler_value::VALUE_TYPE::INT:
+		case compiler_value::VALUE_TYPE::DOUBLE:
+		case compiler_value::VALUE_TYPE::STRING:
+		case compiler_value::VALUE_TYPE::MEMBER:
+		{
+			if (_value.get_type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+				_counter.update(_value.get_value().rt_temp_member);
+				//_toolset.call(&framework::member::operator_call, _left.get_value().rt_member, _operator, _);
+			} else {
+				//_toolset.call(&framework::member::operator_assign_call, _left.get_value().rt_member, _operator, _);
+			}
+
+			break;
+		}
+		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
+	}
 	void constant_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
 	void compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
 	/**

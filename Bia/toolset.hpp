@@ -229,7 +229,7 @@ public:
 	{
 		_output->Move(std::get<0>(p_parameter), std::get<1>(p_parameter), _output->GetPosition() - std::get<1>(p_parameter));
 	}
-	void write_empty_test()
+	void write_test()
 	{
 		architecture::add_instruction<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*_output, 0);
 	}

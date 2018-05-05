@@ -54,6 +54,20 @@ public:
 		_counter = _old_counter;
 	}
 	/**
+	 * Updates the max counter if the new value is higher.
+	 *
+	 * @since 3.64.127.716
+	 * @date 5-May-18
+	 *
+	 * @param _counter The higher counter value.
+	*/
+	void update(counter_type _counter) noexcept
+	{
+		if (_max < _counter) {
+			_max = _counter;
+		}
+	}
+	/**
 	 * Increments the current counter by one.
 	 *
 	 * @since 3.64.127.716
@@ -82,9 +96,7 @@ public:
 	counter_type current() noexcept
 	{
 		// Update max if counter is used
-		if (_max < _counter) {
-			_max = _counter;
-		}
+		update(_counter);
 
 		return _counter;
 	}

@@ -71,6 +71,26 @@ public:
 		_return_type = VALUE_TYPE::NONE;
 	}
 	/**
+	 * Sets the return _value and the type VALUE_TYPE::NONE.
+	 *
+	 * @since 3.64.127.716
+	 * @date 5-May-18
+	*/
+	void set_return() noexcept
+	{
+		_return_type = VALUE_TYPE::NONE;
+	}
+	/**
+	 * Sets the return _value and the type VALUE_TYPE::TEST_VALUE_REGISTER.
+	 *
+	 * @since 3.64.127.716
+	 * @date 5-May-18
+	*/
+	void set_return_test() noexcept
+	{
+		_return_type = VALUE_TYPE::TEST_VALUE_REGISTER;
+	}
+	/**
 	 * Sets the return _value and the type VALUE_TYPE::TEST_VALUE_CONSTANT.
 	 *
 	 * @since 3.64.127.716
@@ -143,7 +163,7 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return(temp_counter::counter_type _value) noexcept
+	void set_return_temp(temp_counter::counter_type _value) noexcept
 	{
 		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
 		_return_value.rt_temp_member = _value;
