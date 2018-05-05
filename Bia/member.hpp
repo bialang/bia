@@ -8,7 +8,6 @@
 #include <utility>
 
 #include "config.hpp"
-#include "parameter_order.hpp"
 #include "operator.hpp"
 #include "native_type.hpp"
 #include "type_traits.hpp"
@@ -95,13 +94,13 @@ public:
 	 * @since 3.64.127.716
 	 * @date 28-Apr-18
 	 *
-	 * @param [out] _destination The destination of the return result.
 	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
+	 * @param [out] _destination The destination of the return result.
 	 *
 	 * @throws exception::symbol_error If the member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
 	*/
-	virtual void execute(BIA_PO_0_1_2(member * _destination, member * _instance)) = 0;
+	virtual void execute(member * _instance, member * _destination) = 0;
 	/**
 	 * Calls this function with only members as parameters.
 	 *

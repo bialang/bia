@@ -23,7 +23,7 @@ void undefined_member::clone(member * _destination)
 	BIA_UNDEFINED_ERROR;
 }
 
-void undefined_member::execute(BIA_PO_0_1_2(member *_destination, member *_instance))
+void undefined_member::execute(member * _instance, member * _destination)
 {
 	BIA_UNDEFINED_ERROR;
 }

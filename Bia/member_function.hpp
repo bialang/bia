@@ -44,7 +44,11 @@ public:
 	}
 	virtual void clone(member * _destination) override
 	{
-		_destination->replace_this<member_function<_Class, _Return, _Args...>>(_function);
+		_destination->replace_this<member_function<_Return(_Class::*)(_Args...)>>(_function);
+	}
+	virtual void execute(member * _instance, member * _destination) override
+	{
+		force::disguised_caller(_function, cast_instance(_instance), _destination);
 	}
 
 private:
@@ -103,6 +107,14 @@ public:
 	virtual void print() override
 	{
 		puts(typeid(_function).name());
+	}
+	virtual void clone(member * _destination) override
+	{
+		_destination->replace_this<member_function<_Return(_Class::*)(_Args...) const>>(_function);
+	}
+	virtual void execute(member * _instance, member * _destination) override
+	{
+		force::disguised_caller(_function, cast_instance(_instance), _destination);
 	}
 
 private:

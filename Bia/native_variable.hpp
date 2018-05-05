@@ -19,7 +19,7 @@ public:
 	{
 		replace_this<undefined_member>();
 	}
-	virtual void execute(BIA_PO_0_1_2(member * _destination, member * _instance)) override
+	virtual void execute(member * _instance, member * _destination) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}

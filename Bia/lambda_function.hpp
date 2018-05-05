@@ -75,6 +75,10 @@ public:
 	{
 		_destination->replace_this<lambda_function<_Lambda>>(_lambda);
 	}
+	virtual void execute(member * _instance, member * _destination) override
+	{
+		force::disguised_caller(&_Lambda::operator(), _lambda.get(), _destination);
+	}
 
 private:
 	/** A pointer to a instance of the lambda function. */

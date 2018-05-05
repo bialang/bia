@@ -40,13 +40,13 @@ public:
 	{
 		puts(typeid(_function).name());
 	}
-	virtual void execute(BIA_PO_0_1_2(member * _destination, member * _instance)) override
-	{
-		force::disguised_caller(BIA_PO_1_1_2(_destination, _function));
-	}
 	virtual void clone(member * _destination) override
 	{
 		_destination->replace_this<static_function<_Return, _Args...>>(_function);
+	}
+	virtual void execute(member * _instance, member * _destination) override
+	{
+		force::disguised_caller(_function, _destination);
 	}
 
 private:
