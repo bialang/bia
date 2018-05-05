@@ -20,6 +20,8 @@
 #define BIA_EM_UNSUPPORTED_TEST "This member cannot be tested."
 #define BIA_EM_UNSUPPORTED_TEST_OPERATOR "Unsupported test operator."
 #define BIA_EM_UNSUPPORTED_INSTANTIATION "Instantiation is not supported."
+#define BIA_EM_FAILED_ALLOCATION "Allocation failed."
+#define BIA_EM_FAILED_MEMORY_PROTECTION "Cannot change protection of the memory address."
 
 
 namespace bia
@@ -332,6 +334,38 @@ public:
 	 * @param _message The message.
 	*/
 	explicit operator_error(const char * _message) : runtime_error(_message)
+	{
+	}
+};
+
+/**
+ * @brief Memory error.
+ *
+ * Corrupted memory or allocation error.
+*/
+class memory_error final : public runtime_error
+{
+public:
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @param _message The message.
+	*/
+	explicit memory_error(const std::string & _message) : runtime_error(_message)
+	{
+	}
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @param _message The message.
+	*/
+	explicit memory_error(const char * _message) : runtime_error(_message)
 	{
 	}
 };
