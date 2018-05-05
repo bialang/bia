@@ -11,9 +11,16 @@ namespace bia
 namespace machine
 {
 
-machine_context::machine_context(std::shared_ptr<memory::allocator> _allocator) : _allocator(std::move(_allocator)), _string_manager(this->_allocator.get())
+machine_context::machine_context(const std::shared_ptr<memory::allocator>& _allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get())
 {
-	if (!this->_allocator.get()) {
+	if (!this->_allocator || !this->_executable_allocator) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+}
+
+machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator, std::shared_ptr<memory::executable_allocator>&& _executable_allocator) : _allocator(std::move(_allocator)), _executable_allocator(std::move(_executable_allocator)), _string_manager(this->_allocator.get())
+{
+	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 }
@@ -29,9 +36,9 @@ framework::member * machine_context::get_address_or_create(const utility::string
 
 	// Create
 	if (_result == _variable_index.end()) {
-		;
-		return _variable_index.emplace(_name, std::unique_ptr<framework::member>(_allocator->construct_blocks<framework::undefined_member>(1, memory::allocator::MEMORY_TYPE::NORMAL).
-			)).first->second.get();
+		auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1);
+
+		return _variable_index.emplace(_name, std::unique_ptr<framework::member>(_allocation.first)).first->second.get();
 	}
 
 	return _result->second.get();
@@ -43,7 +50,9 @@ framework::member * machine_context::get_address_or_create(utility::string_key &
 
 	// Create
 	if (_result == _variable_index.end()) {
-		return _variable_index.emplace(std::move(_name), std::unique_ptr<framework::member>(new framework::undefined_member())).first->second.get();
+		auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1);
+
+		return _variable_index.emplace(std::move(_name), std::unique_ptr<framework::member>(_allocation.first)).first->second.get();
 	}
 
 	return _result->second.get();
