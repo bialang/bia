@@ -71,6 +71,10 @@ public:
 	{
 		puts(typeid(&_Lambda::operator()).name());
 	}
+	virtual void clone(member * _destination) override
+	{
+		_destination->replace_this<lambda_function<_Lambda>>(_lambda);
+	}
 
 private:
 	/** A pointer to a instance of the lambda function. */

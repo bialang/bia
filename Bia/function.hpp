@@ -28,6 +28,10 @@ public:
 	{
 		return true;
 	}
+	virtual int32_t test() const override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
+	}
 
 protected:
 	virtual void * get_native_data(native::NATIVE_TYPE _type) override

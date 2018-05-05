@@ -44,6 +44,10 @@ public:
 	{
 		force::disguised_caller(BIA_PO_1_1_2(_destination, _function));
 	}
+	virtual void clone(member * _destination) override
+	{
+		_destination->replace_this<static_function<_Return, _Args...>>(_function);
+	}
 
 private:
 	/** The function pointer. */

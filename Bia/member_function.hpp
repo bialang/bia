@@ -42,6 +42,10 @@ public:
 	{
 		puts(typeid(_function).name());
 	}
+	virtual void clone(member * _destination) override
+	{
+		_destination->replace_this<member_function<_Class, _Return, _Args...>>(_function);
+	}
 
 private:
 	/** The member function address. */

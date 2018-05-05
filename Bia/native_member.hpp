@@ -32,6 +32,10 @@ public:
 	{
 		machine::link::print(_value);
 	}
+	virtual void clone(member * _destination) override
+	{
+		_destination->replace_this<native_member<_Ty>>(_value);
+	}
 	//inline virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) override
 	//{
 	//	auto fRightNativeType = p_pRight->GetNativeType();
@@ -127,7 +131,10 @@ public:
 	//	//Double
 	//	else if (std::is_same<_Ty, double>::value)
 	//		return NTF_DOUBLE;
-
+	virtual int32_t test() const override
+	{
+		return native::test(_value);
+	}
 	//	return NTF_NONE;
 	//}
 	//inline virtual int32_t Test() override

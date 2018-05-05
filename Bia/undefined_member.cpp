@@ -18,12 +18,22 @@ void undefined_member::print() const
 	BIA_UNDEFINED_ERROR;
 }
 
+void undefined_member::clone(member * _destination)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 void undefined_member::execute(BIA_PO_0_1_2(member *_destination, member *_instance))
 {
 	BIA_UNDEFINED_ERROR;
 }
 
 bool undefined_member::is_const() const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+int32_t undefined_member::test() const
 {
 	BIA_UNDEFINED_ERROR;
 }
