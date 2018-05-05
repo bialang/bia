@@ -7,7 +7,7 @@ namespace bia
 namespace encoding
 {
 
-void utf8::append(char_type _char, int8_t *& _begin, const int8_t * _end)
+void utf8::append(code_point _char, int8_t *& _begin, const int8_t * _end)
 {
 	// Check character
 	if (_char < 0) {
@@ -70,9 +70,9 @@ void utf8::append(char_type _char, int8_t *& _begin, const int8_t * _end)
 	}
 }
 
-utf8::char_type utf8::next(const int8_t *& _begin, const int8_t * _end)
+utf8::code_point utf8::next(const int8_t *& _begin, const int8_t * _end)
 {
-	char_type _char = 0;
+	code_point _char = 0;
 	auto _size = _end - _begin;
 
 	// No input

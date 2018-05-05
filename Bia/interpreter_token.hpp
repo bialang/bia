@@ -639,12 +639,12 @@ public:
 private:
 	 /*
 	1: sign information
-	2: float/double value
-	3: float literal
-	4: binary value
-	5: hex value
-	6: octal value
-	7: decimal value
+	2: binary value
+	3: hex value
+	4: octal value
+	5: decimal/floating point value
+	6: is floating point
+	7: is floating point
 	*/
 	const static std::regex _number_pattern;
 
@@ -657,13 +657,11 @@ private:
 	 * @since 3.64.127.716
 	 * @date 9-Apr-18
 	 *
-	 * @param _number Defines the data.
-	 * @param _length Defines the length of the data.
-	 * @param _custom Defines the custom data.
+	 * @param _buffer The data.
 	 *
 	 * @return The parsed value.
 	*/
-	static int64_t parse_integer(const char * _number, size_t _length, report::custom_type _custom) noexcept;
+	static int64_t parse_integer(stream::input_stream::buffer_type _buffer, encoding::utf * _encoder, int _base) noexcept;
 	/**
 	 * Parses the double that was matched by interpreter_token::number().
 	 *
@@ -672,13 +670,11 @@ private:
 	 * @since 3.64.127.716
 	 * @date 9-Apr-18
 	 *
-	 * @param _number Defines the data.
-	 * @param _length Defines the length of the data.
-	 * @param _custom Defines the custom data.
+	 * @param _buffer The data.
 	 *
 	 * @return The parsed value.
 	*/
-	static double parse_double(const char * _number, size_t _length, report::custom_type _custom) noexcept;
+	static double parse_double(stream::input_stream::buffer_type _buffer, encoding::utf * _encoder) noexcept;
 };
 
 }

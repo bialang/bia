@@ -9,7 +9,7 @@ namespace bia
 namespace encoding
 {
 
-void utf32::encode(char_type _char, void *& _begin, const void * _end)
+void utf32::encode(code_point _char, void *& _begin, const void * _end)
 {
 	auto _begin_ptr = static_cast<int8_t*>(_begin);
 	auto _end_ptr = static_cast<const int8_t*>(_end);
@@ -23,7 +23,7 @@ void utf32::encode(char_type _char, void *& _begin, const void * _end)
 	_begin = _begin_ptr + 4;
 }
 
-utf32::char_type utf32::decode(const void *& _begin, const void * _end)
+utf32::code_point utf32::decode(const void *& _begin, const void * _end)
 {
 	auto _begin_ptr = static_cast<const int8_t*>(_begin);
 	auto _end_ptr = static_cast<const int8_t*>(_end);
@@ -33,7 +33,7 @@ utf32::char_type utf32::decode(const void *& _begin, const void * _end)
 		throw exception::encoding_error(BIA_EM_INVALID_ENCODING);
 	}
 
-	char_type _char = 0;
+	code_point _char = 0;
 	
 	memcpy(&_char, _begin, 4);
 	_begin = _begin_ptr + 4;

@@ -10,8 +10,8 @@ namespace encoding
 class utf32 : public utf
 {
 public:
-	virtual void encode(char_type _char, void *& _begin, const void * _end) override;
-	virtual char_type decode(const void *& _begin, const void * _end) override;
+	virtual void encode(code_point _char, void *& _begin, const void * _end) override;
+	virtual code_point decode(const void *& _begin, const void * _end) override;
 };
 
 }
