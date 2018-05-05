@@ -7,7 +7,6 @@
 #include "member.hpp"
 #include "exception.hpp"
 #include "create_member.hpp"
-#include "parameter_order.hpp"
 #include "type_traits.hpp"
 
 
@@ -30,7 +29,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args, int32_t));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'I':
@@ -40,7 +39,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args, int64_t));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'f':
@@ -50,7 +49,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, float>().choose(va_arg(_args, float));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'd':
@@ -60,7 +59,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, double>().choose(va_arg(_args, double));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 's':
@@ -70,7 +69,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_string) {
 			return chooser<is_string, _Return, const char*>().choose(va_arg(_args, const char*));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'M':
@@ -78,7 +77,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (auto _ptr = va_arg(_args, framework::member*)->cast<_Return>()) {
 			return *_ptr;
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	default:
@@ -86,7 +85,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 	}
 }
 
-inline void disguised_caller(BIA_PO_1_1_2(framework::member * _destination, void(*_function)()))
+inline void disguised_caller(void(*_function)(), framework::member * _destination)
 {
 	_function();
 
@@ -102,7 +101,7 @@ inline void disguised_caller(_Return(*_function)(), framework::member * _destina
 template<typename _Return, typename... _Args>
 inline void disguised_caller(_Return(*)(_Args...), framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 template<typename _Class>
@@ -136,13 +135,13 @@ inline void disguised_caller(_Return(_Class::*_function)() const, const _Class *
 template<typename _Return, typename _Class, typename... _Args>
 inline void disguised_caller(_Return(_Class::*)(_Args...), _Class * _instance, framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 template<typename _Return, typename _Class, typename... _Args>
 inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * _instance, framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 template<typename _Class>
@@ -154,14 +153,14 @@ inline _Class * disguised_caller()
 template<typename _Class, typename... _Args>
 inline _Class * disguised_caller()
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 template<typename _Return>
 inline void disguised_caller_count(_Return(*_function)(), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	framework::create_member(_destination, _function());
@@ -171,9 +170,9 @@ template<typename _Return, typename _0>
 inline void disguised_caller_count(_Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_0>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, _function(std::forward<_0>(v0)));
 }
@@ -182,10 +181,10 @@ template<typename _Return, typename _0, typename _1>
 inline void disguised_caller_count(_Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_0>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, _function(std::forward<_0>(v0), std::forward<_1>(v1)));
 }
@@ -194,11 +193,11 @@ template<typename _Return, typename _0, typename _1, typename _2>
 inline void disguised_caller_count(_Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v2 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_2>();
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 2))->cast<_0>();
+	auto v2 = *va_arg(_args, framework::member*)->cast<_2>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, _function(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2)));
 }
@@ -207,7 +206,7 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2), framework::m
 inline void disguised_caller_count(void(*_function)(), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	_function();
@@ -219,9 +218,9 @@ template<typename _0>
 inline void disguised_caller_count(void(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_0>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	_function(std::forward<_0>(v0));
 
@@ -232,10 +231,10 @@ template<typename _0, typename _1>
 inline void disguised_caller_count(void(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_0>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	_function(std::forward<_0>(v0), std::forward<_1>(v1));
 
@@ -246,11 +245,11 @@ template<typename _0, typename _1, typename _2>
 inline void disguised_caller_count(void(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v2 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_2>();
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 2))->cast<_0>();
+	auto v2 = *va_arg(_args, framework::member*)->cast<_2>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	_function(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 
@@ -261,7 +260,7 @@ template<typename _Class, typename _Return>
 inline void disguised_caller_count(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	framework::create_member(_destination, (_instance->*_function)());
@@ -271,9 +270,9 @@ template<typename _Class, typename _Return, typename _0>
 inline void disguised_caller_count(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_0>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(v0)));
 }
@@ -282,10 +281,10 @@ template<typename _Class, typename _Return, typename _0, typename _1>
 inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_0>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(v0), std::forward<_1>(v1)));
 }
@@ -294,11 +293,11 @@ template<typename _Class, typename _Return, typename _0, typename _1, typename _
 inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v2 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_2>();
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 2))->cast<_0>();
+	auto v2 = *va_arg(_args, framework::member*)->cast<_2>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2)));
 }
@@ -307,7 +306,7 @@ template<typename _Class>
 inline void disguised_caller_count(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	(_instance->*_function)();
@@ -319,9 +318,9 @@ template<typename _Class, typename _0>
 inline void disguised_caller_count(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_0>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(std::forward<_0>(v0));
 
@@ -332,10 +331,10 @@ template<typename _Class, typename _0, typename _1>
 inline void disguised_caller_count(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_0>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(std::forward<_0>(v0), std::forward<_1>(v1));
 
@@ -346,11 +345,11 @@ template<typename _Class, typename _0, typename _1, typename _2>
 inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v2 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_2>();
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 2))->cast<_0>();
+	auto v2 = *va_arg(_args, framework::member*)->cast<_2>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 
@@ -361,7 +360,7 @@ template<typename _Class, typename _Return>
 inline void disguised_caller_count(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	framework::create_member(_destination, (_instance->*_function)());
@@ -371,9 +370,9 @@ template<typename _Class, typename _Return, typename _0>
 inline void disguised_caller_count(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_0>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(v0)));
 }
@@ -382,10 +381,10 @@ template<typename _Class, typename _Return, typename _0, typename _1>
 inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_0>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(v0), std::forward<_1>(v1)));
 }
@@ -394,11 +393,11 @@ template<typename _Class, typename _Return, typename _0, typename _1, typename _
 inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v2 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_2>();
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 2))->cast<_0>();
+	auto v2 = *va_arg(_args, framework::member*)->cast<_2>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2)));
 }
@@ -407,7 +406,7 @@ template<typename _Class>
 inline void disguised_caller_count(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	(_instance->*_function)();
@@ -419,9 +418,9 @@ template<typename _Class, typename _0>
 inline void disguised_caller_count(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_0>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(std::forward<_0>(v0));
 
@@ -432,10 +431,10 @@ template<typename _Class, typename _0, typename _1>
 inline void disguised_caller_count(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_0>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(std::forward<_0>(v0), std::forward<_1>(v1));
 
@@ -446,11 +445,11 @@ template<typename _Class, typename _0, typename _1, typename _2>
 inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v2 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_2>();
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 2))->cast<_0>();
+	auto v2 = *va_arg(_args, framework::member*)->cast<_2>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 
@@ -461,7 +460,7 @@ template<typename _Class>
 inline _Class * disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	return new _Class();
@@ -471,9 +470,9 @@ template<typename _Class, typename _0>
 inline _Class * disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_0>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	return new _Class(std::forward<_0>(v0));
 }
@@ -482,10 +481,10 @@ template<typename _Class, typename _0, typename _1>
 inline _Class * disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_0>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	return new _Class(std::forward<_0>(v0), std::forward<_1>(v1));
 }
@@ -494,11 +493,11 @@ template<typename _Class, typename _0, typename _1, typename _2>
 inline _Class * disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto v2 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_2>();
-	auto v1 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 1))->cast<_1>();
-	auto v0 = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 2))->cast<_0>();
+	auto v2 = *va_arg(_args, framework::member*)->cast<_2>();
+	auto v1 = *va_arg(_args, framework::member*)->cast<_1>();
+	auto v0 = *va_arg(_args, framework::member*)->cast<_0>();
 
 	return new _Class(std::forward<_0>(v0), std::forward<_1>(v1), std::forward<_2>(v2));
 }
@@ -507,7 +506,7 @@ template<typename _Return>
 inline void disguised_caller_format(_Return(*_function)(), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	framework::create_member(_destination, _function());
@@ -517,7 +516,7 @@ template<typename _Return, typename _0>
 inline void disguised_caller_format(_Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
 
@@ -528,7 +527,7 @@ template<typename _Return, typename _0, typename _1>
 inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
@@ -540,7 +539,7 @@ template<typename _Return, typename _0, typename _1, typename _2>
 inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v2 = format_cast<_2>(_args, p_pcFormat);
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
@@ -553,7 +552,7 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::
 inline void disguised_caller_format(void(*_function)(), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	_function();
@@ -565,7 +564,7 @@ template<typename _0>
 inline void disguised_caller_format(void(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
 
@@ -578,7 +577,7 @@ template<typename _0, typename _1>
 inline void disguised_caller_format(void(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
@@ -592,7 +591,7 @@ template<typename _0, typename _1, typename _2>
 inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v2 = format_cast<_2>(_args, p_pcFormat);
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
@@ -607,7 +606,7 @@ template<typename _Class, typename _Return>
 inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	framework::create_member(_destination, (_instance->*_function)());
@@ -617,7 +616,7 @@ template<typename _Class, typename _Return, typename _0>
 inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
 
@@ -628,7 +627,7 @@ template<typename _Class, typename _Return, typename _0, typename _1>
 inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
@@ -640,7 +639,7 @@ template<typename _Class, typename _Return, typename _0, typename _1, typename _
 inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v2 = format_cast<_2>(_args, p_pcFormat);
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
@@ -653,7 +652,7 @@ template<typename _Class>
 inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	(_instance->*_function)();
@@ -665,7 +664,7 @@ template<typename _Class, typename _0>
 inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
 
@@ -678,7 +677,7 @@ template<typename _Class, typename _0, typename _1>
 inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
@@ -692,7 +691,7 @@ template<typename _Class, typename _0, typename _1, typename _2>
 inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v2 = format_cast<_2>(_args, p_pcFormat);
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
@@ -707,7 +706,7 @@ template<typename _Class, typename _Return>
 inline void disguised_caller_format(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	framework::create_member(_destination, (_instance->*_function)());
@@ -717,7 +716,7 @@ template<typename _Class, typename _Return, typename _0>
 inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
 
@@ -728,7 +727,7 @@ template<typename _Class, typename _Return, typename _0, typename _1>
 inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
@@ -740,7 +739,7 @@ template<typename _Class, typename _Return, typename _0, typename _1, typename _
 inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v2 = format_cast<_2>(_args, p_pcFormat);
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
@@ -753,7 +752,7 @@ template<typename _Class>
 inline void disguised_caller_format(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	(_instance->*_function)();
@@ -765,7 +764,7 @@ template<typename _Class, typename _0>
 inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
 
@@ -778,7 +777,7 @@ template<typename _Class, typename _0, typename _1>
 inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
@@ -792,7 +791,7 @@ template<typename _Class, typename _0, typename _1, typename _2>
 inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v2 = format_cast<_2>(_args, p_pcFormat);
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
@@ -807,7 +806,7 @@ template<typename _Class>
 inline _Class * disguised_caller_format(framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 0) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
 	return new _Class();
@@ -817,7 +816,7 @@ template<typename _Class, typename _0>
 inline _Class * disguised_caller_format(framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 1) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
 
@@ -828,7 +827,7 @@ template<typename _Class, typename _0, typename _1>
 inline _Class * disguised_caller_format(framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 2) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v1 = format_cast<_1>(_args, p_pcFormat);
 	auto v0 = format_cast<_0>(_args, p_pcFormat);
@@ -840,7 +839,7 @@ template<typename _Class, typename _0, typename _1, typename _2>
 inline _Class * disguised_caller_format(framework::member::parameter_count _count, const char * _format, va_list _args)
 {
 	if (_count != 3) {
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto v2 = format_cast<_2>(_args, p_pcFormat);
 	auto v1 = format_cast<_1>(_args, p_pcFormat);

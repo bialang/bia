@@ -49,7 +49,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args, int32_t));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'I':
@@ -59,7 +59,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args, int64_t));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'f':
@@ -69,7 +69,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, float>().choose(va_arg(_args, float));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'd':
@@ -79,7 +79,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, double>().choose(va_arg(_args, double));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 's':
@@ -89,7 +89,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_string) {
 			return chooser<is_string, _Return, const char*>().choose(va_arg(_args, const char*));
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'M':
@@ -97,7 +97,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (auto _ptr = va_arg(_args, framework::member*)->cast<_Return>()) {
 			return *_ptr;
 		} else {
-			throw exception::BadCastException("Invalid cast.");
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	default:
@@ -121,7 +121,7 @@ inline void disguised_caller(_Return(*_function)(), framework::member * _destina
 template<typename _Return, typename... _Args>
 inline void disguised_caller(_Return(*)(_Args...), framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 template<typename _Class>
@@ -155,13 +155,13 @@ inline void disguised_caller(_Return(_Class::*_function)() const, const _Class *
 template<typename _Return, typename _Class, typename... _Args>
 inline void disguised_caller(_Return(_Class::*)(_Args...), _Class * _instance, framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 template<typename _Return, typename _Class, typename... _Args>
 inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * _instance, framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 template<typename _Class>
@@ -173,7 +173,7 @@ inline _Class * disguised_caller()
 template<typename _Class, typename... _Args>
 inline _Class * disguised_caller()
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 """)
@@ -284,7 +284,7 @@ for type in ["count", "format"]:
 inline {function_return} {function_name}({param1}{param2}{param3}framework::member::parameter_count _count{format_param}, va_list _args)
 {{
 	if (_count != {arg_count}) {{
-		throw exception::ArgumentException("Argument count does not match.");
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}}{preparations}
 
 	{body1}{body2}{body3}
@@ -302,7 +302,7 @@ inline {function_return} {function_name}({param1}{param2}{param3}framework::memb
 			if type == "count":
 
 				filler["preparations"] = """
-	auto v{0} = *(*reinterpret_cast<framework::member**>(_args + sizeof(framework::member*) * 0))->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
+	auto v{0} = *va_arg(_args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
 			else:
 				filler["preparations"] = """
 	auto v{0} = format_cast<_{0}>(_args, p_pcFormat);""".format(i) + filler["preparations"]
