@@ -8,6 +8,7 @@
 #include "machine_code.hpp"
 #include "string_key.hpp"
 #include "member.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -51,6 +52,8 @@ private:
 	std::shared_ptr<memory::allocator> _allocator;
 	/** Holds all known variables, function and other. */
 	std::unordered_map<utility::string_key, std::unique_ptr<framework::member>, utility::string_key::hasher> _variable_index;
+	/** The string manager for string like resources. */
+	string_manager _string_manager;
 
 
 	framework::member * get_address_or_create(const utility::string_key & _name);

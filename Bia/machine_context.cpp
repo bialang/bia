@@ -11,7 +11,7 @@ namespace bia
 namespace machine
 {
 
-machine_context::machine_context(std::shared_ptr<memory::allocator> _allocator) : _allocator(std::move(_allocator))
+machine_context::machine_context(std::shared_ptr<memory::allocator> _allocator) : _allocator(std::move(_allocator)), _string_manager(this->_allocator.get())
 {
 	if (!this->_allocator.get()) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
