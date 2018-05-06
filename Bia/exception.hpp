@@ -18,6 +18,7 @@
 #define BIA_EM_INVALID_UNICODE "Invalid unicode character."
 #define BIA_EM_UNSUPPORTED_EXECUTE "This type cannot be executed."
 #define BIA_EM_UNSUPPORTED_TEST "This member cannot be tested."
+#define BIA_EM_UNSUPPORTED_OPERATION "This operation is not supported."
 #define BIA_EM_UNSUPPORTED_OPERATOR "Unsupported operator."
 #define BIA_EM_UNSUPPORTED_INSTANTIATION "Instantiation is not supported."
 #define BIA_EM_FAILED_ALLOCATION "Allocation failed."

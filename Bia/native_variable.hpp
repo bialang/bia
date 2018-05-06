@@ -23,6 +23,14 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
+	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
+	}
+	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
+	}
 	/*virtual void call(member * _instance, member * _destination) override
 	{
 		throw exception::BadCallException("Invalid function call on native type.");

@@ -24,6 +24,14 @@ public:
 	typedef native_member<int64_t> int_member;
 	typedef native_member<double> double_member;
 
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param _value The initial value.
+	*/
 	native_member(typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, double>::value, _Ty>::type _value) noexcept
 	{
 		this->_value = _value;
@@ -52,26 +60,18 @@ public:
 
 	//	throw exception::OperatorException("Invalid type on native operation.");
 	//}
-	//inline virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) override
-	//{
-	//	CreateResultMember(operation_chooser<_Ty>::OperationResult(m_value, p_unOperator, p_nRight), p_pDestination);
-	//}
-	//inline virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) override
-	//{
-	//	CreateResultMember(operation_chooser<_Ty>::OperationResult(m_value, p_unOperator, p_llRight), p_pDestination);
-	//}
-	//inline virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) override
-	//{
-	//	CreateResultMember(operation_chooser<_Ty>::OperationResult(m_value, p_unOperator, p_rRight), p_pDestination);
-	//}
-	//inline virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) override
-	//{
-	//	CreateResultMember(operation_chooser<_Ty>::OperationResult(m_value, p_unOperator, p_rRight), p_pDestination);
-	//}
-	//inline virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) override
-	//{
-	//	throw exception::BadCallException("String values are not supported.");
-	//}
+	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
+	{
+		create_result_member(operation_chooser_l<_Ty>::operate_result(_value, _operator, _right), _destination);
+	}
+	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+	{
+		create_result_member(operation_chooser_l<_Ty>::operate_result(_value, _operator, _right), _destination);
+	}
+	virtual void operator_call_double(member * _destination, operator_type _operator, double _right)
+	{
+		create_result_member(operation_chooser_l<_Ty>::operate_result(_value, _operator, _right), _destination);
+	}
 	//inline virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) override
 	//{
 	//	auto fRightNativeType = p_pRight->GetNativeType();
@@ -112,71 +112,26 @@ public:
 	//{
 	//	throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
 	//}
-	//inline virtual void Clone(BiaMember * p_pDestination) override
-	//{
-	//	p_pDestination->ReplaceObject<BiaNative<_Ty>>(m_value);
-	//}
 	virtual bool is_const() const override
 	{
 		return false;
 	}
-	//inline virtual int GetNativeType() const override
-	//{
-	//	//Integral
-	//	if (std::is_same<_Ty, int64_t>::value)
-	//		return NTF_INT_8 | NTF_INT_16 | NTF_INT_32 | NTF_INT_64;
-	//	//Float
-	//	else if (std::is_same<_Ty, float>::value)
-	//		return NTF_FLOAT;
-	//	//Double
-	//	else if (std::is_same<_Ty, double>::value)
-	//		return NTF_DOUBLE;
 	virtual int32_t test() const override
 	{
 		return native::test(_value);
 	}
-	//	return NTF_NONE;
-	//}
-	//inline virtual int32_t Test() override
-	//{
-	//	return native::Test(m_value);
-	//}
-	//inline virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) override
-	//{
-	//	auto fRightNativeType = p_pRight->GetNativeType();
-
-	//	//64 bit int operand
-	//	if (fRightNativeType & NTF_INT_64)
-	//		return TestCallInt_64(p_unOperator, *p_pRight->Cast<int64_t>());
-	//	//Float
-	//	else if (fRightNativeType & NTF_FLOAT)
-	//		return TestCallFloat(p_unOperator, *p_pRight->Cast<float>());
-	//	//Double
-	//	else if (fRightNativeType & NTF_DOUBLE)
-	//		return TestCallDouble(p_unOperator, *p_pRight->Cast<double>());
-
-	//	throw exception::OperatorException("Invalid type on native operation.");
-	//}
-	//inline virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) override
-	//{
-	//	return test_operation_chooser<_Ty>::Operation(m_value, p_unOperator, p_nRight);
-	//}
-	//inline virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) override
-	//{
-	//	return test_operation_chooser<_Ty>::Operation(m_value, p_unOperator, p_llRight);
-	//}
-	//inline virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) override
-	//{
-	//	return test_operation_chooser<_Ty>::Operation(m_value, p_unOperator, p_rRight);
-	//}
-	//inline virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) override
-	//{
-	//	return test_operation_chooser<_Ty>::Operation(m_value, p_unOperator, p_rRight);
-	//}
-	//inline virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) override
-	//{
-	//	throw exception::OperatorException("Cannot compare an integral to a string.");
-	//}
+	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override
+	{
+		return test_operation(_value, _operator, _right);
+	}
+	virtual int32_t test_int64(operator_type _operator, int64_t _right) const override
+	{
+		return test_operation(_value, _operator, _right);
+	}
+	virtual int32_t test_double(operator_type _operator, double _right) const override
+	{
+		return test_operation(_value, _operator, _right);
+	}
 
 protected:
 	virtual void * get_native_data(native::NATIVE_TYPE _type) override
@@ -196,8 +151,7 @@ protected:
 			default:
 				break;
 			}
-		} // Double
-		else if (std::is_same<_Ty, double>::value) {
+		} else {
 			switch (_type) {
 			case NATIVE_TYPE::BOOL:
 				_non_zero = static_cast<bool>(_value);
@@ -228,11 +182,9 @@ private:
 	static void create_result_member(_Ty && _value, member * _destination) noexcept
 	{
 		if (std::is_integral<_Ty>::value) {
-			_destination->replace_this<int_member>(p_value);
-		} else if (std::is_same<_Ty, double>::value) {
-			_destination->replace_this<double_member>(p_value);
+			_destination->replace_this<int_member>(_value);
 		} else {
-			throw BIA_IMPLEMENTATION_EXCEPTION("Implementation error.");
+			_destination->replace_this<double_member>(_value);
 		}
 	}
 };

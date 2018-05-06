@@ -503,7 +503,7 @@ inline _Class * disguised_caller_count(framework::member::parameter_count _count
 }
 
 template<typename _Return>
-inline void disguised_caller_format(_Return(*_function)(), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -513,7 +513,7 @@ inline void disguised_caller_format(_Return(*_function)(), framework::member * _
 }
 
 template<typename _Return, typename _0>
-inline void disguised_caller_format(_Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -524,7 +524,7 @@ inline void disguised_caller_format(_Return(*_function)(_0), framework::member *
 }
 
 template<typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -536,7 +536,7 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::memb
 }
 
 template<typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -549,7 +549,7 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::
 }
 
 
-inline void disguised_caller_format(void(*_function)(), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -561,7 +561,7 @@ inline void disguised_caller_format(void(*_function)(), framework::member * _des
 }
 
 template<typename _0>
-inline void disguised_caller_format(void(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -574,7 +574,7 @@ inline void disguised_caller_format(void(*_function)(_0), framework::member * _d
 }
 
 template<typename _0, typename _1>
-inline void disguised_caller_format(void(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -588,7 +588,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1), framework::member 
 }
 
 template<typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -603,7 +603,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::mem
 }
 
 template<typename _Class, typename _Return>
-inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -613,7 +613,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _ins
 }
 
 template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -624,7 +624,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _i
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -636,7 +636,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class 
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -649,7 +649,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Cl
 }
 
 template<typename _Class>
-inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -661,7 +661,7 @@ inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instan
 }
 
 template<typename _Class, typename _0>
-inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -674,7 +674,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _inst
 }
 
 template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -688,7 +688,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -703,7 +703,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class
 }
 
 template<typename _Class, typename _Return>
-inline void disguised_caller_format(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -713,7 +713,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)() const, const _
 }
 
 template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -724,7 +724,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -736,7 +736,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, c
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -749,7 +749,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) cons
 }
 
 template<typename _Class>
-inline void disguised_caller_format(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -761,7 +761,7 @@ inline void disguised_caller_format(void(_Class::*_function)() const, const _Cla
 }
 
 template<typename _Class, typename _0>
-inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -774,7 +774,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _C
 }
 
 template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -788,7 +788,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, cons
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, const char * _format, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -803,7 +803,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, 
 }
 
 template<typename _Class>
-inline _Class * disguised_caller_format(framework::member::parameter_count _count, const char * _format, va_list _args)
+inline _Class * disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -813,7 +813,7 @@ inline _Class * disguised_caller_format(framework::member::parameter_count _coun
 }
 
 template<typename _Class, typename _0>
-inline _Class * disguised_caller_format(framework::member::parameter_count _count, const char * _format, va_list _args)
+inline _Class * disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -824,7 +824,7 @@ inline _Class * disguised_caller_format(framework::member::parameter_count _coun
 }
 
 template<typename _Class, typename _0, typename _1>
-inline _Class * disguised_caller_format(framework::member::parameter_count _count, const char * _format, va_list _args)
+inline _Class * disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -836,7 +836,7 @@ inline _Class * disguised_caller_format(framework::member::parameter_count _coun
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline _Class * disguised_caller_format(framework::member::parameter_count _count, const char * _format, va_list _args)
+inline _Class * disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);

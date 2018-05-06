@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <cstdarg>
 
 #include "function.hpp"
 #include "exception.hpp"
@@ -78,6 +79,24 @@ public:
 	virtual void execute(member * _instance, member * _destination) override
 	{
 		force::disguised_caller(&_Lambda::operator(), _lambda.get(), _destination);
+	}
+	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) override
+	{
+		std::va_list _args;
+		va_start(_args, _count);
+
+		force::disguised_caller_count(&_Lambda::operator(), _lambda.get(), _destination, _count, _args);
+
+		va_end(_args);
+	}
+	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) override
+	{
+		std::va_list _args;
+		va_start(_args, _count);
+
+		force::disguised_caller_format(&_Lambda::operator(), _lambda.get(), _destination, _format, _count, _args);
+
+		va_end(_args);
 	}
 
 private:

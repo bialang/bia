@@ -99,35 +99,47 @@ public:
 	 *
 	 * @throws exception::symbol_error If the member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
+	 * @throws exception::argument_error If arguments are required or if the instance is null.
+	 * @throws See cast().
 	*/
 	virtual void execute(member * _instance, member * _destination) = 0;
 	/**
-	 * Calls this function with only members as parameters.
+	 * Executes this object as function with only member parameters.
 	 *
-	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
-	 * @param	p_unParameterCount	Defines how many parameters are passed.
-	 * @param	...	Defines the passed parameters.
+	 * @since 3.64.127.716
+	 * @date 6-May-18
 	 *
-	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
-	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
-	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
-	 * @throws	exception::InstanceException	Thrown when the passed instance is invalid.
+	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
+	 * @param [out] _destination The destination of the return result.
+	 * @param _count The amount of the passed arguments.
+	 * @param ... The arguments.
+	 *
+	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::execution_error If this object cannot be executed.
+	 * @throws exception::argument_error If the passed arguments are wrong or if the instance is null.
+	 * @throws exception::invalid_type If one argument is invalid.
+	 * @throws See cast().
 	*/
-	//virtual void CallCount(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) = 0;
+	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) = 0;
 	/**
-	 * Calls this function with any type as parameter.
+	 * Executes this object as function with mixed parameters.
 	 *
-	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
-	 * @param	p_unParameterCount	Defines how many parameters are passed.
-	 * @param	p_pcFormat	Defines the type order of the parameters.
-	 * @param	...	Defines the passed parameters.
+	 * @since 3.64.127.716
+	 * @date 6-May-18
 	 *
-	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
-	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
-	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
-	 * @throws	exception::InstanceException	Thrown when the passed instance is invalid.
+	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
+	 * @param [out] _destination The destination of the return result.
+	 * @param _format The types of the arguments.
+	 * @param _count The amount of the passed arguments.
+	 * @param ... The arguments.
+	 *
+	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::execution_error If this object cannot be executed.
+	 * @throws exception::argument_error If the passed arguments are wrong or if the instance is null.
+	 * @throws exception::invalid_type If one argument is invalid.
+	 * @throws See cast().
 	*/
-	//virtual void CallFormat(BiaMember * p_pInstance, BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) = 0;
+	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) = 0;
 	/**
 	 * Creates an instance without any parameters.
 	 *
@@ -166,12 +178,56 @@ public:
 	 * @throws	exception::OperatorException	Thrown when the operator is not supported.
 	 * @throws	exception::BadCallException	Thrown when operations are not supported.
 	*/
-	/*virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) = 0;
-	virtual void OperatorCallInt_32(uint32_t p_unOperator, int32_t p_nRight, BiaMember * p_pDestination) = 0;
-	virtual void OperatorCallInt_64(uint32_t p_unOperator, int64_t p_llRight, BiaMember * p_pDestination) = 0;
-	virtual void OperatorCallFloat(uint32_t p_unOperator, float p_rRight, BiaMember * p_pDestination) = 0;
-	virtual void OperatorCallDouble(uint32_t p_unOperator, double p_rRight, BiaMember * p_pDestination) = 0;
-	virtual void OperatorCallString(uint32_t p_unOperator, const char * p_szRight, BiaMember * p_pDestination) = 0;*/
+	//virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) = 0;
+	/**
+	 * An operator call with an int32 as right value.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param [out] _destination The of the result value.
+	 * @param _operator The operator.
+	 * @param _right The right value.
+	 *
+	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::operator_error If the operator is not valid.
+	 * @throws exception::access_violation If the left hand value cannot be modified.
+	 * @throws exception::execution_error If the operator call is invalid.
+	*/
+	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) = 0;
+	/**
+	 * An operator call with an int64 as right value.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param [out] _destination The of the result value.
+	 * @param _operator The operator.
+	 * @param _right The right value.
+	 *
+	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::operator_error If the operator is not valid.
+	 * @throws exception::access_violation If the left hand value cannot be modified.
+	 * @throws exception::execution_error If the operator call is invalid.
+	*/
+	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) = 0;
+	/**
+	 * An operator call with a double as right value.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param [out] _destination The of the result value.
+	 * @param _operator The operator.
+	 * @param _right The right value.
+	 *
+	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::operator_error If the operator is not valid.
+	 * @throws exception::access_violation If the left hand value cannot be modified.
+	 * @throws exception::execution_error If the operator call is invalid.
+	*/
+	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) = 0;
+	//virtual void operator_call_string(member * _destination, operator_type _operator, const char * _right) = 0;
 	/**
 	 * @throws	exception::OperatorException
 	*/
@@ -200,7 +256,6 @@ public:
 	 * @date 21-Apr-18
 	 *
 	 * @throws exception::symbol_error If the member is not valid.
-	 * @throws exception::symbol_error If the member is not valid.
 	 *
 	 * @return true if it is const, otherwise false.
 	*/
@@ -216,11 +271,48 @@ public:
 	 * @throws exception::execution_error If a test call is invalid.
 	*/
 	virtual int32_t test() const = 0;
-	/*virtual int32_t TestCall(uint32_t p_unOperator, BiaMember * p_pRight) = 0;
-	virtual int32_t TestCallInt_32(uint32_t p_unOperator, int32_t p_nRight) = 0;
-	virtual int32_t TestCallInt_64(uint32_t p_unOperator, int64_t p_llRight) = 0;
-	virtual int32_t TestCallFloat(uint32_t p_unOperator, float p_rRight) = 0;
-	virtual int32_t TestCallDouble(uint32_t p_unOperator, double p_rRight) = 0;*/
+	/**
+	 * Tests the contents of this member to the right value.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param _operator The operator.
+	 * @param _right The right value.
+
+	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::execution_error If a test call is invalid.
+	 * @throws exception::operator_error If the operator is invalid.
+	*/
+	virtual int32_t test_int32(operator_type _operator, int32_t _right) const = 0;
+	/**
+	 * Tests the contents of this member to the right value.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param _operator The operator.
+	 * @param _right The right value.
+
+	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::execution_error If a test call is invalid.
+	 * @throws exception::operator_error If the operator is invalid.
+	*/
+	virtual int32_t test_int64(operator_type _operator, int64_t _right) const = 0;
+	/**
+	 * Tests the contents of this member to the right value.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param _operator The operator.
+	 * @param _right The right value.
+
+	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::execution_error If a test call is invalid.
+	 * @throws exception::operator_error If the operator is invalid.
+	*/
+	virtual int32_t test_double(operator_type _operator, double _right) const = 0;
 	/**
 	 * Compares this object to the right hand value.
 	 *

@@ -50,6 +50,24 @@ public:
 	{
 		force::disguised_caller(_function, cast_instance(_instance), _destination);
 	}
+	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) override
+	{
+		std::va_list _args;
+		va_start(_args, _count);
+
+		force::disguised_caller_count(_function, cast_instance(_destination), _destination, _count, _args);
+
+		va_end(_args);
+	}
+	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) override
+	{
+		std::va_list _args;
+		va_start(_args, _count);
+
+		force::disguised_caller_format(_function, cast_instance(_destination), _destination, _format, _count, _args);
+
+		va_end(_args);
+	}
 
 private:
 	/** The member function address. */
@@ -115,6 +133,24 @@ public:
 	virtual void execute(member * _instance, member * _destination) override
 	{
 		force::disguised_caller(_function, cast_instance(_instance), _destination);
+	}
+	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) override
+	{
+		std::va_list _args;
+		va_start(_args, _count);
+
+		force::disguised_caller_count(_function, cast_instance(_destination), _destination, _count, _args);
+
+		va_end(_args);
+	}
+	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) override
+	{
+		std::va_list _args;
+		va_start(_args, _count);
+
+		force::disguised_caller_format(_function, cast_instance(_destination), _destination, _format, _count, _args);
+
+		va_end(_args);
 	}
 
 private:

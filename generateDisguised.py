@@ -188,7 +188,7 @@ for type in ["count", "format"]:
 	else:
 		upper["function_name"] = "disguised_caller_format"
 		upper["preparations"] = ""
-		upper["format_param"] = ", const char * _format"
+		upper["format_param"] = "const char * _format, "
 
 	for template in ["static", "static_void", "member", "member_void", "member_const", "member_void_const", "initiator"]:
 		filler = upper.copy()
@@ -281,7 +281,7 @@ for type in ["count", "format"]:
 			filler["arg_count"] = i
 
 			f.write("""{template_begin}{template_middle}{template_end}
-inline {function_return} {function_name}({param1}{param2}{param3}framework::member::parameter_count _count{format_param}, va_list _args)
+inline {function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list _args)
 {{
 	if (_count != {arg_count}) {{
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);

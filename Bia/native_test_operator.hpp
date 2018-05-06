@@ -69,29 +69,6 @@ inline int32_t test_operation(_Left _left, uint32_t _operator, _Right _right)
 	}
 }
 
-template<bool _ARITHMETIC>
-struct TestOperationChooser
-{
-	template<typename _Left, typename _Right>
-	inline static int32_t Operation(_Left _left, uint32_t _operator, _Right _right)
-	{
-		return TestOperation(_left, _operator, _right);
-	}
-};
-
-template<>
-struct TestOperationChooser<false>
-{
-	template<typename _Left, typename _Right>
-	inline static int32_t Operation(_Left _left, uint32_t _operator, _Right _right)
-	{
-		throw BIA_IMPLEMENTATION_EXCEPTION("Should not have happened.");
-	}
-};
-
-template<typename _Ty>
-using test_operation_chooser = TestOperationChooser<std::is_arithmetic<_Ty>::value>;
-
 }
 }
 }

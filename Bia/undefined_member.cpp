@@ -28,12 +28,52 @@ void undefined_member::execute(member * _instance, member * _destination)
 	BIA_UNDEFINED_ERROR;
 }
 
+void undefined_member::execute_count(member * _instance, member * _destination, parameter_count _count...)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+void undefined_member::execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+void undefined_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+void undefined_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+void undefined_member::operator_call_double(member * _destination, operator_type _operator, double _right)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 bool undefined_member::is_const() const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
 int32_t undefined_member::test() const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+int32_t undefined_member::test_int32(operator_type _operator, int32_t _right) const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+int32_t undefined_member::test_int64(operator_type _operator, int64_t _right) const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+int32_t undefined_member::test_double(operator_type _operator, double _right) const
 {
 	BIA_UNDEFINED_ERROR;
 }
