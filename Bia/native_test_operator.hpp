@@ -65,7 +65,7 @@ inline int32_t test_operation(_Left _left, uint32_t _operator, _Right _right)
 	case O_GREATER_EQUALS:
 		return static_cast<int32_t>(_left >= _right);
 	default:
-		throw exception::operator_error(BIA_EM_UNSUPPORTED_TEST_OPERATOR);
+		throw exception::operator_error(BIA_EM_UNSUPPORTED_OPERATOR);
 	}
 }
 
