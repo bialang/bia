@@ -10,6 +10,81 @@ namespace grammar
 
 const std::regex interpreter_token::_number_pattern(R"delim(^(-|+)?(?:0(?:b|B)([01]['01]*)|0(?:x|X)([0-9a-fA-F]['0-9a-fA-F]*)|0([0-7]['0-7]*)|(\d['0-9]*(\.)?(?:\d['0-9]*)?)(f|F)?))delim");
 
+bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encoding::utf * _encoder)
+{
+	auto _skipped = false;
+
+	while (_input.available() > 0) {
+		auto _buffer = _input.get_buffer();
+
+		// Has no next
+		if (!_encoder->has_next(_buffer.first, _buffer.second)) {
+			break;
+		}
+
+		// Ignore every character until a line break
+		do {
+			auto _prev = _buffer.first;
+
+			switch (_encoder->next(_buffer.first, _buffer.second)) {
+			case ' ':
+			case '\t':
+			case '\r':
+				_skipped = true;
+
+				break;
+			default:
+				_input.skip(_prev);
+
+				return _skipped;
+			}
+		} while (_encoder->has_next(_buffer.first, _buffer.second));
+
+		// Move cursor
+		_input.skip(_buffer.first);
+	}
+
+	return _skipped;
+}
+
+bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding::utf * _encoder)
+{
+	auto _skipped = false;
+
+	while (_input.available() > 0) {
+		auto _buffer = _input.get_buffer();
+
+		// Has no next
+		if (!_encoder->has_next(_buffer.first, _buffer.second)) {
+			break;
+		}
+
+		// Ignore every character until a line break
+		do {
+			auto _prev = _buffer.first;
+
+			switch (_encoder->next(_buffer.first, _buffer.second)) {
+			case ' ':
+			case '\t':
+			case '\r':
+			case '\n':
+				_skipped = true;
+
+				break;
+			default:
+				_input.skip(_prev);
+
+				return _skipped;
+			}
+		} while (_encoder->has_next(_buffer.first, _buffer.second));
+
+		// Move cursor
+		_input.skip(_buffer.first);
+	}
+
+	return _skipped;
+}
+
 ACTION interpreter_token::number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
 {
 	constexpr auto success = ACTION::REPORT;
@@ -287,7 +362,10 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
 
-	// Optional starting whitespaces
+	// Starting optional whitespaces
+	if (!whitespace_deleter<flags::starting_ws_opt_token, true>(_input, _params.encoder)) {
+		return error;
+	}
 
 	if (_input.available() > 0) {
 		auto _max = BIA_MAX_OPERATOR_LENGTH;
@@ -307,7 +385,6 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 			case '&':
 			case '|':
 			case '$':
-			case '#':
 				_output.content.content.operatorCode = _output.content.content.operatorCode << 8 | _code_point;
 
 				break;
@@ -323,6 +400,90 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 			}
 			default:
 				return error;
+			}
+		}
+	}
+
+	return error;
+}
+
+ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+{
+	constexpr auto success = ACTION::DONT_REPORT;
+	constexpr auto error = ACTION::ERROR;
+
+	// Starting optional whitespaces
+	if (!whitespace_deleter<flags::starting_ws_opt_token, true>(_input, _params.encoder)) {
+		return error;
+	}
+
+	if (_input.available() > 0) {
+		auto _max = 2;
+		auto _buffer = _input.get_buffer();
+		int _flags = 0;
+		encoding::utf::code_point _first_point = 0;
+
+		enum FLAGS
+		{
+			F_REQUIRED_EQUALS = 0x1,
+			F_OPTIONAL = 0x2
+		};
+
+		_output.content.type = report::TYPE::OPERATOR_CODE;
+
+		while (_max-- && _params.encoder->has_next(_buffer.first, _buffer.second)) {
+			auto _prev = _buffer.first;
+			auto _code_point = _params.encoder->next(_buffer.first, _buffer.second);
+
+			if (_max == 1) {
+				_first_point = _code_point;
+			}
+
+			switch (_code_point) {
+			case '=':
+				if (_flags & F_REQUIRED_EQUALS) {
+					_output.content.content.operatorCode = _first_point << 8 | '=';
+
+					// Move cursor
+					_input.skip(_buffer.first);
+
+					return success;
+				}
+			case '!':
+			{
+				if (_flags & F_REQUIRED_EQUALS) {
+					return error;
+				}
+
+				_flags = F_REQUIRED_EQUALS;
+
+				break;
+			}
+			case '<':
+			case '>':
+			{
+				if (_flags & F_REQUIRED_EQUALS) {
+					return error;
+				}
+
+				_flags = F_REQUIRED_EQUALS | F_OPTIONAL;
+
+				break;
+			}
+			default:
+			{
+				// Matched '<' or '>'
+				if (_flags == (F_REQUIRED_EQUALS | F_OPTIONAL)) {
+					_output.content.content.operatorCode = _first_point;
+
+					// Move cursor
+					_input.skip(_prev);
+
+					return success;
+				}
+
+				return error;
+			}
 			}
 		}
 	}

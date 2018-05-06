@@ -60,112 +60,7 @@ inline int determine_base(const char *& _buffer, size_t & _length) noexcept
 	return 10;
 }
 
-inline size_t whitespace_skipper(const char * _buffer, size_t _length) noexcept
-{
-	const auto _start_length = _length;
 
-	while (_length) {
-		switch (*_buffer++) {
-		case ' ':
-		case '\t':
-		case '\r':
-			--_length;
-
-			break;
-		default:
-			return _start_length - _length;
-		}
-	}
-
-	return _start_length - _length;
-}
-
-inline size_t padding_skipper(const char * _buffer, size_t _length) noexcept
-{
-	const auto _start_length = _length;
-
-	while (_length) {
-		switch (*_buffer++) {
-		case ' ':
-		case '\t':
-		case '\r':
-		case '\n':
-			--_length;
-
-			break;
-		default:
-			return _start_length - _length;
-		}
-	}
-
-	return _start_length - _length;
-}
-
-template<flag_type _Flags, bool _Begin>
-inline bool whitespace_deleter(const char *& _buffer, size_t & _length, token_output & _output) noexcept
-{
-	if (_Begin && (_Flags & (STARTING_WHITESPACE_TOKEN | STARTING_WHITESPACE_OPTIONAL_TOKEN | STARTING_PADDING_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN)) ||
-		!_Begin && (_Flags & ENDING_WHITESPACE_TOKEN)) {
-		constexpr auto SKIPPER = _Flags & (STARTING_PADDING_TOKEN | STARTING_PADDING_OPTIONAL_TOKEN) ? padding_skipper : whitespace_skipper;
-		auto _whitespaces = SKIPPER(_buffer, _length);
-
-		//Whitespace found
-		if (_whitespaces) {
-			_buffer += _whitespaces;
-			_length -= _whitespaces;
-
-			if (_Begin)
-				_output.offset += _whitespaces;
-			else
-				_output.padding += _whitespaces;
-		}
-		//No whitespace found
-		else if (_Begin && (_Flags & (STARTING_WHITESPACE_TOKEN | STARTING_PADDING_TOKEN)) ||
-			!_Begin && (_Flags & ENDING_WHITESPACE_TOKEN)) {
-			return false;
-		}
-	}
-
-	return true;
-}
-
-
-
-template<flag_type _Flags, int _For_clarity = 0>
-inline ACTION IdentifierToken(const char * p_pcBuffer, size_t p_iSize, token_param, token_output & p_output)
-{
-	constexpr auto SUCCESS = _Flags & FILLER_TOKEN ? (_Flags & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-	constexpr auto ERROR = _Flags & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR;
-
-	//Starting whitespaces
-	if (!whitespace_deleter<_Flags, true>(p_pcBuffer, p_iSize, p_output))
-		return ERROR;
-
-	if (p_output.iTokenSize < p_iSize)
-	{
-		if ((p_pcBuffer[p_output.iTokenSize] >= 'a' && p_pcBuffer[p_output.iTokenSize] <= 'z') ||
-			(p_pcBuffer[p_output.iTokenSize] >= 'A' && p_pcBuffer[p_output.iTokenSize] <= 'Z') ||
-			p_pcBuffer[p_output.iTokenSize] == '_')
-			++p_output.iTokenSize;
-		else
-			return ERROR;
-	}
-	else
-		return ERROR;
-
-	while (p_output.iTokenSize < p_iSize)
-	{
-		if ((p_pcBuffer[p_output.iTokenSize] >= 'a' && p_pcBuffer[p_output.iTokenSize] <= 'z') ||
-			(p_pcBuffer[p_output.iTokenSize] >= 'A' && p_pcBuffer[p_output.iTokenSize] <= 'Z') ||
-			(p_pcBuffer[p_output.iTokenSize] >= '0' && p_pcBuffer[p_output.iTokenSize] <= '9') ||
-			p_pcBuffer[p_output.iTokenSize] == '_')
-			++p_output.iTokenSize;
-		else
-			break;
-	}
-
-	return SUCCESS;
-}
 
 template<flag_type _Flags, int _For_clarity = 0>
 inline ACTION StringValueToken(const char * p_pcBuffer, size_t p_iSize, token_param, token_output & p_output)
@@ -333,145 +228,79 @@ gt_break:;
 	return ERROR;
 }
 
-template<flag_type _Flags>
-inline ACTION CustomOperatorToken(const char * p_pcBuffer, size_t p_iSize, token_param, token_output & p_output)
-{
-	constexpr auto SUCCESS = _Flags & FILLER_TOKEN ? (_Flags & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-	constexpr auto ERROR = _Flags & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : (_Flags & LOOPING_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR);
-
-	//Starting whitespaces
-	if (!whitespace_deleter<_Flags, true>(p_pcBuffer, p_iSize, p_output))
-		return ERROR;
-
-	if (p_iSize > 4)
-		p_iSize = 4;
-
-	for (auto i = p_pcBuffer; p_output.iTokenSize < p_iSize; ++i)
-	{
-		switch (*i)
-		{
-		case '*':
-		case '/':
-		case '%':
-		case '+':
-		case '-':
-		case '!':
-		case '~':
-		case '^':
-		case '&':
-		case '|':
-		case '$':
-		case '#':
-			++p_output.iTokenSize;
-
-			break;
-		case ' ':
-		default:
-			return p_output.iTokenSize ? SUCCESS : ERROR;
-		}
-	}
-
-	return ERROR;
-}
-
-template<flag_type _Flags>
-inline ACTION AssignOperatorToken(const char * p_pcBuffer, size_t p_iSize, token_param, token_output & p_output)
-{
-	constexpr auto SUCCESS = _Flags & FILLER_TOKEN ? (_Flags & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-	constexpr auto ERROR = _Flags & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : (_Flags & LOOPING_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR);
-
-	//Starting whitespaces
-	if (!whitespace_deleter<_Flags, true>(p_pcBuffer, p_iSize, p_output))
-		return ERROR;
-
-	if (p_iSize > 4)
-		p_iSize = 4;
-
-	for (auto i = p_pcBuffer; p_output.iTokenSize++ < p_iSize; ++i)
-	{
-		switch (*i)
-		{
-		case '*':
-		case '/':
-		case '%':
-		case '+':
-		case '-':
-		//case '!':
-		case '~':
-		case '^':
-		case '&':
-		case '|':
-		case '$':
-		case '#':
-			break;
-		case '=':
-			return SUCCESS;
-		default:
-			return ERROR;
-		}
-	}
-
-	return ERROR;
-}
-
-template<flag_type _Flags>
-inline ACTION CompareOperatorToken(const char * p_pcBuffer, size_t p_iSize, token_param, token_output & p_output)
-{
-	constexpr auto SUCCESS = _Flags & FILLER_TOKEN ? (_Flags & LOOPING_TOKEN ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & LOOPING_TOKEN ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-	constexpr auto ERROR = _Flags & OPTIONAL_TOKEN ? ACTION::DONT_REPORT : (_Flags & LOOPING_TOKEN ? ACTION::DONT_REPORT : ACTION::ERROR);
-
-	//Starting whitespaces
-	if (!whitespace_deleter<_Flags, true>(p_pcBuffer, p_iSize, p_output))
-		return ERROR;
-
-	if (p_iSize >= 2)
-	{
-		switch (p_pcBuffer[0])
-		{
-		case '=':
-		case '!':
-			p_output.iTokenSize += 2;
-
-			return p_pcBuffer[1] == '=' ? SUCCESS : ERROR;
-		case '<':
-		case '>':
-			if (p_pcBuffer[1] == '=')
-			{
-				p_output.iTokenSize += 2;
-
-				return SUCCESS;
-			}
-		default:
-			break;
-		}
-
-		goto gt_check_one;
-	}
-	
-	if (p_iSize >= 1)
-	{
-	gt_check_one:;
-
-		switch (p_pcBuffer[0])
-		{
-		case '<':
-		case '>':
-			p_output.iTokenSize++;
-
-			return SUCCESS;
-		default:
-			break;
-		}
-	}
-
-	return ERROR;
-}
 
 
 class interpreter_token final
 {
 public:
 	interpreter_token() = delete;
+	
+	/**
+	 * Matches all whitespace or padding characters it can.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @tparam _Flags The flags for the behavior.
+	 * @tparam _Begin If this is called before or after the token.
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param [in] _encoder The encoder.
+	 *
+	 * @throws See padding_skipper() and whitespace_skipper().
+	 *
+	 * @return true if succeded according to the @a _Flags, otherwise false.
+	*/
+	template<flags::flag_type _Flags, bool _Begin>
+	static bool whitespace_deleter(stream::input_stream & _input, encoding::utf * _encoder) noexcept
+	{
+		constexpr auto match_begin = _Begin && (_Flags & (flags::starting_ws_token | flags::starting_ws_opt_token | flags::starting_padding_token | flags::starting_padding_opt_token));
+		constexpr auto match_end = !_Begin && (_Flags & (flags::ending_ws_token | flags::ending_ws_opt_token));
+
+		if (match_begin || match_end) {
+			constexpr auto skipper = _Flags & (flags::starting_padding_token | flags::starting_padding_opt_token) ? padding_skipper : whitespace_skipper;
+
+			// No characters were skipped
+			if (!skipper(_input, _encoder)) {
+				// But they are required
+				if (_Begin && (_Flags & (flags::starting_ws_token | flags::starting_padding_token)) || !_Begin && (_Flags & flags::ending_ws_token)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+	/**
+	 * Matches all whitespace characters it can.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param [in] _encoder The encoder.
+	 *
+	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
+	 * @throws See encoding::utf::next().
+	 *
+	 * @return true if any whitespace was matched, otherwise false.
+	*/
+	static bool whitespace_skipper(stream::input_stream & _input, encoding::utf * _encoder);
+	/**
+	 * Matches all padding characters it can.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param [in] _encoder The encoder.
+	 *
+	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
+	 * @throws See encoding::utf::next().
+	 *
+	 * @return true if any padding character was matched, otherwise false.
+	*/
+	static bool padding_skipper(stream::input_stream & _input, encoding::utf * _encoder);
 	/**
 	 * Matches a number token.
 	 *
@@ -483,7 +312,7 @@ public:
 	 * @param	_params	(Not used)	Defines additional interpreter information.
 	 * @param	[out]	_output	Defines the token result.
 	 *
-	 * @return	Defines the success code. See ::ACTION.
+	 * @return	Defines the success code. See @ref ACTION.
 	*/
 	static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
 	static ACTION string(stream::input_stream & _input, token_param _params, token_output & _output);
@@ -500,7 +329,7 @@ public:
 	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
 	 * @throws See encoding::utf::next().
 	 *
-	 * @return Defines the success code. See ::ACTION.
+	 * @return Defines the success code. See @ref ACTION.
 	*/
 	static ACTION identifier(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
@@ -515,12 +344,31 @@ public:
 	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
+	 * @throws See whitespace_deleter().
 	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
 	 * @throws See encoding::utf::next().
 	 *
-	 * @return Defines the success code. See ::ACTION.
+	 * @return Defines the success code. See @ref ACTION.
 	*/
 	static ACTION assign_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	/**
+	 * Matches a compare operator.
+	 *
+	 * @remarks	A leading whitespace is optional and will be consumed, if present.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param _params Additional interpreter information.
+	 * @param [out] _output The token result.
+	 *
+	 * @throws See whitespace_deleter().
+	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
+	 * @throws See encoding::utf::next().
+	 *
+	 * @return Defines the success code. See @ref ACTION.
+	*/
 	static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a comment which starts with '#' and ends with a line feed.
@@ -535,7 +383,7 @@ public:
 	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
 	 * @throws See encoding::utf::next().
 	 *
-	 * @return Defines the success code. See ::ACTION.
+	 * @return Defines the success code. See @ref ACTION.
 	*/
 	static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
 	/**
@@ -551,9 +399,84 @@ public:
 	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
 	 * @throws See encoding::utf::next().
 	 *
-	 * @return Defines the success code. See ::ACTION.
+	 * @return Defines the success code. See @ref ACTION.
 	*/
 	static ACTION command_end(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
+	/**
+	 * Matches a custom operator.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	 *
+	 * @tparam _Flags Manipulating the behavior of this function. See @ref grammar::flags.
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param _params Additional interpreter information.
+	 * @param [out] _output The token result.
+	 *
+	 * @throws See whitespace_deleter().
+	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
+	 * @throws See encoding::utf::next().
+	 *
+	 * @return Defines the success code. See @ref ACTION.
+	*/
+	template<flags::flag_type _Flags>
+	static ACTION custom_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+	{
+		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
+		constexpr auto error = _Flags & flags::opt_token ? ACTION::DONT_REPORT : (_Flags & flags::looping_token ? ACTION::DONT_REPORT : ACTION::ERROR);
+
+		// Starting whitespaces
+		if (!whitespace_deleter<_Flags, true>(_input, _params.encoder)) {
+			return error;
+		}
+
+		if (_input.available() > 0) {
+			auto _max = BIA_MAX_OPERATOR_LENGTH;
+			auto _buffer = _input.get_buffer();
+			auto _prev = _buffer.first;
+
+			while (_max-- && _params.encoder->has_next(_buffer.first, _buffer.second)) {
+				_prev = _buffer.first;
+				auto _code_point = _params.encoder->next(_buffer.first, _buffer.second);
+
+				switch (_code_point) {
+				case '*':
+				case '/':
+				case '%':
+				case '+':
+				case '-':
+				case '!':
+				case '~':
+				case '^':
+				case '&':
+				case '|':
+				case '$':
+					_output.content.content.operatorCode = _output.content.content.operatorCode << 8 | _code_point;
+
+					break;
+				default:
+					break;
+				}
+			}
+
+			if (_output.content.content.operatorCode) {
+				_output.content.type = report::TYPE::OPERATOR_CODE;
+
+				// Move cursor
+				_input.skip(_prev);
+
+				// Ending whitespaces
+				if (!whitespace_deleter<_Flags, false>(_input, _params.encoder)) {
+					return error;
+				}
+
+				return success;
+			}
+		}
+
+		return error;
+	}
 	/**
 	 * Matches a keyword token.
 	 *
@@ -567,10 +490,11 @@ public:
 	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
+	 * @throws See whitespace_deleter().
 	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
 	 * @throws See encoding::utf::next().
 	 *
-	 * @return Defines the success code. See ::ACTION.
+	 * @return Defines the success code. See @ref ACTION.
 	*/
 	template<typename _Ty, flags::flag_type _Flags = flags::none>
 	static ACTION keyword(stream::input_stream & _input, token_param _params, token_output & _output)
@@ -579,6 +503,11 @@ public:
 		constexpr auto error = _Flags & flags::opt_token ? ACTION::DONT_REPORT : (_Flags & flags::looping_token ? ACTION::DONT_REPORT : ACTION::ERROR);
 
 		static_assert(_Ty::length() <= BIA_MAX_KEYWORD_LENGTH, "Keyword length exceeded.");
+
+		// Starting whitespaces
+		if (!whitespace_deleter<_Flags, true>(_input, _params.encoder)) {
+			return error;
+		}
 
 		if (_input.available() >= _Ty::length()) {
 			auto _buffer = _input.get_buffer();
@@ -597,6 +526,11 @@ public:
 
 					// Move cursor
 					_input.skip(_buffer.first);
+
+					// Ending whitespaces
+					if (!whitespace_deleter<_Flags, false>(_input, _params.encoder)) {
+						return error;
+					}
 
 					return success;
 				}
@@ -618,22 +552,30 @@ public:
 	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
+	 * @throws See whitespace_deleter().
 	 * @throws See interpreter_rule::run_rule().
 	 *
-	 * @return Defines the success code. See ::ACTION.
+	 * @return Defines the success code. See @ref ACTION.
 	*/
 	template<report::rule_type _Rule, flags::flag_type _Flags = flags::filler_token>
 	static ACTION rule_pointer(stream::input_stream & _input, token_param _params, token_output & _output)
 	{
 		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = _Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
-
-		//Starting whitespaces
-		if (!whitespace_deleter<_Flags, true>(_input, _output)) {
+		
+		// Starting whitespaces
+		if (!whitespace_deleter<_Flags, true>(_input, _params.encoder)) {
 			return error;
 		}
 
-		return _params.rules[_Rule].run_rule(_input, _params) ? success : error;
+		auto _result = _params.rules[_Rule].run_rule(_input, _params) ? success : error;
+
+		// Ending whitespaces
+		if (!whitespace_deleter<_Flags, false>(_input, _params.encoder)) {
+			return error;
+		}
+
+		return _result;
 	}
 
 private:

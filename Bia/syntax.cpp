@@ -30,7 +30,7 @@ interpreter syntax::init_rules()
 	// Root helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_ROOT_HELPER_0, interpreter_rule::F_WRAP_UP, {
 		interpreter_token::keyword<operator_scope_open, flags::filler_token>,
-		interpreter_token::rule_pointer<BGR_ROOT_HELPER_1, flags::filler_token | flags::looping_token | STARTING_PADDING_OPTIONAL_TOKEN>,
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_1, flags::filler_token | flags::looping_token | flags::starting_padding_opt_token>,
 		interpreter_token::keyword<operator_scope_close, flags::filler_token>
 		}));
 
@@ -76,7 +76,7 @@ interpreter syntax::init_rules()
 
 	// If helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_IF_HELPER_0, interpreter_rule::F_NONE, {
-		interpreter_token::keyword<keyword_else, flags::filler_token | STARTING_PADDING_OPTIONAL_TOKEN>,
+		interpreter_token::keyword<keyword_else, flags::filler_token | flags::starting_padding_opt_token>,
 		interpreter_token::keyword<keyword_if, flags::filler_token | flags::starting_ws_token>,
 		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_token>,
 		interpreter_token::rule_pointer<BGR_NORMAL_STATEMENT>
@@ -84,7 +84,7 @@ interpreter syntax::init_rules()
 
 	// If helper 1
 	_interpreter.set_rule(interpreter_rule(BGR_IF_HELPER_1, interpreter_rule::F_WRAP_UP, {
-		interpreter_token::keyword<keyword_else, flags::filler_token | STARTING_PADDING_OPTIONAL_TOKEN>,
+		interpreter_token::keyword<keyword_else, flags::filler_token | flags::starting_padding_opt_token>,
 		interpreter_token::rule_pointer<BGR_NORMAL_STATEMENT>
 		}));
 
@@ -198,7 +198,7 @@ interpreter syntax::init_rules()
 
 	// Math expression helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_MATH_EXPRESSION_HELPER_0, interpreter_rule::F_NONE, {
-		CustomOperatorToken<flags::starting_ws_opt_token>,
+		interpreter_token::custom_operator<flags::starting_ws_opt_token>,
 		interpreter_token::rule_pointer<BGR_MATH_TERM, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
@@ -210,7 +210,7 @@ interpreter syntax::init_rules()
 
 	// Condition expression helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_CONDITION_EXPRESSION_HELPER_0, interpreter_rule::F_NONE, {
-		CompareOperatorToken<flags::starting_ws_opt_token>,
+		interpreter_token::compare_operator,
 		interpreter_token::rule_pointer<BGR_MATH_EXPRESSION, flags::filler_token | flags::starting_ws_opt_token>
 		}));
 
@@ -248,7 +248,7 @@ interpreter syntax::init_rules()
 
 	// Member
 	_interpreter.set_rule(interpreter_rule(BGR_MEMBER, interpreter_rule::F_WRAP_UP, {
-		CustomOperatorToken<flags::opt_token>,
+		interpreter_token::custom_operator<flags::opt_token>,
 		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_2, flags::filler_token | flags::starting_ws_opt_token>,
 		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_0, flags::filler_token | flags::looping_token>,
 		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_1, flags::filler_token | flags::looping_token>
