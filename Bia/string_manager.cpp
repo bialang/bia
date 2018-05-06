@@ -2,7 +2,6 @@
 
 #include <cstring>
 #include <utility>
-#include <algorithm>
 
 
 namespace bia
@@ -24,7 +23,10 @@ string_manager::~string_manager()
 {
 	// Delete all allocated strings
 	for (auto & _entry : _index) {
-		_allocator->deallocate(_entry.get_allocation(), memory::allocator::MEMORY_TYPE::NORMAL);
+		try {
+			_allocator->deallocate(_entry.get_allocation());
+		} catch (...) {
+		}
 	}
 }
 
@@ -34,9 +36,9 @@ const char * string_manager::get_name_address(const char * _name, size_t _length
 
 	// Create new entry
 	if (_result == _index.end()) {
-		auto _allocation = _allocator->allocate(_length, memory::allocator::MEMORY_TYPE::NORMAL);
+		auto _allocation = _allocator->allocate(_length);
 
-		memcpy(_allocation.address, _name, _length);
+		memcpy(_allocation.first, _name, _length);
 
 		_result = _index.insert(string_entry(_allocation)).first;
 	}
@@ -50,8 +52,8 @@ const char * string_manager::get_format_address(const char * _format, size_t _le
 
 	// Create new entry
 	if (_result == _index.end()) {
-		auto _allocation = _allocator->allocate(_length, memory::allocator::MEMORY_TYPE::NORMAL);
-		auto _string = static_cast<char*>(_allocation.address);
+		auto _allocation = _allocator->allocate(_length);
+		auto _string = static_cast<char*>(_allocation.first);
 
 		// Copy in reverse order
 		for (size_t i = 0; _length--; ++i) {

@@ -35,7 +35,13 @@ public:
 	 * @param [in,out] _rvalue Defines the object that should be moved.
 	*/
 	string_manager(string_manager && _rvalue) noexcept;
-	~string_manager();
+	/**
+	 * Destructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-May-18
+	*/
+	~string_manager() noexcept;
 	/**
 	 * Returns the name address. This address will be the same for the same name value.
 	 *
@@ -78,8 +84,8 @@ private:
 		}
 		string_entry(memory::allocator::universal_allocation _allocation) noexcept
 		{
-			_string = static_cast<const char*>(_allocation.address);
-			_length = _allocation.size;
+			_string = static_cast<const char*>(_allocation.first);
+			_length = _allocation.second;
 		}
 		bool operator==(const string_entry & _right) const noexcept
 		{

@@ -11,13 +11,11 @@ namespace machine
 machine_code::machine_code(std::pair<const uint8_t*, size_t> _machine_code, machine_schein _machine_schein) : _machine_schein(std::move(_machine_schein))
 {
 	// Allocate
-	_entry_point = this->_machine_schein.get_allocator()->allocate(_machine_code.second, allocator::MEMORY_TYPE::EXECUTABLE_MEMORY);
+	_entry_point = this->_machine_schein.get_executable_allocator()->allocate(_machine_code.second);
 
 	// Copy code
-	if (_entry_point.address) {
-		memcpy(_entry_point.address, _machine_code.first, _machine_code.second);
-		this->_machine_schein.get_allocator()->change_protection(_entry_point, allocator::P_EXECUTE);
-	}
+	memcpy(_entry_point.first, _machine_code.first, _machine_code.second);
+	this->_machine_schein.get_executable_allocator()->protect(_entry_point, memory::executable_allocator::PF_EXECUTE);
 }
 
 machine_code::machine_code(machine_code && _rvalue) : _machine_schein(std::move(_rvalue._machine_schein))
@@ -34,26 +32,21 @@ machine_code::~machine_code()
 void machine_code::execute() const
 {
 	if (is_executable()) {
-		try {
-			reinterpret_cast<entry_point>(_entry_point.address)();
-		} catch (...) {
-			// Clean up
-
-			throw;
-		}
+		reinterpret_cast<entry_point>(_entry_point.first)();
 	}
 }
 
 void machine_code::clear()
 {
-	if (_entry_point.address) {
-		_machine_schein.get_allocator()->deallocate(_entry_point, allocator::MEMORY_TYPE::EXECUTABLE_MEMORY);
+	if (_entry_point.first) {
+		_machine_schein.get_executable_allocator()->deallocate(_entry_point);
+		_entry_point = {};
 	}
 }
 
 bool machine_code::is_executable() const noexcept
 {
-	return _entry_point.address && _entry_point.size;
+	return _entry_point.first && _entry_point.second;
 }
 
 machine_code & machine_code::operator=(machine_code && _rvalue)
