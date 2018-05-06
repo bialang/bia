@@ -207,76 +207,9 @@ public:
 		pop(_passed);
 #endif
 	}
-	inline void CommitTemporaryMembers(BiaMachineContext & p_context, temp_members p_parameter, int8_t p_cCount)
-	{
-		//Get position
-		auto llPosition = _output->GetPosition();
-
-		//Ovewrite
-		_output->SetPosition(std::get<0>(p_parameter));
-
-		PrepareTemporyMembers(p_cCount, &p_context);
-
-		_output->SetPosition(llPosition);
-
-		//Destruct
-		Call(&BiaMachineContext::DestructTemporaryAddresses, &p_context, p_cCount, register_offset<REGISTER::EBP, int8_t, true>(p_cCount * -4));
-
-		//Clean up stack
-		BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(*_output, static_cast<int8_t>(p_cCount * 4));
-	}
-	inline void DiscardTemporaryMembers(temp_members p_parameter)
-	{
-		_output->Move(std::get<0>(p_parameter), std::get<1>(p_parameter), _output->GetPosition() - std::get<1>(p_parameter));
-	}
 	void write_test()
 	{
 		architecture::add_instruction<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*_output, 0);
-	}
-	
-	inline position WriteJump(JUMP p_jump, position p_destination = 0, position p_start = -1)
-	{
-		auto oldPos = _output->GetPosition();
-
-		//Override
-		if (p_start != -1)
-			_output->SetPosition(p_start);
-		
-		auto pos = _output->GetPosition();
-
-		switch (p_jump)
-		{
-		case JUMP::JUMP:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_RELATIVE>(*_output, p_destination - 5 - p_start);
-
-			break;
-		case JUMP::JUMP_IF_TRUE:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_NOT_EQUAL>(*_output, p_destination - 6 - p_start);
-
-			break;
-		case JUMP::JUMP_IF_FALSE:
-			BiaArchitecture::Operation32<OP_CODE::JUMP_EQUAL>(*_output, p_destination - 6 - p_start);
-
-			break;
-		}
-
-		//Go back
-		if (p_start != -1)
-			_output->SetPosition(oldPos);
-
-		return pos;
-	}
-	inline temp_members ReserveTemporyMembers()
-	{
-		temp_members tmp;
-
-		std::get<0>(tmp) = _output->GetPosition();
-
-		PrepareTemporyMembers(0, nullptr);
-
-		std::get<1>(tmp) = _output->GetPosition();
-
-		return tmp;
 	}
 	static temp_result to_temp_member(temp_index_type _index) noexcept
 	{
@@ -417,23 +350,6 @@ private:
 		}
 
 		return 1;
-	}
-	/**
-	 * Prepares a call to construct temporary addresses.
-	 *
-	 * @since	3.45.96.586
-	 * @date	1-Jan-18
-	 *
-	 * @param	p_cCount	Defines the amount of addresses. The implementation limit is at 32.
-	 * @param	[in]	p_pContext	(Optional)	Defines the machine context address.
-	*/
-	void PrepareTemporyMembers(int8_t p_cCount, BiaMachineContext * p_pContext)
-	{
-		//Create space for member pointers; add because -128 is better than 127
-		BiaArchitecture::Operation8<OP_CODE::ADD, REGISTER::ESP>(*_output, p_cCount * -4);
-
-		//Push count and not esp because it is already on the stack
-		Call(&BiaMachineContext::ConstructTemporaryAddresses, p_pContext, p_cCount, register_offset<REGISTER::EBP, int8_t, true>(p_cCount * -4));
 	}
 	template<typename _Ty>
 	static bool is_one_byte_value(_Ty _value) noexcept

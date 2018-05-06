@@ -13,64 +13,58 @@ namespace machine
 namespace link
 {
 
-BIA_STATIC_CALLING_CONVETION(inline void, Print(int64_t p_llValue))
+inline BIA_STATIC_CALLING_CONVETION(void, print_i(int32_t _value))
 {
-	printf("%lli\n", p_llValue);
+	printf("%i\n", _value);
 }
 
-BIA_STATIC_CALLING_CONVETION(inline void, Print(float p_rValue))
+inline BIA_STATIC_CALLING_CONVETION(void, print_I(int64_t _value))
 {
-	printf("%f\n", p_rValue);
+	printf("%lli\n", _value);
 }
 
-BIA_STATIC_CALLING_CONVETION(inline void, Print(double p_rValue))
-{
-	printf("%f\n", p_rValue);
-}
-
-template<typename _Ty>
-BIA_STATIC_CALLING_CONVETION(inline void, Print(_Ty))
-{
-	printf("%s\n", typeid(_Ty).name());
-}
-
-
-BIA_STATIC_CALLING_CONVETION(inline void, print_i(int32_t p_nValue))
-{
-	printf("%i\n", p_nValue);
-}
-
-BIA_STATIC_CALLING_CONVETION(inline void, print_I(int64_t p_llValue))
-{
-	printf("%lli\n", p_llValue);
-}
-
-BIA_STATIC_CALLING_CONVETION(inline void, print_true())
+inline BIA_STATIC_CALLING_CONVETION(void, print_true())
 {
 	puts("true");
 }
 
-BIA_STATIC_CALLING_CONVETION(inline void, print_false())
+inline BIA_STATIC_CALLING_CONVETION(void, print_false())
 {
 	puts("false");
 }
 
-BIA_STATIC_CALLING_CONVETION(inline void, print_b(int32_t p_nValue))
+inline BIA_STATIC_CALLING_CONVETION(void, print_b(int32_t _value))
 {
-	if (p_nValue)
-		Print_true();
-	else
-		Print_false();
+	if (_value) {
+		print_true();
+	} else {
+		print_false();
+	}
 }
 
-BIA_STATIC_CALLING_CONVETION(inline void, print_d(double p_rValue))
+inline BIA_STATIC_CALLING_CONVETION(void, print_d(double _value))
 {
-	printf("%f\n", p_rValue);
+	printf("%f\n", _value);
 }
 
-BIA_STATIC_CALLING_CONVETION(inline void, print_s(const char * p_szString))
+inline BIA_STATIC_CALLING_CONVETION(void, print_s(const char * _string))
 {
-	puts(p_szString);
+	puts(_string);
+}
+inline BIA_STATIC_CALLING_CONVETION(void, print(int64_t _value))
+{
+	print_I(_value);
+}
+
+inline BIA_STATIC_CALLING_CONVETION(void, print(double _value))
+{
+	print_d(_value);
+}
+
+template<typename _Ty>
+inline BIA_STATIC_CALLING_CONVETION(void, print(_Ty))
+{
+	printf("%s\n", typeid(_Ty).name());
 }
 
 }

@@ -51,6 +51,18 @@ void buffer_input_stream::skip(cursor_type _length)
 	_position = _result;
 }
 
+void buffer_input_stream::skip(buffer_type::first_type _ptr)
+{
+	// Check result position
+	auto _result = _ptr - _buffer.get();
+
+	if (_result < 0 || _result > _length) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+
+	_position = _result;
+}
+
 buffer_input_stream::cursor_type buffer_input_stream::mark() const
 {
 	return _position;

@@ -49,7 +49,7 @@ public:
 	*/
 	virtual void reset(cursor_type _mark) = 0;
 	virtual void skip(cursor_type _length) = 0;
-	virtual void skip(buffer_type::first_type _position) = 0;
+	virtual void skip(buffer_type::first_type _ptr) = 0;
 	virtual cursor_type mark() const = 0;
 	virtual cursor_type available() const = 0;
 	virtual buffer_type get_buffer() = 0;

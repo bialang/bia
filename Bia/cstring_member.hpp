@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string>
+#include <cstddef>
 
 #include "native_variable.hpp"
-#include "print.hpp"
 
 
 namespace bia
@@ -24,9 +23,7 @@ public:
 	 *
 	 * @param _string The zero-terminated string.
 	*/
-	cstring_member(const char * _string) noexcept : cstring_member(_string, std::char_traits<char>::length(_string))
-	{
-	}
+	cstring_member(const char * _string) noexcept;
 	/**
 	 * Constructor.
 	 *
@@ -36,69 +33,22 @@ public:
 	 * @param _string The zero-terminated string.
 	 * @param _length The length of the string.
 	*/
-	cstring_member(const char * _string, size_t _length) noexcept
-	{
-		this->_string = _string;
-		this->_length = _length;
-	}
-	virtual void print() const override
-	{
-		machine::link::print_s(_string);
-	}
-	virtual void clone(member * _destination) override
-	{
-		_destination->replace_this<cstring_member>(_string, _length);
-	}
-	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual bool is_const() const override
-	{
-		return true;
-	}
-	virtual int32_t test() const override
-	{
-		return static_cast<int32_t>(_length != 0);
-	}
-	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
-	}
-	virtual int32_t test_int64(operator_type _operator, int64_t _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
-	}
-	virtual int32_t test_double(operator_type _operator, double _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
-	}
+	cstring_member(const char * _string, size_t _length) noexcept;
+	virtual void print() const override;
+	virtual void clone(member * _destination) override;
+	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override;
+	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override;
+	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) override;
+	virtual bool is_const() const override;
+	virtual int32_t test() const override;
+	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override;
+	virtual int32_t test_int64(operator_type _operator, int64_t _right) const override;
+	virtual int32_t test_double(operator_type _operator, double _right) const override;
 
 
 protected:
-	virtual void * get_native_data(native::NATIVE_TYPE _type) override
-	{
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
-	}
-	virtual const void * get_const_native_data(native::NATIVE_TYPE _type) const override
-	{
-		switch (_type) {
-		case NATIVE_TYPE::CONST_STRING:
-			return &_string;
-		default:
-			break;
-		}
-
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
-	}
+	virtual void * get_native_data(native::NATIVE_TYPE _type) override;
+	virtual const void * get_const_native_data(native::NATIVE_TYPE _type) const override;
 
 private:
 	/** The zero-terminated C style pointer. */

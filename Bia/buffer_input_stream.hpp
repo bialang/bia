@@ -47,6 +47,7 @@ public:
 
 	virtual void reset(cursor_type _mark) override;
 	virtual void skip(cursor_type _length) override;
+	virtual void skip(buffer_type::first_type _ptr) override;
 	virtual cursor_type mark() const override;
 	virtual cursor_type available() const override;
 	virtual buffer_type get_buffer() override;
