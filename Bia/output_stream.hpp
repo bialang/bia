@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <utility>
+#include <type_traits>
 
 
 namespace bia
@@ -15,7 +16,7 @@ class output_stream
 public:
 	typedef long long cursor_type;
 
-	virtual ~output_stream() = default;
+	virtual ~output_stream() noexcept = default;
 	/**
 	 * Writes all the passed arguments to the stream.
 	 *
@@ -28,63 +29,83 @@ public:
 	void write_all(_Args &&... _args)
 	{
 		// Prepare underlying implementation
-		reserve(size<_Args...>());
+		prepare(size<_Args...>());
 
-		write(std::forward<_Args>(_args)...);
+		write_forward(std::forward<_Args>(_args)...);
 	}
-	virtual void write_stream(const stream::BiaOutputStreamBuffer & p_stream) = 0;
 	/**
 	 * Sets the position of the cursor.
 	 *
-	 * @since	3.64.127.716
-	 * @date	7-Apr-18
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
 	 *
-	 * @param	_position	Defines the new aboslute position.
+	 * @param _position Defines the new aboslute position.
 	 *
-	 * @throws	std::domain_error	Thrown when the position is out of the domain.
-	 * @throws	
+	 * @throws
 	 *
-	 * @see	output_stream::get_cursor_domain().
+	 * @see output_stream::get_cursor_domain()
 	*/
 	virtual void set_position(cursor_type _position) = 0;
 	/**
-	 * Moves the source to the destination cursor.
-	 *
-	 * @param	p_llDestination	Defines the destination cursor.
-	 * @param	p_llSource	Defines the source cursor.
-	 * @param	p_llSize	Defines the size of the source cursor.
-	*/
-	virtual void Move(long long p_llDestination, long long p_llSource, long long p_llSize) = 0;
-	/**
 	 * Returns the position of the cursor.
 	 *
-	 * @return	The position of the cursor.
+	 * @since 3.64.127.716
+	 * @date 7-May-18
+	 *
+	 * @throws
+	 *
+	 * @return The cursor position.
 	*/
 	virtual cursor_type get_position() const = 0;
-	/**
-	 * Returns a memory buffer with its size.
-	 * 
-	 * @remarks	This buffer is only valid until the destruction of this object.
-	 * 
-	 * @return	The buffer.
-	 */
-	virtual std::pair<const uint8_t*, size_t> GetBuffer() const = 0;
-	virtual std::pair<cursor_type, cursor_type> get_cursor_domain() const noexcept = 0;
 
 protected:
-	virtual void reserve(size_t size) = 0;
-	virtual void write(uint32_t value) = 0;
-	virtual void write(uint64_t value) = 0;
-	virtual void write(uint16_t value) = 0;
-	virtual void write(uint8_t value) = 0;
+	/**
+	 * Prepares the output to write @a _size bytes.
+	 *
+	 * @since 3.64.127.716
+	 * @date 7-May-18
+	 *
+	 * @param _size The amount of bytes that are about to be written.
+	 *
+	 * @throws
+	*/
+	virtual void prepare(size_t _size) = 0;
+	virtual void write(int8_t _value) = 0;
+	virtual void write(int16_t _value) = 0;
+	virtual void write(int32_t _value) = 0;
+	virtual void write(int64_t _value) = 0;
 
 private:
-	template<typename _Ty, typename... _Args>
-	void write(_Ty&& value, _Args&&... args)
+	/*void write_forward() noexcept
 	{
-		write(std::forward<_Ty>(value));
+	}*/
+	template<typename _Ty, typename... _Args>
+	typename std::enable_if<sizeof(_Ty) == 1>::type write_forward(_Ty && _value, _Args &&... _args)
+	{
+		write(*reinterpret_cast<const int8_t*>(&_value)));
 
-		write(std::forward<_Args>(args)...);
+		write_forward(std::forward<_Args>(_args)...);
+	}
+	template<typename _Ty, typename... _Args>
+	typename std::enable_if<sizeof(_Ty) == 2>::type write_forward(_Ty && _value, _Args &&... _args)
+	{
+		write(*reinterpret_cast<const int16_t*>(&_value)));
+
+		write_forward(std::forward<_Args>(_args)...);
+	}
+	template<typename _Ty, typename... _Args>
+	typename std::enable_if<sizeof(_Ty) == 4>::type write_forward(_Ty && _value, _Args &&... _args)
+	{
+		write(*reinterpret_cast<const int32_t*>(&_value)));
+
+		write_forward(std::forward<_Args>(_args)...);
+	}
+	template<typename _Ty, typename... _Args>
+	typename std::enable_if<sizeof(_Ty) == 8>::type write_forward(_Ty && _value, _Args &&... _args)
+	{
+		write(*reinterpret_cast<const int64_t*>(&_value)));
+
+		write_forward(std::forward<_Args>(_args)...);
 	}
 	/**
 	 * Returns the size of the arguments at compile time.

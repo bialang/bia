@@ -40,19 +40,19 @@ enum class OP_CODE
 	JUMP_NOT_EQUAL,
 };
 
-inline uint8_t operator "" _8(unsigned long long _value)
+inline int8_t operator "" _8(unsigned long long _value)
 {
-	return static_cast<uint8_t>(_value);
+	return static_cast<int8_t>(_value);
 }
 
-inline uint16_t operator "" _16(unsigned long long _value)
+inline int16_t operator "" _16(unsigned long long _value)
 {
-	return static_cast<uint16_t>(_value);
+	return static_cast<int16_t>(_value);
 }
 
-inline uint32_t operator "" _32(unsigned long long _value)
+inline int32_t operator "" _32(unsigned long long _value)
 {
-	return static_cast<uint32_t>(_value);
+	return static_cast<int32_t>(_value);
 }
 
 template<REGISTER _Register, typename _Offset, bool _Effective_address>
