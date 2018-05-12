@@ -50,8 +50,12 @@ public:
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
 	machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
-	~machine_context();
-	void execute(stream::input_stream & _script);
+	~machine_context()
+	{
+
+	}
+	void execute(stream::input_stream & _script)
+	{ }
 	/**
 	 * Returns the memory allocator.
 	 *
@@ -62,13 +66,14 @@ public:
 	*/
 	memory::allocator * get_allocator() noexcept;
 
-private:
+//private:
 	/** The allocator for normal memory. */
 	std::shared_ptr<memory::allocator> _allocator;
 	/** The allocator for executable memory. */
 	std::shared_ptr<memory::executable_allocator> _executable_allocator;
 	/** Holds all known variables, function and other. */
-	std::unordered_map<utility::string_key, std::unique_ptr<framework::member>, utility::string_key::hasher, std::equal_to<utility::string_key>, memory::stl_allocator_wrapper<std::pair<utility::string_key, std::unique_ptr<framework::member>>>> _variable_index;
+	std::unordered_map<utility::string_key, std::unique_ptr<framework::member>, utility::string_key::hasher> _variable_index;
+	//std::unordered_map<utility::string_key, std::unique_ptr<framework::member>, utility::string_key::hasher, std::equal_to<utility::string_key>, memory::stl_allocator_wrapper<std::pair<const utility::string_key, std::unique_ptr<framework::member>>>> _variable_index;
 	/** The string manager for string like resources. */
 	string_manager _string_manager;
 

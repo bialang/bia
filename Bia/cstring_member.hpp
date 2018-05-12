@@ -36,6 +36,7 @@ public:
 	cstring_member(const char * _string, size_t _length) noexcept;
 	virtual void print() const override;
 	virtual void clone(member * _destination) override;
+	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override;
 	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override;
 	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override;
 	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) override;

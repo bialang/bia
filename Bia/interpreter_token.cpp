@@ -8,7 +8,7 @@ namespace bia
 namespace grammar
 {
 
-const std::regex interpreter_token::_number_pattern(R"delim(^(-|+)?(?:0(?:b|B)([01]['01]*)|0(?:x|X)([0-9a-fA-F]['0-9a-fA-F]*)|0([0-7]['0-7]*)|(\d['0-9]*(\.)?(?:\d['0-9]*)?)(f|F)?))delim");
+const std::regex interpreter_token::_number_pattern(R"delim(^(-|\\+)?(?:0(?:b|B)([01]['01]*)|0(?:x|X)([0-9a-fA-F]['0-9a-fA-F]*)|0([0-7]['0-7]*)|(\\d['0-9]*(\\.)?(?:\\d['0-9]*)?)(f|F)?))delim");
 
 bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encoding::utf * _encoder)
 {
@@ -349,7 +349,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	}
 
 	// Get address
-	_output.content.content.member = _params.context->get_address(utility::string_key(reinterpret_cast<const char*>(_begin), reinterpret_cast<const char*>(_buffer.first)));
+	_output.content.content.member = _params.context->get_address_or_create(utility::string_key(reinterpret_cast<const char*>(_begin), reinterpret_cast<const char*>(_buffer.first)));
 
 	// Move cursor
 	_input.skip(_buffer.first);

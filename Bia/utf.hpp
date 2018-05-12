@@ -32,7 +32,7 @@ public:
 	{
 		return _char >= 0xd800 && _char <= 0xdfff;
 	}
-	virtual int start(const int8_t * _begin, const int8_t * _end) = 0;
+	//virtual int start(const int8_t * _begin, const int8_t * _end) = 0;
 	virtual code_point next(const int8_t *& _begin, const int8_t * _end) = 0;
 };
 

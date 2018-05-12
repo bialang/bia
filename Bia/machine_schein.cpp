@@ -5,7 +5,7 @@ namespace bia
 namespace machine
 {
 
-machine_schein::machine_schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator)
+machine_schein::machine_schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator) noexcept
 {
 	this->_allocator = _allocator;
 	this->_executable_allocator = _executable_allocator;

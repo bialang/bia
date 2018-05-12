@@ -33,7 +33,7 @@ public:
 	*/
 	machine_schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator) noexcept;
 	machine_schein(const machine_schein & _copy) = delete;
-	machine_schein(machine_schein && _rvalue) = default;
+	machine_schein(machine_schein && _rvalue) noexcept = default;
 	/**
 	 * Destructor.
 	 *
@@ -50,8 +50,10 @@ public:
 	 * @date 7-Apr-18
 	 *
 	 * @param _allocation Defines the allocation.
+	 *
+	 * @throws See std::vector::push_back().
 	*/
-	void register_allocation(memory::executable_allocator::universal_allocation _allocation) noexcept;
+	void register_allocation(memory::executable_allocator::universal_allocation _allocation);
 	/**
 	 * Deletes all registered allocations.
 	 *

@@ -83,6 +83,35 @@ public:
 };
 
 /**
+ * @brief A implementation error.
+*/
+class implementation_error : public bia_error, public std::exception
+{
+public:
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @param _message The message.
+	 * @param _file The file.
+	 * @param _line The line.
+	*/
+	implementation_error(const std::string & _message, const char * _file, int _line) : _message(_message)
+	{
+		this->_message.append(_file).append(":").append(std::to_string(_line)).append(":").append(_message);
+	}
+	virtual const char * what() const override
+	{
+		return _message.c_str();
+	}
+
+private:
+	std::string _message;
+};
+
+/**
  * @brief A runtime exception.
  *
  * Every runtime exception of Bia will inherit this.

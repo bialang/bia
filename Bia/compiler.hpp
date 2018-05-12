@@ -28,14 +28,17 @@ public:
 	compiler(stream::output_stream & _output);
 	compiler(const compiler & _copy) = delete;
 	compiler(compiler && _rvalue) = delete;
-	~compiler();
+	~compiler(){ }
 	virtual void report(const grammar::report * _begin, const grammar::report * _end) override;
-	void finalize();
-	machine::machine_code get_code();
+	void finalize(){ }
+	machine::machine_code get_code()
+	{
+		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(nullptr, nullptr));
+	}
 	//machine::machine_schein get_machine_schein();
 
 private:
-	typedef const grammar::report*(compiler::*handle_type)(const grammar::report*);
+	typedef const grammar::report*(compiler::*handle_function)(const grammar::report*);
 
 	/** The result value for calculating and compiling. */
 	compiler_value _value;
@@ -69,7 +72,10 @@ private:
 		}
 	}
 	void constant_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
-	void compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
+	void compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
+	{
+
+	}
 	/**
 	 * Tests the compiler value and returns a test value.
 	 *
@@ -96,7 +102,8 @@ private:
 	template<bool _Expression = true>
 	const grammar::report * handle_math_expression_and_term(const grammar::report * _report)
 	{
-		constexpr handle_type next = _Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
+		//constexpr auto next = _Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
+		constexpr handle_function next = &compiler::handle_math_factor;
 
 		// Only one math expression or term to handle
 		if (_report[1].content.end + 1 == _report->content.end) {
@@ -235,7 +242,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_math_expression_and_term(const grammar::report * _report, handle_type _next);
+	const grammar::report * handle_math_expression_and_term(const grammar::report * _report, handle_function _next);
 	/**
 	 * Handles a condition expression token.
 	 *

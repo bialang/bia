@@ -142,7 +142,7 @@ const grammar::report * compiler::handle_root_ignore(const grammar::report * _re
 	return _report->content.end;
 }
 
-const grammar::report * compiler::handle_math_expression_and_term(const grammar::report * _report, handle_type _next)
+const grammar::report * compiler::handle_math_expression_and_term(const grammar::report * _report, handle_function _next)
 {
 	// Handle leftmost math term
 	auto _current_count = _counter.next();
@@ -197,6 +197,8 @@ const grammar::report * compiler::handle_condition_expression(const grammar::rep
 		// Call operator
 		compare_operation(_left, _operator->content.operatorCode, _value);
 	}
+
+	return _report->content.end;
 }
 
 const grammar::report *  compiler::handle_number(const grammar::report * _report)

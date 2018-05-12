@@ -70,6 +70,19 @@ void utf8::append(code_point _char, int8_t *& _begin, const int8_t * _end)
 	}
 }
 
+bool utf8::has_next(const int8_t * _begin, const int8_t * _end) noexcept
+{
+	try {
+		auto _tmp = _begin;
+		
+		next(_tmp, _end);
+
+		return true;
+	} catch (...) {
+		return false;
+	}
+}
+
 utf8::code_point utf8::next(const int8_t *& _begin, const int8_t * _end)
 {
 	code_point _char = 0;

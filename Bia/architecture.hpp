@@ -260,7 +260,7 @@ public:
 		{
 			// If constant displacement is 0 the push register directly, otherwise push with one byte displacement
 			if (!_value) {
-				return Operation<OP_CODE::PUSH, _Register>(_output);
+				return add_instruction<OP_CODE::PUSH, _Register>(_output);
 			} else {
 				return _output.write_all(0xff_8, static_cast<uint8_t>(0160 | get_register_code<_Register>()), static_cast<uint8_t>(_value));
 			}

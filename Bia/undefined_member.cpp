@@ -38,6 +38,11 @@ void undefined_member::execute_format(member * _instance, member * _destination,
 	BIA_UNDEFINED_ERROR;
 }
 
+void undefined_member::operator_call(member * _destination, operator_type _operator, const member * _right)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 void undefined_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
 {
 	BIA_UNDEFINED_ERROR;

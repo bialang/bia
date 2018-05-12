@@ -31,6 +31,11 @@ void cstring_member::clone(member * _destination)
 	_destination->replace_this<cstring_member>(_string, _length);
 }
 
+void cstring_member::operator_call(member * _destination, operator_type _operator, const member * _right)
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+}
+
 void cstring_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);

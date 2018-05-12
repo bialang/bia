@@ -9,7 +9,7 @@ namespace bia
 namespace encoding
 {
 
-void utf32::encode(code_point _char, void *& _begin, const void * _end)
+void utf32::append(code_point _char, int8_t *& _begin, const int8_t * _end)
 {
 	auto _begin_ptr = static_cast<int8_t*>(_begin);
 	auto _end_ptr = static_cast<const int8_t*>(_end);
@@ -23,7 +23,7 @@ void utf32::encode(code_point _char, void *& _begin, const void * _end)
 	_begin = _begin_ptr + 4;
 }
 
-utf32::code_point utf32::decode(const void *& _begin, const void * _end)
+utf32::code_point utf32::next(const int8_t *& _begin, const int8_t * _end)
 {
 	auto _begin_ptr = static_cast<const int8_t*>(_begin);
 	auto _end_ptr = static_cast<const int8_t*>(_end);

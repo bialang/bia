@@ -18,7 +18,7 @@ machine_code::machine_code(std::pair<const uint8_t*, size_t> _machine_code, mach
 	this->_machine_schein.get_executable_allocator()->protect(_entry_point, memory::executable_allocator::PF_EXECUTE);
 }
 
-machine_code::machine_code(machine_code && _rvalue) : _machine_schein(std::move(_rvalue._machine_schein))
+machine_code::machine_code(machine_code && _rvalue) noexcept : _machine_schein(std::move(_rvalue._machine_schein))
 {
 	_entry_point = _rvalue._entry_point;
 	_rvalue._entry_point = {};

@@ -1,5 +1,5 @@
 #pragma once
 
 #include "instantiate.hpp"
-#include "biaOperator.hpp"
+#include "operation.hpp"
 #include "print.hpp"

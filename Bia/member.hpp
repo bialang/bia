@@ -71,7 +71,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 8-Apr-18
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	*/
 	virtual void print() const = 0;
 	/**
@@ -82,7 +82,7 @@ public:
 	 *
 	 * @param [out] _destination The specified destination.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If the operation is not supported by the member.
 	 * @throws See replace_this().
 	*/
@@ -97,7 +97,7 @@ public:
 	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
 	 * @param [out] _destination The destination of the return result.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
 	 * @throws exception::argument_error If arguments are required or if the instance is null.
 	 * @throws See cast().
@@ -114,7 +114,7 @@ public:
 	 * @param _count The amount of the passed arguments.
 	 * @param ... The arguments.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
 	 * @throws exception::argument_error If the passed arguments are wrong or if the instance is null.
 	 * @throws exception::invalid_type If one argument is invalid.
@@ -133,7 +133,7 @@ public:
 	 * @param _count The amount of the passed arguments.
 	 * @param ... The arguments.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
 	 * @throws exception::argument_error If the passed arguments are wrong or if the instance is null.
 	 * @throws exception::invalid_type If one argument is invalid.
@@ -178,20 +178,36 @@ public:
 	 * @throws	exception::OperatorException	Thrown when the operator is not supported.
 	 * @throws	exception::BadCallException	Thrown when operations are not supported.
 	*/
-	//virtual void OperatorCall(uint32_t p_unOperator, BiaMember * p_pRight, BiaMember * p_pDestination) = 0;
+	
+	/**
+	 * An operator call with another member as right value.
+	 *
+	 * @since 3.64.127.716
+	 * @date 12-May-18
+	 *
+	 * @param [out] _destination The operation result.
+	 * @param _operator The operator.
+	 * @param _right The right member.
+	 *
+	 * @throws exception::symbol_error If this member is not valid.
+	 * @throws exception::operator_error If the operator is not valid.
+	 * @throws exception::access_violation If this member cannot be modified.
+	 * @throws exception::execution_error If the operator call is invalid.
+	*/
+	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) = 0;
 	/**
 	 * An operator call with an int32 as right value.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The of the result value.
+	 * @param [out] _destination The operation result.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::operator_error If the operator is not valid.
-	 * @throws exception::access_violation If the left hand value cannot be modified.
+	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
 	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) = 0;
@@ -201,13 +217,13 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The of the result value.
+	 * @param [out] _destination The operation result.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::operator_error If the operator is not valid.
-	 * @throws exception::access_violation If the left hand value cannot be modified.
+	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
 	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) = 0;
@@ -217,13 +233,13 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The of the result value.
+	 * @param [out] _destination The operation result.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::operator_error If the operator is not valid.
-	 * @throws exception::access_violation If the left hand value cannot be modified.
+	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
 	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) = 0;
@@ -255,7 +271,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 *
 	 * @return true if it is const, otherwise false.
 	*/
@@ -267,7 +283,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 5-May-18
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
 	*/
 	virtual int32_t test() const = 0;
@@ -280,7 +296,7 @@ public:
 	 * @param _operator The operator.
 	 * @param _right The right value.
 
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
 	 * @throws exception::operator_error If the operator is invalid.
 	*/
@@ -294,7 +310,7 @@ public:
 	 * @param _operator The operator.
 	 * @param _right The right value.
 
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
 	 * @throws exception::operator_error If the operator is invalid.
 	*/
@@ -308,7 +324,7 @@ public:
 	 * @param _operator The operator.
 	 * @param _right The right value.
 
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
 	 * @throws exception::operator_error If the operator is invalid.
 	*/
@@ -340,7 +356,7 @@ public:
 	 *
 	 * @tparam _Ty The required type. References will be converted to pointers.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::invalid_type If this member cannot be casted to _Ty.
 	 *
 	 * @return A point containing the casted type.
@@ -364,7 +380,7 @@ public:
 	 *
 	 * @tparam _Ty The required type. References will be converted to pointers.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::invalid_type If this member cannot be casted to _Ty.
 	 *
 	 * @return A point containing the casted type.
@@ -419,7 +435,7 @@ protected:
 	 *
 	 * @param _type The type.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.s
+	 * @throws exception::symbol_error If this member is not valid.s
 	 * @throws exception::invalid_type If the type is not supported.
 	 *
 	 * @return A pointer to the data.
@@ -433,7 +449,7 @@ protected:
 	 *
 	 * @param _type The type.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::invalid_type If the type is not supported.
 	 *
 	 * @return A pointer to the data.
@@ -447,7 +463,7 @@ protected:
 	 *
 	 * @param _type The type.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::invalid_type If the type is not supported.
 	 *
 	 * @return A pointer to the data.
@@ -461,7 +477,7 @@ protected:
 	 *
 	 * @param _type The type.
 	 *
-	 * @throws exception::symbol_error If the member is not valid.
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::invalid_type If the type is not supported.
 	 *
 	 * @return A pointer to the data.

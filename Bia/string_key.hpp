@@ -26,9 +26,25 @@ public:
 		}
 	};
 
-	string_key(const char * _string);
-	string_key(const char * _string, size_t _length);
-	string_key(const char * _begin, const char * _end);
+	string_key(const char * _string) noexcept : string_key(_string, std::char_traits<char>::length(_string))
+	{
+	}
+	string_key(const char * _string, size_t _length) noexcept
+	{
+		_string_ptr = _string;
+		this->_length = _length;
+	}
+	string_key(const char * _begin, const char * _end) noexcept : string_key(_begin, _end - _begin)
+	{
+	}
+	bool operator==(const string_key & _right) const noexcept
+	{
+		if (_string_ptr == _right._string_ptr) {
+			return true;
+		}
+
+		return _length == _right._length ? std::char_traits<char>::compare(_string_ptr, _right._string_ptr, _length) : false;
+	}
 
 private:
 	const char * _string_ptr;

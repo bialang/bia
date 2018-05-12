@@ -2,6 +2,7 @@
 #include "interpreter_token.hpp"
 #include "exception.hpp"
 
+#include "utf8.hpp"
 
 namespace bia
 {
@@ -22,16 +23,13 @@ void interpreter::set_rule(interpreter_rule && _rule)
 void interpreter::interpret(stream::input_stream & _input, report_receiver & _receiver) const
 {
 	report_bundle _bundle;
+	encoding::utf8 encoder;
 
 	while (_input.available()) {
 		_bundle.reset();
 
 		// Remove all leading whitespaces
-		{
-			token_output _output{};
-
-			//
-		}
+		interpreter_token::whitespace_deleter<flags::starting_padding_opt_token, true>(_input, &encoder);
 
 		// Mark input buffer start
 		auto _mark = _input.mark();
@@ -42,47 +40,20 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 		_param.bundle = &_bundle;
 		_param.rules = _rules;
 		_param.token_id = 0;
+		_param.encoder = &encoder;
 
 		try {
 			_rules[BGR_ROOT].run_rule(_input, _param);
 		} catch (const exception::limitation_error & ex) {
 			// Reset
 			_input.reset(_mark);
+
+			break;
 		}
 
 		// Report
 		_receiver.report(_bundle.begin(), _bundle.end());
 	}
-	/*
-	const auto _start_length = _length;
-	report_bundle _bundle;
-
-	// Interpretation loop
-	while (_length) {
-		_bundle.clear();
-
-		// Remove leading whitespace
-		{
-			token_output _output{};
-
-			whitespace_deleter<STARTING_PADDING_OPTIONAL_TOKEN, true>(_buffer, _length, _output);
-		}
-
-		// Start with rule 0
-		auto _processed = _rules[0].run_rule(_buffer, _length, { &_bundle, _rules, 0 });
-
-		// Report
-		if (_processed) {
-			_receiver.report(_bundle.begin(), _bundle.end());
-
-			_buffer += _processed;
-			_length -= _processed;
-		} else {
-			break;
-		}
-	}
-
-	return _start_length - _length;*/
 }
 
 }

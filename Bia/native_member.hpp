@@ -60,6 +60,10 @@ public:
 
 	//	throw exception::OperatorException("Invalid type on native operation.");
 	//}
+	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override
+	{
+		create_result_member(0, _destination);
+	}
 	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_value, _operator, _right), _destination);
@@ -168,14 +172,42 @@ protected:
 	}
 	virtual const void * get_const_native_data(native::NATIVE_TYPE _type) const override
 	{
-		return get_native_data(_type);
+		// Integral
+		if (std::is_same<_Ty, int64_t>::value) {
+			switch (_type) {
+			case NATIVE_TYPE::BOOL:
+				_non_zero = static_cast<bool>(_value);
+
+				return &_non_zero;
+			case NATIVE_TYPE::INT_8:
+			case NATIVE_TYPE::INT_16:
+			case NATIVE_TYPE::INT_32:
+			case NATIVE_TYPE::INT_64:
+				return &_value;
+			default:
+				break;
+			}
+		} else {
+			switch (_type) {
+			case NATIVE_TYPE::BOOL:
+				_non_zero = static_cast<bool>(_value);
+
+				return &_non_zero;
+			case NATIVE_TYPE::DOUBLE:
+				return &_value;
+			default:
+				break;
+			}
+		}
+
+		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
 	}
 
 private:
 	/** The arithmetic value of type: int64_t, float or double. */
 	_Ty _value;
 	/** True if the value is non zero. */
-	bool _non_zero;
+	mutable bool _non_zero;
 
 
 	template<typename _Ty>

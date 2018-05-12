@@ -99,7 +99,7 @@ public:
 	template<typename _Return, typename... _Args, typename... _Args2>
 	void call(static_function_signature<_Return, _Args...> _function, _Args2 &&... _args)
 	{
-		static_assert(sizeof...(_Args) != sizeof...(_Args2), "Argument count does not match.");
+		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
 		auto _passed = pass(std::forward<_Args2>(_args)...);
