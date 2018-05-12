@@ -52,7 +52,6 @@ struct report
 	{
 		const char * string;
 		int64_t intValue;
-		float floatValue;
 		double doubleValue;
 		const report *  end;
 		framework::member * member;

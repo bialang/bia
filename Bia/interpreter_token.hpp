@@ -2,7 +2,6 @@
 
 #include <cstring>
 #include <cstdint>
-#include <regex>
 #include <type_traits>
 
 #include "config.hpp"
@@ -368,17 +367,6 @@ public:
 	}
 
 private:
-	 /*
-	1: sign information
-	2: binary value
-	3: hex value
-	4: octal value
-	5: decimal/floating point value
-	6: is floating point
-	7: is floating point
-	*/
-	const static std::regex _number_pattern;
-
 	static int get_value(char _digit) noexcept;
 	/**
 	 * Parses the integer that was matched by interpreter_token::number().

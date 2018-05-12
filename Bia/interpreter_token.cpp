@@ -8,8 +8,6 @@ namespace bia
 namespace grammar
 {
 
-const std::regex interpreter_token::_number_pattern(R"delim(^(-|\+)?(?:0(?:b|B)([01]['01]*)|0(?:x|X)([0-9a-fA-F]['0-9a-fA-F]*)|0([0-7]['0-7]*)|(\d['0-9]*(\.)?(?:\d['0-9]*)?)(f|F)?))delim");
-
 bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encoding::utf * _encoder)
 {
 	auto _skipped = false;
@@ -90,80 +88,99 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
 
-	std::cmatch _results;
-
 	// No input
 	if (_input.available() <= 0) {
 		return error;
 	}
 
 	auto _buffer = _input.get_buffer();
+	int64_t _int = 0;
+	auto _double = 0.;
+	auto _negative = false;
+	auto _is_double = false;
+	auto _digit = _params.encoder->next(_buffer.first, _buffer.second);
 
-	if (std::regex_search(reinterpret_cast<const char*>(_buffer.first), reinterpret_cast<const char*>(_buffer.second), _results, _number_pattern)) {
-		// Sign
-		auto _group = _results[1];
-		auto _negative = false;
+	// First character
+	switch (_digit) {
+	case '-':
+		_negative = true;
+	case '+':
+		break;
+	case '0':
+	{
+		// Could be other base
+		if (_buffer.first < _buffer.second) {
+			auto _tmp = _buffer.first;
+			
+			_digit = _params.encoder->next(_buffer.first, _buffer.second);
 
-		if (_group.length() && _group.first[0] == '-') {
-			_negative = true;
+			switch (_digit) {
+			case 'b':
+			case 'B':
+			{
+
+			}
+			case 'x':
+			case 'X':
+			{
+
+			}
+			default:
+			{
+
+			}
+			}
 		}
 
-		// Integer
-		_output.content.type = report::TYPE::INT_VALUE;
+		break;
+	}
+	default:
+	{
+		// Invalid decimal
+		if (!encoding::utf::is_digit(_digit)) {
+			return error;
+		}
 
-		// Decimal base
-		_group = _results[5];
+		auto _tmp = _buffer.first;
 
-		if (_group.length()) {
-			// Floating point
-			if (_results[6].length() || _results[7].length()) {
-				_output.content.type = report::TYPE::FLOAT_VALUE;
-				_output.content.content.floatValue = parse_double(_buffer, _params.encoder) * (_negative ? -1 : 1);
-			} else {
-				_output.content.content.intValue = parse_integer(_buffer, _params.encoder, 10) * (_negative ? -1 : 1);
+		_int = _digit - '0';
+
+		// Parse other digits
+		while (_buffer.first < _buffer.second) {
+			_tmp = _buffer.first;
+			_digit = _params.encoder->next(_buffer.first, _buffer.second);
+
+			if (!encoding::utf::is_digit(_digit)) {
+				break;
 			}
 
-			goto gt_success;
+			_int = _int * 10 + _digit - '0';
 		}
 
-		// Hex base
-		_group = _results[2];
-
-		if (_group.length()) {
-			_output.content.content.intValue = parse_integer(_buffer, _params.encoder, 16) * (_negative ? -1 : 1);
-
-			goto gt_success;
+		// Float literal
+		if (_digit == 'f' || _digit == 'F') {
+			_is_double = true;
+		} // Reset to last
+		else {
+			_buffer.first = _tmp;
 		}
 
-		// Binary base
-		_group = _results[3];
-
-		if (_group.length()) {
-			_output.content.content.intValue = parse_integer(_buffer, _params.encoder, 2) * (_negative ? -1 : 1);
-
-			goto gt_success;
-		}
-
-		// Octal base
-		_group = _results[4];
-
-		if (_group.length()) {
-			_output.content.content.intValue = parse_integer(_buffer, _params.encoder, 8) * (_negative ? -1 : 1);
-
-			goto gt_success;
-		}
-
-		// Success
-		if (false) {
-		gt_success:;
-
-			_input.skip(_results.length());
-
-			return success;
-		}
+		break;
+	}
 	}
 
-	return error;
+	// Set value
+	if (_is_double) {
+		_output.content.type = report::TYPE::DOUBLE_VALUE;
+		_output.content.content.doubleValue = _negative ? -_double : _double;
+	} else {
+		_output.content.type = report::TYPE::INT_VALUE;
+		_output.content.content.intValue = _negative ? -_int : _int;
+	}
+
+	_input.skip(_buffer.first);
+
+	return success;
 }
 
 ACTION interpreter_token::string(stream::input_stream & _input, token_param _params, token_output & _output)
