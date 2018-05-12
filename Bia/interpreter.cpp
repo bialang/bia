@@ -24,8 +24,10 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 {
 	report_bundle _bundle;
 	encoding::utf8 encoder;
+	stream::input_stream::cursor_type _last_available = 0;
 
-	while (_input.available()) {
+	while (_input.available() != _last_available) {
+		_last_available = _input.available();
 		_bundle.reset();
 
 		// Remove all leading whitespaces
@@ -46,13 +48,22 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 			_rules[BGR_ROOT].run_rule(_input, _param);
 		} catch (const exception::limitation_error & ex) {
 			// Reset
+			auto _buffer = _input.get_buffer();
+
+			fwrite(_buffer.first, 1, _buffer.second - _buffer.first, stdout);
 			_input.reset(_mark);
 
 			break;
 		}
 
+		auto _buffer = _input.get_buffer();
+
+		fwrite(_buffer.first, 1, _buffer.second - _buffer.first, stdout);
+
 		// Report
-		_receiver.report(_bundle.begin(), _bundle.end());
+		if (_bundle.size() > 0) {
+			_receiver.report(_bundle.begin(), _bundle.end());
+		}
 	}
 }
 

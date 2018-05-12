@@ -211,7 +211,7 @@ public:
 	static ACTION custom_operator(stream::input_stream & _input, token_param _params, token_output & _output)
 	{
 		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-		constexpr auto error = _Flags & flags::opt_token ? ACTION::DONT_REPORT : (_Flags & flags::looping_token ? ACTION::DONT_REPORT : ACTION::ERROR);
+		constexpr auto error = _Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
 
 		// Starting whitespaces
 		if (!whitespace_deleter<_Flags, true>(_input, _params.encoder)) {
@@ -287,7 +287,7 @@ public:
 	static ACTION keyword(stream::input_stream & _input, token_param _params, token_output & _output)
 	{
 		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-		constexpr auto error = _Flags & flags::opt_token ? ACTION::DONT_REPORT : (_Flags & flags::looping_token ? ACTION::DONT_REPORT : ACTION::ERROR);
+		constexpr auto error = _Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
 
 		static_assert(_Ty::length() <= BIA_MAX_KEYWORD_LENGTH, "Keyword length exceeded.");
 
@@ -355,14 +355,16 @@ public:
 			return error;
 		}
 
-		auto _result = _params.rules[_Rule].run_rule(_input, _params) ? success : error;
+		if (_params.rules[_Rule].run_rule(_input, _params)) {
+			// Ending whitespaces
+			if (!whitespace_deleter<_Flags, false>(_input, _params.encoder)) {
+				return error;
+			}
 
-		// Ending whitespaces
-		if (!whitespace_deleter<_Flags, false>(_input, _params.encoder)) {
-			return error;
+			return success;
 		}
 
-		return _result;
+		return error;
 	}
 
 private:

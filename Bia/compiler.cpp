@@ -97,15 +97,15 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 	}
 	case BGR_VARIABLE_DECLARATION:
 		return handle_variable_declaration(_report);
-	case BGR_IF:
+	//case BGR_IF:
 		//return HandleIf(p_pReport->content.children);
 	case BGR_PRINT:
-		//return HandlePrint(p_pReport->content.children);
-	case BGR_TEST_LOOP:
+		return handle_print(_report);
+	//case BGR_TEST_LOOP:
 		//return HandleTestLoop(p_pReport->content.children);
 	//case BGR_IMPORT:
 		//return HandleImport(p_pReport->content.children);
-	case BGR_VALUE:
+	//case BGR_VALUE:
 		return handle_value<false>(_report, [] {});
 	default:
 		BIA_COMPILER_DEV_INVALID;

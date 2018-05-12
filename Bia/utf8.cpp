@@ -94,7 +94,7 @@ utf8::code_point utf8::next(const int8_t *& _begin, const int8_t * _end)
 	}
 
 	// One byte
-	if ((*_begin & 0xc0) == 0x80) {
+	if (!(*_begin & 0x80)) {
 		_char = *_begin & 0x7f;
 		++_begin;
 	} // Two bytes

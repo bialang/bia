@@ -102,7 +102,7 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 
 					break;
 				}
-
+				
 				// Hard reset
 				_input.reset(_begin_mark);
 
@@ -116,7 +116,7 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 		} while (true);
 	}
 
-	return true;
+	return (_flags & F_OR) == 0;
 }
 
 report::rule_type interpreter_rule::get_id() const noexcept
