@@ -3,6 +3,8 @@
 #include <cstring>
 #include <cstdint>
 #include <type_traits>
+#include <tuple>
+#include <utility>
 
 #include "config.hpp"
 #include "interpreter_rule.hpp"
@@ -367,6 +369,8 @@ public:
 	}
 
 private:
+	static  std::pair<bool, int64_t> match_base(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder, int _base);
+	static  std::tuple<bool, int64_t, double, bool> match_decimal(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder);
 	static int get_value(char _digit) noexcept;
 	/**
 	 * Parses the integer that was matched by interpreter_token::number().

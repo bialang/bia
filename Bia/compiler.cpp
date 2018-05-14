@@ -142,7 +142,7 @@ const grammar::report * compiler::handle_root_ignore(const grammar::report * _re
 	return _report->content.end;
 }
 
-const grammar::report * compiler::handle_math_expression_and_term(const grammar::report * _report, handle_function _next)
+const grammar::report * compiler::handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next)
 {
 	// Handle leftmost math term
 	auto _current_count = _counter.next();
@@ -185,7 +185,7 @@ const grammar::report * compiler::handle_math_expression_and_term(const grammar:
 const grammar::report * compiler::handle_condition_expression(const grammar::report * _report)
 {
 	// Handle left value
-	auto _operator = handle_math_expression_and_term(_report + 1) + 1;
+	auto _operator = handle_math_expression_and_term(_report);
 
 	// Operator is present
 	if (_operator < _report->content.end) {
@@ -210,10 +210,6 @@ const grammar::report *  compiler::handle_number(const grammar::report * _report
 		_value.set_return(_report->content.intValue);
 
 		break;
-	case TYPE::FLOAT_VALUE:
-		_value.set_return(_report->content.floatValue);
-
-		break;
 	case TYPE::DOUBLE_VALUE:
 		_value.set_return(_report->content.doubleValue);
 
@@ -229,6 +225,8 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 {
 	switch (_report[1].token_id) {
 	case BV_NUMBER:
+		handle_number(_report + 1);
+
 		break;
 	case BV_TRUE:
 		_value.set_return(true);

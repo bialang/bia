@@ -100,75 +100,98 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 	auto _is_double = false;
 	auto _digit = _params.encoder->next(_buffer.first, _buffer.second);
 
-	// First character
+	// Optional sign
 	switch (_digit) {
 	case '-':
 		_negative = true;
 	case '+':
+	{
+		// No more input
+		if (_buffer.first >= _buffer.second) {
+			return error;
+		}
+
+		_digit = _params.encoder->next(_buffer.first, _buffer.second);
+	}
+	default:
 		break;
+	}
+
+	// First character
+	switch (_digit) {
 	case '0':
 	{
 		// Could be other base
 		if (_buffer.first < _buffer.second) {
 			auto _tmp = _buffer.first;
-			
+
 			_digit = _params.encoder->next(_buffer.first, _buffer.second);
+
+			int _base;
 
 			switch (_digit) {
 			case 'b':
 			case 'B':
-			{
+				_base = 2;
 
-			}
+				break;
 			case 'x':
 			case 'X':
-			{
+				_base = 16;
 
-			}
+				break;
+			case 'f':
+			case 'F':
+				_is_double = true;
+
+				goto gt_set_value;
+			case '.':
+				_buffer.first = _tmp;
+
+				goto gt_match_decimal;
 			default:
-			{
+				_buffer.first = _tmp;
+				_base = 8;
 
+				break;
 			}
+
+			// Match
+			auto _result = match_base(_buffer, _params.encoder, _base);
+
+			if (!_result.first) {
+				// Result is 0
+				if (_base == 8) {
+					_int = 0;
+					_buffer.first = _tmp;
+
+					goto gt_set_value;
+				}
+
+				return error;
 			}
+
+			_int = _result.second;
 		}
 
 		break;
 	}
 	default:
 	{
-		// Invalid decimal
-		if (!encoding::utf::is_digit(_digit)) {
+	gt_match_decimal:;
+		bool _success;
+
+		std::tie(_success, _int, _double, _is_double) = match_decimal(_buffer, _params.encoder);
+
+		if (!_success) {
 			return error;
-		}
-
-		auto _tmp = _buffer.first;
-
-		_int = _digit - '0';
-
-		// Parse other digits
-		while (_buffer.first < _buffer.second) {
-			_tmp = _buffer.first;
-			_digit = _params.encoder->next(_buffer.first, _buffer.second);
-
-			if (!encoding::utf::is_digit(_digit)) {
-				break;
-			}
-
-			_int = _int * 10 + _digit - '0';
-		}
-
-		// Float literal
-		if (_digit == 'f' || _digit == 'F') {
-			_is_double = true;
-		} // Reset to last
-		else {
-			_buffer.first = _tmp;
 		}
 
 		break;
 	}
 	}
 
+gt_set_value:;
 	// Set value
 	if (_is_double) {
 		_output.content.type = report::TYPE::DOUBLE_VALUE;
@@ -178,6 +201,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 		_output.content.content.intValue = _negative ? -_int : _int;
 	}
 
+	// Move input cursor
 	_input.skip(_buffer.first);
 
 	return success;
@@ -584,6 +608,23 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 	}
 
 	return success;
+}
+
+std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder, int _base)
+{
+	return { false, 0 };
+}
+
+std::tuple<bool, int64_t, double, bool> interpreter_token::match_decimal(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder)
+{
+	std::tuple<bool, int64_t, double, bool> _result{};
+
+	// Parse numbers
+
+	std::get<0>(_result) = true;
+	std::get<1>(_result) = 61;
+
+	return _result;
 }
 
 int interpreter_token::get_value(char _digit) noexcept

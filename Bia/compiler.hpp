@@ -102,14 +102,13 @@ private:
 	template<bool _Expression = true>
 	const grammar::report * handle_math_expression_and_term(const grammar::report * _report)
 	{
-		//constexpr auto next = _Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
-		constexpr handle_function next = &compiler::handle_math_factor;
+		constexpr handle_function next = _Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
 
 		// Only one math expression or term to handle
-		if (_report[1].content.end + 1 == _report->content.end) {
+		if (_report[1].content.end == _report->content.end) {
 			(this->*next)(_report + 1);
 		} else {
-			handle_math_expression_and_term(_report, next);
+			handle_math_expression_and_term_inner(_report, next);
 		}
 
 		return _report->content.end;
@@ -167,7 +166,7 @@ private:
 	template<bool _Test>
 	const grammar::report * handle_value_insecure(const grammar::report * _report)
 	{
-		switch (_report[1].rule_id) {
+		switch (_report->rule_id) {
 		case grammar::BGR_VALUE_EXPRESSION:
 			handle_value_expression<_Test>(_report + 1);
 
@@ -242,7 +241,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_math_expression_and_term(const grammar::report * _report, handle_function _next);
+	const grammar::report * handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next);
 	/**
 	 * Handles a condition expression token.
 	 *

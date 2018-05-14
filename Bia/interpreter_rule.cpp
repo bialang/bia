@@ -47,7 +47,7 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 			}
 		}
 	};
-	std::unique_ptr<void, decltype(_wrapper_function)> _auto_wrapper(nullptr, _wrapper_function);
+	std::unique_ptr<void, decltype(_wrapper_function)> _auto_wrapper(&_wrapper_function, _wrapper_function);
 	
 	// Begin of wrap up
 	begin_wrap_up(_token_param);

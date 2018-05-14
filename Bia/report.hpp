@@ -34,7 +34,6 @@ struct report
 	{
 		STRING,
 		INT_VALUE,
-		FLOAT_VALUE,
 		DOUBLE_VALUE,
 		MEMBER,
 		OPERATOR_CODE,
