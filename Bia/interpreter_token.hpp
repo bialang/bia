@@ -369,35 +369,39 @@ public:
 	}
 
 private:
+	/**
+	 * Matches integral values with a base up to 16.
+	 *
+	 * @remarks The parameters are not checked.
+	 *
+	 * @since 3.64.128.720
+	 * @date 16-May-18
+	 *
+	 * @param [in,out] _buffer The buffer.
+	 * @param [in] _encoder The encoder.
+	 * @param _base The base.
+	 *
+	 * @throws See encoding::utf::next().
+	 *
+	 * @return A pair with the success value as first and the parsed integral as second.
+	*/
 	static  std::pair<bool, int64_t> match_base(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder, int _base);
+	/**
+	 * Matches integral values with a base up to 16.
+	 *
+	 * @remarks The parameters are not checked.
+	 *
+	 * @since 3.64.130.722
+	 * @date 16-May-18
+	 *
+	 * @param [in,out] _buffer The buffer.
+	 * @param [in] _encoder The encoder.
+	 *
+	 * @throws See encoding::utf::next().
+	 *
+	 * @return A pair with the success value as first and the parsed integral as second.
+	*/
 	static  std::tuple<bool, int64_t, double, bool> match_decimal(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder);
-	static int get_value(char _digit) noexcept;
-	/**
-	 * Parses the integer that was matched by interpreter_token::number().
-	 *
-	 * @remarks Do not use this function to parse other integers!
-	 *
-	 * @since 3.64.127.716
-	 * @date 9-Apr-18
-	 *
-	 * @param _buffer The data.
-	 *
-	 * @return The parsed value.
-	*/
-	static int64_t parse_integer(stream::input_stream::buffer_type _buffer, encoding::utf * _encoder, int _base) noexcept;
-	/**
-	 * Parses the double that was matched by interpreter_token::number().
-	 *
-	 * @remarks Do not use this function to parse other doubles!
-	 *
-	 * @since 3.64.127.716
-	 * @date 9-Apr-18
-	 *
-	 * @param _buffer The data.
-	 *
-	 * @return The parsed value.
-	*/
-	static double parse_double(stream::input_stream::buffer_type _buffer, encoding::utf * _encoder) noexcept;
 };
 
 }

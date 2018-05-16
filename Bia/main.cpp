@@ -35,7 +35,8 @@ int main()
 
 	char _script[] = R"delim(
 
-print 0
+print -0xfF
+print 0.4
 
 )delim";
 

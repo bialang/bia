@@ -1,6 +1,7 @@
 #include "interpreter_token.hpp"
 
 #include <cctype>
+#include <limits>
 
 
 namespace bia
@@ -98,6 +99,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 	auto _double = 0.;
 	auto _negative = false;
 	auto _is_double = false;
+	auto _tmp = _buffer.first;
 	auto _digit = _params.encoder->next(_buffer.first, _buffer.second);
 
 	// Optional sign
@@ -111,6 +113,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 			return error;
 		}
 
+		_tmp = _buffer.first;
 		_digit = _params.encoder->next(_buffer.first, _buffer.second);
 	}
 	default:
@@ -123,8 +126,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 	{
 		// Could be other base
 		if (_buffer.first < _buffer.second) {
-			auto _tmp = _buffer.first;
-
+			_tmp = _buffer.first;
 			_digit = _params.encoder->next(_buffer.first, _buffer.second);
 
 			int _base;
@@ -180,6 +182,8 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 	{
 	gt_match_decimal:;
 		bool _success;
+
+		_buffer.first = _tmp;
 
 		std::tie(_success, _int, _double, _is_double) = match_decimal(_buffer, _params.encoder);
 
@@ -612,71 +616,109 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 
 std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder, int _base)
 {
-	return { false, 0 };
+	const auto _begin = _buffer.first;
+	int64_t _result = 0;
+
+	// No input available
+	if (_buffer.first >= _buffer.second) {
+		return { false, 0 };
+	}
+
+	do {
+		auto _tmp = _buffer.first;
+		auto _code_point = _encoder->next(_buffer.first, _buffer.second);
+
+		if (_code_point != '\'') {
+			auto _value = encoding::utf::get_hex_value(_code_point);
+
+			if (_value < _base) {
+				_result = _result * _base + _value;
+			} else {
+				_buffer.first = _tmp;
+				
+				// Failed
+				if (_tmp == _begin) {
+
+					return { false, 0 };
+				}
+
+				break;
+			}
+		}
+	} while (_buffer.first < _buffer.second);
+
+	return { true, _result };
 }
 
 std::tuple<bool, int64_t, double, bool> interpreter_token::match_decimal(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder)
 {
-	std::tuple<bool, int64_t, double, bool> _result{};
+	const auto _begin = _buffer.first;
+	auto _result = std::make_tuple<bool, int64_t, double, bool>(true, 0, 0, false);
 
 	// Parse numbers
-
-	std::get<0>(_result) = true;
-	std::get<1>(_result) = 61;
-
-	return _result;
-}
-
-int interpreter_token::get_value(char _digit) noexcept
-{
-	if (std::isdigit(_digit)) {
-		return _digit - '0';
-	}
-
-	// Is hex digit
-	return std::tolower(_digit) - 'a' + 10;
-}
-
-int64_t interpreter_token::parse_integer(stream::input_stream::buffer_type _buffer, encoding::utf * _encoder, int _base) noexcept
-{
-	int64_t _result = 0;
-
 	while (_buffer.first < _buffer.second) {
+		auto _tmp = _buffer.first;
 		auto _code_point = _encoder->next(_buffer.first, _buffer.second);
 
-		if (_code_point != '/') {
-			_result = _result * _base + get_value(_code_point);
-		}
-	}
-
-	return _result;
-}
-
-double interpreter_token::parse_double(stream::input_stream::buffer_type _buffer, encoding::utf * _encoder) noexcept
-{
-	double _result = 0.;
-
-	// Before dot
-	while (_buffer.first < _buffer.second) {
-		auto _code_point = _encoder->next(_buffer.first, _buffer.second);
-
+		// Is floating point
 		if (_code_point == '.') {
+			std::get<3>(_result) = true;
+			std::get<2>(_result) = std::get<1>(_result);
+
 			goto gt_after_dot;
 		} else if (_code_point != '\'') {
-			_result = _result * 10. + static_cast<double>(get_value(_code_point));
+			// Floating point
+			if (_code_point == 'f' || _code_point == 'F') {
+				std::get<3>(_result) = true;
+				std::get<2>(_result) = std::get<1>(_result);
+
+				return _result;
+			}
+
+			auto _value = _code_point - '0';
+
+			// Invalid code point
+			if (_value < 0 || _value > 9) {
+				if (_tmp == _begin) {
+					std::get<0>(_result) = false;
+				}
+				
+				_buffer.first = _tmp;
+
+				return _result;
+			}
+
+			std::get<1>(_result) = std::get<1>(_result) * 10 + _value;
 		}
 	}
 
-gt_after_dot:;
-	// After dot
-	auto _factor = 1.;
+	// Only for floating point after the point
+	if (false) {
+	gt_after_dot:;
+		auto _factor = 1.;
 
-	while (_buffer.first < _buffer.second) {
-		auto _code_point = _encoder->next(_buffer.first, _buffer.second);
+		while (_buffer.first < _buffer.second) {
+			auto _tmp = _buffer.first;
+			auto _code_point = _encoder->next(_buffer.first, _buffer.second);
 
-		if (_code_point != '\'') {
-			_factor /= 10.;
-			_result = _result + static_cast<double>(get_value(_code_point)) / _factor;
+			if (_code_point != '\'') {
+				// Floating point end
+				if (_code_point == 'f' || _code_point == 'F') {
+					break;
+				}
+
+				auto _value = _code_point - '0';
+
+				// Invalid code point
+				if (_value < 0 || _value > 9) {
+					_buffer.first = _tmp;
+
+					return _result;
+				}
+
+				_factor /= 10.;
+				std::get<2>(_result) = std::get<2>(_result) + _value * _factor;
+			}
 		}
 	}
 

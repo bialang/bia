@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <algorithm>
 
-#define BIA_FUNCTION_ENTRY(x) { union { decltype(&x) function; const void * address; } _converter; _converter.function = &x; _function_map[_converter.address] = std::string(#x "<") + typeid(&x).name() + ">"; }
+#define BIA_FUNCTION_ENTRY(x) { union { decltype(&x) function; const void * address; } _converter; _converter.function = &x; _function_map.emplace(_converter.address, std::string(#x "<") + typeid(&x).name() + ">"); }
 
 
 namespace bia
@@ -93,7 +93,7 @@ disassembler::instruction_list disassembler::init_instructions()
 		_instruction.callback = std::move(_callback);
 		_instruction.size = _instruction_size;
 
-		_instructions.push_back(std::move(_instruction));
+		_instructions.emplace_back(std::move(_instruction));
 	};
 
 #if defined(BIA_ARCHITECTURE_X86)

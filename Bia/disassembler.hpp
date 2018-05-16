@@ -48,6 +48,7 @@ private:
 	//const BiaMachineContext * m_pMachineContextAddress;	/**	Defines the address of the machine context.	*/
 	//variable_index & m_index;	/**	Defines the index holding all global variables.	*/
 
+	/** The address of the corresponding context. */
 	const void * _context_address;
 
 	/** Holds all used machine instructions. */
@@ -55,8 +56,27 @@ private:
 	/** Holds all addresses of all Bia functions. */
 	static function_map _function_map;
 
-
+	/**
+	 * Creates a list with all instructions for the active platform.
+	 *
+	 * @since 3.64.128.720
+	 * @date 16-May-18
+	 *
+	 * @throws See std::vector::emplace_back().
+	 *
+	 * @return The instruction list.
+	*/
 	static instruction_list init_instructions();
+	/**
+	 * Creates a map with all addresses of the Bia functions.
+	 *
+	 * @since 3.64.128.720
+	 * @date 16-May-18
+	 *
+	 * @throws See std::map::emplace().
+	 *
+	 * @return The function map.
+	*/
 	static function_map init_function_map();
 };
 
