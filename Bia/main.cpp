@@ -35,8 +35,7 @@ int main()
 
 	char _script[] = R"delim(
 
-print -0xfF
-print 0.4
+print wd
 
 )delim";
 
@@ -45,7 +44,9 @@ print 0.4
 	bia::stream::buffer_output_stream _output;
 	bia::compiler::compiler _compiler(_output, *_context.get());
 
-	bia::grammar::syntax::get_interpreter().interpret(_input, _compiler);
+	test_and_time(1, [&]() {
+		bia::grammar::syntax::get_interpreter().interpret(_input, _compiler);
+	});
 
 	_compiler.finalize();
 

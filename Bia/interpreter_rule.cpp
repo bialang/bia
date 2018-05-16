@@ -93,17 +93,17 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 				continue;
 			case ACTION::ERROR:
 			{
-				// Can't match rest of the rule
-				_token_param.bundle->rollback(_begin_size);
-
 				// OK, move on
 				if (_flags & F_OR) {
+					// Don't delete the first wrap up character
+					_token_param.bundle->rollback(_begin_size + (_flags & F_WRAP_UP ? 1 : 0));
 					_input.reset(_mark);
 
 					break;
 				}
 				
 				// Hard reset
+				_token_param.bundle->rollback(_begin_size);
 				_input.reset(_begin_mark);
 
 				return false;

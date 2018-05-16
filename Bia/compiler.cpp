@@ -190,7 +190,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 const grammar::report * compiler::handle_condition_expression(const grammar::report * _report)
 {
 	// Handle left value
-	auto _operator = handle_math_expression_and_term(_report);
+	auto _operator = handle_math_expression_and_term(_report + 1);
 
 	// Operator is present
 	if (_operator < _report->content.end) {
@@ -272,7 +272,7 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
-
+	_value.set_return(_report[1].content.member);
 
 	return _report->content.end;
 }

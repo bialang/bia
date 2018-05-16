@@ -176,7 +176,7 @@ private:
 	template<bool _Test>
 	const grammar::report * handle_value_insecure(const grammar::report * _report)
 	{
-		switch (_report->rule_id) {
+		switch (_report[1].rule_id) {
 		case grammar::BGR_VALUE_EXPRESSION:
 			handle_value_expression<_Test>(_report + 1);
 

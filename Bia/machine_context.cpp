@@ -51,7 +51,8 @@ framework::member * machine_context::get_address_or_create(const utility::string
 
 framework::member * machine_context::get_address_or_create(utility::string_key && _name)
 {
-	return nullptr;
+	static framework::undefined_member a;
+	return &a;
 	auto _result = _variable_index.find(_name);
 
 	// Create
