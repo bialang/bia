@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <functional>
 #include <vector>
-#include <algorithm>
 #include <map>
 #include <string>
 

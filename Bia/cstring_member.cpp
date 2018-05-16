@@ -23,7 +23,7 @@ cstring_member::cstring_member(const char * _string, size_t _length) noexcept
 
 void cstring_member::print() const
 {
-	machine::link::print_s(_string);
+	machine::link::print_string(_string);
 }
 
 void cstring_member::clone(member * _destination)

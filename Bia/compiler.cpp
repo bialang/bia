@@ -380,19 +380,19 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 		{
 			// Can be int32
 			if (_value.is_int32()) {
-				_toolset.call(&machine::link::print_i, static_cast<int32_t>(_value.get_value().rt_int));
+				_toolset.call(&machine::link::print_int32, static_cast<int32_t>(_value.get_value().rt_int));
 			} else {
-				_toolset.call(&machine::link::print_I, _value.get_value().rt_int);
+				_toolset.call(&machine::link::print_int64, _value.get_value().rt_int);
 			}
 
 			break;
 		}
 		case compiler_value::VALUE_TYPE::DOUBLE:
-			_toolset.call(&machine::link::print_d, _value.get_value().rt_double);
+			_toolset.call(&machine::link::print_double, _value.get_value().rt_double);
 
 			break;
 		case compiler_value::VALUE_TYPE::STRING:
-			_toolset.call(&machine::link::print_s, _value.get_value().rt_string.data);
+			_toolset.call(&machine::link::print_string, _value.get_value().rt_string.data);
 
 			break;
 		case compiler_value::VALUE_TYPE::MEMBER:
@@ -404,7 +404,7 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 
 			break;
 		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
-			_toolset.call(&machine::link::print_b, machine::platform::toolset::get_test_result_value());
+			_toolset.call(&machine::link::print_bool, machine::platform::toolset::get_test_result_value());
 
 			break;
 		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:

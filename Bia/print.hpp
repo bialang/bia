@@ -13,12 +13,12 @@ namespace machine
 namespace link
 {
 
-inline BIA_STATIC_CALLING_CONVETION(void, print_i(int32_t _value))
+inline BIA_STATIC_CALLING_CONVETION(void, print_int32(int32_t _value))
 {
 	printf("%i\n", _value);
 }
 
-inline BIA_STATIC_CALLING_CONVETION(void, print_I(int64_t _value))
+inline BIA_STATIC_CALLING_CONVETION(void, print_int64(int64_t _value))
 {
 	printf("%lli\n", _value);
 }
@@ -33,7 +33,7 @@ inline BIA_STATIC_CALLING_CONVETION(void, print_false())
 	puts("false");
 }
 
-inline BIA_STATIC_CALLING_CONVETION(void, print_b(int32_t _value))
+inline BIA_STATIC_CALLING_CONVETION(void, print_bool(int32_t _value))
 {
 	if (_value) {
 		print_true();
@@ -42,23 +42,23 @@ inline BIA_STATIC_CALLING_CONVETION(void, print_b(int32_t _value))
 	}
 }
 
-inline BIA_STATIC_CALLING_CONVETION(void, print_d(double _value))
+inline BIA_STATIC_CALLING_CONVETION(void, print_double(double _value))
 {
 	printf("%f\n", _value);
 }
 
-inline BIA_STATIC_CALLING_CONVETION(void, print_s(const char * _string))
+inline BIA_STATIC_CALLING_CONVETION(void, print_string(const char * _string))
 {
 	puts(_string);
 }
 inline BIA_STATIC_CALLING_CONVETION(void, print(int64_t _value))
 {
-	print_I(_value);
+	print_int64(_value);
 }
 
 inline BIA_STATIC_CALLING_CONVETION(void, print(double _value))
 {
-	print_d(_value);
+	print_double(_value);
 }
 
 template<typename _Ty>

@@ -1,9 +1,12 @@
 #include "disassembler.hpp"
 #include "exception.hpp"
+#include "link.hpp"
+#include "member.hpp"
 
 #include <cstdio>
+#include <algorithm>
 
-#define BIA_FUNCTION_ENTRY(x) { union { decltype(&x) pFunction; const void * pAddress; } converter; converter.pFunction = &x; m_sFunctions[converter.pAddress] = std::string(#x "<") + typeid(&x).name() + ">"; }
+#define BIA_FUNCTION_ENTRY(x) { union { decltype(&x) function; const void * address; } _converter; _converter.function = &x; _function_map[_converter.address] = std::string(#x "<") + typeid(&x).name() + ">"; }
 
 
 namespace bia
@@ -232,66 +235,54 @@ disassembler::function_map disassembler::init_function_map()
 {
 	function_map _function_map;
 
-	/*BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_32);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt_64);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateInt0);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateIntP1);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateIntN1);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateFloat);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateDouble);
-	BIA_FUNCTION_ENTRY(machine::link::InstantiateCString);
+	BIA_FUNCTION_ENTRY(machine::link::instantiate_int32);
+	BIA_FUNCTION_ENTRY(machine::link::instantiate_int64);
+	BIA_FUNCTION_ENTRY(machine::link::instantiate_int_0);
+	BIA_FUNCTION_ENTRY(machine::link::instantiate_int_1);
+	BIA_FUNCTION_ENTRY(machine::link::instantiate_int_n1);
+	BIA_FUNCTION_ENTRY(machine::link::instantiate_double);
+	BIA_FUNCTION_ENTRY(machine::link::instantiate_string);
 
-	BIA_FUNCTION_ENTRY(framework::BiaMember::Print);
-	BIA_FUNCTION_ENTRY(machine::link::Print_i);
-	BIA_FUNCTION_ENTRY(machine::link::Print_I);
-	BIA_FUNCTION_ENTRY(machine::link::Print_true);
-	BIA_FUNCTION_ENTRY(machine::link::Print_false);
-	BIA_FUNCTION_ENTRY(machine::link::Print_b);
-	BIA_FUNCTION_ENTRY(machine::link::Print_f);
-	BIA_FUNCTION_ENTRY(machine::link::Print_d);
-	BIA_FUNCTION_ENTRY(machine::link::Print_s);
+	BIA_FUNCTION_ENTRY(framework::member::print);
+	BIA_FUNCTION_ENTRY(machine::link::print_int32);
+	BIA_FUNCTION_ENTRY(machine::link::print_int64);
+	BIA_FUNCTION_ENTRY(machine::link::print_true);
+	BIA_FUNCTION_ENTRY(machine::link::print_false);
+	BIA_FUNCTION_ENTRY(machine::link::print_bool);
+	BIA_FUNCTION_ENTRY(machine::link::print_double);
+	BIA_FUNCTION_ENTRY(machine::link::print_string);
 
-	BIA_FUNCTION_ENTRY(framework::BiaMember::Call);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::CallCount);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::CallFormat);
+	BIA_FUNCTION_ENTRY(framework::member::execute);
+	BIA_FUNCTION_ENTRY(framework::member::execute_count);
+	BIA_FUNCTION_ENTRY(framework::member::execute_format);
 
-	BIA_FUNCTION_ENTRY(framework::BiaMember::Instantiate);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::InstantiateCount);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::InstantiateFormat);
+	/*BIA_FUNCTION_ENTRY(framework::member::Instantiate);
+	BIA_FUNCTION_ENTRY(framework::member::InstantiateCount);
+	BIA_FUNCTION_ENTRY(framework::member::InstantiateFormat);*/
 
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCall);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCallInt_32);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCallInt_64);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCallFloat);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorCallDouble);
-	BIA_FUNCTION_ENTRY(machine::link::OperatorCallInt_32);
-	BIA_FUNCTION_ENTRY(machine::link::OperatorCallInt_64);
-	BIA_FUNCTION_ENTRY(machine::link::OperatorCallFloat);
-	BIA_FUNCTION_ENTRY(machine::link::OperatorCallDouble);
+	BIA_FUNCTION_ENTRY(framework::member::operator_call);
+	BIA_FUNCTION_ENTRY(framework::member::operator_call_int32);
+	BIA_FUNCTION_ENTRY(framework::member::operator_call_int64);
+	BIA_FUNCTION_ENTRY(framework::member::operator_call_double);
+	BIA_FUNCTION_ENTRY(machine::link::operation_int32);
+	BIA_FUNCTION_ENTRY(machine::link::operation_int64);
+	BIA_FUNCTION_ENTRY(machine::link::operation_double);
 
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCall);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallInt_32);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallInt_64);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallFloat);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorAssignCallDouble);
+	/*BIA_FUNCTION_ENTRY(framework::member::);
+	BIA_FUNCTION_ENTRY(framework::member::OperatorAssignCallInt_32);
+	BIA_FUNCTION_ENTRY(framework::member::OperatorAssignCallInt_64);
+	BIA_FUNCTION_ENTRY(framework::member::OperatorAssignCallFloat);
+	BIA_FUNCTION_ENTRY(framework::member::OperatorAssignCallDouble);
 
-	BIA_FUNCTION_ENTRY(framework::BiaMember::OperatorSelfCall);
+	BIA_FUNCTION_ENTRY(framework::member::OperatorSelfCall);*/
 
-	BIA_FUNCTION_ENTRY(framework::BiaMember::Test);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCall);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallInt_32);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallInt_64);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallFloat);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallDouble);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::TestCallString);
+	BIA_FUNCTION_ENTRY(framework::member::test);
+	BIA_FUNCTION_ENTRY(framework::member::test_int32);
+	BIA_FUNCTION_ENTRY(framework::member::test_int64);
+	BIA_FUNCTION_ENTRY(framework::member::test_double);
 
-	BIA_FUNCTION_ENTRY(framework::BiaMember::Clone);
-	BIA_FUNCTION_ENTRY(framework::BiaMember::GetMember);
+	BIA_FUNCTION_ENTRY(framework::member::clone);
 
-	//Machine context functions
-	BIA_FUNCTION_ENTRY(BiaMachineContext::ConstructTemporaryAddresses);
-	BIA_FUNCTION_ENTRY(BiaMachineContext::DestructTemporaryAddresses);
-	*/
 
 	return _function_map;
 }
