@@ -18,6 +18,11 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 	handle_root(_begin);
 }
 
+void compiler::finalize()
+{
+	_toolset.finalize();
+}
+
 void compiler::operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
 {
 	// Constant operation

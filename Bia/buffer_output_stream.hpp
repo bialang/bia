@@ -25,6 +25,7 @@ protected:
 	virtual void write(int64_t _value) override;
 
 private:
+public:
 	std::unique_ptr<int8_t[]> _buffer;
 	cursor_type _limit;
 	cursor_type _size;

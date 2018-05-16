@@ -31,7 +31,15 @@ public:
 	compiler(compiler && _rvalue) = delete;
 	~compiler(){ }
 	virtual void report(const grammar::report * _begin, const grammar::report * _end) override;
-	void finalize(){ }
+	/**
+	 * Finalizes the machine code.
+	 *
+	 * @since 3.64.127.719
+	 * @date 16-May-18
+	 *
+	 * @throws See machine::platform::toolset::finalize().
+	*/
+	void finalize();
 	machine::machine_code get_code()
 	{
 		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(_context.get_allocator(), _context.get_executable_allocator()));

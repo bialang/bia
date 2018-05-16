@@ -68,7 +68,7 @@ machine_code machine_context::compile_script(stream::input_stream & _script)
 {
 	// Create compiler
 	stream::buffer_output_stream _output;
-	compiler::compiler _compiler(_output);
+	compiler::compiler _compiler(_output, *this);
 
 	// Interpret
 	grammar::syntax::get_interpreter().interpret(_script, _compiler);
