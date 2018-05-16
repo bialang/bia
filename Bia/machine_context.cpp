@@ -30,6 +30,11 @@ memory::allocator * machine_context::get_allocator() noexcept
 	return _allocator.get();
 }
 
+memory::executable_allocator * machine_context::get_executable_allocator() noexcept
+{
+	return _executable_allocator.get();
+}
+
 framework::member * machine_context::get_address_or_create(const utility::string_key & _name)
 {
 	auto _result = _variable_index.find(_name);

@@ -9,6 +9,7 @@
 #include "compiler_value.hpp"
 #include "temp_counter.hpp"
 #include "operator.hpp"
+#include "machine_context.hpp"
 
 #include "interpreter.hpp"
 #include "interpreter_rule.hpp"
@@ -25,7 +26,7 @@ namespace compiler
 class compiler : public grammar::report_receiver
 {
 public:
-	compiler(stream::output_stream & _output);
+	compiler(stream::output_stream & _output, machine::machine_context & _context);
 	compiler(const compiler & _copy) = delete;
 	compiler(compiler && _rvalue) = delete;
 	~compiler(){ }
@@ -33,7 +34,7 @@ public:
 	void finalize(){ }
 	machine::machine_code get_code()
 	{
-		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(nullptr, nullptr));
+		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(_context.get_allocator(), _context.get_executable_allocator()));
 	}
 	//machine::machine_schein get_machine_schein();
 
@@ -46,6 +47,7 @@ private:
 	temp_counter _counter;
 	/** The compilers toolset for writing the machine code. */
 	machine::platform::toolset _toolset;
+	machine::machine_context & _context;
 
 	void operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
 	template<typename _Member>

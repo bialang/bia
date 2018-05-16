@@ -65,6 +65,15 @@ public:
 	 * @return The memory allocator of this context.
 	*/
 	memory::allocator * get_allocator() noexcept;
+	/**
+	 * Returns the memory allocator for executable memory.
+	 *
+	 * @since 3.64.127.716
+	 * @date 21-Apr-18
+	 *
+	 * @return The memory allocator of this context.
+	*/
+	memory::executable_allocator * get_executable_allocator() noexcept;
 
 //private:
 	/** The allocator for normal memory. */

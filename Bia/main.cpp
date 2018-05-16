@@ -5,6 +5,7 @@
 #include "buffer_output_stream.hpp"
 #include "buffer_input_stream.hpp"
 #include "syntax.hpp"
+#include "disassembler.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -41,9 +42,13 @@ print 0
 	// Compile
 	bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);
 	bia::stream::buffer_output_stream _output;
-	bia::compiler::compiler _compiler(_output);
+	bia::compiler::compiler _compiler(_output, *_context.get());
 
 	bia::grammar::syntax::get_interpreter().interpret(_input, _compiler);
+
+
+
+	system("pause");
 
 	_compiler.finalize();
 	

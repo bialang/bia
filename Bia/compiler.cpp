@@ -9,7 +9,7 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output) : _toolset(_output)
+compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _toolset(_output), _context(_context)
 {
 }
 
