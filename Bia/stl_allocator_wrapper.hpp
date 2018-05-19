@@ -25,6 +25,13 @@ template<typename _Ty>
 class stl_allocator_wrapper
 {
 public:
+	/** The value type of this allocator. */
+	typedef _Ty value_type;
+	/** The type of the allocated pointers. */
+	typedef _Ty* pointer;
+	/** The type of the size of the pointers. */
+	typedef allocator::size_type size_type;
+
 	/**
 	 * Constructor.
 	 *
@@ -48,6 +55,20 @@ public:
 	{
 	}
 	/**
+	 * Copy-Constructor.
+	 *
+	 * @since 3.64.131.725
+	 * @date 19-May-18
+	 *
+	 * @tparam _T The type of the copy.
+	 *
+	 * @param _copy The object that should be copied.
+	*/
+	template<typename _T>
+	explicit stl_allocator_wrapper(const stl_allocator_wrapper<_T> & _copy) noexcept : _allocator(_copy._allocator)
+	{
+	}
+	/**
 	 * Deallocates the memory address allocated by allocate().
 	 *
 	 * @since 3.64.127.716
@@ -58,7 +79,7 @@ public:
 	 *
 	 * @throws See allocator::deallocate().
 	*/
-	void deallocate(_Ty * _ptr, size_t _size)
+	void deallocate(pointer _ptr, size_type _size)
 	{
 		_allocator->deallocate(allocator::cast_allocation<void>(allocator::allocation<_Ty>{ _ptr, _size }));
 	}
@@ -72,41 +93,15 @@ public:
 	 *
 	 * @throws See allocator::allocate().
 	*/
-	_Ty * allocate(size_t _size)
+	pointer allocate(size_type _size)
 	{
-		return _allocator->allocate(_size).first;
+		return static_cast<pointer>(_allocator->allocate(_size).first);
 	}
-	/**
-	 * Compares two allocators for equality.
-	 *
-	 * @since 3.64.127.716
-	 * @date 5-May-18
-	 *
-	 * @param _right The right operand.
-	 *
-	 * @return true if they both have the same underlying Bia allocator, otherwise false.
-	*/
-	bool operator==(const stl_allocator_wrapper & _right) const noexcept
-	{
-		return _allocator.get() == _right._allocator.get();
-	}
-	/**
-	 * Compares two allocators for inequality.
-	 *
-	 * @since 3.64.127.716
-	 * @date 5-May-18
-	 *
-	 * @param _right The right operand.
-	 *
-	 * @return true if they both have the different underlying Bia allocator, otherwise false.
-	*/
-	bool operator!=(const stl_allocator_wrapper & _right) const noexcept
-	{
-		return _allocator.get() != _right._allocator.get();
-	}
-
 
 private:
+	template<typename _T>
+	friend class stl_allocator_wrapper;
+
 	/** The underlying Bia allocator. */
 	std::shared_ptr<allocator> _allocator;
 };

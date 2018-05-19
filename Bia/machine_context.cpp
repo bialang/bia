@@ -11,14 +11,14 @@ namespace bia
 namespace machine
 {
 
-machine_context::machine_context(const std::shared_ptr<memory::allocator>& _allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get())
+machine_context::machine_context(const std::shared_ptr<memory::allocator>& _allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _variable_index(this->_allocator), _string_manager(this->_allocator.get())
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 }
 
-machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator, std::shared_ptr<memory::executable_allocator>&& _executable_allocator) : _allocator(std::move(_allocator)), _executable_allocator(std::move(_executable_allocator)), _string_manager(this->_allocator.get())
+machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator, std::shared_ptr<memory::executable_allocator>&& _executable_allocator) : _allocator(std::move(_allocator)), _executable_allocator(std::move(_executable_allocator)), _variable_index(this->_allocator), _string_manager(this->_allocator.get())
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -35,21 +35,19 @@ memory::executable_allocator * machine_context::get_executable_allocator() noexc
 	return _executable_allocator.get();
 }
 
-framework::member * machine_context::get_address_or_create(const utility::string_key & _name)
+framework::member * machine_context::get_address_or_create(utility::string_key _name)
 {
-	auto _result = _variable_index.find(_name);
-
-	// Create
-	if (_result == _variable_index.end()) {
-		auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1);
-
-		// Create name
-		utility::string_key _key(_string_manager.get_name_address(_name.get_string(), _name.length()), _name.length());
-
-		return _variable_index.emplace(std::move(_key), std::unique_ptr<framework::member>(_allocation.first)).first->second.get();
+	if (auto _result = _variable_index.find(_name)) {
+		return _result;
 	}
 
-	return _result->second.get();
+	// Create
+	auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1);
+
+	// Create name
+	utility::string_key _key(_string_manager.get_name_address(_name.get_string(), _name.length()), _name.length());
+
+	return _variable_index.add(_key, _allocation);
 }
 
 machine_code machine_context::compile_script(stream::input_stream & _script)

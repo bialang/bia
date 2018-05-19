@@ -24,9 +24,10 @@ namespace memory
 class allocator
 {
 public:
+	typedef size_t size_type;
 	/** An allocation with type. */
 	template<typename _Ty>
-	using allocation = std::pair<_Ty*, size_t>;
+	using allocation = std::pair<_Ty*, size_type>;
 	/** An universal allocation. */
 	typedef allocation<void> universal_allocation;
 
@@ -59,7 +60,7 @@ public:
 		auto _ptr = reinterpret_cast<int8_t*>(_allocation.first);
 
 		// Destroy all elements
-		for (size_t i = 0; i < _allocation.second; ++i) {
+		for (size_type i = 0; i < _allocation.second; ++i) {
 			reinterpret_cast<_Ty*>(_ptr + i * block_size)->~_Ty();
 		}
 
@@ -102,7 +103,7 @@ public:
 	 *
 	 * @return The allocation with possibly adapted size parameter.
 	*/
-	virtual universal_allocation commit(universal_allocation _allocation, size_t _size) = 0;
+	virtual universal_allocation commit(universal_allocation _allocation, size_type _size) = 0;
 	/**
 	 * Allocates memory.
 	 *
@@ -115,7 +116,7 @@ public:
 	 *
 	 * @return The allocation.
 	*/
-	virtual universal_allocation allocate(size_t _size) = 0;
+	virtual universal_allocation allocate(size_type _size) = 0;
 	/**
 	 * Allocates the specified amount of blocks.
 	 *
@@ -128,7 +129,7 @@ public:
 	 *
 	 * @return The blocks.
 	*/
-	virtual universal_allocation allocate_blocks(size_t _count) = 0;
+	virtual universal_allocation allocate_blocks(size_type _count) = 0;
 	/**
 	 * Prepares memory if the actual size can be smaller.
 	 *
@@ -143,7 +144,7 @@ public:
 	 *
 	 * @see For commiting the actual size use commit().
 	*/
-	virtual universal_allocation prepare(size_t _size) = 0;
+	virtual universal_allocation prepare(size_type _size) = 0;
 	/**
 	 * Casts an allocation to an @ref universal_allocation.
 	 *
@@ -184,7 +185,7 @@ public:
 	 * @return The allocated blocks.
 	*/
 	template<typename _Base, typename _Deriviate = _Base, typename... _Args>
-	allocation<_Base> construct_blocks(size_t _count, _Args &&... _args)
+	allocation<_Base> construct_blocks(size_type _count, _Args &&... _args)
 	{
 		static_assert(sizeof(_Deriviate) <= block_size, "Type exceeds block size.");
 
@@ -192,7 +193,7 @@ public:
 		auto _ptr = static_cast<int8_t*>(_allocation.first);
 
 		// Construct all elements
-		for (size_t i = 0; i < _count; ++i) {
+		for (size_type i = 0; i < _count; ++i) {
 			new(_ptr + i * block_size) _Deriviate(std::forward<_Args>(_args)...);
 		}
 

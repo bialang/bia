@@ -1,16 +1,15 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
 
 #include "allocator.hpp"
 #include "executable_allocator.hpp"
-#include "stl_allocator_wrapper.hpp"
 #include "input_stream.hpp"
 #include "machine_code.hpp"
 #include "string_key.hpp"
 #include "member.hpp"
 #include "string_manager.hpp"
+#include "variable_index.hpp"
 
 
 namespace bia
@@ -76,18 +75,30 @@ public:
 	memory::executable_allocator * get_executable_allocator() noexcept;
 
 //private:
+	
+
 	/** The allocator for normal memory. */
 	std::shared_ptr<memory::allocator> _allocator;
 	/** The allocator for executable memory. */
 	std::shared_ptr<memory::executable_allocator> _executable_allocator;
 	/** Holds all known variables, function and other. */
-	std::unordered_map<utility::string_key, std::unique_ptr<framework::member>, utility::string_key::hasher> _variable_index;
-	//std::unordered_map<utility::string_key, std::unique_ptr<framework::member>, utility::string_key::hasher, std::equal_to<utility::string_key>, memory::stl_allocator_wrapper<std::pair<const utility::string_key, std::unique_ptr<framework::member>>>> _variable_index;
+	variable_index _variable_index;
 	/** The string manager for string like resources. */
 	string_manager _string_manager;
 
-
-	framework::member * get_address_or_create(const utility::string_key & _name);
+	/**
+	 * Returns the member address of the key. If it does not exists, it will be created.
+	 *
+	 * @since 3.64.131.725
+	 * @date 19-May-18
+	 *
+	 * @param _name The key.
+	 *
+	 * @throws See variable_index::find() and variable_index::add().
+	 *
+	 * @return The member address.
+	*/
+	framework::member * get_address_or_create(utility::string_key _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 
