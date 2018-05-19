@@ -43,21 +43,10 @@ framework::member * machine_context::get_address_or_create(const utility::string
 	if (_result == _variable_index.end()) {
 		auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1);
 
-		return _variable_index.emplace(_name, std::unique_ptr<framework::member>(_allocation.first)).first->second.get();
-	}
+		// Create name
+		utility::string_key _key(_string_manager.get_name_address(_name.get_string(), _name.length()), _name.length());
 
-	return _result->second.get();
-}
-
-framework::member * machine_context::get_address_or_create(utility::string_key && _name)
-{
-	auto _result = _variable_index.find(_name);
-
-	// Create
-	if (_result == _variable_index.end()) {
-		auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1);
-
-		return _variable_index.emplace(std::move(_name), std::unique_ptr<framework::member>(_allocation.first)).first->second.get();
+		return _variable_index.emplace(std::move(_key), std::unique_ptr<framework::member>(_allocation.first)).first->second.get();
 	}
 
 	return _result->second.get();

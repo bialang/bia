@@ -88,7 +88,6 @@ public:
 
 
 	framework::member * get_address_or_create(const utility::string_key & _name);
-	framework::member * get_address_or_create(utility::string_key && _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 

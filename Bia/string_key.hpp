@@ -45,6 +45,14 @@ public:
 
 		return _length == _right._length ? !std::char_traits<char>::compare(_string_ptr, _right._string_ptr, _length) : false;
 	}
+	const char * get_string() const noexcept
+	{
+		return _string_ptr;
+	}
+	size_t length() const noexcept
+	{
+		return _length;
+	}
 
 private:
 	const char * _string_ptr;
