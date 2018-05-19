@@ -49,6 +49,48 @@ void compiler::constant_operation(const compiler_value & _left, framework::opera
 	///TODO
 }
 
+void compiler::compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
+{
+	switch (_left.get_type()) {
+	case compiler_value::VALUE_TYPE::INT:
+	{
+		switch (_right.get_type()) {
+		case compiler_value::VALUE_TYPE::INT:
+			constant_compare_operation(_left.get_value().rt_int, _operator, _right.get_value().rt_int);
+
+			break;
+		case compiler_value::VALUE_TYPE::DOUBLE:
+			constant_compare_operation(_left.get_value().rt_int, _operator, _right.get_value().rt_double);
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
+
+		break;
+	}
+	case compiler_value::VALUE_TYPE::DOUBLE:
+	{
+		switch (_right.get_type()) {
+		case compiler_value::VALUE_TYPE::INT:
+			constant_compare_operation(_left.get_value().rt_double, _operator, _right.get_value().rt_int);
+
+			break;
+		case compiler_value::VALUE_TYPE::DOUBLE:
+			constant_compare_operation(_left.get_value().rt_double, _operator, _right.get_value().rt_double);
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
+
+		break;
+	}
+	default:
+		BIA_COMPILER_DEV_INVALID;
+	}
+}
+
 void compiler::test_compiler_value()
 {
 	switch (_value.get_type()) {

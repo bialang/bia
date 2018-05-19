@@ -458,7 +458,7 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 
 ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_param _params, token_output & _output)
 {
-	constexpr auto success = ACTION::DONT_REPORT;
+	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
 
 	// Starting optional whitespaces

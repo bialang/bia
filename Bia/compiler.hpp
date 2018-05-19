@@ -82,9 +82,53 @@ private:
 		}
 	}
 	void constant_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
-	void compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
+	void compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
+	/**
+	 * Executes the compare operator.
+	 *
+	 * @since 3.64.131.725
+	 * @date 19-May-18
+	 *
+	 * @tparam _Left The type of the left value.
+	 * @tparam _Right The type of the right value.
+	 *
+	 * @param [in] _left The left hand value.
+	 * @param _operator The operator.
+	 * @param [in] _right The right hand value.
+	*/
+	template<typename _Left, typename _Right>
+	void constant_compare_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
 	{
+		using namespace framework;
 
+		switch (_operator) {
+		case O_EQUALS:
+			_value.set_return(_left == _right);
+
+			break;
+		case O_EQUALS_NOT:
+			_value.set_return(_left != _right);
+
+			break;
+		case O_LESS_THAN:
+			_value.set_return(_left < _right);
+
+			break;
+		case O_LESS_EQUALS:
+			_value.set_return(_left <= _right);
+
+			break;
+		case O_GREATER_THAN:
+			_value.set_return(_left > _right);
+
+			break;
+		case O_GREATER_EQUALS:
+			_value.set_return(_left >= _right);
+
+			break;
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
 	}
 	/**
 	 * Tests the compiler value and returns a test value.

@@ -36,9 +36,7 @@ int main()
 	std::unique_ptr<bia::machine::machine_context> _context(new bia::machine::machine_context(std::make_shared<bia::machine::memory::simple_allocator>(), std::make_shared<bia::machine::memory::simple_executable_allocator>()));
 
 	char _script[] = R"delim(
-global wd= 0b1000
-global e =0x44
-print wd
+print 0b1000<18
 
 )delim";
 
