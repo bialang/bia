@@ -4,6 +4,7 @@
 #include "interpreter_id.hpp"
 #include "interpreter_rule.hpp"
 #include "input_stream.hpp"
+#include "machine_context.hpp"
 
 
 namespace bia
@@ -30,7 +31,7 @@ public:
 	 * @param _rule Defines the rule.
 	*/
 	void set_rule(interpreter_rule && _rule);
-	void interpret(stream::input_stream & _input, report_receiver & _receiver) const;
+	void interpret(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const;
 
 private:
 	/** All available rules. */

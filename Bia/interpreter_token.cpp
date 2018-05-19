@@ -381,6 +381,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 
 	// Rest
 	while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
+		auto _tmp = _buffer.first;
 		auto _code_point = _params.encoder->next(_buffer.first, _buffer.second);
 
 		if (_code_point == '_' || encoding::utf::is_alnum(_code_point)) {
@@ -389,6 +390,8 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 				return error;
 			}
 		} else {
+			_buffer.first = _tmp;
+
 			break;
 		}
 	}

@@ -29,12 +29,15 @@ inline void test_and_time(int _count, _Lambda && _lambda)
 	printf("Time taken: %f ms\n", _time_taken / static_cast<double>(_count));
 }
 
+using namespace bia;
+
 int main()
 {
 	std::unique_ptr<bia::machine::machine_context> _context(new bia::machine::machine_context(std::make_shared<bia::machine::memory::simple_allocator>(), std::make_shared<bia::machine::memory::simple_executable_allocator>()));
 
 	char _script[] = R"delim(
-
+global wd= 0b1000
+global e =0x44
 print wd
 
 )delim";
@@ -45,7 +48,7 @@ print wd
 	bia::compiler::compiler _compiler(_output, *_context.get());
 
 	test_and_time(1, [&]() {
-		bia::grammar::syntax::get_interpreter().interpret(_input, _compiler);
+		bia::grammar::syntax::get_interpreter().interpret(_input, _compiler, *_context.get());
 	});
 
 	_compiler.finalize();

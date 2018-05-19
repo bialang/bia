@@ -20,7 +20,7 @@ void interpreter::set_rule(interpreter_rule && _rule)
 	}
 }
 
-void interpreter::interpret(stream::input_stream & _input, report_receiver & _receiver) const
+void interpreter::interpret(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const
 {
 	report_bundle _bundle;
 	encoding::utf8 encoder;
@@ -42,6 +42,7 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 		_param.bundle = &_bundle;
 		_param.rules = _rules;
 		_param.token_id = 0;
+		_param.context = &_context;
 		_param.encoder = &encoder;
 
 		try {

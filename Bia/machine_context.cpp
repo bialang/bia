@@ -51,8 +51,6 @@ framework::member * machine_context::get_address_or_create(const utility::string
 
 framework::member * machine_context::get_address_or_create(utility::string_key && _name)
 {
-	static framework::undefined_member a;
-	return &a;
 	auto _result = _variable_index.find(_name);
 
 	// Create
@@ -72,7 +70,7 @@ machine_code machine_context::compile_script(stream::input_stream & _script)
 	compiler::compiler _compiler(_output, *this);
 
 	// Interpret
-	grammar::syntax::get_interpreter().interpret(_script, _compiler);
+	grammar::syntax::get_interpreter().interpret(_script, _compiler, *this);
 
 	_compiler.finalize();
 

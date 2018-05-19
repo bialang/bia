@@ -43,7 +43,7 @@ public:
 			return true;
 		}
 
-		return _length == _right._length ? std::char_traits<char>::compare(_string_ptr, _right._string_ptr, _length) : false;
+		return _length == _right._length ? !std::char_traits<char>::compare(_string_ptr, _right._string_ptr, _length) : false;
 	}
 
 private:
