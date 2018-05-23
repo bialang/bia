@@ -95,24 +95,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">compiler.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
-<code>#include &quot;<a class="el" href="exception_8hpp_source.html">exception.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="exception_8hpp_source.html">exception.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="output__stream_8hpp_source.html">output_stream.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="toolset_8hpp_source.html">toolset.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="member_8hpp_source.html">member.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="report__bundle_8hpp_source.html">report_bundle.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="report_8hpp_source.html">report.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="interpreter__id_8hpp_source.html">interpreter_id.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="compiler__value_8hpp_source.html">compiler_value.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="temp__counter_8hpp_source.html">temp_counter.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="operator_8hpp_source.html">operator.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="machine__context_8hpp_source.html">machine_context.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="interpreter_8hpp_source.html">interpreter.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="interpreter__rule_8hpp_source.html">interpreter_rule.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="machine__code_8hpp_source.html">machine_code.hpp</a>&quot;</code><br />
 </div>
 <p><a href="compiler_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compiler.html">bia::compiler::compiler</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1compiler_1_1compiler_1_1return__value_1_1string.html">bia::compiler::compiler::return_value::string</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1compiler_1_1compiler_1_1return__value_1_1parameter.html">bia::compiler::compiler::return_value::parameter</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -124,7 +124,7 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a4d32fe617759c91c0f8c0d6e8d6c5fb6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compiler_8hpp.html#a4d32fe617759c91c0f8c0d6e8d6c5fb6">BIA_COMPILER_DEV_INVALID</a>&#160;&#160;&#160;throw <a class="el" href="exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141">BIA_IMPLEMENTATION_EXCEPTION</a>(&quot;Invalid case.&quot;)</td></tr>
+<tr class="memitem:a4d32fe617759c91c0f8c0d6e8d6c5fb6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="compiler_8hpp.html#a4d32fe617759c91c0f8c0d6e8d6c5fb6">BIA_COMPILER_DEV_INVALID</a>&#160;&#160;&#160;throw 0 /*<a class="el" href="exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141">BIA_IMPLEMENTATION_EXCEPTION</a>(&quot;Invalid case.&quot;)*/</td></tr>
 <tr class="separator:a4d32fe617759c91c0f8c0d6e8d6c5fb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -133,7 +133,7 @@ Macros</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define BIA_COMPILER_DEV_INVALID&#160;&#160;&#160;throw <a class="el" href="exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141">BIA_IMPLEMENTATION_EXCEPTION</a>(&quot;Invalid case.&quot;)</td>
+          <td class="memname">#define BIA_COMPILER_DEV_INVALID&#160;&#160;&#160;throw 0 /*<a class="el" href="exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141">BIA_IMPLEMENTATION_EXCEPTION</a>(&quot;Invalid case.&quot;)*/</td>
         </tr>
       </table>
 </div><div class="memdoc">

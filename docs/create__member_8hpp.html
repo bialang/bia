@@ -95,13 +95,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
+<code>#include &quot;<a class="el" href="type__traits_8hpp_source.html">type_traits.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="member_8hpp_source.html">member.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="native__member_8hpp_source.html">native_member.hpp</a>&quot;</code><br />
-<code>#include &quot;biaNativeReference.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="cstring__member_8hpp_source.html">cstring_member.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="static__function_8hpp_source.html">static_function.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="bia_class_raw_8hpp_source.html">biaClassRaw.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="member__function_8hpp_source.html">member_function.hpp</a>&quot;</code><br />
 </div>
 <p><a href="create__member_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -122,21 +123,15 @@ Functions</h2></td></tr>
 <tr class="memitem:ad489e06ea194e39a8fb2a41ea801280a"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
 <tr class="memitem:ad489e06ea194e39a8fb2a41ea801280a"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_floating_point&lt; _Ty &gt;::value &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#ad489e06ea194e39a8fb2a41ea801280a">bia::framework::create_member</a> (member *_destination, _Ty _value)</td></tr>
 <tr class="separator:ad489e06ea194e39a8fb2a41ea801280a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73db68e92b42551a7336beaa252d3095"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
-<tr class="memitem:a73db68e92b42551a7336beaa252d3095"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_arithmetic&lt; _Ty &gt;::value &amp;&amp;bia::utility::Negation&lt; std::is_same&lt; _Ty, const char &gt;::value &gt;::value &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#a73db68e92b42551a7336beaa252d3095">bia::framework::MemberCreator</a> (BiaMember *p_pDestination, _Ty *p_pValue)</td></tr>
-<tr class="separator:a73db68e92b42551a7336beaa252d3095"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f235675373f7c6c3b17f16e5b6acd7c"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
-<tr class="memitem:a9f235675373f7c6c3b17f16e5b6acd7c"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_arithmetic&lt; _Ty &gt;::value &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#a9f235675373f7c6c3b17f16e5b6acd7c">bia::framework::MemberCreator</a> (BiaMember *p_pDestination, _Ty &amp;p_value)</td></tr>
-<tr class="separator:a9f235675373f7c6c3b17f16e5b6acd7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac7a11d64e4e4e65ed463eb6849e19b7"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
-<tr class="memitem:aac7a11d64e4e4e65ed463eb6849e19b7"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_same&lt; _Ty, const char * &gt;::value &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#aac7a11d64e4e4e65ed463eb6849e19b7">bia::framework::MemberCreator</a> (BiaMember *p_pDestination, _Ty p_value)</td></tr>
-<tr class="separator:aac7a11d64e4e4e65ed463eb6849e19b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8b4ff1b7f5d21fdcc300c009e80038c"><td class="memTemplParams" colspan="2">template&lt;typename _RETURN , typename... _ARGS&gt; </td></tr>
-<tr class="memitem:ad8b4ff1b7f5d21fdcc300c009e80038c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#ad8b4ff1b7f5d21fdcc300c009e80038c">bia::framework::MemberCreator</a> (BiaMember *p_pDestination, _RETURN(*p_value)(_ARGS...))</td></tr>
-<tr class="separator:ad8b4ff1b7f5d21fdcc300c009e80038c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f5e0ed1ce240f2bdf010f2278cc4f00"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
-<tr class="memitem:a6f5e0ed1ce240f2bdf010f2278cc4f00"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; bia::utility::Negation&lt; std::is_arithmetic&lt; typename std::remove_pointer&lt; typename std::remove_reference&lt; _Ty &gt;::type &gt;::type &gt;::value &gt;::value &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#a6f5e0ed1ce240f2bdf010f2278cc4f00">bia::framework::MemberCreator</a> (BiaMember *p_pDestination, _Ty &amp;&amp;p_value)</td></tr>
-<tr class="separator:a6f5e0ed1ce240f2bdf010f2278cc4f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae267bca46e0c79607f6c291b9629ad4f"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
+<tr class="memitem:ae267bca46e0c79607f6c291b9629ad4f"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_same&lt; _Ty, const char * &gt;::value &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#ae267bca46e0c79607f6c291b9629ad4f">bia::framework::create_member</a> (member *_destination, _Ty _value)</td></tr>
+<tr class="separator:ae267bca46e0c79607f6c291b9629ad4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6875dc6f596fe68934c6336dc7c5dd7"><td class="memTemplParams" colspan="2">template&lt;typename _Return , typename... _Args&gt; </td></tr>
+<tr class="memitem:ad6875dc6f596fe68934c6336dc7c5dd7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#ad6875dc6f596fe68934c6336dc7c5dd7">bia::framework::create_member</a> (member *_destination, _Return(*_function)(_Args...))</td></tr>
+<tr class="separator:ad6875dc6f596fe68934c6336dc7c5dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86577087983d976880636861dc8652e5"><td class="memTemplParams" colspan="2">template&lt;typename _Class , typename _Return , typename... _Args&gt; </td></tr>
+<tr class="memitem:a86577087983d976880636861dc8652e5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#a86577087983d976880636861dc8652e5">bia::framework::create_member</a> (member *_destination, _Return(_Class::*_function)(_Args...))</td></tr>
+<tr class="separator:a86577087983d976880636861dc8652e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -42,7 +42,6 @@ var searchData=
   ['bgr_5fvalue_5fhelper_5f0',['BGR_VALUE_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a9b53f02200ea8629db9b39940d604271',1,'bia::grammar']]],
   ['bgr_5fvalue_5fraw',['BGR_VALUE_RAW',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a8dc7662d9ea9bed2854b5b2814a52072',1,'bia::grammar']]],
   ['bgr_5fvariable_5fdeclaration',['BGR_VARIABLE_DECLARATION',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a5cfba86bbb685aa1454a18625cae0f08',1,'bia::grammar']]],
-  ['bgr_5fvariable_5fdeclaration_5fhelper_5f0',['BGR_VARIABLE_DECLARATION_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9ae875223e8c362d7df7e5e5f7597ff00f',1,'bia::grammar']]],
   ['bm_5fidentifier',['BM_IDENTIFIER',['../namespacebia_1_1grammar.html#ab5119acef0e7085602668083ee37d202ae9d3d03ec9d8ccde9f2ac98a0cd73c64',1,'bia::grammar']]],
   ['bm_5finstantiation',['BM_INSTANTIATION',['../namespacebia_1_1grammar.html#ab5119acef0e7085602668083ee37d202a8dbf5ccb6414e08c9fa2f1775080db64',1,'bia::grammar']]],
   ['bm_5fstring',['BM_STRING',['../namespacebia_1_1grammar.html#ab5119acef0e7085602668083ee37d202ac3986c925a9fe539bf31b71261d0aadd',1,'bia::grammar']]],

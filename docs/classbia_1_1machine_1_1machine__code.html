@@ -97,6 +97,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
+<p>Holds executable machine code.  
+ <a href="classbia_1_1machine_1_1machine__code.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="machine__code_8hpp_source.html">machine_code.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -118,7 +121,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3aa5256a47c3b4a46a5357e69c0139e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1machine__code.html">machine_code</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__code.html#a3aa5256a47c3b4a46a5357e69c0139e2">operator=</a> (<a class="el" href="classbia_1_1machine_1_1machine__code.html">machine_code</a> &amp;&amp;_rvalue)</td></tr>
 <tr class="separator:a3aa5256a47c3b4a46a5357e69c0139e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Holds executable machine code. </p>
+<p>For directly executable machine code.</p>
+<dl class="section see"><dt>See also</dt><dd>machine::platform::architecture </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ab443ca2a205bc2c56c0e496d56663982"></a>
 <div class="memitem">
 <div class="memproto">
@@ -154,7 +161,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">See</td><td>allocator::allocate(). </td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab132a440dbeca705a7d6273d6f18672b">memory::allocator::allocate()</a> and <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html#ab3eb80901cb37ed290f8a7276a097a3b">memory::executable_allocator::protect()</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -230,6 +237,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Destructor.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1machine__code.html#ad2a1e9ff18d503297c9a5cae318e4721">clear()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -251,7 +267,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section date"><dt>Date</dt><dd>7-Apr-18</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">See</td><td>allocator::deallocate(). </td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a8a86548166c06e9d1657fdc14f8fe245">memory::allocator::deallocate()</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -275,7 +291,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section date"><dt>Date</dt><dd>14-Dec-2017</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">...</td><td>Any exception from the Bia script. </td></tr>
+    <tr><td class="paramname">Any</td><td>exception from the Bia script. </td></tr>
   </table>
   </dd>
 </dl>

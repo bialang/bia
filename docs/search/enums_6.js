@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator',['OPERATOR',['../namespacebia_1_1framework.html#a6af22ba7fe0ec822e0db269971d856fa',1,'bia::framework']]]
+  ['operator',['OPERATOR',['../namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0',1,'bia::framework']]]
 ];

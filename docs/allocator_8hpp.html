@@ -96,6 +96,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;cstddef&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
 <code>#include &quot;<a class="el" href="config_8hpp_source.html">config.hpp</a>&quot;</code><br />
 </div>
 <p><a href="allocator_8hpp_source.html">Go to the source code of this file.</a></p>
@@ -104,8 +106,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">bia::machine::memory::allocator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An allocator interface.  <a href="classbia_1_1machine_1_1memory_1_1allocator.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">bia::machine::memory::allocator::allocation&lt; _Ty &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -119,19 +119,20 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a4d912aa5056f38905be44c4b77e4a7ba"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="allocator_8hpp.html#a4d912aa5056f38905be44c4b77e4a7ba">BIA_MAX_MEMBER_SIZE</a>&#160;&#160;&#160;50</td></tr>
-<tr class="separator:a4d912aa5056f38905be44c4b77e4a7ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ca07d06c765c54baf1db8f1fa09fc19"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="allocator_8hpp.html#a0ca07d06c765c54baf1db8f1fa09fc19">BIA_MAX_IDENTIFIER_LENGTH</a>&#160;&#160;&#160;(<a class="el" href="config_8hpp.html#a4901fc71a976a765803fa022219da3ea">BIA_MIN_INPUT_BUFFER_SIZE</a> / 4)</td></tr>
+<tr class="separator:a0ca07d06c765c54baf1db8f1fa09fc19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="a4d912aa5056f38905be44c4b77e4a7ba"></a>
+<a class="anchor" id="a0ca07d06c765c54baf1db8f1fa09fc19"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define BIA_MAX_MEMBER_SIZE&#160;&#160;&#160;50</td>
+          <td class="memname">#define BIA_MAX_IDENTIFIER_LENGTH&#160;&#160;&#160;(<a class="el" href="config_8hpp.html#a4901fc71a976a765803fa022219da3ea">BIA_MIN_INPUT_BUFFER_SIZE</a> / 4)</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The maximum identifier length. Can be at most as high as BIA_MIN_INPUT_BUFFER / 4. </p>
 
 </div>
 </div>

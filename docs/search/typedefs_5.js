@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['operation_5fchooser',['operation_chooser',['../namespacebia_1_1framework_1_1native.html#a61f800bb464e162ab7671afef5f43c1f',1,'bia::framework::native']]],
-  ['operation_5ftype_5fchooser',['operation_type_chooser',['../namespacebia_1_1framework_1_1native.html#a58e3feef27f5298fbf2ce983eab7043d',1,'bia::framework::native']]]
+  ['int_5fmember',['int_member',['../classbia_1_1framework_1_1native_1_1native__member.html#ac8c6ab73e7c5877ebe35f23d6b88c755',1,'bia::framework::native::native_member::int_member()'],['../namespacebia_1_1framework_1_1native.html#a2d7eaa247660a03c04b4f5bfd651e212',1,'bia::framework::native::int_member()']]]
 ];

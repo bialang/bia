@@ -107,13 +107,13 @@ Inheritance diagram for bia::framework::member:</div>
  <div class="center">
   <img src="classbia_1_1framework_1_1member.png" usemap="#bia::framework::member_map" alt=""/>
   <map id="bia::framework::member_map" name="bia::framework::member_map">
-<area href="classbia_1_1framework_1_1executable_1_1function.html" alt="bia::framework::executable::function" shape="rect" coords="741,56,1225,80"/>
+<area href="classbia_1_1framework_1_1executable_1_1function.html" title="A function member interface. " alt="bia::framework::executable::function" shape="rect" coords="741,56,1225,80"/>
 <area href="classbia_1_1framework_1_1native_1_1native__variable.html" alt="bia::framework::native::native_variable" shape="rect" coords="2470,56,2954,80"/>
 <area href="classbia_1_1framework_1_1undefined__member.html" alt="bia::framework::undefined_member" shape="rect" coords="2964,56,3448,80"/>
-<area href="classbia_1_1framework_1_1executable_1_1lambda__function.html" title="A lambda function. " alt="bia::framework::executable::lambda_function&lt; _Lambda &gt;" shape="rect" coords="0,112,484,136"/>
+<area href="classbia_1_1framework_1_1executable_1_1lambda__function.html" title="A lambda function member. " alt="bia::framework::executable::lambda_function&lt; _Lambda &gt;" shape="rect" coords="0,112,484,136"/>
 <area href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_01const_01_01_4.html" title="A member function. " alt="bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...) const  &gt;" shape="rect" coords="494,112,978,136"/>
-<area href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_4.html" title="A member function. " alt="bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...)&gt;" shape="rect" coords="988,112,1472,136"/>
-<area href="classbia_1_1framework_1_1executable_1_1static__function.html" alt="bia::framework::executable::static_function&lt; _Return, _Args &gt;" shape="rect" coords="1482,112,1966,136"/>
+<area href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_4.html" title="A member function member. " alt="bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...)&gt;" shape="rect" coords="988,112,1472,136"/>
+<area href="classbia_1_1framework_1_1executable_1_1static__function.html" title="A static function member. " alt="bia::framework::executable::static_function&lt; _Return, _Args &gt;" shape="rect" coords="1482,112,1966,136"/>
 <area href="classbia_1_1framework_1_1native_1_1cstring__member.html" alt="bia::framework::native::cstring_member" shape="rect" coords="1976,112,2460,136"/>
 <area href="classbia_1_1framework_1_1native_1_1native__member.html" alt="bia::framework::native::native_member&lt; _Ty &gt;" shape="rect" coords="2470,112,2954,136"/>
 <area href="classbia_1_1framework_1_1native_1_1native__reference.html" alt="bia::framework::native::native_reference&lt; _Ty &gt;" shape="rect" coords="2964,112,3448,136"/>
@@ -148,8 +148,32 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aef9f78cf1c7bed9060b408518e32d565"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab12d4768ddf0f70d3b67f9d7a95e00dd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#ab12d4768ddf0f70d3b67f9d7a95e00dd">print</a> () const  =0</td></tr>
 <tr class="separator:ab12d4768ddf0f70d3b67f9d7a95e00dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54fc90055e124bb3fc795bf930526fb9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a54fc90055e124bb3fc795bf930526fb9">clone</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination)=0</td></tr>
+<tr class="separator:a54fc90055e124bb3fc795bf930526fb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a081ca5d9d5456a417179cd8327b11fd7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a081ca5d9d5456a417179cd8327b11fd7">execute</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_instance, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination)=0</td></tr>
+<tr class="separator:a081ca5d9d5456a417179cd8327b11fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a445252ac2aa27c60dea6f42239f42bc6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a445252ac2aa27c60dea6f42239f42bc6">execute_count</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_instance, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a> _count...)=0</td></tr>
+<tr class="separator:a445252ac2aa27c60dea6f42239f42bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a289a5584affbf5076db49273749efd47"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a289a5584affbf5076db49273749efd47">execute_format</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_instance, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, const char *_format, <a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a> _count...)=0</td></tr>
+<tr class="separator:a289a5584affbf5076db49273749efd47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1283a0e885648224a512d42b65beb77"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#aa1283a0e885648224a512d42b65beb77">operator_call</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, const <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_right)=0</td></tr>
+<tr class="separator:aa1283a0e885648224a512d42b65beb77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4caed364f6935e7cfbd9bc50ea75868"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#ac4caed364f6935e7cfbd9bc50ea75868">operator_call_int32</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int32_t _right)=0</td></tr>
+<tr class="separator:ac4caed364f6935e7cfbd9bc50ea75868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44907ffc4fcc7868aabc743bd172f9e1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a44907ffc4fcc7868aabc743bd172f9e1">operator_call_int64</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int64_t _right)=0</td></tr>
+<tr class="separator:a44907ffc4fcc7868aabc743bd172f9e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec6a5af7d338111d7fcc19789b3df295"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#aec6a5af7d338111d7fcc19789b3df295">operator_call_double</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, double _right)=0</td></tr>
+<tr class="separator:aec6a5af7d338111d7fcc19789b3df295"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fb9ad6d59c63a3161119c3e9d95bda0"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a5fb9ad6d59c63a3161119c3e9d95bda0">is_const</a> () const  =0</td></tr>
 <tr class="separator:a5fb9ad6d59c63a3161119c3e9d95bda0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12cdf4b8d5dd8d1a3ee92cee10814650"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a12cdf4b8d5dd8d1a3ee92cee10814650">test</a> () const  =0</td></tr>
+<tr class="separator:a12cdf4b8d5dd8d1a3ee92cee10814650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26162960b8084cb02a383639b3bba858"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a26162960b8084cb02a383639b3bba858">test_int32</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int32_t _right) const  =0</td></tr>
+<tr class="separator:a26162960b8084cb02a383639b3bba858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2d6d60d5f73e17dc12df0b80aaace49"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#ae2d6d60d5f73e17dc12df0b80aaace49">test_int64</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int64_t _right) const  =0</td></tr>
+<tr class="separator:ae2d6d60d5f73e17dc12df0b80aaace49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0afabf6e05df16dfac2bede36b6615a"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#ae0afabf6e05df16dfac2bede36b6615a">test_double</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, double _right) const  =0</td></tr>
+<tr class="separator:ae0afabf6e05df16dfac2bede36b6615a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fe6e5a1a0eab4f8e767b9317dd3ae83"><td class="memTemplParams" colspan="2">template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&gt;::type&gt; </td></tr>
 <tr class="memitem:a6fe6e5a1a0eab4f8e767b9317dd3ae83"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; <a class="el" href="structbia_1_1utility_1_1negation.html">utility::negation</a>&lt; std::is_const&lt; _T &gt;::value &gt;::value, _T * &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a6fe6e5a1a0eab4f8e767b9317dd3ae83">cast</a> ()</td></tr>
 <tr class="separator:a6fe6e5a1a0eab4f8e767b9317dd3ae83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -296,14 +320,7 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Tests the content of this object.</p>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when the member cannot be tested.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A non-zero value for a successful result, otherwise 0. Compares this object to the right hand value.</dd></dl>
+<p>Compares this object to the right hand value.</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">exception::BadCallException</td><td>Thrown when the member cannot be tested. </td></tr>
@@ -335,7 +352,7 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If the member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If this member cannot be casted to _Ty.</td></tr>
   </table>
   </dd>
@@ -377,12 +394,245 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If the member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If this member cannot be casted to _Ty.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A point containing the casted type. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a54fc90055e124bb3fc795bf930526fb9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::framework::member::clone </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Clones this member to the specified location.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">_destination</td><td>The specified destination.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If the operation is not supported by the member. </td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1framework_1_1member.html#a7bb98a6c69b0217e7e0172464c693109">replace_this()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_01const_01_01_4.html#adae0a9d141d856cb48159f9b727b0684">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...) const  &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1lambda__function.html#a5d87d4d3f133a571971720296a404616">bia::framework::executable::lambda_function&lt; _Lambda &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_4.html#aef5f874d9d133530828c6ec457a68260">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...)&gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ade56c02bd5bb54672488e77d2e6acd03">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1static__function.html#af982aa2bcae2c2ea26f054242f25858e">bia::framework::executable::static_function&lt; _Return, _Args &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a56182a465bb77da62371ca6d4b3c91d3">bia::framework::native::cstring_member</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a8d4b9f2045db3ec881086816e22ff74f">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a081ca5d9d5456a417179cd8327b11fd7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::framework::member::execute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Executes this object as function.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>28-Apr-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_instance</td><td>A corresponding instance. Only needed if this is a member function. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">_destination</td><td>The destination of the return result.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If this object cannot be executed. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1argument__error.html" title="One or more argument errors. ">exception::argument_error</a></td><td>If arguments are required or if the instance is null. </td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1framework_1_1member.html#a6fe6e5a1a0eab4f8e767b9317dd3ae83">cast()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_01const_01_01_4.html#aecbf5f3bebb280bbd306b720c6fca7f0">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...) const  &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1lambda__function.html#a468cbd5959f303c8f5af1f6c0632d95d">bia::framework::executable::lambda_function&lt; _Lambda &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_4.html#acf3e008361f6a041d6015a9664671b4c">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...)&gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1static__function.html#a35be1def625bbe9bf3dcf14bc7f50605">bia::framework::executable::static_function&lt; _Return, _Args &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#ac8a29437b5b518e3d492bfecc83864a9">bia::framework::native::native_variable</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a3dc4e7bc2daca654cb8ba664d1d1f420">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a445252ac2aa27c60dea6f42239f42bc6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::framework::member::execute_count </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a>&#160;</td>
+          <td class="paramname"><em>_count...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Executes this object as function with only member parameters.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_instance</td><td>A corresponding instance. Only needed if this is a member function. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">_destination</td><td>The destination of the return result. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_count</td><td>The amount of the passed arguments. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">...</td><td>The arguments.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If this object cannot be executed. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1argument__error.html" title="One or more argument errors. ">exception::argument_error</a></td><td>If the passed arguments are wrong or if the instance is null. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If one argument is invalid. </td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1framework_1_1member.html#a6fe6e5a1a0eab4f8e767b9317dd3ae83">cast()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_01const_01_01_4.html#af8b312ec750695132d5e82c89ed5dd1b">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...) const  &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1lambda__function.html#aeb08a1d5416ab6f7b81a65d2e3cb6b8b">bia::framework::executable::lambda_function&lt; _Lambda &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_4.html#afced9df9acc9e6c79cdd883931e1d54c">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...)&gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1static__function.html#afab41b9d68a0328a6e7cf1bcd616600d">bia::framework::executable::static_function&lt; _Return, _Args &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a7506932a9c769e9dd63d7cd788c36941">bia::framework::native::native_variable</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#afd0bfbbd5bd2ec98c1ec0ce64e2fcca2">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a289a5584affbf5076db49273749efd47"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::framework::member::execute_format </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>_format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a>&#160;</td>
+          <td class="paramname"><em>_count...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Executes this object as function with mixed parameters.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_instance</td><td>A corresponding instance. Only needed if this is a member function. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">_destination</td><td>The destination of the return result. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_format</td><td>The types of the arguments. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_count</td><td>The amount of the passed arguments. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">...</td><td>The arguments.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If this object cannot be executed. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1argument__error.html" title="One or more argument errors. ">exception::argument_error</a></td><td>If the passed arguments are wrong or if the instance is null. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If one argument is invalid. </td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1framework_1_1member.html#a6fe6e5a1a0eab4f8e767b9317dd3ae83">cast()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_01const_01_01_4.html#aed78ef2f83a715b0dc512748fe3449cf">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...) const  &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1lambda__function.html#abe43875217816383099c6437f6c47d72">bia::framework::executable::lambda_function&lt; _Lambda &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_4.html#a3c985d277660fa12cfb9da07cf06ed00">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...)&gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1static__function.html#a1401d13568356d329d37d196a2a5ed68">bia::framework::executable::static_function&lt; _Return, _Args &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#aa36c897116b6cd2f8250518f7039c259">bia::framework::native::native_variable</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#af08d0f668ea36910f04145767e092d3a">bia::framework::undefined_member</a>.</p>
 
 </div>
 </div>
@@ -418,14 +668,14 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If the member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If the type is not supported.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the data. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a853762631f75d3c67fbb062844822dcd">bia::framework::native::native_variable</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a8e0d371cc86d77206e76f0a344c4c57f">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a4c8a23ad9b5c7aa2d603b8c3c917bbda">bia::framework::undefined_member</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a8e0d371cc86d77206e76f0a344c4c57f">bia::framework::executable::function</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a853762631f75d3c67fbb062844822dcd">bia::framework::native::native_variable</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a4c8a23ad9b5c7aa2d603b8c3c917bbda">bia::framework::undefined_member</a>.</p>
 
 </div>
 </div>
@@ -461,14 +711,14 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If the member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If the type is not supported.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the data. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a92e6b040a46aa1296525974ba8235963">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a46ef520b09169b7904b8f8db810c98ec">bia::framework::native::cstring_member</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#aefe51117c969b06d91578df8fd581b37">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a1dbafe8dac282d25d31624b1983cc240">bia::framework::undefined_member</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a92e6b040a46aa1296525974ba8235963">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#aefe51117c969b06d91578df8fd581b37">bia::framework::executable::function</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a46ef520b09169b7904b8f8db810c98ec">bia::framework::native::cstring_member</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a1dbafe8dac282d25d31624b1983cc240">bia::framework::undefined_member</a>.</p>
 
 </div>
 </div>
@@ -504,14 +754,14 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If the member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If the type is not supported.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the data. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#af7c9daae01d52ed5c817b91d53f7cfc7">bia::framework::native::native_variable</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a3dc9c28f1134e377dca1a76ef6aa5f36">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#aa12eea612d25357bd1cb04d9dd644455">bia::framework::undefined_member</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a3dc9c28f1134e377dca1a76ef6aa5f36">bia::framework::executable::function</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#af7c9daae01d52ed5c817b91d53f7cfc7">bia::framework::native::native_variable</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#aa12eea612d25357bd1cb04d9dd644455">bia::framework::undefined_member</a>.</p>
 
 </div>
 </div>
@@ -547,14 +797,14 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If the member is not valid.s </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid.s </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If the type is not supported.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the data. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ada7d2df29ef49d8729ccfcd07fcee03b">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a368d49bad0174726103e7532b72bbbaf">bia::framework::native::cstring_member</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a359baa08990434fb2feaaa49c9db50d9">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a2afa45b77441e519cfc89a37362b0610">bia::framework::undefined_member</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ada7d2df29ef49d8729ccfcd07fcee03b">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a359baa08990434fb2feaaa49c9db50d9">bia::framework::executable::function</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a368d49bad0174726103e7532b72bbbaf">bia::framework::native::cstring_member</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a2afa45b77441e519cfc89a37362b0610">bia::framework::undefined_member</a>.</p>
 
 </div>
 </div>
@@ -578,57 +828,72 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calls this function without any parameters.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">_instance</td><td>(Optional) If non-null defines the instance for member functions. </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">_destination</td><td>Defines the destination of the return result.</td></tr>
-  </table>
-  </dd>
-</dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when this member cannot be executed. </td></tr>
-    <tr><td class="paramname">exception::ArgumentException</td><td>Thrown when the arguments do not match the function signature. </td></tr>
-    <tr><td class="paramname">exception::InstanceException</td><td>Thrown when the passed instance is invalid. Calls this function with only members as parameters.</td></tr>
+    <tr><td class="paramname">exception::OperatorException</td><td></td></tr>
+    <tr><td class="paramname">exception::OperatorException</td><td>Checks whether the specified type matches this object.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_pDestination</td><td>Defines the destination of the return result. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">p_unParameterCount</td><td>Defines how many parameters are passed. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">...</td><td>Defines the passed parameters.</td></tr>
+    <tr><td class="paramname">p_type</td><td>Defines the type.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if they match, otherwise false. Whether the data this member holds is const or not.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">exception::BadCastException</td><td>Thrown when one of the arguments do not match. </td></tr>
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when this member cannot be executed. </td></tr>
-    <tr><td class="paramname">exception::ArgumentException</td><td>Thrown when the arguments do not match the function signature. </td></tr>
-    <tr><td class="paramname">exception::InstanceException</td><td>Thrown when the passed instance is invalid. Calls this function with any type as parameter.</td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_pDestination</td><td>Defines the destination of the return result. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">p_unParameterCount</td><td>Defines how many parameters are passed. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">p_pcFormat</td><td>Defines the type order of the parameters. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">...</td><td>Defines the passed parameters.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">exception::BadCastException</td><td>Thrown when one of the arguments do not match. </td></tr>
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when this member cannot be executed. </td></tr>
-    <tr><td class="paramname">exception::ArgumentException</td><td>Thrown when the arguments do not match the function signature. </td></tr>
-    <tr><td class="paramname">exception::InstanceException</td><td>Thrown when the passed instance is invalid. Creates an instance without any parameters.</td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if it is const, otherwise false. </dd></dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a449d7efe6eb2f57521d88c8ffa668c86">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aa918df085857e45b2730438142317828">bia::framework::native::cstring_member</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a71c40d14f7c88a540341979bf2021b9d">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a3a4208a7b87fd5f6fda5d4442331948c">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa1283a0e885648224a512d42b65beb77"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::framework::member::operator_call </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates an instance without any parameters.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">p_pDestination</td><td>Defines the destination of the return result.</td></tr>
@@ -673,31 +938,217 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
     <tr><td class="paramname">exception::BadCallException</td><td>Thrown when this member cannot be executed. </td></tr>
     <tr><td class="paramname">exception::ArgumentException</td><td>Thrown when the arguments do not match the function signature. </td></tr>
     <tr><td class="paramname">exception::OperatorException</td><td>Thrown when the operator is not supported. </td></tr>
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when operations are not supported. </td></tr>
-    <tr><td class="paramname">exception::OperatorException</td><td></td></tr>
-    <tr><td class="paramname">exception::OperatorException</td><td>Clones the contents of this object to the destination.</td></tr>
+    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when operations are not supported. An operator call with another member as right value.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>12-May-18</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_pDestination</td><td>Defines the destination. Checks whether the specified type matches this object.</td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">p_type</td><td>Defines the type.</td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">_destination</td><td>The operation result. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_operator</td><td>The operator. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_right</td><td>The right member.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if they match, otherwise false. Whether the data this member holds is const or not.</dd></dl>
-<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If the member is not valid.</td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1access__violation.html" title="An access violation. ">exception::access_violation</a></td><td>If this member cannot be modified. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If the operator call is invalid. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if it is const, otherwise false. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a449d7efe6eb2f57521d88c8ffa668c86">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aa918df085857e45b2730438142317828">bia::framework::native::cstring_member</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a71c40d14f7c88a540341979bf2021b9d">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a3a4208a7b87fd5f6fda5d4442331948c">bia::framework::undefined_member</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ac298c36b2a0564275875874cab3e3c78">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a0a7a4b23fb3c59e0ac75c66e800617e4">bia::framework::native::cstring_member</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a27372470ba951f6d1d7016fc6178c20d">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aec6a5af7d338111d7fcc19789b3df295"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::framework::member::operator_call_double </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>An operator call with a double as right value.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">_destination</td><td>The operation result. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_operator</td><td>The operator. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_right</td><td>The right value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1access__violation.html" title="An access violation. ">exception::access_violation</a></td><td>If this member cannot be modified. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If the operator call is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a9c848f0a238f51b0bfa4a9a76211999b">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ae5e23739ca20394695fb417fb9618f8a">bia::framework::native::cstring_member</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#ab69dc9bebf5d171ff2e350604fe2fce4">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a72784a272132b128646e293cba7a8fee">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac4caed364f6935e7cfbd9bc50ea75868"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::framework::member::operator_call_int32 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>An operator call with an int32 as right value.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">_destination</td><td>The operation result. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_operator</td><td>The operator. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_right</td><td>The right value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1access__violation.html" title="An access violation. ">exception::access_violation</a></td><td>If this member cannot be modified. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If the operator call is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a78e48deff2b6b42364add1bdf5c7c284">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a50efdfa5ee17666746e2bff43721ebe0">bia::framework::native::cstring_member</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a9887a93bcc934177c33a063b8573cf6d">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a58088ebdab723934dceec24639cb4c40">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a44907ffc4fcc7868aabc743bd172f9e1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::framework::member::operator_call_int64 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>An operator call with an int64 as right value.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">_destination</td><td>The operation result. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_operator</td><td>The operator. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_right</td><td>The right value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1access__violation.html" title="An access violation. ">exception::access_violation</a></td><td>If this member cannot be modified. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If the operator call is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a02dee439d6aceff56e0d91ebf314af92">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a41e8551b64313d620c7e51bd4793f3c3">bia::framework::native::cstring_member</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#ad043daf44c2befeba96af420afcccb74">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a992607129e56174b81d47b6efcc0b49b">bia::framework::undefined_member</a>.</p>
 
 </div>
 </div>
@@ -726,7 +1177,7 @@ template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&
 <dl class="section date"><dt>Date</dt><dd>8-Apr-18</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If the member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
   </table>
   </dd>
 </dl>
@@ -782,6 +1233,203 @@ template&lt;typename _Ty , typename... _Args&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The newly constructed object. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a12cdf4b8d5dd8d1a3ee92cee10814650"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int32_t bia::framework::member::test </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Tests the contents of this member.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a6bb8874602abed9da020a4416b569d4a">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a8fae0326b22cda061d9b2e3a2b1e19bc">bia::framework::native::cstring_member</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#ac392369dd11325a1e4dbfa98321ff48b">bia::framework::executable::function</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a6fed254ba193aba22df0ce5662f4fbad">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae0afabf6e05df16dfac2bede36b6615a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int32_t bia::framework::member::test_double </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Tests the contents of this member to the right value.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_operator</td><td>The operator. </td></tr>
+    <tr><td class="paramname">_right</td><td>The right value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ad27b037a9bb6ea1d1cce5c92abb85084">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a33cf717e836e5a0061b468868601e480">bia::framework::executable::function</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a839d320a63da775b53e16d8c051372d8">bia::framework::native::cstring_member</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a2d50e1cbe52a43fff94c277ee960969e">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a26162960b8084cb02a383639b3bba858"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int32_t bia::framework::member::test_int32 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Tests the contents of this member to the right value.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_operator</td><td>The operator. </td></tr>
+    <tr><td class="paramname">_right</td><td>The right value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ab1c830ba3caa40f4e46af12f15981582">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a5ff09a594f62354ee25a000b88a21c1d">bia::framework::executable::function</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ab51890b1711e01516091499314be8584">bia::framework::native::cstring_member</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#ac92b0fd84affb73df19bd51fde5e731f">bia::framework::undefined_member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae2d6d60d5f73e17dc12df0b80aaace49"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int32_t bia::framework::member::test_int64 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Tests the contents of this member to the right value.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_operator</td><td>The operator. </td></tr>
+    <tr><td class="paramname">_right</td><td>The right value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a5b3f40fe0f977226ae5c7eda68e3e58e">bia::framework::native::native_member&lt; _Ty &gt;</a>, <a class="el" href="classbia_1_1framework_1_1executable_1_1function.html#a28442ef91f76cad12a94c2bdfa362bc4">bia::framework::executable::function</a>, <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aa5dd7c748ac45610e20d2aad9a0a8159">bia::framework::native::cstring_member</a>, and <a class="el" href="classbia_1_1framework_1_1undefined__member.html#a03e1e4804e6dd63b49f3b7f252dce9bd">bia::framework::undefined_member</a>.</p>
 
 </div>
 </div>

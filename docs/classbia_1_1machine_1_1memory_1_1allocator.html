@@ -90,7 +90,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
@@ -111,125 +110,98 @@ Inheritance diagram for bia::machine::memory::allocator:</div>
  <div class="center">
   <img src="classbia_1_1machine_1_1memory_1_1allocator.png" usemap="#bia::machine::memory::allocator_map" alt=""/>
   <map id="bia::machine::memory::allocator_map" name="bia::machine::memory::allocator_map">
-<area href="classbia_1_1machine_1_1memory_1_1simple__allocator.html" title="A simple implementation of allocator. " alt="bia::machine::memory::simple_allocator" shape="rect" coords="0,56,229,80"/>
+<area href="classbia_1_1machine_1_1memory_1_1executable__allocator.html" title="An extension to allocator. " alt="bia::machine::memory::executable_allocator" shape="rect" coords="0,56,297,80"/>
+<area href="classbia_1_1machine_1_1memory_1_1simple__allocator.html" title="A simple implementation of allocator. " alt="bia::machine::memory::simple_allocator" shape="rect" coords="307,56,604,80"/>
+<area href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html" title="A simple implementation of executable_allocator. " alt="bia::machine::memory::simple_executable_allocator" shape="rect" coords="0,112,297,136"/>
 </map>
  </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a07dbc6a6451e7bb61245d173a70866b5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a> { <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5a1e23852820b9154316c7c06e2b7ba051">MEMORY_TYPE::NORMAL</a>, 
-<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5a43285f8abf727955068395f7ccdb2dd5">MEMORY_TYPE::EXECUTABLE_MEMORY</a>
- }</td></tr>
-<tr class="separator:a07dbc6a6451e7bb61245d173a70866b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada564c5c32a989fae691af7284c5fc95"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ada564c5c32a989fae691af7284c5fc95">PROTECTION</a> { <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ada564c5c32a989fae691af7284c5fc95ac0093c7a5a4411e759b85bdd97d2c625">P_READ_WRITE</a> = 0x1, 
-<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ada564c5c32a989fae691af7284c5fc95a7022fd1e6b11ac9fbe2fa65628ddf91b">P_EXECUTE</a> = 0x2
- }</td></tr>
-<tr class="separator:ada564c5c32a989fae691af7284c5fc95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ee057e4fe120b2fcebd7aaf254e03cf"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt; void &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a></td></tr>
+<tr class="memitem:acf36624126755c24d7eb5a028879836a"><td class="memItemLeft" align="right" valign="top">typedef size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a></td></tr>
+<tr class="separator:acf36624126755c24d7eb5a028879836a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba26badddea56def8537363932eadb96"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
+<tr class="memitem:aba26badddea56def8537363932eadb96"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a> = std::pair&lt; _Ty *, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a> &gt;</td></tr>
+<tr class="separator:aba26badddea56def8537363932eadb96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ee057e4fe120b2fcebd7aaf254e03cf"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; void &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a></td></tr>
 <tr class="separator:a7ee057e4fe120b2fcebd7aaf254e03cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a13e7f5574594b52a9d988780e138e7e7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a13e7f5574594b52a9d988780e138e7e7">~allocator</a> () noexcept=default</td></tr>
 <tr class="separator:a13e7f5574594b52a9d988780e138e7e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63e9e8adb5f6945fa5f9000b3da277b5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a63e9e8adb5f6945fa5f9000b3da277b5">commit_allocation</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> _allocation, size_t _size)=0</td></tr>
-<tr class="separator:a63e9e8adb5f6945fa5f9000b3da277b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb7830edd7dfb3682addb3bfb269e597"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acb7830edd7dfb3682addb3bfb269e597">deallocate</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> _allocation, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a> _type)=0</td></tr>
-<tr class="separator:acb7830edd7dfb3682addb3bfb269e597"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9fa6474d5f1be1a77a3d692078c5474e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a9fa6474d5f1be1a77a3d692078c5474e">deallocate_blocks</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> _allocation, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a> _type)=0</td></tr>
-<tr class="separator:a9fa6474d5f1be1a77a3d692078c5474e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acab3403e8cc09299d11010150e8bb11c"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
-<tr class="memitem:acab3403e8cc09299d11010150e8bb11c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acab3403e8cc09299d11010150e8bb11c">destroy_blocks</a> (<a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt; _Ty &gt; _allocation, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a> _type)</td></tr>
-<tr class="separator:acab3403e8cc09299d11010150e8bb11c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaadcc8fa5ab742786de016079fa4233c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aaadcc8fa5ab742786de016079fa4233c">change_protection</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> _allocation, int _protection)=0</td></tr>
-<tr class="separator:aaadcc8fa5ab742786de016079fa4233c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abad1bfd25be713faa1032fd60c2cc13b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#abad1bfd25be713faa1032fd60c2cc13b">allocate</a> (size_t _size, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a> _type)=0</td></tr>
-<tr class="separator:abad1bfd25be713faa1032fd60c2cc13b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d91bd4bf89c6dfe9a2adff26665d7b5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a4d91bd4bf89c6dfe9a2adff26665d7b5">allocate_blocks</a> (size_t _count, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a> _type)=0</td></tr>
-<tr class="separator:a4d91bd4bf89c6dfe9a2adff26665d7b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a379dfe049fdce001d2b1f55d53f495"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a0a379dfe049fdce001d2b1f55d53f495">reserve_allocation</a> (size_t _max_size, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a> _type)=0</td></tr>
-<tr class="separator:a0a379dfe049fdce001d2b1f55d53f495"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa227d70ce6790447adb2ee1e438ebef5"><td class="memTemplParams" colspan="2">template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt; </td></tr>
-<tr class="memitem:aa227d70ce6790447adb2ee1e438ebef5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt; _Base &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aa227d70ce6790447adb2ee1e438ebef5">construct_blocks</a> (size_t _count, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a> _type, _Args &amp;&amp;..._args)</td></tr>
-<tr class="separator:aa227d70ce6790447adb2ee1e438ebef5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4aec60e242250b72992eaa5df72ae46"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
+<tr class="memitem:aa4aec60e242250b72992eaa5df72ae46"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aa4aec60e242250b72992eaa5df72ae46">destroy_blocks</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Ty &gt; _allocation)</td></tr>
+<tr class="separator:aa4aec60e242250b72992eaa5df72ae46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a86548166c06e9d1657fdc14f8fe245"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a8a86548166c06e9d1657fdc14f8fe245">deallocate</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> _allocation)=0</td></tr>
+<tr class="separator:a8a86548166c06e9d1657fdc14f8fe245"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c83f69c2619fea57662a8e0f4b20003"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a2c83f69c2619fea57662a8e0f4b20003">deallocate_blocks</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> _blocks)=0</td></tr>
+<tr class="separator:a2c83f69c2619fea57662a8e0f4b20003"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bb3892f42e43c92e064fa6e86eb67b1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7bb3892f42e43c92e064fa6e86eb67b1">commit</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> _allocation, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a> _size)=0</td></tr>
+<tr class="separator:a7bb3892f42e43c92e064fa6e86eb67b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab132a440dbeca705a7d6273d6f18672b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab132a440dbeca705a7d6273d6f18672b">allocate</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a> _size)=0</td></tr>
+<tr class="separator:ab132a440dbeca705a7d6273d6f18672b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15c1380255154fccfe67527208ca6781"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a15c1380255154fccfe67527208ca6781">allocate_blocks</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a> _count)=0</td></tr>
+<tr class="separator:a15c1380255154fccfe67527208ca6781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aca74fd71b1fe593999e7a2f0cd862f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a9aca74fd71b1fe593999e7a2f0cd862f">prepare</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a> _size)=0</td></tr>
+<tr class="separator:a9aca74fd71b1fe593999e7a2f0cd862f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a576e520c60a0268e3734922aba0be906"><td class="memTemplParams" colspan="2">template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt; </td></tr>
+<tr class="memitem:a576e520c60a0268e3734922aba0be906"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Base &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a576e520c60a0268e3734922aba0be906">construct_blocks</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a> _count, _Args &amp;&amp;..._args)</td></tr>
+<tr class="separator:a576e520c60a0268e3734922aba0be906"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d09b3ae65b994fae2e7c438117e1999"><td class="memTemplParams" colspan="2">template&lt;typename _Return , typename _Ty &gt; </td></tr>
-<tr class="memitem:a9d09b3ae65b994fae2e7c438117e1999"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt; _Return &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a9d09b3ae65b994fae2e7c438117e1999">cast_allocation</a> (<a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt; _Ty &gt; _allocation) noexcept</td></tr>
+<tr class="memitem:a9d09b3ae65b994fae2e7c438117e1999"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Return &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a9d09b3ae65b994fae2e7c438117e1999">cast_allocation</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Ty &gt; _allocation) noexcept</td></tr>
 <tr class="separator:a9d09b3ae65b994fae2e7c438117e1999"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:ab114b27b1f7f2d1c55ccd80d8e09d6b3"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab114b27b1f7f2d1c55ccd80d8e09d6b3">block_size</a> = <a class="el" href="allocator_8hpp.html#a4d912aa5056f38905be44c4b77e4a7ba">BIA_MAX_MEMBER_SIZE</a></td></tr>
+<tr class="memitem:ab114b27b1f7f2d1c55ccd80d8e09d6b3"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab114b27b1f7f2d1c55ccd80d8e09d6b3">block_size</a> = <a class="el" href="config_8hpp.html#a4d912aa5056f38905be44c4b77e4a7ba">BIA_MAX_MEMBER_SIZE</a></td></tr>
 <tr class="separator:ab114b27b1f7f2d1c55ccd80d8e09d6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An allocator interface. </p>
-<p>An interface for allocation executable and 'normal' memory.</p>
+<p>An interface for allocating memory.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html">simple_allocator</a> </dd></dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="aba26badddea56def8537363932eadb96"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">bia::machine::memory::allocator::allocation</a> =  std::pair&lt;_Ty*, <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>An allocation with type. </p>
+
+</div>
+</div>
+<a class="anchor" id="acf36624126755c24d7eb5a028879836a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef size_t <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">bia::machine::memory::allocator::size_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a7ee057e4fe120b2fcebd7aaf254e03cf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt;void&gt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">bia::machine::memory::allocator::universal_allocation</a></td>
+          <td class="memname">typedef <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt;void&gt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">bia::machine::memory::allocator::universal_allocation</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
-<a class="anchor" id="a07dbc6a6451e7bb61245d173a70866b5"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">bia::machine::memory::allocator::MEMORY_TYPE</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a07dbc6a6451e7bb61245d173a70866b5a1e23852820b9154316c7c06e2b7ba051"></a>NORMAL&#160;</td><td class="fielddoc">
-<p>'Normal' memory just needs to be read-write memory. </p>
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a07dbc6a6451e7bb61245d173a70866b5a43285f8abf727955068395f7ccdb2dd5"></a>EXECUTABLE_MEMORY&#160;</td><td class="fielddoc">
-<p>Memory which is read-only and can be executed. </p>
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="ada564c5c32a989fae691af7284c5fc95"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ada564c5c32a989fae691af7284c5fc95">bia::machine::memory::allocator::PROTECTION</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ada564c5c32a989fae691af7284c5fc95ac0093c7a5a4411e759b85bdd97d2c625"></a>P_READ_WRITE&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="ada564c5c32a989fae691af7284c5fc95a7022fd1e6b11ac9fbe2fa65628ddf91b"></a>P_EXECUTE&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
+<p>An universal allocation. </p>
 
 </div>
 </div>
@@ -261,7 +233,7 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="abad1bfd25be713faa1032fd60c2cc13b"></a>
+<a class="anchor" id="ab132a440dbeca705a7d6273d6f18672b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -271,19 +243,9 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> bia::machine::memory::allocator::allocate </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a>&#160;</td>
+          <td class="paramname"><em>_size</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a>&#160;</td>
-          <td class="paramname"><em>_type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -292,12 +254,28 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Allocates memory.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_size</td><td>The size of the allocation in bytes.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the memory could not be allocated.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocation. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a6fa672f66502d983071537298097f991">bia::machine::memory::simple_allocator</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#a1ab0a342a44afa978fd76e3a63f5d595">bia::machine::memory::simple_executable_allocator</a>, and <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a626d19a2821630e156d9b866a9914c89">bia::machine::memory::simple_allocator</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4d91bd4bf89c6dfe9a2adff26665d7b5"></a>
+<a class="anchor" id="a15c1380255154fccfe67527208ca6781"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -307,19 +285,9 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> bia::machine::memory::allocator::allocate_blocks </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>_count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a>&#160;</td>
+          <td class="paramname"><em>_count</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a>&#160;</td>
-          <td class="paramname"><em>_type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -328,8 +296,24 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Allocates the specified amount of blocks.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_count</td><td>The amount of the blocks.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the memory could not be allocated.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The blocks. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a04f4cba2f8fa06b040fbc55ecff76f96">bia::machine::memory::simple_allocator</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#a1be345255a1c5cc75e370480f678e96b">bia::machine::memory::simple_executable_allocator</a>, and <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a49bb1a394462eea97be408dd87bf5597">bia::machine::memory::simple_allocator</a>.</p>
 
 </div>
 </div>
@@ -343,9 +327,9 @@ template&lt;typename _Return , typename _Ty &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt;_Return&gt; bia::machine::memory::allocator::cast_allocation </td>
+          <td class="memname">static <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt;_Return&gt; bia::machine::memory::allocator::cast_allocation </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt; _Ty &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Ty &gt;&#160;</td>
           <td class="paramname"><em>_allocation</em></td><td>)</td>
           <td></td>
         </tr>
@@ -376,7 +360,7 @@ template&lt;typename _Return , typename _Ty &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aaadcc8fa5ab742786de016079fa4233c"></a>
+<a class="anchor" id="a7bb3892f42e43c92e064fa6e86eb67b1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -384,7 +368,7 @@ template&lt;typename _Return , typename _Ty &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void bia::machine::memory::allocator::change_protection </td>
+          <td class="memname">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> bia::machine::memory::allocator::commit </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td>
           <td class="paramname"><em>_allocation</em>, </td>
@@ -392,43 +376,7 @@ template&lt;typename _Return , typename _Ty &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>_protection</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#ad37de0409257055764aaff36a3adf92a">bia::machine::memory::simple_allocator</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a63e9e8adb5f6945fa5f9000b3da277b5"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void bia::machine::memory::allocator::commit_allocation </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td>
-          <td class="paramname"><em>_allocation</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a>&#160;</td>
           <td class="paramname"><em>_size</em>&#160;</td>
         </tr>
         <tr>
@@ -443,12 +391,30 @@ template&lt;typename _Return , typename _Ty &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Commits the memory reserved by <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a9aca74fd71b1fe593999e7a2f0cd862f">prepare()</a>.</p>
+<dl class="section remark"><dt>Remarks</dt><dd>The returned allocation can have the same size as <em>_allocation</em>.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_allocation</td><td>The allocation. </td></tr>
+    <tr><td class="paramname">_size</td><td>The final size of the allocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the specified allocation or the size are invalid.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocation with possibly adapted size parameter. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#ab98a41c9054a51a790aafe86c02c711e">bia::machine::memory::simple_allocator</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#a02323f4c1a0bdf5ef52f6d914747f5e7">bia::machine::memory::simple_executable_allocator</a>, and <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a2107f8b98ab15a0e31d50ad22bccbff9">bia::machine::memory::simple_allocator</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aa227d70ce6790447adb2ee1e438ebef5"></a>
+<a class="anchor" id="a576e520c60a0268e3734922aba0be906"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -458,16 +424,10 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt;_Base&gt; bia::machine::memory::allocator::construct_blocks </td>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt;_Base&gt; bia::machine::memory::allocator::construct_blocks </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a>&#160;</td>
           <td class="paramname"><em>_count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a>&#160;</td>
-          <td class="paramname"><em>_type</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -487,7 +447,7 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Constructs blocks of the desired type.</p>
+<p>Allocates and constructs blocks of the desired type.</p>
 <dl class="section remark"><dt>Remarks</dt><dd><em>_Deriviate</em> must inherit <em>_Base</em> and must be smaller than <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab114b27b1f7f2d1c55ccd80d8e09d6b3">block_size</a>.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
@@ -509,7 +469,8 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a4d91bd4bf89c6dfe9a2adff26665d7b5">allocate_blocks()</a>.</td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a15c1380255154fccfe67527208ca6781">allocate_blocks()</a>. </td></tr>
+    <tr><td class="paramname">See</td><td>the constructor of <em>_Deriviate</em>.</td></tr>
   </table>
   </dd>
 </dl>
@@ -517,7 +478,7 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
 
 </div>
 </div>
-<a class="anchor" id="acb7830edd7dfb3682addb3bfb269e597"></a>
+<a class="anchor" id="a8a86548166c06e9d1657fdc14f8fe245"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -528,18 +489,8 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
           <td class="memname">virtual void bia::machine::memory::allocator::deallocate </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td>
-          <td class="paramname"><em>_allocation</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>_allocation</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a>&#160;</td>
-          <td class="paramname"><em>_type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -548,12 +499,27 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Deallocates the allocation allocated by <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab132a440dbeca705a7d6273d6f18672b">allocate()</a>.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_allocation</td><td>The allocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the specified allocation is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a53f117755299abbb6f684259e7d70e2e">bia::machine::memory::simple_allocator</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#abe6146a8637f76b9a5d2ee2fbc545051">bia::machine::memory::simple_allocator</a>, and <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#a400282373978079f52546a3cae37f928">bia::machine::memory::simple_executable_allocator</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a9fa6474d5f1be1a77a3d692078c5474e"></a>
+<a class="anchor" id="a2c83f69c2619fea57662a8e0f4b20003"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -564,18 +530,8 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
           <td class="memname">virtual void bia::machine::memory::allocator::deallocate_blocks </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td>
-          <td class="paramname"><em>_allocation</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>_blocks</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a>&#160;</td>
-          <td class="paramname"><em>_type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -584,12 +540,27 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Deallocates the blocks allocated by <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a15c1380255154fccfe67527208ca6781">allocate_blocks()</a>.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_blocks</td><td>The allocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the specified allocation is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#affc2d7561355b495dfb9b6c3afdfb561">bia::machine::memory::simple_allocator</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#aa26db132c5b4b444d10b2f2f76575a27">bia::machine::memory::simple_allocator</a>, and <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#a796b4b858b1c526b2043f41f7a17968e">bia::machine::memory::simple_executable_allocator</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="acab3403e8cc09299d11010150e8bb11c"></a>
+<a class="anchor" id="aa4aec60e242250b72992eaa5df72ae46"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -601,19 +572,9 @@ template&lt;typename _Ty &gt; </div>
         <tr>
           <td class="memname">void bia::machine::memory::allocator::destroy_blocks </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html">allocation</a>&lt; _Ty &gt;&#160;</td>
-          <td class="paramname"><em>_allocation</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Ty &gt;&#160;</td>
+          <td class="paramname"><em>_allocation</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a>&#160;</td>
-          <td class="paramname"><em>_type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -622,10 +583,32 @@ template&lt;typename _Ty &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Destroys and deallocates the blocks created by <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a15c1380255154fccfe67527208ca6781">allocate_blocks()</a>.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">_Ty</td><td>The allocation type.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_allocation</td><td>The allocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a2c83f69c2619fea57662a8e0f4b20003">deallocate_blocks()</a>. </td></tr>
+    <tr><td class="paramname">See</td><td>the destructor of <em>_Ty</em>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a class="anchor" id="a0a379dfe049fdce001d2b1f55d53f495"></a>
+<a class="anchor" id="a9aca74fd71b1fe593999e7a2f0cd862f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -633,21 +616,11 @@ template&lt;typename _Ty &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> bia::machine::memory::allocator::reserve_allocation </td>
+          <td class="memname">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a> bia::machine::memory::allocator::prepare </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>_max_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a>&#160;</td>
+          <td class="paramname"><em>_size</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a07dbc6a6451e7bb61245d173a70866b5">MEMORY_TYPE</a>&#160;</td>
-          <td class="paramname"><em>_type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -656,8 +629,25 @@ template&lt;typename _Ty &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Prepares memory if the actual size can be smaller.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_size</td><td>The maximum size of the allocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the memory could not be allocated.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocation.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>For commiting the actual size use <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7bb3892f42e43c92e064fa6e86eb67b1">commit()</a>. </dd></dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a2053f76328caba3c3575aef5f19e4ed1">bia::machine::memory::simple_allocator</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#a390397575de02da6e4e27f3b7fc37d64">bia::machine::memory::simple_executable_allocator</a>, and <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#ae06b3f19405c044500eb062058219b1a">bia::machine::memory::simple_allocator</a>.</p>
 
 </div>
 </div>
@@ -670,7 +660,7 @@ template&lt;typename _Ty &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto bia::machine::memory::allocator::block_size = <a class="el" href="allocator_8hpp.html#a4d912aa5056f38905be44c4b77e4a7ba">BIA_MAX_MEMBER_SIZE</a></td>
+          <td class="memname">constexpr auto bia::machine::memory::allocator::block_size = <a class="el" href="config_8hpp.html#a4d912aa5056f38905be44c4b77e4a7ba">BIA_MAX_MEMBER_SIZE</a></td>
         </tr>
       </table>
   </td>

@@ -91,68 +91,130 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classbia_1_1machine_1_1machine__context-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">bia::machine::machine_context Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
+<p>A Bia machine context.  
+ <a href="classbia_1_1machine_1_1machine__context.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="machine__context_8hpp_source.html">machine_context.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4cffdb4ac90379fd30ab845aa0fdc8a8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a4cffdb4ac90379fd30ab845aa0fdc8a8">machine_context</a> (std::shared_ptr&lt; allocator &gt; _allocator)</td></tr>
-<tr class="separator:a4cffdb4ac90379fd30ab845aa0fdc8a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a682be944785fe3ed9bc41e81be834fdb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a682be944785fe3ed9bc41e81be834fdb">machine_context</a> (const std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> &gt; &amp;<a class="el" href="classbia_1_1machine_1_1machine__context.html#a40dbae1f8a43bc4e0e9a405d783a458e">_allocator</a>, const std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> &gt; &amp;<a class="el" href="classbia_1_1machine_1_1machine__context.html#afcb5401543aa72a9f2fcddd6de526cd9">_executable_allocator</a>)</td></tr>
+<tr class="separator:a682be944785fe3ed9bc41e81be834fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73646698432478c3512f84a52d1fc66a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a73646698432478c3512f84a52d1fc66a">machine_context</a> (std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> &gt; &amp;&amp;<a class="el" href="classbia_1_1machine_1_1machine__context.html#a40dbae1f8a43bc4e0e9a405d783a458e">_allocator</a>, std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> &gt; &amp;&amp;<a class="el" href="classbia_1_1machine_1_1machine__context.html#afcb5401543aa72a9f2fcddd6de526cd9">_executable_allocator</a>)</td></tr>
+<tr class="separator:a73646698432478c3512f84a52d1fc66a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27fbe7f3ffae11402c1f56ea0692915b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a27fbe7f3ffae11402c1f56ea0692915b">~machine_context</a> ()</td></tr>
 <tr class="separator:a27fbe7f3ffae11402c1f56ea0692915b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad68064ba33b8c077a242704c2f1a372"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#aad68064ba33b8c077a242704c2f1a372">SetScript</a> (std::string p_stScriptName, const char *p_pcScript, size_t p_iSize)</td></tr>
-<tr class="separator:aad68064ba33b8c077a242704c2f1a372"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21fa0394a5d70febf8883b2c9fe8c15b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a21fa0394a5d70febf8883b2c9fe8c15b">Execute</a> (const char *p_pcScript, size_t p_iSize)</td></tr>
-<tr class="separator:a21fa0394a5d70febf8883b2c9fe8c15b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38161b74d42c0a100ebee2c6182dafed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a38161b74d42c0a100ebee2c6182dafed">ExecuteScript</a> (const std::string &amp;p_stScriptName)</td></tr>
-<tr class="separator:a38161b74d42c0a100ebee2c6182dafed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e9fe2d14c3082f17ce52ce593c3b7dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1machine__code.html">machine_code</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a6e9fe2d14c3082f17ce52ce593c3b7dd">GetScript</a> (const std::string &amp;p_stScriptName)</td></tr>
-<tr class="separator:a6e9fe2d14c3082f17ce52ce593c3b7dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac547825b2f5e953bdd0e79e35987e7ae"><td class="memItemLeft" align="right" valign="top">allocator *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#ac547825b2f5e953bdd0e79e35987e7ae">get_allocator</a> () noexcept</td></tr>
-<tr class="separator:ac547825b2f5e953bdd0e79e35987e7ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1edb79b6174bddd3cbd963649bba9ac0"><td class="memItemLeft" align="right" valign="top">framework::BiaMember *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a1edb79b6174bddd3cbd963649bba9ac0">GetGlobal</a> (const std::string &amp;p_stVariable)</td></tr>
-<tr class="separator:a1edb79b6174bddd3cbd963649bba9ac0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a627c3fea673e33d450994dcc85ba973c"><td class="memItemLeft" align="right" valign="top">framework::BiaMember *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a627c3fea673e33d450994dcc85ba973c">GetLocal</a> (const std::string &amp;p_stScriptName, const std::string &amp;p_stVariable)=delete</td></tr>
-<tr class="separator:a627c3fea673e33d450994dcc85ba973c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c0c8ead01000c493687bbb1982328ea"><td class="memTemplParams" colspan="2">template&lt;typename _Ty , typename... _ARGS&gt; </td></tr>
-<tr class="memitem:a8c0c8ead01000c493687bbb1982328ea"><td class="memTemplItemLeft" align="right" valign="top">_Ty *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a8c0c8ead01000c493687bbb1982328ea">SetMember</a> (<a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a> p_name, _ARGS &amp;&amp;...p_args)</td></tr>
-<tr class="separator:a8c0c8ead01000c493687bbb1982328ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e4c6d96de2a62bdd48dd9dc2beb4abc"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
-<tr class="memitem:a8e4c6d96de2a62bdd48dd9dc2beb4abc"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1framework_1_1object_1_1_bia_class_template.html">framework::object::BiaClassTemplate</a>&lt; _Ty &gt; *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a8e4c6d96de2a62bdd48dd9dc2beb4abc">SetTemplate</a> (<a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a> p_name)</td></tr>
-<tr class="separator:a8e4c6d96de2a62bdd48dd9dc2beb4abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa5a9e3558f394f1baf7122d02453100"><td class="memTemplParams" colspan="2">template&lt;typename _RETURN , typename... _ARGS&gt; </td></tr>
-<tr class="memitem:aaa5a9e3558f394f1baf7122d02453100"><td class="memTemplItemLeft" align="right" valign="top">framework::executable::BiaStaticFunction&lt; _RETURN, _ARGS... &gt; *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#aaa5a9e3558f394f1baf7122d02453100">SetFunction</a> (<a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a> p_name, _RETURN(*p_pFunction)(_ARGS...))</td></tr>
-<tr class="separator:aaa5a9e3558f394f1baf7122d02453100"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74375ea77f8bb3e78a8804de85b6652c"><td class="memTemplParams" colspan="2">template&lt;typename _LAMBDA &gt; </td></tr>
-<tr class="memitem:a74375ea77f8bb3e78a8804de85b6652c"><td class="memTemplItemLeft" align="right" valign="top">framework::executable::BiaLambdaFunction&lt; _LAMBDA &gt; *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a74375ea77f8bb3e78a8804de85b6652c">SetLambda</a> (<a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a> p_name, _LAMBDA p_lambda)</td></tr>
-<tr class="separator:a74375ea77f8bb3e78a8804de85b6652c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaab83b2dc65922981d45edb8a7ec2648"><td class="memTemplParams" colspan="2">template&lt;typename _LAMBDA &gt; </td></tr>
-<tr class="memitem:aaab83b2dc65922981d45edb8a7ec2648"><td class="memTemplItemLeft" align="right" valign="top">framework::executable::BiaLambdaFunction&lt; _LAMBDA &gt; *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#aaab83b2dc65922981d45edb8a7ec2648">SetLambda</a> (<a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a> p_name, std::shared_ptr&lt; _LAMBDA &gt; p_pLambda)</td></tr>
-<tr class="separator:aaab83b2dc65922981d45edb8a7ec2648"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b8e144a14d356055d276f49b7b6ce60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a7b8e144a14d356055d276f49b7b6ce60">execute</a> (<a class="el" href="classbia_1_1stream_1_1input__stream.html">stream::input_stream</a> &amp;_script)</td></tr>
+<tr class="separator:a7b8e144a14d356055d276f49b7b6ce60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a1eba00a27796a7ae20e7974b0ff084"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a9a1eba00a27796a7ae20e7974b0ff084">get_allocator</a> () noexcept</td></tr>
+<tr class="separator:a9a1eba00a27796a7ae20e7974b0ff084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a02f91dfcf04cbf9f48c31b0593c5cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a9a02f91dfcf04cbf9f48c31b0593c5cc">get_executable_allocator</a> () noexcept</td></tr>
+<tr class="separator:a9a02f91dfcf04cbf9f48c31b0593c5cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22e19dddab56ef3b35d513642c8b65aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a22e19dddab56ef3b35d513642c8b65aa">get_address_or_create</a> (<a class="el" href="classbia_1_1utility_1_1string__key.html">utility::string_key</a> _name)</td></tr>
+<tr class="separator:a22e19dddab56ef3b35d513642c8b65aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e95853dd562cc689d12b2bdc141bb1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1machine__code.html">machine_code</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a6e95853dd562cc689d12b2bdc141bb1c">compile_script</a> (<a class="el" href="classbia_1_1stream_1_1input__stream.html">stream::input_stream</a> &amp;_script)</td></tr>
+<tr class="separator:a6e95853dd562cc689d12b2bdc141bb1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a40dbae1f8a43bc4e0e9a405d783a458e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a40dbae1f8a43bc4e0e9a405d783a458e">_allocator</a></td></tr>
+<tr class="separator:a40dbae1f8a43bc4e0e9a405d783a458e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcb5401543aa72a9f2fcddd6de526cd9"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#afcb5401543aa72a9f2fcddd6de526cd9">_executable_allocator</a></td></tr>
+<tr class="separator:afcb5401543aa72a9f2fcddd6de526cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af67448441a7104db9eda7d61544dcb1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1variable__index.html">variable_index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#af67448441a7104db9eda7d61544dcb1c">_variable_index</a></td></tr>
+<tr class="separator:af67448441a7104db9eda7d61544dcb1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7c9c75f9f90134925bcf09d9059416b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1string__manager.html">string_manager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#aa7c9c75f9f90134925bcf09d9059416b">_string_manager</a></td></tr>
+<tr class="separator:aa7c9c75f9f90134925bcf09d9059416b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a4cffdb4ac90379fd30ab845aa0fdc8a8"></a>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A Bia machine context. </p>
+<p>A machine context is used to store compiled script, execute them and store everything a script uses and knows. For example: global variables, modules and set function or classes. A context is not thread safe, however, read-only actions are. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a682be944785fe3ed9bc41e81be834fdb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bia::machine::machine_context::machine_context </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; allocator &gt;&#160;</td>
-          <td class="paramname"><em>_allocator</em></td><td>)</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_allocator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_executable_allocator</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Constructor.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">_allocator</td><td>Defines the memory allocator. </td></tr>
+    <tr><td class="paramname">_allocator</td><td>The allocator for normal memory. </td></tr>
+    <tr><td class="paramname">_executable_allocator</td><td>The allocator for executable memory.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1argument__error.html" title="One or more argument errors. ">exception::argument_error</a></td><td>If the allocator is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a73646698432478c3512f84a52d1fc66a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bia::machine::machine_context::machine_context </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_allocator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_executable_allocator</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Constructor.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_allocator</td><td>The allocator for normal memory. </td></tr>
+    <tr><td class="paramname">_executable_allocator</td><td>The allocator for executable memory.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1argument__error.html" title="One or more argument errors. ">exception::argument_error</a></td><td>If the allocator is invalid. </td></tr>
   </table>
   </dd>
 </dl>
@@ -162,6 +224,9 @@ Public Member Functions</h2></td></tr>
 <a class="anchor" id="a27fbe7f3ffae11402c1f56ea0692915b"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bia::machine::machine_context::~machine_context </td>
@@ -170,75 +235,33 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a21fa0394a5d70febf8883b2c9fe8c15b"></a>
+<a class="anchor" id="a6e95853dd562cc689d12b2bdc141bb1c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool bia::machine::machine_context::Execute </td>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1machine__code.html">machine_code</a> bia::machine::machine_context::compile_script </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>p_pcScript</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>p_iSize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Executes the given script.</p>
-<dl class="section since"><dt>Since</dt><dd>3.63.123.707 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2-Apr-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_pcScript</td><td>Defines the script. </td></tr>
-    <tr><td class="paramname">p_iSize</td><td>Defines the size of the script in bytes.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the script was executed, otherwise false. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a38161b74d42c0a100ebee2c6182dafed"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool bia::machine::machine_context::ExecuteScript </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>p_stScriptName</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1stream_1_1input__stream.html">stream::input_stream</a> &amp;&#160;</td>
+          <td class="paramname"><em>_script</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Executes the script associated with the name.</p>
-<dl class="section since"><dt>Since</dt><dd>3.63.123.707 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2-Apr-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_stScriptName</td><td>Defines the name of the script.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the script was executed, otherwise false. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ac547825b2f5e953bdd0e79e35987e7ae"></a>
+<a class="anchor" id="a7b8e144a14d356055d276f49b7b6ce60"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -246,7 +269,63 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">allocator* bia::machine::machine_context::get_allocator </td>
+          <td class="memname">void bia::machine::machine_context::execute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1stream_1_1input__stream.html">stream::input_stream</a> &amp;&#160;</td>
+          <td class="paramname"><em>_script</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a22e19dddab56ef3b35d513642c8b65aa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a>* bia::machine::machine_context::get_address_or_create </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1utility_1_1string__key.html">utility::string_key</a>&#160;</td>
+          <td class="paramname"><em>_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the member address of the key. If it does not exists, it will be created.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.131.725 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>19-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_name</td><td>The key.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1variable__index.html#a49af06bc8beb978c268dffb436735c3d">variable_index::find()</a> and <a class="el" href="classbia_1_1machine_1_1variable__index.html#a1f6740db6b0d05d623e0d4b405aeaf21">variable_index::add()</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The member address. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9a1eba00a27796a7ae20e7974b0ff084"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a>* bia::machine::machine_context::get_allocator </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -258,26 +337,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the memory allocator.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The memory allocator of this context. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a1edb79b6174bddd3cbd963649bba9ac0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">framework::BiaMember* bia::machine::machine_context::GetGlobal </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>p_stVariable</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a627c3fea673e33d450994dcc85ba973c"></a>
+<a class="anchor" id="a9a02f91dfcf04cbf9f48c31b0593c5cc"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -285,325 +352,75 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">framework::BiaMember* bia::machine::machine_context::GetLocal </td>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a>* bia::machine::machine_context::get_executable_allocator </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>p_stScriptName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>p_stVariable</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6e9fe2d14c3082f17ce52ce593c3b7dd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbia_1_1machine_1_1machine__code.html">machine_code</a>* bia::machine::machine_context::GetScript </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>p_stScriptName</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns the script associated with the name.</p>
-<dl class="section since"><dt>Since</dt><dd>3.63.123.707 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2-Apr-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_stScriptName</td><td>Defines the name of the script.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pointer to the executable machine code if it succeeds, otherwise null. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aaa5a9e3558f394f1baf7122d02453100"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename _RETURN , typename... _ARGS&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">framework::executable::BiaStaticFunction&lt; _RETURN, _ARGS...&gt;* bia::machine::machine_context::SetFunction </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a>&#160;</td>
-          <td class="paramname"><em>p_name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">_RETURN(*)(_ARGS...)&#160;</td>
-          <td class="paramname"><em>p_pFunction</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Sets a static function.</p>
-<dl class="section since"><dt>Since</dt><dd>3.61.122.691 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>20-Mar-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_name</td><td>Defines the name of the member. </td></tr>
-    <tr><td class="paramname">p_pFunction</td><td>Defines the address of the function.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pointer to the static function. Do not ever delete the pointer. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a74375ea77f8bb3e78a8804de85b6652c"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename _LAMBDA &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">framework::executable::BiaLambdaFunction&lt;_LAMBDA&gt;* bia::machine::machine_context::SetLambda </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a>&#160;</td>
-          <td class="paramname"><em>p_name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">_LAMBDA&#160;</td>
-          <td class="paramname"><em>p_lambda</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Sets a lambda function.</p>
-<dl class="section since"><dt>Since</dt><dd>3.61.122.691 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>20-Mar-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_name</td><td>Defines the name of the member. </td></tr>
-    <tr><td class="paramname">p_lambda</td><td>Defines the lambda function.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pointer to the lambda function. Do not ever delete the pointer. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aaab83b2dc65922981d45edb8a7ec2648"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename _LAMBDA &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">framework::executable::BiaLambdaFunction&lt;_LAMBDA&gt;* bia::machine::machine_context::SetLambda </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a>&#160;</td>
-          <td class="paramname"><em>p_name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::shared_ptr&lt; _LAMBDA &gt;&#160;</td>
-          <td class="paramname"><em>p_pLambda</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Sets a lambda function.</p>
-<dl class="section since"><dt>Since</dt><dd>3.61.122.691 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>20-Mar-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_name</td><td>Defines the name of the member. </td></tr>
-    <tr><td class="paramname">p_pLambda</td><td>Defines the address of the lambda function.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pointer to the lambda function. Do not ever delete the pointer. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a8c0c8ead01000c493687bbb1982328ea"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename _Ty , typename... _ARGS&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">_Ty* bia::machine::machine_context::SetMember </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a>&#160;</td>
-          <td class="paramname"><em>p_name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">_ARGS &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>p_args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Sets a member directly.</p>
-<dl class="section remark"><dt>Remarks</dt><dd>The member type must be a deriviate of framework::BiaMember.</dd></dl>
-<dl class="section since"><dt>Since</dt><dd>3.61.122.691 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>20-Mar-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_name</td><td>Defines the name of the member. </td></tr>
-    <tr><td class="paramname">p_args</td><td>Defines the arguments needed to create the member.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pointer to the member. Do not ever delete the pointer. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aad68064ba33b8c077a242704c2f1a372"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool bia::machine::machine_context::SetScript </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>p_stScriptName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>p_pcScript</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>p_iSize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Sets the script under the given name.</p>
-<dl class="section remark"><dt>Remarks</dt><dd>If a script with the name exists, the old script will be overriden.</dd></dl>
-<dl class="section since"><dt>Since</dt><dd>3.63.123.707 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2-Apr-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_stScriptName</td><td>Defines the name of the script. </td></tr>
-    <tr><td class="paramname">p_pcScript</td><td>Defines the script. </td></tr>
-    <tr><td class="paramname">p_iSize</td><td>Defines the size of the script in bytes.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the script was set, otherwise false. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a8e4c6d96de2a62bdd48dd9dc2beb4abc"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename _Ty &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbia_1_1framework_1_1object_1_1_bia_class_template.html">framework::object::BiaClassTemplate</a>&lt;_Ty&gt;* bia::machine::machine_context::SetTemplate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacebia_1_1machine.html#a2cdf808f1745a5cc297c7888e30c399d">StringKey</a>&#160;</td>
-          <td class="paramname"><em>p_name</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sets a class template.</p>
-<dl class="section since"><dt>Since</dt><dd>3.61.122.691 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>20-Mar-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_name</td><td>Defines the name of the member.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The pointer to the class template. Do not ever delete the pointer. </dd></dl>
+<p>Returns the memory allocator for executable memory.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The memory allocator of this context. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a40dbae1f8a43bc4e0e9a405d783a458e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a>&gt; bia::machine::machine_context::_allocator</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The allocator for normal memory. </p>
+
+</div>
+</div>
+<a class="anchor" id="afcb5401543aa72a9f2fcddd6de526cd9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a>&gt; bia::machine::machine_context::_executable_allocator</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The allocator for executable memory. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa7c9c75f9f90134925bcf09d9059416b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1string__manager.html">string_manager</a> bia::machine::machine_context::_string_manager</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The string manager for string like resources. </p>
+
+</div>
+</div>
+<a class="anchor" id="af67448441a7104db9eda7d61544dcb1c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1variable__index.html">variable_index</a> bia::machine::machine_context::_variable_index</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Holds all known variables, function and other. </p>
 
 </div>
 </div>

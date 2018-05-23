@@ -92,6 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classbia_1_1stream_1_1input__stream-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">bia::stream::input_stream Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
@@ -116,6 +117,8 @@ Inheritance diagram for bia::stream::input_stream:</div>
 Public Types</h2></td></tr>
 <tr class="memitem:a4561312f43f888e04905ec7860459b6d"><td class="memItemLeft" align="right" valign="top">typedef long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#a4561312f43f888e04905ec7860459b6d">cursor_type</a></td></tr>
 <tr class="separator:a4561312f43f888e04905ec7860459b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15a9dd863d0526baeb4fb70758b56366"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; const int8_t *, const int8_t * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#a15a9dd863d0526baeb4fb70758b56366">buffer_type</a></td></tr>
+<tr class="separator:a15a9dd863d0526baeb4fb70758b56366"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -125,18 +128,38 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a304ddc520082bd853295b21e8976ea51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac45894948b0f496917983c19eac1fd69"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#ac45894948b0f496917983c19eac1fd69">skip</a> (<a class="el" href="classbia_1_1stream_1_1input__stream.html#a4561312f43f888e04905ec7860459b6d">cursor_type</a> _length)=0</td></tr>
 <tr class="separator:ac45894948b0f496917983c19eac1fd69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52ec7f356f8992be2f98d1d7e943a71e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#a52ec7f356f8992be2f98d1d7e943a71e">skip</a> (buffer_type::first_type _ptr)=0</td></tr>
+<tr class="separator:a52ec7f356f8992be2f98d1d7e943a71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52afacf000fdd9d9abf7ee973a9f2f96"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1stream_1_1input__stream.html#a4561312f43f888e04905ec7860459b6d">cursor_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#a52afacf000fdd9d9abf7ee973a9f2f96">mark</a> () const  =0</td></tr>
 <tr class="separator:a52afacf000fdd9d9abf7ee973a9f2f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57164a46a9b124e2e4148c4097c969ff"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1stream_1_1input__stream.html#a4561312f43f888e04905ec7860459b6d">cursor_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#a57164a46a9b124e2e4148c4097c969ff">available</a> () const  =0</td></tr>
 <tr class="separator:a57164a46a9b124e2e4148c4097c969ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6155811a4a27769a045a4cd081a69e50"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; const int8_t *, <a class="el" href="classbia_1_1stream_1_1input__stream.html#a4561312f43f888e04905ec7860459b6d">cursor_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#a6155811a4a27769a045a4cd081a69e50">get_buffer</a> ()=0</td></tr>
-<tr class="separator:a6155811a4a27769a045a4cd081a69e50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afec2a9f48bc98bf8a7e45221daafd5e2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1stream_1_1input__stream.html#a15a9dd863d0526baeb4fb70758b56366">buffer_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#afec2a9f48bc98bf8a7e45221daafd5e2">get_buffer</a> ()=0</td></tr>
+<tr class="separator:afec2a9f48bc98bf8a7e45221daafd5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a14038583efa70bac68d74be321ae05a3"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classbia_1_1stream_1_1input__stream.html#a4561312f43f888e04905ec7860459b6d">cursor_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1input__stream.html#a14038583efa70bac68d74be321ae05a3">min_buffer_size</a> = <a class="el" href="config_8hpp.html#a4901fc71a976a765803fa022219da3ea">BIA_MIN_INPUT_BUFFER_SIZE</a></td></tr>
+<tr class="separator:a14038583efa70bac68d74be321ae05a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An input stream interface. </p>
 <p>An interface for input streams.</p>
 <dl class="section see"><dt>See also</dt><dd>file_input_stream, <a class="el" href="classbia_1_1stream_1_1buffer__input__stream.html">buffer_input_stream</a> </dd></dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a15a9dd863d0526baeb4fb70758b56366"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::pair&lt;const int8_t*, const int8_t*&gt; <a class="el" href="classbia_1_1stream_1_1input__stream.html#a15a9dd863d0526baeb4fb70758b56366">bia::stream::input_stream::buffer_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The buffer type. </p>
+
+</div>
+</div>
 <a class="anchor" id="a4561312f43f888e04905ec7860459b6d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -203,7 +226,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6155811a4a27769a045a4cd081a69e50"></a>
+<a class="anchor" id="afec2a9f48bc98bf8a7e45221daafd5e2"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -211,7 +234,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::pair&lt;const int8_t*, <a class="el" href="classbia_1_1stream_1_1input__stream.html#a4561312f43f888e04905ec7860459b6d">cursor_type</a>&gt; bia::stream::input_stream::get_buffer </td>
+          <td class="memname">virtual <a class="el" href="classbia_1_1stream_1_1input__stream.html#a15a9dd863d0526baeb4fb70758b56366">buffer_type</a> bia::stream::input_stream::get_buffer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -224,7 +247,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__input__stream.html#a16aac6d8389bf04e76f51540484741fd">bia::stream::buffer_input_stream</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__input__stream.html#ab26eabf1b6769edb80784950d86c8d30">bia::stream::buffer_input_stream</a>.</p>
 
 </div>
 </div>
@@ -318,6 +341,53 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__input__stream.html#a51dba131f36253debf5582a1a236895b">bia::stream::buffer_input_stream</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a52ec7f356f8992be2f98d1d7e943a71e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void bia::stream::input_stream::skip </td>
+          <td>(</td>
+          <td class="paramtype">buffer_type::first_type&#160;</td>
+          <td class="paramname"><em>_ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__input__stream.html#a5f7fae228b4f882621d9d5a416a479ce">bia::stream::buffer_input_stream</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a14038583efa70bac68d74be321ae05a3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classbia_1_1stream_1_1input__stream.html#a4561312f43f888e04905ec7860459b6d">cursor_type</a> bia::stream::input_stream::min_buffer_size = <a class="el" href="config_8hpp.html#a4901fc71a976a765803fa022219da3ea">BIA_MIN_INPUT_BUFFER_SIZE</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

@@ -102,18 +102,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>A report from the interpreter.  
  <a href="structbia_1_1grammar_1_1report.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="report__bundle_8hpp_source.html">report_bundle.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="report_8hpp_source.html">report.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:af835da9290b7ccefffbaac49b7460831"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831">TYPE</a> : uint32_t { <br />
 &#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a63b588d5559f64f89a416e656880b949">TYPE::STRING</a>, 
 <a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a7f12111b3f331d04dc056ee57986f3b3">TYPE::INT_VALUE</a>, 
-<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a1d937b8e75a80dab97faa117b84239d4">TYPE::FLOAT_VALUE</a>, 
 <a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831abb40dd0bceb01de2c068fa18c2c033e3">TYPE::DOUBLE_VALUE</a>, 
+<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a77e6cb59f088a2937324f798be141b4b">TYPE::MEMBER</a>, 
 <br />
-&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a77e6cb59f088a2937324f798be141b4b">TYPE::MEMBER</a>, 
-<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831adcd657bb4d59e301e74a824058118c8d">TYPE::OPERATOR_CODE</a>, 
+&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831adcd657bb4d59e301e74a824058118c8d">TYPE::OPERATOR_CODE</a>, 
+<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a780bc0722dd01d4a8d9869f060734be6">TYPE::KEYWORD</a>, 
 <a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a19aad9f2fe3ce0023298ab83f7e75775">TYPE::BEGIN</a>, 
 <a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831ab1a326c06d88bf042f73d70f50197905">TYPE::END</a>, 
 <br />
@@ -143,16 +143,16 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a891c9dd5ce7069fc317538ba481b3693"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac63699854640514d308cee6640a5c71b"><td class="memItemLeft" >&#160;&#160;&#160;int64_t&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#aadea7f601231102a051479189794e8f4">intValue</a></td></tr>
 <tr class="separator:ac63699854640514d308cee6640a5c71b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24de2a99690089684802f13b32c0c375"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a779f94abf05a3650e8c1f45ddef1c34f">floatValue</a></td></tr>
-<tr class="separator:a24de2a99690089684802f13b32c0c375"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c23d1e4e55a393f14084415805e2407"><td class="memItemLeft" >&#160;&#160;&#160;double&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#ac5d82c674bfcd8a321fc4f3ce367b364">doubleValue</a></td></tr>
 <tr class="separator:a8c23d1e4e55a393f14084415805e2407"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8d7048133d0369d53c8338f0e770043"><td class="memItemLeft" >&#160;&#160;&#160;const <a class="el" href="structbia_1_1grammar_1_1report.html">report</a> *&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a612a8ee5515c3e08edc96091337a4fc1">end</a></td></tr>
 <tr class="separator:ad8d7048133d0369d53c8338f0e770043"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7b85c9e837ca61f18a0700c4c29899e"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> *&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a9757586f3c95022f1c5c93405c4a0ff6">member</a></td></tr>
 <tr class="separator:aa7b85c9e837ca61f18a0700c4c29899e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd91e2c4f90f15bbfa79db5d64298de5"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#a6af22ba7fe0ec822e0db269971d856fa">framework::OPERATOR</a>&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a56936a14e04ec529a7c271b79a9689cd">operatorCode</a></td></tr>
-<tr class="separator:acd91e2c4f90f15bbfa79db5d64298de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a396de858f1112c57f6940e0ce8a55338"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a>&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a7f42712278f4d14a23cc1b8d3f5d7eb9">operatorCode</a></td></tr>
+<tr class="separator:a396de858f1112c57f6940e0ce8a55338"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad42a0d0488411b4038d755aaa5356f5c"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="namespacebia_1_1grammar.html#a85eeff2619f26dbed0e52e215f86286c">INTERPRETER_STRING</a>&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#aa019a417aaf7e4329146962eca3e7df7">keyword</a></td></tr>
+<tr class="separator:ad42a0d0488411b4038d755aaa5356f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9af7d9fed7e5997d83bf598cf212bbea"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1grammar_1_1report.html#a9af7d9fed7e5997d83bf598cf212bbea">content</a></td></tr>
 <tr class="separator:a9af7d9fed7e5997d83bf598cf212bbea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -229,13 +229,13 @@ Static Public Attributes</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="af835da9290b7ccefffbaac49b7460831a7f12111b3f331d04dc056ee57986f3b3"></a>INT_VALUE&#160;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><a class="anchor" id="af835da9290b7ccefffbaac49b7460831a1d937b8e75a80dab97faa117b84239d4"></a>FLOAT_VALUE&#160;</td><td class="fielddoc">
-</td></tr>
 <tr><td class="fieldname"><a class="anchor" id="af835da9290b7ccefffbaac49b7460831abb40dd0bceb01de2c068fa18c2c033e3"></a>DOUBLE_VALUE&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="af835da9290b7ccefffbaac49b7460831a77e6cb59f088a2937324f798be141b4b"></a>MEMBER&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="af835da9290b7ccefffbaac49b7460831adcd657bb4d59e301e74a824058118c8d"></a>OPERATOR_CODE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="af835da9290b7ccefffbaac49b7460831a780bc0722dd01d4a8d9869f060734be6"></a>KEYWORD&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="af835da9290b7ccefffbaac49b7460831a19aad9f2fe3ce0023298ab83f7e75775"></a>BEGIN&#160;</td><td class="fielddoc">
 </td></tr>
@@ -316,24 +316,24 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a779f94abf05a3650e8c1f45ddef1c34f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float bia::grammar::report::floatValue</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="aadea7f601231102a051479189794e8f4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int64_t bia::grammar::report::intValue</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa019a417aaf7e4329146962eca3e7df7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacebia_1_1grammar.html#a85eeff2619f26dbed0e52e215f86286c">INTERPRETER_STRING</a> bia::grammar::report::keyword</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -352,12 +352,12 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a56936a14e04ec529a7c271b79a9689cd"></a>
+<a class="anchor" id="a7f42712278f4d14a23cc1b8d3f5d7eb9"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacebia_1_1framework.html#a6af22ba7fe0ec822e0db269971d856fa">framework::OPERATOR</a> bia::grammar::report::operatorCode</td>
+          <td class="memname"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a> bia::grammar::report::operatorCode</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -453,7 +453,7 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Bia/<a class="el" href="report__bundle_8hpp_source.html">report_bundle.hpp</a></li>
+<li>Bia/<a class="el" href="report_8hpp_source.html">report.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

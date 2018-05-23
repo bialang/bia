@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['variable_5findex',['variable_index',['../namespacebia_1_1machine.html#a9fe4a0c7884eba156e5398277b37e9ed',1,'bia::machine']]]
+  ['universal_5fallocation',['universal_allocation',['../classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf',1,'bia::machine::memory::allocator']]]
 ];

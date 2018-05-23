@@ -97,17 +97,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
+<p>The interpreter for syntax.  
+ <a href="classbia_1_1grammar_1_1interpreter.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="interpreter_8hpp_source.html">interpreter.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5df3a7219fa457c18f48ed2e2d4cce26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1grammar_1_1interpreter.html#a5df3a7219fa457c18f48ed2e2d4cce26">set_rule</a> (<a class="el" href="classbia_1_1grammar_1_1interpreter__rule.html">interpreter_rule</a> &amp;&amp;_rule)</td></tr>
 <tr class="separator:a5df3a7219fa457c18f48ed2e2d4cce26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25e00abca336925aac4e5e77515f9a66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1grammar_1_1interpreter.html#a25e00abca336925aac4e5e77515f9a66">interpret</a> (<a class="el" href="classbia_1_1stream_1_1input__stream.html">stream::input_stream</a> &amp;_input, <a class="el" href="classbia_1_1grammar_1_1report__receiver.html">report_receiver</a> &amp;_receiver) const </td></tr>
-<tr class="separator:a25e00abca336925aac4e5e77515f9a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26dc4ce6f1afbcf9815aefa38bffddb1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1grammar_1_1interpreter.html#a26dc4ce6f1afbcf9815aefa38bffddb1">interpret</a> (<a class="el" href="classbia_1_1stream_1_1input__stream.html">stream::input_stream</a> &amp;_input, <a class="el" href="classbia_1_1grammar_1_1report__receiver.html">report_receiver</a> &amp;_receiver, <a class="el" href="classbia_1_1machine_1_1machine__context.html">machine::machine_context</a> &amp;_context) const </td></tr>
+<tr class="separator:a26dc4ce6f1afbcf9815aefa38bffddb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a25e00abca336925aac4e5e77515f9a66"></a>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The interpreter for syntax. </p>
+<p>The Bia interpreter with rules.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classbia_1_1grammar_1_1interpreter__rule.html">interpreter_rule</a>, <a class="el" href="classbia_1_1grammar_1_1syntax.html">syntax</a> </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a26dc4ce6f1afbcf9815aefa38bffddb1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -121,7 +128,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classbia_1_1grammar_1_1report__receiver.html">report_receiver</a> &amp;&#160;</td>
-          <td class="paramname"><em>_receiver</em>&#160;</td>
+          <td class="paramname"><em>_receiver</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1machine__context.html">machine::machine_context</a> &amp;&#160;</td>
+          <td class="paramname"><em>_context</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

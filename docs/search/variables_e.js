@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['size',['size',['../structbia_1_1machine_1_1memory_1_1allocator_1_1allocation.html#a2c71a202d149c97e6c91cdd58a3130c4',1,'bia::machine::memory::allocator::allocation']]],
   ['starting_5fpadding_5fopt_5ftoken',['starting_padding_opt_token',['../structbia_1_1grammar_1_1flags.html#a02bdd37bce144ab092936e56395b9343',1,'bia::grammar::flags']]],
   ['starting_5fpadding_5ftoken',['starting_padding_token',['../structbia_1_1grammar_1_1flags.html#a014e2ec8c73e0973627d5b5016eabcaa',1,'bia::grammar::flags']]],
   ['starting_5fws_5fopt_5ftoken',['starting_ws_opt_token',['../structbia_1_1grammar_1_1flags.html#a3a9f36b7fe76405bba333d74edba4a30',1,'bia::grammar::flags']]],

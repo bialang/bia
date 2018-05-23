@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bia_5ftoken_5ffunction',['bia_token_function',['../namespacebia_1_1grammar.html#adf93db95d59847469bfbe2393dad6d47',1,'bia::grammar']]]
+  ['allocation',['allocation',['../classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96',1,'bia::machine::memory::allocator']]]
 ];

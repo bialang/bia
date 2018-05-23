@@ -1,18 +1,8 @@
 var searchData=
 [
-  ['_7eallocator',['~allocator',['../classbia_1_1machine_1_1memory_1_1allocator.html#a13e7f5574594b52a9d988780e138e7e7',1,'bia::machine::memory::allocator']]],
-  ['_7ebia_5ferror',['~bia_error',['../classbia_1_1exception_1_1bia__error.html#a7f2ad96e8a5503c1e495fdb2fc02d444',1,'bia::exception::bia_error']]],
-  ['_7ebiainitiator',['~BiaInitiator',['../classbia_1_1force_1_1_bia_initiator.html#a5709e20c356f28511e11ef30e712b7ab',1,'bia::force::BiaInitiator']]],
-  ['_7ebiamemberholder',['~BiaMemberHolder',['../classbia_1_1framework_1_1_bia_member_holder.html#afb202f047214eca485ad6f1e2e43f141',1,'bia::framework::BiaMemberHolder']]],
-  ['_7ebiatemporarystorage',['~BiaTemporaryStorage',['../classbia_1_1machine_1_1_bia_temporary_storage.html#a7d4d23f04acee2be42e6b5e9129f87b5',1,'bia::machine::BiaTemporaryStorage']]],
-  ['_7ecompiler',['~compiler',['../classbia_1_1compiler_1_1compiler.html#a2866007ac525f06d5489fa90bcff650a',1,'bia::compiler::compiler']]],
-  ['_7einput_5fstream',['~input_stream',['../classbia_1_1stream_1_1input__stream.html#abf59abf1d566667f2d6ca85fa9bfebdc',1,'bia::stream::input_stream']]],
-  ['_7emachine_5fcode',['~machine_code',['../classbia_1_1machine_1_1machine__code.html#a37e6347b39edf218071623b525a2ff97',1,'bia::machine::machine_code']]],
-  ['_7emachine_5fcontext',['~machine_context',['../classbia_1_1machine_1_1machine__context.html#a27fbe7f3ffae11402c1f56ea0692915b',1,'bia::machine::machine_context']]],
-  ['_7emachine_5fschein',['~machine_schein',['../classbia_1_1machine_1_1machine__schein.html#abe5defbf819a2c1d3dcefa4a0358e1c0',1,'bia::machine::machine_schein']]],
-  ['_7emember',['~member',['../classbia_1_1framework_1_1member.html#aef90f0ecb9e816dca599bda757d3bc20',1,'bia::framework::member']]],
-  ['_7ename_5fmanager',['~name_manager',['../classbia_1_1machine_1_1name__manager.html#abf4a5af749e1654d53d90ee5b0ddbb92',1,'bia::machine::name_manager']]],
-  ['_7eoutput_5fstream',['~output_stream',['../classbia_1_1stream_1_1output__stream.html#aacccf3c4b964978a26786ebaf0752032',1,'bia::stream::output_stream']]],
-  ['_7ereport_5freceiver',['~report_receiver',['../classbia_1_1grammar_1_1report__receiver.html#a0b877357ef0e30ce255c1124a8872bba',1,'bia::grammar::report_receiver']]],
-  ['_7eundefined_5fmember',['~undefined_member',['../classbia_1_1framework_1_1undefined__member.html#ad15dfc1f2d0e8fa5bddadacf31eb9774',1,'bia::framework::undefined_member']]]
+  ['what',['what',['../classbia_1_1exception_1_1implementation__error.html#aed351d1369a15da1582552475a31a41e',1,'bia::exception::implementation_error']]],
+  ['whitespace_5fdeleter',['whitespace_deleter',['../classbia_1_1grammar_1_1interpreter__token.html#a2d7ce00e4a6405e156d22c9259f6b3ab',1,'bia::grammar::interpreter_token']]],
+  ['whitespace_5fskipper',['whitespace_skipper',['../classbia_1_1grammar_1_1interpreter__token.html#a8f67e72cb98cdade4d6421083f1029e4',1,'bia::grammar::interpreter_token']]],
+  ['write',['write',['../classbia_1_1stream_1_1buffer__output__stream.html#a36aeaa0945d4d33680d4b9eb750a7998',1,'bia::stream::buffer_output_stream::write(int8_t _value) override'],['../classbia_1_1stream_1_1buffer__output__stream.html#a2a66c234d277931949ac6ffb24726efe',1,'bia::stream::buffer_output_stream::write(int16_t _value) override'],['../classbia_1_1stream_1_1buffer__output__stream.html#a0893e0b52bd0ca80ead9e79c3c5aebd2',1,'bia::stream::buffer_output_stream::write(int32_t _value) override'],['../classbia_1_1stream_1_1buffer__output__stream.html#a63b3f1a31f49d99c1c2b758d018eb83d',1,'bia::stream::buffer_output_stream::write(int64_t _value) override'],['../classbia_1_1stream_1_1output__stream.html#a72528143913ec6ebf156e2b6cc045e01',1,'bia::stream::output_stream::write(int8_t _value)=0'],['../classbia_1_1stream_1_1output__stream.html#a7eb25f9221018adbcc670f23b04a4197',1,'bia::stream::output_stream::write(int16_t _value)=0'],['../classbia_1_1stream_1_1output__stream.html#a77ed706d3309f8b025d44368d7e16aa6',1,'bia::stream::output_stream::write(int32_t _value)=0'],['../classbia_1_1stream_1_1output__stream.html#a2ea6db33249cde343920f337de4812e0',1,'bia::stream::output_stream::write(int64_t _value)=0']]],
+  ['write_5fall',['write_all',['../classbia_1_1stream_1_1output__stream.html#ac78cce357e5facaabdd1d73d0b055edf',1,'bia::stream::output_stream']]]
 ];

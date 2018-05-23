@@ -117,36 +117,28 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aacccf3c4b964978a26786ebaf0752032"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#aacccf3c4b964978a26786ebaf0752032">~output_stream</a> ()=default</td></tr>
-<tr class="separator:aacccf3c4b964978a26786ebaf0752032"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6f4e04adb5df192c47786f6315c9777"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#ae6f4e04adb5df192c47786f6315c9777">~output_stream</a> () noexcept=default</td></tr>
+<tr class="separator:ae6f4e04adb5df192c47786f6315c9777"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac78cce357e5facaabdd1d73d0b055edf"><td class="memTemplParams" colspan="2">template&lt;typename... _Args&gt; </td></tr>
 <tr class="memitem:ac78cce357e5facaabdd1d73d0b055edf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#ac78cce357e5facaabdd1d73d0b055edf">write_all</a> (_Args &amp;&amp;..._args)</td></tr>
 <tr class="separator:ac78cce357e5facaabdd1d73d0b055edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28a858aee0892e60263de573292a9a66"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a28a858aee0892e60263de573292a9a66">write_stream</a> (const stream::BiaOutputStreamBuffer &amp;p_stream)=0</td></tr>
-<tr class="separator:a28a858aee0892e60263de573292a9a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae545f7de72c70e03e69a3274fbec9f58"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#ae545f7de72c70e03e69a3274fbec9f58">set_position</a> (<a class="el" href="classbia_1_1stream_1_1output__stream.html#ae0b006beac77d7e5862deaf1d5262c69">cursor_type</a> _position)=0</td></tr>
 <tr class="separator:ae545f7de72c70e03e69a3274fbec9f58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a429ec1e145976a5ffa5e90fe5f5b072c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a429ec1e145976a5ffa5e90fe5f5b072c">Move</a> (long long p_llDestination, long long p_llSource, long long p_llSize)=0</td></tr>
-<tr class="separator:a429ec1e145976a5ffa5e90fe5f5b072c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8df8cbedfc6281403bbced19fc310e90"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1stream_1_1output__stream.html#ae0b006beac77d7e5862deaf1d5262c69">cursor_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a8df8cbedfc6281403bbced19fc310e90">get_position</a> () const  =0</td></tr>
 <tr class="separator:a8df8cbedfc6281403bbced19fc310e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06da4c471fe862b433ff4d6f97a7ed22"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; const uint8_t *, size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a06da4c471fe862b433ff4d6f97a7ed22">GetBuffer</a> () const  =0</td></tr>
-<tr class="separator:a06da4c471fe862b433ff4d6f97a7ed22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5923098128740491ea5cb2062e696209"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; <a class="el" href="classbia_1_1stream_1_1output__stream.html#ae0b006beac77d7e5862deaf1d5262c69">cursor_type</a>, <a class="el" href="classbia_1_1stream_1_1output__stream.html#ae0b006beac77d7e5862deaf1d5262c69">cursor_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a5923098128740491ea5cb2062e696209">get_cursor_domain</a> () const  noexcept=0</td></tr>
-<tr class="separator:a5923098128740491ea5cb2062e696209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a121d14f85b8bc09556f1602e50b614e4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a121d14f85b8bc09556f1602e50b614e4">reserve</a> (size_t size)=0</td></tr>
-<tr class="separator:a121d14f85b8bc09556f1602e50b614e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2b115af459fcc5464d114751f4f6efa"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#ac2b115af459fcc5464d114751f4f6efa">write</a> (uint32_t value)=0</td></tr>
-<tr class="separator:ac2b115af459fcc5464d114751f4f6efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dda65d6090d170871948c1dcc062ace"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a7dda65d6090d170871948c1dcc062ace">write</a> (uint64_t value)=0</td></tr>
-<tr class="separator:a7dda65d6090d170871948c1dcc062ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad660535a72fe91a8ca3f34e816e30b75"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#ad660535a72fe91a8ca3f34e816e30b75">write</a> (uint16_t value)=0</td></tr>
-<tr class="separator:ad660535a72fe91a8ca3f34e816e30b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3beb90fb935f5dea477ad2049ec53670"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a3beb90fb935f5dea477ad2049ec53670">write</a> (uint8_t value)=0</td></tr>
-<tr class="separator:a3beb90fb935f5dea477ad2049ec53670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ef3ff915638c1fc7a08cfce51181713"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a6ef3ff915638c1fc7a08cfce51181713">prepare</a> (size_t _size)=0</td></tr>
+<tr class="separator:a6ef3ff915638c1fc7a08cfce51181713"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72528143913ec6ebf156e2b6cc045e01"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a72528143913ec6ebf156e2b6cc045e01">write</a> (int8_t _value)=0</td></tr>
+<tr class="separator:a72528143913ec6ebf156e2b6cc045e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eb25f9221018adbcc670f23b04a4197"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a7eb25f9221018adbcc670f23b04a4197">write</a> (int16_t _value)=0</td></tr>
+<tr class="separator:a7eb25f9221018adbcc670f23b04a4197"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77ed706d3309f8b025d44368d7e16aa6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a77ed706d3309f8b025d44368d7e16aa6">write</a> (int32_t _value)=0</td></tr>
+<tr class="separator:a77ed706d3309f8b025d44368d7e16aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ea6db33249cde343920f337de4812e0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1stream_1_1output__stream.html#a2ea6db33249cde343920f337de4812e0">write</a> (int64_t _value)=0</td></tr>
+<tr class="separator:a2ea6db33249cde343920f337de4812e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="ae0b006beac77d7e5862deaf1d5262c69"></a>
@@ -162,7 +154,7 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aacccf3c4b964978a26786ebaf0752032"></a>
+<a class="anchor" id="ae6f4e04adb5df192c47786f6315c9777"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -178,7 +170,7 @@ Protected Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -186,29 +178,6 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a5923098128740491ea5cb2062e696209"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual std::pair&lt;<a class="el" href="classbia_1_1stream_1_1output__stream.html#ae0b006beac77d7e5862deaf1d5262c69">cursor_type</a>, <a class="el" href="classbia_1_1stream_1_1output__stream.html#ae0b006beac77d7e5862deaf1d5262c69">cursor_type</a>&gt; bia::stream::output_stream::get_cursor_domain </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a8df8cbedfc6281403bbced19fc310e90"></a>
 <div class="memitem">
 <div class="memproto">
@@ -230,90 +199,20 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns the position of the cursor.</p>
-<dl class="section return"><dt>Returns</dt><dd>The position of the cursor. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a06da4c471fe862b433ff4d6f97a7ed22"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual std::pair&lt;const uint8_t*, size_t&gt; bia::stream::output_stream::GetBuffer </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns a memory buffer with its size.</p>
-<dl class="section remark"><dt>Remarks</dt><dd>This buffer is only valid until the destruction of this object.</dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>The buffer. </dd></dl>
-
-<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#a668094ee759da47a5d9a570f8e1945ec">bia::stream::buffer_output_stream</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a429ec1e145976a5ffa5e90fe5f5b072c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void bia::stream::output_stream::Move </td>
-          <td>(</td>
-          <td class="paramtype">long long&#160;</td>
-          <td class="paramname"><em>p_llDestination</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long long&#160;</td>
-          <td class="paramname"><em>p_llSource</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long long&#160;</td>
-          <td class="paramname"><em>p_llSize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Moves the source to the destination cursor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_llDestination</td><td>Defines the destination cursor. </td></tr>
-    <tr><td class="paramname">p_llSource</td><td>Defines the source cursor. </td></tr>
-    <tr><td class="paramname">p_llSize</td><td>Defines the size of the source cursor. </td></tr>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>7-May-18</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"></td><td></td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#a37102c6a3fbcd1bf52a14b718e51c49d">bia::stream::buffer_output_stream</a>.</p>
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#ab8fbd4db36c025092127ad3639ef104c">bia::stream::buffer_output_stream</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a121d14f85b8bc09556f1602e50b614e4"></a>
+<a class="anchor" id="a6ef3ff915638c1fc7a08cfce51181713"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -321,10 +220,10 @@ Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void bia::stream::output_stream::reserve </td>
+          <td class="memname">virtual void bia::stream::output_stream::prepare </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em></td><td>)</td>
+          <td class="paramname"><em>_size</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -334,6 +233,23 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Prepares the output to write <em>_size</em> bytes.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>7-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_size</td><td>The amount of bytes that are about to be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#afbdc302d198bdc320c82318900425a13">bia::stream::buffer_output_stream</a>.</p>
 
 </div>
 </div>
@@ -369,15 +285,16 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::domain_error</td><td>Thrown when the position is out of the domain. </td></tr>
     <tr><td class="paramname"></td><td></td></tr>
   </table>
   </dd>
 </dl>
 
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#abad4fb3ee623aa37d67d8232832b8383">bia::stream::buffer_output_stream</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="ac2b115af459fcc5464d114751f4f6efa"></a>
+<a class="anchor" id="a72528143913ec6ebf156e2b6cc045e01"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -387,8 +304,8 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void bia::stream::output_stream::write </td>
           <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
+          <td class="paramtype">int8_t&#160;</td>
+          <td class="paramname"><em>_value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -399,9 +316,11 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#a36aeaa0945d4d33680d4b9eb750a7998">bia::stream::buffer_output_stream</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="a7dda65d6090d170871948c1dcc062ace"></a>
+<a class="anchor" id="a7eb25f9221018adbcc670f23b04a4197"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -411,8 +330,8 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void bia::stream::output_stream::write </td>
           <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>_value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -423,9 +342,11 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#a2a66c234d277931949ac6ffb24726efe">bia::stream::buffer_output_stream</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="ad660535a72fe91a8ca3f34e816e30b75"></a>
+<a class="anchor" id="a77ed706d3309f8b025d44368d7e16aa6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -435,8 +356,8 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void bia::stream::output_stream::write </td>
           <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -447,9 +368,11 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#a0893e0b52bd0ca80ead9e79c3c5aebd2">bia::stream::buffer_output_stream</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="a3beb90fb935f5dea477ad2049ec53670"></a>
+<a class="anchor" id="a2ea6db33249cde343920f337de4812e0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -459,8 +382,8 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void bia::stream::output_stream::write </td>
           <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>_value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -470,6 +393,8 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#a63b3f1a31f49d99c1c2b758d018eb83d">bia::stream::buffer_output_stream</a>.</p>
 
 </div>
 </div>
@@ -505,30 +430,6 @@ template&lt;typename... _Args&gt; </div>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="a28a858aee0892e60263de573292a9a66"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void bia::stream::output_stream::write_stream </td>
-          <td>(</td>
-          <td class="paramtype">const stream::BiaOutputStreamBuffer &amp;&#160;</td>
-          <td class="paramname"><em>p_stream</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
