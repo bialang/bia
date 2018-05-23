@@ -33,13 +33,13 @@ _context.execute(_code.c_str(), _code.length());
 **Native types**
 - Integrals with a range from -2^32 to 2^32-1
 - 64-Bit floating point numbers
-- Classic C-style string support
+- ~~Classic C-style string support~~ (In development)
 
 **Variable Declaration:**
 - Global variables `global`: `global i = 0`
 
   Global variables can be access by any script in the same context at any time.
-- Instantiation: `global obj = new my_class()`
+- ~~Instantiation: `global obj = new my_class()`~~ (In development)
 - The types of the variables will be deducted from the value
 - Once a variable has a tpye it cannot be changed, unless it is redeclared:
 
@@ -57,7 +57,7 @@ global var = 0
 var = 34
 ```
 
-**Function Calls**
+~~**Function Calls**~~ (In development)
 - Normal function call: `normal_function()`
 - Member function call: `object.function()`
 - Optimized member function call. This is more efficient in loops:
@@ -67,7 +67,7 @@ global function_pointer = object.function
 object->function_pointer()
 ```
 
-**Loops**
+~~**Loops**~~ (In development)
 - While loop:
 
 ```
@@ -100,7 +100,7 @@ do until false {
 }
 ```
 
-**Conditional Statements**
+~~**Conditional Statements**~~ (In development)
 - If statements. Conditions that can be evaluated at compile time will be optimized away:
 
 ```
@@ -112,7 +112,7 @@ else if some_value == 3 {
 }
 ```
 
-# The Simple C++ Interface
+~~# The Simple C++ Interface~~ (In development)
 - Adding a static function to your `_context`:
 
 ```
