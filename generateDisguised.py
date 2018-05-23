@@ -6,17 +6,17 @@ def move_position(s):
 	def c(x):
 		return " * " + str(next(c.counter)) + ")"
 		
-	numbers = []
+	is_numbers = []
 	
 	for n in range(1, max_args + 1):
-		numbers.append(n)
+		is_numbers.append(n)
 		
-	c.counter = iter(numbers)
+	c.counter = iter(is_numbers)
 	
 	return re.sub(""" \* \d+\)""", c, s)
 
 
-f = open("Bia/biaDisguisedCaller.hpp", "wb")
+f = open("Bia/disguised_caller.hpp", "wb")
 
 f.write(b"""#pragma once
 
@@ -24,10 +24,10 @@ f.write(b"""#pragma once
 #include <cstdint>
 #include <type_traits>
 
-#include "biaMember.hpp"
-#include "biaException.hpp"
-#include "biaMemberCreator.hpp"
-#include "biaTypeTraits.hpp"
+#include "member.hpp"
+#include "exception.hpp"
+#include "create_member.hpp"
+#include "type_traits.hpp"
 
 
 namespace bia
@@ -35,139 +35,145 @@ namespace bia
 namespace force
 {
 
-template<typename _RETURN>
-inline _RETURN FormatCast(va_list & p_args, const char *& p_szFormat)
+template<typename _Return>
+inline _Return format_cast(va_list & _args, const char *& _format)
 {
 	using namespace utility;
 
-	switch (*p_szFormat++)
+	switch (*_format++)
 	{
 	case 'i':
 	{
-		constexpr auto NUMBER = std::is_integral<_RETURN>::value || std::is_floating_point<_RETURN>::value;
+		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
-		if (NUMBER)
-			return Chooser<NUMBER, _RETURN, int32_t>().Choose(va_arg(p_args, int32_t));
-		else
-			throw exception::BadCastException("Invalid cast.");
+		if (is_number) {
+			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args, int32_t));
+		} else {
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+		}
 	}
 	case 'I':
 	{
-		constexpr auto NUMBER = std::is_integral<_RETURN>::value || std::is_floating_point<_RETURN>::value;
+		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
-		if (NUMBER)
-			return Chooser<NUMBER, _RETURN, int64_t>().Choose(va_arg(p_args, int64_t));
-		else
-			throw exception::BadCastException("Invalid cast.");
+		if (is_number) {
+			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args, int64_t));
+		} else {
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+		}
 	}
 	case 'f':
 	{
-		constexpr auto NUMBER = std::is_integral<_RETURN>::value || std::is_floating_point<_RETURN>::value;
+		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
-		if (NUMBER)
-			return Chooser<NUMBER, _RETURN, float>().Choose(va_arg(p_args, float));
-		else
-			throw exception::BadCastException("Invalid cast.");
+		if (is_number) {
+			return chooser<is_number, _Return, float>().choose(va_arg(_args, float));
+		} else {
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+		}
 	}
 	case 'd':
 	{
-		constexpr auto NUMBER = std::is_integral<_RETURN>::value || std::is_floating_point<_RETURN>::value;
+		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
-		if (NUMBER)
-			return Chooser<NUMBER, _RETURN, double>().Choose(va_arg(p_args, double));
-		else
-			throw exception::BadCastException("Invalid cast.");
+		if (is_number) {
+			return chooser<is_number, _Return, double>().choose(va_arg(_args, double));
+		} else {
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+		}
 	}
 	case 's':
 	{
-		constexpr auto STRING = std::is_same<_RETURN, const char*>::value;
+		constexpr auto is_string = std::is_same<_Return, const char*>::value;
 
-		if (STRING)
-			return Chooser<STRING, _RETURN, const char*>().Choose(va_arg(p_args, const char*));
-		else
-			throw exception::BadCastException("Invalid cast.");
+		if (is_string) {
+			return chooser<is_string, _Return, const char*>().choose(va_arg(_args, const char*));
+		} else {
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+		}
 	}
 	case 'M':
 	{
-		if (auto pValue = va_arg(p_args, framework::BiaMember*)->Cast<_RETURN>())
-			return *pValue;
-		else
-			throw exception::BadCastException("Invalid cast.");
+		if (auto _ptr = va_arg(_args, framework::member*)->cast<_Return>()) {
+			return *_ptr;
+		} else {
+			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+		}
 	}
 	default:
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
 	}
 }
 
-inline void DisguisedCaller(void(*p_pFunction)(), framework::BiaMember * p_pDestination)
+inline void disguised_caller(void(*_function)(), framework::member * _destination)
 {
-	p_pFunction();
+	_function();
 
-	framework::MemberCreator(p_pDestination);
+	framework::create_member(_destination);
 }
 
-template<typename _RETURN>
-inline void DisguisedCaller(_RETURN(*p_pFunction)(), framework::BiaMember * p_pDestination)
+template<typename _Return>
+inline void disguised_caller(_Return(*_function)(), framework::member * _destination)
 {
-	framework::MemberCreator(p_pDestination, p_pFunction());
+	framework::create_member(_destination, _function());
 }
 
-template<typename _RETURN, typename... _ARGS>
-inline void DisguisedCaller(_RETURN(*)(_ARGS...), framework::BiaMember*)
+template<typename _Return, typename... _Args>
+inline void disguised_caller(_Return(*)(_Args...), framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _CLASS>
-inline void DisguisedCaller(void(_CLASS::*p_pFunction)(), _CLASS * p_pInstance, framework::BiaMember * p_pDestination)
+template<typename _Class>
+inline void disguised_caller(void(_Class::*_function)(), _Class * _instance, framework::member * _destination)
 {
-	(p_pInstance->*p_pFunction)();
+	(_instance->*_function)();
 
-	framework::MemberCreator(p_pDestination);
+	framework::create_member(_destination);
 }
 
-template<typename _CLASS>
-inline void DisguisedCaller(void(_CLASS::*p_pFunction)() const, _CLASS * p_pInstance, framework::BiaMember * p_pDestination)
+template<typename _Class>
+inline void disguised_caller(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination)
 {
-	(p_pInstance->*p_pFunction)();
+	(_instance->*_function)();
 
-	framework::MemberCreator(p_pDestination);
+	framework::create_member(_destination);
 }
 
-template<typename _RETURN, typename _CLASS>
-inline void DisguisedCaller(_RETURN(_CLASS::*p_pFunction)(), _CLASS * p_pInstance, framework::BiaMember * p_pDestination)
+template<typename _Return, typename _Class>
+inline void disguised_caller(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination)
 {
-	framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)());
+	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _RETURN, typename _CLASS>
-inline void DisguisedCaller(_RETURN(_CLASS::*p_pFunction)() const, _CLASS * p_pInstance, framework::BiaMember * p_pDestination)
+template<typename _Return, typename _Class>
+inline void disguised_caller(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination)
 {
-	framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)());
+	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _RETURN, typename _CLASS, typename... _ARGS>
-inline void DisguisedCaller(_RETURN(_CLASS::*)(_ARGS...), _CLASS*, framework::BiaMember*)
+template<typename _Return, typename _Class, typename... _Args>
+inline void disguised_caller(_Return(_Class::*)(_Args...), _Class * _instance, framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _RETURN, typename _CLASS, typename... _ARGS>
-inline void DisguisedCaller(_RETURN(_CLASS::*)(_ARGS...) const, _CLASS*, framework::BiaMember*)
+template<typename _Return, typename _Class, typename... _Args>
+inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * _instance, framework::member * _destination)
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _CLASS>
-inline _CLASS * DisguisedCaller()
+template<typename _Class>
+inline _Class * disguised_caller()
 {
-	return new _CLASS();
+	return new _Class();
 }
 
-template<typename _CLASS, typename... _ARGS>
-inline _CLASS * DisguisedCaller()
+template<typename _Class, typename... _Args>
+inline _Class * disguised_caller()
 {
-	throw exception::ArgumentException("Arguments expected.");
+	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
 """)
@@ -176,26 +182,26 @@ for type in ["count", "format"]:
 	upper = {}
 
 	if type == "count":
-		upper["function_name"] = "DisguisedCallerCount"
+		upper["function_name"] = "disguised_caller_count"
 		upper["preparations"] = ""
 		upper["format_param"] = ""
 	else:
-		upper["function_name"] = "DisguisedCallerFormat"
+		upper["function_name"] = "disguised_caller_format"
 		upper["preparations"] = ""
-		upper["format_param"] = ", const char * p_pcFormat"
+		upper["format_param"] = "const char * _format, "
 
 	for template in ["static", "static_void", "member", "member_void", "member_const", "member_void_const", "initiator"]:
 		filler = upper.copy()
 
 		if template == "static":
-			filler["template_begin"] = "template<typename _RETURN"
+			filler["template_begin"] = "template<typename _Return"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "_RETURN(*p_pFunction)("
+			filler["param1"] = "_Return(*_function)("
 			filler["param2"] = ""
-			filler["param3"] = "), framework::BiaMember * p_pDestination, "
-			filler["body1"] = "framework::MemberCreator(p_pDestination, p_pFunction("
+			filler["param3"] = "), framework::member * _destination, "
+			filler["body1"] = "framework::create_member(_destination, _function("
 			filler["body2"] = ""
 			filler["body3"] = "));"
 		elif template == "static_void":
@@ -203,71 +209,71 @@ for type in ["count", "format"]:
 			filler["template_middle"] = ""
 			filler["template_end"] = ""
 			filler["function_return"] = "void"
-			filler["param1"] = "void(*p_pFunction)("
+			filler["param1"] = "void(*_function)("
 			filler["param2"] = ""
-			filler["param3"] = "), framework::BiaMember * p_pDestination, "
-			filler["body1"] = "p_pFunction("
+			filler["param3"] = "), framework::member * _destination, "
+			filler["body1"] = "_function("
 			filler["body2"] = ""
 			filler["body3"] = """);
 
-	framework::MemberCreator(p_pDestination);"""
+	framework::create_member(_destination);"""
 		elif template == "member":
-			filler["template_begin"] = "template<typename _CLASS, typename _RETURN"
+			filler["template_begin"] = "template<typename _Class, typename _Return"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "_RETURN(_CLASS::*p_pFunction)("
+			filler["param1"] = "_Return(_Class::*_function)("
 			filler["param2"] = ""
-			filler["param3"] = "), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, "
-			filler["body1"] = "framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)("
+			filler["param3"] = "), _Class * _instance, framework::member * _destination, "
+			filler["body1"] = "framework::create_member(_destination, (_instance->*_function)("
 			filler["body2"] = ""
 			filler["body3"] = "));"
 		elif template == "member_void":
-			filler["template_begin"] = "template<typename _CLASS"
+			filler["template_begin"] = "template<typename _Class"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "void(_CLASS::*p_pFunction)("
+			filler["param1"] = "void(_Class::*_function)("
 			filler["param2"] = ""
-			filler["param3"] = "), _CLASS * p_pInstance, framework::BiaMember * p_pDestination, "
-			filler["body1"] = "(p_pInstance->*p_pFunction)("
+			filler["param3"] = "), _Class * _instance, framework::member * _destination, "
+			filler["body1"] = "(_instance->*_function)("
 			filler["body2"] = ""
 			filler["body3"] = """);
 
-	framework::MemberCreator(p_pDestination);"""
+	framework::create_member(_destination);"""
 		elif template == "member_const":
-			filler["template_begin"] = "template<typename _CLASS, typename _RETURN"
+			filler["template_begin"] = "template<typename _Class, typename _Return"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "_RETURN(_CLASS::*p_pFunction)("
+			filler["param1"] = "_Return(_Class::*_function)("
 			filler["param2"] = ""
-			filler["param3"] = ") const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, "
-			filler["body1"] = "framework::MemberCreator(p_pDestination, (p_pInstance->*p_pFunction)("
+			filler["param3"] = ") const, const _Class * _instance, framework::member * _destination, "
+			filler["body1"] = "framework::create_member(_destination, (_instance->*_function)("
 			filler["body2"] = ""
 			filler["body3"] = "));"
 		elif template == "member_void_const":
-			filler["template_begin"] = "template<typename _CLASS"
+			filler["template_begin"] = "template<typename _Class"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "void(_CLASS::*p_pFunction)("
+			filler["param1"] = "void(_Class::*_function)("
 			filler["param2"] = ""
-			filler["param3"] = ") const, const _CLASS * p_pInstance, framework::BiaMember * p_pDestination, "
-			filler["body1"] = "(p_pInstance->*p_pFunction)("
+			filler["param3"] = ") const, const _Class * _instance, framework::member * _destination, "
+			filler["body1"] = "(_instance->*_function)("
 			filler["body2"] = ""
 			filler["body3"] = """);
 
-	framework::MemberCreator(p_pDestination);"""
+	framework::create_member(_destination);"""
 		elif template == "initiator":
-			filler["template_begin"] = "template<typename _CLASS"
+			filler["template_begin"] = "template<typename _Class"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
-			filler["function_return"] = "_CLASS *"
+			filler["function_return"] = "_Class *"
 			filler["param1"] = ""
 			filler["param2"] = ""
 			filler["param3"] = ""
-			filler["body1"] = "return new _CLASS("
+			filler["body1"] = "return new _Class("
 			filler["body2"] = ""
 			filler["body3"] = ");"
 
@@ -275,11 +281,12 @@ for type in ["count", "format"]:
 			filler["arg_count"] = i
 
 			f.write("""{template_begin}{template_middle}{template_end}
-inline {function_return} {function_name}({param1}{param2}{param3}framework::BiaMember::parameter_count p_count{format_param}, va_list p_args)
+inline {function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list _args)
 {{
-	if (p_count != {arg_count})
-		throw exception::ArgumentException("Argument count does not match.");
-{preparations}
+	if (_count != {arg_count}) {{
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}}{preparations}
+
 	{body1}{body2}{body3}
 }}
 
@@ -295,10 +302,10 @@ inline {function_return} {function_name}({param1}{param2}{param3}framework::BiaM
 			if type == "count":
 
 				filler["preparations"] = """
-	_{0} v{0} = *(*reinterpret_cast<framework::BiaMember**>(p_args + sizeof(framework::BiaMember*) * 0))->Cast<_{0}>();""".format(i) + move_position(filler["preparations"])
+	auto v{0} = *va_arg(_args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
 			else:
 				filler["preparations"] = """
-	_{0} v{0} = FormatCast<_{0}>(p_args, p_pcFormat);""".format(i) + filler["preparations"]
+	auto v{0} = format_cast<_{0}>(_args, p_pcFormat);""".format(i) + filler["preparations"]
 			
 			if template == "static_void":
 				filler["template_begin"] = "template<"
