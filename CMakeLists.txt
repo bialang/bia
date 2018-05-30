@@ -20,7 +20,7 @@ include_directories(Bia)
 add_subdirectory(Bia)
 
 # Tests
-option(BUILD_TESTS "Build tests" ON)
+option(BUILD_TESTS "Build tests" OFF)
 
 if(BUILD_TESTS)
   enable_testing()
