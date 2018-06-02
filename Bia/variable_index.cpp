@@ -10,18 +10,27 @@ variable_index::variable_index(const std::shared_ptr<memory::allocator> & _alloc
 {
 }
 
-framework::member * variable_index::add(utility::string_key _key, memory::allocator::allocation<framework::member> _value)
+framework::member * variable_index::add(utility::string_key _key, value_type _value)
 {
-	_map.emplace(std::move(_key), std::move(_value));
+	auto _result = _map.emplace(std::move(_key), utility::make_guard(std::move(_value), &guard_action));
 
-	return static_cast<framework::member*>(_value.first);
+	if (!_result.second) {
+		throw;
+	}
+
+	return _result.first->second.get().first;
 }
 
 framework::member * variable_index::find(utility::string_key _key)
 {
 	auto _result = _map.find(_key);
 
-	return _result == _map.end() ? nullptr : _result->second.get();
+	return _result == _map.end() ? nullptr : _result->second.get().first;
+}
+
+void variable_index::guard_action(value_type & _value)
+{
+	printf("guard_action: destroying %p with %zi bytes\n", _value.first, _value.second);
 }
 
 }

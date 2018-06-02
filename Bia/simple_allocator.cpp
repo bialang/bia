@@ -13,6 +13,7 @@ namespace memory
 
 void simple_allocator::deallocate(universal_allocation _allocation)
 {
+	printf("free %zi bytes at %p\n", _allocation.second, _allocation.first);
 	std::free(_allocation.first);
 }
 
@@ -29,7 +30,7 @@ simple_allocator::universal_allocation simple_allocator::commit(universal_alloca
 simple_allocator::universal_allocation simple_allocator::allocate(size_t _size)
 {
 	auto _ptr = std::malloc(_size);
-
+	printf("allocated %zi bytes at %p\n", _size, _ptr);
 	if (!_ptr) {
 		throw exception::memory_error(BIA_EM_FAILED_ALLOCATION);
 	}

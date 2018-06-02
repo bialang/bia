@@ -51,7 +51,7 @@ public:
 	machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
 	~machine_context()
 	{
-
+		puts("de");
 	}
 	void execute(stream::input_stream & _script)
 	{ }
@@ -81,10 +81,10 @@ public:
 	std::shared_ptr<memory::allocator> _allocator;
 	/** The allocator for executable memory. */
 	std::shared_ptr<memory::executable_allocator> _executable_allocator;
-	/** Holds all known variables, function and other. */
-	variable_index _variable_index;
 	/** The string manager for string like resources. */
 	string_manager _string_manager;
+	/** Holds all known variables, function and other. */
+	variable_index _variable_index;
 
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.

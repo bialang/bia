@@ -81,7 +81,7 @@ public:
 	*/
 	void deallocate(pointer _ptr, size_type _size)
 	{
-		_allocator->deallocate(allocator::cast_allocation<void>(allocator::allocation<_Ty>{ _ptr, _size }));
+		_allocator->deallocate(allocator::cast_allocation<void>(allocator::allocation<_Ty>{ _ptr, _size * sizeof(_Ty) }));
 	}
 	/**
 	 * Allocates memory with the desired size.
@@ -95,7 +95,7 @@ public:
 	*/
 	pointer allocate(size_type _size)
 	{
-		return static_cast<pointer>(_allocator->allocate(_size).first);
+		return static_cast<pointer>(_allocator->allocate(_size * sizeof(_Ty)).first);
 	}
 
 private:

@@ -40,7 +40,7 @@ const char * string_manager::get_name_address(const char * _name, size_t _length
 
 		memcpy(_allocation.first, _name, _length);
 
-		_result = _index.insert(string_entry(_allocation)).first;
+		_result = _index.emplace(string_entry(_allocation)).first;
 	}
 
 	return _result->_string;
