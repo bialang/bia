@@ -240,7 +240,7 @@ public:
 				case '&':
 				case '|':
 				case '$':
-					_output.content.content.operatorCode = _output.content.content.operatorCode << 8 | _code_point;
+					_output.content.content.operator_code = _output.content.content.operator_code << 8 | _code_point;
 
 					break;
 				default:
@@ -248,7 +248,7 @@ public:
 				}
 			}
 
-			if (_output.content.content.operatorCode) {
+			if (_output.content.content.operator_code) {
 				_output.content.type = report::TYPE::OPERATOR_CODE;
 
 				// Move cursor

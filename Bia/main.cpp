@@ -33,45 +33,44 @@ using namespace bia;
 
 int main()
 {
-	// Create context which handles almost everything
 	{
+		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		auto _exec_allocator = std::make_shared<machine::memory::simple_executable_allocator>();
 		bia::machine::machine_context _context(_allocator, _exec_allocator);
-		_context.get_address_or_create("servus");
-	}/*
 
-	// Script
-	char _script[] = R"delim(
-print 0b1000<18
+		// Script
+		char _script[] = R"delim(
+print 5+5
 
 )delim";
 
-	// Compile
-	bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);
-	bia::stream::buffer_output_stream _output;
-	bia::compiler::compiler _compiler(_output, _context);
+		// Compile
+		bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);
+		bia::stream::buffer_output_stream _output;
+		bia::compiler::compiler _compiler(_output, _context);
 
-	test_and_time(1, [&]() {
-		bia::grammar::syntax::get_interpreter().interpret(_input, _compiler, _context);
-	});
+		test_and_time(1, [&]() {
+			bia::grammar::syntax::get_interpreter().interpret(_input, _compiler, _context);
+		});
 
-	_compiler.finalize();
+		_compiler.finalize();
 
-	// Disassemble
-	//bia::machine::disassembler _disassembler(&_context);
+		// Disassemble
+		bia::machine::disassembler _disassembler(&_context);
 
-	//_disassembler.disassemble(_output._buffer.get(), _output._size);
+		_disassembler.disassemble(_output._buffer.get(), _output._size);
 
-	system("pause");
-	
-	// Run
-	//bia::machine::machine_code _machine_code = _compiler.get_code();
-	bia::machine::machine_code _machine_code({ reinterpret_cast<const uint8_t*>(_output._buffer.get()), _output._size }, bia::machine::machine_schein(_context.get_allocator(), _context.get_executable_allocator()));
+		system("pause");
 
-	if (_machine_code.is_executable()) {
-		_machine_code.execute();
+		// Run
+		//bia::machine::machine_code _machine_code = _compiler.get_code();
+		bia::machine::machine_code _machine_code({ reinterpret_cast<const uint8_t*>(_output._buffer.get()), _output._size }, bia::machine::machine_schein(_context.get_allocator(), _context.get_executable_allocator()));
+
+		if (_machine_code.is_executable()) {
+			_machine_code.execute();
+		}
 	}
-	*/
+
 	system("pause");
 }

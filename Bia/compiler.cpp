@@ -1,5 +1,6 @@
 #include "compiler.hpp"
 #include "link.hpp"
+#include "compile_compare_operation.hpp"
 
 
 namespace bia
@@ -25,16 +26,18 @@ void compiler::finalize()
 
 void compiler::operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
 {
+	using VT = compiler_value::VALUE_TYPE;
+
 	// Constant operation
 	if (_left.is_const() && _right.is_const()) {
 		constant_operation(_left, _operator, _right);
 	} else {
 		switch (_left.get_type()) {
-		case compiler_value::VALUE_TYPE::MEMBER:
+		case VT::MEMBER:
 			member_operation(_left.get_value().rt_member, _operator, _right);
 
 			break;
-		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+		case VT::TEMPORARY_MEMBER:
 			member_operation(_toolset.to_temp_member(_left.get_value().rt_temp_member), _operator, _right);
 
 			break;
@@ -51,41 +54,19 @@ void compiler::constant_operation(const compiler_value & _left, framework::opera
 
 void compiler::compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
 {
+	using VT = compiler_value::VALUE_TYPE;
+
 	switch (_left.get_type()) {
-	case compiler_value::VALUE_TYPE::INT:
-	{
-		switch (_right.get_type()) {
-		case compiler_value::VALUE_TYPE::INT:
-			constant_compare_operation(_left.get_value().rt_int, _operator, _right.get_value().rt_int);
-
-			break;
-		case compiler_value::VALUE_TYPE::DOUBLE:
-			constant_compare_operation(_left.get_value().rt_int, _operator, _right.get_value().rt_double);
-
-			break;
-		default:
-			BIA_COMPILER_DEV_INVALID;
-		}
+	case VT::INT:
+		constant_compare_operation(_left.get_value().rt_int, _operator, _right);
 
 		break;
-	}
-	case compiler_value::VALUE_TYPE::DOUBLE:
-	{
-		switch (_right.get_type()) {
-		case compiler_value::VALUE_TYPE::INT:
-			constant_compare_operation(_left.get_value().rt_double, _operator, _right.get_value().rt_int);
-
-			break;
-		case compiler_value::VALUE_TYPE::DOUBLE:
-			constant_compare_operation(_left.get_value().rt_double, _operator, _right.get_value().rt_double);
-
-			break;
-		default:
-			BIA_COMPILER_DEV_INVALID;
-		}
+	case VT::DOUBLE:
+		constant_compare_operation(_left.get_value().rt_double, _operator, _right);
 
 		break;
-	}
+	case VT::MEMBER:
+
 	default:
 		BIA_COMPILER_DEV_INVALID;
 	}
@@ -203,7 +184,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 
 	do {
 		// Operator
-		auto _operator = i->content.operatorCode;
+		auto _operator = i->content.operator_code;
 
 		// Handle right math term
 		i = (this->*_next)(i + 1) + 1;
@@ -242,7 +223,9 @@ const grammar::report * compiler::handle_condition_expression(const grammar::rep
 		handle_math_expression_and_term(_operator + 1);
 
 		// Call operator
-		compare_operation(_left, _operator->content.operatorCode, _value);
+		///TODO: destination?
+		compile_compare_operation(_toolset).operate(_left, _operator->content.operator_code, _value);
+		compare_operation(_left, _operator->content.operator_code, _value);
 	}
 
 	return _report->content.end;
@@ -254,11 +237,11 @@ const grammar::report *  compiler::handle_number(const grammar::report * _report
 
 	switch (_report->type) {
 	case TYPE::INT_VALUE:
-		_value.set_return(_report->content.intValue);
+		_value.set_return(_report->content.int_value);
 
 		break;
 	case TYPE::DOUBLE_VALUE:
-		_value.set_return(_report->content.doubleValue);
+		_value.set_return(_report->content.double_value);
 
 		break;
 	default:

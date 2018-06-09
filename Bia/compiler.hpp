@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "exception.hpp"
 #include "output_stream.hpp"
 #include "toolset.hpp"
@@ -29,7 +28,9 @@ public:
 	compiler(stream::output_stream & _output, machine::machine_context & _context);
 	compiler(const compiler & _copy) = delete;
 	compiler(compiler && _rvalue) = delete;
-	~compiler(){ }
+	~compiler()
+	{
+	}
 	virtual void report(const grammar::report * _begin, const grammar::report * _end) override;
 	/**
 	 * Finalizes the machine code.
@@ -61,13 +62,15 @@ private:
 	template<typename _Member>
 	void member_operation(_Member && _left, framework::operator_type _operator, const compiler_value & _right)
 	{
+		using VT = compiler_value::VALUE_TYPE;
+
 		switch (_right.get_type()) {
-		case compiler_value::VALUE_TYPE::INT:
-		case compiler_value::VALUE_TYPE::DOUBLE:
-		case compiler_value::VALUE_TYPE::STRING:
-		case compiler_value::VALUE_TYPE::MEMBER:
+		case VT::INT:
+		case VT::DOUBLE:
+		case VT::STRING:
+		case VT::MEMBER:
 		{
-			if (_value.get_type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			if (_value.get_type() == VT::TEMPORARY_MEMBER) {
 				_counter.update(_value.get_value().rt_temp_member);
 				//_toolset.call(&framework::member::operator_call, _left.get_value().rt_member, _operator, _);
 			} else {
@@ -83,6 +86,48 @@ private:
 	}
 	void constant_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
 	void compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
+	template<typename _Left>
+	void constant_compare_operation(_Left && _left, compiler_value::VALUE_TYPE _left_type, framework::operator_type _operator, const compiler_value & _right)
+	{
+		using VT = compiler_value::VALUE_TYPE;
+
+		switch (_right.get_type()) {
+		case VT::INT:
+			constant_compare_operation(_left, _operator, _right.get_value().rt_int);
+
+			break;
+		case VT::DOUBLE:
+			constant_compare_operation(_left, _operator, _right.get_value().rt_double);
+
+			break;
+		case VT::MEMBER:
+		{
+			switch (_left_type) {
+			case VT::INT:
+			{
+				// Is int32
+				if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
+					_toolset.call(&machine::link::operation_int32, static_cast<int32_t>(_left), nullptr, _operator, _right.get_value().rt_member);
+				} else {
+					_toolset.call(&machine::link::operation_int64, _left, nullptr, _operator, _right.get_value().rt_member);
+				}
+
+				break;
+			}
+			case VT::DOUBLE:
+				_toolset.call(&machine::link::operation_double, _left, nullptr, _operator, _right.get_value().rt_member);
+
+				break;
+			default:
+				BIA_COMPILER_DEV_INVALID;
+			}
+
+			break;
+		}
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
+	}
 	/**
 	 * Executes the compare operator.
 	 *
@@ -136,7 +181,7 @@ private:
 	 * @since 3.64.127.716
 	 * @date 1-May-18
 	 *
-	 * @throws 
+	 * @throws
 	*/
 	void test_compiler_value();
 	/**
@@ -236,7 +281,7 @@ private:
 			handle_value_expression<false>(_report + 3);
 
 			// Call operator
-			operation(_left, _report[2].content.operatorCode, _value);
+			operation(_left, _report[2].content.operator_code, _value);
 
 			break;
 		}

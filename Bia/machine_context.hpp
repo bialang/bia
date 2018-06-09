@@ -49,10 +49,6 @@ public:
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
 	machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
-	~machine_context()
-	{
-		puts("de");
-	}
 	void execute(stream::input_stream & _script)
 	{ }
 	/**

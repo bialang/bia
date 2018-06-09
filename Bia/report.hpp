@@ -50,11 +50,11 @@ struct report
 	union
 	{
 		const char * string;
-		int64_t intValue;
-		double doubleValue;
+		int64_t int_value;
+		double double_value;
 		const report *  end;
 		framework::member * member;
-		framework::operator_type operatorCode;
+		framework::operator_type operator_code;
 		INTERPRETER_STRING keyword;
 	} content;
 };

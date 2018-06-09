@@ -199,10 +199,10 @@ gt_set_value:;
 	// Set value
 	if (_is_double) {
 		_output.content.type = report::TYPE::DOUBLE_VALUE;
-		_output.content.content.doubleValue = _negative ? -_double : _double;
+		_output.content.content.double_value = _negative ? -_double : _double;
 	} else {
 		_output.content.type = report::TYPE::INT_VALUE;
-		_output.content.content.intValue = _negative ? -_int : _int;
+		_output.content.content.int_value = _negative ? -_int : _int;
 	}
 
 	// Move input cursor
@@ -434,12 +434,12 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 			case '&':
 			case '|':
 			case '$':
-				_output.content.content.operatorCode = _output.content.content.operatorCode << 8 | _code_point;
+				_output.content.content.operator_code = _output.content.content.operator_code << 8 | _code_point;
 
 				break;
 			case '=':
 			{
-				_output.content.content.operatorCode = _output.content.content.operatorCode << 8 | '=';
+				_output.content.content.operator_code = _output.content.content.operator_code << 8 | '=';
 				_output.content.type = report::TYPE::OPERATOR_CODE;
 
 				// Move cursor
@@ -491,7 +491,7 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 			switch (_code_point) {
 			case '=':
 				if (_flags & F_REQUIRED_EQUALS) {
-					_output.content.content.operatorCode = _first_point << 8 | '=';
+					_output.content.content.operator_code = _first_point << 8 | '=';
 
 					// Move cursor
 					_input.skip(_buffer.first);
@@ -523,7 +523,7 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 			{
 				// Matched '<' or '>'
 				if (_flags == (F_REQUIRED_EQUALS | F_OPTIONAL)) {
-					_output.content.content.operatorCode = _first_point;
+					_output.content.content.operator_code = _first_point;
 
 					// Move cursor
 					_input.skip(_prev);
