@@ -276,6 +276,10 @@ private:
 	{
 		return 0;
 	}
+	pass_count pass(std::nullptr_t)
+	{
+		return pass(intptr_t(0));
+	}
 	template<typename _Ty, typename... _Args>
 	pass_count pass(_Ty _value, _Args &&... _args)
 	{

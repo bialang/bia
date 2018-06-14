@@ -66,15 +66,15 @@ enum OPERATOR : operator_type
 	/** The `==` operator. */
 	O_EQUALS = 0x3d3d,
 	/** The `!=` operator. */
-	O_EQUALS_NOT = 0x3d21,
+	O_EQUALS_NOT = 0x213d,
 	/** The `<` operator. */
 	O_LESS_THAN = 0x3c,
 	/** The `<=` operator. */
-	O_LESS_EQUALS = 0x3d3c,
+	O_LESS_EQUALS = 0x3c3d,
 	/** The `>` operator. */
 	O_GREATER_THAN = 0x3e,
 	/** The `>=` operator. */
-	O_GREATER_EQUALS = 0x3d3e,
+	O_GREATER_EQUALS = 0x3e3d,
 };
 
 }

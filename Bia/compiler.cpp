@@ -52,26 +52,6 @@ void compiler::constant_operation(const compiler_value & _left, framework::opera
 	///TODO
 }
 
-void compiler::compare_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
-{
-	using VT = compiler_value::VALUE_TYPE;
-
-	switch (_left.get_type()) {
-	case VT::INT:
-		constant_compare_operation(_left.get_value().rt_int, _operator, _right);
-
-		break;
-	case VT::DOUBLE:
-		constant_compare_operation(_left.get_value().rt_double, _operator, _right);
-
-		break;
-	case VT::MEMBER:
-
-	default:
-		BIA_COMPILER_DEV_INVALID;
-	}
-}
-
 void compiler::test_compiler_value()
 {
 	switch (_value.get_type()) {
@@ -224,8 +204,7 @@ const grammar::report * compiler::handle_condition_expression(const grammar::rep
 
 		// Call operator
 		///TODO: destination?
-		compile_compare_operation(_toolset).operate(_left, _operator->content.operator_code, _value);
-		compare_operation(_left, _operator->content.operator_code, _value);
+		compile_compare_operation(_toolset, _value).operate(_left, _operator->content.operator_code, _value);
 	}
 
 	return _report->content.end;
