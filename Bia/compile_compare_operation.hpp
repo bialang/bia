@@ -1,6 +1,8 @@
 #pragma once
 
 #include <limits>
+#include <type_traits>
+#include <utility>
 
 #include "exception.hpp"
 #include "toolset.hpp"
@@ -166,19 +168,19 @@ private:
 
 		switch (_right.get_type()) {
 		case VT::INT:
-			both_constant_operation(_left, _operator, _right.get_value().rt_int);
+			both_constant_operation(std::forward<_Left>(_left), _operator, _right.get_value().rt_int);
 
 			break;
 		case VT::DOUBLE:
-			both_constant_operation(_left, _operator, _right.get_value().rt_double);
+			both_constant_operation(std::forward<_Left>(_left), _operator, _right.get_value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			left_constant_right_member_operation(_left, _operator, _right.get_value().rt_member);
+			left_constant_right_member_operation(std::forward<_Left>(_left), _operator, _right.get_value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_temp_member(_right.get_value().rt_temp_member));
+			left_constant_right_member_operation(std::forward<_Left>(_left), _operator, machine::platform::toolset::to_temp_member(_right.get_value().rt_temp_member));
 
 			break;
 		default:
@@ -214,7 +216,7 @@ private:
 			break;
 		case O_SAME:
 			_value.set_return(std::is_same<_Left, _Right>::value && _left == _right);
-
+			
 			break;
 		case O_NOT_SAME:
 			_value.set_return(!std::is_same<_Left, _Right>::value || _left != _right);

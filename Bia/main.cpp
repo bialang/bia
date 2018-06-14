@@ -41,7 +41,7 @@ int main()
 
 		// Script
 		char _script[] = R"delim(
-print 5. !== 5
+print 5. === 5f
 
 )delim";
 
