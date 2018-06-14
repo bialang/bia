@@ -124,6 +124,10 @@ public:
 	{
 		return native::test(_value);
 	}
+	virtual int32_t test_member(operator_type _operator, member * _right) const override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
+	}
 	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override
 	{
 		return test_operation(_value, _operator, _right);

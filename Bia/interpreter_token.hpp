@@ -234,7 +234,6 @@ public:
 				case '%':
 				case '+':
 				case '-':
-				case '!':
 				case '~':
 				case '^':
 				case '&':

@@ -88,9 +88,9 @@ utf8::code_point utf8::next(const int8_t *& _begin, const int8_t * _end)
 	code_point _char = 0;
 	auto _size = _end - _begin;
 
-	// No input
+	// End of string
 	if (_size <= 0) {
-		throw exception::encoding_error(BIA_EM_NOT_ENOUGH_SPACE);
+		return 0;
 	}
 
 	// One byte

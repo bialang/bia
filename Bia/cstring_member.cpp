@@ -61,6 +61,11 @@ int32_t cstring_member::test() const
 	return static_cast<int32_t>(_length != 0);
 }
 
+int32_t cstring_member::test_member(operator_type _operator, member * _right) const
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
+}
+
 int32_t cstring_member::test_int32(operator_type _operator, int32_t _right) const
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);

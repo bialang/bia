@@ -67,6 +67,10 @@ enum OPERATOR : operator_type
 	O_EQUALS = 0x3d3d,
 	/** The `!=` operator. */
 	O_EQUALS_NOT = 0x213d,
+	/** The `===` operator. */
+	O_SAME = 0x3d3d3d,
+	/** The `!==` operator. */
+	O_NOT_SAME = 0x213d3d,
 	/** The `<` operator. */
 	O_LESS_THAN = 0x3c,
 	/** The `<=` operator. */

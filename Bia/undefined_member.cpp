@@ -68,6 +68,11 @@ int32_t undefined_member::test() const
 	BIA_UNDEFINED_ERROR;
 }
 
+int32_t undefined_member::test_member(operator_type _operator, member * _right) const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 int32_t undefined_member::test_int32(operator_type _operator, int32_t _right) const
 {
 	BIA_UNDEFINED_ERROR;

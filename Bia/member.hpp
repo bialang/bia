@@ -285,8 +285,26 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
+	 *
+	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
 	virtual int32_t test() const = 0;
+	/**
+	 * Tests the contents of this member to the right member.
+	 *
+	 * @since 3.64.131.727
+	 * @date 14-Jun-18
+	 *
+	 * @param _operator The operator.
+	 * @param _right The right member.
+
+	 * @throws exception::symbol_error If this member is not valid.
+	 * @throws exception::execution_error If a test call is invalid.
+	 * @throws exception::operator_error If the operator is invalid.
+	 *
+	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
+	*/
+	virtual int32_t test_member(operator_type _operator, member * _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -299,6 +317,8 @@ public:
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
 	 * @throws exception::operator_error If the operator is invalid.
+	 *
+	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
 	virtual int32_t test_int32(operator_type _operator, int32_t _right) const = 0;
 	/**
@@ -313,6 +333,8 @@ public:
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
 	 * @throws exception::operator_error If the operator is invalid.
+	 *
+	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
 	virtual int32_t test_int64(operator_type _operator, int64_t _right) const = 0;
 	/**
@@ -327,6 +349,8 @@ public:
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If a test call is invalid.
 	 * @throws exception::operator_error If the operator is invalid.
+	 *
+	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
 	virtual int32_t test_double(operator_type _operator, double _right) const = 0;
 	/**

@@ -15,7 +15,7 @@ namespace bia
 namespace compiler
 {
 
-class compile_compare_operation
+class compile_normal_operation
 {
 public:
 	/**
@@ -27,7 +27,7 @@ public:
 	 * @param [in] _toolset The toolset.
 	 * @param [in] _value The compiler value.
 	*/
-	compile_compare_operation(machine::platform::toolset & _toolset, compiler_value & _value) noexcept : _toolset(_toolset), _value(_value)
+	compile_normal_operation(machine::platform::toolset & _toolset, compiler_value & _value) noexcept : _toolset(_toolset), _value(_value)
 	{
 	}
 	/**
@@ -93,30 +93,28 @@ private:
 		case VT::INT:
 		{
 			if (_right.is_int32()) {
-				_toolset.call(&framework::member::test_int32, _member, _operator, static_cast<int32_t>(_right.get_value().rt_int));
+				_toolset.call(&framework::member::operator_call_int32, _member, nullptr, _operator, static_cast<int32_t>(_right.get_value().rt_int));
 			} else {
-				_toolset.call(&framework::member::test_int64, _member, _operator, _right.get_value().rt_int);
+				_toolset.call(&framework::member::operator_call_int32, _member, nullptr, _operator, _right.get_value().rt_int);
 			}
 
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&framework::member::test_double, _member, _operator, _right.get_value().rt_double);
+			_toolset.call(&framework::member::operator_call_double, _member, nullptr, _operator, _right.get_value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			_toolset.call(&framework::member::test_member, _member, _operator, _right.get_value().rt_member);
+			_toolset.call(&framework::member::operator_call, _member, nullptr, _operator, _right.get_value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::test_member, _member, _operator, machine::platform::toolset::to_temp_member(_right.get_value().rt_temp_member));
+			_toolset.call(&framework::member::operator_call, _member, nullptr, _operator, machine::platform::toolset::to_temp_member(_right.get_value().rt_temp_member));
 
 			break;
 		default:
 			BIA_COMPILER_DEV_INVALID;
 		}
-
-		_value.set_return_test();
 	}
 	/**
 	 * Executes the compare operator.
@@ -137,15 +135,13 @@ private:
 		if (std::is_same<_Left, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
-				_toolset.call(&machine::link::compare_operation_int32, static_cast<int32_t>(_left), _operator, _right);
+				_toolset.call(&machine::link::operation_int32, static_cast<int32_t>(_left), nullptr, _operator, _right);
 			} else {
-				_toolset.call(&machine::link::compare_operation_int64, _left, _operator, _right);
+				_toolset.call(&machine::link::operation_int64, _left, nullptr, _operator, _right);
 			}
 		} else {
-			_toolset.call(&machine::link::compare_operation_double, _left, _operator, _right);
+			_toolset.call(&machine::link::operation_double, _left, nullptr, _operator, _right);
 		}
-
-		_value.set_return_test();
 	}
 	/**
 	 * Executes the compare operator.
@@ -210,14 +206,6 @@ private:
 			break;
 		case O_EQUALS_NOT:
 			_value.set_return(_left != _right);
-
-			break;
-		case O_SAME:
-			_value.set_return(std::is_same<_Left, _Right>::value && _left == _right);
-
-			break;
-		case O_NOT_SAME:
-			_value.set_return(!std::is_same<_Left, _Right>::value || _left != _right);
 
 			break;
 		case O_LESS_THAN:
