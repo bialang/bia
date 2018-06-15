@@ -1,6 +1,7 @@
 #pragma once
 
 #include <limits>
+#include <type_traits>
 
 #include "exception.hpp"
 #include "toolset.hpp"
@@ -31,7 +32,7 @@ public:
 	{
 	}
 	/**
-	 * Executes the operator value.
+	 * Executes the value.
 	 *
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
@@ -73,7 +74,7 @@ private:
 	compiler_value & _value;
 
 	/**
-	 * Executes the compare operator.
+	 * Executes the operator.
 	 *
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
@@ -117,7 +118,7 @@ private:
 		}
 	}
 	/**
-	 * Executes the compare operator.
+	 * Executes the operator.
 	 *
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
@@ -144,7 +145,7 @@ private:
 		}
 	}
 	/**
-	 * Executes the compare operator.
+	 * Executes the operator.
 	 *
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
@@ -182,7 +183,7 @@ private:
 		}
 	}
 	/**
-	 * Executes the compare operator.
+	 * Executes the operator.
 	 *
 	 * @since 3.64.131.725
 	 * @date 19-May-18
@@ -195,33 +196,25 @@ private:
 	 * @param [in] _right The right hand value.
 	*/
 	template<typename _Left, typename _Right>
-	void both_constant_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
+	typename std::enable_if<std::is_floating_point<_Left>::value || std::is_floating_point<_Right>::value || true>::type both_constant_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
 	{
 		using namespace framework;
 
 		switch (_operator) {
-		case O_EQUALS:
-			_value.set_return(_left == _right);
+		case O_PLUS:
+			_value.set_return(_left + _right);
 
 			break;
-		case O_EQUALS_NOT:
-			_value.set_return(_left != _right);
+		case O_MINUS:
+			_value.set_return(_left - _right);
 
 			break;
-		case O_LESS_THAN:
-			_value.set_return(_left < _right);
+		case O_MULTIPLY:
+			_value.set_return(_left * _right);
 
 			break;
-		case O_LESS_EQUALS:
-			_value.set_return(_left <= _right);
-
-			break;
-		case O_GREATER_THAN:
-			_value.set_return(_left > _right);
-
-			break;
-		case O_GREATER_EQUALS:
-			_value.set_return(_left >= _right);
+		case O_DIVIDE:
+			_value.set_return(_left / _right);
 
 			break;
 		default:

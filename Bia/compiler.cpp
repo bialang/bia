@@ -1,5 +1,6 @@
 #include "compiler.hpp"
 #include "link.hpp"
+#include "compile_normal_operation.hpp"
 #include "compile_compare_operation.hpp"
 
 
@@ -113,7 +114,7 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		//return HandleTestLoop(p_pReport->content.children);
 	//case BGR_IMPORT:
 		//return HandleImport(p_pReport->content.children);
-	//case BGR_VALUE:
+	case BGR_VALUE:
 		return handle_value<false>(_report, [] {});
 	default:
 		BIA_COMPILER_DEV_INVALID;
@@ -154,7 +155,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 {
 	// Handle leftmost math term
 	auto _current_count = _counter.next();
-	auto i = (this->*_next)(_report + 1) + 1;
+	auto i = (this->*_next)(_report + 1);
 	auto _left_value = _value;
 
 	// Pop if not used
@@ -179,7 +180,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 
 		_value.set_return_temp(_current_count);
 
-		operation(_left_value, _operator, _right);
+		compile_normal_operation(_toolset, _value).operate(_left_value, _operator, _right);
 
 		_left_value = _value;
 

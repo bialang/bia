@@ -494,7 +494,7 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 		}
 
 		_output.content.content.operator_code = _output.content.content.operator_code << 8 | '=';
-		
+
 		if (!_optional) {
 			// Can be the same operator
 			_prev = _buffer.first;
@@ -516,6 +516,63 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 	}
 
 	return error;
+}
+
+ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+{
+	constexpr auto success = ACTION::REPORT;
+	constexpr auto error = ACTION::ERROR;
+
+	// Starting optional whitespaces
+	if (!whitespace_deleter<flags::starting_ws_opt_token, true>(_input, _params.encoder)) {
+		return error;
+	}
+
+	auto _buffer = _input.get_buffer();
+
+	_output.content.type = report::TYPE::OPERATOR_CODE;
+
+	switch (_params.encoder->next(_buffer.first, _buffer.second)) {
+	case '*':
+	{
+		// Double times
+		auto _prev = _buffer.first;
+
+		if (_params.encoder->next(_buffer.first, _buffer.second) == '*') {
+			_output.content.content.operator_code = '*' << 8 | '*';
+		} else {
+			_output.content.content.operator_code = '*';
+			_buffer.first = _prev;
+		}
+
+		break;
+	}
+	case '/':
+	{
+		// Double divide
+		auto _prev = _buffer.first;
+
+		if (_params.encoder->next(_buffer.first, _buffer.second) == '/') {
+			_output.content.content.operator_code = '/' << 8 | '/';
+		} else {
+			_output.content.content.operator_code = '/';
+			_buffer.first = _prev;
+		}
+
+		break;
+	}
+	case '%':
+		_output.content.content.operator_code = '*';
+
+		break;
+	default:
+		return error;
+	}
+
+	// Move
+	_input.skip(_buffer.first);
+
+	return success;
 }
 
 ACTION interpreter_token::comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept

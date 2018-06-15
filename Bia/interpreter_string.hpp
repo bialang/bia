@@ -30,10 +30,6 @@ enum INTERPRETER_STRING : int32_t
 	IS_PRINTLN,
 	IS_EQUALS,
 	IS_ASSIGN,
-	IS_TIMES,
-	IS_DIVIDE,
-	IS_DOUBLE_DIVIDE,
-	IS_MODULUS,
 	IS_DOT,
 	IS_ARROW,
 	IS_COMMA,
@@ -316,70 +312,6 @@ struct operator_assign
 	constexpr static INTERPRETER_STRING string_id() noexcept
 	{
 		return IS_ASSIGN;
-	}
-};
-
-struct operator_times
-{
-	constexpr static const char * token() noexcept
-	{
-		return "*";
-	}
-	constexpr static size_t length() noexcept
-	{
-		return 1;
-	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
-	{
-		return IS_TIMES;
-	}
-};
-
-struct operator_divide
-{
-	constexpr static const char * token() noexcept
-	{
-		return "/";
-	}
-	constexpr static size_t length() noexcept
-	{
-		return 1;
-	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
-	{
-		return IS_DIVIDE;
-	}
-};
-
-struct operator_double_divide
-{
-	constexpr static const char * token() noexcept
-	{
-		return "//";
-	}
-	constexpr static size_t length() noexcept
-	{
-		return 2;
-	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
-	{
-		return IS_DOUBLE_DIVIDE;
-	}
-};
-
-struct operator_modulus
-{
-	constexpr static const char * token() noexcept
-	{
-		return "%";
-	}
-	constexpr static size_t length() noexcept
-	{
-		return 1;
-	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
-	{
-		return IS_MODULUS;
 	}
 };
 

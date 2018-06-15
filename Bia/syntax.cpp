@@ -178,16 +178,8 @@ interpreter syntax::init_rules()
 
 	// Math term helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_MATH_TERM_HELPER_0, interpreter_rule::F_NONE, {
-		interpreter_token::rule_pointer<BGR_MATH_TERM_HELPER_1, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::dot_operator,
 		interpreter_token::rule_pointer<BGR_MATH_FACTOR, flags::filler_token | flags::starting_ws_opt_token>
-		}));
-
-	// Math term helper 1
-	_interpreter.set_rule(interpreter_rule(BGR_MATH_TERM_HELPER_1, interpreter_rule::F_OR, {
-		interpreter_token::keyword<operator_times>,
-		interpreter_token::keyword<operator_divide>,
-		interpreter_token::keyword<operator_double_divide>,
-		interpreter_token::keyword<operator_modulus>
 		}));
 
 	// Math expression (must be wrapped because of math factor)

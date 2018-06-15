@@ -158,6 +158,7 @@ public:
 	 * @return Defines the success code. See @ref ACTION.
 	*/
 	static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	static ACTION dot_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a comment which starts with '#' and ends with a line feed.
 	 *
@@ -243,9 +244,11 @@ public:
 
 					break;
 				default:
-					break;
+					goto gt_break;
 				}
 			}
+
+		gt_break:;
 
 			if (_output.content.content.operator_code) {
 				_output.content.type = report::TYPE::OPERATOR_CODE;
