@@ -56,6 +56,10 @@ inline int32_t test_operation(_Left _left, uint32_t _operator, _Right _right)
 		return static_cast<int32_t>(_left == _right);
 	case O_EQUALS_NOT:
 		return static_cast<int32_t>(_left != _right);
+	/*case O_SAME:
+		return static_cast<int32_t>(std::is_same<_Left, _Right>::value && _left == _right);
+	case O_NOT_SAME:
+		return static_cast<int32_t>(!std::is_same<_Left, _Right>::value || _left != _right);*/
 	case O_LESS_THAN:
 		return static_cast<int32_t>(_left < _right);
 	case O_LESS_EQUALS:

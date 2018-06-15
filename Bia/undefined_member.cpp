@@ -58,7 +58,7 @@ void undefined_member::operator_call_double(member * _destination, operator_type
 	BIA_UNDEFINED_ERROR;
 }
 
-bool undefined_member::is_const() const
+int undefined_member::get_flags() const
 {
 	BIA_UNDEFINED_ERROR;
 }
@@ -84,6 +84,16 @@ int32_t undefined_member::test_int64(operator_type _operator, int64_t _right) co
 }
 
 int32_t undefined_member::test_double(operator_type _operator, double _right) const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+int64_t undefined_member::to_int() const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+double undefined_member::to_double() const
 {
 	BIA_UNDEFINED_ERROR;
 }

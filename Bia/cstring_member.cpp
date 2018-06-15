@@ -51,9 +51,9 @@ void cstring_member::operator_call_double(member * _destination, operator_type _
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 }
 
-bool cstring_member::is_const() const
+int cstring_member::get_flags() const
 {
-	return true;
+	return F_CONST;
 }
 
 int32_t cstring_member::test() const
@@ -81,9 +81,19 @@ int32_t cstring_member::test_double(operator_type _operator, double _right) cons
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 }
 
+int64_t cstring_member::to_int() const
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+double cstring_member::to_double() const
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
 void * cstring_member::get_native_data(native::NATIVE_TYPE _type)
 {
-	throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
 
 const void * cstring_member::get_const_native_data(native::NATIVE_TYPE _type) const
@@ -95,7 +105,7 @@ const void * cstring_member::get_const_native_data(native::NATIVE_TYPE _type) co
 		break;
 	}
 
-	throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
 
 }

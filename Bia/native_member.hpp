@@ -116,9 +116,9 @@ public:
 	//{
 	//	throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
 	//}
-	virtual bool is_const() const override
+	virtual int get_flags() const override
 	{
-		return false;
+		return F_NONE;
 	}
 	virtual int32_t test() const override
 	{
@@ -126,7 +126,11 @@ public:
 	}
 	virtual int32_t test_member(operator_type _operator, member * _right) const override
 	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
+		if (std::is_same<_Ty, int64_t>::value) {
+			return test_operation(_value, _operator, _right->to_int());
+		} else {
+			return test_operation(_value, _operator, _right->to_double());
+		}
 	}
 	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override
 	{
@@ -139,6 +143,14 @@ public:
 	virtual int32_t test_double(operator_type _operator, double _right) const override
 	{
 		return test_operation(_value, _operator, _right);
+	}
+	virtual int64_t to_int() const override
+	{
+		return static_cast<int64_t>(_value);
+	}
+	virtual double to_double() const override
+	{
+		return static_cast<double>(_value);
 	}
 
 protected:
@@ -172,7 +184,7 @@ protected:
 			}
 		}
 
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 	virtual const void * get_const_native_data(native::NATIVE_TYPE _type) const override
 	{
@@ -204,7 +216,7 @@ protected:
 			}
 		}
 
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 
 private:

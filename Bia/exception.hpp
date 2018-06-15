@@ -150,7 +150,7 @@ public:
  *
  * Indicates an invalid type cast.
 */
-class invalid_type : public logic_error
+class type_error : public logic_error
 {
 public:
 	/**
@@ -161,7 +161,7 @@ public:
 	 *
 	 * @param _message The message.
 	*/
-	explicit invalid_type(const std::string & _message) : logic_error(_message)
+	explicit type_error(const std::string & _message) : logic_error(_message)
 	{
 	}
 	/**
@@ -172,7 +172,7 @@ public:
 	 *
 	 * @param _message The message.
 	*/
-	explicit invalid_type(const char * _message) : logic_error(_message)
+	explicit type_error(const char * _message) : logic_error(_message)
 	{
 	}
 };

@@ -40,13 +40,14 @@ public:
 	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override;
 	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override;
 	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) override;
-	virtual bool is_const() const override;
+	virtual int get_flags() const override;
 	virtual int32_t test() const override;
 	virtual int32_t test_member(operator_type _operator, member * _right) const override;
 	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override;
 	virtual int32_t test_int64(operator_type _operator, int64_t _right) const override;
 	virtual int32_t test_double(operator_type _operator, double _right) const override;
-
+	virtual int64_t to_int() const override;
+	virtual double to_double() const override;
 
 protected:
 	virtual void * get_native_data(native::NATIVE_TYPE _type) override;

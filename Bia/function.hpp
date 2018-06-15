@@ -36,9 +36,9 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual bool is_const() const override
+	virtual int get_flags() const override
 	{
-		return true;
+		return F_CONST;
 	}
 	virtual int32_t test() const override
 	{
@@ -60,23 +60,31 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
+	virtual int64_t to_int() const override
+	{
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	}
+	virtual double to_double() const override
+	{
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	}
 
 protected:
 	virtual void * get_native_data(native::NATIVE_TYPE _type) override
 	{
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 	virtual const void * get_const_native_data(native::NATIVE_TYPE _type) const override
 	{
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 	virtual void * get_data(const std::type_info & _type) override
 	{
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 	virtual const void * get_const_data(const std::type_info & _type) const override
 	{
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 };
 

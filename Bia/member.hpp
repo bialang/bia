@@ -23,16 +23,17 @@ class member
 public:
 
 
-	enum NATIVE_TYPE_FLAG : int
+	enum FLAG : int
 	{
-		NTF_NONE = 0,
-		NTF_INT_8 = 0x1,
-		NTF_INT_16 = 0x2,
-		NTF_INT_32 = 0x4,
-		NTF_INT_64 = 0x8,
-		NTF_FLOAT = 0x10,
-		NTF_DOUBLE = 0x20,
-		NTF_STRING = 0x40
+		F_NONE = 0,
+		F_INT_8 = 0x1,
+		F_INT_16 = 0x2,
+		F_INT_32 = 0x4,
+		F_INT_64 = 0x8,
+		F_INT = 0x10,
+		F_DOUBLE = 0x20,
+		F_STRING = 0x40,
+		F_CONST = 0x80
 	};
 
 	typedef uint32_t parameter_count;
@@ -266,17 +267,16 @@ public:
 	*/
 	//virtual bool is_custom_type(const std::type_info & _type) const = 0;
 	/**
-	 * Whether the data this member holds is const or not.
+	 * Some details about the content.
 	 *
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 *
-	 * @return true if it is const, otherwise false.
+	 * @return See @ref member::FLAG.
 	*/
-	virtual bool is_const() const = 0;
-	//virtual int GetNativeType() const = 0;
+	virtual int get_flags() const = 0;
 	/**
 	 * Tests the contents of this member.
 	 *
@@ -353,6 +353,30 @@ public:
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
 	virtual int32_t test_double(operator_type _operator, double _right) const = 0;
+	/**
+	 * Returns the int representation of the content.
+	 *
+	 * @since 3.64.132.729
+	 * @date 15-Jun-18
+	 *
+	 * @throws exception::symbol_error If this member is not valid.
+	 * @throws exception::type_error If no representation is available.
+	 *
+	 * @return The int representation.
+	*/
+	virtual int64_t to_int() const = 0;
+	/**
+	 * Returns the double representation of the content.
+	 *
+	 * @since 3.64.132.729
+	 * @date 15-Jun-18
+	 *
+	 * @throws exception::symbol_error If this member is not valid.
+	 * @throws exception::type_error If no representation is available.
+	 *
+	 * @return The double representation.
+	*/
+	virtual double to_double() const = 0;
 	/**
 	 * Compares this object to the right hand value.
 	 *

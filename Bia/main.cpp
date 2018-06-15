@@ -41,7 +41,10 @@ int main()
 
 		// Script
 		char _script[] = R"delim(
-print 7 // 2
+global i = 1.0
+global j = 1
+
+print i == j
 
 )delim";
 

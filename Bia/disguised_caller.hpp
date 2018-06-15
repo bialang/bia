@@ -29,7 +29,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args, int32_t));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'I':
@@ -39,7 +39,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args, int64_t));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'f':
@@ -49,7 +49,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, float>().choose(va_arg(_args, float));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'd':
@@ -59,7 +59,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, double>().choose(va_arg(_args, double));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 's':
@@ -69,7 +69,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_string) {
 			return chooser<is_string, _Return, const char*>().choose(va_arg(_args, const char*));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'M':
@@ -77,7 +77,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (auto _ptr = va_arg(_args, framework::member*)->cast<_Return>()) {
 			return *_ptr;
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	default:

@@ -67,11 +67,11 @@ public:
 protected:
 	virtual void * get_data(const std::type_info & _type) override
 	{
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 	virtual const void * get_const_data(const std::type_info & _type) const override
 	{
-		throw exception::invalid_type(BIA_EM_UNSUPPORTED_TYPE);
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 };
 
