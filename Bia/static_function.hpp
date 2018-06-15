@@ -44,11 +44,11 @@ public:
 	{
 		_destination->replace_this<static_function<_Return, _Args...>>(_function);
 	}
-	virtual void execute(member * _instance, member * _destination) override
+	virtual void execute(member * _destination) override
 	{
 		force::disguised_caller(_function, _destination);
 	}
-	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) override
+	virtual void execute_count(member * _destination, parameter_count _count...) override
 	{
 		std::va_list _args;
 		va_start(_args, _count);
@@ -57,7 +57,7 @@ public:
 
 		va_end(_args);
 	}
-	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) override
+	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) override
 	{
 		std::va_list _args;
 		va_start(_args, _count);

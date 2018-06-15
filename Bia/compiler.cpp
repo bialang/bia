@@ -3,6 +3,8 @@
 #include "compile_normal_operation.hpp"
 #include "compile_compare_operation.hpp"
 
+#include <vector>
+
 
 namespace bia
 {
@@ -23,34 +25,6 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 void compiler::finalize()
 {
 	_toolset.finalize();
-}
-
-void compiler::operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
-{
-	using VT = compiler_value::VALUE_TYPE;
-
-	// Constant operation
-	if (_left.is_const() && _right.is_const()) {
-		constant_operation(_left, _operator, _right);
-	} else {
-		switch (_left.get_type()) {
-		case VT::MEMBER:
-			member_operation(_left.get_value().rt_member, _operator, _right);
-
-			break;
-		case VT::TEMPORARY_MEMBER:
-			member_operation(_toolset.to_temp_member(_left.get_value().rt_temp_member), _operator, _right);
-
-			break;
-		default:
-			BIA_COMPILER_DEV_INVALID;
-		}
-	}
-}
-
-void compiler::constant_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right)
-{
-	///TODO
 }
 
 void compiler::test_compiler_value()
@@ -106,8 +80,8 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 	}
 	case BGR_VARIABLE_DECLARATION:
 		return handle_variable_declaration(_report);
-	//case BGR_IF:
-		//return HandleIf(p_pReport->content.children);
+	case BGR_IF:
+		return handle_if(_report);
 	case BGR_PRINT:
 		return handle_print(_report);
 	//case BGR_TEST_LOOP:
@@ -371,6 +345,63 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			BIA_COMPILER_DEV_INVALID;
 		}
 	});
+
+	return _report->content.end;
+}
+
+const grammar::report * compiler::handle_if(const grammar::report * _report)
+{
+	std::vector<machine::platform::toolset::position> _end_jumps;
+
+	for (auto i = _report + 1; i < _report->content.end;) {
+		// Else statement
+		if (i->rule_id == grammar::BGR_IF_HELPER_1) {
+			// Set the results for compiling
+			_value.set_return(true);
+
+			// Move because the else statement is wrapped up
+			++i;
+		} // Handle condition
+		else {
+			i = handle_value<true>(i, []() {}) + 1;
+		}
+
+		// Compile statement
+		if (_value.get_type() != compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT || _value.get_value().rt_test_result) {
+			// Write jump
+			auto _constant = _value.get_type() == compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT;
+			auto _jump = _constant ? 0 : _toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE);
+
+			// Compile statement
+			i = handle_root(i) + 1;
+
+			// Jump to end if it has not been reached
+			if (i < _report->content.end && !_constant) {
+				_end_jumps.push_back(_toolset.jump(machine::platform::toolset::JUMP::JUMP));
+
+				// Update test jump to next statement
+				_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.get_cursor_position(), _jump);
+			} // End of ifs or condition is at compile time true
+			else {
+				// Update test jump to ent
+				if (!_constant) {
+					_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.get_cursor_position(), _jump);
+				}
+
+				break;
+			}
+		} // Skip statements. These are conditions that are at compile time false
+		else {
+			i = handle_root_ignore(i) + 1;
+		}
+	}
+
+	// Update end jump locations
+	auto _end = _toolset.get_cursor_position();
+
+	for (auto & _jump : _end_jumps) {
+		_toolset.jump(machine::platform::toolset::JUMP::JUMP, _end, _jump);
+	}
 
 	return _report->content.end;
 }

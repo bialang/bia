@@ -3,6 +3,7 @@
 #include "function.hpp"
 #include "exception.hpp"
 #include "disguised_caller.hpp"
+#include "share.hpp"
 
 
 namespace bia
@@ -46,25 +47,25 @@ public:
 	{
 		_destination->replace_this<member_function<_Return(_Class::*)(_Args...)>>(_function);
 	}
-	virtual void execute(member * _instance, member * _destination) override
+	virtual void execute(member * _destination) override
 	{
-		force::disguised_caller(_function, cast_instance(_instance), _destination);
+		force::disguised_caller(_function, cast_instance(_instance.get()), _destination);
 	}
-	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) override
+	virtual void execute_count(member * _destination, parameter_count _count...) override
 	{
 		std::va_list _args;
 		va_start(_args, _count);
 
-		force::disguised_caller_count(_function, cast_instance(_destination), _destination, _count, _args);
+		force::disguised_caller_count(_function, cast_instance(_instance.get()), _destination, _count, _args);
 
 		va_end(_args);
 	}
-	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) override
+	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) override
 	{
 		std::va_list _args;
 		va_start(_args, _count);
 
-		force::disguised_caller_format(_function, cast_instance(_destination), _destination, _format, _count, _args);
+		force::disguised_caller_format(_function, cast_instance(_instance.get()), _destination, _format, _count, _args);
 
 		va_end(_args);
 	}
@@ -72,6 +73,7 @@ public:
 private:
 	/** The member function address. */
 	_Return(_Class::*_function)(_Args...);
+	utility::share<member*> _instance;
 
 
 	/**

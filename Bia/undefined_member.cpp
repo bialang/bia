@@ -23,17 +23,17 @@ void undefined_member::clone(member * _destination)
 	BIA_UNDEFINED_ERROR;
 }
 
-void undefined_member::execute(member * _instance, member * _destination)
+void undefined_member::execute(member * _destination)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void undefined_member::execute_count(member * _instance, member * _destination, parameter_count _count...)
+void undefined_member::execute_count(member * _destination, parameter_count _count...)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void undefined_member::execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...)
+void undefined_member::execute_format(member * _destination, const char * _format, parameter_count _count...)
 {
 	BIA_UNDEFINED_ERROR;
 }

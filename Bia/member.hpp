@@ -95,40 +95,37 @@ public:
 	 * @since 3.64.127.716
 	 * @date 28-Apr-18
 	 *
-	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
 	 * @param [out] _destination The destination of the return result.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
-	 * @throws exception::argument_error If arguments are required or if the instance is null.
+	 * @throws exception::argument_error If arguments are required.
 	 * @throws See cast().
 	*/
-	virtual void execute(member * _instance, member * _destination) = 0;
+	virtual void execute(member * _destination) = 0;
 	/**
 	 * Executes this object as function with only member parameters.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
 	 * @param [out] _destination The destination of the return result.
 	 * @param _count The amount of the passed arguments.
 	 * @param ... The arguments.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
-	 * @throws exception::argument_error If the passed arguments are wrong or if the instance is null.
-	 * @throws exception::invalid_type If one argument is invalid.
+	 * @throws exception::argument_error If the passed arguments are wrong.
+	 * @throws exception::type_error If one argument is invalid.
 	 * @throws See cast().
 	*/
-	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) = 0;
+	virtual void execute_count(member * _destination, parameter_count _count...) = 0;
 	/**
 	 * Executes this object as function with mixed parameters.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [in] _instance A corresponding instance. Only needed if this is a member function.
 	 * @param [out] _destination The destination of the return result.
 	 * @param _format The types of the arguments.
 	 * @param _count The amount of the passed arguments.
@@ -136,11 +133,11 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
-	 * @throws exception::argument_error If the passed arguments are wrong or if the instance is null.
-	 * @throws exception::invalid_type If one argument is invalid.
+	 * @throws exception::argument_error If the passed arguments are wrong.
+	 * @throws exception::type_error If one argument is invalid.
 	 * @throws See cast().
 	*/
-	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) = 0;
+	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) = 0;
 	/**
 	 * Creates an instance without any parameters.
 	 *

@@ -19,15 +19,15 @@ public:
 	{
 		replace_this<undefined_member>();
 	}
-	virtual void execute(member * _instance, member * _destination) override
+	virtual void execute(member * _destination) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void execute_count(member * _instance, member * _destination, parameter_count _count...) override
+	virtual void execute_count(member * _destination, parameter_count _count...) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void execute_format(member * _instance, member * _destination, const char * _format, parameter_count _count...) override
+	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}

@@ -46,6 +46,10 @@ global j = 1
 
 print i == j
 
+if true {
+	print 1
+}
+
 )delim";
 
 		// Compile

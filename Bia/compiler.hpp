@@ -58,33 +58,6 @@ private:
 	machine::platform::toolset _toolset;
 	machine::machine_context & _context;
 
-	void operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
-	template<typename _Member>
-	void member_operation(_Member && _left, framework::operator_type _operator, const compiler_value & _right)
-	{
-		using VT = compiler_value::VALUE_TYPE;
-
-		switch (_right.get_type()) {
-		case VT::INT:
-		case VT::DOUBLE:
-		case VT::STRING:
-		case VT::MEMBER:
-		{
-			if (_value.get_type() == VT::TEMPORARY_MEMBER) {
-				_counter.update(_value.get_value().rt_temp_member);
-				//_toolset.call(&framework::member::operator_call, _left.get_value().rt_member, _operator, _);
-			} else {
-				//_toolset.call(&framework::member::operator_assign_call, _left.get_value().rt_member, _operator, _);
-			}
-
-			break;
-		}
-		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-		default:
-			BIA_COMPILER_DEV_INVALID;
-		}
-	}
-	void constant_operation(const compiler_value & _left, framework::operator_type _operator, const compiler_value & _right);
 	/**
 	 * Tests the compiler value and returns a test value.
 	 *
@@ -317,6 +290,7 @@ private:
 	 * @return The end of the report.
 	*/
 	const grammar::report * handle_variable_declaration(const grammar::report * _report);
+	const grammar::report * handle_if(const grammar::report * _report);
 	/**
 	 * Handles a print token.
 	 *
