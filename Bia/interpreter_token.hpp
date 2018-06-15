@@ -158,6 +158,24 @@ public:
 	 * @return Defines the success code. See @ref ACTION.
 	*/
 	static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	/**
+	 * Matches a dot operator like `*`, `/` and so on.
+	 *
+	 * @remarks	A leading whitespace is optional and will be consumed, if present.
+	 *
+	 * @since 3.64.132.729
+	 * @date 15-Jun-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param _params Additional interpreter information.
+	 * @param [out] _output The token result.
+	 *
+	 * @throws See whitespace_deleter().
+	 * @throws See stream::input_stream::get_buffer() and stream::input_stream::skip().
+	 * @throws See encoding::utf::next().
+	 *
+	 * @return Defines the success code. See @ref ACTION.
+	*/
 	static ACTION dot_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a comment which starts with '#' and ends with a line feed.

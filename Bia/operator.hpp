@@ -21,10 +21,14 @@ enum OPERATOR : operator_type
 	O_MINUS = 0x2d,
 	/** The `/` operator. */
 	O_DIVIDE = 0x2f,
+	/** The `//` operator. */
+	O_DOUBLE_DIVIDE = 0x2f2f,
 	/** The `%` operator. */
 	O_MODULUS = 0x25,
 	/** The `*` operator. */
 	O_MULTIPLY = 0x2a,
+	/** The `**` operator. */
+	O_DOUBLE_MULTIPLY = 0x2a2a,
 	/** The `+=` operator. */
 	O_ASSIGN_PLUS = 0x3d2b,
 	/** The `-=` operator. */

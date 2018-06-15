@@ -2,6 +2,7 @@
 
 #include <limits>
 #include <type_traits>
+#include <cmath>
 
 #include "exception.hpp"
 #include "toolset.hpp"
@@ -213,8 +214,16 @@ private:
 			_value.set_return(_left * _right);
 
 			break;
+		case O_DOUBLE_MULTIPLY:
+			_value.set_return(std::pow(_left, _right));
+
+			break;
 		case O_DIVIDE:
-			_value.set_return(_left / _right);
+			_value.set_return(static_cast<double>(_left) / static_cast<double>(_right));
+
+			break;
+		case O_DOUBLE_DIVIDE:
+			_value.set_return(static_cast<int64_t>(_left / _right));
 
 			break;
 		default:
