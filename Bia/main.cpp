@@ -46,8 +46,13 @@ global j = 1
 
 print i == j
 
-if true {
+if i != j {
 	print 1
+}else if i < 1.1{
+print 5151
+}
+else {
+	print 30
 }
 
 )delim";

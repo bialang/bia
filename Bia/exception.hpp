@@ -6,6 +6,7 @@
 #include <exception>
 
 #define BIA_IMPLEMENTATION_EXCEPTION(msg) bia::exception::implementation_error(msg, __FILE__, __LINE__)
+#define BIA_COMPILER_DEV_INVALID throw BIA_IMPLEMENTATION_EXCEPTION("Implementation error.")
 #define BIA_EM_UNSUPPORTED_TYPE "Type is not supported."
 #define BIA_EM_UNEXPECTED_TYPE "Unexpected type."
 #define BIA_EM_UNDEFINED_MEMBER "Undefined member."

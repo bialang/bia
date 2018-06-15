@@ -9,12 +9,12 @@
 #include "temp_counter.hpp"
 #include "operator.hpp"
 #include "machine_context.hpp"
+#include "compile_compare_operation.hpp"
 
 #include "interpreter.hpp"
 #include "interpreter_rule.hpp"
 #include "machine_code.hpp"
 
-#define BIA_COMPILER_DEV_INVALID throw 0 /*BIA_IMPLEMENTATION_EXCEPTION("Invalid case.")*/
 
 
 namespace bia
@@ -164,7 +164,7 @@ private:
 			handle_value_expression<false>(_report + 3);
 
 			// Call operator
-			operation(_left, _report[2].content.operator_code, _value);
+			compile_normal_operation(_toolset, _value).operate(_left, _report[2].content.operator_code, _value);
 
 			break;
 		}

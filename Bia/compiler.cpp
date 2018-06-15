@@ -1,7 +1,6 @@
 #include "compiler.hpp"
 #include "link.hpp"
 #include "compile_normal_operation.hpp"
-#include "compile_compare_operation.hpp"
 
 #include <vector>
 
@@ -73,7 +72,7 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 
 		// Handle all reports
 		while (_report < _end) {
-			_report = handle_root(_report) + 1;
+			_report = handle_root(_report);
 		}
 
 		return _end;
@@ -106,7 +105,7 @@ const grammar::report * compiler::handle_root_ignore(const grammar::report * _re
 
 		// Handle all reports
 		while (_report < _end) {
-			_report = handle_root_ignore(_report) + 1;
+			_report = handle_root_ignore(_report);
 		}
 
 		return _end;
@@ -363,7 +362,7 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 			++i;
 		} // Handle condition
 		else {
-			i = handle_value<true>(i, []() {}) + 1;
+			i = handle_value<true>(i, []() {});
 		}
 
 		// Compile statement
@@ -373,31 +372,31 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 			auto _jump = _constant ? 0 : _toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE);
 
 			// Compile statement
-			i = handle_root(i) + 1;
+			i = handle_root(i);
 
 			// Jump to end if it has not been reached
 			if (i < _report->content.end && !_constant) {
 				_end_jumps.push_back(_toolset.jump(machine::platform::toolset::JUMP::JUMP));
 
 				// Update test jump to next statement
-				_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.get_cursor_position(), _jump);
+				_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.get_output_stream().get_position(), _jump);
 			} // End of ifs or condition is at compile time true
 			else {
 				// Update test jump to ent
 				if (!_constant) {
-					_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.get_cursor_position(), _jump);
+					_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.get_output_stream().get_position(), _jump);
 				}
 
 				break;
 			}
 		} // Skip statements. These are conditions that are at compile time false
 		else {
-			i = handle_root_ignore(i) + 1;
+			i = handle_root_ignore(i);
 		}
 	}
 
 	// Update end jump locations
-	auto _end = _toolset.get_cursor_position();
+	auto _end = _toolset.get_output_stream().get_position();
 
 	for (auto & _jump : _end_jumps) {
 		_toolset.jump(machine::platform::toolset::JUMP::JUMP, _end, _jump);

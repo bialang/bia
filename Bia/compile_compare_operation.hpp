@@ -119,6 +119,7 @@ private:
 		}
 
 		_value.set_return_test();
+		_toolset.write_test();
 	}
 	/**
 	 * Executes the compare operator.
@@ -148,6 +149,7 @@ private:
 		}
 
 		_value.set_return_test();
+		_toolset.write_test();
 	}
 	/**
 	 * Executes the compare operator.

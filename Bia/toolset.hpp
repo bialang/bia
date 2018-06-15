@@ -211,6 +211,39 @@ public:
 	{
 		architecture::add_instruction<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*_output, 0);
 	}
+	position jump(JUMP _type, position _destination = 0, position _start = -1)
+	{
+		auto _old = _output->get_position();
+
+		// Override
+		if (_start != -1) {
+			_output->set_position(_start);
+		}
+
+		switch (_type) {
+		case JUMP::JUMP:
+			architecture::add_instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _start);
+
+			break;
+		case JUMP::JUMP_IF_TRUE:
+			architecture::add_instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _start);
+
+			break;
+		case JUMP::JUMP_IF_FALSE:
+			architecture::add_instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _start);
+
+			break;
+		}
+
+		// Go back
+		if (_start != -1) {
+			_output->set_position(_old);
+
+			return _start;
+		}
+
+		return _old;
+	}
 	static temp_result to_temp_member(temp_index_type _index) noexcept
 	{
 		return temp_result(_index * -4);
