@@ -100,14 +100,13 @@ do until false {
 }
 ```
 
-~~**Conditional Statements**~~ (In development)
+**Conditional Statements**
 - If statements. Conditions that can be evaluated at compile time will be optimized away:
 
 ```
 if 1 == 0 {
   print true
-}
-else if some_value == 3 {
+} else if some_value == 3 {
   print false
 }
 ```
