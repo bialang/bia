@@ -23,9 +23,13 @@ public:
 	function(machine::machine_context * _machine_context) noexcept : member(_machine_context)
 	{
 	}
-	virtual void undefine() override
+	virtual void undefine() noexcept override
 	{
 		replace_this<undefined_member>();
+	}
+	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
 	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
 	{

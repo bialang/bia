@@ -39,10 +39,10 @@ interpreter syntax::init_rules()
 		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION>,
 		interpreter_token::rule_pointer<BGR_IF>,
 		interpreter_token::rule_pointer<BGR_PRINT>,
-		interpreter_token::rule_pointer<BGR_TEST_LOOP>,
-		interpreter_token::rule_pointer<BGR_IMPORT>,
+		//interpreter_token::rule_pointer<BGR_TEST_LOOP>,
+		//interpreter_token::rule_pointer<BGR_IMPORT>,
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_2>,
 		interpreter_token::comment,
-		interpreter_token::rule_pointer<BGR_ROOT_HELPER_2>
 		}));
 
 	// Root helper 2

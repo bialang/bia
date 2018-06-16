@@ -104,6 +104,8 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 
 	// Optional sign
 	switch (_digit) {
+	case 0:
+		return error;
 	case '-':
 		_negative = true;
 	case '+':
@@ -122,6 +124,10 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 
 	// First character
 	switch (_digit) {
+	case 0:
+	case 'f':
+	case 'F':
+		return error;
 	case '0':
 	{
 		// Could be other base

@@ -250,7 +250,10 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
+
 	_value.set_return(_report[1].content.member);
+
+	//_toolset.call(&framework::member::execute, _report[1].content.member, nullptr);
 
 	return _report->content.end;
 }

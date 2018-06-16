@@ -29,7 +29,9 @@ namespace framework
  */
 inline void create_member(member * _destination) noexcept
 {
-	_destination->undefine();
+	if (_destination) {
+		_destination->undefine();
+	}
 }
 
 /**
@@ -50,7 +52,9 @@ inline void create_member(member * _destination) noexcept
 template<typename _Ty>
 inline typename std::enable_if<std::is_integral<_Ty>::value>::type create_member(member * _destination, _Ty _value)
 {
-	_destination->replace_this<native::int_member>(static_cast<int64_t>(_value));
+	if (_destination) {
+		_destination->replace_this<native::int_member>(static_cast<int64_t>(_value));
+	}
 }
 
 /**
@@ -71,7 +75,9 @@ inline typename std::enable_if<std::is_integral<_Ty>::value>::type create_member
 template<typename _Ty>
 inline typename std::enable_if<std::is_floating_point<_Ty>::value>::type create_member(member * _destination, _Ty _value)
 {
-	_destination->replace_this<native::double_member>(static_cast<double>(_value));
+	if (_destination) {
+		_destination->replace_this<native::double_member>(static_cast<double>(_value));
+	}
 }
 
 /*template<typename _Ty>
@@ -104,7 +110,9 @@ inline typename std::enable_if<std::is_arithmetic<_Ty>::value>::type MemberCreat
 template<typename _Ty>
 inline typename std::enable_if<std::is_same<_Ty, const char*>::value>::type create_member(member * _destination, _Ty _value)
 {
-	_destination->replace_this<native::cstring_member>(_value);
+	if (_destination) {
+		_destination->replace_this<native::cstring_member>(_value);
+	}
 }
 
 /**
@@ -126,7 +134,9 @@ inline typename std::enable_if<std::is_same<_Ty, const char*>::value>::type crea
 template<typename _Return, typename... _Args>
 inline void create_member(member * _destination, _Return(*_function)(_Args...))
 {
-	_destination->replace_this<executable::static_function<_Return, _Args...>>(_function);
+	if (_destination) {
+		_destination->replace_this<executable::static_function<_Return, _Args...>>(_function);
+	}
 }
 
 /**
@@ -149,7 +159,9 @@ inline void create_member(member * _destination, _Return(*_function)(_Args...))
 template<typename _Class, typename _Return, typename... _Args>
 inline void create_member(member * _destination, _Return(_Class::*_function)(_Args...))
 {
-	_destination->replace_this<executable::member_function<_Return(_Class::*)(_Args...)>>(_function);
+	if (_destination) {
+		_destination->replace_this<executable::member_function<_Return(_Class::*)(_Args...)>>(_function);
+	}
 }
 
 /**
@@ -172,7 +184,9 @@ inline void create_member(member * _destination, _Return(_Class::*_function)(_Ar
 template<typename _Class, typename _Return, typename... _Args>
 inline void create_member(member * _destination, _Return(_Class::*_function)(_Args...) const)
 {
-	_destination->replace_this<executable::member_function<_Return(_Class::*)(_Args...) const>>(_function);
+	if (_destination) {
+		_destination->replace_this<executable::member_function<_Return(_Class::*)(_Args...) const>>(_function);
+	}
 }
 
 /*template<typename _Ty>

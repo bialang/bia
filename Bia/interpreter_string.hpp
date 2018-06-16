@@ -28,6 +28,8 @@ enum INTERPRETER_STRING : int32_t
 	IS_AS,
 	IS_PRINT,
 	IS_PRINTLN,
+	IS_COPYOF,
+	IS_REFOF,
 	IS_EQUALS,
 	IS_ASSIGN,
 	IS_DOT,
@@ -296,6 +298,38 @@ struct keyword_print
 	constexpr static INTERPRETER_STRING string_id() noexcept
 	{
 		return IS_PRINT;
+	}
+};
+
+struct keyword_copyof
+{
+	constexpr static const char * token() noexcept
+	{
+		return "copyof";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 6;
+	}
+	constexpr static INTERPRETER_STRING string_id() noexcept
+	{
+		return IS_COPYOF;
+	}
+};
+
+struct keyword_refof
+{
+	constexpr static const char * token() noexcept
+	{
+		return "refof";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 5;
+	}
+	constexpr static INTERPRETER_STRING string_id() noexcept
+	{
+		return IS_REFOF;
 	}
 };
 

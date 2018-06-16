@@ -30,15 +30,24 @@ public:
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
+	 * @param [in] _machine_context The machine context.
 	 * @param _function The static function address.
 	*/
-	explicit static_function(_Return(*_function)(_Args...)) noexcept
+	static_function(machine::machine_context * _machine_context, _Return(*_function)(_Args...)) noexcept : function(_machine_context)
 	{
 		this->_function = _function;
 	}
-	virtual void print() override
+	virtual void print() const override
 	{
 		puts(typeid(_function).name());
+	}
+	virtual void copy(member * _destination) override
+	{
+		_destination->replace_this<static_function<_Return, _Args...>>(_function);
+	}
+	virtual void refer(member * _destination) override
+	{
+		_destination->replace_this<static_function<_Return, _Args...>>(_function);
 	}
 	virtual void clone(member * _destination) override
 	{
