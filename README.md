@@ -57,14 +57,14 @@ global var = 0
 var = 34
 ```
 
-~~**Function Calls**~~ (In development)
+**Function Calls** (In development)
 - Normal function call: `normal_function()`
 - Member function call: `object.function()`
 - Optimized member function call. This is more efficient in loops:
 
 ```
 global function_pointer = object.function
-object->function_pointer()
+function_pointer()
 ```
 
 ~~**Loops**~~ (In development)
