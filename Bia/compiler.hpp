@@ -275,6 +275,7 @@ private:
 	*/
 	const grammar::report * handle_math_factor(const grammar::report * _report);
 	const grammar::report * handle_member(const grammar::report * _report);
+	const grammar::report * handle_parameter(const grammar::report * _report);
 	const grammar::report * handle_instantiation(const grammar::report * _report);
 	/**
 	 * Handles a variable declaration token.

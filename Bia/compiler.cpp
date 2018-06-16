@@ -250,10 +250,57 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
+	for (auto i = _report + 1; i < _report->content.end;) {
+		switch (i->token_id) {
+		//case grammar::BM_INSTANTIATION:
+		case grammar::BM_IDENTIFIER:
+			_value.set_return(i->content.member);
+			++i;
 
-	_value.set_return(_report[1].content.member);
+			break;
+		//case grammar::BM_STRING:
+		default:
+			BIA_COMPILER_DEV_INVALID;
+		}
 
-	//_toolset.call(&framework::member::execute, _report[1].content.member, nullptr);
+		// Function call or item access
+		while (i < _report->content.end) {
+			if (i->rule_id == grammar::BGR_PARAMETER) {
+				i = handle_parameter(i);
+			} else if (i->rule_id == grammar::BGR_PARAMETER_ITEM_ACCESS) {
+				BIA_COMPILER_DEV_INVALID;
+			} else {
+				break;
+			}
+		}
+	}
+
+	return _report->content.end;
+}
+
+const grammar::report * compiler::handle_parameter(const grammar::report * _report)
+{
+	using VT = compiler_value::VALUE_TYPE;
+
+	auto _caller = _value;
+
+	if (_report->type != grammar::report::TYPE::EMPTY_CHILD) {
+		for (auto i = _report + 1; i < _report->content.end;) {
+			i = handle_value<false>(i, []() {
+				///TODO
+			});
+		}
+	}
+
+	// Call function
+	switch (_caller.get_type()) {
+	case VT::MEMBER:
+		_toolset.call(&framework::member::execute, _caller.get_value().rt_member, nullptr);
+
+		break;
+	default:
+		BIA_COMPILER_DEV_INVALID;
+	}
 
 	return _report->content.end;
 }

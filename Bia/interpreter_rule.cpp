@@ -43,7 +43,7 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 				auto _begin = _token_param.bundle->begin() + _begin_size;
 
 				_begin->type = report::TYPE::EMPTY_CHILD;
-				_begin->content.end = _begin;
+				_begin->content.end = _begin + 1;
 			}
 		}
 	};

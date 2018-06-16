@@ -254,22 +254,16 @@ interpreter syntax::init_rules()
 
 	// Member helper 1
 	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_1, interpreter_rule::F_NONE, {
-		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_3, flags::filler_token | flags::starting_ws_opt_token | flags::ending_ws_opt_token>,
-		interpreter_token::identifier,
+		interpreter_token::keyword<operator_dot, flags::filler_token | flags::starting_ws_opt_token | flags::ending_ws_opt_token>,
+		interpreter_token::identifier, // BM_IDENTIFIER
 		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_0, flags::filler_token | flags::looping_token>
 		}));
 
 	// Member helper 2
 	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_2, interpreter_rule::F_OR, {
 		interpreter_token::rule_pointer<BGR_INSTANTIATION>, // BM_INSTANTIATION
-		interpreter_token::string, // BM_STRING
-		interpreter_token::identifier // BM_IDENTIFIER
-		}));
-
-	// Member helper 3
-	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_3, interpreter_rule::F_OR, {
-		interpreter_token::keyword<operator_arrow>, // BAO_ARROW_ACCESS
-		interpreter_token::keyword<operator_dot, flags::filler_token> // BAO_DOT
+		interpreter_token::identifier, // BM_IDENTIFIER
+		interpreter_token::string // BM_STRING
 		}));
 
 	return _interpreter;
