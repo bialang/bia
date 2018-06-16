@@ -42,6 +42,28 @@ public:
 	*/
 	virtual ~allocator() noexcept = default;
 	/**
+	 * Destroys and deallocates the element created by construct().
+	 *
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @tparam _Base The returned type.
+	 * @tparam _Deriviate The constructed type.
+	 *
+	 * @param _allocation The allocation.
+	 *
+	 * @throws See deallocate().
+	 * @throws See the destructor of @a _Deriviate.
+	*/
+	template<typename _Base, typename _Deriviate = _Base>
+	void destroy(allocation<_Base> _allocation)
+	{
+		// Destroy element
+		_allocation.first->~_Deriviate();
+
+		deallocate(cast_allocation<void>(_allocation));
+	}
+	/**
 	 * Destroys and deallocates the blocks created by allocate_blocks().
 	 *
 	 * @since 3.64.127.716
@@ -164,6 +186,35 @@ public:
 		return { static_cast<_Return*>(_allocation.first), _allocation.second };
 	}
 	/**
+	 * Allocates and constructs the desired type.
+	 *
+	 * @remarks @a _Deriviate must inherit @a _Base.
+	 *
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @tparam _Base The returned type.
+	 * @tparam _Deriviate The constructed type.
+	 * @tparam _Args The arguments that will be used to construct the element.
+	 *
+	 * @param _args The arguments used to create the element.
+	 *
+	 * @throws See allocate().
+	 * @throws See the constructor of @a _Deriviate.
+	 *
+	 * @return The allocated and constructed block.
+	*/
+	template<typename _Base, typename _Deriviate = _Base, typename... _Args>
+	allocation<_Base> construct(_Args &&... _args)
+	{
+		auto _allocation = allocate(sizeof(_Deriviate));
+
+		// Construct element
+		new(_allocation.first) _Deriviate(std::forward<_Args>(_args)...);
+
+		return cast_allocation<_Base>(_allocation);
+	}
+	/**
 	 * Allocates and constructs blocks of the desired type.
 	 *
 	 * @remarks @a _Deriviate must inherit @a _Base and must be smaller than @ref block_size.
@@ -176,7 +227,6 @@ public:
 	 * @tparam _Args The arguments that will be used to construct the blocks.
 	 *
 	 * @param _count How many blocks should be constructed.
-	 * @param _type The type of the memory.
 	 * @param _args The arguments used to create the blocks.
 	 *
 	 * @throws See allocate_blocks().

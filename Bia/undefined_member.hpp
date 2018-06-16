@@ -11,9 +11,12 @@ namespace framework
 class undefined_member final : public member
 {
 public:
+	undefined_member(machine::machine_context * _machine_context) noexcept;
 	~undefined_member() noexcept = default;
 	virtual void undefine() noexcept override;
 	virtual void print() const override;
+	virtual void copy(member * _destination) override;
+	virtual void refer(member * _destination) override;
 	virtual void clone(member * _destination) override;
 	virtual void execute(member * _destination) override;
 	virtual void execute_count(member * _destination, parameter_count _count...) override;

@@ -21,20 +21,24 @@ public:
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
+	 * @param [in] _machine_context The machine context.
 	 * @param _string The zero-terminated string.
 	*/
-	cstring_member(const char * _string) noexcept;
+	cstring_member(machine::machine_context * _machine_context, const char * _string) noexcept;
 	/**
 	 * Constructor.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
+	 * @param [in] _machine_context The machine context.
 	 * @param _string The zero-terminated string.
 	 * @param _length The length of the string.
 	*/
-	cstring_member(const char * _string, size_t _length) noexcept;
+	cstring_member(machine::machine_context * _machine_context, const char * _string, size_t _length) noexcept;
 	virtual void print() const override;
+	virtual void copy(member * _destination) override;
+	virtual void refer(member * _destination) override;
 	virtual void clone(member * _destination) override;
 	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override;
 	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override;

@@ -16,52 +16,89 @@ template<typename _Ty>
 class share
 {
 public:
-	share() noexcept
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @tparam _Args The arguments needed to create the underlying object.
+	 *
+	 * @param [in] _allocator The memory allocator.
+	 * @param _args The arguments.
+	 *
+	 * @throws See machine::memory::allocator::construct().
+	*/
+	template<typename... _Args>
+	share(machine::memory::allocator * _allocator, _Args &&... _args)
 	{
-		_data = nullptr;
+		_data = _allocator->construct<data>(_Ty(std::forward<_Args>(_args)...), _allocator).first;
 	}
-	share(const share<_Ty>&) = delete;
-	share(share<_Ty> && _move) noexcept
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @param _copy The copy.
+	*/
+	share(const share<_Ty> & _copy) noexcept
 	{
-		_data = _move._data;
-		_move._data = nullptr;
-	}
-
-	template<typename _Deleter>
-	void dereference(machine::memory::allocator * _allocator, _Deleter && _deleter)
-	{
-		// Delete
-		if (_data && _data->ref_counter.fetch_sub(1, std::memory_order_release) == 1) {
-			std::atomic_thread_fence(std::memory_order_acquire);
-
-			_deleter(_data->object);
-			_allocator->destroy_blocks(machine::memory::allocator::allocation<std::atomic_size_t>(_data, sizeof(data)));
-			_data = nullptr;
-		}
-	}
-	void reference(_Ty && _object, machine::memory::allocator * _allocator)
-	{
-		_data = _allocator->construct_blocks<data>(1, std::forward<_Ty>(_object)).first;
-	}
-	void reference(const share<_Ty> & _reference)
-	{
-		_data = _reference._data;
+		_data = _copy._data;
 		_data->ref_counter.fetch_add(1, std::memory_order_relaxed);
 	}
-	_Ty & get()
+	share(share<_Ty>&&) = delete;
+	/**
+	 * Destructor.
+	 *
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @throws See machine::memory::allocator::destroy().
+	*/
+	~share()
 	{
-		return _data->object;
-	}
-	const _Ty & get() const
-	{
-		return _data->object;
-	}
-	share<_Ty> & operator=(share<_Ty> && _right) noexcept
-	{
-		_data = _right._data;
-		_right._data = nullptr;
+		if (_data->ref_counter.fetch_sub(1, std::memory_order_release) == 1) {
+			std::atomic_thread_fence(std::memory_order_acquire);
 
-		return *this;
+			_data->allocator->destroy(machine::memory::allocator::allocation<data>(_data, sizeof(data)));
+		}
+	}
+	/**
+	 * Returns the referred object.
+	 *
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @return The object.
+	*/
+	_Ty & get() noexcept
+	{
+		return _data->object;
+	}
+	/**
+	 * Returns the referred object.
+	 *
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @return The object.
+	*/
+	const _Ty & get() const noexcept
+	{
+		return _data->object;
+	}
+	/**
+	 * Returns the allocator.
+	 *
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @return The allocator.
+	*/
+	machine::memory::allocator * get_allocator() noexcept
+	{
+		return _data->allocator;
 	}
 
 private:
@@ -71,9 +108,12 @@ private:
 		_Ty object;
 		/** The reference counter. */
 		std::atomic_size_t ref_counter;
+		/** The memory allocator. */
+		machine::memory::allocator * allocator;
 
-		data(_Ty && _object) : object(std::forward<_Ty>(_object)), ref_counter(1)
+		data(_Ty && _object, machine::memory::allocator * _allocator) : object(std::forward<_Ty>(_object)), ref_counter(1)
 		{
+			allocator = _allocator;
 		}
 	} *_data;
 };

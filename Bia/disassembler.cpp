@@ -252,6 +252,8 @@ disassembler::function_map disassembler::init_function_map()
 	BIA_FUNCTION_ENTRY(machine::link::print_double);
 	BIA_FUNCTION_ENTRY(machine::link::print_string);
 
+	BIA_FUNCTION_ENTRY(framework::member::copy);
+	BIA_FUNCTION_ENTRY(framework::member::refer);
 	BIA_FUNCTION_ENTRY(framework::member::clone);
 
 	BIA_FUNCTION_ENTRY(framework::member::execute);

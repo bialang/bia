@@ -15,6 +15,12 @@
 
 namespace bia
 {
+namespace machine
+{
+
+class machine_context;
+
+}
 namespace framework
 {
 
@@ -42,12 +48,14 @@ public:
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.64.127.716
-	 * @date 8-Apr-18
+	 * @since 3.64.132.730
+	 * @date 16-Jun-18
+	 *
+	 * @param [in] _machine_context The machine context.
 	*/
-	member() noexcept
+	member(machine::machine_context * _machine_context) noexcept
 	{
-		_initialized = true;
+		this->_machine_context = _machine_context;
 	}
 	/**
 	 * Destructor.
@@ -55,10 +63,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	*/
-	virtual ~member() noexcept
-	{
-		_initialized = false;
-	}
+	virtual ~member() noexcept = default;
 	/**
 	 * Undefines this object.
 	 *
@@ -75,6 +80,8 @@ public:
 	 * @throws exception::symbol_error If this member is not valid.
 	*/
 	virtual void print() const = 0;
+	virtual void copy(member * _destination) = 0;
+	virtual void refer(member * _destination) = 0;
 	/**
 	 * Clones this member to the specified location.
 	 *
@@ -88,7 +95,6 @@ public:
 	 * @throws See replace_this().
 	*/
 	virtual void clone(member * _destination) = 0;
-	//virtual void introduce(template_table * _table) = 0;
 	/**
 	 * Executes this object as function.
 	 *
@@ -138,45 +144,6 @@ public:
 	 * @throws See cast().
 	*/
 	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) = 0;
-	/**
-	 * Creates an instance without any parameters.
-	 *
-	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
-	 *
-	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
-	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
-	*/
-	//virtual void Instantiate(BiaMember * p_pDestination) = 0;
-	/**
-	 * Creates an instance with only members as parameters.
-	 *
-	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
-	 * @param	p_unParameterCount	Defines how many parameters are passed.
-	 * @param	...	Defines the passed parameters.
-	 *
-	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
-	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
-	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
-	*/
-	//virtual void InstantiateCount(BiaMember * p_pDestination, parameter_count p_unParameterCount, ...) = 0;
-	/**
-	 * Creates an instance with any type as parameter.
-	 *
-	 * @param	[in,out]	p_pDestination	Defines the destination of the return result.
-	 * @param	p_unParameterCount	Defines how many parameters are passed.
-	 * @param	p_pcFormat	Defines the type order of the parameters.
-	 * @param	...	Defines the passed parameters.
-	 *
-	 * @throws	exception::BadCastException	Thrown when one of the arguments do not match.
-	 * @throws	exception::BadCallException	Thrown when this member cannot be executed.
-	 * @throws	exception::ArgumentException	Thrown when the arguments do not match the function signature.
-	*/
-	//virtual void InstantiateFormat(BiaMember * p_pDestination, parameter_count p_unParameterCount, const char * p_pcFormat, ...) = 0;
-	/**
-	 * @throws	exception::OperatorException	Thrown when the operator is not supported.
-	 * @throws	exception::BadCallException	Thrown when operations are not supported.
-	*/
-	
 	/**
 	 * An operator call with another member as right value.
 	 *
@@ -255,14 +222,6 @@ public:
 	 * @throws	exception::OperatorException
 	*/
 	//virtual void OperatorSelfCall(uint32_t p_unOperator) = 0;
-	/**
-	 * Checks whether the specified type matches this object.
-	 *
-	 * @param	p_type	Defines the type.
-	 *
-	 * @return	true if they match, otherwise false.
-	*/
-	//virtual bool is_custom_type(const std::type_info & _type) const = 0;
 	/**
 	 * Some details about the content.
 	 *
@@ -402,7 +361,7 @@ public:
 	 * @tparam _Ty The required type. References will be converted to pointers.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::invalid_type If this member cannot be casted to _Ty.
+	 * @throws exception::type_error If this member cannot be casted to _Ty.
 	 *
 	 * @return A point containing the casted type.
 	*/
@@ -426,7 +385,7 @@ public:
 	 * @tparam _Ty The required type. References will be converted to pointers.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::invalid_type If this member cannot be casted to _Ty.
+	 * @throws exception::type_error If this member cannot be casted to _Ty.
 	 *
 	 * @return A point containing the casted type.
 	*/
@@ -461,16 +420,20 @@ public:
 	template<typename _Ty, typename... _Args>
 	typename std::enable_if<std::is_base_of<member, _Ty>::value, _Ty*>::type replace_this(_Args &&... _args)
 	{
+		auto _context = _machine_context;
+
 		// Destroy this
 		this->~member();
 
 		// Construct new object
-		return new(this) _Ty(std::forward<_Args>(_args)...);
+		return new(this) _Ty(_context, std::forward<_Args>(_args)...);
 	}
 
 protected:
+	machine::machine_context * _machine_context;
 	/** If true this object was initialized, otherwise not. */
-	bool _initialized;
+	//bool _initialized;
+
 
 	/**
 	 * Returns a pointer to mutable native data.
@@ -481,7 +444,7 @@ protected:
 	 * @param _type The type.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.s
-	 * @throws exception::invalid_type If the type is not supported.
+	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.
 	*/
@@ -495,7 +458,7 @@ protected:
 	 * @param _type The type.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::invalid_type If the type is not supported.
+	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.
 	*/
@@ -509,7 +472,7 @@ protected:
 	 * @param _type The type.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::invalid_type If the type is not supported.
+	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.
 	*/
@@ -523,7 +486,7 @@ protected:
 	 * @param _type The type.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::invalid_type If the type is not supported.
+	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.
 	*/

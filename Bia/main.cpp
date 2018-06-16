@@ -40,9 +40,9 @@ int main()
 		bia::machine::machine_context _context(_allocator, _exec_allocator);
 
 		// Script
-		char _script[] = R"delim(
-global i = 1.0
-global j = 1
+		char _script[] = R""(
+global i = 06
+global j = 1 
 
 print i == j
 
@@ -55,7 +55,7 @@ else {
 	print 30
 }
 
-)delim";
+)"";
 
 		// Compile
 		bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);

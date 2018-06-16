@@ -20,6 +20,9 @@ namespace executable
 class function : public member
 {
 public:
+	function(machine::machine_context * _machine_context) noexcept : member(_machine_context)
+	{
+	}
 	virtual void undefine() override
 	{
 		replace_this<undefined_member>();
