@@ -156,9 +156,9 @@ private:
 		case grammar::BGR_VALUE_HELPER_0:
 		{
 			// Set identifier
-			compiler_value _left;
+			handle_identifier(_report + 1);
 
-			_left.set_return(_report[1].content.member);
+			auto _left = _value;
 
 			// Handle right value expression
 			handle_value_expression<false>(_report + 3);
@@ -262,6 +262,19 @@ private:
 	*/
 	const grammar::report * handle_raw_value(const grammar::report * _report);
 	/**
+	 * Handles a single identifier.
+	 *
+	 * @since 3.64.132.731
+	 * @date 17-Jun-18
+	 *
+	 * @param _report The identifier.
+	 *
+	 * @throws See machine::machine_context::get_address_or_create().
+	 *
+	 * @return The end of the report.
+	*/
+	const grammar::report * handle_identifier(const grammar::report * _report);
+	/**
 	 * Handles a math factor token.
 	 *
 	 * @since 3.64.127.716
@@ -291,6 +304,19 @@ private:
 	 * @return The end of the report.
 	*/
 	const grammar::report * handle_variable_declaration(const grammar::report * _report);
+	/**
+	 * Handles an if statement.
+	 *
+	 * @since 3.64.132.731
+	 * @date 17-Jun-18
+	 *
+	 * @param _report The statement.
+	 *
+	 * @throws See handle_value(), handle_root() and handle_root_ignore().
+	 * @throws See machine::platform::toolset::jump() and stream::output_stream::get_position().
+	 *
+	 * @return The end of the report.
+	*/
 	const grammar::report * handle_if(const grammar::report * _report);
 	/**
 	 * Handles a print token.

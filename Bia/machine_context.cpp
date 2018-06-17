@@ -35,6 +35,11 @@ memory::executable_allocator * machine_context::get_executable_allocator() noexc
 	return _executable_allocator.get();
 }
 
+const char * machine_context::get_name_address(utility::string_key _name)
+{
+	return _string_manager.get_name_address(_name.get_string(), _name.length());
+}
+
 framework::member * machine_context::get_address_or_create(utility::string_key _name)
 {
 	if (auto _result = _variable_index.find(_name)) {
@@ -44,10 +49,7 @@ framework::member * machine_context::get_address_or_create(utility::string_key _
 	// Create
 	auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1, this);
 
-	// Create name
-	utility::string_key _key(_string_manager.get_name_address(_name.get_string(), _name.length()), _name.length());
-
-	return _variable_index.add(_key, _allocation);
+	return _variable_index.add(_name, _allocation);
 }
 
 machine_code machine_context::compile_script(stream::input_stream & _script)

@@ -230,6 +230,13 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 	return _report->content.end;
 }
 
+const grammar::report * compiler::handle_identifier(const grammar::report * _report)
+{
+	_value.set_return(_context.get_address_or_create(utility::string_key(_report->content.member.name, _report->content.member.length)));
+
+	return _report + 1;
+}
+
 const grammar::report * compiler::handle_math_factor(const grammar::report * _report)
 {
 	switch (_report[1].rule_id) {
@@ -254,8 +261,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 		switch (i->token_id) {
 		//case grammar::BM_INSTANTIATION:
 		case grammar::BM_IDENTIFIER:
-			_value.set_return(i->content.member);
-			++i;
+			i = handle_identifier(i);
 
 			break;
 		//case grammar::BM_STRING:
@@ -308,7 +314,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 const grammar::report * compiler::handle_instantiation(const grammar::report * _report)
 {
 	// Set identifier
-	_value.set_return(_report[1].content.member);
+	//_value.set_return(_report[1].content.member);
 
 	// Handle parameters
 

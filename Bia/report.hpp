@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "member.hpp"
 #include "operator.hpp"
 #include "interpreter_string.hpp"
 
@@ -53,7 +52,11 @@ struct report
 		int64_t int_value;
 		double double_value;
 		const report *  end;
-		framework::member * member;
+		struct
+		{
+			const char * name;
+			size_t length;
+		} member;
 		framework::operator_type operator_code;
 		INTERPRETER_STRING keyword;
 	} content;

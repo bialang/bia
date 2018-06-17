@@ -404,7 +404,8 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 
 	// Get address
 	_output.content.type = report::TYPE::MEMBER;
-	_output.content.content.member = _params.context->get_address_or_create(utility::string_key(reinterpret_cast<const char*>(_begin), _length));
+	_output.content.content.member.name = _params.context->get_name_address(utility::string_key(reinterpret_cast<const char*>(_begin), _length));
+	_output.content.content.member.length = _length;
 
 	// Move cursor
 	_input.skip(_buffer.first);

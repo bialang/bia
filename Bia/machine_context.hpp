@@ -82,6 +82,7 @@ public:
 	/** Holds all known variables, function and other. */
 	variable_index _variable_index;
 
+	const char * get_name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.
 	 *
