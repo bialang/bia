@@ -52,11 +52,7 @@ struct report
 		int64_t int_value;
 		double double_value;
 		const report *  end;
-		struct
-		{
-			const char * name;
-			size_t length;
-		} member;
+		const char * member;
 		framework::operator_type operator_code;
 		INTERPRETER_STRING keyword;
 	} content;

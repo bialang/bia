@@ -10,9 +10,9 @@ variable_index::variable_index(const std::shared_ptr<memory::allocator> & _alloc
 {
 }
 
-framework::member * variable_index::add(utility::string_key _key, value_type _value)
+framework::member * variable_index::add(const char * _key, value_type _value)
 {
-	auto _result = _map.emplace(std::move(_key), utility::make_guard(std::move(_value), &guard_action));
+	auto _result = _map.emplace(_key, utility::make_guard(std::move(_value), &guard_action));
 
 	if (!_result.second) {
 		throw;
@@ -21,7 +21,7 @@ framework::member * variable_index::add(utility::string_key _key, value_type _va
 	return _result.first->second.get().first;
 }
 
-framework::member * variable_index::find(utility::string_key _key)
+framework::member * variable_index::find(const char * _key)
 {
 	auto _result = _map.find(_key);
 

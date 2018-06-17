@@ -18,27 +18,12 @@ public:
 	 * @since 3.64.131.726
 	 * @date 2-Jun-18
 	 *
-	 * @param _object A copy of the object that should be guarded.
-	 * @param [in] _action The guard function.
-	 *
-	 * @throws See the copy constructor of @a _Ty.
-	*/
-	guard(const _Ty & _object, _Action && _action) : _object(_object), _action(std::move(_action))
-	{
-		_valid = true;
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.131.726
-	 * @date 2-Jun-18
-	 *
 	 * @param _object The object that should be guarded.
 	 * @param [in] _action The guard function.
 	 *
-	 * @throws See the move constructor of @a _Ty.
+	 * @throws See the constructor of @a _Ty.
 	*/
-	guard(_Ty && _object, _Action && _action) : _object(std::move(_object)), _action(std::move(_action))
+	guard(_Ty && _object, _Action && _action) : _object(std::forward<_Ty>(_object)), _action(std::forward<_Action>(_action))
 	{
 		_valid = true;
 	}
@@ -120,7 +105,7 @@ private:
 template<typename _Ty, typename _Action>
 inline guard<_Ty, _Action> make_guard(_Ty && _object, _Action && _action)
 {
-	return guard<_Ty, _Action>(std::move(_object), std::move(_action));
+	return guard<_Ty, _Action>(std::forward<_Ty>(_object), std::forward<_Action>(_action));
 }
 
 }

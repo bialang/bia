@@ -232,7 +232,7 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 
 const grammar::report * compiler::handle_identifier(const grammar::report * _report)
 {
-	_value.set_return(_context.get_address_or_create(utility::string_key(_report->content.member.name, _report->content.member.length)));
+	_value.set_return(_context.get_address_or_create(_report->content.member));
 
 	return _report + 1;
 }

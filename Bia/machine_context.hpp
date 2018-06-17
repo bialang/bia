@@ -95,7 +95,7 @@ public:
 	 *
 	 * @return The member address.
 	*/
-	framework::member * get_address_or_create(utility::string_key _name);
+	framework::member * get_address_or_create(const char * _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 

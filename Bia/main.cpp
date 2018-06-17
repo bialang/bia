@@ -45,8 +45,8 @@ int main()
 		auto _exec_allocator = std::make_shared<machine::memory::simple_executable_allocator>();
 		bia::machine::machine_context _context(_allocator, _exec_allocator);
 		_context.get_address_or_create("foo")->replace_this<framework::executable::static_function<void>>(&test);
-		_context.get_address_or_create("a")->replace_this<framework::native::int_member>(1);
-		_context.get_address_or_create("a")->refer(_context.get_address_or_create("b"));
+		_context.get_address_or_create(_context.get_name_address("a"))->replace_this<framework::native::int_member>(1);
+		_context.get_address_or_create(_context.get_name_address("a"))->refer(_context.get_address_or_create("b"));
 		*_context.get_address_or_create("b")->cast<int64_t>() = 69;
 		// Script
 		char _script[] = R""(

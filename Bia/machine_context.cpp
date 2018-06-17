@@ -40,7 +40,7 @@ const char * machine_context::get_name_address(utility::string_key _name)
 	return _string_manager.get_name_address(_name.get_string(), _name.length());
 }
 
-framework::member * machine_context::get_address_or_create(utility::string_key _name)
+framework::member * machine_context::get_address_or_create(const char * _name)
 {
 	if (auto _result = _variable_index.find(_name)) {
 		return _result;
