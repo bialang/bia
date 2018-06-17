@@ -84,7 +84,7 @@ bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding:
 	return _skipped;
 }
 
-ACTION interpreter_token::number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
+ACTION interpreter_token::number(stream::input_stream & _input, token_param _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -581,7 +581,7 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
+ACTION interpreter_token::comment(stream::input_stream & _input, token_param _params, token_output & _output)
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -623,7 +623,7 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 	return _first_iter ? success : error;
 }
 
-ACTION interpreter_token::command_end(stream::input_stream & _input, token_param _params, token_output & _output) noexcept
+ACTION interpreter_token::command_end(stream::input_stream & _input, token_param _params, token_output & _output)
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;

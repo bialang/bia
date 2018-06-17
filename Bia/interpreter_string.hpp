@@ -12,7 +12,7 @@ namespace grammar
 enum INTERPRETER_STRING : int32_t
 {
 	IS_GLOBAL,
-	IS_LOCAL,
+	IS_VAR,
 	IS_NEW,
 	IS_FOR,
 	IS_WHILE,
@@ -61,19 +61,19 @@ struct keyword_global
 	}
 };
 
-struct keyword_local
+struct keyword_var
 {
 	constexpr static const char * token() noexcept
 	{
-		return "local";
+		return "var";
 	}
 	constexpr static size_t length() noexcept
 	{
-		return 5;
+		return 3;
 	}
 	constexpr static INTERPRETER_STRING string_id() noexcept
 	{
-		return IS_LOCAL;
+		return IS_VAR;
 	}
 };
 

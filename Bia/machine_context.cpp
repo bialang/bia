@@ -48,8 +48,9 @@ framework::member * machine_context::get_address_or_create(const char * _name)
 
 	// Create
 	auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1, this);
-
-	return _variable_index.add(_name, _allocation);
+	auto a = _variable_index.add(_name, _allocation);
+	printf("created: %p\n", a);
+	return a;
 }
 
 machine_code machine_context::compile_script(stream::input_stream & _script)

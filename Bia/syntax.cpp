@@ -58,11 +58,17 @@ interpreter syntax::init_rules()
 
 	// Variable declaration
 	_interpreter.set_rule(interpreter_rule(BGR_VARIABLE_DECLARATION, interpreter_rule::F_WRAP_UP, {
-		interpreter_token::keyword<keyword_global, flags::filler_token | flags::ending_ws_token>,
+		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION_HELPER_0, flags::filler_token | flags::ending_ws_token>,
 		interpreter_token::identifier,
 		interpreter_token::keyword<operator_assign, flags::filler_token | flags::starting_ws_opt_token>,
 		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>,
 		interpreter_token::command_end
+		}));
+
+	// Variable declaration helper 0
+	_interpreter.set_rule(interpreter_rule(BGR_VARIABLE_DECLARATION_HELPER_0, interpreter_rule::F_OR, {
+		interpreter_token::keyword<keyword_var>,
+		interpreter_token::keyword<keyword_global>,
 		}));
 
 	// If

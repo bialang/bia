@@ -326,15 +326,19 @@ const grammar::report * compiler::handle_instantiation(const grammar::report * _
 const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)
 {
 	// Handle value and prepare the result for a function call
-	handle_value<false>(_report + 2, [&] {
-		auto _destination = _report[1].content.member;
+	handle_value<false>(_report + 3, [&] {
+		auto _expression = _value;
+
+		handle_identifier(_report + 2);
+
+		auto _destination = _value.get_value().rt_member;
 
 		// Make call
-		switch (_value.get_type()) {
+		switch (_expression.get_type()) {
 		case compiler_value::VALUE_TYPE::INT:
 		{
 			// Optimize common used constant values
-			switch (_value.get_value().rt_int) {
+			switch (_expression.get_value().rt_int) {
 			case 0:
 				_toolset.call(&machine::link::instantiate_int_0, _destination);
 
@@ -350,10 +354,10 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			default:
 			{
 				// Can be int32
-				if (_value.is_int32()) {
-					_toolset.call(&machine::link::instantiate_int32, static_cast<int32_t>(_value.get_value().rt_int), _destination);
+				if (_expression.is_int32()) {
+					_toolset.call(&machine::link::instantiate_int32, static_cast<int32_t>(_expression.get_value().rt_int), _destination);
 				} else {
-					_toolset.call(&machine::link::instantiate_int64, _value.get_value().rt_int, _destination);
+					_toolset.call(&machine::link::instantiate_int64, _expression.get_value().rt_int, _destination);
 				}
 
 				break;
@@ -363,19 +367,19 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;
 		}
 		case compiler_value::VALUE_TYPE::DOUBLE:
-			_toolset.call(&machine::link::instantiate_double, _value.get_value().rt_double, _destination);
+			_toolset.call(&machine::link::instantiate_double, _expression.get_value().rt_double, _destination);
 
 			break;
 		case compiler_value::VALUE_TYPE::STRING:
-			_toolset.call(&machine::link::instantiate_string, _value.get_value().rt_string.data, _value.get_value().rt_string.length, _destination);
+			_toolset.call(&machine::link::instantiate_string, _expression.get_value().rt_string.data, _expression.get_value().rt_string.length, _destination);
 
 			break;
 		case compiler_value::VALUE_TYPE::MEMBER:
-			_toolset.call(&framework::member::clone, _value.get_value().rt_member, _destination);
+			_toolset.call(&framework::member::clone, _expression.get_value().rt_member, _destination);
 
 			break;
 		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::clone, _toolset.to_temp_member(_value.get_value().rt_temp_member), _destination);
+			_toolset.call(&framework::member::clone, _toolset.to_temp_member(_expression.get_value().rt_temp_member), _destination);
 
 			break;
 		/*case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
@@ -384,7 +388,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;*/
 		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
 		{
-			if (_value.get_value().rt_test_result) {
+			if (_expression.get_value().rt_test_result) {
 				_toolset.call(&machine::link::instantiate_int_1, _destination);
 			} else {
 				_toolset.call(&machine::link::instantiate_int_0, _destination);

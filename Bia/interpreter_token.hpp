@@ -102,7 +102,7 @@ public:
 	 *
 	 * @return	Defines the success code. See @ref ACTION.
 	*/
-	static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
+	static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output);
 	static ACTION string(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches an identifier. An identifier conists of alphanumeric characters and an underscore without a leading number.
@@ -192,7 +192,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
+	static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a commend terminator.
 	 *
@@ -208,7 +208,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION command_end(stream::input_stream & _input, token_param _params, token_output & _output) noexcept;
+	static ACTION command_end(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a custom operator.
 	 *
