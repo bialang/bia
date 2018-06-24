@@ -73,7 +73,6 @@ using const_member_function_signature = _Return(__thiscall _Class::*)(_Args...) 
 #endif
 
 // Universal macros
-#define BIA_MAX_MEMBER_SIZE 50
 #define BIA_MAX_KEYWORD_LENGTH 16
 #define BIA_MAX_OPERATOR_LENGTH 4
 /** The minimum buffer size of stream::input_stream::get_buffer(). */

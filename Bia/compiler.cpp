@@ -18,6 +18,7 @@ compiler::compiler(stream::output_stream & _output, machine::machine_context & _
 
 void compiler::report(const grammar::report * _begin, const grammar::report * _end)
 {
+	puts("global scope");
 	handle_root(_begin);
 }
 
@@ -66,6 +67,7 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 	switch (_report->rule_id) {
 	case BGR_ROOT_HELPER_0:
 	{
+		puts("open scope");
 		auto _end = _report->content.end;
 
 		++_report;
@@ -232,6 +234,7 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 
 const grammar::report * compiler::handle_identifier(const grammar::report * _report)
 {
+	// Global member
 	_value.set_return(_context.get_address_or_create(_report->content.member));
 
 	return _report + 1;

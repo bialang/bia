@@ -5,6 +5,7 @@
 #include <cstdint>
 
 #include "config.hpp"
+#include "exception.hpp"
 
 
 namespace bia
@@ -30,9 +31,6 @@ public:
 	using allocation = std::pair<_Ty*, size_type>;
 	/** An universal allocation. */
 	typedef allocation<void> universal_allocation;
-
-	/** The size of a block. Cannot be changed. */
-	constexpr static auto block_size = BIA_MAX_MEMBER_SIZE;
 
 	/**
 	 * Destructor.
@@ -80,10 +78,11 @@ public:
 	void destroy_blocks(allocation<_Ty> _allocation)
 	{
 		auto _ptr = reinterpret_cast<int8_t*>(_allocation.first);
+		auto _block_size = get_block_size();
 
 		// Destroy all elements
 		for (size_type i = 0; i < _allocation.second; ++i) {
-			reinterpret_cast<_Ty*>(_ptr + i * block_size)->~_Ty();
+			reinterpret_cast<_Ty*>(_ptr + i * _block_size)->~_Ty();
 		}
 
 		deallocate_blocks(cast_allocation<void>(_allocation));
@@ -110,6 +109,7 @@ public:
 	 * @throws exception::memory_error If the specified allocation is invalid.
 	*/
 	virtual void deallocate_blocks(universal_allocation _blocks) = 0;
+	size_t get_block_size() const noexcept;
 	/**
 	 * Commits the memory reserved by prepare().
 	 *
@@ -237,18 +237,23 @@ public:
 	template<typename _Base, typename _Deriviate = _Base, typename... _Args>
 	allocation<_Base> construct_blocks(size_type _count, _Args &&... _args)
 	{
-		static_assert(sizeof(_Deriviate) <= block_size, "Type exceeds block size.");
+		auto _block_size = get_block_size();
+
+		if (sizeof(_Deriviate) > _block_size) {
+			BIA_COMPILER_DEV_INVALID("Elements exceeds block size.");
+		}
 
 		auto _allocation = allocate_blocks(_count);
 		auto _ptr = static_cast<int8_t*>(_allocation.first);
 
 		// Construct all elements
 		for (size_type i = 0; i < _count; ++i) {
-			new(_ptr + i * block_size) _Deriviate(std::forward<_Args>(_args)...);
+			new(_ptr + i * _block_size) _Deriviate(std::forward<_Args>(_args)...);
 		}
 
 		return cast_allocation<_Base>(_allocation);
 	}
+
 };
 
 }
