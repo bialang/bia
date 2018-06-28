@@ -50,12 +50,11 @@ int main()
 		*_context.get_address_or_create("b")->cast<int64_t>() = 69;*/
 		// Script
 		char _script[] = R""(
-{
-var i = 34
-global j = 34
-
-print i == j
+global i = 0
+do until i <= 0{
+	print 32
 }
+
 )"";
 
 		// Compile

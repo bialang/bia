@@ -39,7 +39,7 @@ interpreter syntax::init_rules()
 		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION>,
 		interpreter_token::rule_pointer<BGR_IF>,
 		interpreter_token::rule_pointer<BGR_PRINT>,
-		//interpreter_token::rule_pointer<BGR_TEST_LOOP>,
+		interpreter_token::rule_pointer<BGR_TEST_LOOP>,
 		//interpreter_token::rule_pointer<BGR_IMPORT>,
 		interpreter_token::rule_pointer<BGR_ROOT_HELPER_2>,
 		interpreter_token::comment,
@@ -111,8 +111,8 @@ interpreter syntax::init_rules()
 
 	// Test loop helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_TEST_LOOP_HELPER_0, interpreter_rule::F_OR, {
-		interpreter_token::keyword<keyword_while>, // LT_WHILE
-		interpreter_token::keyword<keyword_until> // LT_UNTIL
+		interpreter_token::keyword<keyword_while>,
+		interpreter_token::keyword<keyword_until>
 		}));
 
 	// Import

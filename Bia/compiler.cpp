@@ -1,6 +1,7 @@
 #include "compiler.hpp"
 #include "link.hpp"
 #include "compile_normal_operation.hpp"
+#include "buffer_output_stream.hpp"
 
 #include <vector>
 
@@ -85,7 +86,8 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_if(_report);
 	case BGR_PRINT:
 		return handle_print(_report);
-	//case BGR_TEST_LOOP:
+	case BGR_TEST_LOOP:
+		return handle_test_loop(_report);
 		//return HandleTestLoop(p_pReport->content.children);
 	//case BGR_IMPORT:
 		//return HandleImport(p_pReport->content.children);
@@ -262,12 +264,12 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
 	for (auto i = _report + 1; i < _report->content.end;) {
 		switch (i->token_id) {
-		//case grammar::BM_INSTANTIATION:
+			//case grammar::BM_INSTANTIATION:
 		case grammar::BM_IDENTIFIER:
 			i = handle_identifier(i);
 
 			break;
-		//case grammar::BM_STRING:
+			//case grammar::BM_STRING:
 		default:
 			BIA_COMPILER_DEV_INVALID;
 		}
@@ -385,10 +387,10 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			_toolset.call(&framework::member::clone, _toolset.to_temp_member(_expression.get_value().rt_temp_member), _destination);
 
 			break;
-		/*case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
-			m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, machine::architecture::BiaToolset::TestValueResult());
+			/*case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
+				m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, machine::architecture::BiaToolset::TestValueResult());
 
-			break;*/
+				break;*/
 		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
 		{
 			if (_expression.get_value().rt_test_result) {
@@ -526,6 +528,91 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 	});
 
 	return _report->content.end;
+}
+
+const grammar::report * compiler::handle_test_loop(const grammar::report * _report)
+{
+	using namespace machine::platform;
+
+	const auto _end = _report->content.end;
+
+	++_report;
+
+	// Loop type
+	toolset::position _pre_test_jump;
+
+	// Post test
+	if (_report->content.keyword == grammar::IS_DO) {
+		_pre_test_jump = -1;
+		++_report;
+	}  // Pre test
+	else {
+		_pre_test_jump = _toolset.jump(toolset::JUMP::JUMP);
+	}
+
+	// Loop jump type
+	auto _jump_type = _report++->content.keyword == grammar::IS_WHILE ? toolset::JUMP::JUMP_IF_TRUE : toolset::JUMP::JUMP_IF_FALSE;
+
+	// Handle loop condition
+	toolset::position _condition_jump = -1;
+	stream::buffer_output_stream _condition_buffer;
+	auto & _orig_buffer = _toolset.get_output_stream();
+	auto _compile = true;
+
+	// Redirect conditional code to a temporary buffer
+	_toolset.set_output(_condition_buffer);
+
+	// Loop condition
+	_report = handle_value<true>(_report, [&] {
+		// Constant condition
+		if (_value.get_type() == compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT) {
+			// Don't compile this loop
+			if (!_value.get_value().rt_test_result) {
+				_compile = false;
+
+				return;
+			}
+
+			// Change to unconditional jump
+			_jump_type = toolset::JUMP::JUMP;
+		} // Not a test register
+		else if (_value.get_type() != compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER) {
+			BIA_COMPILER_DEV_INVALID;
+		}
+
+		_condition_jump = _toolset.jump(_jump_type);
+	});
+
+	// Reset output buffer
+	_toolset.set_output(_orig_buffer);
+
+	// Compile loop
+	if (_compile) {
+		auto _start_pos = _orig_buffer.get_position();
+
+		handle_root(_report);
+
+		// Update jump positions
+		auto _end_pos = _orig_buffer.get_position();
+
+		_condition_jump += _end_pos;
+
+		// Write loop condition
+		_orig_buffer.append_stream(_condition_buffer);
+
+		// Upate jump offset for loop jump
+		_toolset.jump(_jump_type, _start_pos, _condition_jump);
+
+		// Upate jump offset for pre test
+		if (_pre_test_jump != -1) {
+			_toolset.jump(toolset::JUMP::JUMP, _end_pos, _pre_test_jump);
+		}
+	} // Discard pre test jump
+	else if (_pre_test_jump != -1) {
+		_toolset.get_output_stream().set_position(_pre_test_jump);
+	}
+
+	return _end;
 }
 
 }

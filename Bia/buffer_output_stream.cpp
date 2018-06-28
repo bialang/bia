@@ -1,4 +1,5 @@
 #include "buffer_output_stream.hpp"
+#include "exception.hpp"
 
 #include <cstring>
 
@@ -20,6 +21,17 @@ void buffer_output_stream::set_position(cursor_type _position)
 	}
 
 	_size = _position;
+}
+
+void buffer_output_stream::append_stream(output_stream & _stream)
+{
+	if (auto _buffer_stream = dynamic_cast<buffer_output_stream*>(&_stream)) {
+		prepare(_buffer_stream->_size);
+		memcpy(_buffer.get() + _size, _buffer_stream->_buffer.get(), _buffer_stream->_size);
+		_size += _buffer_stream->_size;
+	} else {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
 }
 
 buffer_output_stream::cursor_type buffer_output_stream::get_position() const

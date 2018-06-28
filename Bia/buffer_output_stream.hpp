@@ -15,6 +15,7 @@ class buffer_output_stream : public output_stream
 public:
 	explicit buffer_output_stream();
 	virtual void set_position(cursor_type _position) override;
+	virtual void append_stream(output_stream & _stream) override;
 	virtual cursor_type get_position() const override;
 
 protected:

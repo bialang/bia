@@ -47,6 +47,19 @@ public:
 	*/
 	virtual void set_position(cursor_type _position) = 0;
 	/**
+	 * Appends the streams to this one.
+	 *
+	 * @remarks This function is only required to work with @ref buffer_output_stream.
+	 *
+	 * @since 3.64.132.731
+	 * @date 28-Jun-18
+	 *
+	 * @param [in] _stream The stream. This stream may be in an unspecified state after completion.
+	 *
+	 * @throws exception::argument_error If the stream type is not supported.
+	*/
+	virtual void append_stream(output_stream & _stream) = 0;
+	/**
 	 * Returns the position of the cursor.
 	 *
 	 * @since 3.64.127.716

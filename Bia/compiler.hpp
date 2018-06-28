@@ -332,6 +332,7 @@ private:
 	 * @return The end of the report.
 	*/
 	const grammar::report * handle_print(const grammar::report * _report);
+	const grammar::report * handle_test_loop(const grammar::report * _report);
 };
 
 }

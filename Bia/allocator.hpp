@@ -109,7 +109,15 @@ public:
 	 * @throws exception::memory_error If the specified allocation is invalid.
 	*/
 	virtual void deallocate_blocks(universal_allocation _blocks) = 0;
-	size_t get_block_size() const noexcept;
+	/**
+	 * Returns the required block size.
+	 *
+	 * @since 3.64.132.731
+	 * @date 28-Jun-18
+	 *
+	 * @return The block size.
+	*/
+	static size_t get_block_size() noexcept;
 	/**
 	 * Commits the memory reserved by prepare().
 	 *
@@ -240,7 +248,7 @@ public:
 		auto _block_size = get_block_size();
 
 		if (sizeof(_Deriviate) > _block_size) {
-			BIA_COMPILER_DEV_INVALID("Elements exceeds block size.");
+			throw BIA_IMPLEMENTATION_EXCEPTION("Elements exceeds block size.");
 		}
 
 		auto _allocation = allocate_blocks(_count);
