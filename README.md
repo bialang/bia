@@ -67,7 +67,7 @@ global function_pointer = object.function
 function_pointer()
 ```
 
-~~**Loops**~~ (In development)
+**Loops**
 - While loop:
 
 ```
