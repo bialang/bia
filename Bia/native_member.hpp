@@ -32,12 +32,11 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [in] _machine_context The machine context.
 	 * @param _value The initial value.
 	 *
 	 * @throws See @ref utility::share::share().
 	*/
-	native_member(machine::machine_context * _machine_context, typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, double>::value, _Ty>::type _value) : native_variable(_machine_context), _data(_machine_context->get_allocator(), _value, false)
+	native_member(typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, double>::value, _Ty>::type _value) : _data(_value, false)
 	{
 	}
 	/**
@@ -46,10 +45,9 @@ public:
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18
 	 *
-	 * @param [in] _machine_context The machine context.
 	 * @param _data The data of the referred class.
 	*/
-	native_member(machine::machine_context * _machine_context, const utility::share<std::pair<_Ty, bool>> & _data) noexcept : native_variable(_machine_context), _data(_data)
+	native_member(const utility::share<std::pair<_Ty, bool>> & _data) noexcept : _data(_data)
 	{
 	}
 	virtual void print() const override
@@ -201,6 +199,10 @@ private:
 	template<typename _T>
 	void create_result_member(_T && _value, member * _destination)
 	{
+		if (!_destination) {
+			_destination = this;
+		}
+
 		if (std::is_integral<_T>::value) {
 			_destination->replace_this<int_member>(_value);
 		} else {

@@ -88,7 +88,6 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_print(_report);
 	case BGR_TEST_LOOP:
 		return handle_test_loop(_report);
-		//return HandleTestLoop(p_pReport->content.children);
 	//case BGR_IMPORT:
 		//return HandleImport(p_pReport->content.children);
 	case BGR_VALUE:

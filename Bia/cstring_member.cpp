@@ -11,11 +11,11 @@ namespace framework
 namespace native
 {
 
-cstring_member::cstring_member(machine::machine_context * _machine_context, const char * _string) noexcept : cstring_member(_machine_context, _string, std::char_traits<char>::length(_string))
+cstring_member::cstring_member(const char * _string) noexcept : cstring_member(_string, std::char_traits<char>::length(_string))
 {
 }
 
-cstring_member::cstring_member(machine::machine_context * _machine_context, const char * _string, size_t _length) noexcept : native_variable(_machine_context)
+cstring_member::cstring_member(const char * _string, size_t _length) noexcept
 {
 	this->_string = _string;
 	this->_length = _length;

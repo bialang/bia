@@ -13,10 +13,6 @@ void undefined_member::undefine() noexcept
 {
 }
 
-undefined_member::undefined_member(machine::machine_context * _machine_context) noexcept : member(_machine_context)
-{
-}
-
 void undefined_member::print() const
 {
 	BIA_UNDEFINED_ERROR;

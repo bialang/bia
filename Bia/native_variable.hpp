@@ -15,9 +15,6 @@ namespace native
 class native_variable : public member
 {
 public:
-	native_variable(machine::machine_context * _machine_context) noexcept : member(_machine_context)
-	{
-	}
 	virtual void undefine() noexcept override
 	{
 		replace_this<undefined_member>();

@@ -51,6 +51,8 @@ int main()
 		// Script
 		char _script[] = R""(
 global i = 0
+i = 3
+print i
 do until i <= 0{
 	print 32
 }
@@ -80,6 +82,9 @@ do until i <= 0{
 		bia::machine::machine_code _machine_code({ reinterpret_cast<const uint8_t*>(_output._buffer.get()), _output._size }, bia::machine::machine_schein(_context.get_allocator(), _context.get_executable_allocator()));
 
 		if (_machine_code.is_executable()) {
+			// Set active allocator
+			bia::machine::machine_context::_active_allocator = _context.get_allocator();
+
 			try {
 				_machine_code.execute();
 			} catch (const std::exception & e) {

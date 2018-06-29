@@ -15,12 +15,6 @@
 
 namespace bia
 {
-namespace machine
-{
-
-class machine_context;
-
-}
 namespace framework
 {
 
@@ -50,12 +44,9 @@ public:
 	 *
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18
-	 *
-	 * @param [in] _machine_context The machine context.
 	*/
-	member(machine::machine_context * _machine_context) noexcept
+	member() noexcept
 	{
-		this->_machine_context = _machine_context;
 	}
 	/**
 	 * Destructor.
@@ -420,17 +411,14 @@ public:
 	template<typename _Ty, typename... _Args>
 	typename std::enable_if<std::is_base_of<member, _Ty>::value, _Ty*>::type replace_this(_Args &&... _args)
 	{
-		auto _context = _machine_context;
-
 		// Destroy this
 		this->~member();
 
 		// Construct new object
-		return new(this) _Ty(_context, std::forward<_Args>(_args)...);
+		return new(this) _Ty(std::forward<_Args>(_args)...);
 	}
 
 protected:
-	machine::machine_context * _machine_context;
 	/** If true this object was initialized, otherwise not. */
 	//bool _initialized;
 

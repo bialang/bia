@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "allocator.hpp"
+#include "machine_context.hpp"
 
 
 namespace bia
@@ -11,7 +12,13 @@ namespace bia
 namespace utility
 {
 
-
+/**
+ * @brief A shared object.
+ *
+ * A shared object with reference counting in only one thread.
+ *
+ * @tparam _Ty The type of the object.
+*/
 template<typename _Ty>
 class share
 {
@@ -24,15 +31,14 @@ public:
 	 *
 	 * @tparam _Args The arguments needed to create the underlying object.
 	 *
-	 * @param [in] _allocator The memory allocator.
 	 * @param _args The arguments.
 	 *
 	 * @throws See machine::memory::allocator::construct().
 	*/
 	template<typename... _Args>
-	share(machine::memory::allocator * _allocator, _Args &&... _args)
+	share(_Args &&... _args)
 	{
-		_data = _allocator->construct<data>(_Ty(std::forward<_Args>(_args)...), _allocator).first;
+		_data = machine::machine_context::get_active_allocator()->construct<data>(_Ty(std::forward<_Args>(_args)...)).first;
 	}
 	/**
 	 * Constructor.
@@ -45,7 +51,7 @@ public:
 	share(const share<_Ty> & _copy) noexcept
 	{
 		_data = _copy._data;
-		_data->ref_counter.fetch_add(1, std::memory_order_relaxed);
+		++_data->ref_counter;
 	}
 	share(share<_Ty>&&) = delete;
 	/**
@@ -58,10 +64,8 @@ public:
 	*/
 	~share()
 	{
-		if (_data->ref_counter.fetch_sub(1, std::memory_order_release) == 1) {
-			std::atomic_thread_fence(std::memory_order_acquire);
-
-			_data->allocator->destroy(machine::memory::allocator::allocation<data>(_data, sizeof(data)));
+		if (!--_data->ref_counter) {
+			machine::machine_context::get_active_allocator()->destroy(machine::memory::allocator::allocation<data>(_data, sizeof(data)));
 		}
 	}
 	/**
@@ -88,18 +92,6 @@ public:
 	{
 		return _data->object;
 	}
-	/**
-	 * Returns the allocator.
-	 *
-	 * @since 3.64.132.730
-	 * @date 16-Jun-18
-	 *
-	 * @return The allocator.
-	*/
-	machine::memory::allocator * get_allocator() noexcept
-	{
-		return _data->allocator;
-	}
 
 private:
 	struct data
@@ -107,13 +99,11 @@ private:
 		/** The referenced object. */
 		_Ty object;
 		/** The reference counter. */
-		std::atomic_size_t ref_counter;
-		/** The memory allocator. */
-		machine::memory::allocator * allocator;
+		size_t ref_counter;
 
-		data(_Ty && _object, machine::memory::allocator * _allocator) : object(std::forward<_Ty>(_object)), ref_counter(1)
+		data(_Ty && _object) : object(std::forward<_Ty>(_object))
 		{
-			allocator = _allocator;
+			ref_counter = 1;
 		}
 	} *_data;
 };

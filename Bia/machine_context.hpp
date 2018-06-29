@@ -50,15 +50,25 @@ public:
 	*/
 	machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
 	void execute(stream::input_stream & _script)
-	{ }
+	{
+	}
 	/**
-	 * Returns the memory allocator.
+	 * Returns the currently active allocator of the current thread.
 	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
+	 * @since 3.65.132.733
+	 * @date 29-Jun-18
 	 *
-	 * @return The memory allocator of this context.
+	 * @return The active allocator.
 	*/
+	static memory::allocator * get_active_allocator() noexcept;
+	 /**
+	  * Returns the memory allocator.
+	  *
+	  * @since 3.64.127.716
+	  * @date 21-Apr-18
+	  *
+	  * @return The memory allocator of this context.
+	 */
 	memory::allocator * get_allocator() noexcept;
 	/**
 	 * Returns the memory allocator for executable memory.
@@ -71,8 +81,10 @@ public:
 	memory::executable_allocator * get_executable_allocator() noexcept;
 
 //private:
-	
 
+
+	/** The allocator of the context currently active. */
+	static thread_local memory::allocator * _active_allocator;
 	/** The allocator for normal memory. */
 	std::shared_ptr<memory::allocator> _allocator;
 	/** The allocator for executable memory. */
@@ -82,7 +94,9 @@ public:
 	/** Holds all known variables, function and other. */
 	variable_index _variable_index;
 
+	void destroy_from_stack(uint32_t _member_count, uint32_t _address_count);
 	const char * get_name_address(utility::string_key _name);
+	framework::member * create_on_stack(uint32_t _member_count, uint32_t _address_count);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.
 	 *
