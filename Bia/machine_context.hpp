@@ -10,6 +10,7 @@
 #include "member.hpp"
 #include "string_manager.hpp"
 #include "variable_index.hpp"
+#include "machine_stack.hpp"
 
 
 namespace bia
@@ -93,10 +94,36 @@ public:
 	string_manager _string_manager;
 	/** Holds all known variables, function and other. */
 	variable_index _variable_index;
+	/** The virtual machine stack. */
+	machine_stack _stack;
 
+	/**
+	 * Pops the variables from the stack.
+	 *
+	 * @since 3.65.132.734
+	 * @date 30-Jun-18
+	 *
+	 * @param _member_count The amount of member variables.
+	 * @param _address_count The amount of address variables.
+	 *
+	 * @throws See machine_stack::pop().
+	*/
 	void destroy_from_stack(uint32_t _member_count, uint32_t _address_count);
+	/**
+	 * Pushes the variables to the stack.
+	 *
+	 * @since 3.65.132.734
+	 * @date 30-Jun-18
+	 *
+	 * @param _member_count The amount of member variables.
+	 * @param _address_count The amount of address variables.
+	 *
+	 * @throws See machine_stack::push().
+	 *
+	 * @return The address of the allocated space.
+	*/
+	void * create_on_stack(uint32_t _member_count, uint32_t _address_count);
 	const char * get_name_address(utility::string_key _name);
-	framework::member * create_on_stack(uint32_t _member_count, uint32_t _address_count);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.
 	 *

@@ -137,7 +137,7 @@ private:
 	template<typename _Left, typename _Right>
 	void left_constant_right_member_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
 	{
-		if (std::is_same<_Left, int64_t>::value) {
+		if (std::is_same<typename std::remove_reference<_Left>::type, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
 				_toolset.call(&machine::link::compare_operation_int32, static_cast<int32_t>(_left), _operator, _right);

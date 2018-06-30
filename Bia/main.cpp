@@ -51,14 +51,11 @@ int main()
 		// Script
 		char _script[] = R""(
 global i = 0
-i = 3
+i = 3 + i
 print i
-do until i <= 0{
-	print 32
-}
 
 )"";
-
+		sizeof(nullptr);
 		// Compile
 		bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);
 		bia::stream::buffer_output_stream _output;

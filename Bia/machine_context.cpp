@@ -43,6 +43,16 @@ memory::executable_allocator * machine_context::get_executable_allocator() noexc
 	return _executable_allocator.get();
 }
 
+void machine_context::destroy_from_stack(uint32_t _member_count, uint32_t _address_count)
+{
+	_stack.pop(_member_count, _address_count);
+}
+
+void * machine_context::create_on_stack(uint32_t _member_count, uint32_t _address_count)
+{
+	return _stack.push(_member_count, _address_count);
+}
+
 const char * machine_context::get_name_address(utility::string_key _name)
 {
 	return _string_manager.get_name_address(_name.get_string(), _name.length());
