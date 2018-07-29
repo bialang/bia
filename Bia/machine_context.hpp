@@ -104,25 +104,24 @@ public:
 	 * @date 30-Jun-18
 	 *
 	 * @param _member_count The amount of member variables.
-	 * @param _address_count The amount of address variables.
 	 *
 	 * @throws See machine_stack::pop().
 	*/
-	void destroy_from_stack(uint32_t _member_count, uint32_t _address_count);
+	void destroy_from_stack(uint32_t _member_count);
 	/**
 	 * Pushes the variables to the stack.
 	 *
 	 * @since 3.65.132.734
 	 * @date 30-Jun-18
 	 *
+	 * @param [in,out] _destination The destination of the created addresses.
 	 * @param _member_count The amount of member variables.
-	 * @param _address_count The amount of address variables.
 	 *
 	 * @throws See machine_stack::push().
 	 *
 	 * @return The address of the allocated space.
 	*/
-	void * create_on_stack(uint32_t _member_count, uint32_t _address_count);
+	void create_on_stack(framework::member ** _destination, uint32_t _member_count);
 	const char * get_name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.

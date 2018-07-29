@@ -43,22 +43,26 @@ public:
 	 * @date 29-Apr-18
 	 *
 	 * @param [in] _output The output stream.
+	 * @param [in] _context The machine context.
 	 *
 	 * @throws See architecture::add_instruction().
 	*/
-	toolset(stream::output_stream & _output) : _output(&_output)
+	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output)
 	{
 		// Create new stack frame for this entry point
-		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*this->_output);
-		architecture::add_instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(*this->_output, 0);
+		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(_output);
+		architecture::add_instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(_output, 0);
 
-		// Allocate 
-		call(&machine_context::create_on_stack, uint32_t(0), uint32_t(0));
+		//call(&toolset::pp, register_offset<REGISTER::EBP, int8_t, true>(0), register_offset<REGISTER::EBP, int8_t, false>(0));
+
+		// Allocate
+		architecture::add_instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(_output, 0 * sizeof(void*));
+		call(&machine_context::create_on_stack, _context, register_offset<REGISTER::EBP, int32_t, true>(0), uint32_t(0));
 
 		// Save result
-		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EAX>(*this->_output);
+		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EAX>(_output);
 
-		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*this->_output, int8_t(-4));
+		//architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*this->_output, int8_t(-4));
 	}
 	/**
 	 * Adds some necessary cleanup instruction to the output stream.

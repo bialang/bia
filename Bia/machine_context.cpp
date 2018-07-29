@@ -14,14 +14,14 @@ namespace machine
 thread_local memory::allocator * machine_context::_active_allocator = nullptr;
 
 
-machine_context::machine_context(const std::shared_ptr<memory::allocator>& _allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get()), _variable_index(this->_allocator)
+machine_context::machine_context(const std::shared_ptr<memory::allocator>& _allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024)
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 }
 
-machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator, std::shared_ptr<memory::executable_allocator>&& _executable_allocator) : _allocator(std::move(_allocator)), _executable_allocator(std::move(_executable_allocator)), _string_manager(this->_allocator.get()), _variable_index(this->_allocator)
+machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator, std::shared_ptr<memory::executable_allocator>&& _executable_allocator) : _allocator(std::move(_allocator)), _executable_allocator(std::move(_executable_allocator)), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024)
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -43,14 +43,14 @@ memory::executable_allocator * machine_context::get_executable_allocator() noexc
 	return _executable_allocator.get();
 }
 
-void machine_context::destroy_from_stack(uint32_t _member_count, uint32_t _address_count)
+void machine_context::destroy_from_stack(uint32_t _member_count)
 {
-	_stack.pop(_member_count, _address_count);
+	_stack.pop(_member_count);
 }
 
-void * machine_context::create_on_stack(uint32_t _member_count, uint32_t _address_count)
+void machine_context::create_on_stack(framework::member ** _destination, uint32_t _member_count)
 {
-	return _stack.push(_member_count, _address_count);
+	_stack.push(_destination, _member_count);
 }
 
 const char * machine_context::get_name_address(utility::string_key _name)
