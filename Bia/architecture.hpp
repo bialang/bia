@@ -188,6 +188,23 @@ public:
 		}
 		}
 	}
+	template<OP_CODE _Op_code, REGISTER _Register, typename _Offset>
+	static void add_instruction(stream::output_stream & _output, _Offset _offset)
+	{
+		static_assert(_Op_code == OP_CODE::PUSH, "This opcode is not supported.");
+		static_assert(std::is_same<int8_t, _Offset>::value || std::is_same<int32_t, _Offset>::value, "Offset must be int8_t or int32_t.");
+
+		switch (_Op_code) {
+		case OP_CODE::PUSH:
+		{
+			if (std::is_same<int8_t, _Offset>::value) {
+				return _output.write_all(0xff_8, static_cast<uint8_t>(0160 | get_register_code<_Register>()), _offset);
+			} else {
+				return _output.write_all(0xff_8, static_cast<uint8_t>(0260 | get_register_code<_Register>()), _offset);
+			}
+		}
+		}
+	}
 	template<OP_CODE _Op_code>
 	static void add_instruction32(stream::output_stream & _output, int32_t _value)
 	{

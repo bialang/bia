@@ -51,6 +51,14 @@ public:
 		// Create new stack frame for this entry point
 		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*this->_output);
 		architecture::add_instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(*this->_output, 0);
+
+		// Allocate 
+		call(&machine_context::create_on_stack, uint32_t(0), uint32_t(0));
+
+		// Save result
+		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EAX>(*this->_output);
+
+		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*this->_output, int8_t(-4));
 	}
 	/**
 	 * Adds some necessary cleanup instruction to the output stream.
