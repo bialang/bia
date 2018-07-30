@@ -44,15 +44,18 @@ int main()
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		auto _exec_allocator = std::make_shared<machine::memory::simple_executable_allocator>();
 		bia::machine::machine_context _context(_allocator, _exec_allocator);
-		/*_context.get_address_or_create("foo")->replace_this<framework::executable::static_function<void>>(&test);
-		_context.get_address_or_create(_context.get_name_address("a"))->replace_this<framework::native::int_member>(1);
-		_context.get_address_or_create(_context.get_name_address("a"))->refer(_context.get_address_or_create("b"));
-		*_context.get_address_or_create("b")->cast<int64_t>() = 69;*/
+		/*_context.get_address_of_member("foo")->replace_this<framework::executable::static_function<void>>(&test);
+		_context.get_address_of_member(_context.get_name_address("a"))->replace_this<framework::native::int_member>(1);
+		_context.get_address_of_member(_context.get_name_address("a"))->refer(_context.get_address_of_member("b"));
+		*_context.get_address_of_member("b")->cast<int64_t>() = 69;*/
+
+		_context.emplace_member<framework::executable::static_function<void>>(u8"hello_wörld", static_cast<void(*)()>([]() {
+			puts("hello, world");
+		}));
+
 		// Script
-		char _script[] = R""(
-global i = 90
-i = 3 * i
-print i
+		char _script[] = u8R""(
+hello_wörld()
 
 )"";
 		sizeof(nullptr);

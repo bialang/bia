@@ -18,7 +18,7 @@ public:
 	virtual bool has_next(const int8_t * _begin, const int8_t * _end) noexcept = 0;
 	static bool is_alpha(code_point _char) noexcept
 	{
-		return (_char >= 'a' && _char <= 'z') || (_char >= 'A' && _char <= 'Z');
+		return (_char >= 'a' && _char <= 'z') || (_char >= 'A' && _char <= 'Z') || _char == 246;
 	}
 	static bool is_digit(code_point _char) noexcept
 	{

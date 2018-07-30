@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 
 #include "allocator.hpp"
 #include "executable_allocator.hpp"
@@ -52,6 +53,11 @@ public:
 	machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
 	void execute(stream::input_stream & _script)
 	{
+	}
+	template<typename _Ty, typename... _Args>
+	void emplace_member(const char * _name, _Args &&... _args)
+	{
+		address_of_member(name_address(_name))->replace_this<_Ty>(std::forward<_Args>(_args)...);
 	}
 	/**
 	 * Returns the currently active allocator of the current thread.
@@ -135,7 +141,7 @@ public:
 	 *
 	 * @return The member address.
 	*/
-	framework::member * address_or_create(const char * _name);
+	framework::member * address_of_member(const char * _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 

@@ -241,7 +241,7 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 const grammar::report * compiler::handle_identifier(const grammar::report * _report)
 {
 	// Global member
-	_value.set_return(_context.address_or_create(_report->content.member));
+	_value.set_return(_context.address_of_member(_report->content.member));
 
 	return _report + 1;
 }

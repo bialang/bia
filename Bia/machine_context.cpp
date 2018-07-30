@@ -58,7 +58,7 @@ const char * machine_context::name_address(utility::string_key _name)
 	return _string_manager.name_address(_name.string(), _name.length());
 }
 
-framework::member * machine_context::address_or_create(const char * _name)
+framework::member * machine_context::address_of_member(const char * _name)
 {
 	if (auto _result = _variable_index.find(_name)) {
 		return _result;

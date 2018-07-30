@@ -269,7 +269,7 @@ private:
 	 *
 	 * @param _report The identifier.
 	 *
-	 * @throws See machine::machine_context::get_address_or_create().
+	 * @throws See machine::machine_context::get_address_of_member().
 	 *
 	 * @return The end of the report.
 	*/
