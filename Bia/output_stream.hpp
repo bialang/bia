@@ -18,22 +18,6 @@ public:
 
 	virtual ~output_stream() noexcept = default;
 	/**
-	 * Writes all the passed arguments to the stream.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _args Defines the parameters.
-	*/
-	template<typename... _Args>
-	void write_all(_Args &&... _args)
-	{
-		// Prepare underlying implementation
-		prepare(size<_Args...>());
-
-		write_forward(std::forward<_Args>(_args)...);
-	}
-	/**
 	 * Sets the position of the cursor.
 	 *
 	 * @since 3.64.127.716
@@ -59,6 +43,28 @@ public:
 	 * @throws exception::argument_error If the stream type is not supported.
 	*/
 	virtual void append_stream(output_stream & _stream) = 0;
+	/**
+	 * Writes all the passed arguments to the stream.
+	 *
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
+	 *
+	 * @param _args Defines the parameters.
+	 *
+	 * @return The amount of bytes written.
+	*/
+	template<typename... _Args>
+	size_t write_all(_Args &&... _args)
+	{
+		// Prepare underlying implementation
+		auto _size = size<_Args...>();
+
+		prepare(_size);
+
+		write_forward(std::forward<_Args>(_args)...);
+
+		return _size;
+	}
 	/**
 	 * Returns the position of the cursor.
 	 *
