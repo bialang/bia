@@ -88,7 +88,7 @@ public:
 	}
 	virtual int flags() const override
 	{
-		return F_NONE;
+		return F_TO_INT | F_TO_DOUBLE | (std::is_same<_Ty, int64_t>::value ? F_INT : F_DOUBLE);
 	}
 	virtual int32_t test() const override
 	{

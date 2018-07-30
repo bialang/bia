@@ -26,14 +26,12 @@ public:
 	enum FLAG : int
 	{
 		F_NONE = 0,
-		F_INT_8 = 0x1,
-		F_INT_16 = 0x2,
-		F_INT_32 = 0x4,
-		F_INT_64 = 0x8,
-		F_INT = 0x10,
-		F_DOUBLE = 0x20,
-		F_STRING = 0x40,
-		F_CONST = 0x80
+		F_INT = 0x1,
+		F_DOUBLE = 0x2,
+		F_STRING = 0x4,
+		F_CONST = 0x8,
+		F_TO_INT = 0x10,
+		F_TO_DOUBLE = 0x20
 	};
 
 	typedef uint32_t parameter_count;
