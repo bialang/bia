@@ -30,27 +30,27 @@ void compiler::finalize()
 
 void compiler::test_compiler_value()
 {
-	switch (_value.get_type()) {
+	switch (_value.type()) {
 	case compiler_value::VALUE_TYPE::INT:
-		_value.set_return(_value.get_value().rt_int != 0);
+		_value.set_return(_value.value().rt_int != 0);
 
 		break;
 	case compiler_value::VALUE_TYPE::DOUBLE:
-		_value.set_return(_value.get_value().rt_double != 0.);
+		_value.set_return(_value.value().rt_double != 0.);
 
 		break;
 	case compiler_value::VALUE_TYPE::STRING:
-		_value.set_return(_value.get_value().rt_string.length != 0);
+		_value.set_return(_value.value().rt_string.length != 0);
 
 		break;
 	case compiler_value::VALUE_TYPE::MEMBER:
-		_toolset.call(&framework::member::test, _value.get_value().rt_member);
+		_toolset.call(&framework::member::test, _value.value().rt_member);
 		_value.set_return_test();
 		_toolset.write_test();
 
 		break;
 	case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-		_toolset.call(&framework::member::test, _toolset.to_temp_member(_value.get_value().rt_temp_member));
+		_toolset.call(&framework::member::test, _toolset.to_temp_member(_value.value().rt_temp_member));
 		_value.set_return_test();
 		_toolset.write_test();
 
@@ -135,7 +135,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 	auto _left_value = _value;
 
 	// Pop if not used
-	if (_value.get_type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+	if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
 		_counter.pop(_current_count);
 	}
 
@@ -147,7 +147,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		i = (this->*_next)(i + 1) + 1;
 
 		// Pop if not used
-		if (_value.get_type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
 			_counter.pop(_current_count);
 		}
 
@@ -159,8 +159,8 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		compile_normal_operation(_toolset, _value).operate(_left_value, _operator, _right);
 
 		// Update if used
-		if (_value.get_type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_counter.update(_value.get_value().rt_temp_member);
+		if (_value.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_counter.update(_value.value().rt_temp_member);
 		}
 
 		_left_value = _value;
@@ -241,7 +241,7 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 const grammar::report * compiler::handle_identifier(const grammar::report * _report)
 {
 	// Global member
-	_value.set_return(_context.get_address_or_create(_report->content.member));
+	_value.set_return(_context.address_or_create(_report->content.member));
 
 	return _report + 1;
 }
@@ -308,9 +308,9 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	}
 
 	// Call function
-	switch (_caller.get_type()) {
+	switch (_caller.type()) {
 	case VT::MEMBER:
-		_toolset.call(&framework::member::execute, _caller.get_value().rt_member, nullptr);
+		_toolset.call(&framework::member::execute, _caller.value().rt_member, nullptr);
 
 		break;
 	default:
@@ -340,14 +340,14 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 		handle_identifier(_report + 2);
 
-		auto _destination = _value.get_value().rt_member;
+		auto _destination = _value.value().rt_member;
 
 		// Make call
-		switch (_expression.get_type()) {
+		switch (_expression.type()) {
 		case compiler_value::VALUE_TYPE::INT:
 		{
 			// Optimize common used constant values
-			switch (_expression.get_value().rt_int) {
+			switch (_expression.value().rt_int) {
 			case 0:
 				_toolset.call(&machine::link::instantiate_int_0, _destination);
 
@@ -364,9 +364,9 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			{
 				// Can be int32
 				if (_expression.is_int32()) {
-					_toolset.call(&machine::link::instantiate_int32, static_cast<int32_t>(_expression.get_value().rt_int), _destination);
+					_toolset.call(&machine::link::instantiate_int32, static_cast<int32_t>(_expression.value().rt_int), _destination);
 				} else {
-					_toolset.call(&machine::link::instantiate_int64, _expression.get_value().rt_int, _destination);
+					_toolset.call(&machine::link::instantiate_int64, _expression.value().rt_int, _destination);
 				}
 
 				break;
@@ -376,19 +376,19 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;
 		}
 		case compiler_value::VALUE_TYPE::DOUBLE:
-			_toolset.call(&machine::link::instantiate_double, _expression.get_value().rt_double, _destination);
+			_toolset.call(&machine::link::instantiate_double, _expression.value().rt_double, _destination);
 
 			break;
 		case compiler_value::VALUE_TYPE::STRING:
-			_toolset.call(&machine::link::instantiate_string, _expression.get_value().rt_string.data, _expression.get_value().rt_string.length, _destination);
+			_toolset.call(&machine::link::instantiate_string, _expression.value().rt_string.data, _expression.value().rt_string.length, _destination);
 
 			break;
 		case compiler_value::VALUE_TYPE::MEMBER:
-			_toolset.call(&framework::member::clone, _expression.get_value().rt_member, _destination);
+			_toolset.call(&framework::member::clone, _expression.value().rt_member, _destination);
 
 			break;
 		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::clone, _toolset.to_temp_member(_expression.get_value().rt_temp_member), _destination);
+			_toolset.call(&framework::member::clone, _toolset.to_temp_member(_expression.value().rt_temp_member), _destination);
 
 			break;
 			/*case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
@@ -397,7 +397,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 				break;*/
 		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
 		{
-			if (_expression.get_value().rt_test_result) {
+			if (_expression.value().rt_test_result) {
 				_toolset.call(&machine::link::instantiate_int_1, _destination);
 			} else {
 				_toolset.call(&machine::link::instantiate_int_0, _destination);
@@ -435,9 +435,9 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 		}
 
 		// Compile statement
-		if (_value.get_type() != compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT || _value.get_value().rt_test_result) {
+		if (_value.type() != compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT || _value.value().rt_test_result) {
 			// Write jump
-			auto _constant = _value.get_type() == compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT;
+			auto _constant = _value.type() == compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT;
 			auto _jump = _constant ? 0 : _toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE);
 
 			// Compile statement
@@ -448,12 +448,12 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 				_end_jumps.push_back(_toolset.jump(machine::platform::toolset::JUMP::JUMP));
 
 				// Update test jump to next statement
-				_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.get_output_stream().get_position(), _jump);
+				_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.output_stream().position(), _jump);
 			} // End of ifs or condition is at compile time true
 			else {
 				// Update test jump to ent
 				if (!_constant) {
-					_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.get_output_stream().get_position(), _jump);
+					_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.output_stream().position(), _jump);
 				}
 
 				break;
@@ -465,7 +465,7 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 	}
 
 	// Update end jump locations
-	auto _end = _toolset.get_output_stream().get_position();
+	auto _end = _toolset.output_stream().position();
 
 	for (auto & _jump : _end_jumps) {
 		_toolset.jump(machine::platform::toolset::JUMP::JUMP, _end, _jump);
@@ -479,41 +479,41 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 	// Handle value to print
 	handle_value<false>(_report + 1, [this] {
 		// Call print function
-		switch (_value.get_type()) {
+		switch (_value.type()) {
 		case compiler_value::VALUE_TYPE::INT:
 		{
 			// Can be int32
 			if (_value.is_int32()) {
-				_toolset.call(&machine::link::print_int32, static_cast<int32_t>(_value.get_value().rt_int));
+				_toolset.call(&machine::link::print_int32, static_cast<int32_t>(_value.value().rt_int));
 			} else {
-				_toolset.call(&machine::link::print_int64, _value.get_value().rt_int);
+				_toolset.call(&machine::link::print_int64, _value.value().rt_int);
 			}
 
 			break;
 		}
 		case compiler_value::VALUE_TYPE::DOUBLE:
-			_toolset.call(&machine::link::print_double, _value.get_value().rt_double);
+			_toolset.call(&machine::link::print_double, _value.value().rt_double);
 
 			break;
 		case compiler_value::VALUE_TYPE::STRING:
-			_toolset.call(&machine::link::print_string, _value.get_value().rt_string.data);
+			_toolset.call(&machine::link::print_string, _value.value().rt_string.data);
 
 			break;
 		case compiler_value::VALUE_TYPE::MEMBER:
-			_toolset.call(&framework::member::print, _value.get_value().rt_member);
+			_toolset.call(&framework::member::print, _value.value().rt_member);
 
 			break;
 		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::print, machine::platform::toolset::to_temp_member(_value.get_value().rt_temp_member));
+			_toolset.call(&framework::member::print, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 
 			break;
 		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
-			_toolset.call(&machine::link::print_bool, machine::platform::toolset::get_test_result_value());
+			_toolset.call(&machine::link::print_bool, machine::platform::toolset::test_result_value());
 
 			break;
 		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
 		{
-			if (_value.get_value().rt_test_result) {
+			if (_value.value().rt_test_result) {
 				_toolset.call(&machine::link::print_true);
 			} else {
 				_toolset.call(&machine::link::print_false);
@@ -560,7 +560,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 	// Handle loop condition
 	toolset::position _condition_jump = -1;
 	stream::buffer_output_stream _condition_buffer;
-	auto & _orig_buffer = _toolset.get_output_stream();
+	auto & _orig_buffer = _toolset.output_stream();
 	auto _compile = true;
 
 	// Redirect conditional code to a temporary buffer
@@ -569,9 +569,9 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 	// Loop condition
 	_report = handle_value<true>(_report, [&] {
 		// Constant condition
-		if (_value.get_type() == compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT) {
+		if (_value.type() == compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT) {
 			// Don't compile this loop
-			if (!_value.get_value().rt_test_result) {
+			if (!_value.value().rt_test_result) {
 				_compile = false;
 
 				return;
@@ -580,7 +580,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 			// Change to unconditional jump
 			_jump_type = toolset::JUMP::JUMP;
 		} // Not a test register
-		else if (_value.get_type() != compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER) {
+		else if (_value.type() != compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER) {
 			BIA_COMPILER_DEV_INVALID;
 		}
 
@@ -592,12 +592,12 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 	// Compile loop
 	if (_compile) {
-		auto _start_pos = _orig_buffer.get_position();
+		auto _start_pos = _orig_buffer.position();
 
 		handle_root(_report);
 
 		// Update jump positions
-		auto _end_pos = _orig_buffer.get_position();
+		auto _end_pos = _orig_buffer.position();
 
 		_condition_jump += _end_pos;
 
@@ -613,7 +613,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 		}
 	} // Discard pre test jump
 	else if (_pre_test_jump != -1) {
-		_toolset.get_output_stream().set_position(_pre_test_jump);
+		_toolset.output_stream().set_position(_pre_test_jump);
 	}
 
 	return _end;

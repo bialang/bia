@@ -240,7 +240,7 @@ public:
 
 		if (_input.available() > 0) {
 			auto _max = BIA_MAX_OPERATOR_LENGTH;
-			auto _buffer = _input.get_buffer();
+			auto _buffer = _input.buffer();
 			auto _prev = _buffer.first;
 
 			while (_max-- && _params.encoder->has_next(_buffer.first, _buffer.second)) {
@@ -318,7 +318,7 @@ public:
 		}
 
 		if (_input.available() >= _Ty::length()) {
-			auto _buffer = _input.get_buffer();
+			auto _buffer = _input.buffer();
 			auto _keyword = _Ty::token();
 			auto _length = _Ty::length();
 

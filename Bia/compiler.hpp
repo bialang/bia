@@ -41,9 +41,9 @@ public:
 	 * @throws See machine::platform::toolset::finalize().
 	*/
 	void finalize();
-	machine::machine_code get_code()
+	machine::machine_code code()
 	{
-		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(_context.get_allocator(), _context.get_executable_allocator()));
+		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(_context.allocator(), _context.executable_allocator()));
 	}
 	//machine::machine_schein get_machine_schein();
 
@@ -313,7 +313,7 @@ private:
 	 * @param _report The statement.
 	 *
 	 * @throws See handle_value(), handle_root() and handle_root_ignore().
-	 * @throws See machine::platform::toolset::jump() and stream::output_stream::get_position().
+	 * @throws See machine::platform::toolset::jump() and stream::output_stream::position().
 	 *
 	 * @return The end of the report.
 	*/

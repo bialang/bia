@@ -12,14 +12,14 @@ namespace grammar
 interpreter syntax::_interpreter = syntax::init_rules();
 
 
-const interpreter & syntax::get_interpreter() noexcept
+const interpreter & syntax::interpreter() noexcept
 {
 	return _interpreter;
 }
 
 interpreter syntax::init_rules()
 {
-	interpreter _interpreter;
+	grammar::interpreter _interpreter;
 
 	// Root
 	_interpreter.set_rule(interpreter_rule(BGR_ROOT, interpreter_rule::F_OR, {

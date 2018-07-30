@@ -18,9 +18,9 @@ public:
 	virtual void set_position(cursor_type _position) override;
 	virtual void set_beginning(cursor_type _position) override;
 	virtual void append_stream(output_stream & _stream) override;
-	virtual cursor_type get_position() const override;
-	cursor_type get_size() const;
-	const int8_t * get_buffer() const;
+	virtual cursor_type position() const override;
+	cursor_type size() const;
+	const int8_t * buffer() const;
 
 protected:
 	virtual void prepare(size_t _size) override;

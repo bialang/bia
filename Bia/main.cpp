@@ -62,7 +62,7 @@ print i
 		bia::compiler::compiler _compiler(_output, _context);
 
 		test_and_time(1, [&]() {
-			bia::grammar::syntax::get_interpreter().interpret(_input, _compiler, _context);
+			bia::grammar::syntax::interpreter().interpret(_input, _compiler, _context);
 		});
 
 		_compiler.finalize();
@@ -70,17 +70,17 @@ print i
 		// Disassemble
 		bia::machine::disassembler _disassembler(&_context);
 
-		_disassembler.disassemble(_output.get_buffer(), _output.get_size());
+		_disassembler.disassemble(_output.buffer(), _output.size());
 
 		system("pause");
 
 		// Run
 		//bia::machine::machine_code _machine_code = _compiler.get_code();
-		bia::machine::machine_code _machine_code({ reinterpret_cast<const uint8_t*>(_output.get_buffer()), _output.get_size() }, bia::machine::machine_schein(_context.get_allocator(), _context.get_executable_allocator()));
+		bia::machine::machine_code _machine_code({ reinterpret_cast<const uint8_t*>(_output.buffer()), _output.size() }, bia::machine::machine_schein(_context.allocator(), _context.executable_allocator()));
 
 		if (_machine_code.is_executable()) {
 			// Set active allocator
-			bia::machine::machine_context::_active_allocator = _context.get_allocator();
+			bia::machine::machine_context::_active_allocator = _context.allocator();
 
 			try {
 				_machine_code.execute();

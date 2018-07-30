@@ -71,7 +71,7 @@ public:
 	 *
 	 * @return The pointer to the allocator.
 	*/
-	memory::allocator * get_allocator() noexcept;
+	memory::allocator * allocator() noexcept;
 	/**
 	 * Returns the executable memory allocator.
 	 *
@@ -80,7 +80,7 @@ public:
 	 *
 	 * @return The pointer to the allocator.
 	*/
-	memory::executable_allocator * get_executable_allocator() noexcept;
+	memory::executable_allocator * executable_allocator() noexcept;
 	/**
 	 * Move operator.
 	 *

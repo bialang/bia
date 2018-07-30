@@ -78,7 +78,7 @@ public:
 	void destroy_blocks(allocation<_Ty> _allocation)
 	{
 		auto _ptr = reinterpret_cast<int8_t*>(_allocation.first);
-		auto _block_size = get_block_size();
+		auto _block_size = block_size();
 
 		// Destroy all elements
 		for (size_type i = 0; i < _allocation.second; ++i) {
@@ -117,7 +117,7 @@ public:
 	 *
 	 * @return The block size.
 	*/
-	static size_t get_block_size() noexcept;
+	static size_t block_size() noexcept;
 	/**
 	 * Commits the memory reserved by prepare().
 	 *
@@ -245,7 +245,7 @@ public:
 	template<typename _Base, typename _Deriviate = _Base, typename... _Args>
 	allocation<_Base> construct_blocks(size_type _count, _Args &&... _args)
 	{
-		auto _block_size = get_block_size();
+		auto _block_size = block_size();
 
 		if (sizeof(_Deriviate) > _block_size) {
 			throw BIA_IMPLEMENTATION_EXCEPTION("Elements exceeds block size.");

@@ -68,7 +68,7 @@ void undefined_member::operator_call_double(member * _destination, operator_type
 	BIA_UNDEFINED_ERROR;
 }
 
-int undefined_member::get_flags() const
+int undefined_member::flags() const
 {
 	BIA_UNDEFINED_ERROR;
 }
@@ -108,22 +108,22 @@ double undefined_member::to_double() const
 	BIA_UNDEFINED_ERROR;
 }
 
-void * undefined_member::get_native_data(native::NATIVE_TYPE _type)
+void * undefined_member::native_data(native::NATIVE_TYPE _type)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-const void * undefined_member::get_const_native_data(native::NATIVE_TYPE _type) const
+const void * undefined_member::const_native_data(native::NATIVE_TYPE _type) const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void * undefined_member::get_data(const std::type_info & _type)
+void * undefined_member::data(const std::type_info & _type)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-const void * undefined_member::get_const_data(const std::type_info & _type) const
+const void * undefined_member::const_data(const std::type_info & _type) const
 {
 	BIA_UNDEFINED_ERROR;
 }

@@ -46,26 +46,26 @@ public:
 	 * @param [in] _output The output stream.
 	 * @param [in] _context The machine context.
 	 *
-	 * @throws See architecture::add_instruction().
+	 * @throws See architecture::instruction().
 	*/
 	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output)
 	{
 		this->_context = _context;
 
 		// Create new stack frame for this entry point
-		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(_output);
-		architecture::add_instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(_output, 0);
+		architecture::instruction<OP_CODE::PUSH, REGISTER::EBP>(_output);
+		architecture::instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(_output, 0);
 
 		// Allocate temp members
-		_temp_member_pos = _output.get_position();
+		_temp_member_pos = _output.position();
 
-		architecture::add_instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(_output, 0);
+		architecture::instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(_output, 0);
 		call(&machine_context::create_on_stack, _context, register_offset<REGISTER::EBP, int32_t, true>(0), uint32_t(0));
 
 		// Save result
-		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EAX>(_output);
+		architecture::instruction<OP_CODE::PUSH, REGISTER::EAX>(_output);
 
-		_setup_end_pos = _output.get_position();
+		_setup_end_pos = _output.position();
 	}
 	/**
 	 * Adds some necessary cleanup instruction to the output stream.
@@ -75,7 +75,7 @@ public:
 	 *
 	 * @param _temp_count The amount of temp variables.
 	 *
-	 * @throws See architecture::add_instruction().
+	 * @throws See architecture::instruction().
 	*/
 	void finalize(temp_index_type _temp_count)
 	{
@@ -86,28 +86,28 @@ public:
 		// Adjust setup
 		if (_temp_count > 0) {
 			// Overwrite temp member creation
-			auto _current_pos = _output->get_position();
+			auto _current_pos = _output->position();
 
 			_output->set_position(_temp_member_pos);
 
-			architecture::add_instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(*_output, _temp_count * sizeof(void*));
+			architecture::instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(*_output, _temp_count * sizeof(void*));
 			call(&machine_context::create_on_stack, _context, register_offset<REGISTER::EBP, int32_t, true>(-_temp_count * sizeof(void*)), static_cast<uint32_t>(_temp_count));
 
 			_output->set_position(_current_pos);
 
 			// Member deletion
 			call(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
-			architecture::add_instruction32<OP_CODE::ADD, REGISTER::ESP>(*_output, _temp_count * sizeof(void*));
+			architecture::instruction32<OP_CODE::ADD, REGISTER::ESP>(*_output, _temp_count * sizeof(void*));
 
 			// Clean up stack
-			architecture::add_instruction<OP_CODE::LEAVE>(*_output);
+			architecture::instruction<OP_CODE::LEAVE>(*_output);
 		} // Skip setup
 		else {
 			_output->set_beginning(_setup_end_pos);
 		}
 
 		// Return
-		architecture::add_instruction<OP_CODE::RETURN_NEAR>(*_output);
+		architecture::instruction<OP_CODE::RETURN_NEAR>(*_output);
 	}
 	/**
 	 * Sets the output stream.
@@ -136,7 +136,7 @@ public:
 	 * @param _function The function address.
 	 * @param _args The arguments for the function.
 	 *
-	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
+	 * @throws See architecture::instruction32() and architecture::instruction().
 	 * @throws See pass() and pop().
 	*/
 	template<typename _Return, typename... _Args, typename... _Args2>
@@ -148,8 +148,8 @@ public:
 		auto _passed = pass(std::forward<_Args2>(_args)...);
 
 		// Move the address of the function into EAX and call it
-		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(_function));
-		architecture::add_instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
+		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(_function));
+		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
 
 		// Pop parameter
 		pop(_passed);
@@ -172,7 +172,7 @@ public:
 	 * @param [in] _instance The class instance.
 	 * @param _args The arguments for the function.
 	 *
-	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
+	 * @throws See architecture::instruction32() and architecture::instruction().
 	 * @throws See pass() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
@@ -195,8 +195,8 @@ public:
 		address.member = _function;
 
 		// Move the address of the function into EAX and call it
-		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
-		architecture::add_instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
+		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
+		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
 
 #if defined(BIA_COMPILER_GNU)
 		// Pop
@@ -221,7 +221,7 @@ public:
 	 * @param _instance The class instance.
 	 * @param _args The arguments for the function.
 	 *
-	 * @throws See architecture::add_instruction32() and architecture::add_instruction().
+	 * @throws See architecture::instruction32() and architecture::instruction().
 	 * @throws See pass() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
@@ -242,8 +242,8 @@ public:
 		address.member = _function;
 
 		// Move the address of the function into EAX and call it
-		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
-		architecture::add_instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
+		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
+		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
 
 #if defined(BIA_COMPILER_GNU)
 		// Pop
@@ -252,11 +252,11 @@ public:
 	}
 	void write_test()
 	{
-		architecture::add_instruction<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*_output, 0);
+		architecture::instruction<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*_output, 0);
 	}
 	position jump(JUMP _type, position _destination = 0, position _start = -1)
 	{
-		auto _old = _output->get_position();
+		auto _old = _output->position();
 
 		// Override
 		if (_start != -1) {
@@ -265,15 +265,15 @@ public:
 
 		switch (_type) {
 		case JUMP::JUMP:
-			architecture::add_instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _start);
+			architecture::instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _start);
 
 			break;
 		case JUMP::JUMP_IF_TRUE:
-			architecture::add_instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _start);
+			architecture::instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _start);
 
 			break;
 		case JUMP::JUMP_IF_FALSE:
-			architecture::add_instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _start);
+			architecture::instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _start);
 
 			break;
 		}
@@ -291,15 +291,15 @@ public:
 	{
 		return temp_result(_index * -4);
 	}
-	stream::output_stream & get_output_stream() noexcept
+	stream::output_stream & output_stream() noexcept
 	{
 		return *_output;
 	}
-	static register_offset<REGISTER::EAX, void, false> get_test_result_value() noexcept
+	static register_offset<REGISTER::EAX, void, false> test_result_value() noexcept
 	{
 		return register_offset<REGISTER::EAX, void, false>();
 	}
-	static register_offset<REGISTER::EAX, void, false> get_result_value() noexcept
+	static register_offset<REGISTER::EAX, void, false> result_value() noexcept
 	{
 		return register_offset<REGISTER::EAX, void, false>();
 	}
@@ -318,7 +318,7 @@ private:
 	template<typename _Ty>
 	void pass_instance(_Ty * _instance)
 	{
-		architecture::add_instruction32<OP_CODE::MOVE, REGISTER::ECX>(*_output, reinterpret_cast<int32_t>(_instance));
+		architecture::instruction32<OP_CODE::MOVE, REGISTER::ECX>(*_output, reinterpret_cast<int32_t>(_instance));
 	}
 	template<REGISTER _Register, typename _Offset, bool _Effective_address>
 	void pass_instance(register_offset<_Register, _Offset, _Effective_address> _offset)
@@ -327,10 +327,10 @@ private:
 
 		//Effective address
 		if (_Effective_address) {
-			architecture::add_instruction<OP_CODE::LEA, REGISTER::ECX, _Register, _Offset>(*_output, _offset.offset);
+			architecture::instruction<OP_CODE::LEA, REGISTER::ECX, _Register, _Offset>(*_output, _offset.offset);
 		} // Just content
 		else {
-			architecture::add_instruction<OP_CODE::MOVE, REGISTER::ECX, _Register, _Offset>(*_output, _offset.offset);
+			architecture::instruction<OP_CODE::MOVE, REGISTER::ECX, _Register, _Offset>(*_output, _offset.offset);
 		}
 	}
 	template<REGISTER _Register, bool _Effective_address>
@@ -338,19 +338,19 @@ private:
 	{
 		//Effective address
 		if (_Effective_address) {
-			architecture::add_instruction<OP_CODE::LEA, REGISTER::ECX, _Register, int8_t>(*_output, 0);
+			architecture::instruction<OP_CODE::LEA, REGISTER::ECX, _Register, int8_t>(*_output, 0);
 		} //Just content
 		else {
-			architecture::add_instruction<OP_CODE::MOVE, REGISTER::ECX, _Register, int8_t>(*_output, 0);
+			architecture::instruction<OP_CODE::MOVE, REGISTER::ECX, _Register, int8_t>(*_output, 0);
 		}
 	}
 	void pop(pass_count _count)
 	{
 		if (_count > 0) {
 			if (_count * 4 < 128) {
-				architecture::add_instruction8<OP_CODE::ADD, REGISTER::ESP>(*_output, static_cast<int8_t>(_count * 4));
+				architecture::instruction8<OP_CODE::ADD, REGISTER::ESP>(*_output, static_cast<int8_t>(_count * 4));
 			} else {
-				architecture::add_instruction32<OP_CODE::ADD, REGISTER::ESP>(*_output, static_cast<int32_t>(_count * 4));
+				architecture::instruction32<OP_CODE::ADD, REGISTER::ESP>(*_output, static_cast<int32_t>(_count * 4));
 			}
 		}
 	}
@@ -372,7 +372,7 @@ private:
 	template<typename _Ty>
 	typename std::enable_if<sizeof(_Ty) == 1, pass_count>::type pass(_Ty _value)
 	{
-		architecture::add_instruction8<OP_CODE::PUSH>(*_output, static_cast<int8_t>(_value));
+		architecture::instruction8<OP_CODE::PUSH>(*_output, static_cast<int8_t>(_value));
 
 		return 1;
 	}
@@ -381,10 +381,10 @@ private:
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_value)) {
-			architecture::add_instruction8<OP_CODE::PUSH>(*_output, static_cast<int8_t>(_value));
+			architecture::instruction8<OP_CODE::PUSH>(*_output, static_cast<int8_t>(_value));
 		} // Push all 4 bytes
 		else {
-			architecture::add_instruction32<OP_CODE::PUSH>(*_output, *reinterpret_cast<int32_t*>(&_value));
+			architecture::instruction32<OP_CODE::PUSH>(*_output, *reinterpret_cast<int32_t*>(&_value));
 		}
 
 		return 1;
@@ -409,15 +409,15 @@ private:
 
 		// Push address
 		if (_Effective_address) {
-			architecture::add_instruction<OP_CODE::LEA, REGISTER::EAX, _Register, _Offset>(*_output, _offset.offset);
-			architecture::add_instruction<OP_CODE::PUSH, REGISTER::EAX>(*_output);
+			architecture::instruction<OP_CODE::LEA, REGISTER::EAX, _Register, _Offset>(*_output, _offset.offset);
+			architecture::instruction<OP_CODE::PUSH, REGISTER::EAX>(*_output);
 		} else {
 			// 32 bit signed offset
 			if (std::is_same<_Offset, int32_t>::value) {
-				architecture::add_instruction32<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
+				architecture::instruction32<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
 			} // 8 bit signed offset
 			else {
-				architecture::add_instruction8<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
+				architecture::instruction8<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
 			}
 		}
 
@@ -428,11 +428,11 @@ private:
 	{
 		// Push address
 		if (_Effective_address) {
-			architecture::add_instruction<OP_CODE::LEA, REGISTER::EAX, _Register, int8_t>(*_output, 0);
-			architecture::add_instruction<OP_CODE::PUSH, REGISTER::EAX>(*_output);
+			architecture::instruction<OP_CODE::LEA, REGISTER::EAX, _Register, int8_t>(*_output, 0);
+			architecture::instruction<OP_CODE::PUSH, REGISTER::EAX>(*_output);
 		} // Push register
 		else {
-			architecture::add_instruction<OP_CODE::PUSH, _Register>(*_output);
+			architecture::instruction<OP_CODE::PUSH, _Register>(*_output);
 		}
 
 		return 1;

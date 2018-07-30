@@ -89,7 +89,7 @@ public:
 	 * @return The size of the instruction in bytes.
 	*/
 	template<OP_CODE _Op_code>
-	static size_t add_instruction(stream::output_stream & _output)
+	static size_t instruction(stream::output_stream & _output)
 	{
 		static_assert(_Op_code == OP_CODE::LEAVE || _Op_code == OP_CODE::RETURN_NEAR, "This opcode is not supported.");
 
@@ -116,7 +116,7 @@ public:
 	 * @return The size of the instruction in bytes.
 	*/
 	template<OP_CODE _Op_code, REGISTER _Register>
-	static size_t add_instruction(stream::output_stream & _output)
+	static size_t instruction(stream::output_stream & _output)
 	{
 		static_assert(_Op_code == OP_CODE::PUSH || _Op_code == OP_CODE::CALL, "This opcode is not supported.");
 
@@ -146,7 +146,7 @@ public:
 	 * @return The size of the instruction in bytes.
 	*/
 	template<OP_CODE _Op_code, REGISTER _Dest, REGISTER _Src, typename _Offset>
-	static size_t add_instruction(stream::output_stream & _output, _Offset _offset)
+	static size_t instruction(stream::output_stream & _output, _Offset _offset)
 	{
 		static_assert(_Op_code == OP_CODE::MOVE || _Op_code == OP_CODE::LEA || _Op_code == OP_CODE::TEST, "This opcode is not supported.");
 		static_assert(std::is_same<int8_t, _Offset>::value || std::is_same<int32_t, _Offset>::value, "Offset must be int8_t or int32_t.");
@@ -195,7 +195,7 @@ public:
 		}
 	}
 	template<OP_CODE _Op_code, REGISTER _Register, typename _Offset>
-	static size_t add_instruction(stream::output_stream & _output, _Offset _offset)
+	static size_t instruction(stream::output_stream & _output, _Offset _offset)
 	{
 		static_assert(_Op_code == OP_CODE::PUSH, "This opcode is not supported.");
 		static_assert(std::is_same<int8_t, _Offset>::value || std::is_same<int32_t, _Offset>::value, "Offset must be int8_t or int32_t.");
@@ -212,7 +212,7 @@ public:
 		}
 	}
 	template<OP_CODE _Op_code>
-	static size_t add_instruction32(stream::output_stream & _output, int32_t _value)
+	static size_t instruction32(stream::output_stream & _output, int32_t _value)
 	{
 		static_assert(_Op_code == OP_CODE::PUSH || _Op_code == OP_CODE::JUMP_RELATIVE || _Op_code == OP_CODE::JUMP_EQUAL || _Op_code == OP_CODE::JUMP_NOT_EQUAL, "This opcode is not supported.");
 
@@ -228,7 +228,7 @@ public:
 		}
 	}
 	template<OP_CODE _Op_code>
-	static size_t add_instruction8(stream::output_stream & _output, int8_t _value)
+	static size_t instruction8(stream::output_stream & _output, int8_t _value)
 	{
 		static_assert(_Op_code == OP_CODE::PUSH || _Op_code == OP_CODE::JUMP_RELATIVE || _Op_code == OP_CODE::JUMP_EQUAL || _Op_code == OP_CODE::JUMP_NOT_EQUAL, "This opcode is not supported.");
 
@@ -244,7 +244,7 @@ public:
 		}
 	}
 	template<OP_CODE _Op_code, REGISTER _Register>
-	static size_t add_instruction32(stream::output_stream & _output, int32_t _value)
+	static size_t instruction32(stream::output_stream & _output, int32_t _value)
 	{
 		static_assert(_Op_code == OP_CODE::PUSH || _Op_code == OP_CODE::MOVE || _Op_code == OP_CODE::ADD || _Op_code == OP_CODE::SUBTRACT, "This opcode is not supported.");
 
@@ -274,7 +274,7 @@ public:
 		}
 	}
 	template<OP_CODE _Op_code, REGISTER _Register>
-	static size_t add_instruction8(stream::output_stream & _output, int8_t _value)
+	static size_t instruction8(stream::output_stream & _output, int8_t _value)
 	{
 		static_assert(_Op_code == OP_CODE::PUSH || _Op_code == OP_CODE::ADD || _Op_code == OP_CODE::SUBTRACT, "This opcode is not supported.");
 
@@ -283,7 +283,7 @@ public:
 		{
 			// If constant displacement is 0 the push register directly, otherwise push with one byte displacement
 			if (!_value) {
-				return add_instruction<OP_CODE::PUSH, _Register>(_output);
+				return instruction<OP_CODE::PUSH, _Register>(_output);
 			}
 
 			return _output.write_all(0xff_8, static_cast<uint8_t>(0160 | get_register_code<_Register>()), static_cast<uint8_t>(_value));

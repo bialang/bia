@@ -46,21 +46,21 @@ public:
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_left.get_type()) {
+		switch (_left.type()) {
 		case VT::INT:
-			left_constant_operation(_left.get_value().rt_int, _operator, _right);
+			left_constant_operation(_left.value().rt_int, _operator, _right);
 
 			break;
 		case VT::DOUBLE:
-			left_constant_operation(_left.get_value().rt_double, _operator, _right);
+			left_constant_operation(_left.value().rt_double, _operator, _right);
 
 			break;
 		case VT::MEMBER:
-			left_member_operation(_left.get_value().rt_member, _operator, _right);
+			left_member_operation(_left.value().rt_member, _operator, _right);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			left_member_operation(machine::platform::toolset::to_temp_member(_left.get_value().rt_temp_member), _operator, _right);
+			left_member_operation(machine::platform::toolset::to_temp_member(_left.value().rt_temp_member), _operator, _right);
 
 			break;
 		default:
@@ -91,27 +91,27 @@ private:
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_right.get_type()) {
+		switch (_right.type()) {
 		case VT::INT:
 		{
 			if (_right.is_int32()) {
-				_toolset.call(&framework::member::test_int32, _member, _operator, static_cast<int32_t>(_right.get_value().rt_int));
+				_toolset.call(&framework::member::test_int32, _member, _operator, static_cast<int32_t>(_right.value().rt_int));
 			} else {
-				_toolset.call(&framework::member::test_int64, _member, _operator, _right.get_value().rt_int);
+				_toolset.call(&framework::member::test_int64, _member, _operator, _right.value().rt_int);
 			}
 
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&framework::member::test_double, _member, _operator, _right.get_value().rt_double);
+			_toolset.call(&framework::member::test_double, _member, _operator, _right.value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			_toolset.call(&framework::member::test_member, _member, _operator, _right.get_value().rt_member);
+			_toolset.call(&framework::member::test_member, _member, _operator, _right.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::test_member, _member, _operator, machine::platform::toolset::to_temp_member(_right.get_value().rt_temp_member));
+			_toolset.call(&framework::member::test_member, _member, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		default:
@@ -168,21 +168,21 @@ private:
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_right.get_type()) {
+		switch (_right.type()) {
 		case VT::INT:
-			both_constant_operation(std::forward<_Left>(_left), _operator, _right.get_value().rt_int);
+			both_constant_operation(std::forward<_Left>(_left), _operator, _right.value().rt_int);
 
 			break;
 		case VT::DOUBLE:
-			both_constant_operation(std::forward<_Left>(_left), _operator, _right.get_value().rt_double);
+			both_constant_operation(std::forward<_Left>(_left), _operator, _right.value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			left_constant_right_member_operation(std::forward<_Left>(_left), _operator, _right.get_value().rt_member);
+			left_constant_right_member_operation(std::forward<_Left>(_left), _operator, _right.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			left_constant_right_member_operation(std::forward<_Left>(_left), _operator, machine::platform::toolset::to_temp_member(_right.get_value().rt_temp_member));
+			left_constant_right_member_operation(std::forward<_Left>(_left), _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		default:

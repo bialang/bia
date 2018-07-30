@@ -14,7 +14,7 @@ bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encodi
 	auto _skipped = false;
 
 	while (_input.available() > 0) {
-		auto _buffer = _input.get_buffer();
+		auto _buffer = _input.buffer();
 
 		// Has no next
 		if (!_encoder->has_next(_buffer.first, _buffer.second)) {
@@ -51,7 +51,7 @@ bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding:
 	auto _skipped = false;
 
 	while (_input.available() > 0) {
-		auto _buffer = _input.get_buffer();
+		auto _buffer = _input.buffer();
 
 		// Has no next
 		if (!_encoder->has_next(_buffer.first, _buffer.second)) {
@@ -94,7 +94,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 		return error;
 	}
 
-	auto _buffer = _input.get_buffer();
+	auto _buffer = _input.buffer();
 	int64_t _int = 0;
 	auto _double = 0.;
 	auto _negative = false;
@@ -241,7 +241,7 @@ ACTION interpreter_token::string(stream::input_stream & _input, token_param _par
 			return error;
 		}
 
-		_buffer = _input.get_buffer();
+		_buffer = _input.buffer();
 
 		while (_buffer.first < _buffer.second) {
 			switch (*_buffer.first++) {
@@ -351,7 +351,7 @@ gt_break:;
 				return error;
 			}
 
-			_buffer = _input.get_buffer();
+			_buffer = _input.buffer();
 		}
 	} // Normal string
 
@@ -369,7 +369,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 		return error;
 	}
 
-	auto _buffer = _input.get_buffer();
+	auto _buffer = _input.buffer();
 	auto _begin = _buffer.first;
 
 	// First character
@@ -404,7 +404,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 
 	// Get address
 	_output.content.type = report::TYPE::MEMBER;
-	_output.content.content.member = _params.context->get_name_address(utility::string_key(reinterpret_cast<const char*>(_begin), _length));
+	_output.content.content.member = _params.context->name_address(utility::string_key(reinterpret_cast<const char*>(_begin), _length));
 
 	// Move cursor
 	_input.skip(_buffer.first);
@@ -424,7 +424,7 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 
 	if (_input.available() > 0) {
 		auto _max = BIA_MAX_OPERATOR_LENGTH;
-		auto _buffer = _input.get_buffer();
+		auto _buffer = _input.buffer();
 
 		while (_max-- && _params.encoder->has_next(_buffer.first, _buffer.second)) {
 			auto _code_point = _params.encoder->next(_buffer.first, _buffer.second);
@@ -472,7 +472,7 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 		return error;
 	}
 
-	auto _buffer = _input.get_buffer();
+	auto _buffer = _input.buffer();
 	auto _optional = false;
 
 	_output.content.type = report::TYPE::OPERATOR_CODE;
@@ -534,7 +534,7 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 		return error;
 	}
 
-	auto _buffer = _input.get_buffer();
+	auto _buffer = _input.buffer();
 
 	_output.content.type = report::TYPE::OPERATOR_CODE;
 
@@ -590,7 +590,7 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 
 	// Check if this is a comment
 	while (_input.available() > 0) {
-		auto _buffer = _input.get_buffer();
+		auto _buffer = _input.buffer();
 
 		// Has no next character
 		if (!_params.encoder->has_next(_buffer.first, _buffer.second)) {
@@ -629,7 +629,7 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 	constexpr auto error = ACTION::ERROR;
 
 	while (_input.available() > 0) {
-		auto _buffer = _input.get_buffer();
+		auto _buffer = _input.buffer();
 
 		if (!_params.encoder->has_next(_buffer.first, _buffer.second)) {
 			break;
@@ -674,7 +674,7 @@ std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buf
 		auto _code_point = _encoder->next(_buffer.first, _buffer.second);
 
 		if (_code_point != '\'') {
-			auto _value = encoding::utf::get_hex_value(_code_point);
+			auto _value = encoding::utf::hex_value(_code_point);
 
 			if (_value < _base) {
 				_result = _result * _base + _value;

@@ -30,7 +30,7 @@ string_manager::~string_manager()
 	}
 }
 
-const char * string_manager::get_name_address(const char * _name, size_t _length)
+const char * string_manager::name_address(const char * _name, size_t _length)
 {
 	auto _result = _index.find({ _name, _length });
 
@@ -46,7 +46,7 @@ const char * string_manager::get_name_address(const char * _name, size_t _length
 	return _result->_string;
 }
 
-const char * string_manager::get_format_address(const char * _format, size_t _length)
+const char * string_manager::format_address(const char * _format, size_t _length)
 {
 	auto _result = _index.find({ _format, _length });
 

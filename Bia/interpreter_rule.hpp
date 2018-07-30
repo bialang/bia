@@ -135,7 +135,7 @@ public:
 	 *
 	 * @return The id.
 	*/
-	report::rule_type get_id() const noexcept;
+	report::rule_type id() const noexcept;
 
 private:
 	/** The id of this rule. */

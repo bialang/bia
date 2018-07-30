@@ -59,7 +59,7 @@ void cstring_member::operator_call_double(member * _destination, operator_type _
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 }
 
-int cstring_member::get_flags() const
+int cstring_member::flags() const
 {
 	return F_CONST;
 }
@@ -99,12 +99,12 @@ double cstring_member::to_double() const
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
 
-void * cstring_member::get_native_data(native::NATIVE_TYPE _type)
+void * cstring_member::native_data(native::NATIVE_TYPE _type)
 {
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
 
-const void * cstring_member::get_const_native_data(native::NATIVE_TYPE _type) const
+const void * cstring_member::const_native_data(native::NATIVE_TYPE _type) const
 {
 	switch (_type) {
 	case NATIVE_TYPE::CONST_STRING:

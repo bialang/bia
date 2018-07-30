@@ -28,17 +28,17 @@ machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator
 	}
 }
 
-memory::allocator * machine_context::get_active_allocator() noexcept
+memory::allocator * machine_context::active_allocator() noexcept
 {
 	return _active_allocator;
 }
 
-memory::allocator * machine_context::get_allocator() noexcept
+memory::allocator * machine_context::allocator() noexcept
 {
 	return _allocator.get();
 }
 
-memory::executable_allocator * machine_context::get_executable_allocator() noexcept
+memory::executable_allocator * machine_context::executable_allocator() noexcept
 {
 	return _executable_allocator.get();
 }
@@ -53,12 +53,12 @@ void machine_context::create_on_stack(framework::member ** _destination, uint32_
 	_stack.push(_destination, _member_count);
 }
 
-const char * machine_context::get_name_address(utility::string_key _name)
+const char * machine_context::name_address(utility::string_key _name)
 {
-	return _string_manager.get_name_address(_name.get_string(), _name.length());
+	return _string_manager.name_address(_name.string(), _name.length());
 }
 
-framework::member * machine_context::get_address_or_create(const char * _name)
+framework::member * machine_context::address_or_create(const char * _name)
 {
 	if (auto _result = _variable_index.find(_name)) {
 		return _result;
@@ -78,11 +78,11 @@ machine_code machine_context::compile_script(stream::input_stream & _script)
 	compiler::compiler _compiler(_output, *this);
 
 	// Interpret
-	grammar::syntax::get_interpreter().interpret(_script, _compiler, *this);
+	grammar::syntax::interpreter().interpret(_script, _compiler, *this);
 
 	_compiler.finalize();
 
-	return _compiler.get_code();
+	return _compiler.code();
 }
 
 

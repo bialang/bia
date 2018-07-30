@@ -40,7 +40,7 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual int get_flags() const override
+	virtual int flags() const override
 	{
 		return F_CONST;
 	}
@@ -74,19 +74,19 @@ public:
 	}
 
 protected:
-	virtual void * get_native_data(native::NATIVE_TYPE _type) override
+	virtual void * native_data(native::NATIVE_TYPE _type) override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
-	virtual const void * get_const_native_data(native::NATIVE_TYPE _type) const override
+	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
-	virtual void * get_data(const std::type_info & _type) override
+	virtual void * data(const std::type_info & _type) override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
-	virtual const void * get_const_data(const std::type_info & _type) const override
+	virtual const void * const_data(const std::type_info & _type) const override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}

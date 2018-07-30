@@ -48,21 +48,21 @@ public:
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_left.get_type()) {
+		switch (_left.type()) {
 		case VT::INT:
-			left_constant_operation(_left.get_value().rt_int, _operator, _right);
+			left_constant_operation(_left.value().rt_int, _operator, _right);
 
 			break;
 		case VT::DOUBLE:
-			left_constant_operation(_left.get_value().rt_double, _operator, _right);
+			left_constant_operation(_left.value().rt_double, _operator, _right);
 
 			break;
 		case VT::MEMBER:
-			left_member_operation(_left.get_value().rt_member, _operator, _right);
+			left_member_operation(_left.value().rt_member, _operator, _right);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			left_member_operation(machine::platform::toolset::to_temp_member(_left.get_value().rt_temp_member), _operator, _right);
+			left_member_operation(machine::platform::toolset::to_temp_member(_left.value().rt_temp_member), _operator, _right);
 
 			break;
 		default:
@@ -93,27 +93,27 @@ private:
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_right.get_type()) {
+		switch (_right.type()) {
 		case VT::INT:
 		{
 			if (_right.is_int32()) {
-				_toolset.call(&framework::member::operator_call_int32, _member, nullptr, _operator, static_cast<int32_t>(_right.get_value().rt_int));
+				_toolset.call(&framework::member::operator_call_int32, _member, nullptr, _operator, static_cast<int32_t>(_right.value().rt_int));
 			} else {
-				_toolset.call(&framework::member::operator_call_int32, _member, nullptr, _operator, _right.get_value().rt_int);
+				_toolset.call(&framework::member::operator_call_int32, _member, nullptr, _operator, _right.value().rt_int);
 			}
 
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&framework::member::operator_call_double, _member, nullptr, _operator, _right.get_value().rt_double);
+			_toolset.call(&framework::member::operator_call_double, _member, nullptr, _operator, _right.value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			_toolset.call(&framework::member::operator_call, _member, nullptr, _operator, _right.get_value().rt_member);
+			_toolset.call(&framework::member::operator_call, _member, nullptr, _operator, _right.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::operator_call, _member, nullptr, _operator, machine::platform::toolset::to_temp_member(_right.get_value().rt_temp_member));
+			_toolset.call(&framework::member::operator_call, _member, nullptr, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		default:
@@ -138,11 +138,11 @@ private:
 	template<typename _Left, typename _Right>
 	void left_constant_right_member_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
 	{
-		if (_value.get_type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
 			throw;
 		}
 
-		auto _destination = machine::platform::toolset::to_temp_member(_value.get_value().rt_temp_member);
+		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
 
 		if (std::is_same<typename std::remove_reference<_Left>::type, int64_t>::value) {
 			// Is int32
@@ -174,21 +174,21 @@ private:
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_right.get_type()) {
+		switch (_right.type()) {
 		case VT::INT:
-			both_constant_operation(_left, _operator, _right.get_value().rt_int);
+			both_constant_operation(_left, _operator, _right.value().rt_int);
 
 			break;
 		case VT::DOUBLE:
-			both_constant_operation(_left, _operator, _right.get_value().rt_double);
+			both_constant_operation(_left, _operator, _right.value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			left_constant_right_member_operation(_left, _operator, _right.get_value().rt_member);
+			left_constant_right_member_operation(_left, _operator, _right.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_temp_member(_right.get_value().rt_temp_member));
+			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		default:

@@ -93,7 +93,7 @@ simple_executable_allocator::universal_allocation simple_executable_allocator::a
 
 simple_executable_allocator::universal_allocation simple_executable_allocator::allocate_blocks(size_t _count)
 {
-	return { allocate(get_block_size() * _count).first, _count };
+	return { allocate(block_size() * _count).first, _count };
 }
 
 simple_executable_allocator::universal_allocation simple_executable_allocator::prepare(size_t _size)

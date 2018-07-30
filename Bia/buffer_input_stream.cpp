@@ -73,7 +73,7 @@ buffer_input_stream::cursor_type buffer_input_stream::available() const
 	return _length - _position;
 }
 
-buffer_input_stream::buffer_type buffer_input_stream::get_buffer()
+buffer_input_stream::buffer_type buffer_input_stream::buffer()
 {
 	return { static_cast<const int8_t*>(_buffer.get()) + _position, static_cast<const int8_t*>(_buffer.get()) + _length };
 }

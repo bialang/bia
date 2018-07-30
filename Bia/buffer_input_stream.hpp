@@ -50,7 +50,7 @@ public:
 	virtual void skip(buffer_type::first_type _ptr) override;
 	virtual cursor_type mark() const override;
 	virtual cursor_type available() const override;
-	virtual buffer_type get_buffer() override;
+	virtual buffer_type buffer() override;
 
 private:
 	/** The buffer. */

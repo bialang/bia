@@ -119,7 +119,7 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 	return (_flags & F_OR) == 0;
 }
 
-report::rule_type interpreter_rule::get_id() const noexcept
+report::rule_type interpreter_rule::id() const noexcept
 {
 	return _id;
 }

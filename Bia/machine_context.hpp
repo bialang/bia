@@ -61,7 +61,7 @@ public:
 	 *
 	 * @return The active allocator.
 	*/
-	static memory::allocator * get_active_allocator() noexcept;
+	static memory::allocator * active_allocator() noexcept;
 	 /**
 	  * Returns the memory allocator.
 	  *
@@ -70,7 +70,7 @@ public:
 	  *
 	  * @return The memory allocator of this context.
 	 */
-	memory::allocator * get_allocator() noexcept;
+	memory::allocator * allocator() noexcept;
 	/**
 	 * Returns the memory allocator for executable memory.
 	 *
@@ -79,7 +79,7 @@ public:
 	 *
 	 * @return The memory allocator of this context.
 	*/
-	memory::executable_allocator * get_executable_allocator() noexcept;
+	memory::executable_allocator * executable_allocator() noexcept;
 
 //private:
 
@@ -122,7 +122,7 @@ public:
 	 * @return The address of the allocated space.
 	*/
 	void create_on_stack(framework::member ** _destination, uint32_t _member_count);
-	const char * get_name_address(utility::string_key _name);
+	const char * name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.
 	 *
@@ -135,7 +135,7 @@ public:
 	 *
 	 * @return The member address.
 	*/
-	framework::member * get_address_or_create(const char * _name);
+	framework::member * address_or_create(const char * _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 

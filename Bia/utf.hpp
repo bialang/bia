@@ -46,7 +46,7 @@ public:
 	 *
 	 * @return The value if it succeeds, otherwise ~0.
 	*/
-	static uint8_t get_hex_value(code_point _code_point) noexcept
+	static uint8_t hex_value(code_point _code_point) noexcept
 	{
 		if (is_digit(_code_point)) {
 			return _code_point - '0';

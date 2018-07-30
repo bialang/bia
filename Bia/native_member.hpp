@@ -86,7 +86,7 @@ public:
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
-	virtual int get_flags() const override
+	virtual int flags() const override
 	{
 		return F_NONE;
 	}
@@ -124,7 +124,7 @@ public:
 	}
 
 protected:
-	virtual void * get_native_data(native::NATIVE_TYPE _type) override
+	virtual void * native_data(native::NATIVE_TYPE _type) override
 	{
 		// Integral
 		if (std::is_same<_Ty, int64_t>::value) {
@@ -156,7 +156,7 @@ protected:
 
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
-	virtual const void * get_const_native_data(native::NATIVE_TYPE _type) const override
+	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override
 	{
 		// Integral
 		if (std::is_same<_Ty, int64_t>::value) {

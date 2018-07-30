@@ -55,7 +55,7 @@ public:
 	 *
 	 * @return The name address. It's valid until destruction of this name manager. This address is not zero-terminated.
 	*/
-	const char * get_name_address(const char * _name, size_t _length);
+	const char * name_address(const char * _name, size_t _length);
 	/**
 	 * Returns the format address. This address will be the same for the same format value.
 	 *
@@ -69,7 +69,7 @@ public:
 	 *
 	 * @return The format address. It's valid until destruction of this name manager. This address is in reverse order and not zero-terminated.
 	*/
-	const char * get_format_address(const char * _format, size_t _length);
+	const char * format_address(const char * _format, size_t _length);
 
 private:
 	struct string_entry

@@ -38,7 +38,7 @@ public:
 	template<typename... _Args>
 	share(_Args &&... _args)
 	{
-		_data = machine::machine_context::get_active_allocator()->construct<data>(_Ty(std::forward<_Args>(_args)...)).first;
+		_data = machine::machine_context::active_allocator()->construct<data>(_Ty(std::forward<_Args>(_args)...)).first;
 	}
 	/**
 	 * Constructor.
@@ -65,7 +65,7 @@ public:
 	~share()
 	{
 		if (!--_data->ref_counter) {
-			machine::machine_context::get_active_allocator()->destroy(machine::memory::allocator::allocation<data>(_data, sizeof(data)));
+			machine::machine_context::active_allocator()->destroy(machine::memory::allocator::allocation<data>(_data, sizeof(data)));
 		}
 	}
 	/**

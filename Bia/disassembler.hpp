@@ -29,7 +29,7 @@ public:
 	 *
 	 * @return The name if available, otherwise null.
 	*/
-	const char * get_name(const void * _address) const noexcept;
+	const char * name(const void * _address) const noexcept;
 
 private:
 	struct instruction

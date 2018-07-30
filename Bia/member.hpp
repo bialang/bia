@@ -223,7 +223,7 @@ public:
 	 *
 	 * @return See @ref member::FLAG.
 	*/
-	virtual int get_flags() const = 0;
+	virtual int flags() const = 0;
 	/**
 	 * Tests the contents of this member.
 	 *
@@ -361,10 +361,10 @@ public:
 	{
 		// Native type
 		if (native::determine_native_type<_T>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<_T*>(get_native_data(native::determine_native_type<_T>()));
+			return static_cast<_T*>(native_data(native::determine_native_type<_T>()));
 		} // Custom type
 		else {
-			return static_cast<_T*>(get_data(typeid(_T)));
+			return static_cast<_T*>(data(typeid(_T)));
 		}
 	}
 	/**
@@ -385,10 +385,10 @@ public:
 	{
 		// Native type
 		if (native::determine_native_type<_T>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<_T*>(get_const_native_data(native::determine_native_type<_T>()));
+			return static_cast<_T*>(const_native_data(native::determine_native_type<_T>()));
 		} // Custom type
 		else {
-			return static_cast<_T*>(get_const_data(typeid(_T)));
+			return static_cast<_T*>(const_data(typeid(_T)));
 		}
 	}
 	/**
@@ -436,7 +436,7 @@ protected:
 	 *
 	 * @return A pointer to the data.
 	*/
-	virtual void * get_native_data(native::NATIVE_TYPE _type) = 0;
+	virtual void * native_data(native::NATIVE_TYPE _type) = 0;
 	/**
 	 * Returns a pointer to immutable native data.
 	 *
@@ -450,7 +450,7 @@ protected:
 	 *
 	 * @return A pointer to the data.
 	*/
-	virtual const void * get_const_native_data(native::NATIVE_TYPE _type) const = 0;
+	virtual const void * const_native_data(native::NATIVE_TYPE _type) const = 0;
 	/**
 	 * Returns a pointer to mutable custom data.
 	 *
@@ -464,7 +464,7 @@ protected:
 	 *
 	 * @return A pointer to the data.
 	*/
-	virtual void * get_data(const std::type_info & _type) = 0;
+	virtual void * data(const std::type_info & _type) = 0;
 	/**
 	 * Returns a pointer to immutable custom data.
 	 *
@@ -478,7 +478,7 @@ protected:
 	 *
 	 * @return A pointer to the data.
 	*/
-	virtual const void * get_const_data(const std::type_info & _type) const = 0;
+	virtual const void * const_data(const std::type_info & _type) const = 0;
 };
 
 }

@@ -45,17 +45,17 @@ void buffer_output_stream::append_stream(output_stream & _stream)
 	}
 }
 
-buffer_output_stream::cursor_type buffer_output_stream::get_position() const
+buffer_output_stream::cursor_type buffer_output_stream::position() const
 {
 	return _size;
 }
 
-buffer_output_stream::cursor_type buffer_output_stream::get_size() const
+buffer_output_stream::cursor_type buffer_output_stream::size() const
 {
 	return _size - _beginning;
 }
 
-const int8_t * buffer_output_stream::get_buffer() const
+const int8_t * buffer_output_stream::buffer() const
 {
 	return _buffer.get() + _beginning;
 }

@@ -86,7 +86,7 @@ public:
 	 *
 	 * @return The cursor position.
 	*/
-	virtual cursor_type get_position() const = 0;
+	virtual cursor_type position() const = 0;
 
 protected:
 	/**

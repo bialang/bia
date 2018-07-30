@@ -24,11 +24,11 @@ public:
 	 *
 	 * @return The interpreter.
 	*/
-	static const interpreter & get_interpreter() noexcept;
+	static const interpreter & interpreter() noexcept;
 
 private:
 	/**	Defines the interpreter for the Bia grammar.	*/
-	static interpreter _interpreter;
+	static grammar::interpreter _interpreter;
 
 	/**
 	 * Creates an interpreter with the Bia rules.
@@ -40,7 +40,7 @@ private:
 	 *
 	 * @return The newly created interpreter.
 	*/
-	static interpreter init_rules();
+	static grammar::interpreter init_rules();
 };
 
 }

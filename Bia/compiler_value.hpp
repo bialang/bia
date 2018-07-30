@@ -223,7 +223,7 @@ public:
 	 *
 	 * @return The type.
 	*/
-	VALUE_TYPE get_type() const noexcept
+	VALUE_TYPE type() const noexcept
 	{
 		return _return_type;
 	}
@@ -235,7 +235,7 @@ public:
 	 *
 	 * @return The value.
 	*/
-	return_value get_value() const noexcept
+	return_value value() const noexcept
 	{
 		return _return_value;
 	}

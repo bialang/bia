@@ -11,7 +11,7 @@ namespace grammar
 
 void interpreter::set_rule(interpreter_rule && _rule)
 {
-	auto _rule_id = _rule.get_id();
+	auto _rule_id = _rule.id();
 
 	if (_rule_id < BGR_RULE_COUNT) {
 		_rules[_rule_id] = std::move(_rule);
@@ -49,7 +49,7 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 			_rules[BGR_ROOT].run_rule(_input, _param);
 		} catch (const exception::limitation_error & ex) {
 			// Reset
-			auto _buffer = _input.get_buffer();
+			auto _buffer = _input.buffer();
 
 			fwrite(_buffer.first, 1, _buffer.second - _buffer.first, stdout);
 			_input.reset(_mark);
@@ -57,7 +57,7 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 			break;
 		}
 
-		auto _buffer = _input.get_buffer();
+		auto _buffer = _input.buffer();
 
 		fwrite(_buffer.first, 1, _buffer.second - _buffer.first, stdout);
 

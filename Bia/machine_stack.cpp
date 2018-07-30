@@ -26,7 +26,7 @@ machine_stack::~machine_stack()
 
 void machine_stack::pop(uint32_t _member_count)
 {
-	auto _member_size = memory::allocator::get_block_size();
+	auto _member_size = memory::allocator::block_size();
 
 	if (_cursor < _member_count * _member_size) {
 		throw 1;
@@ -46,7 +46,7 @@ void machine_stack::pop(uint32_t _member_count)
 void machine_stack::push(framework::member ** _destination, uint32_t _member_count)
 {
 	auto _ptr = _buffer + _cursor;
-	auto _member_size = memory::allocator::get_block_size();
+	auto _member_size = memory::allocator::block_size();
 
 	if (_cursor + _member_count * _member_size > _max_size) {
 		throw 1;

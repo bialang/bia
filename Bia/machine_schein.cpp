@@ -32,12 +32,12 @@ void machine_schein::delete_all_allocations()
 	}
 }
 
-memory::allocator * machine_schein::get_allocator() noexcept
+memory::allocator * machine_schein::allocator() noexcept
 {
 	return _allocator;
 }
 
-memory::executable_allocator * machine_schein::get_executable_allocator() noexcept
+memory::executable_allocator * machine_schein::executable_allocator() noexcept
 {
 	return _executable_allocator;
 }
