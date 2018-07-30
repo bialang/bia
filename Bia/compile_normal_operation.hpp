@@ -41,6 +41,8 @@ public:
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
+	 *
+	 * @throws See compile_normal_operation::left_constant_operation().
 	*/
 	void operate(compiler_value _left, framework::operator_type _operator, compiler_value _right)
 	{
@@ -130,19 +132,27 @@ private:
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
+	 *
+	 * @throws
 	*/
 	template<typename _Left, typename _Right>
 	void left_constant_right_member_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
 	{
+		if (_value.get_type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			throw;
+		}
+
+		auto _destination = machine::platform::toolset::to_temp_member(_value.get_value().rt_temp_member);
+
 		if (std::is_same<typename std::remove_reference<_Left>::type, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
-				_toolset.call(&machine::link::operation_int32, static_cast<int32_t>(_left), nullptr, _operator, _right);
+				_toolset.call(&machine::link::operation_int32, static_cast<int32_t>(_left), _destination, _operator, _right);
 			} else {
-				_toolset.call(&machine::link::operation_int64, _left, nullptr, _operator, _right);
+				_toolset.call(&machine::link::operation_int64, _left, _destination, _operator, _right);
 			}
 		} else {
-			_toolset.call(&machine::link::operation_double, _left, nullptr, _operator, _right);
+			_toolset.call(&machine::link::operation_double, _left, _destination, _operator, _right);
 		}
 	}
 	/**
@@ -156,6 +166,8 @@ private:
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
+	 *
+	 * @throws See compile_normal_operation::left_constant_right_member_operation().
 	*/
 	template<typename _Left>
 	void left_constant_operation(_Left && _left, framework::operator_type _operator, compiler_value _right)
