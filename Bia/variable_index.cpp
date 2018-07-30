@@ -15,7 +15,7 @@ framework::member * variable_index::add(const char * _key, value_type _value)
 	auto _result = _map.emplace(_key, utility::make_guard(std::move(_value), &guard_action));
 
 	if (!_result.second) {
-		throw;
+		throw exception::symbol_error(BIA_EM_SYMBOL_ALREADY_EXISTS);
 	}
 
 	return _result.first->second.get().first;

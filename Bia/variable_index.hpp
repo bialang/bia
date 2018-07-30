@@ -8,6 +8,7 @@
 #include "allocator.hpp"
 #include "stl_allocator_wrapper.hpp"
 #include "guard.hpp"
+#include "exception.hpp"
 
 
 namespace bia
@@ -25,6 +26,7 @@ namespace machine
 class variable_index
 {
 public:
+	/** The value type. */
 	typedef memory::allocator::allocation<framework::member> value_type;
 
 	/**
@@ -36,6 +38,22 @@ public:
 	 * @param _allocator The allocator that should be used.
 	*/
 	explicit variable_index(const std::shared_ptr<memory::allocator> & _allocator) noexcept;
+	/**
+	 * Adds a member to the global scope.
+	 *
+	 * @remarks The key address should be created by one @ref string_manager.
+	 *
+	 * @since 3.64.131.725
+	 * @date 19-May-18
+	 *
+	 * @param _key The key.
+	 * @param _value The member allocation.
+	 *
+	 * @throws exception::symbol_error When the key already exists.
+	 * @throws See std::unordered_map::emplace().
+	 *
+	 * @return The inserted member address.
+	*/
 	framework::member * add(const char * _key, value_type _value);
 	/**
 	 * Searches for the key and returns the value.

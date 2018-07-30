@@ -48,7 +48,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	 *
-	 * @param _name Defines the name.
+	 * @param _name Defines the UTF-8 formatted name.
 	 * @param _length Deifnes the length of the name.
 	 *
 	 * @throws See memory::allocator::allocate().
@@ -91,7 +91,7 @@ private:
 		{
 			return _length == _right._length ? memcmp(_string, _right._string, _length) == 0 : false;
 		}
-		memory::allocator::universal_allocation get_allocation() const noexcept
+		memory::allocator::universal_allocation allocation() const noexcept
 		{
 			return { const_cast<char*>(_string), _length };
 		}

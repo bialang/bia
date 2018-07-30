@@ -24,7 +24,7 @@ string_manager::~string_manager()
 	// Delete all allocated strings
 	for (auto & _entry : _index) {
 		try {
-			_allocator->deallocate(_entry.get_allocation());
+			_allocator->deallocate(_entry.allocation());
 		} catch (...) {
 		}
 	}

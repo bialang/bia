@@ -25,6 +25,7 @@
 #define BIA_EM_FAILED_ALLOCATION "Allocation failed."
 #define BIA_EM_FAILED_MEMORY_PROTECTION "Cannot change protection of the memory address."
 #define BIA_EM_ASSIGN_ON_CONST "Assigns on constant variable are disallowed."
+#define BIA_EM_SYMBOL_ALREADY_EXISTS "Symbol already exists."
 
 
 namespace bia
