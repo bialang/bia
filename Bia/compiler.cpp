@@ -130,13 +130,13 @@ const grammar::report * compiler::handle_root_ignore(const grammar::report * _re
 const grammar::report * compiler::handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next)
 {
 	// Handle leftmost math term
-	auto _current_count = _counter.next();
+	auto _old_counter = _counter.peek();
 	auto i = (this->*_next)(_report + 1);
-	auto _left_value = _value;
+	auto _left = _value;
 
 	// Pop if not used
 	if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-		_counter.pop(_current_count);
+		_counter.pop(_old_counter);
 	}
 
 	do {
@@ -146,27 +146,30 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		// Handle right math term
 		i = (this->*_next)(i + 1);
 
-		// Pop if not used
-		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_counter.pop(_current_count);
-		}
-
-		// Call operator and set destination
+		// Pop if not used and set destination
 		auto _right = _value;
 
-		_value.set_return_temp(_current_count);
+		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_counter.pop(_old_counter);
+			_value.set_return_temp(_counter.next());
+		} else if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_value.set_return_temp(_left.value().rt_temp_member);
+		}
 
-		compile_normal_operation(_toolset, _value).operate(_left_value, _operator, _right);
+		// Call operator
+		compile_normal_operation(_toolset, _value).operate(_left, _operator, _right);
 
 		// Update if used
 		if (_value.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_counter.update(_value.value().rt_temp_member);
+			_old_counter = _value.value().rt_temp_member;
+
+			_counter.update(_old_counter);
 		}
 
-		_left_value = _value;
+		_left = _value;
 
 		// Pop back
-		_counter.pop(_current_count);
+		_counter.pop(_old_counter);
 	} while (i < _report->content.end);
 
 	return _report->content.end;

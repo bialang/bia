@@ -57,7 +57,8 @@ int main()
 		char _script[] = u8R""(
 global i = 6
 global j = 34
-print i * j
+print i + i *3 + i *3 + i*3*6
+#print i * j + 2*(j - 3)
 
 )"";
 		sizeof(nullptr);
