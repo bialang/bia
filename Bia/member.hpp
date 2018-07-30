@@ -18,22 +18,33 @@ namespace bia
 namespace framework
 {
 
+/**
+ * @brief The base of all members.
+ *
+ * The base class of all variables Bia knows.
+*/
 class member
 {
 public:
-
-
 	enum FLAG : int
 	{
+		/** No flags specified. */
 		F_NONE = 0,
+		/** The member is an integer. */
 		F_INT = 0x1,
+		/** The member is a double. */
 		F_DOUBLE = 0x2,
+		/** The member is a string. */
 		F_STRING = 0x4,
+		/** The member cannot be modified. */
 		F_CONST = 0x8,
+		/** The member can be displayed as an integer. */
 		F_TO_INT = 0x10,
+		/** The member can be displayed as a double. */
 		F_TO_DOUBLE = 0x20
 	};
 
+	/** The type of the parameter count. */
 	typedef uint32_t parameter_count;
 
 
@@ -69,7 +80,31 @@ public:
 	 * @throws exception::symbol_error If this member is not valid.
 	*/
 	virtual void print() const = 0;
+	/**
+	 * Copy this member to the specified destination.
+	 *
+	 * @since 3.65.132.736
+	 * @date 30-Jul-18
+	 *
+	 * @param [in,out] _destination The destionation member.
+	 *
+	 * @throws exception::symbol_error If this member is not valid.
+	 * @throws exception::execution_error If the operation is not supported by the member.
+	 * @throws See replace_this().
+	*/
 	virtual void copy(member * _destination) = 0;
+	/**
+	 * Creates a reference to this member.
+	 *
+	 * @since 3.65.132.736
+	 * @date 30-Jul-18
+	 *
+	 * @param [in,out] _destination The destionation member.
+	 *
+	 * @throws exception::symbol_error If this member is not valid.
+	 * @throws exception::execution_error If the operation is not supported by the member.
+	 * @throws See replace_this().
+	*/
 	virtual void refer(member * _destination) = 0;
 	/**
 	 * Clones this member to the specified location.
@@ -197,20 +232,6 @@ public:
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
 	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) = 0;
-	//virtual void operator_call_string(member * _destination, operator_type _operator, const char * _right) = 0;
-	/**
-	 * @throws	exception::OperatorException
-	*/
-	/*virtual void OperatorAssignCall(uint32_t p_unOperator, BiaMember * p_pRight) = 0;
-	virtual void OperatorAssignCallInt_32(uint32_t p_unOperator, int32_t p_nRight) = 0;
-	virtual void OperatorAssignCallInt_64(uint32_t p_unOperator, int64_t p_llRight) = 0;
-	virtual void OperatorAssignCallFloat(uint32_t p_unOperator, float p_rRight) = 0;
-	virtual void OperatorAssignCallDouble(uint32_t p_unOperator, double p_rRight) = 0;
-	virtual void OperatorAssignCallString(uint32_t p_unOperator, const char * p_szRight) = 0;*/
-	/**
-	 * @throws	exception::OperatorException
-	*/
-	//virtual void OperatorSelfCall(uint32_t p_unOperator) = 0;
 	/**
 	 * Some details about the content.
 	 *
@@ -323,25 +344,6 @@ public:
 	*/
 	virtual double to_double() const = 0;
 	/**
-	 * Compares this object to the right hand value.
-	 *
-	 * @throws	exception::BadCallException	Thrown when the member cannot be tested.
-	 * @throws	exception::OperatorException	Thrown when the operation is not valid.
-	 *
-	 * @return	A non-zero value for a successful result, otherwise 0.
-	*/
-	//virtual int32_t TestCallString(uint32_t p_unOperator, const char * p_szRight) = 0;
-	/**
-	 * Returns the member address matching the given name.
-	 *
-	 * @param	p_szName	Defines the zero-terminated name.
-	 *
-	 * @throws	exception::SymbolException	Thrown when the member is not known.
-	 *
-	 * @return	The address of the member.
-	*/
-	//virtual BiaMember * GetMember(const char * p_szName) = 0;
-	/**
 	 * Casts this member to the specified mutable type.
 	 *
 	 * @since 3.64.127.716
@@ -417,10 +419,6 @@ public:
 	}
 
 protected:
-	/** If true this object was initialized, otherwise not. */
-	//bool _initialized;
-
-
 	/**
 	 * Returns a pointer to mutable native data.
 	 *
