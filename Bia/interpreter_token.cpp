@@ -644,6 +644,7 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 			case '\r':
 				break;
 			case '\n':
+			case ';':
 			case 0:
 				// Move cursor
 				_input.skip(_buffer.first);
