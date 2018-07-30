@@ -144,7 +144,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		auto _operator = i->content.operator_code;
 
 		// Handle right math term
-		i = (this->*_next)(i + 1) + 1;
+		i = (this->*_next)(i + 1);
 
 		// Pop if not used
 		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
