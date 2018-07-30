@@ -55,7 +55,9 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
-hello_wörld()
+global i = 6
+global j = 34
+print i * j
 
 )"";
 		sizeof(nullptr);

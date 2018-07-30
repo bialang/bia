@@ -9,11 +9,9 @@ namespace machine
 
 machine_stack::machine_stack(memory::allocator * _allocator, size_t _size)
 {
-	this->_allocator = _allocator;
-	
-
 	auto _allocation = _allocator->allocate(_size);
-
+	
+	this->_allocator = _allocator;
 	_buffer = static_cast<int8_t*>(_allocation.first);
 	_max_size = _allocation.second;
 	_cursor = 0;

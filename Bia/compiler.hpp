@@ -142,6 +142,7 @@ private:
 	 * @param _report The corresponding report.
 	 *
 	 * @throws See handle_value_expression() and operation().
+	 * @throws See compile_normal_operation::operate().
 	 *
 	 * @return The end of the report.
 	*/
@@ -163,8 +164,20 @@ private:
 			// Handle right value expression
 			handle_value_expression<false>(_report + 3);
 
+			auto _right = _value;
+			auto _old_counter = _counter.peek();
+
+			_value.set_return_temp(_counter.next());
+
 			// Call operator
-			compile_normal_operation(_toolset, _value).operate(_left, _report[2].content.operator_code, _value);
+			compile_normal_operation(_toolset, _value).operate(_left, _report[2].content.operator_code, _right);
+
+			// Update counter
+			if (_value.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+				_counter.update(_value.value().rt_temp_member);
+			} else {
+				_counter.pop(_old_counter);
+			}
 
 			break;
 		}
@@ -218,7 +231,7 @@ private:
 	 * @param _next The next function hop. Should handle_math_expression_and_term<false>() or handle_math_factor().
 	 *
 	 * @throws See operation().
-	 * @throws See temp_counter::next(), temp_counter::current() and temp_counter::pop().
+	 * @throws See temp_counter::next(), temp_counter::update() and temp_counter::pop().
 	 * @throws Whatever @a _next throws.
 	 *
 	 * @return The end of the report.

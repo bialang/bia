@@ -42,7 +42,7 @@ public:
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See compile_normal_operation::left_constant_operation().
+	 * @throws See left_constant_operation() and left_member_operation().
 	*/
 	void operate(compiler_value _left, framework::operator_type _operator, compiler_value _right)
 	{
@@ -87,33 +87,41 @@ private:
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
+	 *
+	 * @throws
 	*/
 	template<typename _Member>
 	void left_member_operation(_Member && _member, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
+		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			throw;
+		}
+
+		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
+
 		switch (_right.type()) {
 		case VT::INT:
 		{
 			if (_right.is_int32()) {
-				_toolset.call(&framework::member::operator_call_int32, _member, nullptr, _operator, static_cast<int32_t>(_right.value().rt_int));
+				_toolset.call(&framework::member::operator_call_int32, _member, _destination, _operator, static_cast<int32_t>(_right.value().rt_int));
 			} else {
-				_toolset.call(&framework::member::operator_call_int32, _member, nullptr, _operator, _right.value().rt_int);
+				_toolset.call(&framework::member::operator_call_int32, _member, _destination, _operator, _right.value().rt_int);
 			}
 
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&framework::member::operator_call_double, _member, nullptr, _operator, _right.value().rt_double);
+			_toolset.call(&framework::member::operator_call_double, _member, _destination, _operator, _right.value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			_toolset.call(&framework::member::operator_call, _member, nullptr, _operator, _right.value().rt_member);
+			_toolset.call(&framework::member::operator_call, _member, _destination, _operator, _right.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::operator_call, _member, nullptr, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
+			_toolset.call(&framework::member::operator_call, _member, _destination, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		default:
@@ -167,7 +175,7 @@ private:
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See compile_normal_operation::left_constant_right_member_operation().
+	 * @throws See left_constant_right_member_operation().
 	*/
 	template<typename _Left>
 	void left_constant_operation(_Left && _left, framework::operator_type _operator, compiler_value _right)
