@@ -383,7 +383,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 		return error;
 	}
 
-	int _length = 1;
+	int _length = _buffer.first - _begin;
 
 	// Rest
 	while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
@@ -392,7 +392,9 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 
 		if (_code_point == '_' || encoding::utf::is_alnum(_code_point)) {
 			// Max identifier length reached
-			if (++_length > BIA_MAX_IDENTIFIER_LENGTH) {
+			_length += _buffer.first - _tmp;
+
+			if (_length > BIA_MAX_IDENTIFIER_LENGTH) {
 				return error;
 			}
 		} else {
