@@ -25,7 +25,7 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 
 void compiler::finalize()
 {
-	_toolset.finalize();
+	_toolset.finalize(_counter.max());
 }
 
 void compiler::test_compiler_value()
@@ -157,6 +157,11 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		_value.set_return_temp(_current_count);
 
 		compile_normal_operation(_toolset, _value).operate(_left_value, _operator, _right);
+
+		// Update if used
+		if (_value.get_type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_counter.update(_value.get_value().rt_temp_member);
+		}
 
 		_left_value = _value;
 

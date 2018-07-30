@@ -5,6 +5,7 @@
 #include <tuple>
 #include <initializer_list>
 #include <utility>
+#include <limits>
 
 #include "config.hpp"
 #include "architecture.hpp"
@@ -49,20 +50,22 @@ public:
 	*/
 	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output)
 	{
+		this->_context = _context;
+
 		// Create new stack frame for this entry point
 		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(_output);
 		architecture::add_instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(_output, 0);
 
-		//call(&toolset::pp, register_offset<REGISTER::EBP, int8_t, true>(0), register_offset<REGISTER::EBP, int8_t, false>(0));
+		// Allocate temp members
+		_temp_member_pos = _output.get_position();
 
-		// Allocate
-		architecture::add_instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(_output, 0 * sizeof(void*));
+		architecture::add_instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(_output, 0);
 		call(&machine_context::create_on_stack, _context, register_offset<REGISTER::EBP, int32_t, true>(0), uint32_t(0));
 
 		// Save result
 		architecture::add_instruction<OP_CODE::PUSH, REGISTER::EAX>(_output);
 
-		//architecture::add_instruction<OP_CODE::PUSH, REGISTER::EBP>(*this->_output, int8_t(-4));
+		_setup_end_pos = _output.get_position();
 	}
 	/**
 	 * Adds some necessary cleanup instruction to the output stream.
@@ -70,12 +73,40 @@ public:
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
+	 * @param _temp_count The amount of temp variables.
+	 *
 	 * @throws See architecture::add_instruction().
 	*/
-	void finalize()
+	void finalize(temp_index_type _temp_count)
 	{
-		// Cleanup stack frame and return
-		architecture::add_instruction<OP_CODE::LEAVE>(*_output);
+		if (_temp_count > std::numeric_limits<temp_index_type>::max() / sizeof(void*) || _temp_count < 0) {
+			throw 1;
+		}
+
+		// Adjust setup
+		if (_temp_count > 0) {
+			// Overwrite temp member creation
+			auto _current_pos = _output->get_position();
+
+			_output->set_position(_temp_member_pos);
+
+			architecture::add_instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(*_output, _temp_count * sizeof(void*));
+			call(&machine_context::create_on_stack, _context, register_offset<REGISTER::EBP, int32_t, true>(-_temp_count * sizeof(void*)), static_cast<uint32_t>(_temp_count));
+
+			_output->set_position(_current_pos);
+
+			// Member deletion
+			call(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
+			architecture::add_instruction32<OP_CODE::ADD, REGISTER::ESP>(*_output, _temp_count * sizeof(void*));
+
+			// Clean up stack
+			architecture::add_instruction<OP_CODE::LEAVE>(*_output);
+		} // Skip setup
+		else {
+			_output->set_beginning(_setup_end_pos);
+		}
+
+		// Return
 		architecture::add_instruction<OP_CODE::RETURN_NEAR>(*_output);
 	}
 	/**
@@ -276,7 +307,13 @@ public:
 private:
 	/** The output stream for the machine code. */
 	stream::output_stream * _output;
-
+	/** The position of the temp member creation. */
+	stream::output_stream::cursor_type _temp_member_pos;
+	/** The end position of the setup. */
+	stream::output_stream::cursor_type _setup_end_pos;
+	/** The machine context. */
+	machine_context * _context;
+	
 
 	template<typename _Ty>
 	void pass_instance(_Ty * _instance)
