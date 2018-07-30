@@ -31,6 +31,17 @@ public:
 	*/
 	virtual void set_position(cursor_type _position) = 0;
 	/**
+	 * Sets the beginning of the stream.
+	 *
+	 * @since 3.65.132.736
+	 * @date 30-Jul-18
+	 *
+	 * @param _position The new beginning.
+	 *
+	 * @throws
+	*/
+	virtual void set_beginning(cursor_type _position) = 0;
+	/**
 	 * Appends the streams to this one.
 	 *
 	 * @remarks This function is only required to work with @ref buffer_output_stream.

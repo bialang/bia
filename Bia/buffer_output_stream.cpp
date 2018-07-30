@@ -11,16 +11,27 @@ namespace stream
 
 buffer_output_stream::buffer_output_stream()
 {
-	_limit = _size = 0;
+	_limit = 0;
+	_size = 0;
+	_beginning = 0;
 }
 
 void buffer_output_stream::set_position(cursor_type _position)
 {
-	if (_position < 0 || _position > _limit) {
+	if (_position < _beginning || _position > _limit) {
 		throw;
 	}
 
 	_size = _position;
+}
+
+void buffer_output_stream::set_beginning(cursor_type _position)
+{
+	if (_position < 0 || _position > _size) {
+		throw;
+	}
+
+	_beginning = _position;
 }
 
 void buffer_output_stream::append_stream(output_stream & _stream)
@@ -37,6 +48,16 @@ void buffer_output_stream::append_stream(output_stream & _stream)
 buffer_output_stream::cursor_type buffer_output_stream::get_position() const
 {
 	return _size;
+}
+
+buffer_output_stream::cursor_type buffer_output_stream::get_size() const
+{
+	return _size - _beginning;
+}
+
+const int8_t * buffer_output_stream::get_buffer() const
+{
+	return _buffer.get() + _beginning;
 }
 
 void buffer_output_stream::prepare(size_t _size)
