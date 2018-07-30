@@ -50,8 +50,8 @@ int main()
 		*_context.get_address_or_create("b")->cast<int64_t>() = 69;*/
 		// Script
 		char _script[] = R""(
-global i = 0
-i = 3 + i
+global i = 90
+i = 3 * i
 print i
 
 )"";
