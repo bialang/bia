@@ -167,7 +167,7 @@ disassembler::instruction_list disassembler::init_instructions()
 	_add_instruction(0x0500000000, 8, 5, [](const disassembler * _disassembler, const uint8_t * _buffer) {
 		printf("add\teax,%i\n", *reinterpret_cast<const int32_t*>(_buffer + 1));
 	});
-	_add_instruction(0x8100000000 | 0300ll << 32, 13, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
+	_add_instruction(0x810000000000 | 0300ll << 32, 13, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
 		printf("add\t%s,%i\n", _register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
 	});
 	_add_instruction(0x2d00000000, 8, 5, [](const disassembler * _disassembler, const uint8_t * _buffer) {
@@ -234,6 +234,9 @@ disassembler::instruction_list disassembler::init_instructions()
 disassembler::function_map disassembler::init_function_map()
 {
 	function_map _function_map;
+
+	BIA_FUNCTION_ENTRY(machine_context::create_on_stack);
+	BIA_FUNCTION_ENTRY(machine_context::destroy_from_stack);
 
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int32);
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int64);
