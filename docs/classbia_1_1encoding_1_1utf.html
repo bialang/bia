@@ -139,8 +139,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a3b3cff13a45f1a0b261ff00eb61b5127"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0366181b1f2f6d57ed7e4c5d2c914865"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1encoding_1_1utf.html#a0366181b1f2f6d57ed7e4c5d2c914865">is_reserved</a> (<a class="el" href="classbia_1_1encoding_1_1utf.html#af0355e19c4201ea3eabf21c9b9343adf">code_point</a> _char) noexcept</td></tr>
 <tr class="separator:a0366181b1f2f6d57ed7e4c5d2c914865"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe50583d78ece406dae01f08206ec0a1"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1encoding_1_1utf.html#afe50583d78ece406dae01f08206ec0a1">get_hex_value</a> (<a class="el" href="classbia_1_1encoding_1_1utf.html#af0355e19c4201ea3eabf21c9b9343adf">code_point</a> _code_point) noexcept</td></tr>
-<tr class="separator:afe50583d78ece406dae01f08206ec0a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2045c81bc9e7994937947654570b189f"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1encoding_1_1utf.html#a2045c81bc9e7994937947654570b189f">hex_value</a> (<a class="el" href="classbia_1_1encoding_1_1utf.html#af0355e19c4201ea3eabf21c9b9343adf">code_point</a> _code_point) noexcept</td></tr>
+<tr class="separator:a2045c81bc9e7994937947654570b189f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="af0355e19c4201ea3eabf21c9b9343adf"></a>
@@ -222,40 +222,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afe50583d78ece406dae01f08206ec0a1"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint8_t bia::encoding::utf::get_hex_value </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classbia_1_1encoding_1_1utf.html#af0355e19c4201ea3eabf21c9b9343adf">code_point</a>&#160;</td>
-          <td class="paramname"><em>_code_point</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the value of the hexadecimal digit.</p>
-<dl class="section since"><dt>Since</dt><dd>3.64.128.720 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>16-May-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_code_point</td><td>The hexadecimal digit.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The value if it succeeds, otherwise ~0. </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a8db53d53ef67a2093bd969bd1f829f80"></a>
 <div class="memitem">
 <div class="memproto">
@@ -289,6 +255,40 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classbia_1_1encoding_1_1utf8.html#aa4f3359835b0928a0a428dc77b68eedd">bia::encoding::utf8</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2045c81bc9e7994937947654570b189f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint8_t bia::encoding::utf::hex_value </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1encoding_1_1utf.html#af0355e19c4201ea3eabf21c9b9343adf">code_point</a>&#160;</td>
+          <td class="paramname"><em>_code_point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the value of the hexadecimal digit.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.128.720 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>16-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_code_point</td><td>The hexadecimal digit.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value if it succeeds, otherwise ~0. </dd></dl>
 
 </div>
 </div>

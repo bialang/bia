@@ -17,6 +17,13 @@ namespace bia
 namespace compiler
 {
 
+/**
+ * @brief Helper class for the compiler.
+ *
+ * Compiles normal operations for the compiler.
+ *
+ * @see @ref compiler, @ref compile_compare_operation
+*/
 class compile_normal_operation
 {
 public:
@@ -88,7 +95,7 @@ private:
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws
+	 * @throws See function_caller_helper().
 	*/
 	template<typename _Member>
 	void left_member_operation(_Member && _member, framework::operator_type _operator, compiler_value _right)
@@ -136,6 +143,20 @@ private:
 			BIA_COMPILER_DEV_INVALID;
 		}
 	}
+	/**
+	 * A helper function for calling the given function.
+	 *
+	 * @since 3.65.133.740
+	 * @date 31-Jul-18
+	 *
+	 * @param [in] _function The function.
+	 * @param [in] _member The instance of the function.
+	 * @param [in] _destination (Optional) The destination of the operation result.
+	 * @param _operator The operator.
+	 * @param [in] _right The right hand value.
+	 *
+	 * @throws See machine::platform::toolset::call().
+	*/
 	template<typename _Function, typename _Member, typename _Right>
 	void function_caller_helper(_Function && _function, _Member && _member, machine::platform::toolset::temp_result * _destination, framework::operator_type _operator, _Right && _right)
 	{

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['real_5finitiator',['real_initiator',['../classbia_1_1force_1_1real__initiator.html',1,'bia::force']]],
+  ['refer',['refer',['../classbia_1_1framework_1_1native_1_1cstring__member.html#a95f52679c5d10703780b3cda7fef7dae',1,'bia::framework::native::cstring_member::refer()'],['../classbia_1_1framework_1_1member.html#a71ff9139751a9f391a7333aef43190db',1,'bia::framework::member::refer()'],['../classbia_1_1framework_1_1native_1_1native__member.html#a915ed39ee75baa6c9efc239bef292071',1,'bia::framework::native::native_member::refer()'],['../classbia_1_1framework_1_1executable_1_1static__function.html#af1555944f0c952c42b680014b030d7c6',1,'bia::framework::executable::static_function::refer()'],['../classbia_1_1framework_1_1undefined__member.html#aca9837c875ba9d2bc78f30593c8d30fd',1,'bia::framework::undefined_member::refer()']]],
   ['register_5fallocation',['register_allocation',['../classbia_1_1machine_1_1machine__schein.html#a302d85c0ee218ef4365f840b7cfc8368',1,'bia::machine::machine_schein']]],
   ['replace_5fthis',['replace_this',['../classbia_1_1framework_1_1member.html#a7bb98a6c69b0217e7e0172464c693109',1,'bia::framework::member']]],
   ['report',['report',['../structbia_1_1grammar_1_1report.html',1,'bia::grammar']]],
@@ -29,6 +30,6 @@ var searchData=
   ['rule_5ftype',['rule_type',['../structbia_1_1grammar_1_1report.html#a08120076a182d795dbf4e3fe3f92bba7',1,'bia::grammar::report']]],
   ['rules',['rules',['../structbia_1_1grammar_1_1token__param.html#ad896b83972c016aa7062a78611e28684',1,'bia::grammar::token_param']]],
   ['run_5frule',['run_rule',['../classbia_1_1grammar_1_1interpreter__rule.html#ae06bf4150ed0e6aa6ddf6bd73579aefd',1,'bia::grammar::interpreter_rule']]],
-  ['runtime_5ferror',['runtime_error',['../classbia_1_1exception_1_1runtime__error.html',1,'bia::exception']]],
-  ['runtime_5ferror',['runtime_error',['../classbia_1_1exception_1_1runtime__error.html#acf3ed84704cbe69ee860c809db626dda',1,'bia::exception::runtime_error::runtime_error(const std::string &amp;_message)'],['../classbia_1_1exception_1_1runtime__error.html#ad664b668edc43cbbadfcc09d11fdebae',1,'bia::exception::runtime_error::runtime_error(const char *_message)']]]
+  ['runtime_5ferror',['runtime_error',['../classbia_1_1exception_1_1runtime__error.html#acf3ed84704cbe69ee860c809db626dda',1,'bia::exception::runtime_error::runtime_error(const std::string &amp;_message)'],['../classbia_1_1exception_1_1runtime__error.html#ad664b668edc43cbbadfcc09d11fdebae',1,'bia::exception::runtime_error::runtime_error(const char *_message)']]],
+  ['runtime_5ferror',['runtime_error',['../classbia_1_1exception_1_1runtime__error.html',1,'bia::exception']]]
 ];

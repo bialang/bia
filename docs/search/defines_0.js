@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['bia_5fcompiler_5fdev_5finvalid',['BIA_COMPILER_DEV_INVALID',['../compiler_8hpp.html#a4d32fe617759c91c0f8c0d6e8d6c5fb6',1,'compiler.hpp']]],
+  ['bia_5fcompiler_5fdev_5finvalid',['BIA_COMPILER_DEV_INVALID',['../exception_8hpp.html#a4d32fe617759c91c0f8c0d6e8d6c5fb6',1,'exception.hpp']]],
   ['bia_5fem_5fassign_5fon_5fconst',['BIA_EM_ASSIGN_ON_CONST',['../exception_8hpp.html#adc9eb72875672ba15bf45f206390609a',1,'exception.hpp']]],
   ['bia_5fem_5ffailed_5fallocation',['BIA_EM_FAILED_ALLOCATION',['../exception_8hpp.html#a2e2aff65dc37eddff43f8b5bf23df6e2',1,'exception.hpp']]],
   ['bia_5fem_5ffailed_5fmemory_5fprotection',['BIA_EM_FAILED_MEMORY_PROTECTION',['../exception_8hpp.html#a8606995b60236bf995cfe6c2a40e6fb7',1,'exception.hpp']]],
@@ -11,6 +11,7 @@ var searchData=
   ['bia_5fem_5fnot_5fenough_5fspace',['BIA_EM_NOT_ENOUGH_SPACE',['../exception_8hpp.html#a1d04bb51bc51776614eb46a93d9c541a',1,'exception.hpp']]],
   ['bia_5fem_5fnull_5finstance',['BIA_EM_NULL_INSTANCE',['../exception_8hpp.html#aadc7b7b3dbbf83c75103da2235608ad8',1,'exception.hpp']]],
   ['bia_5fem_5freport_5flimit',['BIA_EM_REPORT_LIMIT',['../exception_8hpp.html#a494fb91eee1e7cdbf921b409fdbac41c',1,'exception.hpp']]],
+  ['bia_5fem_5fsymbol_5falready_5fexists',['BIA_EM_SYMBOL_ALREADY_EXISTS',['../exception_8hpp.html#a0cc288e8ba7198bd95f8911887ca4f0e',1,'exception.hpp']]],
   ['bia_5fem_5fundefined_5fmember',['BIA_EM_UNDEFINED_MEMBER',['../exception_8hpp.html#a15cd312cc554ebaab272c448c24dc6f9',1,'exception.hpp']]],
   ['bia_5fem_5funexpected_5ftype',['BIA_EM_UNEXPECTED_TYPE',['../exception_8hpp.html#ab3cea6cd1ef95d069608c3d7f75d6fdb',1,'exception.hpp']]],
   ['bia_5fem_5funsupported_5fexecute',['BIA_EM_UNSUPPORTED_EXECUTE',['../exception_8hpp.html#a2cfaf6f6a60286b1ae63ea2235ca8ddf',1,'exception.hpp']]],
@@ -22,7 +23,6 @@ var searchData=
   ['bia_5fimplementation_5fexception',['BIA_IMPLEMENTATION_EXCEPTION',['../exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141',1,'exception.hpp']]],
   ['bia_5fmax_5fidentifier_5flength',['BIA_MAX_IDENTIFIER_LENGTH',['../allocator_8hpp.html#a0ca07d06c765c54baf1db8f1fa09fc19',1,'config.hpp']]],
   ['bia_5fmax_5fkeyword_5flength',['BIA_MAX_KEYWORD_LENGTH',['../config_8hpp.html#a4ef735902fdd56f739b2cfe0dacc5e3a',1,'config.hpp']]],
-  ['bia_5fmax_5fmember_5fsize',['BIA_MAX_MEMBER_SIZE',['../config_8hpp.html#a4d912aa5056f38905be44c4b77e4a7ba',1,'config.hpp']]],
   ['bia_5fmax_5foperator_5flength',['BIA_MAX_OPERATOR_LENGTH',['../config_8hpp.html#a62fa18e42d7df6701ba01d8bb8bc074e',1,'config.hpp']]],
   ['bia_5fmin_5finput_5fbuffer_5fsize',['BIA_MIN_INPUT_BUFFER_SIZE',['../config_8hpp.html#a4901fc71a976a765803fa022219da3ea',1,'config.hpp']]]
 ];

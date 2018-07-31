@@ -6,5 +6,6 @@ var searchData=
   ['hasher',['hasher',['../classbia_1_1utility_1_1hasher.html',1,'bia::utility']]],
   ['hasher_2ehpp',['hasher.hpp',['../hasher_8hpp.html',1,'']]],
   ['hasher_3c_20uint32_5ft_20_3e',['hasher&lt; uint32_t &gt;',['../classbia_1_1utility_1_1hasher_3_01uint32__t_01_4.html',1,'bia::utility']]],
-  ['hasher_3c_20uint64_5ft_20_3e',['hasher&lt; uint64_t &gt;',['../classbia_1_1utility_1_1hasher_3_01uint64__t_01_4.html',1,'bia::utility']]]
+  ['hasher_3c_20uint64_5ft_20_3e',['hasher&lt; uint64_t &gt;',['../classbia_1_1utility_1_1hasher_3_01uint64__t_01_4.html',1,'bia::utility']]],
+  ['hex_5fvalue',['hex_value',['../classbia_1_1encoding_1_1utf.html#a2045c81bc9e7994937947654570b189f',1,'bia::encoding::utf']]]
 ];

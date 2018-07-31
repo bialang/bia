@@ -110,10 +110,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a793e9444c8f02db4dc5d8ff577d51a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a975b814340d231a2bb5d6b7ebd50131f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#a975b814340d231a2bb5d6b7ebd50131f">~string_manager</a> () noexcept</td></tr>
 <tr class="separator:a975b814340d231a2bb5d6b7ebd50131f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a10b34cbc90024fa13aa4f353f6abd6"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#a6a10b34cbc90024fa13aa4f353f6abd6">get_name_address</a> (const char *_name, size_t _length)</td></tr>
-<tr class="separator:a6a10b34cbc90024fa13aa4f353f6abd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4e25cd1513bf3074d6b23ac5240fcea"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#ad4e25cd1513bf3074d6b23ac5240fcea">get_format_address</a> (const char *_format, size_t _length)</td></tr>
-<tr class="separator:ad4e25cd1513bf3074d6b23ac5240fcea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5941daa81d6ca693b52248d0ccc0e2f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#ab5941daa81d6ca693b52248d0ccc0e2f">name_address</a> (const char *_name, size_t _length)</td></tr>
+<tr class="separator:ab5941daa81d6ca693b52248d0ccc0e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa53f688a57e1994d90b3633dc97ffca"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#afa53f688a57e1994d90b3633dc97ffca">format_address</a> (const char *_format, size_t _length)</td></tr>
+<tr class="separator:afa53f688a57e1994d90b3633dc97ffca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a9a4cfed7de41d6ccedda28edcc23ae13"></a>
@@ -234,12 +234,12 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ad4e25cd1513bf3074d6b23ac5240fcea"></a>
+<a class="anchor" id="afa53f688a57e1994d90b3633dc97ffca"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* bia::machine::string_manager::get_format_address </td>
+          <td class="memname">const char* bia::machine::string_manager::format_address </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>_format</em>, </td>
@@ -277,12 +277,12 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6a10b34cbc90024fa13aa4f353f6abd6"></a>
+<a class="anchor" id="ab5941daa81d6ca693b52248d0ccc0e2f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* bia::machine::string_manager::get_name_address </td>
+          <td class="memname">const char* bia::machine::string_manager::name_address </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>_name</em>, </td>
@@ -305,7 +305,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section date"><dt>Date</dt><dd>7-Apr-18</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">_name</td><td>Defines the name. </td></tr>
+    <tr><td class="paramname">_name</td><td>Defines the UTF-8 formatted name. </td></tr>
     <tr><td class="paramname">_length</td><td>Deifnes the length of the name.</td></tr>
   </table>
   </dd>

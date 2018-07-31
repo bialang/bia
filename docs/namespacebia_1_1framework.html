@@ -92,7 +92,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">bia::framework Namespace Reference</div>  </div>
 </div><!--header-->
@@ -108,6 +109,7 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html">member</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The base of all members.  <a href="classbia_1_1framework_1_1member.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1undefined__member.html">undefined_member</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,38 +127,43 @@ Enumerations</h2></td></tr>
 <a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a79e16d2806fb204fa3ba08babd1315ed">O_MINUS</a> = 0x2d, 
 <a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a94e0045472b1f91ca402a1833af07413">O_DIVIDE</a> = 0x2f, 
 <br />
-&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a653f69ed9b636cff4e3c82e2cfc89af6">O_MODULUS</a> = 0x25, 
+&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a78ca828f98f75e07f685deaa8d4c7213">O_DOUBLE_DIVIDE</a> = 0x2f2f, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a653f69ed9b636cff4e3c82e2cfc89af6">O_MODULUS</a> = 0x25, 
 <a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a72e828be7874cd2e18857a7a268d09e2">O_MULTIPLY</a> = 0x2a, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a2229536f8a0fcb75a625d43a0a1d7d7a">O_ASSIGN_PLUS</a> = 0x3d2b, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a512d371760ac05421d500e840a32d180">O_ASSIGN_MINUS</a> = 0x3d2d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a1e0007c50a187dfd316e5161f094923b">O_DOUBLE_MULTIPLY</a> = 0x2a2a, 
 <br />
-&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a2a19222c235e6764ceb4756b1f3cc7de">O_ASSIGN_DIVIDE</a> = 0x3d2f, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0aafcc3c51667ad146b595bda488bbb294">O_ASSIGN_MODULUS</a> = 0x3d25, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a80e25403fb8c663c2b8dcce94e836d22">O_ASSIGN_MULTIPLY</a> = 0x3d2a, 
+&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a2229536f8a0fcb75a625d43a0a1d7d7a">O_ASSIGN_PLUS</a> = 0x2b3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a512d371760ac05421d500e840a32d180">O_ASSIGN_MINUS</a> = 0x2d3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a2a19222c235e6764ceb4756b1f3cc7de">O_ASSIGN_DIVIDE</a> = 0x2f3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0aafcc3c51667ad146b595bda488bbb294">O_ASSIGN_MODULUS</a> = 0x253d, 
+<br />
+&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a80e25403fb8c663c2b8dcce94e836d22">O_ASSIGN_MULTIPLY</a> = 0x2a3d, 
 <a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a31d3f1bac70353e5942dc1d12b59ff2b">O_BITWISE_OR</a> = 0x7c, 
-<br />
-&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a2d38e1136c9bf0e385e392508da233b9">O_BITWISE_AND</a> = 0x26, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a2d38e1136c9bf0e385e392508da233b9">O_BITWISE_AND</a> = 0x26, 
 <a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0ab449d6ef282a2f196d32ac2fdd805245">O_BITWISE_XOR</a> = 0x5e, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a8d4e68124731e2edbe849412bd961577">O_BITWISE_INVERT</a> = 0x7e, 
+<br />
+&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a8d4e68124731e2edbe849412bd961577">O_BITWISE_INVERT</a> = 0x7e, 
 <a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a2661219254b3e47866a9f4c02ce54a07">O_BITWISE_ARITHMETIC_LEFT_SHIFT</a> = 0x3c3c, 
-<br />
-&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0ad6c69115b1928d2316e16f53a75d7ac0">O_BITWISE_ARITHMETIC_RIGHT_SHIFT</a> = 0x3e3e, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0ad6c69115b1928d2316e16f53a75d7ac0">O_BITWISE_ARITHMETIC_RIGHT_SHIFT</a> = 0x3e3e, 
 <a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0af5f7596332d1812d0b2978d4fe93bca7">O_BITWISE_LOGICAL_RIGHT_SHIFT</a> = 0x3e3e3e, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a6a8379fe53bac3bedc2bf489aa7edd0c">O_BITWISE_ASSIGN_OR</a> = 0x3d7c, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a6ecfd18a04601b3c8e09b5a83538e848">O_BITWISE_ASSIGN_AND</a> = 0x3d26, 
 <br />
-&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a7f906cc7200fb7cdcbc44947741f2936">O_BITWISE_ASSIGN_XOR</a> = 0x3d5e, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a86bb3a8e6573c547fc6857200cd46a50">O_BITWISE_ASSIGN_ARITHMETIC_LEFT_SHIFT</a> = 0x3d3c3c, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0ad171ef680497e9c0b58775d6afeb65e4">O_BITWISE_ASSIGN_ARITHMETIC_RIGHT_SHIFT</a> = 0x3d3e3e, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0ab41f10f73ce8c3a620cf827d0c01662c">O_BITWISE_ASSIGN_LOGICAL_RIGHT_SHIFT</a> = 0x3d3e3e3e, 
+&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a6a8379fe53bac3bedc2bf489aa7edd0c">O_BITWISE_ASSIGN_OR</a> = 0x7c3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a6ecfd18a04601b3c8e09b5a83538e848">O_BITWISE_ASSIGN_AND</a> = 0x263d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a7f906cc7200fb7cdcbc44947741f2936">O_BITWISE_ASSIGN_XOR</a> = 0x5e3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a86bb3a8e6573c547fc6857200cd46a50">O_BITWISE_ASSIGN_ARITHMETIC_LEFT_SHIFT</a> = 0x3c3c3d, 
 <br />
-&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0abb4a8ab243f041559ee4948920243242">O_EQUALS</a> = 0x3d3d, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0aa6a9829d75bc99772c7a5fd46385ff9c">O_EQUALS_NOT</a> = 0x3d21, 
+&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0ad171ef680497e9c0b58775d6afeb65e4">O_BITWISE_ASSIGN_ARITHMETIC_RIGHT_SHIFT</a> = 0x3e3e3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0ab41f10f73ce8c3a620cf827d0c01662c">O_BITWISE_ASSIGN_LOGICAL_RIGHT_SHIFT</a> = 0x3e3e3e3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0abb4a8ab243f041559ee4948920243242">O_EQUALS</a> = 0x3d3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0aa6a9829d75bc99772c7a5fd46385ff9c">O_EQUALS_NOT</a> = 0x213d, 
+<br />
+&#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a4fb97d52b7f1fce6a7ec323dfd27fca4">O_SAME</a> = 0x3d3d3d, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0acc01fb657e8d4d0cc0dbe5e4886d0a01">O_NOT_SAME</a> = 0x213d3d, 
 <a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0aa14da05386098c5953ed713116c084f3">O_LESS_THAN</a> = 0x3c, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a8befce0bedcfc8b3b9626a0426164b4d">O_LESS_EQUALS</a> = 0x3d3c, 
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a8befce0bedcfc8b3b9626a0426164b4d">O_LESS_EQUALS</a> = 0x3c3d, 
 <br />
 &#160;&#160;<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a91bdeee539a53d439c04afcffbeaec21">O_GREATER_THAN</a> = 0x3e, 
-<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0aa5626a6900a8960396f7c27b14d6ace3">O_GREATER_EQUALS</a> = 0x3d3e
+<a class="el" href="namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0aa5626a6900a8960396f7c27b14d6ace3">O_GREATER_EQUALS</a> = 0x3e3d
 <br />
  }</td></tr>
 <tr class="separator:ac4192d5c3767f4d8720dc4dff0e215a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,6 +187,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a86577087983d976880636861dc8652e5"><td class="memTemplParams" colspan="2">template&lt;typename _Class , typename _Return , typename... _Args&gt; </td></tr>
 <tr class="memitem:a86577087983d976880636861dc8652e5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#a86577087983d976880636861dc8652e5">create_member</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, _Return(_Class::*_function)(_Args...))</td></tr>
 <tr class="separator:a86577087983d976880636861dc8652e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacb2c51190c351bc44a8a7c3d91e8f6c"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
+<tr class="memitem:aacb2c51190c351bc44a8a7c3d91e8f6c"><td class="memTemplItemLeft" align="right" valign="top">constexpr _Ty&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#aacb2c51190c351bc44a8a7c3d91e8f6c">max</a> (_Ty &amp;&amp;_first, _Ty &amp;&amp;_second)</td></tr>
+<tr class="separator:aacb2c51190c351bc44a8a7c3d91e8f6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ab3cef8c0dd632cd243d7f183212d8a5f"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework.html#ab3cef8c0dd632cd243d7f183212d8a5f">max_member_size</a></td></tr>
+<tr class="separator:ab3cef8c0dd632cd243d7f183212d8a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a class="anchor" id="afc22072b4c4f68bcb56d0ccde909039c"></a>
@@ -217,11 +232,17 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0a94e0045472b1f91ca402a1833af07413"></a>O_DIVIDE&#160;</td><td class="fielddoc">
 <p>The <code>/</code> operator. </p>
 </td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0a78ca828f98f75e07f685deaa8d4c7213"></a>O_DOUBLE_DIVIDE&#160;</td><td class="fielddoc">
+<p>The <code>//</code> operator. </p>
+</td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0a653f69ed9b636cff4e3c82e2cfc89af6"></a>O_MODULUS&#160;</td><td class="fielddoc">
 <p>The <code>%</code> operator. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0a72e828be7874cd2e18857a7a268d09e2"></a>O_MULTIPLY&#160;</td><td class="fielddoc">
 <p>The <code>*</code> operator. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0a1e0007c50a187dfd316e5161f094923b"></a>O_DOUBLE_MULTIPLY&#160;</td><td class="fielddoc">
+<p>The <code>**</code> operator. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0a2229536f8a0fcb75a625d43a0a1d7d7a"></a>O_ASSIGN_PLUS&#160;</td><td class="fielddoc">
 <p>The <code>+=</code> operator. </p>
@@ -282,6 +303,12 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0aa6a9829d75bc99772c7a5fd46385ff9c"></a>O_EQUALS_NOT&#160;</td><td class="fielddoc">
 <p>The <code>!=</code> operator. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0a4fb97d52b7f1fce6a7ec323dfd27fca4"></a>O_SAME&#160;</td><td class="fielddoc">
+<p>The <code>===</code> operator. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0acc01fb657e8d4d0cc0dbe5e4886d0a01"></a>O_NOT_SAME&#160;</td><td class="fielddoc">
+<p>The <code>!==</code> operator. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac4192d5c3767f4d8720dc4dff0e215a0aa14da05386098c5953ed713116c084f3"></a>O_LESS_THAN&#160;</td><td class="fielddoc">
 <p>The <code>&lt;</code> operator. </p>
@@ -630,6 +657,57 @@ template&lt;typename _Class , typename _Return , typename... _Args&gt; </div>
   </dd>
 </dl>
 
+</div>
+</div>
+<a class="anchor" id="aacb2c51190c351bc44a8a7c3d91e8f6c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr _Ty bia::framework::max </td>
+          <td>(</td>
+          <td class="paramtype">_Ty &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_Ty &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_second</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="ab3cef8c0dd632cd243d7f183212d8a5f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto bia::framework::max_member_size</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= <a class="code" href="namespacebia_1_1framework.html#aacb2c51190c351bc44a8a7c3d91e8f6c">max</a>(<span class="keyword">sizeof</span>(native::cstring_member),</div><div class="line">    <a class="code" href="namespacebia_1_1framework.html#aacb2c51190c351bc44a8a7c3d91e8f6c">max</a>(<span class="keyword">sizeof</span>(<a class="code" href="namespacebia_1_1framework_1_1native.html#a2d7eaa247660a03c04b4f5bfd651e212">native::int_member</a>),</div><div class="line">        <a class="code" href="namespacebia_1_1framework.html#aacb2c51190c351bc44a8a7c3d91e8f6c">max</a>(<span class="keyword">sizeof</span>(executable::static_function&lt;void&gt;), <span class="keywordtype">size_t</span>(0))))</div><div class="ttc" id="namespacebia_1_1framework_html_aacb2c51190c351bc44a8a7c3d91e8f6c"><div class="ttname"><a href="namespacebia_1_1framework.html#aacb2c51190c351bc44a8a7c3d91e8f6c">bia::framework::max</a></div><div class="ttdeci">constexpr _Ty max(_Ty &amp;&amp;_first, _Ty &amp;&amp;_second)</div><div class="ttdef"><b>Definition:</b> max_member_size.hpp:16</div></div>
+<div class="ttc" id="namespacebia_1_1framework_1_1native_html_a2d7eaa247660a03c04b4f5bfd651e212"><div class="ttname"><a href="namespacebia_1_1framework_1_1native.html#a2d7eaa247660a03c04b4f5bfd651e212">bia::framework::native::int_member</a></div><div class="ttdeci">native_member&lt; int64_t &gt; int_member</div><div class="ttdef"><b>Definition:</b> native_member.hpp:214</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

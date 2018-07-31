@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['bao_5farrow_5faccess',['BAO_ARROW_ACCESS',['../namespacebia_1_1grammar.html#acae94397c2acb97affdd55578f5739e7a0ca70e0654cb4e8ef1edc7802f0042a1',1,'bia::grammar']]],
-  ['bao_5fdot',['BAO_DOT',['../namespacebia_1_1grammar.html#acae94397c2acb97affdd55578f5739e7a300db064431a11fa519026f20b842b31',1,'bia::grammar']]],
   ['begin',['BEGIN',['../structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a19aad9f2fe3ce0023298ab83f7e75775',1,'bia::grammar::report']]],
   ['bgr_5fcondition_5fexpression',['BGR_CONDITION_EXPRESSION',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a4752521886e76a639d64b5890de1aa27',1,'bia::grammar']]],
   ['bgr_5fcondition_5fexpression_5fhelper_5f0',['BGR_CONDITION_EXPRESSION_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9abf966bbc188b06df21b88322c899f74c',1,'bia::grammar']]],
@@ -16,12 +14,10 @@ var searchData=
   ['bgr_5fmath_5ffactor_5fhelper_5f0',['BGR_MATH_FACTOR_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9af81720169dbddeb1b5fb84c4a854f943',1,'bia::grammar']]],
   ['bgr_5fmath_5fterm',['BGR_MATH_TERM',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a5a01f3552cab97ebedc6c2bb97267288',1,'bia::grammar']]],
   ['bgr_5fmath_5fterm_5fhelper_5f0',['BGR_MATH_TERM_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9aecc794ff09101842f95fe9a61f5266d1',1,'bia::grammar']]],
-  ['bgr_5fmath_5fterm_5fhelper_5f1',['BGR_MATH_TERM_HELPER_1',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a50a3498988131da21e87f19bcb9950b0',1,'bia::grammar']]],
   ['bgr_5fmember',['BGR_MEMBER',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a2c982759142a1632a0ae7f0fd681b2be',1,'bia::grammar']]],
   ['bgr_5fmember_5fhelper_5f0',['BGR_MEMBER_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a79b98e80aaf17adc1a4d7c88cd86d4fe',1,'bia::grammar']]],
   ['bgr_5fmember_5fhelper_5f1',['BGR_MEMBER_HELPER_1',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a3f6d75dd2d88e9ba3673d558c4937d8d',1,'bia::grammar']]],
   ['bgr_5fmember_5fhelper_5f2',['BGR_MEMBER_HELPER_2',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a13af0c8f162a8714e70a15b440f016f8',1,'bia::grammar']]],
-  ['bgr_5fmember_5fhelper_5f3',['BGR_MEMBER_HELPER_3',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a90158b259a29f6fa14d09731e275c05e',1,'bia::grammar']]],
   ['bgr_5fnormal_5fstatement',['BGR_NORMAL_STATEMENT',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9aa6c3fde55ff4472cea2e60b16d3d71ac',1,'bia::grammar']]],
   ['bgr_5fparameter',['BGR_PARAMETER',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a1716adb687651416f155338f731ba12f',1,'bia::grammar']]],
   ['bgr_5fparameter_5fhelper_5f0',['BGR_PARAMETER_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a282fe026cf87664db50cb442a6099475',1,'bia::grammar']]],
@@ -42,6 +38,7 @@ var searchData=
   ['bgr_5fvalue_5fhelper_5f0',['BGR_VALUE_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a9b53f02200ea8629db9b39940d604271',1,'bia::grammar']]],
   ['bgr_5fvalue_5fraw',['BGR_VALUE_RAW',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a8dc7662d9ea9bed2854b5b2814a52072',1,'bia::grammar']]],
   ['bgr_5fvariable_5fdeclaration',['BGR_VARIABLE_DECLARATION',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9a5cfba86bbb685aa1454a18625cae0f08',1,'bia::grammar']]],
+  ['bgr_5fvariable_5fdeclaration_5fhelper_5f0',['BGR_VARIABLE_DECLARATION_HELPER_0',['../namespacebia_1_1grammar.html#a6fdfa964018909c2c5d04910e5ea72f9ae875223e8c362d7df7e5e5f7597ff00f',1,'bia::grammar']]],
   ['bm_5fidentifier',['BM_IDENTIFIER',['../namespacebia_1_1grammar.html#ab5119acef0e7085602668083ee37d202ae9d3d03ec9d8ccde9f2ac98a0cd73c64',1,'bia::grammar']]],
   ['bm_5finstantiation',['BM_INSTANTIATION',['../namespacebia_1_1grammar.html#ab5119acef0e7085602668083ee37d202a8dbf5ccb6414e08c9fa2f1775080db64',1,'bia::grammar']]],
   ['bm_5fstring',['BM_STRING',['../namespacebia_1_1grammar.html#ab5119acef0e7085602668083ee37d202ac3986c925a9fe539bf31b71261d0aadd',1,'bia::grammar']]],

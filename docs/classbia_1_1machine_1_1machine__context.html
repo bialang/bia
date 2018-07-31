@@ -91,7 +91,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classbia_1_1machine_1_1machine__context-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">bia::machine::machine_context Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
@@ -109,18 +111,30 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a682be944785fe3ed9bc41e81be834fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73646698432478c3512f84a52d1fc66a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a73646698432478c3512f84a52d1fc66a">machine_context</a> (std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> &gt; &amp;&amp;<a class="el" href="classbia_1_1machine_1_1machine__context.html#a40dbae1f8a43bc4e0e9a405d783a458e">_allocator</a>, std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> &gt; &amp;&amp;<a class="el" href="classbia_1_1machine_1_1machine__context.html#afcb5401543aa72a9f2fcddd6de526cd9">_executable_allocator</a>)</td></tr>
 <tr class="separator:a73646698432478c3512f84a52d1fc66a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27fbe7f3ffae11402c1f56ea0692915b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a27fbe7f3ffae11402c1f56ea0692915b">~machine_context</a> ()</td></tr>
-<tr class="separator:a27fbe7f3ffae11402c1f56ea0692915b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b8e144a14d356055d276f49b7b6ce60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a7b8e144a14d356055d276f49b7b6ce60">execute</a> (<a class="el" href="classbia_1_1stream_1_1input__stream.html">stream::input_stream</a> &amp;_script)</td></tr>
 <tr class="separator:a7b8e144a14d356055d276f49b7b6ce60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a1eba00a27796a7ae20e7974b0ff084"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a9a1eba00a27796a7ae20e7974b0ff084">get_allocator</a> () noexcept</td></tr>
-<tr class="separator:a9a1eba00a27796a7ae20e7974b0ff084"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a02f91dfcf04cbf9f48c31b0593c5cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a9a02f91dfcf04cbf9f48c31b0593c5cc">get_executable_allocator</a> () noexcept</td></tr>
-<tr class="separator:a9a02f91dfcf04cbf9f48c31b0593c5cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22e19dddab56ef3b35d513642c8b65aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a22e19dddab56ef3b35d513642c8b65aa">get_address_or_create</a> (<a class="el" href="classbia_1_1utility_1_1string__key.html">utility::string_key</a> _name)</td></tr>
-<tr class="separator:a22e19dddab56ef3b35d513642c8b65aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb4253ee094f9bb6cc5b6c83e1080322"><td class="memTemplParams" colspan="2">template&lt;typename _Ty , typename... _Args&gt; </td></tr>
+<tr class="memitem:afb4253ee094f9bb6cc5b6c83e1080322"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#afb4253ee094f9bb6cc5b6c83e1080322">emplace_member</a> (const char *_name, _Args &amp;&amp;..._args)</td></tr>
+<tr class="separator:afb4253ee094f9bb6cc5b6c83e1080322"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacf5dd2a4641e34dbfa4df4315fec3fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#aacf5dd2a4641e34dbfa4df4315fec3fc">allocator</a> () noexcept</td></tr>
+<tr class="separator:aacf5dd2a4641e34dbfa4df4315fec3fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20796df10d97950bf7370c8ab26c1231"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a20796df10d97950bf7370c8ab26c1231">executable_allocator</a> () noexcept</td></tr>
+<tr class="separator:a20796df10d97950bf7370c8ab26c1231"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a1facc36f7f7464abdaf087c35bb8d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a3a1facc36f7f7464abdaf087c35bb8d3">destroy_from_stack</a> (uint32_t _member_count)</td></tr>
+<tr class="separator:a3a1facc36f7f7464abdaf087c35bb8d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc19900e3402a6d2b8d3bb896172769d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#afc19900e3402a6d2b8d3bb896172769d">create_on_stack</a> (<a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> **_destination, uint32_t _member_count)</td></tr>
+<tr class="separator:afc19900e3402a6d2b8d3bb896172769d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f28546deb95088aedd0b03e3d38d8d"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a75f28546deb95088aedd0b03e3d38d8d">name_address</a> (<a class="el" href="classbia_1_1utility_1_1string__key.html">utility::string_key</a> _name)</td></tr>
+<tr class="separator:a75f28546deb95088aedd0b03e3d38d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33ebbd26eb331e50ee3cd07e7d19ffcf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a33ebbd26eb331e50ee3cd07e7d19ffcf">address_of_member</a> (const char *_name)</td></tr>
+<tr class="separator:a33ebbd26eb331e50ee3cd07e7d19ffcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e95853dd562cc689d12b2bdc141bb1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1machine__code.html">machine_code</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a6e95853dd562cc689d12b2bdc141bb1c">compile_script</a> (<a class="el" href="classbia_1_1stream_1_1input__stream.html">stream::input_stream</a> &amp;_script)</td></tr>
 <tr class="separator:a6e95853dd562cc689d12b2bdc141bb1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab317ee148b824f1e6d159ed8a9ce529a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#ab317ee148b824f1e6d159ed8a9ce529a">active_allocator</a> () noexcept</td></tr>
+<tr class="separator:ab317ee148b824f1e6d159ed8a9ce529a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -128,10 +142,17 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a40dbae1f8a43bc4e0e9a405d783a458e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcb5401543aa72a9f2fcddd6de526cd9"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#afcb5401543aa72a9f2fcddd6de526cd9">_executable_allocator</a></td></tr>
 <tr class="separator:afcb5401543aa72a9f2fcddd6de526cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af67448441a7104db9eda7d61544dcb1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1variable__index.html">variable_index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#af67448441a7104db9eda7d61544dcb1c">_variable_index</a></td></tr>
-<tr class="separator:af67448441a7104db9eda7d61544dcb1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7c9c75f9f90134925bcf09d9059416b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1string__manager.html">string_manager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#aa7c9c75f9f90134925bcf09d9059416b">_string_manager</a></td></tr>
 <tr class="separator:aa7c9c75f9f90134925bcf09d9059416b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af67448441a7104db9eda7d61544dcb1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1variable__index.html">variable_index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#af67448441a7104db9eda7d61544dcb1c">_variable_index</a></td></tr>
+<tr class="separator:af67448441a7104db9eda7d61544dcb1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a793e31007754831194b0a19b84b942df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1machine__stack.html">machine_stack</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a793e31007754831194b0a19b84b942df">_stack</a></td></tr>
+<tr class="separator:a793e31007754831194b0a19b84b942df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a7d418e419064a7857a58cc562e1eafae"><td class="memItemLeft" align="right" valign="top">static thread_local <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__context.html#a7d418e419064a7857a58cc562e1eafae">_active_allocator</a></td></tr>
+<tr class="separator:a7d418e419064a7857a58cc562e1eafae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A Bia machine context. </p>
@@ -221,7 +242,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a27fbe7f3ffae11402c1f56ea0692915b"></a>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ab317ee148b824f1e6d159ed8a9ce529a"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -229,7 +251,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bia::machine::machine_context::~machine_context </td>
+          <td class="memname">static <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a>* bia::machine::machine_context::active_allocator </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -237,14 +259,76 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the currently active allocator of the current thread.</p>
+<dl class="section since"><dt>Since</dt><dd>3.65.132.733 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>29-Jun-18</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The active allocator. </dd></dl>
 
 </div>
 </div>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a33ebbd26eb331e50ee3cd07e7d19ffcf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a>* bia::machine::machine_context::address_of_member </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the member address of the key. If it does not exists, it will be created.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.131.725 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>19-May-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_name</td><td>The key.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1variable__index.html#a191bba44f5bbfc53331c2d29a643dcab">variable_index::find()</a> and <a class="el" href="classbia_1_1machine_1_1variable__index.html#a6c7862968956f36e4093e63454e597ff">variable_index::add()</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The member address. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aacf5dd2a4641e34dbfa4df4315fec3fc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a>* bia::machine::machine_context::allocator </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the memory allocator.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The memory allocator of this context. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a6e95853dd562cc689d12b2bdc141bb1c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -258,6 +342,143 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afc19900e3402a6d2b8d3bb896172769d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::machine::machine_context::create_on_stack </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> **&#160;</td>
+          <td class="paramname"><em>_destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>_member_count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Pushes the variables to the stack.</p>
+<dl class="section since"><dt>Since</dt><dd>3.65.132.734 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>30-Jun-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">_destination</td><td>The destination of the created addresses. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">_member_count</td><td>The amount of member variables.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1machine__stack.html#ad66a4ab5e0ae4d5752e019d1f5bf914c">machine_stack::push()</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The address of the allocated space. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3a1facc36f7f7464abdaf087c35bb8d3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::machine::machine_context::destroy_from_stack </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>_member_count</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Pops the variables from the stack.</p>
+<dl class="section since"><dt>Since</dt><dd>3.65.132.734 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>30-Jun-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_member_count</td><td>The amount of member variables.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1machine__stack.html#abf7f5758e45a839cd4f5c7e55b9d2717">machine_stack::pop()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="afb4253ee094f9bb6cc5b6c83e1080322"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty , typename... _Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::machine::machine_context::emplace_member </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>_args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a20796df10d97950bf7370c8ab26c1231"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a>* bia::machine::machine_context::executable_allocator </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the memory allocator for executable memory.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The memory allocator of this context. </dd></dl>
 
 </div>
 </div>
@@ -285,12 +506,12 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a22e19dddab56ef3b35d513642c8b65aa"></a>
+<a class="anchor" id="a75f28546deb95088aedd0b03e3d38d8d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a>* bia::machine::machine_context::get_address_or_create </td>
+          <td class="memname">const char* bia::machine::machine_context::name_address </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1utility_1_1string__key.html">utility::string_key</a>&#160;</td>
           <td class="paramname"><em>_name</em></td><td>)</td>
@@ -298,80 +519,31 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the member address of the key. If it does not exists, it will be created.</p>
-<dl class="section since"><dt>Since</dt><dd>3.64.131.725 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>19-May-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_name</td><td>The key.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1variable__index.html#a49af06bc8beb978c268dffb436735c3d">variable_index::find()</a> and <a class="el" href="classbia_1_1machine_1_1variable__index.html#a1f6740db6b0d05d623e0d4b405aeaf21">variable_index::add()</a>.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The member address. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a9a1eba00a27796a7ae20e7974b0ff084"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a>* bia::machine::machine_context::get_allocator </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the memory allocator.</p>
-<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>The memory allocator of this context. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a9a02f91dfcf04cbf9f48c31b0593c5cc"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a>* bia::machine::machine_context::get_executable_allocator </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the memory allocator for executable memory.</p>
-<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>The memory allocator of this context. </dd></dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a7d418e419064a7857a58cc562e1eafae"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">thread_local <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a>* bia::machine::machine_context::_active_allocator</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The allocator of the context currently active. </p>
+
+</div>
+</div>
 <a class="anchor" id="a40dbae1f8a43bc4e0e9a405d783a458e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -395,6 +567,19 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>The allocator for executable memory. </p>
+
+</div>
+</div>
+<a class="anchor" id="a793e31007754831194b0a19b84b942df"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1machine__stack.html">machine_stack</a> bia::machine::machine_context::_stack</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The virtual machine stack. </p>
 
 </div>
 </div>

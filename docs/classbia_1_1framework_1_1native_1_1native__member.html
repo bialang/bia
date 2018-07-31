@@ -107,7 +107,7 @@ Inheritance diagram for bia::framework::native::native_member&lt; _Ty &gt;:</div
   <img src="classbia_1_1framework_1_1native_1_1native__member.png" usemap="#bia::framework::native::native_5Fmember_3C_20_5FTy_20_3E_map" alt=""/>
   <map id="bia::framework::native::native_5Fmember_3C_20_5FTy_20_3E_map" name="bia::framework::native::native_member&lt; _Ty &gt;_map">
 <area href="classbia_1_1framework_1_1native_1_1native__variable.html" alt="bia::framework::native::native_variable" shape="rect" coords="0,56,270,80"/>
-<area href="classbia_1_1framework_1_1member.html" alt="bia::framework::member" shape="rect" coords="0,0,270,24"/>
+<area href="classbia_1_1framework_1_1member.html" title="The base of all members. " alt="bia::framework::member" shape="rect" coords="0,0,270,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -118,28 +118,33 @@ Public Types</h2></td></tr>
 <tr class="memitem:ad859c0a8cd802bcc0ef5adacb6e9dba1"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">native_member</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ad859c0a8cd802bcc0ef5adacb6e9dba1">double_member</a></td></tr>
 <tr class="separator:ad859c0a8cd802bcc0ef5adacb6e9dba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classbia_1_1framework_1_1member"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classbia_1_1framework_1_1member')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classbia_1_1framework_1_1member.html">bia::framework::member</a></td></tr>
-<tr class="memitem:a42ba8d43565dca325d3575c8e7e43d6c inherit pub_types_classbia_1_1framework_1_1member"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6c">NATIVE_TYPE_FLAG</a> : int { <br />
-&#160;&#160;<a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6ca7e9c0eb9545889c8a75774e5d705358b">NTF_NONE</a> = 0, 
-<a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6ca9f43359bc8edd9883437fb1fe4c536fc">NTF_INT_8</a> = 0x1, 
-<a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6caaddf2f026afbfdd23854931ddb27fd25">NTF_INT_16</a> = 0x2, 
-<a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6cab28e64d653fe9dcaf93daf21e4a7ab10">NTF_INT_32</a> = 0x4, 
+<tr class="memitem:affbf39d40f37790692235926da094919 inherit pub_types_classbia_1_1framework_1_1member"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919">FLAG</a> : int { <br />
+&#160;&#160;<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a71dd49deefacc54288f23ae7c51acad4">F_NONE</a> = 0, 
+<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a390ee12a498bd38e0ddd2e61350c4e1a">F_INT</a> = 0x1, 
+<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a29134d67574414174b113a7fb890a75e">F_DOUBLE</a> = 0x2, 
+<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919ae49a1d305d7f2be9323f5add337d67e9">F_STRING</a> = 0x4, 
 <br />
-&#160;&#160;<a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6ca64225ceeb96b36e19085e9d128a4d858">NTF_INT_64</a> = 0x8, 
-<a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6caf6820aa45df4cbadde4e946e7df226c8">NTF_FLOAT</a> = 0x10, 
-<a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6cade5d55caca11c76fe8f7374e1d9e1482">NTF_DOUBLE</a> = 0x20, 
-<a class="el" href="classbia_1_1framework_1_1member.html#a42ba8d43565dca325d3575c8e7e43d6cad3bebe5a761e804219c0e19e8cf2bcf8">NTF_STRING</a> = 0x40
+&#160;&#160;<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a2a46887d1690429ba0e29bb9a364de91">F_CONST</a> = 0x8, 
+<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a896e54cf3d5182ef529ed0b11e67b391">F_TO_INT</a> = 0x10, 
+<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a94038d2a4abca61aaa35daa2b9a96516">F_TO_DOUBLE</a> = 0x20
 <br />
  }</td></tr>
-<tr class="separator:a42ba8d43565dca325d3575c8e7e43d6c inherit pub_types_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:affbf39d40f37790692235926da094919 inherit pub_types_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a802a36071c55e7d72448eb3a03ce838d inherit pub_types_classbia_1_1framework_1_1member"><td class="memItemLeft" align="right" valign="top">typedef uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a></td></tr>
 <tr class="separator:a802a36071c55e7d72448eb3a03ce838d inherit pub_types_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af179cd7ffd9bc94ab74612cdd84c3815"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#af179cd7ffd9bc94ab74612cdd84c3815">native_member</a> (typename std::enable_if&lt; std::is_same&lt; _Ty, int64_t &gt;::value||std::is_same&lt; _Ty, double &gt;::value, _Ty &gt;::type _value) noexcept</td></tr>
-<tr class="separator:af179cd7ffd9bc94ab74612cdd84c3815"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18b1d862aa6c392b7e1a6d1759baad4d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a18b1d862aa6c392b7e1a6d1759baad4d">native_member</a> (typename std::enable_if&lt; std::is_same&lt; _Ty, int64_t &gt;::value||std::is_same&lt; _Ty, double &gt;::value, _Ty &gt;::type _value)</td></tr>
+<tr class="separator:a18b1d862aa6c392b7e1a6d1759baad4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a388f213c7c0922c5414afddb9b907c35"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a388f213c7c0922c5414afddb9b907c35">native_member</a> (const <a class="el" href="classbia_1_1utility_1_1share.html">utility::share</a>&lt; std::pair&lt; _Ty, bool &gt;&gt; &amp;_data) noexcept</td></tr>
+<tr class="separator:a388f213c7c0922c5414afddb9b907c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0bb720fb957021a3bd545b369ab7153"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ae0bb720fb957021a3bd545b369ab7153">print</a> () const  override</td></tr>
 <tr class="separator:ae0bb720fb957021a3bd545b369ab7153"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a254c1828fc014e4a2e2256231f998257"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a254c1828fc014e4a2e2256231f998257">copy</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
+<tr class="separator:a254c1828fc014e4a2e2256231f998257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a915ed39ee75baa6c9efc239bef292071"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a915ed39ee75baa6c9efc239bef292071">refer</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
+<tr class="separator:a915ed39ee75baa6c9efc239bef292071"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade56c02bd5bb54672488e77d2e6acd03"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ade56c02bd5bb54672488e77d2e6acd03">clone</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
 <tr class="separator:ade56c02bd5bb54672488e77d2e6acd03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac298c36b2a0564275875874cab3e3c78"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ac298c36b2a0564275875874cab3e3c78">operator_call</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, const <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_right) override</td></tr>
@@ -150,30 +155,36 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a02dee439d6aceff56e0d91ebf314af92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c848f0a238f51b0bfa4a9a76211999b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a9c848f0a238f51b0bfa4a9a76211999b">operator_call_double</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, double _right)</td></tr>
 <tr class="separator:a9c848f0a238f51b0bfa4a9a76211999b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a449d7efe6eb2f57521d88c8ffa668c86"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a449d7efe6eb2f57521d88c8ffa668c86">is_const</a> () const  override</td></tr>
-<tr class="separator:a449d7efe6eb2f57521d88c8ffa668c86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf094004d1d83c78f98b82ac537dc27a"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#adf094004d1d83c78f98b82ac537dc27a">flags</a> () const  override</td></tr>
+<tr class="separator:adf094004d1d83c78f98b82ac537dc27a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bb8874602abed9da020a4416b569d4a"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a6bb8874602abed9da020a4416b569d4a">test</a> () const  override</td></tr>
 <tr class="separator:a6bb8874602abed9da020a4416b569d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e74820c5f9831daf6482f35699d93b5"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a6e74820c5f9831daf6482f35699d93b5">test_member</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_right) const  override</td></tr>
+<tr class="separator:a6e74820c5f9831daf6482f35699d93b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1c830ba3caa40f4e46af12f15981582"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ab1c830ba3caa40f4e46af12f15981582">test_int32</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int32_t _right) const  override</td></tr>
 <tr class="separator:ab1c830ba3caa40f4e46af12f15981582"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b3f40fe0f977226ae5c7eda68e3e58e"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a5b3f40fe0f977226ae5c7eda68e3e58e">test_int64</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int64_t _right) const  override</td></tr>
 <tr class="separator:a5b3f40fe0f977226ae5c7eda68e3e58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad27b037a9bb6ea1d1cce5c92abb85084"><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ad27b037a9bb6ea1d1cce5c92abb85084">test_double</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, double _right) const  override</td></tr>
 <tr class="separator:ad27b037a9bb6ea1d1cce5c92abb85084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97f678f2acf6c4c22bf4171cd86d227a"><td class="memItemLeft" align="right" valign="top">virtual int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a97f678f2acf6c4c22bf4171cd86d227a">to_int</a> () const  override</td></tr>
+<tr class="separator:a97f678f2acf6c4c22bf4171cd86d227a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97a9aab2cec1c915b0a4e160a33c5670"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a97a9aab2cec1c915b0a4e160a33c5670">to_double</a> () const  override</td></tr>
+<tr class="separator:a97a9aab2cec1c915b0a4e160a33c5670"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classbia_1_1framework_1_1native_1_1native__variable')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html">bia::framework::native::native_variable</a></td></tr>
 <tr class="memitem:afb8bde83c05ec34db229b775fb1903af inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#afb8bde83c05ec34db229b775fb1903af">undefine</a> () noexcept override</td></tr>
 <tr class="separator:afb8bde83c05ec34db229b775fb1903af inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8a29437b5b518e3d492bfecc83864a9 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#ac8a29437b5b518e3d492bfecc83864a9">execute</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_instance, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
-<tr class="separator:ac8a29437b5b518e3d492bfecc83864a9 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7506932a9c769e9dd63d7cd788c36941 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a7506932a9c769e9dd63d7cd788c36941">execute_count</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_instance, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a> _count...) override</td></tr>
-<tr class="separator:a7506932a9c769e9dd63d7cd788c36941 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa36c897116b6cd2f8250518f7039c259 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#aa36c897116b6cd2f8250518f7039c259">execute_format</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_instance, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, const char *_format, <a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a> _count...) override</td></tr>
-<tr class="separator:aa36c897116b6cd2f8250518f7039c259 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf9771a09446244e649b8ed9b02e2cf7 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#adf9771a09446244e649b8ed9b02e2cf7">execute</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
+<tr class="separator:adf9771a09446244e649b8ed9b02e2cf7 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b7eaaefc93780e8998b46365d7eefce inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a6b7eaaefc93780e8998b46365d7eefce">execute_count</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a> _count...) override</td></tr>
+<tr class="separator:a6b7eaaefc93780e8998b46365d7eefce inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdfe8ee19fe924aa804b93a74f3eb762 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#afdfe8ee19fe924aa804b93a74f3eb762">execute_format</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, const char *_format, <a class="el" href="classbia_1_1framework_1_1member.html#a802a36071c55e7d72448eb3a03ce838d">parameter_count</a> _count...) override</td></tr>
+<tr class="separator:afdfe8ee19fe924aa804b93a74f3eb762 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classbia_1_1framework_1_1member"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classbia_1_1framework_1_1member')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classbia_1_1framework_1_1member.html">bia::framework::member</a></td></tr>
 <tr class="memitem:ac4582146d0bbbac7ef3933a6b6db7b28 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#ac4582146d0bbbac7ef3933a6b6db7b28">member</a> () noexcept</td></tr>
 <tr class="separator:ac4582146d0bbbac7ef3933a6b6db7b28 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef90f0ecb9e816dca599bda757d3bc20 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#aef90f0ecb9e816dca599bda757d3bc20">~member</a> () noexcept</td></tr>
-<tr class="separator:aef90f0ecb9e816dca599bda757d3bc20 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47d3861e8b8b1fc36ed27ada8c570e41 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a47d3861e8b8b1fc36ed27ada8c570e41">~member</a> () noexcept=default</td></tr>
+<tr class="separator:a47d3861e8b8b1fc36ed27ada8c570e41 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fe6e5a1a0eab4f8e767b9317dd3ae83 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memTemplParams" colspan="2">template&lt;typename _Ty , typename _T  = typename std::remove_reference&lt;_Ty&gt;::type&gt; </td></tr>
 <tr class="memitem:a6fe6e5a1a0eab4f8e767b9317dd3ae83 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; <a class="el" href="structbia_1_1utility_1_1negation.html">utility::negation</a>&lt; std::is_const&lt; _T &gt;::value &gt;::value, _T * &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a6fe6e5a1a0eab4f8e767b9317dd3ae83">cast</a> ()</td></tr>
 <tr class="separator:a6fe6e5a1a0eab4f8e767b9317dd3ae83 inherit pub_methods_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,21 +197,15 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ada7d2df29ef49d8729ccfcd07fcee03b"><td class="memItemLeft" align="right" valign="top">virtual void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#ada7d2df29ef49d8729ccfcd07fcee03b">get_native_data</a> (<a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a> _type) override</td></tr>
-<tr class="separator:ada7d2df29ef49d8729ccfcd07fcee03b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92e6b040a46aa1296525974ba8235963"><td class="memItemLeft" align="right" valign="top">virtual const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a92e6b040a46aa1296525974ba8235963">get_const_native_data</a> (<a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a> _type) const  override</td></tr>
-<tr class="separator:a92e6b040a46aa1296525974ba8235963"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af73051b83d006d4406bee33604afc1f6"><td class="memItemLeft" align="right" valign="top">virtual void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#af73051b83d006d4406bee33604afc1f6">native_data</a> (<a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a> _type) override</td></tr>
+<tr class="separator:af73051b83d006d4406bee33604afc1f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d97396584844b599cafa1c445ef9687"><td class="memItemLeft" align="right" valign="top">virtual const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a0d97396584844b599cafa1c445ef9687">const_native_data</a> (<a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a> _type) const  override</td></tr>
+<tr class="separator:a0d97396584844b599cafa1c445ef9687"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classbia_1_1framework_1_1native_1_1native__variable')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html">bia::framework::native::native_variable</a></td></tr>
-<tr class="memitem:af7c9daae01d52ed5c817b91d53f7cfc7 inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#af7c9daae01d52ed5c817b91d53f7cfc7">get_data</a> (const std::type_info &amp;_type) override</td></tr>
-<tr class="separator:af7c9daae01d52ed5c817b91d53f7cfc7 inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a853762631f75d3c67fbb062844822dcd inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a853762631f75d3c67fbb062844822dcd">get_const_data</a> (const std::type_info &amp;_type) const  override</td></tr>
-<tr class="separator:a853762631f75d3c67fbb062844822dcd inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_attribs_classbia_1_1framework_1_1member"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classbia_1_1framework_1_1member')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classbia_1_1framework_1_1member.html">bia::framework::member</a></td></tr>
-<tr class="memitem:a59e584ea9ac9645d138ccfc0549aac67 inherit pro_attribs_classbia_1_1framework_1_1member"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1member.html#a59e584ea9ac9645d138ccfc0549aac67">_initialized</a></td></tr>
-<tr class="separator:a59e584ea9ac9645d138ccfc0549aac67 inherit pro_attribs_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53b364e6b068c7ea9d1bb3327e5ad2b1 inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a53b364e6b068c7ea9d1bb3327e5ad2b1">data</a> (const std::type_info &amp;_type) override</td></tr>
+<tr class="separator:a53b364e6b068c7ea9d1bb3327e5ad2b1 inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a340a333515ad87f4a7c6808657d494c6 inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a340a333515ad87f4a7c6808657d494c6">const_data</a> (const std::type_info &amp;_type) const  override</td></tr>
+<tr class="separator:a340a333515ad87f4a7c6808657d494c6 inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="ad859c0a8cd802bcc0ef5adacb6e9dba1"></a>
@@ -232,7 +237,7 @@ template&lt;typename _Ty &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af179cd7ffd9bc94ab74612cdd84c3815"></a>
+<a class="anchor" id="a18b1d862aa6c392b7e1a6d1759baad4d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -251,7 +256,7 @@ template&lt;typename _Ty &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -260,7 +265,48 @@ template&lt;typename _Ty &gt; </div>
 <dl class="section date"><dt>Date</dt><dd>6-May-18</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">_value</td><td>The initial value. </td></tr>
+    <tr><td class="paramname">_value</td><td>The initial value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1utility_1_1share.html#a784bd078e4ff428d89cbce54ab867f74">utility::share::share()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a388f213c7c0922c5414afddb9b907c35"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::<a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">native_member</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classbia_1_1utility_1_1share.html">utility::share</a>&lt; std::pair&lt; _Ty, bool &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>_data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Refer-Constructor.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.132.730 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>16-Jun-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_data</td><td>The data of the referred class. </td></tr>
   </table>
   </dd>
 </dl>
@@ -313,7 +359,7 @@ template&lt;typename _Ty &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a92e6b040a46aa1296525974ba8235963"></a>
+<a class="anchor" id="a0d97396584844b599cafa1c445ef9687"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -323,7 +369,7 @@ template&lt;typename _Ty &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const void* <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::get_const_native_data </td>
+          <td class="memname">virtual const void* <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::const_native_data </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a>&#160;</td>
           <td class="paramname"><em>_type</em></td><td>)</td>
@@ -348,17 +394,17 @@ template&lt;typename _Ty &gt; </div>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If the type is not supported.</td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1type__error.html" title="Indicates an invalid cast. ">exception::type_error</a></td><td>If the type is not supported.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the data. </dd></dl>
 
-<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a03de9d2b0bf4f827b0882562765f7300">bia::framework::member</a>.</p>
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a71fbf342fead2ef281a16ed2707fb466">bia::framework::member</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ada7d2df29ef49d8729ccfcd07fcee03b"></a>
+<a class="anchor" id="a254c1828fc014e4a2e2256231f998257"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -368,7 +414,89 @@ template&lt;typename _Ty &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void* <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::get_native_data </td>
+          <td class="memname">virtual void <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::copy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Copy this member to the specified destination.</p>
+<dl class="section since"><dt>Since</dt><dd>3.65.132.736 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>30-Jul-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">_destination</td><td>The destionation member.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If the operation is not supported by the member. </td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1framework_1_1member.html#a7bb98a6c69b0217e7e0172464c693109">replace_this()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#aa8b45a97b494786eeb08bb268d68a069">bia::framework::member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adf094004d1d83c78f98b82ac537dc27a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::flags </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Some details about the content.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>See <a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919">member::FLAG</a>. </dd></dl>
+
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a2a58547bf364027ae6b4b9182f71d453">bia::framework::member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af73051b83d006d4406bee33604afc1f6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void* <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::native_data </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a>&#160;</td>
           <td class="paramname"><em>_type</em></td><td>)</td>
@@ -393,63 +521,13 @@ template&lt;typename _Ty &gt; </div>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid.s </td></tr>
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1invalid__type.html" title="Indicates an invalid cast. ">exception::invalid_type</a></td><td>If the type is not supported.</td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1type__error.html" title="Indicates an invalid cast. ">exception::type_error</a></td><td>If the type is not supported.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the data. </dd></dl>
 
-<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#aa32f7eab77df6b4b28711189fa691380">bia::framework::member</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a449d7efe6eb2f57521d88c8ffa668c86"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename _Ty &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::is_const </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">exception::OperatorException</td><td></td></tr>
-    <tr><td class="paramname">exception::OperatorException</td><td>Checks whether the specified type matches this object.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_type</td><td>Defines the type.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if they match, otherwise false. Whether the data this member holds is const or not.</dd></dl>
-<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if it is const, otherwise false. </dd></dl>
-
-<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a5fb9ad6d59c63a3161119c3e9d95bda0">bia::framework::member</a>.</p>
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a5bc02bad80371d351c8f4413c64a8aae">bia::framework::member</a>.</p>
 
 </div>
 </div>
@@ -492,55 +570,7 @@ template&lt;typename _Ty &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates an instance without any parameters.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_pDestination</td><td>Defines the destination of the return result.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when this member cannot be executed. </td></tr>
-    <tr><td class="paramname">exception::ArgumentException</td><td>Thrown when the arguments do not match the function signature. Creates an instance with only members as parameters.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_pDestination</td><td>Defines the destination of the return result. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">p_unParameterCount</td><td>Defines how many parameters are passed. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">...</td><td>Defines the passed parameters.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">exception::BadCastException</td><td>Thrown when one of the arguments do not match. </td></tr>
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when this member cannot be executed. </td></tr>
-    <tr><td class="paramname">exception::ArgumentException</td><td>Thrown when the arguments do not match the function signature. Creates an instance with any type as parameter.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_pDestination</td><td>Defines the destination of the return result. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">p_unParameterCount</td><td>Defines how many parameters are passed. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">p_pcFormat</td><td>Defines the type order of the parameters. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">...</td><td>Defines the passed parameters.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">exception::BadCastException</td><td>Thrown when one of the arguments do not match. </td></tr>
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when this member cannot be executed. </td></tr>
-    <tr><td class="paramname">exception::ArgumentException</td><td>Thrown when the arguments do not match the function signature. </td></tr>
-    <tr><td class="paramname">exception::OperatorException</td><td>Thrown when the operator is not supported. </td></tr>
-    <tr><td class="paramname">exception::BadCallException</td><td>Thrown when operations are not supported. An operator call with another member as right value.</td></tr>
-  </table>
-  </dd>
-</dl>
+<p>An operator call with another member as right value.</p>
 <dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>12-May-18</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -793,6 +823,51 @@ template&lt;typename _Ty &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a915ed39ee75baa6c9efc239bef292071"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::refer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a reference to this member.</p>
+<dl class="section since"><dt>Since</dt><dd>3.65.132.736 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>30-Jul-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">_destination</td><td>The destionation member.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If the operation is not supported by the member. </td></tr>
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1framework_1_1member.html#a7bb98a6c69b0217e7e0172464c693109">replace_this()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a71ff9139751a9f391a7333aef43190db">bia::framework::member</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a6bb8874602abed9da020a4416b569d4a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -821,10 +896,11 @@ template&lt;typename _Ty &gt; </div>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-zero value for the boolean value true, otherwise 0 for false. </dd></dl>
 
 <p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a12cdf4b8d5dd8d1a3ee92cee10814650">bia::framework::member</a>.</p>
 
@@ -877,10 +953,11 @@ template&lt;typename _Ty &gt; </div>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-zero value for the boolean value true, otherwise 0 for false. </dd></dl>
 
 <p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#ae0afabf6e05df16dfac2bede36b6615a">bia::framework::member</a>.</p>
 
@@ -933,10 +1010,11 @@ template&lt;typename _Ty &gt; </div>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-zero value for the boolean value true, otherwise 0 for false. </dd></dl>
 
 <p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a26162960b8084cb02a383639b3bba858">bia::framework::member</a>.</p>
 
@@ -989,12 +1067,146 @@ template&lt;typename _Ty &gt; </div>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
     <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-zero value for the boolean value true, otherwise 0 for false. </dd></dl>
 
 <p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#ae2d6d60d5f73e17dc12df0b80aaace49">bia::framework::member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6e74820c5f9831daf6482f35699d93b5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int32_t <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::test_member </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Tests the contents of this member to the right member.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.131.727 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>14-Jun-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_operator</td><td>The operator. </td></tr>
+    <tr><td class="paramname">_right</td><td>The right member.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1execution__error.html" title="Execution error. ">exception::execution_error</a></td><td>If a test call is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>If the operator is invalid.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-zero value for the boolean value true, otherwise 0 for false. </dd></dl>
+
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#af7b26f049701ffd7e5ea7e489846458b">bia::framework::member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97a9aab2cec1c915b0a4e160a33c5670"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::to_double </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the double representation of the content.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.132.729 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>15-Jun-18</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1type__error.html" title="Indicates an invalid cast. ">exception::type_error</a></td><td>If no representation is available.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The double representation. </dd></dl>
+
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a2938c416cf166872e59fae0a3bbfcdce">bia::framework::member</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97f678f2acf6c4c22bf4171cd86d227a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Ty &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int64_t <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html">bia::framework::native::native_member</a>&lt; _Ty &gt;::to_int </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the int representation of the content.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.132.729 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>15-Jun-18</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1symbol__error.html" title="Unresolvable symbol. ">exception::symbol_error</a></td><td>If this member is not valid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1type__error.html" title="Indicates an invalid cast. ">exception::type_error</a></td><td>If no representation is available.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The int representation. </dd></dl>
+
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a7bd19df96f675da90663d201f8fffb36">bia::framework::member</a>.</p>
 
 </div>
 </div>

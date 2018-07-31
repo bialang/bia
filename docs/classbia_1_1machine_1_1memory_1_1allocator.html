@@ -93,7 +93,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classbia_1_1machine_1_1memory_1_1allocator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">bia::machine::memory::allocator Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
@@ -130,6 +129,9 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a13e7f5574594b52a9d988780e138e7e7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a13e7f5574594b52a9d988780e138e7e7">~allocator</a> () noexcept=default</td></tr>
 <tr class="separator:a13e7f5574594b52a9d988780e138e7e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa593c86811f97ce095ef2524b11de71"><td class="memTemplParams" colspan="2">template&lt;typename _Base , typename _Deriviate  = _Base&gt; </td></tr>
+<tr class="memitem:aaa593c86811f97ce095ef2524b11de71"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aaa593c86811f97ce095ef2524b11de71">destroy</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Base &gt; _allocation)</td></tr>
+<tr class="separator:aaa593c86811f97ce095ef2524b11de71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4aec60e242250b72992eaa5df72ae46"><td class="memTemplParams" colspan="2">template&lt;typename _Ty &gt; </td></tr>
 <tr class="memitem:aa4aec60e242250b72992eaa5df72ae46"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aa4aec60e242250b72992eaa5df72ae46">destroy_blocks</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Ty &gt; _allocation)</td></tr>
 <tr class="separator:aa4aec60e242250b72992eaa5df72ae46"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,20 +147,20 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a15c1380255154fccfe67527208ca6781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9aca74fd71b1fe593999e7a2f0cd862f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7ee057e4fe120b2fcebd7aaf254e03cf">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a9aca74fd71b1fe593999e7a2f0cd862f">prepare</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a> _size)=0</td></tr>
 <tr class="separator:a9aca74fd71b1fe593999e7a2f0cd862f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b011c23ec477dc0d160fbb6c951b19e"><td class="memTemplParams" colspan="2">template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt; </td></tr>
+<tr class="memitem:a4b011c23ec477dc0d160fbb6c951b19e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Base &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a4b011c23ec477dc0d160fbb6c951b19e">construct</a> (_Args &amp;&amp;..._args)</td></tr>
+<tr class="separator:a4b011c23ec477dc0d160fbb6c951b19e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a576e520c60a0268e3734922aba0be906"><td class="memTemplParams" colspan="2">template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt; </td></tr>
 <tr class="memitem:a576e520c60a0268e3734922aba0be906"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Base &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a576e520c60a0268e3734922aba0be906">construct_blocks</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a">size_type</a> _count, _Args &amp;&amp;..._args)</td></tr>
 <tr class="separator:a576e520c60a0268e3734922aba0be906"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ad9ea42f14469249d8116ba12c67bd57a"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ad9ea42f14469249d8116ba12c67bd57a">block_size</a> () noexcept</td></tr>
+<tr class="separator:ad9ea42f14469249d8116ba12c67bd57a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d09b3ae65b994fae2e7c438117e1999"><td class="memTemplParams" colspan="2">template&lt;typename _Return , typename _Ty &gt; </td></tr>
 <tr class="memitem:a9d09b3ae65b994fae2e7c438117e1999"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Return &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a9d09b3ae65b994fae2e7c438117e1999">cast_allocation</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Ty &gt; _allocation) noexcept</td></tr>
 <tr class="separator:a9d09b3ae65b994fae2e7c438117e1999"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:ab114b27b1f7f2d1c55ccd80d8e09d6b3"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab114b27b1f7f2d1c55ccd80d8e09d6b3">block_size</a> = <a class="el" href="config_8hpp.html#a4d912aa5056f38905be44c4b77e4a7ba">BIA_MAX_MEMBER_SIZE</a></td></tr>
-<tr class="separator:ab114b27b1f7f2d1c55ccd80d8e09d6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An allocator interface. </p>
@@ -317,6 +319,33 @@ template&lt;typename _Ty &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ad9ea42f14469249d8116ba12c67bd57a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t bia::machine::memory::allocator::block_size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the required block size.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.132.731 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>28-Jun-18</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The block size. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a9d09b3ae65b994fae2e7c438117e1999"></a>
 <div class="memitem">
 <div class="memproto">
@@ -414,6 +443,58 @@ template&lt;typename _Return , typename _Ty &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a4b011c23ec477dc0d160fbb6c951b19e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt;_Base&gt; bia::machine::memory::allocator::construct </td>
+          <td>(</td>
+          <td class="paramtype">_Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>_args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allocates and constructs the desired type.</p>
+<dl class="section remark"><dt>Remarks</dt><dd><em>_Deriviate</em> must inherit <em>_Base</em>.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.64.132.730 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>16-Jun-18</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">_Base</td><td>The returned type. </td></tr>
+    <tr><td class="paramname">_Deriviate</td><td>The constructed type. </td></tr>
+    <tr><td class="paramname">_Args</td><td>The arguments that will be used to construct the element.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_args</td><td>The arguments used to create the element.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab132a440dbeca705a7d6273d6f18672b">allocate()</a>. </td></tr>
+    <tr><td class="paramname">See</td><td>the constructor of <em>_Deriviate</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocated and constructed block. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a576e520c60a0268e3734922aba0be906"></a>
 <div class="memitem">
 <div class="memproto">
@@ -448,7 +529,7 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
 </table>
 </div><div class="memdoc">
 <p>Allocates and constructs blocks of the desired type.</p>
-<dl class="section remark"><dt>Remarks</dt><dd><em>_Deriviate</em> must inherit <em>_Base</em> and must be smaller than <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab114b27b1f7f2d1c55ccd80d8e09d6b3">block_size</a>.</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd><em>_Deriviate</em> must inherit <em>_Base</em> and must be smaller than <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ad9ea42f14469249d8116ba12c67bd57a">block_size</a>.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>21-Apr-18</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
@@ -462,7 +543,6 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_count</td><td>How many blocks should be constructed. </td></tr>
-    <tr><td class="paramname">_type</td><td>The type of the memory. </td></tr>
     <tr><td class="paramname">_args</td><td>The arguments used to create the blocks.</td></tr>
   </table>
   </dd>
@@ -560,6 +640,55 @@ template&lt;typename _Base , typename _Deriviate  = _Base, typename... _Args&gt;
 
 </div>
 </div>
+<a class="anchor" id="aaa593c86811f97ce095ef2524b11de71"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Base , typename _Deriviate  = _Base&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::machine::memory::allocator::destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#aba26badddea56def8537363932eadb96">allocation</a>&lt; _Base &gt;&#160;</td>
+          <td class="paramname"><em>_allocation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Destroys and deallocates the element created by <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a4b011c23ec477dc0d160fbb6c951b19e">construct()</a>.</p>
+<dl class="section since"><dt>Since</dt><dd>3.64.132.730 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>16-Jun-18</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">_Base</td><td>The returned type. </td></tr>
+    <tr><td class="paramname">_Deriviate</td><td>The constructed type.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_allocation</td><td>The allocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">See</td><td><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a8a86548166c06e9d1657fdc14f8fe245">deallocate()</a>. </td></tr>
+    <tr><td class="paramname">See</td><td>the destructor of <em>_Deriviate</em>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="aa4aec60e242250b72992eaa5df72ae46"></a>
 <div class="memitem">
 <div class="memproto">
@@ -648,28 +777,6 @@ template&lt;typename _Ty &gt; </div>
 <dl class="section see"><dt>See also</dt><dd>For commiting the actual size use <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a7bb3892f42e43c92e064fa6e86eb67b1">commit()</a>. </dd></dl>
 
 <p>Implemented in <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#a390397575de02da6e4e27f3b7fc37d64">bia::machine::memory::simple_executable_allocator</a>, and <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#ae06b3f19405c044500eb062058219b1a">bia::machine::memory::simple_allocator</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="ab114b27b1f7f2d1c55ccd80d8e09d6b3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto bia::machine::memory::allocator::block_size = <a class="el" href="config_8hpp.html#a4d912aa5056f38905be44c4b77e4a7ba">BIA_MAX_MEMBER_SIZE</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>The size of a block. Cannot be changed. </p>
 
 </div>
 </div>

@@ -17,6 +17,13 @@ namespace bia
 namespace compiler
 {
 
+/**
+ * @brief Helper class for the compiler.
+ *
+ * Compiles compare operations for the compiler.
+ *
+ * @see @ref compiler, @ref compile_normal_operation
+*/
 class compile_compare_operation
 {
 public:
@@ -41,6 +48,8 @@ public:
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
+	 *
+	 * @throws See left_constant_operation() and left_member_operation().
 	*/
 	void operate(compiler_value _left, framework::operator_type _operator, compiler_value _right)
 	{
@@ -85,6 +94,8 @@ private:
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
+	 *
+	 * @throws See machine::platform::toolset::call() and machine::platform::toolset::write_test().
 	*/
 	template<typename _Member>
 	void left_member_operation(_Member && _member, framework::operator_type _operator, compiler_value _right)
@@ -140,6 +151,8 @@ private:
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
+	 *
+	 * @throws See machine::platform::toolset::call() and machine::platform::toolset::write_test().
 	*/
 	template<typename _Left, typename _Right>
 	void left_constant_right_member_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
@@ -169,6 +182,8 @@ private:
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
+	 *
+	 * @throws See left_constant_right_member_operation().
 	*/
 	template<typename _Left>
 	void left_constant_operation(_Left && _left, framework::operator_type _operator, compiler_value _right)

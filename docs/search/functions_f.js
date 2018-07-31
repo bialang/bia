@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['refer',['refer',['../classbia_1_1framework_1_1native_1_1cstring__member.html#a95f52679c5d10703780b3cda7fef7dae',1,'bia::framework::native::cstring_member::refer()'],['../classbia_1_1framework_1_1member.html#a71ff9139751a9f391a7333aef43190db',1,'bia::framework::member::refer()'],['../classbia_1_1framework_1_1native_1_1native__member.html#a915ed39ee75baa6c9efc239bef292071',1,'bia::framework::native::native_member::refer()'],['../classbia_1_1framework_1_1executable_1_1static__function.html#af1555944f0c952c42b680014b030d7c6',1,'bia::framework::executable::static_function::refer()'],['../classbia_1_1framework_1_1undefined__member.html#aca9837c875ba9d2bc78f30593c8d30fd',1,'bia::framework::undefined_member::refer()']]],
   ['register_5fallocation',['register_allocation',['../classbia_1_1machine_1_1machine__schein.html#a302d85c0ee218ef4365f840b7cfc8368',1,'bia::machine::machine_schein']]],
   ['replace_5fthis',['replace_this',['../classbia_1_1framework_1_1member.html#a7bb98a6c69b0217e7e0172464c693109',1,'bia::framework::member']]],
   ['report',['report',['../classbia_1_1compiler_1_1compiler.html#a64cae13c49cd1ceb00d2c05b740d68e9',1,'bia::compiler::compiler::report()'],['../classbia_1_1grammar_1_1report__receiver.html#adf8f9ad3dabfbffe2177008ef231d5e2',1,'bia::grammar::report_receiver::report()']]],

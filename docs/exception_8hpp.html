@@ -116,8 +116,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1exception_1_1runtime__error.html">bia::exception::runtime_error</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A runtime exception.  <a href="classbia_1_1exception_1_1runtime__error.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1exception_1_1invalid__type.html">bia::exception::invalid_type</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates an invalid cast.  <a href="classbia_1_1exception_1_1invalid__type.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1exception_1_1type__error.html">bia::exception::type_error</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates an invalid cast.  <a href="classbia_1_1exception_1_1type__error.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1exception_1_1encoding__error.html">bia::exception::encoding_error</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates an invalid encoding.  <a href="classbia_1_1exception_1_1encoding__error.html#details">More...</a><br /></td></tr>
@@ -155,6 +155,8 @@ Namespaces</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:aff6cf8b7fc1220b260842f4a8dec7141"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141">BIA_IMPLEMENTATION_EXCEPTION</a>(msg)&#160;&#160;&#160;<a class="el" href="classbia_1_1exception_1_1implementation__error.html">bia::exception::implementation_error</a>(msg, __FILE__, __LINE__)</td></tr>
 <tr class="separator:aff6cf8b7fc1220b260842f4a8dec7141"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d32fe617759c91c0f8c0d6e8d6c5fb6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#a4d32fe617759c91c0f8c0d6e8d6c5fb6">BIA_COMPILER_DEV_INVALID</a>&#160;&#160;&#160;throw <a class="el" href="exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141">BIA_IMPLEMENTATION_EXCEPTION</a>(&quot;Implementation error.&quot;)</td></tr>
+<tr class="separator:a4d32fe617759c91c0f8c0d6e8d6c5fb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af436ee0dfe5e2d2439d31d6ba9b4622f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#af436ee0dfe5e2d2439d31d6ba9b4622f">BIA_EM_UNSUPPORTED_TYPE</a>&#160;&#160;&#160;&quot;Type is not supported.&quot;</td></tr>
 <tr class="separator:af436ee0dfe5e2d2439d31d6ba9b4622f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3cea6cd1ef95d069608c3d7f75d6fdb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#ab3cea6cd1ef95d069608c3d7f75d6fdb">BIA_EM_UNEXPECTED_TYPE</a>&#160;&#160;&#160;&quot;Unexpected type.&quot;</td></tr>
@@ -191,8 +193,22 @@ Macros</h2></td></tr>
 <tr class="separator:a8606995b60236bf995cfe6c2a40e6fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc9eb72875672ba15bf45f206390609a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#adc9eb72875672ba15bf45f206390609a">BIA_EM_ASSIGN_ON_CONST</a>&#160;&#160;&#160;&quot;Assigns on constant variable are disallowed.&quot;</td></tr>
 <tr class="separator:adc9eb72875672ba15bf45f206390609a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cc288e8ba7198bd95f8911887ca4f0e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#a0cc288e8ba7198bd95f8911887ca4f0e">BIA_EM_SYMBOL_ALREADY_EXISTS</a>&#160;&#160;&#160;&quot;Symbol already exists.&quot;</td></tr>
+<tr class="separator:a0cc288e8ba7198bd95f8911887ca4f0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a4d32fe617759c91c0f8c0d6e8d6c5fb6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BIA_COMPILER_DEV_INVALID&#160;&#160;&#160;throw <a class="el" href="exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141">BIA_IMPLEMENTATION_EXCEPTION</a>(&quot;Implementation error.&quot;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="adc9eb72875672ba15bf45f206390609a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -307,6 +323,18 @@ Macros</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define BIA_EM_REPORT_LIMIT&#160;&#160;&#160;&quot;Report bundle limit reached.&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0cc288e8ba7198bd95f8911887ca4f0e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BIA_EM_SYMBOL_ALREADY_EXISTS&#160;&#160;&#160;&quot;Symbol already exists.&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">
