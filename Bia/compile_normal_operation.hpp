@@ -94,38 +94,49 @@ private:
 	void left_member_operation(_Member && _member, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
+		using t = machine::platform::toolset;
 
-		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			throw;
+		t::temp_result _destination_tmp(0);
+		t::temp_result * _destination = nullptr;
+
+		if (_value.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_destination = &_destination_tmp;
 		}
-
-		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
 
 		switch (_right.type()) {
 		case VT::INT:
 		{
 			if (_right.is_int32()) {
-				_toolset.call(&framework::member::operator_call_int32, _member, _destination, _operator, static_cast<int32_t>(_right.value().rt_int));
+				function_caller_helper(&framework::member::operator_call_int32, _member, _destination, _operator, static_cast<int32_t>(_right.value().rt_int));
 			} else {
-				_toolset.call(&framework::member::operator_call_int32, _member, _destination, _operator, _right.value().rt_int);
+				function_caller_helper(&framework::member::operator_call_int32, _member, _destination, _operator, _right.value().rt_int);
 			}
 
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&framework::member::operator_call_double, _member, _destination, _operator, _right.value().rt_double);
+			function_caller_helper(&framework::member::operator_call_double, _member, _destination, _operator, _right.value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			_toolset.call(&framework::member::operator_call, _member, _destination, _operator, _right.value().rt_member);
+			function_caller_helper(&framework::member::operator_call, _member, _destination, _operator, _right.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::operator_call, _member, _destination, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
+			function_caller_helper(&framework::member::operator_call, _member, _destination, _operator, t::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		default:
 			BIA_COMPILER_DEV_INVALID;
+		}
+	}
+	template<typename _Function, typename _Member, typename _Right>
+	void function_caller_helper(_Function && _function, _Member && _member, machine::platform::toolset::temp_result * _destination, framework::operator_type _operator, _Right && _right)
+	{
+		if (_destination) {
+			_toolset.call(std::forward<_Function>(_function), std::forward<_Member>(_member), *_destination, _operator, std::forward<_Right>(_right));
+		} else {
+			_toolset.call(std::forward<_Function>(_function), std::forward<_Member>(_member), nullptr, _operator, std::forward<_Right>(_right));
 		}
 	}
 	/**

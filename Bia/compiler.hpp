@@ -165,19 +165,15 @@ private:
 			handle_value_expression<false>(_report + 3);
 
 			auto _right = _value;
-			auto _old_counter = _counter.peek();
 
-			_value.set_return_temp(_counter.next());
+			// Reset destination
+			_value.set_return();
 
-			// Call operator
+			// Call assign operator
 			compile_normal_operation(_toolset, _value).operate(_left, _report[2].content.operator_code, _right);
 
-			// Update counter
-			if (_value.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-				_counter.update(_value.value().rt_temp_member);
-			} else {
-				_counter.pop(_old_counter);
-			}
+			// Set left as return
+			_value = _left;
 
 			break;
 		}
