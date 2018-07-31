@@ -150,8 +150,12 @@ private:
 	const grammar::report * handle_value_insecure(const grammar::report * _report)
 	{
 		switch (_report[1].rule_id) {
+		case grammar::BGR_VARIABLE_DECLARATION_INLINE:
+			handle_variable_declaration(_report + 1);
+
+			break;
 		case grammar::BGR_VALUE_EXPRESSION:
-			handle_value_expression<_Test>(_report + 1);
+			handle_value_expression(_report + 1);
 
 			break;
 		case grammar::BGR_VALUE_HELPER_0:
@@ -162,7 +166,7 @@ private:
 			auto _left = _value;
 
 			// Handle right value expression
-			handle_value_expression<false>(_report + 3);
+			handle_value_expression(_report + 3);
 
 			auto _right = _value;
 
@@ -181,30 +185,14 @@ private:
 			BIA_COMPILER_DEV_INVALID;
 		}
 
-		return _report->content.end;
-	}
-	template<bool _Test>
-	const grammar::report * handle_value_expression(const grammar::report * _report)
-	{
-		using JUMP = machine::platform::toolset::JUMP;
-
-		const auto _end = _report->content.end;
-		auto _test = false;
-		///TODO
-		do {
-			// Handle expression
-			_report = handle_condition_expression(_report + 1) + 1;
-
-			// Create test result
-			if (_Test || _test || _report < _end) {
-				test_compiler_value();
-			}
-
-			_test = true;
-		} while (_report < _end);
+		// Test
+		if (_Test) {
+			test_compiler_value();
+		}
 
 		return _report->content.end;
 	}
+	const grammar::report * handle_value_expression(const grammar::report * _report);
 	const grammar::report * handle_root(const grammar::report * _report);
 	/**
 	 * Handle the root without compiling it. This is only used to get the last report.

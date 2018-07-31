@@ -64,10 +64,9 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-hello_wörld()
-ser()
-ser()
-ser()
+if (global i = 1) {
+	print i
+}
 
 )"";
 		sizeof(nullptr);

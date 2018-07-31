@@ -63,6 +63,28 @@ void compiler::test_compiler_value()
 	}
 }
 
+const grammar::report * compiler::handle_value_expression(const grammar::report * _report)
+{
+	using JUMP = machine::platform::toolset::JUMP;
+
+	const auto _end = _report->content.end;
+	auto _test = false;
+	///TODO
+	do {
+		// Handle expression
+		_report = handle_condition_expression(_report + 1) + 1;
+
+		// Create test result
+		if (_test || _report < _end) {
+			test_compiler_value();
+		}
+
+		_test = true;
+	} while (_report < _end);
+
+	return _report->content.end;
+}
+
 const grammar::report * compiler::handle_root(const grammar::report * _report)
 {
 	switch (_report->rule_id) {

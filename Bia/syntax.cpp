@@ -65,6 +65,14 @@ interpreter syntax::init_rules()
 		interpreter_token::command_end
 		}));
 
+	// Variable declaration inline
+	_interpreter.set_rule(interpreter_rule(BGR_VARIABLE_DECLARATION_INLINE, interpreter_rule::F_WRAP_UP, {
+		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION_HELPER_0, flags::filler_token | flags::ending_ws_token>,
+		interpreter_token::identifier,
+		interpreter_token::keyword<operator_assign, flags::filler_token | flags::starting_ws_opt_token>,
+		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>
+		}));
+
 	// Variable declaration helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_VARIABLE_DECLARATION_HELPER_0, interpreter_rule::F_OR, {
 		interpreter_token::keyword<keyword_var>,
@@ -232,7 +240,7 @@ interpreter syntax::init_rules()
 
 	// Value
 	_interpreter.set_rule(interpreter_rule(BGR_VALUE, interpreter_rule::F_WRAP_UP | interpreter_rule::F_OR, {
-		// interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION, flags::filler_token>,
+		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION_INLINE>,
 		interpreter_token::rule_pointer<BGR_VALUE_HELPER_0>,
 		interpreter_token::rule_pointer<BGR_VALUE_EXPRESSION>
 		}));
