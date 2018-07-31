@@ -90,8 +90,11 @@ private:
 	void left_member_operation(_Member && _member, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
+		using T = machine::platform::toolset;
 
 		switch (_right.type()) {
+		case VT::TEST_VALUE_CONSTANT:
+			_right.set_return(static_cast<int64_t>(_right.value().rt_test_result));
 		case VT::INT:
 		{
 			if (_right.is_int32()) {
@@ -111,7 +114,11 @@ private:
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::test_member, _member, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
+			_toolset.call(&framework::member::test_member, _member, _operator, T::to_temp_member(_right.value().rt_temp_member));
+
+			break;
+		case VT::TEST_VALUE_REGISTER:
+			_toolset.call(&framework::member::test_int32, _member, _operator, T::test_result_value());
 
 			break;
 		default:

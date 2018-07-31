@@ -94,10 +94,10 @@ private:
 	void left_member_operation(_Member && _member, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
-		using t = machine::platform::toolset;
+		using T = machine::platform::toolset;
 
-		t::temp_result _destination_tmp(0);
-		t::temp_result * _destination = nullptr;
+		T::temp_result _destination_tmp(0);
+		T::temp_result * _destination = nullptr;
 
 		if (_value.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
 			_destination = &_destination_tmp;
@@ -125,11 +125,11 @@ private:
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			function_caller_helper(&framework::member::operator_call, _member, _destination, _operator, t::to_temp_member(_right.value().rt_temp_member));
+			function_caller_helper(&framework::member::operator_call, _member, _destination, _operator, T::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		case VT::TEST_VALUE_REGISTER:
-			function_caller_helper(&framework::member::operator_call_int32, _member, _destination, _operator, t::test_result_value());
+			function_caller_helper(&framework::member::operator_call_int32, _member, _destination, _operator, T::test_result_value());
 
 			break;
 		default:
