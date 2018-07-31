@@ -57,8 +57,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 global i = 6
-i = 1
-print i == true
+i += 1
 print i
 
 )"";
