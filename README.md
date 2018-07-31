@@ -10,19 +10,17 @@ Embedded C++ Scripting Language
 bia::machine::machine_context _context;
 
 // Add a lambda function
-_context.set_lambda("hello_world", [] {
+bia::set_lambda(_context, "hello_world", [] {
   puts("Hello, World! - C++");
 });
 
 // Bia script
 std::string _code = R"(
+  # Print 'Hello, World' to the console
+  print "Hello, World! - Bia"
 
-# Print 'Hello, World' to the console
-print "Hello, World! - Bia"
-
-# Call the C++ function and print 'Hello, World' to the console
-hello_world()
-
+  # Call the C++ function and print 'Hello, World' to the console
+  hello_world()
 )";
 
 // Execute
@@ -111,7 +109,7 @@ if 1 == 0 {
 }
 ```
 
-~~# The Simple C++ Interface~~ (In development)
+# The Simple C++ Interface (In development)
 - Adding a static function to your `_context`:
 
 ```
@@ -122,19 +120,19 @@ int square(int _base)
 }
 
 // Adding the function
-_context.set_function("square", &square);
+bia::set_function(_context, "square", &square);
 ```
 
 - Adding a lambda function:
 
 ```
 // Adding the function
-_context.set_lambda("int_sqrt", [] (double _value) {
+bia::set_lambda(_context, "int_sqrt", [] (double _value) {
   return static_cast<int>(sqrt(_value));
 });
 ```
 
-- Adding a C++ class:
+ ~~- Adding a C++ class:~~
 
 ```
 // A C++ class
