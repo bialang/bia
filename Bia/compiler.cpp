@@ -338,6 +338,8 @@ const grammar::report * compiler::handle_instantiation(const grammar::report * _
 
 const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)
 {
+	using T = machine::platform::toolset;
+
 	// Handle value and prepare the result for a function call
 	handle_value<false>(_report + 3, [&] {
 		auto _expression = _value;
@@ -348,6 +350,8 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 		// Make call
 		switch (_expression.type()) {
+		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
+			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
 		case compiler_value::VALUE_TYPE::INT:
 		{
 			// Optimize common used constant values
@@ -392,27 +396,17 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 			break;
 		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::clone, _toolset.to_temp_member(_expression.value().rt_temp_member), _destination);
+			_toolset.call(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
 
 			break;
-			/*case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
-				m_toolset.Call(&machine::link::InstantiateInt_32, pVariable, machine::architecture::BiaToolset::TestValueResult());
-
-				break;*/
-		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
-		{
-			if (_expression.value().rt_test_result) {
-				_toolset.call(&machine::link::instantiate_int_1, _destination);
-			} else {
-				_toolset.call(&machine::link::instantiate_int_0, _destination);
-			}
+		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
+			_toolset.call(&machine::link::instantiate_int32, T::test_result_value(), _destination);
 
 			break;
-		}
-		/*case compiler_value::VALUE_TYPE::RESULT_REGISTER:
-			m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::ResultValue(), pVariable);
+	/*case compiler_value::VALUE_TYPE::RESULT_REGISTER:
+		m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::ResultValue(), pVariable);
 
-			break;*/
+		break;*/
 		default:
 			BIA_COMPILER_DEV_INVALID;
 		}

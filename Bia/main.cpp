@@ -51,14 +51,14 @@ int main()
 
 		_context.emplace_member<framework::executable::static_function<int>>(u8"hello_wörld", static_cast<int(*)()>([]() {
 			puts("hello, world");
-			return 34;
+			return 4;
 		}));
 
 		// Script
 		char _script[] = u8R""(
-global i = 6
-i += 1
-print i
+global i = 0
+
+until i == hello_wörld() 	print i += 1
 
 )"";
 		sizeof(nullptr);
