@@ -68,9 +68,17 @@ public:
 	explicit lambda_function(std::shared_ptr<_Lambda> && _lambda) noexcept : _lambda(std::move(_lambda))
 	{
 	}
-	virtual void print() override
+	virtual void print() const override
 	{
 		puts(typeid(&_Lambda::operator()).name());
+	}
+	virtual void copy(member * _destination) override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+	}
+	virtual void refer(member * _destination) override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
 	virtual void clone(member * _destination) override
 	{
