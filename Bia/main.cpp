@@ -49,15 +49,17 @@ int main()
 		_context.get_address_of_member(_context.get_name_address("a"))->refer(_context.get_address_of_member("b"));
 		*_context.get_address_of_member("b")->cast<int64_t>() = 69;*/
 
-		_context.emplace_member<framework::executable::static_function<void>>(u8"hello_wörld", static_cast<void(*)()>([]() {
+		_context.emplace_member<framework::executable::static_function<int>>(u8"hello_wörld", static_cast<int(*)()>([]() {
 			puts("hello, world");
+			return 34;
 		}));
 
 		// Script
 		char _script[] = u8R""(
 global i = 6
 global j = 34
-print i + i *3 + i *3 + i*3*6
+print hello_wörld() * i + j*(hello_wörld()+j*i)
+#print i + i *3 + i *3 + i*3*6
 #print i * j + 2*(j - 3)
 
 )"";

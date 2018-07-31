@@ -313,7 +313,8 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	// Call function
 	switch (_caller.type()) {
 	case VT::MEMBER:
-		_toolset.call(&framework::member::execute, _caller.value().rt_member, nullptr);
+		_value.set_return_temp(_counter.next());
+		_toolset.call(&framework::member::execute, _caller.value().rt_member, machine::platform::toolset::to_temp_member(_counter.current()));
 
 		break;
 	default:
