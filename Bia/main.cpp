@@ -7,6 +7,7 @@
 #include "syntax.hpp"
 #include "disassembler.hpp"
 #include "static_function.hpp"
+#include "bia.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -49,16 +50,24 @@ int main()
 		_context.get_address_of_member(_context.get_name_address("a"))->refer(_context.get_address_of_member("b"));
 		*_context.get_address_of_member("b")->cast<int64_t>() = 69;*/
 
-		_context.emplace_member<framework::executable::static_function<int>>(u8"hello_wörld", static_cast<int(*)()>([]() {
+		set_function(_context, u8"hello_wörld", static_cast<int(*)()>([]() {
 			puts("hello, world");
 			return 4;
 		}));
+		set_lambda(_context, "ser", [&]() {
+			puts("servus");
+			set_lambda(_context, "ser", []() {
+				puts("bye");
+			});
+		});
 
 		// Script
 		char _script[] = u8R""(
-global i = 0
 
-until i == hello_wörld() 	print i += 1
+hello_wörld()
+ser()
+ser()
+ser()
 
 )"";
 		sizeof(nullptr);
