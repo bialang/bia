@@ -104,6 +104,8 @@ private:
 		}
 
 		switch (_right.type()) {
+		case VT::TEST_VALUE_CONSTANT:
+			_right.set_return(static_cast<int64_t>(_right.value().rt_test_result));
 		case VT::INT:
 		{
 			if (_right.is_int32()) {
@@ -124,6 +126,10 @@ private:
 			break;
 		case VT::TEMPORARY_MEMBER:
 			function_caller_helper(&framework::member::operator_call, _member, _destination, _operator, t::to_temp_member(_right.value().rt_temp_member));
+
+			break;
+		case VT::TEST_VALUE_REGISTER:
+			function_caller_helper(&framework::member::operator_call_int32, _member, _destination, _operator, t::test_result_value());
 
 			break;
 		default:
