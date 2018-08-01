@@ -1,11 +1,11 @@
 #pragma once
 
-#include <memory>
 #include <cstdarg>
 
 #include "function.hpp"
 #include "exception.hpp"
 #include "disguised_caller.hpp"
+#include "share.hpp"
 
 
 namespace bia
@@ -31,8 +31,10 @@ public:
 	 * @date 21-Apr-18
 	 *
 	 * @param _lambda The lambda function.
+	 *
+	 * @throws See utility::share::share().
 	*/
-	explicit lambda_function(const _Lambda & _lambda) noexcept : _lambda(new _Lambda(_lambda))
+	explicit lambda_function(const _Lambda & _lambda) : _data(_lambda)
 	{
 	}
 	/**
@@ -42,30 +44,21 @@ public:
 	 * @date 21-Apr-18
 	 *
 	 * @param _lambda The lambda function.
+	 *
+	 * @throws See utility::share::share().
 	*/
-	explicit lambda_function(_Lambda && _lambda) noexcept : _lambda(new _Lambda(std::move(_lambda)))
+	explicit lambda_function(_Lambda && _lambda) : _data(std::move(_lambda))
 	{
 	}
 	/**
-	 * Constructor.
+	 * Refer-Constructor.
 	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _lambda The lambda function.
-	*/
-	explicit lambda_function(const std::shared_ptr<_Lambda> & _lambda) noexcept : _lambda(_lambda)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
+	 * @since 3.65.134.742
+	 * @date 1-Aug-18
 	 *
 	 * @param _lambda The lambda function.
 	*/
-	explicit lambda_function(std::shared_ptr<_Lambda> && _lambda) noexcept : _lambda(std::move(_lambda))
+	explicit lambda_function(const utility::share<_Lambda> & _data) noexcept : _data(_data)
 	{
 	}
 	virtual void print() const override
@@ -74,26 +67,26 @@ public:
 	}
 	virtual void copy(member * _destination) override
 	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+		_destination->replace_this<lambda_function<_Lambda>>(_data.get());
 	}
 	virtual void refer(member * _destination) override
 	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+		_destination->replace_this<lambda_function<_Lambda>>(_data);
 	}
 	virtual void clone(member * _destination) override
 	{
-		_destination->replace_this<lambda_function<_Lambda>>(_lambda);
+		refer(_destination);
 	}
 	virtual void execute(member * _destination) override
 	{
-		force::disguised_caller(&_Lambda::operator(), _lambda.get(), _destination);
+		force::disguised_caller(&_Lambda::operator(), &_data.get(), _destination);
 	}
 	virtual void execute_count(member * _destination, parameter_count _count...) override
 	{
 		std::va_list _args;
 		va_start(_args, _count);
 
-		force::disguised_caller_count(&_Lambda::operator(), _lambda.get(), _destination, _count, _args);
+		force::disguised_caller_count(&_Lambda::operator(), &_data.get(), _destination, _count, _args);
 
 		va_end(_args);
 	}
@@ -102,14 +95,14 @@ public:
 		std::va_list _args;
 		va_start(_args, _count);
 
-		force::disguised_caller_format(&_Lambda::operator(), _lambda.get(), _destination, _format, _count, _args);
+		force::disguised_caller_format(&_Lambda::operator(), &_data.get(), _destination, _format, _count, _args);
 
 		va_end(_args);
 	}
 
 private:
-	/** A pointer to a instance of the lambda function. */
-	std::shared_ptr<_Lambda> _lambda;
+	/** The lambda function. */
+	utility::share<_Lambda> _data;
 };
 
 }

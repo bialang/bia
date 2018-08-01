@@ -29,7 +29,7 @@ public:
 	 *
 	 * @throws See cstring_member().
 	*/
-	cstring_member(const _Char * _string) noexcept : cstring_member(_string, std::char_traits<_Char>::length(_string))
+	cstring_member(const _Char * _string) : cstring_member(_string, std::char_traits<_Char>::length(_string))
 	{
 	}
 	/**
@@ -43,7 +43,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	cstring_member(const _Char * _string, size_t _length) noexcept : _data(_string, _length)
+	cstring_member(const _Char * _string, size_t _length) : _data(_string, _length)
 	{
 	}
 	/**
