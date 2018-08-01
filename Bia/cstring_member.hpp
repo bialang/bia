@@ -4,6 +4,7 @@
 #include <string>
 
 #include "native_variable.hpp"
+#include "share.hpp"
 #include "print.hpp"
 
 
@@ -14,6 +15,7 @@ namespace framework
 namespace native
 {
 
+template<typename _Char>
 class cstring_member final : public native_variable
 {
 public:
@@ -24,8 +26,10 @@ public:
 	 * @date 21-Apr-18
 	 *
 	 * @param _string The zero-terminated string.
+	 *
+	 * @throws See cstring_member().
 	*/
-	cstring_member(const char * _string) noexcept : cstring_member(_string, std::char_traits<char>::length(_string))
+	cstring_member(const _Char * _string) noexcept : cstring_member(_string, std::char_traits<_Char>::length(_string))
 	{
 	}
 	/**
@@ -36,11 +40,22 @@ public:
 	 *
 	 * @param _string The zero-terminated string.
 	 * @param _length The length of the string.
+	 *
+	 * @throws See utility::share::share().
 	*/
-	cstring_member(const char * _string, size_t _length) noexcept
+	cstring_member(const _Char * _string, size_t _length) noexcept : _data(_string, _length)
 	{
-		this->_string = _string;
-		this->_length = _length;
+	}
+	/**
+	 * Refer-Constructor.
+	 *
+	 * @since 3.65.134.742
+	 * @date 1-Aug-18
+	 *
+	 * @param _data The data of the referred object.
+	*/
+	cstring_member(const utility::share<std::pair<const _Char*, size_t>> & _data) noexcept : _data(_data)
+	{
 	}
 	virtual void print() const override
 	{
@@ -48,13 +63,15 @@ public:
 	}
 	virtual void copy(member * _destination) override
 	{
+		_destination->replace_this<cstring_member<_Char>>(_data.get().first, _data.get().second);
 	}
 	virtual void refer(member * _destination) override
 	{
+		_destination->replace_this<cstring_member<_Char>>(_data);
 	}
 	virtual void clone(member * _destination) override
 	{
-		_destination->replace_this<cstring_member>(_string, _length);
+		copy(_destination);
 	}
 	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{
@@ -78,7 +95,7 @@ public:
 	}
 	virtual int32_t test() const override
 	{
-		return static_cast<int32_t>(_length != 0);
+		return static_cast<int32_t>(_data.get().second != 0);
 	}
 	virtual int32_t test_member(operator_type _operator, member * _right) const override
 	{
@@ -114,7 +131,7 @@ protected:
 	{
 		switch (_type) {
 		case NATIVE_TYPE::CONST_STRING:
-			return &_string;
+			return &_data.get().first;
 		default:
 			break;
 		}
@@ -123,10 +140,8 @@ protected:
 	}
 
 private:
-	/** The zero-terminated C style pointer. */
-	const char * _string;
-	/** The length of the string. */
-	size_t _length;
+	/** The zero-terminated C style string and its length. */
+	utility::share<std::pair<const _Char*, size_t>> _data;
 };
 
 }

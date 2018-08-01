@@ -9,7 +9,6 @@
 #include "native_test_operator.hpp"
 #include "print.hpp"
 #include "share.hpp"
-#include "machine_context.hpp"
 
 
 namespace bia
@@ -34,7 +33,7 @@ public:
 	 *
 	 * @param _value The initial value.
 	 *
-	 * @throws See @ref utility::share::share().
+	 * @throws See utility::share::share().
 	*/
 	native_member(typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, double>::value, _Ty>::type _value) : _data(_value, false)
 	{
@@ -45,7 +44,7 @@ public:
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18
 	 *
-	 * @param _data The data of the referred class.
+	 * @param _data The data of the referred object.
 	*/
 	native_member(const utility::share<std::pair<_Ty, bool>> & _data) noexcept : _data(_data)
 	{
