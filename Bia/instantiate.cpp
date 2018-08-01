@@ -42,7 +42,17 @@ BIA_STATIC_CALLING_CONVETION(void, instantiate_double(double _value, framework::
 
 BIA_STATIC_CALLING_CONVETION(void, instantiate_string(const char *_string, size_t _length, framework::member *_destination))
 {
-	_destination->replace_this<framework::native::cstring_member>(_string, _length);
+	_destination->replace_this<framework::native::cstring_member<char>>(_string, _length);
+}
+
+BIA_STATIC_CALLING_CONVETION(void, instantiate_string16(const char16_t *_string, size_t _length, framework::member *_destination))
+{
+	_destination->replace_this<framework::native::cstring_member<char16_t>>(_string, _length);
+}
+
+BIA_STATIC_CALLING_CONVETION(void, instantiate_string32(const char32_t *_string, size_t _length, framework::member *_destination))
+{
+	_destination->replace_this<framework::native::cstring_member<char32_t>>(_string, _length);
 }
 
 }
