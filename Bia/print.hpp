@@ -51,6 +51,7 @@ inline BIA_STATIC_CALLING_CONVETION(void, print_string(const char * _string))
 {
 	puts(_string);
 }
+
 inline BIA_STATIC_CALLING_CONVETION(void, print(int64_t _value))
 {
 	print_int64(_value);

@@ -59,7 +59,7 @@ public:
 	}
 	virtual void print() const override
 	{
-		machine::link::print_string(_string);
+		//machine::link::print_string(_string);
 	}
 	virtual void copy(member * _destination) override
 	{
