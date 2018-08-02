@@ -1,13 +1,13 @@
 #pragma once
 
-#include "utf.hpp"
+#include "encoder.hpp"
 
 namespace bia
 {
 namespace encoding
 {
 
-class utf32 : public utf
+class utf32 : public encoder
 {
 public:
 	virtual void append(code_point _char, int8_t *& _begin, const int8_t * _end) override;

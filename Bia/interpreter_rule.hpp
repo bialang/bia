@@ -6,7 +6,7 @@
 #include "report_bundle.hpp"
 #include "input_stream.hpp"
 #include "machine_context.hpp"
-#include "utf.hpp"
+#include "encoder.hpp"
 
 
 namespace bia
@@ -68,7 +68,7 @@ struct token_param
 	/** The corresponding machine context. */
 	machine::machine_context * context;
 	/** The decoder for the input stream. */
-	encoding::utf * encoder;
+	encoding::encoder * encoder;
 };
 
 struct token_output

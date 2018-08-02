@@ -83,7 +83,7 @@ bool utf8::has_next(const int8_t * _begin, const int8_t * _end) noexcept
 	}
 }
 
-utf8::code_point utf8::next(const int8_t *& _begin, const int8_t * _end)
+code_point utf8::next(const int8_t *& _begin, const int8_t * _end)
 {
 	code_point _char = 0;
 	auto _size = _end - _begin;

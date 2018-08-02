@@ -8,12 +8,12 @@ namespace bia
 namespace encoding
 {
 
-class utf
+typedef int32_t code_point;
+
+class encoder
 {
 public:
-	typedef int32_t code_point;
-
-	virtual ~utf() noexcept = default;
+	virtual ~encoder() noexcept = default;
 	virtual void append(code_point _char, int8_t *& _begin, const int8_t * _end) = 0;
 	virtual bool has_next(const int8_t * _begin, const int8_t * _end) noexcept = 0;
 	static bool is_alpha(code_point _char) noexcept

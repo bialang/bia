@@ -9,7 +9,7 @@ namespace bia
 namespace grammar
 {
 
-bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encoding::utf * _encoder)
+bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
 {
 	auto _skipped = false;
 
@@ -46,7 +46,7 @@ bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encodi
 	return _skipped;
 }
 
-bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding::utf * _encoder)
+bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
 {
 	auto _skipped = false;
 
@@ -354,7 +354,7 @@ gt_break:;
 			_buffer = _input.buffer();
 		}
 	} // Normal string
-
+	
 
 	return error;
 }
@@ -376,7 +376,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	if (_params.encoder->has_next(_buffer.first, _buffer.second)) {
 		auto _first = _params.encoder->next(_buffer.first, _buffer.second);
 
-		if (_first != '_' && !encoding::utf::is_alpha(_first)) {
+		if (_first != '_' && !encoding::encoder::is_alpha(_first)) {
 			return error;
 		}
 	} else {
@@ -390,7 +390,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 		auto _tmp = _buffer.first;
 		auto _code_point = _params.encoder->next(_buffer.first, _buffer.second);
 
-		if (_code_point == '_' || encoding::utf::is_alnum(_code_point)) {
+		if (_code_point == '_' || encoding::encoder::is_alnum(_code_point)) {
 			// Max identifier length reached
 			_length += _buffer.first - _tmp;
 
@@ -662,7 +662,7 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 	return success;
 }
 
-std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder, int _base)
+std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base)
 {
 	const auto _begin = _buffer.first;
 	int64_t _result = 0;
@@ -677,7 +677,7 @@ std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buf
 		auto _code_point = _encoder->next(_buffer.first, _buffer.second);
 
 		if (_code_point != '\'') {
-			auto _value = encoding::utf::hex_value(_code_point);
+			auto _value = encoding::encoder::hex_value(_code_point);
 
 			if (_value < _base) {
 				_result = _result * _base + _value;
@@ -698,7 +698,7 @@ std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buf
 	return { true, _result };
 }
 
-std::tuple<bool, int64_t, double, bool> interpreter_token::match_decimal(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder)
+std::tuple<bool, int64_t, double, bool> interpreter_token::match_decimal(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
 {
 	const auto _begin = _buffer.first;
 	auto _result = std::make_tuple<bool, int64_t, double, bool>(true, 0, 0, false);

@@ -10,7 +10,7 @@
 #include "interpreter_rule.hpp"
 #include "interpreter_id.hpp"
 #include "input_stream.hpp"
-#include "utf.hpp"
+#include "encoder.hpp"
 
 
 namespace bia
@@ -40,7 +40,7 @@ public:
 	 * @return true if succeded according to the @a _Flags, otherwise false.
 	*/
 	template<flags::flag_type _Flags, bool _Begin>
-	static bool whitespace_deleter(stream::input_stream & _input, encoding::utf * _encoder) noexcept
+	static bool whitespace_deleter(stream::input_stream & _input, encoding::encoder * _encoder) noexcept
 	{
 		constexpr auto match_begin = _Begin && (_Flags & (flags::starting_ws_token | flags::starting_ws_opt_token | flags::starting_padding_token | flags::starting_padding_opt_token));
 		constexpr auto match_end = !_Begin && (_Flags & (flags::ending_ws_token | flags::ending_ws_opt_token));
@@ -73,7 +73,7 @@ public:
 	 *
 	 * @return true if any whitespace was matched, otherwise false.
 	*/
-	static bool whitespace_skipper(stream::input_stream & _input, encoding::utf * _encoder);
+	static bool whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder);
 	/**
 	 * Matches all padding characters it can.
 	 *
@@ -88,7 +88,7 @@ public:
 	 *
 	 * @return true if any padding character was matched, otherwise false.
 	*/
-	static bool padding_skipper(stream::input_stream & _input, encoding::utf * _encoder);
+	static bool padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder);
 	/**
 	 * Matches a number token.
 	 *
@@ -405,7 +405,7 @@ private:
 	 *
 	 * @return A pair with the success value as first and the parsed integral as second.
 	*/
-	static  std::pair<bool, int64_t> match_base(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder, int _base);
+	static  std::pair<bool, int64_t> match_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base);
 	/**
 	 * Matches integral values with a base up to 16.
 	 *
@@ -421,7 +421,7 @@ private:
 	 *
 	 * @return A pair with the success value as first and the parsed integral as second.
 	*/
-	static  std::tuple<bool, int64_t, double, bool> match_decimal(stream::input_stream::buffer_type & _buffer, encoding::utf * _encoder);
+	static  std::tuple<bool, int64_t, double, bool> match_decimal(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
 };
 
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utf.hpp"
+#include "encoder.hpp"
 
 
 namespace bia
@@ -8,7 +8,7 @@ namespace bia
 namespace encoding
 {
 
-class utf8 : public utf
+class utf8 : public encoder
 {
 public:
 	virtual void append(code_point _char, int8_t *& _begin, const int8_t * _end) override;
