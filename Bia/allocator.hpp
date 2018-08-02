@@ -119,6 +119,22 @@ public:
 	*/
 	static size_t block_size() noexcept;
 	/**
+	 * Can be used to expand or shrinken an allocation.
+	 *
+	 * @remarks If a new memory is allocated, the data will be copied.
+	 *
+	 * @since 3.65.134.742
+	 * @date 2-Aug-18
+	 *
+	 * @param _allocation The allocation that should be expanded or shrinken.
+	 * @param _size The new size.
+	 *
+	 * @throws exception::memory_error If the memory could not be allocated.
+	 *
+	 * @return The reallocated allocation.
+	*/
+	virtual universal_allocation reallocate(universal_allocation _allocation, size_type _size) = 0;
+	/**
 	 * Commits the memory reserved by prepare().
 	 *
 	 * @remarks The returned allocation can have the same size as @a _allocation.
