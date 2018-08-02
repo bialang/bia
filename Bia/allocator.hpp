@@ -48,6 +48,10 @@ public:
 			first = nullptr;
 			second = 0;
 		}
+		operator bool() const noexcept
+		{
+			return first != nullptr;
+		}
 		_Ty * operator->() noexcept
 		{
 			return first;
@@ -79,6 +83,10 @@ public:
 			first = nullptr;
 			second = 0;
 		}
+		operator bool() const noexcept
+		{
+			return first != nullptr;
+		}
 	};
 	/** An universal allocation. */
 	typedef allocation<void> universal_allocation;
@@ -108,9 +116,11 @@ public:
 	void destroy(allocation<_Base> _allocation)
 	{
 		// Destroy element
-		_allocation.first->~_Deriviate();
+		if (_allocation) {
+			_allocation.first->~_Deriviate();
 
-		deallocate(cast_allocation<void>(_allocation));
+			deallocate(cast_allocation<void>(_allocation));
+		}
 	}
 	/**
 	 * Destroys and deallocates the blocks created by allocate_blocks().
