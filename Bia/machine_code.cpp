@@ -21,7 +21,7 @@ machine_code::machine_code(std::pair<const uint8_t*, size_t> _machine_code, mach
 machine_code::machine_code(machine_code && _rvalue) noexcept : _machine_schein(std::move(_rvalue._machine_schein))
 {
 	_entry_point = _rvalue._entry_point;
-	_rvalue._entry_point = {};
+	_rvalue._entry_point.clear();
 }
 
 machine_code::~machine_code()
@@ -40,7 +40,7 @@ void machine_code::clear()
 {
 	if (_entry_point.first) {
 		_machine_schein.executable_allocator()->deallocate(_entry_point);
-		_entry_point = {};
+		_entry_point.clear();
 	}
 }
 
@@ -56,7 +56,7 @@ machine_code & machine_code::operator=(machine_code && _rvalue)
 	// Move
 	_machine_schein = std::move(_rvalue._machine_schein);
 	_entry_point = _rvalue._entry_point;
-	_rvalue._entry_point = {};
+	_rvalue._entry_point.clear();
 
 	return *this;
 }

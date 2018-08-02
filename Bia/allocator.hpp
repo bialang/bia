@@ -28,7 +28,58 @@ public:
 	typedef size_t size_type;
 	/** An allocation with type. */
 	template<typename _Ty>
-	using allocation = std::pair<_Ty*, size_type>;
+	class allocation
+	{
+	public:
+		_Ty * first;
+		size_type second;
+
+		allocation() noexcept
+		{
+			clear();
+		}
+		allocation(_Ty * _first, size_type _second) noexcept
+		{
+			first = _first;
+			second = _second;
+		}
+		void clear() noexcept
+		{
+			first = nullptr;
+			second = 0;
+		}
+		_Ty * operator->() noexcept
+		{
+			return first;
+		}
+		const _Ty * operator->() const noexcept
+		{
+			return first;
+		}
+	};
+	/** An universal allocation. */
+	template<>
+	class allocation<void>
+	{
+	public:
+		void * first;
+		size_type second;
+
+		allocation() noexcept
+		{
+			clear();
+		}
+		allocation(void * _first, size_type _second) noexcept
+		{
+			first = _first;
+			second = _second;
+		}
+		void clear() noexcept
+		{
+			first = nullptr;
+			second = 0;
+		}
+	};
 	/** An universal allocation. */
 	typedef allocation<void> universal_allocation;
 
