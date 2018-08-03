@@ -42,13 +42,21 @@ struct report
 		EMPTY_CHILD
 	};
 
+	enum STRING_TYPE
+	{
+		ASCII = 1,
+		UTF8,
+		UTF16,
+		UTF32
+	};
+
 	TYPE type : 32 - custom_bits;
 	uint32_t custom_parameter : custom_bits;
 	uint32_t rule_id : rule_bits;
 	uint32_t token_id : token_bits;
 	union
 	{
-		const char * string;
+		int8_t * string;
 		int64_t int_value;
 		double double_value;
 		const report *  end;
