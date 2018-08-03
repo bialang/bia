@@ -1,4 +1,5 @@
 #include "string_manager.hpp"
+#include "string_stream.hpp"
 
 #include <cstring>
 #include <utility>
@@ -19,7 +20,7 @@ string_manager::string_manager(string_manager && _rvalue) noexcept : _index(std:
 	_allocator = _rvalue._allocator;
 }
 
-string_manager::~string_manager()
+string_manager::~string_manager() noexcept
 {
 	// Delete all allocated strings
 	for (auto & _entry : _index) {
@@ -28,6 +29,19 @@ string_manager::~string_manager()
 		} catch (...) {
 		}
 	}
+
+	// Delete all string resources
+	for (auto & _resource : _string_resources) {
+		try {
+			_allocator->deallocate({ _resource, stream::string_stream::size(_resource) });
+		} catch (...) {
+		}
+	}
+}
+
+void string_manager::register_string(int8_t * _resource)
+{
+	_string_resources.push_back(_resource);
 }
 
 const char * string_manager::name_address(const char * _name, size_t _length)

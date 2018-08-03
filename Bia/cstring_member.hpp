@@ -52,7 +52,7 @@ public:
 	}
 	virtual void print() const override
 	{
-		//machine::link::print_string(_string);
+		print(std::get<0>(_data.get()));
 	}
 	virtual void copy(member * _destination) override
 	{
@@ -135,6 +135,16 @@ protected:
 private:
 	/** The zero-terminated C style string, its size and its length. */
 	data_type _data;
+
+
+	static void print(const char * _string)
+	{
+		machine::link::print_string(_string);
+	}
+	template<typename _Ty>
+	static void print(const _Ty * _string) noexcept
+	{
+	}
 };
 
 }

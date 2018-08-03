@@ -43,6 +43,11 @@ memory::executable_allocator * machine_context::executable_allocator() noexcept
 	return _executable_allocator.get();
 }
 
+string_manager & machine_context::string_manager() noexcept
+{
+	return _string_manager;
+}
+
 void machine_context::destroy_from_stack(uint32_t _member_count)
 {
 	_stack.pop(_member_count);

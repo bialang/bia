@@ -355,8 +355,10 @@ gt_end:;
 	_input.skip(_buffer.first);
 	_string.finish();
 
+	// Get buffer and register
 	_output.content.type = report::TYPE::STRING;
 	_output.content.content.string = _string.buffer();
+	_params.context->string_manager().register_string(_output.content.content.string);
 
 	return success;
 }

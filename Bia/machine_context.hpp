@@ -86,6 +86,7 @@ public:
 	 * @return The memory allocator of this context.
 	*/
 	memory::executable_allocator * executable_allocator() noexcept;
+	string_manager & string_manager() noexcept;
 
 //private:
 
@@ -93,11 +94,11 @@ public:
 	/** The allocator of the context currently active. */
 	static thread_local memory::allocator * _active_allocator;
 	/** The allocator for normal memory. */
-	std::shared_ptr<memory::allocator> _allocator;
+	const std::shared_ptr<memory::allocator> _allocator;
 	/** The allocator for executable memory. */
-	std::shared_ptr<memory::executable_allocator> _executable_allocator;
+	const std::shared_ptr<memory::executable_allocator> _executable_allocator;
 	/** The string manager for string like resources. */
-	string_manager _string_manager;
+	machine::string_manager _string_manager;
 	/** Holds all known variables, function and other. */
 	variable_index _variable_index;
 	/** The virtual machine stack. */

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_set>
+#include <vector>
 
 #include "allocator.hpp"
 #include "hasher.hpp"
@@ -42,6 +43,7 @@ public:
 	 * @date 6-May-18
 	*/
 	~string_manager() noexcept;
+	void register_string(int8_t * _resource);
 	/**
 	 * Returns the name address. This address will be the same for the same name value.
 	 *
@@ -109,6 +111,8 @@ private:
 	memory::allocator * _allocator;
 	/** Defines the index holding all allocated names. */
 	std::unordered_set<string_entry, string_hasher> _index;
+	/** The registered string resources. */
+	std::vector<int8_t*> _string_resources;
 };
 
 }

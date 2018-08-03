@@ -10,6 +10,7 @@
 #include "cstring_member.hpp"
 #include "static_function.hpp"
 #include "member_function.hpp"
+#include "lambda_function.hpp"
 
 
 namespace bia
@@ -111,7 +112,7 @@ template<typename _Ty>
 inline typename std::enable_if<std::is_same<_Ty, const char*>::value>::type create_member(member * _destination, _Ty _value)
 {
 	if (_destination) {
-		_destination->replace_this<native::cstring_member>(_value);
+		_destination->replace_this<native::cstring_member<char>>(_value);
 	}
 }
 
