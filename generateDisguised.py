@@ -62,16 +62,6 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
-	case 'f':
-	{
-		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
-
-		if (is_number) {
-			return chooser<is_number, _Return, float>().choose(va_arg(_args, float));
-		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
-		}
-	}
 	case 'd':
 	{
 		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
@@ -82,7 +72,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
-	case 's':
+	case 'a':
 	{
 		constexpr auto is_string = std::is_same<_Return, const char*>::value;
 
