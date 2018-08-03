@@ -18,6 +18,7 @@ public:
 	virtual void set_position(cursor_type _position) override;
 	virtual void set_beginning(cursor_type _position) override;
 	virtual void append_stream(output_stream & _stream) override;
+	virtual void write(const void * _buffer, size_t _size) override;
 	virtual cursor_type position() const override;
 	cursor_type size() const;
 	const int8_t * buffer() const;

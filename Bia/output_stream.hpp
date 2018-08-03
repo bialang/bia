@@ -55,6 +55,18 @@ public:
 	*/
 	virtual void append_stream(output_stream & _stream) = 0;
 	/**
+	 * Writes the buffer to the stream.
+	 *
+	 * @since 3.66.135.743
+	 * @date 3-Aug-18
+	 *
+	 * @param _buffer The buffer.
+	 * @param _size The size of the buffer.
+	 *
+	 * @throws 
+	*/
+	virtual void write(const void * _buffer, size_t _size) = 0;
+	/**
 	 * Writes all the passed arguments to the stream.
 	 *
 	 * @since 3.64.127.716
