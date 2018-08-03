@@ -189,7 +189,7 @@ public:
 	 * @param _args The arguments for the function.
 	 *
 	 * @throws See architecture::instruction32() and architecture::instruction().
-	 * @throws See pass() and pop().
+	 * @throws See pass(), pass_instance() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
 	void call(member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
@@ -239,7 +239,7 @@ public:
 	 * @param _args The arguments for the function.
 	 *
 	 * @throws See architecture::instruction32() and architecture::instruction().
-	 * @throws See pass() and pop().
+	 * @throws See pass(), pass_instance() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
 	void call(const_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
@@ -270,12 +270,12 @@ public:
 #endif
 	}
 	/**
-	 * Performs a member function call.
+	 * Performs a member function call with varg.
 	 *
 	 * @remarks Passing invalid parameters can lead to undefined behavior.
 	 *
-	 * @since 3.64.127.716
-	 * @date 29-Apr-18
+	 * @since 3.66.135.745
+	 * @date 3-Aug-18
 	 *
 	 * @tparam _Class The class.
 	 * @tparam _Return The return type of the function.
@@ -285,6 +285,8 @@ public:
 	 *
 	 * @param _function The function address.
 	 * @param [in] _instance The class instance.
+	 * @param _variable_parameter An array with the variable parameters.
+	 * @param _count The size of @a _variable_parameter.
 	 * @param _args The arguments for the function.
 	 *
 	 * @throws See architecture::instruction32() and architecture::instruction().
@@ -314,8 +316,8 @@ public:
 		// Push all parameters
 		_passed += pass(std::forward<_Args2>(_args)...);
 		
-		pass(_instance);
-		//pass_instance(_instance);
+		// Push instance
+		_passed += pass(_instance);
 
 		// Convert
 		union
@@ -330,10 +332,8 @@ public:
 		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
 		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
 
-#if defined(BIA_COMPILER_GNU)
 		// Pop
 		pop(_passed);
-#endif
 	}
 	void write_test()
 	{
