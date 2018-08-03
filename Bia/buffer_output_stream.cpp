@@ -83,31 +83,5 @@ void buffer_output_stream::prepare(size_t _size)
 	}
 }
 
-void buffer_output_stream::write(int8_t _value)
-{
-	_buffer[_size++] = _value;
-}
-
-void buffer_output_stream::write(int16_t _value)
-{
-	std::memcpy(_buffer.get() + _size, &_value, 2);
-
-	_size += 2;
-}
-
-void buffer_output_stream::write(int32_t _value)
-{
-	std::memcpy(_buffer.get() + _size, &_value, 4);
-
-	_size += 4;
-}
-
-void buffer_output_stream::write(int64_t _value)
-{
-	std::memcpy(_buffer.get() + _size, &_value, 8);
-
-	_size += 8;
-}
-
 }
 }

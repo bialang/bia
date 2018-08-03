@@ -112,40 +112,15 @@ protected:
 	 * @throws
 	*/
 	virtual void prepare(size_t _size) = 0;
-	virtual void write(int8_t _value) = 0;
-	virtual void write(int16_t _value) = 0;
-	virtual void write(int32_t _value) = 0;
-	virtual void write(int64_t _value) = 0;
 
 private:
 	void write_forward() noexcept
 	{
 	}
 	template<typename _Ty, typename... _Args>
-	typename std::enable_if<sizeof(_Ty) == 1>::type write_forward(_Ty && _value, _Args &&... _args)
+	void write_forward(_Ty && _value, _Args &&... _args)
 	{
-		write(*reinterpret_cast<const int8_t*>(&_value));
-
-		write_forward(std::forward<_Args>(_args)...);
-	}
-	template<typename _Ty, typename... _Args>
-	typename std::enable_if<sizeof(_Ty) == 2>::type write_forward(_Ty && _value, _Args &&... _args)
-	{
-		write(*reinterpret_cast<const int16_t*>(&_value));
-
-		write_forward(std::forward<_Args>(_args)...);
-	}
-	template<typename _Ty, typename... _Args>
-	typename std::enable_if<sizeof(_Ty) == 4>::type write_forward(_Ty && _value, _Args &&... _args)
-	{
-		write(*reinterpret_cast<const int32_t*>(&_value));
-
-		write_forward(std::forward<_Args>(_args)...);
-	}
-	template<typename _Ty, typename... _Args>
-	typename std::enable_if<sizeof(_Ty) == 8>::type write_forward(_Ty && _value, _Args &&... _args)
-	{
-		write(*reinterpret_cast<const int64_t*>(&_value));
+		write(&_value, sizeof(_Ty));
 
 		write_forward(std::forward<_Args>(_args)...);
 	}
