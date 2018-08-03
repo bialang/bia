@@ -13,6 +13,8 @@ typedef int32_t code_point;
 class encoder
 {
 public:
+	static constexpr code_point eos = 0;
+
 	virtual ~encoder() noexcept = default;
 	virtual void append(code_point _char, int8_t *& _begin, const int8_t * _end) = 0;
 	virtual bool has_next(const int8_t * _begin, const int8_t * _end) noexcept = 0;

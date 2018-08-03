@@ -276,8 +276,8 @@ interpreter syntax::init_rules()
 	// Member helper 2
 	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_2, interpreter_rule::F_OR, {
 		interpreter_token::rule_pointer<BGR_INSTANTIATION>, // BM_INSTANTIATION
-		interpreter_token::identifier, // BM_IDENTIFIER
-		interpreter_token::string // BM_STRING
+		interpreter_token::string, // BM_STRING
+		interpreter_token::identifier // BM_IDENTIFIER
 		}));
 
 	return _interpreter;

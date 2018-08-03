@@ -2,6 +2,7 @@
 #include "link.hpp"
 #include "compile_normal_operation.hpp"
 #include "buffer_output_stream.hpp"
+#include "string_stream.hpp"
 
 #include <vector>
 
@@ -294,11 +295,23 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 	for (auto i = _report + 1; i < _report->content.end;) {
 		switch (i->token_id) {
 			//case grammar::BM_INSTANTIATION:
+		case grammar::BM_STRING:
+		{
+			if (i->custom_parameter == report::ASCII || i->custom_parameter == report::UTF8) {
+				auto _string = reinterpret_cast<const char*>(i->content.string + stream::string_stream::offset());
+				auto _length = *reinterpret_cast<size_t*>(i->content.string + sizeof(size_t));
+
+				_value.set_return(compiler_value::return_value::string({ _string, _length }));
+			}
+			//_value.set_return(compiler_value::return_value::string({ i->content.string,0}));
+			++i;
+
+			break;
+		}
 		case grammar::BM_IDENTIFIER:
 			i = handle_identifier(i);
 
 			break;
-			//case grammar::BM_STRING:
 		default:
 			BIA_COMPILER_DEV_INVALID;
 		}

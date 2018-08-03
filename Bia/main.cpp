@@ -12,6 +12,7 @@
 #include <chrono>
 #include <iostream>
 #include <regex>
+#include <Windows.h>
 
 
 template<typename _Lambda>
@@ -60,13 +61,11 @@ int main()
 				puts("bye");
 			});
 		});
-
+		//SetConsoleOutputCP(65001);
 		// Script
 		char _script[] = u8R""(
 
-if (global i = 1) {
-	print i
-}
+print 'hellö fränd'
 
 )"";
 		sizeof(nullptr);

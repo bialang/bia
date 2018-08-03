@@ -1,4 +1,5 @@
 #include "interpreter_token.hpp"
+#include "string_stream.hpp"
 
 #include <cctype>
 #include <limits>
@@ -226,14 +227,15 @@ ACTION interpreter_token::string(stream::input_stream & _input, token_param _par
 	enum FLAGS : uint32_t
 	{
 		F_SINGLE_QUOTE = 0x1,
-		F_QUOTE_SET = 0x2,
-		F_RAW_STRING = 0x4,
-		F_BINARY = 0x8,
+		F_DOUBLE_QUOTE = 0x2,
+		F_QUOTE_SET = F_SINGLE_QUOTE | F_DOUBLE_QUOTE,
+		F_PREFIX_LOWER_U = 0x4,
 	};
 
 	uint32_t _flags = 0;
 	stream::input_stream::buffer_type _buffer;
 	stream::input_stream::cursor_type _delimitor = 0;
+	stream::string_stream _string(_params.context->allocator());
 
 	// Determine delimitor and quote
 	while (true) {
@@ -245,79 +247,60 @@ ACTION interpreter_token::string(stream::input_stream & _input, token_param _par
 		_buffer = _input.buffer();
 
 		while (_buffer.first < _buffer.second) {
-			switch (*_buffer.first++) {
-			case 'R':
-			{
-				// Add 'R' to raw string delimitor
-				if (_flags & F_QUOTE_SET) {
-					++_delimitor;
-				} // Start of raw string
-				else if (!(_flags & F_RAW_STRING)) {
-					_flags |= F_RAW_STRING;
-				} else {
-					return error;
-				}
-
-				break;
-			}
+			switch (_params.encoder->next(_buffer.first, _buffer.second)) {
 			case '"':
 			{
-				// No quote has been set
-				if (!(_flags & F_QUOTE_SET)) {
-					_flags |= F_QUOTE_SET;
+				_flags |= F_DOUBLE_QUOTE;
 
-					// Read string now
-					if (!(_flags & F_RAW_STRING)) {
-						goto gt_break;
-					}
+				// Move cursor
+				_input.skip(_buffer.first);
 
-					// Read delimitor of raw string now
-				} // Add to delimiter
-				else {
-					++_delimitor;
-				}
-
-				break;
+				goto gt_break;
 			}
 			case '\'':
 			{
-				// No quote has been set
-				if (!(_flags & F_QUOTE_SET)) {
-					_flags |= F_QUOTE_SET | F_SINGLE_QUOTE;
+				_flags |= F_SINGLE_QUOTE;
 
-					// Read string now
-					if (!(_flags & F_RAW_STRING)) {
-						goto gt_break;
-					}
+				// Move cursor
+				_input.skip(_buffer.first);
 
-					// Read delimitor of raw string now
-				} //Add to delimitor
-				else {
-					++_delimitor;
-				}
-
-				break;
+				goto gt_break;
 			}
-			case '(':
+			case 'u':
 			{
-				// Terminate delimitor of raw string
-				if (_flags & F_QUOTE_SET) {
-					goto gt_break;
-				}
-
-				return error;
-			}
-			default:
-			{
-				// No raw string delimitor
-				if (!(_flags & F_QUOTE_SET)) {
+				if (_string.codec_set() || _flags & F_PREFIX_LOWER_U) {
 					return error;
 				}
 
-				++_delimitor;
+				_flags |= F_PREFIX_LOWER_U;
 
 				break;
 			}
+			case 'U':
+			{
+				if (_string.codec_set() || _flags & F_PREFIX_LOWER_U) {
+					return error;
+				}
+
+				_string.set_codec(stream::string_stream::CODEC::UTF32);
+				_output.content.custom_parameter = report::UTF32;
+
+				break;
+			}
+			case '8':
+			{
+				if (!(_flags & F_PREFIX_LOWER_U)) {
+					return error;
+				}
+
+				_string.set_codec(stream::string_stream::CODEC::UTF8);
+				_output.content.custom_parameter = report::UTF8;
+				_flags &= ~F_PREFIX_LOWER_U;
+
+				break;
+			}
+			default:
+				return error;
 			}
 		}
 
@@ -327,37 +310,55 @@ ACTION interpreter_token::string(stream::input_stream & _input, token_param _par
 
 gt_break:;
 
-	// Raw string
-	if (_flags & F_RAW_STRING) {
-		while (true) {
-			while (_buffer.first < _buffer.second) {
-				switch (*_buffer.first++) {
-				case ')':
-				{
-					// Compare delimitors
-					if (true) {
-
-					}
-				}
-				default:
-					break;
-				}
-			}
-
-			// Move buffer
-			_input.skip(_buffer.first);
-
-			// No buffer available
-			if (_input.available() <= 0) {
-				return error;
-			}
-
-			_buffer = _input.buffer();
+	// Set encoder if not happened
+	if (!_string.codec_set()) {
+		// Set UTF-16
+		if (_flags & F_PREFIX_LOWER_U) {
+			_string.set_codec(stream::string_stream::CODEC::UTF16);
+			_output.content.custom_parameter = report::UTF16;
+		} // Fall back to ASCII
+		else {
+			_string.set_codec(stream::string_stream::CODEC::ASCII);
+			_output.content.custom_parameter = report::ASCII;
 		}
-	} // Normal string
-	
+	}
 
-	return error;
+	while (_input.available() > 0) {
+		_buffer = _input.buffer();
+
+		while (_buffer.first < _buffer.second) {
+			switch (auto _code_point = _params.encoder->next(_buffer.first, _buffer.second)) {
+			case '"':
+			{
+				if (_flags & F_DOUBLE_QUOTE) {
+					goto gt_end;
+				}
+
+				goto gt_default;
+			}
+			case '\'':
+			{
+				if (_flags & F_SINGLE_QUOTE) {
+					goto gt_end;
+				}
+			}
+			default:
+			gt_default:;
+				_string.append(_code_point);
+
+				break;
+			}
+		}
+	}
+
+gt_end:;
+	_input.skip(_buffer.first);
+	_string.finish();
+
+	_output.content.type = report::TYPE::STRING;
+	_output.content.content.string = _string.string();
+
+	return success;
 }
 
 ACTION interpreter_token::identifier(stream::input_stream & _input, token_param _params, token_output & _output)
