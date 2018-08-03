@@ -11,6 +11,7 @@
 #include "architecture.hpp"
 #include "output_stream.hpp"
 #include "machine_context.hpp"
+#include "member.hpp"
 
 
 namespace bia
@@ -19,6 +20,24 @@ namespace machine
 {
 namespace platform
 {
+
+struct variable_parameter
+{
+	enum class TYPE
+	{
+		INT32,
+		INT64,
+		DOUBLE,
+		MEMBER
+	} type;
+	union
+	{
+		int32_t v_int32;
+		int64_t v_int64;
+		double v_double;
+		framework::member * v_member;
+	} value;
+};
 
 #if defined(BIA_COMPILER_MSVC) || defined(BIA_COMPILER_GNU)
 class toolset
@@ -176,6 +195,7 @@ public:
 	void call(member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
 	{
 		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
+		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
 		auto _passed = pass(std::forward<_Args2>(_args)...);
@@ -185,7 +205,7 @@ public:
 		// Convert
 		union
 		{
-			_Return(_Class::*member)(_Args...);
+			member_function_signature<_Class, _Return, _Args...> member;
 			void * address;
 		} address;
 		
@@ -224,6 +244,8 @@ public:
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
 	void call(const_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
 	{
+		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
+
 		// Push all parameters
 		auto _passed = pass(std::forward<_Args2>(_args)...);
 		
@@ -232,7 +254,73 @@ public:
 		// Convert
 		union
 		{
-			_Return(_Class::*member)(_Args...) const;
+			const_member_function_signature<_Class, _Return, _Args...> member;
+			void * address;
+		} address;
+		
+		address.member = _function;
+
+		// Move the address of the function into EAX and call it
+		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
+		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
+
+#if defined(BIA_COMPILER_GNU)
+		// Pop
+		pop(_passed);
+#endif
+	}
+	/**
+	 * Performs a member function call.
+	 *
+	 * @remarks Passing invalid parameters can lead to undefined behavior.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @tparam _Class The class.
+	 * @tparam _Return The return type of the function.
+	 * @tparam _Instance The instance type.
+	 * @tparam _Args The arguments of the function.
+	 * @tparam _Args2 The arguemtns that should be passed.
+	 *
+	 * @param _function The function address.
+	 * @param [in] _instance The class instance.
+	 * @param _args The arguments for the function.
+	 *
+	 * @throws See architecture::instruction32() and architecture::instruction().
+	 * @throws See pass() and pop().
+	*/
+	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
+	void call(varg_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, const variable_parameter * _variable_parameter, size_t _count, _Args2 &&... _args)
+	{
+		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
+		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
+
+		pass_count _passed = 0;
+
+		while (_count--) {
+			switch (_variable_parameter->type) {
+			case variable_parameter::TYPE::MEMBER:
+				_passed += pass(_variable_parameter->value.v_member);
+
+				break;
+			default:
+				throw;
+			}
+
+			++_variable_parameter;
+		}
+
+		// Push all parameters
+		_passed += pass(std::forward<_Args2>(_args)...);
+		
+		pass(_instance);
+		//pass_instance(_instance);
+
+		// Convert
+		union
+		{
+			varg_member_function_signature<_Class, _Return, _Args...> member;
 			void * address;
 		} address;
 		

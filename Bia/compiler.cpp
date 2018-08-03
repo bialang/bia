@@ -327,11 +327,25 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	using VT = compiler_value::VALUE_TYPE;
 
 	auto _caller = _value;
+	std::vector<machine::platform::variable_parameter> _parameters;
 
 	if (_report->type != grammar::report::TYPE::EMPTY_CHILD) {
 		for (auto i = _report + 1; i < _report->content.end;) {
-			i = handle_value<false>(i, []() {
-				///TODO
+			i = handle_value<false>(i, [&]() {
+				machine::platform::variable_parameter _param;
+
+				switch (_value.type()) {
+				case VT::MEMBER:
+					_param.type = machine::platform::variable_parameter::TYPE::MEMBER;
+					_param.value.v_member = _value.value().rt_member;
+
+
+					break;
+				default:
+					BIA_COMPILER_DEV_INVALID;
+				}
+
+				_parameters.push_back(_param);
 			});
 		}
 	}
@@ -339,10 +353,20 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	// Call function
 	switch (_caller.type()) {
 	case VT::MEMBER:
+	{
 		_value.set_return_temp(_counter.next());
-		_toolset.call(&framework::member::execute, _caller.value().rt_member, machine::platform::toolset::to_temp_member(_counter.current()));
+		auto _destination = machine::platform::toolset::to_temp_member(_counter.current());
+
+		if (_parameters.empty()) {
+			_toolset.call(&framework::member::execute, _caller.value().rt_member, _destination);
+		} else {
+			void(framework::member::*a)(framework::member*, uint32_t, ...)  = &framework::member::execute_count;
+
+			_toolset.call(&framework::member::execute_count, _caller.value().rt_member, _parameters.data(), _parameters.size(), _destination, static_cast<uint32_t>(_parameters.size()));
+		}
 
 		break;
+	}
 	default:
 		BIA_COMPILER_DEV_INVALID;
 	}

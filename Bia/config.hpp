@@ -49,6 +49,9 @@ using member_function_signature = _Return(__thiscall _Class::*)(_Args...);
 template<typename _Class, typename _Return, typename... _Args>
 using const_member_function_signature = _Return(__thiscall _Class::*)(_Args...) const;
 
+template<typename _Class, typename _Return, typename... _Args>
+using varg_member_function_signature = _Return(__cdecl _Class::*)(_Args..., ...);
+
 // Export
 #if defined(BIA_IMPORT)
 #define BIA_EXPORT __declspec(dllimport)
