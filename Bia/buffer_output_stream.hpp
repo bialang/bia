@@ -25,10 +25,6 @@ public:
 
 protected:
 	virtual void prepare(size_t _size) override;
-	virtual void write(int8_t _value) override;
-	virtual void write(int16_t _value) override;
-	virtual void write(int32_t _value) override;
-	virtual void write(int64_t _value) override;
 
 private:
 	std::unique_ptr<int8_t[]> _buffer;
