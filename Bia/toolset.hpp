@@ -302,6 +302,18 @@ public:
 
 		while (_count--) {
 			switch (_variable_parameter->type) {
+			case variable_parameter::TYPE::INT32:
+				_passed += pass(_variable_parameter->value.v_int32);
+
+				break;
+			case variable_parameter::TYPE::INT64:
+				_passed += pass(_variable_parameter->value.v_int64);
+
+				break;
+			case variable_parameter::TYPE::DOUBLE:
+				_passed += pass(_variable_parameter->value.v_double);
+
+				break;
 			case variable_parameter::TYPE::MEMBER:
 				_passed += pass(_variable_parameter->value.v_member);
 
