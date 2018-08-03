@@ -15,9 +15,10 @@ bia::set_lambda(_context, "hello_world", [] {
 });
 
 // Bia script
-std::string _code = R"(
+std::string _code = u8R"(
   # Print 'Hello, World' to the console
   print "Hello, World! - Bia"
+  print u8"Hallo, schöne Welt! - German"
 
   # Call the C++ function and print 'Hello, World' to the console
   hello_world()
@@ -31,7 +32,7 @@ _context.execute(_code.c_str(), _code.length());
 **Native types**
 - Integrals with a range from -2^32 to 2^32-1
 - 64-Bit floating point numbers
-- ~~Classic C-style string support~~ (In development)
+- Classic C-style string with C++11 string literal support
 
 **Variable Declaration:**
 - Global variables `global`: `global i = 0`
