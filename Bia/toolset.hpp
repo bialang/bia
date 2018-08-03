@@ -62,9 +62,6 @@ public:
 		architecture::instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(_output, 0);
 		call(&machine_context::create_on_stack, _context, register_offset<REGISTER::EBP, int32_t, true>(0), uint32_t(0));
 
-		// Save result
-		architecture::instruction<OP_CODE::PUSH, REGISTER::EAX>(_output);
-
 		_setup_end_pos = _output.position();
 	}
 	/**
