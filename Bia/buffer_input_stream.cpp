@@ -2,6 +2,7 @@
 #include "exception.hpp"
 
 #include <cstdint>
+#include <cstring>
 
 
 namespace bia
@@ -61,6 +62,17 @@ void buffer_input_stream::skip(buffer_type::first_type _ptr)
 	}
 
 	_position = _result;
+}
+
+void buffer_input_stream::read(void * _destination, size_t _size)
+{
+	if (_size > available()) {
+		throw;
+	}
+
+	std::memcpy(_destination, static_cast<const int8_t*>(_buffer.get()) + _position, _size);
+
+	_position += _size;
 }
 
 buffer_input_stream::cursor_type buffer_input_stream::mark() const

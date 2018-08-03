@@ -50,9 +50,19 @@ public:
 	virtual void reset(cursor_type _mark) = 0;
 	virtual void skip(cursor_type _length) = 0;
 	virtual void skip(buffer_type::first_type _ptr) = 0;
+	virtual void read(void * _destination, size_t _size) = 0;
 	virtual cursor_type mark() const = 0;
 	virtual cursor_type available() const = 0;
 	virtual buffer_type buffer() = 0;
+	template<typename _Ty>
+	_Ty read()
+	{
+		_Ty _value;
+
+		read(&_value, sizeof(_Ty));
+
+		return _value;
+	}
 };
 
 }
