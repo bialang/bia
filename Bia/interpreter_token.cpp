@@ -125,6 +125,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 	// First character
 	switch (_digit) {
 	case 0:
+	case '\'':
 	case 'f':
 	case 'F':
 		return error;
