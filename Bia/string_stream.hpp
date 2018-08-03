@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstring>
+
 #include "allocator.hpp"
 #include "encoder.hpp"
 #include "ascii.hpp"
@@ -14,6 +16,9 @@ namespace stream
 class string_stream
 {
 public:
+	typedef decltype(machine::memory::allocator::universal_allocation::second) size_type;
+	typedef size_t length_type;
+
 	enum class CODEC
 	{
 		ASCII,
@@ -25,8 +30,8 @@ public:
 	string_stream(machine::memory::allocator * _allocator)
 	{
 		this->_allocator = _allocator;
-		_buffer = _allocator->prepare(16);
-		_cursor = static_cast<int8_t*>(_buffer.first);
+		_buffer = _allocator->prepare(offset() + 16);
+		_cursor = static_cast<int8_t*>(_buffer.first) + offset();
 		_end = static_cast<const int8_t*>(_buffer.first) + _buffer.second;
 		_length = 0;
 	}
@@ -75,6 +80,9 @@ public:
 		
 		// Commit buffer
 		_buffer = _allocator->commit(_buffer, _cursor - _buffer.first);
+
+		std::memcpy(_buffer.first, &_buffer.second, sizeof(size_type));
+		std::memcpy(static_cast<int8_t*>(_buffer.first) + sizeof(_buffer.second), &_length, sizeof(length_type));
 	}
 	bool codec_set() const noexcept
 	{
@@ -84,21 +92,21 @@ public:
 	{
 		return _length;
 	}
-	machine::memory::allocator::allocation<char> string() const noexcept
+	int8_t * string() const noexcept
 	{
-		return machine::memory::allocator::cast_allocation<char>(_buffer);
+		return static_cast<int8_t*>(_buffer.first);
 	}
-	machine::memory::allocator::allocation<char16_t> string16() const noexcept
+	constexpr static size_t offset() noexcept
 	{
-		return machine::memory::allocator::cast_allocation<char16_t>(_buffer);
+		return sizeof(size_type) + sizeof(length_type);
 	}
-	machine::memory::allocator::allocation<char32_t> string32() const noexcept
+	constexpr static size_t size_offset() noexcept
 	{
-		return machine::memory::allocator::cast_allocation<char32_t>(_buffer);
+		return 0;
 	}
-	machine::memory::allocator::allocation<wchar_t> wstring() const noexcept
+	constexpr static size_t length_offset() noexcept
 	{
-		return machine::memory::allocator::cast_allocation<wchar_t>(_buffer);
+		return sizeof(size_type);
 	}
 
 private:
@@ -107,7 +115,7 @@ private:
 	machine::memory::allocator::universal_allocation _buffer;
 	int8_t * _cursor;
 	const int8_t * _end;
-	size_t _length;
+	length_type _length;
 };
 
 }
