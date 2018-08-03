@@ -328,6 +328,8 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 
 	auto _caller = _value;
 	std::vector<machine::platform::variable_parameter> _parameters;
+	std::string _format;
+	auto _mixed = false;
 
 	if (_report->type != grammar::report::TYPE::EMPTY_CHILD) {
 		for (auto i = _report + 1; i < _report->content.end;) {
@@ -335,12 +337,41 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 				machine::platform::variable_parameter _param;
 
 				switch (_value.type()) {
+				case VT::INT:
+				{
+					if (_value.is_int32()) {
+						_param.type = machine::platform::variable_parameter::TYPE::INT32;
+						_param.value.v_int32 = static_cast<int32_t>(_value.value().rt_int);
+						_format += 'i';
+					} else {
+						_param.type = machine::platform::variable_parameter::TYPE::INT64;
+						_param.value.v_int64 = _value.value().rt_int;
+						_format += 'I';
+					}
+
+					_mixed = true;
+
+					break;
+				}
+				case VT::DOUBLE:
+				{
+					_param.type = machine::platform::variable_parameter::TYPE::DOUBLE;
+					_param.value.v_double = _value.value().rt_double;
+					_format += 'd';
+
+					_mixed = true;
+
+					break;
+				}
 				case VT::MEMBER:
+				{
 					_param.type = machine::platform::variable_parameter::TYPE::MEMBER;
 					_param.value.v_member = _value.value().rt_member;
+					_format += 'M';
 
 
 					break;
+				}
 				default:
 					BIA_COMPILER_DEV_INVALID;
 				}
@@ -357,11 +388,16 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		_value.set_return_temp(_counter.next());
 		auto _destination = machine::platform::toolset::to_temp_member(_counter.current());
 
+		// Execute without parameters
 		if (_parameters.empty()) {
 			_toolset.call(&framework::member::execute, _caller.value().rt_member, _destination);
-		} else {
-			void(framework::member::*a)(framework::member*, uint32_t, ...)  = &framework::member::execute_count;
+		} // Formatted execute
+		else if (_mixed) {
+			auto _format_ptr = _context._string_manager.format_address(_format.data(), _format.length());
 
+			_toolset.call(&framework::member::execute_format, _caller.value().rt_member, _parameters.data(), _parameters.size(), _destination, _format_ptr, static_cast<uint32_t>(_parameters.size()));
+		} // Only members as parameters
+		else {
 			_toolset.call(&framework::member::execute_count, _caller.value().rt_member, _parameters.data(), _parameters.size(), _destination, static_cast<uint32_t>(_parameters.size()));
 		}
 

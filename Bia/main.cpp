@@ -55,8 +55,8 @@ int main()
 			puts("hello, world");
 			return 4;
 		}));
-		set_lambda(_context, "ser", [&](int a, int b) {
-			printf("s%d---%i\n", a, b);
+		set_lambda(_context, "ser", [&](int a, double b) {
+			printf("s%d---%f\n", a, b);
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
@@ -67,7 +67,7 @@ int main()
 
 var i = 3
 var b = 61
-ser(i, b)
+ser(i, 61.65)
 
 )"";
 		sizeof(nullptr);
