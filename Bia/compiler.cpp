@@ -296,18 +296,9 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 		switch (i->token_id) {
 			//case grammar::BM_INSTANTIATION:
 		case grammar::BM_STRING:
-		{
-			if (i->custom_parameter == report::ASCII || i->custom_parameter == report::UTF8) {
-				auto _string = reinterpret_cast<const char*>(i->content.string + stream::string_stream::offset());
-				auto _length = *reinterpret_cast<size_t*>(i->content.string + sizeof(size_t));
-
-				_value.set_return(compiler_value::return_value::string({ _string, _length }));
-			}
-			//_value.set_return(compiler_value::return_value::string({ i->content.string,0}));
-			++i;
+			i = handle_string(i);
 
 			break;
-		}
 		case grammar::BM_IDENTIFIER:
 			i = handle_identifier(i);
 
@@ -369,6 +360,27 @@ const grammar::report * compiler::handle_instantiation(const grammar::report * _
 	// Instantiate
 
 	return _report->content.end;
+}
+
+const grammar::report * compiler::handle_string(const grammar::report * _report)
+{
+	using S = stream::string_stream;
+
+	auto _buffer = _report->content.string;
+
+	switch (_report->custom_parameter) {
+	case report::ASCII:
+	case report::UTF8:
+		_value.set_return(S::string<char>(_buffer), S::size(_buffer), S::length(_buffer));
+
+		break;
+	case report::UTF16:
+	case report::UTF32:
+	default:
+		BIA_COMPILER_DEV_INVALID;
+	}
+
+	return _report + 1;
 }
 
 const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)

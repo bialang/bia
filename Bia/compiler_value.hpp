@@ -6,6 +6,7 @@
 
 #include "member.hpp"
 #include "temp_counter.hpp"
+#include "string_stream.hpp"
 
 
 namespace bia
@@ -27,7 +28,14 @@ public:
 	{
 		INT,
 		DOUBLE,
+		/** ASCII or UTF-8 encoded string. */
 		STRING,
+		/** UTF-16 encoded string. */
+		STRING16,
+		/** UTF-32 encoded string. */
+		STRING32,
+		/** A wchar_t string. */
+		WSTRING,
 		MEMBER,
 		TEMPORARY_MEMBER,
 		/** Defines that the test value is stored in the test register. */
@@ -42,13 +50,17 @@ public:
 
 	union return_value
 	{
-		bool rt_test_result;	/**	Defines the constant test _value.	*/
+		/** The constant test value. */
+		bool rt_test_result;
+		/** A constant integer. */
 		int64_t rt_int;
+		/** A constant floating point. */
 		double rt_double;
 		struct string
 		{
-			const char * data;
-			size_t length;
+			const int8_t * data;
+			stream::string_stream::size_type size;
+			stream::string_stream::length_type length;
 		} rt_string;
 		framework::member * rt_member;
 		temp_counter::counter_type rt_temp_member;
@@ -132,15 +144,70 @@ public:
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::STRING.
 	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
+	 * @since 3.66.135.743
+	 * @date 3-Aug-18
 	 *
-	 * @param _value Defines the _value.
+	 * @param _value The string.
+	 * @param _size The size of the string.
+	 * @param _length The length of the string.
 	*/
-	void set_return(return_value::string _value) noexcept
+	void set_return(const char * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
 		_return_type = VALUE_TYPE::STRING;
-		_return_value.rt_string = _value;
+		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
+		_return_value.rt_string.size = _size;
+		_return_value.rt_string.length = _length;
+	}
+	/**
+	 * Sets the return _value and the type VALUE_TYPE::STRING16.
+	 *
+	 * @since 3.66.135.743
+	 * @date 3-Aug-18
+	 *
+	 * @param _value The string.
+	 * @param _size The size of the string.
+	 * @param _length The length of the string.
+	*/
+	void set_return(const char16_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	{
+		_return_type = VALUE_TYPE::STRING16;
+		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
+		_return_value.rt_string.size = _size;
+		_return_value.rt_string.length = _length;
+	}
+	/**
+	 * Sets the return _value and the type VALUE_TYPE::STRING32.
+	 *
+	 * @since 3.66.135.743
+	 * @date 3-Aug-18
+	 *
+	 * @param _value The string.
+	 * @param _size The size of the string.
+	 * @param _length The length of the string.
+	*/
+	void set_return(const char32_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	{
+		_return_type = VALUE_TYPE::STRING32;
+		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
+		_return_value.rt_string.size = _size;
+		_return_value.rt_string.length = _length;
+	}
+	/**
+	 * Sets the return _value and the type VALUE_TYPE::STRING.
+	 *
+	 * @since 3.66.135.743
+	 * @date 3-Aug-18
+	 *
+	 * @param _value The string.
+	 * @param _size The size of the string.
+	 * @param _length The length of the string.
+	*/
+	void set_return(const wchar_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	{
+		_return_type = VALUE_TYPE::WSTRING;
+		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
+		_return_value.rt_string.size = _size;
+		_return_value.rt_string.length = _length;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::MEMBER.
