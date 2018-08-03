@@ -16,9 +16,11 @@ public:
 	{
 		if (_begin >= _end) {
 			throw exception::encoding_error(BIA_EM_NOT_ENOUGH_SPACE);
+		} else if (_char < 0 || _char > 0x7f) {
+			_char = '?';
 		}
 
-		*_begin++ = _char & 0x7f;
+		*_begin++ = _char;
 	}
 	virtual bool has_next(const int8_t * _begin, const int8_t * _end) noexcept override
 	{
