@@ -55,8 +55,8 @@ int main()
 			puts("hello, world");
 			return 4;
 		}));
-		set_lambda(_context, "ser", [&]() {
-			puts("servus");
+		set_lambda(_context, "ser", [&](int a) {
+			printf("s%d\n", a);
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
@@ -65,8 +65,8 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = 'hellö fränd'
-print i
+var i = 3
+ser(i)
 
 )"";
 		sizeof(nullptr);

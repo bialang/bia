@@ -305,7 +305,7 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 	auto v{0} = *va_arg(_args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
 			else:
 				filler["preparations"] = """
-	auto v{0} = format_cast<_{0}>(_args, p_pcFormat);""".format(i) + filler["preparations"]
+	auto v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]
 			
 			if template == "static_void":
 				filler["template_begin"] = "template<"
