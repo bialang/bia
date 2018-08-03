@@ -356,7 +356,7 @@ gt_end:;
 	_string.finish();
 
 	_output.content.type = report::TYPE::STRING;
-	_output.content.content.string = _string.string();
+	_output.content.content.string = _string.buffer();
 
 	return success;
 }

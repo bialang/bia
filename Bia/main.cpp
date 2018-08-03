@@ -65,7 +65,8 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-print 'hellö fränd'
+var i = 'hellö fränd'
+print i
 
 )"";
 		sizeof(nullptr);

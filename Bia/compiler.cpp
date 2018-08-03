@@ -435,7 +435,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 			break;
 		case compiler_value::VALUE_TYPE::STRING:
-			_toolset.call(&machine::link::instantiate_string, _expression.value().rt_string.data, _expression.value().rt_string.length, _destination);
+			_toolset.call(&machine::link::instantiate_string, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length, _destination);
 
 			break;
 		case compiler_value::VALUE_TYPE::MEMBER:
