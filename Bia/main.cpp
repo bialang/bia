@@ -61,7 +61,6 @@ int main()
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
-
 		//	a = 3434.453;
 		});
 
@@ -72,7 +71,7 @@ int main()
 var i = 5
 var b = "hey"
 
-ser(i != 3, 'b')
+ser(i != 3, 'hey "quote" didn\'t')
 
 print i
 

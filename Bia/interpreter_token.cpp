@@ -230,6 +230,7 @@ ACTION interpreter_token::string(stream::input_stream & _input, token_param _par
 		F_DOUBLE_QUOTE = 0x2,
 		F_QUOTE_SET = F_SINGLE_QUOTE | F_DOUBLE_QUOTE,
 		F_PREFIX_LOWER_U = 0x4,
+		F_RAW_STRING = 0x8
 	};
 
 	uint32_t _flags = 0;
@@ -323,30 +324,72 @@ gt_break:;
 		}
 	}
 
+	auto _escape_next = false;
+
 	while (_input.available() > 0) {
 		_buffer = _input.buffer();
 
 		while (_buffer.first < _buffer.second) {
-			switch (auto _code_point = _params.encoder->next(_buffer.first, _buffer.second)) {
-			case '"':
-			{
-				if (_flags & F_DOUBLE_QUOTE) {
-					goto gt_end;
+			auto _code_point = _params.encoder->next(_buffer.first, _buffer.second);
+
+			// Escape this
+			if (_escape_next) {
+				switch (_code_point) {
+				case 'r':
+					_string.append('\r');
+
+					break;
+				case 'n':
+					_string.append('\n');
+
+					break;
+				case 'a':
+					_string.append('\a');
+
+					break;
+				case 't':
+					_string.append('\t');
+
+					break;
+				default:
+					_string.append(_code_point);
+
+					break;
 				}
 
-				goto gt_default;
-			}
-			case '\'':
-			{
-				if (_flags & F_SINGLE_QUOTE) {
-					goto gt_end;
-				}
-			}
-			default:
-			gt_default:;
-				_string.append(_code_point);
+				_escape_next = false;
+			} else {
+				switch (_code_point) {
+				case '\\':
+				{
+					if (!(_flags & F_RAW_STRING)) {
+						_escape_next = true;
+					} else {
+						goto gt_default;
+					}
 
-				break;
+					break;
+				}
+				case '"':
+				{
+					if (_flags & F_DOUBLE_QUOTE) {
+						goto gt_end;
+					}
+
+					goto gt_default;
+				}
+				case '\'':
+				{
+					if (_flags & F_SINGLE_QUOTE) {
+						goto gt_end;
+					}
+				}
+				default:
+				gt_default:;
+					_string.append(_code_point);
+
+					break;
+				}
 			}
 		}
 	}
