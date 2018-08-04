@@ -357,7 +357,7 @@ public:
 	 * @return A point containing the casted type.
 	*/
 	template<typename _Ty, typename _T = typename std::remove_reference<_Ty>::type>
-	typename std::enable_if<utility::negation<std::is_const<_T>::value>::value, _T*>::type cast()
+	typename std::enable_if<utility::negation<std::is_const<typename std::remove_pointer<_T>::type>::value>::value, _T*>::type cast()
 	{
 		// Native type
 		if (native::determine_native_type<_T>() != native::NATIVE_TYPE::CUSTOM) {
@@ -381,14 +381,14 @@ public:
 	 * @return A point containing the casted type.
 	*/
 	template<typename _Ty, typename _T = typename std::remove_reference<_Ty>::type>
-	typename std::enable_if<std::is_const<_T>::value, _T*>::type cast() const
+	typename std::enable_if<std::is_const<typename std::remove_pointer<_T>::type>::value, _T const*>::type cast() const
 	{
 		// Native type
 		if (native::determine_native_type<_T>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<_T*>(const_native_data(native::determine_native_type<_T>()));
+			return static_cast<_T const* >(const_native_data(native::determine_native_type<_T>()));
 		} // Custom type
 		else {
-			return static_cast<_T*>(const_data(typeid(_T)));
+			return static_cast<_T const* >(const_data(typeid(_T)));
 		}
 	}
 	/**

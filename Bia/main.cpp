@@ -55,20 +55,24 @@ int main()
 			puts("hello, world");
 			return 4;
 		}));
-		set_lambda(_context, "ser", [&](int a, int b) {
-			printf("s%d---%i\n", a, b);
+		set_lambda(_context, "ser", [&](int a, const char * b) {
+			printf("s%d---%s\n", a, b);
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
+
+			return 3434.453;
 		});
 		//SetConsoleOutputCP(65001);
 		// Script
 		char _script[] = u8R""(
 
 var i = 5
-var b = 71
+var b = "hey"
 
-ser(i+b, b-i)
+i = ser(i+5, b)
+
+print i
 
 )"";
 		sizeof(nullptr);
