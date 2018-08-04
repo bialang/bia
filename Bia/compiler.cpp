@@ -374,6 +374,34 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 
 				break;
 			}
+			case VT::STRING:
+			{
+				_passed += _toolset.pass_varg(_value.value().rt_string.data);
+				_type = 'a';
+
+				break;
+			}
+			case VT::STRING16:
+			{
+				_passed += _toolset.pass_varg(_value.value().rt_string.data);
+				_type = 'u';
+
+				break;
+			}
+			case VT::STRING32:
+			{
+				_passed += _toolset.pass_varg(_value.value().rt_string.data);
+				_type = 'U';
+
+				break;
+			}
+			case VT::WSTRING:
+			{
+				_passed += _toolset.pass_varg(_value.value().rt_string.data);
+				_type = 'w';
+
+				break;
+			}
 			case VT::MEMBER:
 			{
 				_passed += _toolset.pass_varg(_value.value().rt_member);

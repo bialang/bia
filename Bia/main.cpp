@@ -72,7 +72,7 @@ int main()
 var i = 5
 var b = "hey"
 
-ser(i != 3, b)
+ser(i != 3, 'b')
 
 print i
 
