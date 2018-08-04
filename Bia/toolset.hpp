@@ -21,24 +21,6 @@ namespace machine
 namespace platform
 {
 
-struct variable_parameter
-{
-	enum class TYPE
-	{
-		INT32,
-		INT64,
-		DOUBLE,
-		MEMBER
-	} type;
-	union
-	{
-		int32_t v_int32;
-		int64_t v_int64;
-		double v_double;
-		framework::member * v_member;
-	} value;
-};
-
 #if defined(BIA_COMPILER_MSVC) || defined(BIA_COMPILER_GNU)
 class toolset
 {
@@ -293,37 +275,12 @@ public:
 	 * @throws See pass() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call(varg_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, const variable_parameter * _variable_parameter, size_t _count, _Args2 &&... _args)
+	void call(varg_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, pass_count _passed_vargs, _Args2 &&... _args)
 	{
 		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
-		pass_count _passed = 0;
-
-		while (_count--) {
-			switch (_variable_parameter->type) {
-			case variable_parameter::TYPE::INT32:
-				_passed += pass(_variable_parameter->value.v_int32);
-
-				break;
-			case variable_parameter::TYPE::INT64:
-				_passed += pass(_variable_parameter->value.v_int64);
-
-				break;
-			case variable_parameter::TYPE::DOUBLE:
-				_passed += pass(_variable_parameter->value.v_double);
-
-				break;
-			case variable_parameter::TYPE::MEMBER:
-				_passed += pass(_variable_parameter->value.v_member);
-
-				break;
-			default:
-				throw;
-			}
-
-			++_variable_parameter;
-		}
+		pass_count _passed = _passed_vargs;
 
 		// Push all parameters
 		_passed += pass(std::forward<_Args2>(_args)...);
@@ -350,6 +307,11 @@ public:
 	void write_test()
 	{
 		architecture::instruction<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*_output, 0);
+	}
+	template<typename _Ty>
+	pass_count pass_varg(_Ty _value)
+	{
+		return pass(_value);
 	}
 	position jump(JUMP _type, position _destination = 0, position _start = -1)
 	{

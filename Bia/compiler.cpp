@@ -172,12 +172,23 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		// Pop if not used and set destination
 		auto _right = _value;
 
-		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+		// Get the lower one
+		if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER && _right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_value.set_return_temp(_left.value().rt_temp_member < _right.value().rt_temp_member ? _left.value().rt_temp_member : _right.value().rt_temp_member);
+		} else if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_value.set_return_temp(_left.value().rt_temp_member);
+		} else if (_right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_value.set_return_temp(_right.value().rt_temp_member);
+		} else {
+			//_counter.pop(_old_counter);
+			_value.set_return_temp(_counter.next());
+		}
+		/*if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
 			_counter.pop(_old_counter);
 			_value.set_return_temp(_counter.next());
 		} else if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
 			_value.set_return_temp(_left.value().rt_temp_member);
-		}
+		}*/
 
 		// Call operator
 		compile_normal_operation(_toolset, _value).operate(_left, _operator, _right);
@@ -327,58 +338,66 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	using VT = compiler_value::VALUE_TYPE;
 
 	auto _caller = _value;
-	std::vector<machine::platform::variable_parameter> _parameters;
+	machine::platform::toolset::pass_count _passed = 0;
+	uint32_t _count = 0;
 	std::string _format;
 	auto _mixed = false;
 
 	if (_report->type != grammar::report::TYPE::EMPTY_CHILD) {
-		for (auto i = _report + 1; i < _report->content.end;) {
-			i = handle_value<false>(i, [&]() {
-				machine::platform::variable_parameter _param;
+		// Save old counter
+		auto _old = _counter.peek();
 
-				switch (_value.type()) {
-				case VT::INT:
-				{
-					if (_value.is_int32()) {
-						_param.type = machine::platform::variable_parameter::TYPE::INT32;
-						_param.value.v_int32 = static_cast<int32_t>(_value.value().rt_int);
-						_format += 'i';
-					} else {
-						_param.type = machine::platform::variable_parameter::TYPE::INT64;
-						_param.value.v_int64 = _value.value().rt_int;
-						_format += 'I';
-					}
+		for (auto i = _report + 1; i < _report->content.end; ++_count) {
+			i = handle_value_insecure<false>(i);
 
-					_mixed = true;
-
-					break;
-				}
-				case VT::DOUBLE:
-				{
-					_param.type = machine::platform::variable_parameter::TYPE::DOUBLE;
-					_param.value.v_double = _value.value().rt_double;
-					_format += 'd';
-
-					_mixed = true;
-
-					break;
-				}
-				case VT::MEMBER:
-				{
-					_param.type = machine::platform::variable_parameter::TYPE::MEMBER;
-					_param.value.v_member = _value.value().rt_member;
-					_format += 'M';
-
-
-					break;
-				}
-				default:
-					BIA_COMPILER_DEV_INVALID;
+			switch (_value.type()) {
+			case VT::TEST_VALUE_CONSTANT:
+				_value.set_return(static_cast<int64_t>(_value.value().rt_test_result));
+			case VT::INT:
+			{
+				if (_value.is_int32()) {
+					_passed += _toolset.pass_varg(static_cast<int32_t>(_value.value().rt_int));
+					_format += 'i';
+				} else {
+					_passed += _toolset.pass_varg(_value.value().rt_int);
+					_format += 'I';
 				}
 
-				_parameters.push_back(_param);
-			});
+				_mixed = true;
+
+				break;
+			}
+			case VT::DOUBLE:
+			{
+				_passed += _toolset.pass_varg(_value.value().rt_double);
+				_format += 'd';
+
+				_mixed = true;
+
+				break;
+			}
+			case VT::MEMBER:
+			{
+				_passed += _toolset.pass_varg(_value.value().rt_member);
+				_format += 'M';
+
+
+				break;
+			}
+			case VT::TEMPORARY_MEMBER:
+			{
+				//_passed += _toolset.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+				//_format += 'M';
+
+
+				break;
+			}
+			default:
+				BIA_COMPILER_DEV_INVALID;
+			}
 		}
+
+		_counter.pop(_old);
 	}
 
 	// Call function
@@ -389,16 +408,16 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		auto _destination = machine::platform::toolset::to_temp_member(_counter.current());
 
 		// Execute without parameters
-		if (_parameters.empty()) {
+		if (!_count) {
 			_toolset.call(&framework::member::execute, _caller.value().rt_member, _destination);
 		} // Formatted execute
 		else if (_mixed) {
-			auto _format_ptr = _context._string_manager.format_address(_format.data(), _format.length());
+			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
 
-			_toolset.call(&framework::member::execute_format, _caller.value().rt_member, _parameters.data(), _parameters.size(), _destination, _format_ptr, static_cast<uint32_t>(_parameters.size()));
+			_toolset.call(&framework::member::execute_format, _caller.value().rt_member, _passed, _destination, _format_ptr, static_cast<uint32_t>(_count));
 		} // Only members as parameters
 		else {
-			_toolset.call(&framework::member::execute_count, _caller.value().rt_member, _parameters.data(), _parameters.size(), _destination, static_cast<uint32_t>(_parameters.size()));
+			_toolset.call(&framework::member::execute_count, _caller.value().rt_member, _passed, _destination, static_cast<uint32_t>(_count));
 		}
 
 		break;
