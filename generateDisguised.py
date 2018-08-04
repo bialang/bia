@@ -49,7 +49,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args, int32_t));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'I':
@@ -59,7 +59,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args, int64_t));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'd':
@@ -69,7 +69,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_number) {
 			return chooser<is_number, _Return, double>().choose(va_arg(_args, double));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'a':
@@ -79,7 +79,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (is_string) {
 			return chooser<is_string, _Return, const char*>().choose(va_arg(_args, const char*));
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'M':
@@ -87,7 +87,7 @@ inline _Return format_cast(va_list & _args, const char *& _format)
 		if (auto _ptr = va_arg(_args, framework::member*)->cast<_Return>()) {
 			return *_ptr;
 		} else {
-			throw exception::invalid_type(BIA_EM_UNEXPECTED_TYPE);
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	default:
@@ -286,16 +286,15 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 			
 			if template != "initiator":
 				filler["param2"] += (", " if i != 0 else "") + "_" + str(i)
-			
-			filler["body2"] += (", " if i != 0 else "") + "std::forward<_{0}>(v{0})".format(i)
-
+		
 			if type == "count":
-
+				filler["body2"] += (", " if i != 0 else "") + "*_v{0}".format(i)
 				filler["preparations"] = """
-	auto v{0} = *va_arg(_args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
+	auto _v{0} = va_arg(_args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
 			else:
 				filler["preparations"] = """
-	auto v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]
+	auto _v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]
+				filler["body2"] += (", " if i != 0 else "") + "std::forward<_{0}>(_v{0})".format(i)
 			
 			if template == "static_void":
 				filler["template_begin"] = "template<"

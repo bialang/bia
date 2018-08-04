@@ -64,9 +64,9 @@ struct chooser<true, _Return, _Ty>
 template<typename _Return, typename _Ty>
 struct chooser<false, _Return, _Ty>
 {
-	static _Return choose(_Ty _value) noexcept
+	static _Return choose(_Ty _value)
 	{
-		return _Return();
+		throw;
 	}
 };
 

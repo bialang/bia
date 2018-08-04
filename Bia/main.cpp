@@ -51,18 +51,20 @@ int main()
 		_context.get_address_of_member(_context.get_name_address("a"))->refer(_context.get_address_of_member("b"));
 		*_context.get_address_of_member("b")->cast<int64_t>() = 69;*/
 
+
 		set_function(_context, u8"hello_wörld", static_cast<int(*)()>([]() {
 			puts("hello, world");
 			return 4;
 		}));
-		set_lambda(_context, "ser", [&](int a, const char * b) {
+		set_lambda(_context, "ser", [&](int & a, const char * b) {
 			printf("s%d---%s\n", a, b);
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
 
-			return 3434.453;
+			a = 3434.453;
 		});
+
 		//SetConsoleOutputCP(65001);
 		// Script
 		char _script[] = u8R""(
@@ -70,7 +72,7 @@ int main()
 var i = 5
 var b = "hey"
 
-i = ser(i+5, b)
+ser(i, b)
 
 print i
 

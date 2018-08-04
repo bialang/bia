@@ -385,10 +385,10 @@ public:
 	{
 		// Native type
 		if (native::determine_native_type<_T>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<_T const* >(const_native_data(native::determine_native_type<_T>()));
+			return static_cast<_T const*>(const_native_data(native::determine_native_type<_T>()));
 		} // Custom type
 		else {
-			return static_cast<_T const* >(const_data(typeid(_T)));
+			return static_cast<_T const*>(const_data(typeid(_T)));
 		}
 	}
 	/**
