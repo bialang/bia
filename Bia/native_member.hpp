@@ -196,7 +196,7 @@ private:
 	/** True if the value is non zero. */
 
 	template<typename _T>
-	void create_result_member(_T && _value, member * _destination)
+	void create_result_member(const _T & _value, member * _destination)
 	{
 		if (!_destination) {
 			_destination = this;

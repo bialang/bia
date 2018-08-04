@@ -304,16 +304,48 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
 	for (auto i = _report + 1; i < _report->content.end;) {
-		switch (i->token_id) {
-			//case grammar::BM_INSTANTIATION:
-		case grammar::BM_STRING:
+		void(framework::member::*_function)(framework::member*) = nullptr;
+
+		switch (i->type) {
+		case report::TYPE::BEGIN:
+		{
+			// Handle instantiation
+			if (i->rule_id == BGR_INSTANTIATION) {
+				i = handle_instantiation(i);
+			} else {
+				BIA_COMPILER_DEV_INVALID;
+			}
+
+			break;
+		}
+		case report::TYPE::STRING:
 			i = handle_string(i);
 
 			break;
-		case grammar::BM_IDENTIFIER:
+		case report::TYPE::KEYWORD:
+		{
+			// Ref of
+			if (i->content.keyword == keyword_refof::string_id()) {
+				_function = &framework::member::refer;
+			} // Copy of
+			else {
+				_function = &framework::member::copy;
+			}
+
+			++i;
+		}
+		case report::TYPE::MEMBER:
+		{
 			i = handle_identifier(i);
 
+			// Get refof/copyof
+			if (_function) {
+				_toolset.call(_function, _value.value().rt_member, machine::platform::toolset::to_temp_member(_counter.next()));
+				_value.set_return_temp(_counter.current());
+			}
+
 			break;
+		}
 		default:
 			BIA_COMPILER_DEV_INVALID;
 		}

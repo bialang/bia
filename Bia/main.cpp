@@ -56,12 +56,12 @@ int main()
 			puts("hello, world");
 			return 4;
 		}));
-		set_lambda(_context, "ser", [&](int a, const char * b) {
+		set_lambda(_context, "ser", [&](int & a, const char * b) {
 			printf("s%d---%s\n", a, b);
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
-		//	a = 3434.453;
+			a = 3434.453;
 		});
 
 		//SetConsoleOutputCP(65001);
@@ -71,7 +71,7 @@ int main()
 var i = 5
 var b = "hey"
 
-ser(i != 3, 'hey "quote" didn\'t')
+ser(copyof i, b)
 
 print i
 
