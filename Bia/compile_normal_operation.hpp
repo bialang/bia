@@ -107,6 +107,7 @@ private:
 		T::temp_result * _destination = nullptr;
 
 		if (_value.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_destination_tmp = T::to_temp_member(_value.value().rt_temp_member);
 			_destination = &_destination_tmp;
 		}
 
