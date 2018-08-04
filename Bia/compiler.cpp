@@ -348,6 +348,8 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		auto _old = _counter.peek();
 
 		for (auto i = _report + 1; i < _report->content.end; ++_count) {
+			char _type;
+
 			i = handle_value_insecure<false>(i);
 
 			switch (_value.type()) {
@@ -357,43 +359,51 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 			{
 				if (_value.is_int32()) {
 					_passed += _toolset.pass_varg(static_cast<int32_t>(_value.value().rt_int));
-					_format += 'i';
+					_type = 'i';
 				} else {
 					_passed += _toolset.pass_varg(_value.value().rt_int);
-					_format += 'I';
+					_type = 'I';
 				}
-
-				_mixed = true;
 
 				break;
 			}
 			case VT::DOUBLE:
 			{
 				_passed += _toolset.pass_varg(_value.value().rt_double);
-				_format += 'd';
-
-				_mixed = true;
+				_type = 'd';
 
 				break;
 			}
 			case VT::MEMBER:
 			{
 				_passed += _toolset.pass_varg(_value.value().rt_member);
-				_format += 'M';
-
+				_type = 'M';
 
 				break;
 			}
 			case VT::TEMPORARY_MEMBER:
 			{
-				//_passed += _toolset.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
-				//_format += 'M';
+				_passed += _toolset.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+				_type = 'M';
 
+				break;
+			}
+			case VT::TEST_VALUE_REGISTER:
+			{
+				_passed += _toolset.pass_varg(machine::platform::toolset::test_result_value());
+				_type = 'i';
 
 				break;
 			}
 			default:
 				BIA_COMPILER_DEV_INVALID;
+			}
+
+			// Add type to format
+			_format += _type;
+
+			if (_type != 'M') {
+				_mixed = true;
 			}
 		}
 
