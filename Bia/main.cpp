@@ -15,6 +15,27 @@
 #include <Windows.h>
 
 
+struct printer
+{
+	printer()
+	{
+		puts("default constructor");
+	}
+	printer(const printer&)
+	{
+		puts("copy constructor");
+	}
+	printer(printer&&)
+	{
+		puts("move constructor");
+	}
+	~printer()
+	{
+		puts("destructor");
+	}
+};
+
+
 template<typename _Lambda>
 inline void test_and_time(int _count, _Lambda && _lambda)
 {
@@ -46,14 +67,10 @@ int main()
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		auto _exec_allocator = std::make_shared<machine::memory::simple_executable_allocator>();
 		bia::machine::machine_context _context(_allocator, _exec_allocator);
-		/*_context.get_address_of_member("foo")->replace_this<framework::executable::static_function<void>>(&test);
-		_context.get_address_of_member(_context.get_name_address("a"))->replace_this<framework::native::int_member>(1);
-		_context.get_address_of_member(_context.get_name_address("a"))->refer(_context.get_address_of_member("b"));
-		*_context.get_address_of_member("b")->cast<int64_t>() = 69;*/
 
-
-		set_function(_context, u8"hello_wörld", static_cast<int(*)(std::string)>([](std::string _s) {
-			puts(_s.c_str());
+		set_function(_context, u8"hello_wörld", static_cast<int(*)(std::string*)>([](std::string *_s) {
+			puts(_s->c_str());
+			*_s = "alksdalksd";
 			return 4;
 		}));
 		set_lambda(_context, "ser", [&](int & a, const char * b) {
@@ -62,10 +79,11 @@ int main()
 				puts("bye");
 			});
 			a = 3434.453;
-			return std::string("hi");
+			return printer();
 		});
 
 		//SetConsoleOutputCP(65001);
+
 		// Script
 		char _script[] = u8R""(
 
@@ -73,13 +91,12 @@ var i = 5
 var b = "hey"
 
 var c = ser(copyof i, b)
-hello_wörld(c)
 
 
-print i
+print c
 
 )"";
-		sizeof(nullptr);
+
 		// Compile
 		bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);
 		bia::stream::buffer_output_stream _output;
@@ -99,7 +116,6 @@ print i
 		system("pause");
 
 		// Run
-		//bia::machine::machine_code _machine_code = _compiler.get_code();
 		bia::machine::machine_code _machine_code({ reinterpret_cast<const uint8_t*>(_output.buffer()), _output.size() }, bia::machine::machine_schein(_context.allocator(), _context.executable_allocator()));
 
 		if (_machine_code.is_executable()) {

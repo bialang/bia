@@ -35,7 +35,7 @@ public:
 	 * @throws See constructor_chain().
 	*/
 	template<typename _T, typename A = typename std::enable_if<std::is_same<typename std::remove_cv<typename std::remove_reference<_T>::type>::type, typename std::remove_cv<typename std::remove_reference<_Ty>::type>::type>::value, int>::type>
-	raw_class_member( _T && _object) : _data(nullptr, false)
+	raw_class_member(_T && _object) : _data(nullptr, false)
 	{
 		_data.get().first = constructor_chain(std::forward<_T>(_object));
 		_data.get().second = true;
@@ -69,7 +69,7 @@ public:
 	 * @since 3.66.135.746
 	 * @date 5-Aug-18
 	 *
-	 * @throws 
+	 * @throws
 	*/
 	~raw_class_member()
 	{
@@ -185,8 +185,12 @@ protected:
 	}
 	virtual void * data(const std::type_info & _type) override
 	{
-		if (!std::is_const<_Ty>::value && typeid(_Ty) == _type) {
-			return _data.get().first;
+		if (!std::is_const<_Ty>::value) {
+			if (typeid(_Ty) == _type) {
+				return _data.get().first;
+			} else if (typeid(_Ty*) == _type) {
+				return &_data.get().first;
+			}
 		}
 
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
@@ -195,6 +199,8 @@ protected:
 	{
 		if (typeid(_Ty) == _type) {
 			return _data.get().first;
+		} else if (typeid(_Ty*) == _type) {
+			return &_data.get().first;
 		}
 
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
