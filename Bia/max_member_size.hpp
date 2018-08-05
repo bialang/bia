@@ -7,6 +7,7 @@
 #include "static_function.hpp"
 #include "lambda_function.hpp"
 #include "member_function.hpp"
+#include "raw_class_member.hpp"
 
 
 namespace bia
@@ -29,7 +30,8 @@ inline constexpr typename std::enable_if<(sizeof...(_Args) > 1), _Ty>::type max(
 constexpr auto max_member_size = max(
 	sizeof(native::cstring_member<char>), 
 	sizeof(native::int_member), 
-	sizeof(executable::static_function<void>));
+	sizeof(executable::static_function<void>),
+	sizeof(object::raw_class_member<int>));
 
 }
 }

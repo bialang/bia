@@ -11,6 +11,7 @@
 #include "static_function.hpp"
 #include "member_function.hpp"
 #include "lambda_function.hpp"
+#include "raw_class_member.hpp"
 
 
 namespace bia
@@ -80,18 +81,6 @@ inline typename std::enable_if<std::is_floating_point<_Ty>::value>::type create_
 		_destination->replace_this<native::double_member>(static_cast<double>(_value));
 	}
 }
-
-/*template<typename _Ty>
-inline typename std::enable_if<std::is_arithmetic<_Ty>::value && bia::utility::Negation<std::is_same<_Ty, const char>::value>::value>::type MemberCreator(BiaMember * p_pDestination, _Ty * p_pValue)
-{
-	p_pDestination->ReplaceObject<native::BiaNativeReference<_Ty>>(p_value);
-}
-
-template<typename _Ty>
-inline typename std::enable_if<std::is_arithmetic<_Ty>::value>::type MemberCreator(BiaMember * p_pDestination, _Ty & p_value)
-{
-	p_pDestination->ReplaceObject<native::BiaNativeReference<_Ty>>(p_value);
-}*/
 
 /**
  * Creates the member for a C-string result.
@@ -190,13 +179,13 @@ inline void create_member(member * _destination, _Return(_Class::*_function)(_Ar
 	}
 }
 
-/*template<typename _Ty>
+template<typename _Ty>
 inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<_Ty>::type>::type>::value>::value>::type create_member(member * _destination, _Ty && _value)
 {
-	using _Type = typename std::remove_reference<_Ty>::type;
-
-	_destination->replace_this<object::BiaClassRaw<_Type>>(std::shared_ptr<_Type>(new _Type(std::forward<_Ty>(p_value))));
-}*/
+	if (_destination) {
+		_destination->replace_this<object::raw_class_member<typename std::remove_reference<_Ty>::type>>(std::forward<_Ty>(_value));
+	}
+}
 
 }
 }

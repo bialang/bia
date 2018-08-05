@@ -52,8 +52,8 @@ int main()
 		*_context.get_address_of_member("b")->cast<int64_t>() = 69;*/
 
 
-		set_function(_context, u8"hello_wörld", static_cast<int(*)()>([]() {
-			puts("hello, world");
+		set_function(_context, u8"hello_wörld", static_cast<int(*)(std::string)>([](std::string _s) {
+			puts(_s.c_str());
 			return 4;
 		}));
 		set_lambda(_context, "ser", [&](int & a, const char * b) {
@@ -62,6 +62,7 @@ int main()
 				puts("bye");
 			});
 			a = 3434.453;
+			return std::string("hi");
 		});
 
 		//SetConsoleOutputCP(65001);
@@ -71,7 +72,9 @@ int main()
 var i = 5
 var b = "hey"
 
-ser(copyof i, b)
+var c = ser(copyof i, b)
+hello_wörld(c)
+
 
 print i
 

@@ -24,19 +24,18 @@ public:
 	/** The data of @ref raw_class_member. The first parameter is a pointer to the real data and the second is a boolean defining whether the first parameter needs to be deallocated or not. */
 	typedef utility::share<std::pair<_Ty*, bool>> data_type;
 
-
 	/**
 	 * Move-Constructor.
 	 *
 	 * @since 3.66.135.746
 	 * @date 5-Aug-18
 	 *
-	 * @param [in,out] _copy The object that should be set.
+	 * @param [in,out] _object The object that should be set.
 	 *
 	 * @throws See constructor_chain().
 	*/
-	template<typename _T>
-	raw_class_member(_T && _copy) : _data(nullptr, false)
+	template<typename _T, typename A = typename std::enable_if<std::is_same<typename std::remove_cv<typename std::remove_reference<_T>::type>::type, typename std::remove_cv<typename std::remove_reference<_Ty>::type>::type>::value, int>::type>
+	raw_class_member( _T && _object) : _data(nullptr, false)
 	{
 		_data.get().first = constructor_chain(std::forward<_T>(_object));
 		_data.get().second = true;
@@ -61,7 +60,7 @@ public:
 	 * @param [in] _object The object address. This address must not be null.
 	 * @param _owner true if this object is in charge of deallocating the object or not.
 	*/
-	raw_class_member(_Ty * _object, bool _owner) noexcept : _data(_object, _owner)
+	raw_class_member(_Ty * _object, bool _owner) noexcept : _data(nullptr, _owner)
 	{
 	}
 	/**
@@ -88,7 +87,7 @@ public:
 	}
 	virtual void copy(member * _destination) override
 	{
-		_destination->replace_this<raw_class_member<_Ty>>(copy(_data.get().first), true);
+		_destination->replace_this<raw_class_member<_Ty>>(copy(*_data.get().first), true);
 	}
 	virtual void refer(member * _destination) override
 	{
@@ -170,7 +169,7 @@ public:
 	{
 		return promote()->to_double();
 	}
-	member * promote()
+	member * promote() const
 	{
 		return nullptr;
 	}
@@ -187,7 +186,7 @@ protected:
 	virtual void * data(const std::type_info & _type) override
 	{
 		if (!std::is_const<_Ty>::value && typeid(_Ty) == _type) {
-			return &_data.get().first;
+			return _data.get().first;
 		}
 
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
@@ -195,7 +194,7 @@ protected:
 	virtual const void * const_data(const std::type_info & _type) const override
 	{
 		if (typeid(_Ty) == _type) {
-			return &_data.get().first;
+			return _data.get().first;
 		}
 
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
