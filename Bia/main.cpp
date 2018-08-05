@@ -35,7 +35,6 @@ struct printer
 	}
 };
 
-
 template<typename _Lambda>
 inline void test_and_time(int _count, _Lambda && _lambda)
 {
@@ -62,6 +61,8 @@ void test()
 
 int main()
 {
+	//constructor_chain<const printer>(printer());
+
 	{
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
@@ -73,13 +74,14 @@ int main()
 			*_s = "alksdalksd";
 			return 4;
 		}));
-		set_lambda(_context, "ser", [&](int & a, const char * b) {
+		set_lambda(_context, "ser", [&](int & a, const char * b) -> const printer&& {
 			printf("s%d---%s\n", a, b);
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
 			a = 3434.453;
-			return printer();
+			static printer _p;
+			return std::move(_p);
 		});
 
 		//SetConsoleOutputCP(65001);

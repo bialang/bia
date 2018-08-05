@@ -8,6 +8,8 @@
 #include "undefined_member.hpp"
 #include "share.hpp"
 #include "type_traits.hpp"
+#include "constructor_chain.hpp"
+#include "machine_context.hpp"
 
 
 namespace bia
@@ -37,7 +39,7 @@ public:
 	template<typename _T, typename A = typename std::enable_if<std::is_same<typename std::remove_cv<typename std::remove_reference<_T>::type>::type, typename std::remove_cv<typename std::remove_reference<_Ty>::type>::type>::value, int>::type>
 	raw_class_member(_T && _object) : _data(nullptr, false)
 	{
-		_data.get().first = constructor_chain(std::forward<_T>(_object));
+		_data.get().first = constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), std::forward<_T>(_object));
 		_data.get().second = true;
 	}
 	/**
@@ -69,12 +71,12 @@ public:
 	 * @since 3.66.135.746
 	 * @date 5-Aug-18
 	 *
-	 * @throws
+	 * @throws See machine::memory::allocator::destroy().
 	*/
 	~raw_class_member()
 	{
 		if (_data.only_owner() && _data.get().second) {
-			delete _data.get().first;
+			machine::machine_context::active_allocator()->destroy<_Ty>({ _data.get().first, sizeof(_Ty) });
 		}
 	}
 	virtual void undefine() noexcept override
@@ -87,7 +89,7 @@ public:
 	}
 	virtual void copy(member * _destination) override
 	{
-		_destination->replace_this<raw_class_member<_Ty>>(copy(*_data.get().first), true);
+		_destination->replace_this<raw_class_member<_Ty>>(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().first), true);
 	}
 	virtual void refer(member * _destination) override
 	{
@@ -191,7 +193,7 @@ protected:
 	{
 		if (!std::is_const<_Ty>::value) {
 			if (typeid(_Ty) == _type) {
-				return _data.get().first;
+				return const_cast<typename std::remove_cv<_Ty>::type*>(_data.get().first);
 			} else if (typeid(_Ty*) == _type) {
 				return &_data.get().first;
 			}
@@ -212,40 +214,6 @@ protected:
 
 private:
 	data_type _data;
-
-
-	template<typename _T>
-	static typename std::enable_if<std::is_copy_constructible<_T>::value, _T*>::type copy(const _T & _object)
-	{
-		return new _T(_object);
-	}
-	template<typename _T>
-	static typename std::enable_if<utility::negation<std::is_copy_constructible<_T>::value>::value, _T*>::type copy(const _T & _object)
-	{
-		// No copy constructable
-		throw;
-	}
-	template<typename _T>
-	static typename std::enable_if<std::is_move_constructible<_T>::value, _T*>::type constructor_chain(_T & _object)
-	{
-		return new _T(std::move(_object));
-	}
-	template<typename _T>
-	static typename std::enable_if<utility::negation<std::is_move_constructible<_T>::value>::value && std::is_copy_constructible<_T>::value, _T*>::type constructor_chain(_T & _object)
-	{
-		return new _T(_object);
-	}
-	template<typename _T>
-	static typename std::enable_if<std::is_copy_constructible<_T>::value, _T*>::type constructor_chain(const _T & _object)
-	{
-		return new _T(_object);
-	}
-	template<typename _T>
-	static typename std::enable_if<utility::negation<std::is_move_constructible<_T>::value || std::is_copy_constructible<_T>::value>::value, _T*>::type constructor_chain(_T && _object)
-	{
-		// Cannot be moved/copied
-		throw;
-	}
 };
 
 }
