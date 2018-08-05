@@ -31,6 +31,7 @@ public:
 	virtual int32_t test_double(operator_type _operator, double _right) const override;
 	virtual int64_t to_int() const override;
 	virtual double to_double() const override;
+	virtual member * object_member(machine::string_manager::name_type _name) override;
 
 protected:
 	virtual void * native_data(native::NATIVE_TYPE _type) override;

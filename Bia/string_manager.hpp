@@ -15,6 +15,9 @@ namespace machine
 class string_manager
 {
 public:
+	typedef const char* name_type;
+
+
 	/**
 	 * Constructor.
 	 *
@@ -57,7 +60,7 @@ public:
 	 *
 	 * @return The name address. It's valid until destruction of this name manager. This address is not zero-terminated.
 	*/
-	const char * name_address(const char * _name, size_t _length);
+	name_type name_address(const char * _name, size_t _length);
 	/**
 	 * Returns the format address. This address will be the same for the same format value.
 	 *

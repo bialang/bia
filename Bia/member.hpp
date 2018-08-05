@@ -11,6 +11,7 @@
 #include "operator.hpp"
 #include "native_type.hpp"
 #include "type_traits.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -343,6 +344,19 @@ public:
 	 * @return The double representation.
 	*/
 	virtual double to_double() const = 0;
+	/**
+	 * Returns a member of this member.
+	 *
+	 * @since 3.66.135.747
+	 * @date 5-Aug-18
+	 *
+	 * @param _name The name of the member.
+	 *
+	 * @throws exception::symbol_error If this member or the wanted member is not valid.
+	 *
+	 * @return The member.
+	*/
+	virtual member * object_member(machine::string_manager::name_type _name) = 0;
 	/**
 	 * Casts this member to the specified mutable type.
 	 *

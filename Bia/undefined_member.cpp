@@ -108,6 +108,11 @@ double undefined_member::to_double() const
 	BIA_UNDEFINED_ERROR;
 }
 
+member * undefined_member::object_member(machine::string_manager::name_type _name)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 void * undefined_member::native_data(native::NATIVE_TYPE _type)
 {
 	BIA_UNDEFINED_ERROR;

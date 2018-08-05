@@ -114,6 +114,10 @@ public:
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
+	virtual member * object_member(machine::string_manager::name_type _name) override
+	{
+		BIA_NOT_IMPLEMENTED;
+	}
 
 protected:
 	virtual void * native_data(native::NATIVE_TYPE _type) override

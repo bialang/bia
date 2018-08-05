@@ -121,6 +121,10 @@ public:
 	{
 		return static_cast<double>(_data.get().first);
 	}
+	virtual member * object_member(machine::string_manager::name_type _name) override
+	{
+		BIA_NOT_IMPLEMENTED;
+	}
 
 protected:
 	virtual void * native_data(native::NATIVE_TYPE _type) override

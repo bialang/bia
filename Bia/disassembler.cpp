@@ -265,10 +265,6 @@ disassembler::function_map disassembler::init_function_map()
 
 	BIA_FUNCTION_ENTRY(framework::member::flags);
 
-	/*BIA_FUNCTION_ENTRY(framework::member::Instantiate);
-	BIA_FUNCTION_ENTRY(framework::member::InstantiateCount);
-	BIA_FUNCTION_ENTRY(framework::member::InstantiateFormat);*/
-
 	BIA_FUNCTION_ENTRY(framework::member::operator_call);
 	BIA_FUNCTION_ENTRY(framework::member::operator_call_int32);
 	BIA_FUNCTION_ENTRY(framework::member::operator_call_int64);
@@ -276,14 +272,6 @@ disassembler::function_map disassembler::init_function_map()
 	BIA_FUNCTION_ENTRY(machine::link::operation_int32);
 	BIA_FUNCTION_ENTRY(machine::link::operation_int64);
 	BIA_FUNCTION_ENTRY(machine::link::operation_double);
-
-	/*BIA_FUNCTION_ENTRY(framework::member::);
-	BIA_FUNCTION_ENTRY(framework::member::OperatorAssignCallInt_32);
-	BIA_FUNCTION_ENTRY(framework::member::OperatorAssignCallInt_64);
-	BIA_FUNCTION_ENTRY(framework::member::OperatorAssignCallFloat);
-	BIA_FUNCTION_ENTRY(framework::member::OperatorAssignCallDouble);
-
-	BIA_FUNCTION_ENTRY(framework::member::OperatorSelfCall);*/
 
 	BIA_FUNCTION_ENTRY(framework::member::test);
 	BIA_FUNCTION_ENTRY(framework::member::test_member);
@@ -293,6 +281,8 @@ disassembler::function_map disassembler::init_function_map()
 
 	BIA_FUNCTION_ENTRY(framework::member::to_int);
 	BIA_FUNCTION_ENTRY(framework::member::to_double);
+
+	BIA_FUNCTION_ENTRY(framework::member::object_member);
 
 	return _function_map;
 }

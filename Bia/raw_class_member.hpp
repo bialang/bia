@@ -169,6 +169,10 @@ public:
 	{
 		return promote()->to_double();
 	}
+	virtual member * object_member(machine::string_manager::name_type _name) override
+	{
+		throw BIA_IMPLEMENTATION_EXCEPTION("Not implemented.");
+	}
 	member * promote() const
 	{
 		return nullptr;
