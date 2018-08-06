@@ -58,6 +58,7 @@ inline int32_t operator "" _32(unsigned long long _value)
 template<REGISTER _Register, typename _Offset, bool _Effective_address>
 struct register_offset
 {
+	constexpr static REGISTER register_value = _Register;
 	_Offset offset;
 
 	register_offset(_Offset _Offset) noexcept
@@ -69,6 +70,7 @@ struct register_offset
 template<REGISTER _Register, bool _Effective_address>
 struct register_offset<_Register, void, _Effective_address>
 {
+	constexpr static REGISTER register_value = _Register;
 };
 
 class architecture
@@ -203,7 +205,13 @@ public:
 		switch (_Op_code) {
 		case OP_CODE::PUSH:
 		{
-			if (std::is_same<int8_t, _Offset>::value) {
+			if (_Register == REGISTER::ESP) {
+				if (std::is_same<int8_t, _Offset>::value) {
+					return _output.write_all(0xff_8, static_cast<uint8_t>(0160 | get_register_code<_Register>()), 0x24_8, _offset);
+				}
+
+				return _output.write_all(0xff_8, static_cast<uint8_t>(0260 | get_register_code<_Register>()), 0x24_8, _offset);
+			} else if (std::is_same<int8_t, _Offset>::value) {
 				return _output.write_all(0xff_8, static_cast<uint8_t>(0160 | get_register_code<_Register>()), _offset);
 			}
 
@@ -246,11 +254,9 @@ public:
 	template<OP_CODE _Op_code, REGISTER _Register>
 	static size_t instruction32(stream::output_stream & _output, int32_t _value)
 	{
-		static_assert(_Op_code == OP_CODE::PUSH || _Op_code == OP_CODE::MOVE || _Op_code == OP_CODE::ADD || _Op_code == OP_CODE::SUBTRACT, "This opcode is not supported.");
+		static_assert(_Op_code == OP_CODE::MOVE || _Op_code == OP_CODE::ADD || _Op_code == OP_CODE::SUBTRACT, "This opcode is not supported.");
 
 		switch (_Op_code) {
-		case OP_CODE::PUSH:
-			return _output.write_all(0xff_8, static_cast<uint8_t>(0260 | get_register_code<_Register>()), static_cast<uint32_t>(_value));
 		case OP_CODE::MOVE:
 			return _output.write_all(static_cast<uint8_t>(0xb8 | get_register_code<_Register>()), static_cast<uint32_t>(_value));
 		case OP_CODE::ADD:
@@ -276,18 +282,9 @@ public:
 	template<OP_CODE _Op_code, REGISTER _Register>
 	static size_t instruction8(stream::output_stream & _output, int8_t _value)
 	{
-		static_assert(_Op_code == OP_CODE::PUSH || _Op_code == OP_CODE::ADD || _Op_code == OP_CODE::SUBTRACT, "This opcode is not supported.");
+		static_assert(_Op_code == OP_CODE::ADD || _Op_code == OP_CODE::SUBTRACT, "This opcode is not supported.");
 
 		switch (_Op_code) {
-		case OP_CODE::PUSH:
-		{
-			// If constant displacement is 0 the push register directly, otherwise push with one byte displacement
-			if (!_value) {
-				return instruction<OP_CODE::PUSH, _Register>(_output);
-			}
-
-			return _output.write_all(0xff_8, static_cast<uint8_t>(0160 | get_register_code<_Register>()), static_cast<uint8_t>(_value));
-		}
 		case OP_CODE::ADD:
 		{
 			// Special opcode for EAX
