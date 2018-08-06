@@ -88,6 +88,7 @@ private:
 	 * @throws
 	*/
 	void test_compiler_value();
+	char handle_parameter_item(machine::platform::toolset::pass_count & _passed);
 	/**
 	 * Handles a math expression or a math term token.
 	 *

@@ -72,6 +72,62 @@ void compiler::test_compiler_value()
 	}
 }
 
+char compiler::handle_parameter_item(machine::platform::toolset::pass_count & _passed)
+{
+	using VT = compiler_value::VALUE_TYPE;
+
+	switch (_value.type()) {
+	case VT::TEST_VALUE_CONSTANT:
+		_value.set_return(static_cast<int64_t>(_value.value().rt_test_result));
+	case VT::INT:
+	{
+		if (_value.is_int32()) {
+			_passed += _toolset.pass_varg(static_cast<int32_t>(_value.value().rt_int));
+
+			return 'i';
+		}
+
+		_passed += _toolset.pass_varg(_value.value().rt_int);
+
+		return 'I';
+	}
+	case VT::DOUBLE:
+		_passed += _toolset.pass_varg(_value.value().rt_double);
+
+		return 'd';
+	case VT::STRING:
+		_passed += _toolset.pass_varg(_value.value().rt_string.data);
+
+		return 'a';
+	case VT::STRING16:
+		_passed += _toolset.pass_varg(_value.value().rt_string.data);
+
+		return 'u';
+	case VT::STRING32:
+		_passed += _toolset.pass_varg(_value.value().rt_string.data);
+
+		return 'U';
+	case VT::WSTRING:
+		_passed += _toolset.pass_varg(_value.value().rt_string.data);
+
+		return 'w';
+	case VT::MEMBER:
+		_passed += _toolset.pass_varg(_value.value().rt_member);
+
+		return 'M';
+	case VT::TEMPORARY_MEMBER:
+		_passed += _toolset.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+
+		return 'M';
+	case VT::TEST_VALUE_REGISTER:
+		_passed += _toolset.pass_varg(machine::platform::toolset::test_result_value());
+
+		return 'i';
+	default:
+		BIA_IMPLEMENTATION_ERROR;
+	}
+}
+
 const grammar::report * compiler::handle_value_expression(const grammar::report * _report)
 {
 	using JUMP = machine::platform::toolset::JUMP;
@@ -386,70 +442,11 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		auto _old = _counter.peek();
 
 		for (auto i = _report + 1; i < _report->content.end; ++_count) {
-			char _type;
-
 			i = handle_value_insecure<false>(i);
 
-			switch (_value.type()) {
-			case VT::TEST_VALUE_CONSTANT:
-				_value.set_return(static_cast<int64_t>(_value.value().rt_test_result));
-			case VT::INT:
-			{
-				if (_value.is_int32()) {
-					_passed += _toolset.pass_varg(static_cast<int32_t>(_value.value().rt_int));
-					_type = 'i';
-				} else {
-					_passed += _toolset.pass_varg(_value.value().rt_int);
-					_type = 'I';
-				}
-
-				break;
-			}
-			case VT::DOUBLE:
-				_passed += _toolset.pass_varg(_value.value().rt_double);
-				_type = 'd';
-
-				break;
-			case VT::STRING:
-				_passed += _toolset.pass_varg(_value.value().rt_string.data);
-				_type = 'a';
-
-				break;
-			case VT::STRING16:
-				_passed += _toolset.pass_varg(_value.value().rt_string.data);
-				_type = 'u';
-
-				break;
-			case VT::STRING32:
-				_passed += _toolset.pass_varg(_value.value().rt_string.data);
-				_type = 'U';
-
-				break;
-			case VT::WSTRING:
-				_passed += _toolset.pass_varg(_value.value().rt_string.data);
-				_type = 'w';
-
-				break;
-			case VT::MEMBER:
-				_passed += _toolset.pass_varg(_value.value().rt_member);
-				_type = 'M';
-
-				break;
-			case VT::TEMPORARY_MEMBER:
-				_passed += _toolset.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
-				_type = 'M';
-
-				break;
-			case VT::TEST_VALUE_REGISTER:
-				_passed += _toolset.pass_varg(machine::platform::toolset::test_result_value());
-				_type = 'i';
-
-				break;
-			default:
-				BIA_IMPLEMENTATION_ERROR;
-			}
-
 			// Add type to format
+			auto _type = handle_parameter_item(_passed);
+
 			_format += _type;
 
 			if (_type != 'M') {
