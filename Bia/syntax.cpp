@@ -254,8 +254,8 @@ interpreter syntax::init_rules()
 
 	// Member
 	_interpreter.set_rule(interpreter_rule(BGR_MEMBER, interpreter_rule::F_WRAP_UP, {
-		interpreter_token::custom_operator<flags::opt_token>,
-		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_2, flags::filler_token | flags::starting_ws_opt_token>,
+		//interpreter_token::custom_operator<flags::opt_token>,
+		interpreter_token::first_member,
 		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_0, flags::filler_token | flags::looping_token>,
 		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_1, flags::filler_token | flags::looping_token>
 		}));
@@ -271,25 +271,6 @@ interpreter syntax::init_rules()
 		interpreter_token::keyword<operator_dot, flags::filler_token | flags::starting_ws_opt_token | flags::ending_ws_opt_token>,
 		interpreter_token::identifier,
 		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_0, flags::filler_token | flags::looping_token>
-		}));
-
-	// Member helper 2
-	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_2, interpreter_rule::F_OR, {
-		interpreter_token::rule_pointer<BGR_INSTANTIATION>, // BM_INSTANTIATION
-		interpreter_token::string, // BM_STRING
-		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_3> // BM_IDENTIFIER
-		}));
-
-	// Member helper 3
-	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_3, interpreter_rule::F_NONE, {
-		interpreter_token::rule_pointer<BGR_MEMBER_HELPER_4, flags::filler_token | flags::opt_token | flags::ending_ws_token>,
-		interpreter_token::identifier
-		}));
-
-	// Member helper 4
-	_interpreter.set_rule(interpreter_rule(BGR_MEMBER_HELPER_4, interpreter_rule::F_OR, {
-		interpreter_token::keyword<keyword_refof>,
-		interpreter_token::keyword<keyword_copyof>
 		}));
 
 	return _interpreter;

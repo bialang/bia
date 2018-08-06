@@ -461,6 +461,43 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	return success;
 }
 
+ACTION interpreter_token::first_member(stream::input_stream & _input, token_param _params, token_output & _output)
+{
+	constexpr auto success = ACTION::REPORT;
+	constexpr auto error = ACTION::ERROR;
+	auto _mark = _input.mark();
+
+	// Starting optional whitespaces
+	if (!whitespace_deleter<flags::starting_ws_opt_token, true>(_input, _params.encoder)) {
+		return error;
+	}
+
+	// First element
+	if (string(_input, _params, _output) != ACTION::REPORT) {
+		report::custom_type _info = 0;
+		_output = {};
+
+		_input.reset(_mark);
+
+		if (keyword<keyword_copyof, flags::ending_ws_token>(_input, _params, _output) == ACTION::REPORT) {
+			_info = keyword_copyof::string_id();
+		} else if (keyword<keyword_refof, flags::ending_ws_token>(_input, _params, _output) == ACTION::REPORT) {
+			_info = keyword_refof::string_id();
+		} else {
+			_input.reset(_mark);
+		}
+
+		// Try identifier
+		if (identifier(_input, _params, _output) != ACTION::REPORT) {
+			return error;
+		}
+
+		_output.custom_parameter = _info;
+	}
+
+	return success;
+}
+
 ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;

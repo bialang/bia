@@ -121,6 +121,22 @@ public:
 	*/
 	static ACTION identifier(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
+	 * Matches the first member of a member chain.
+	 *
+	 * @since 3.67.135.749
+	 * @date 6-Aug-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param _params Additional interpreter information.
+	 * @param [out] _output The token result.
+	 *
+	 * @throws See whitespace_deleter(), string(), keyword() and identifier().
+	 * @throws See stream::input_stream::mark() and stream::input_stream::reset().
+	 *
+	 * @return Defines the success code. See @ref ACTION.
+	*/
+	static ACTION first_member(stream::input_stream & _input, token_param _params, token_output & _output);
+	/**
 	 * Matches an assign operator.
 	 *
 	 * @remarks	A leading whitespace is optional and will be consumed, if present.
