@@ -60,6 +60,23 @@ private:
 	machine::platform::toolset _toolset;
 	machine::machine_context & _context;
 
+	/**
+	 * Executes the given member.
+	 *
+	 * @since 3.67.135.751
+	 * @date 6-Aug-18
+	 *
+	 * @tparam _Ty The type of the member.
+	 *
+	 * @param _member The member.
+	 * @param _format The format of the passed parameters.
+	 * @param _mixed Whether some constants were passed too or not.
+	 * @param _count The amount of passed parameters.
+	 * @param _passed The size of the passed parameters.
+	 *
+	 * @throws See machine::string_manager::format_address().
+	 * @throws See machine::platform::toolset::call().
+	*/
 	template<typename _Ty>
 	void handle_parameter_execute(_Ty _member, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::toolset::pass_count _passed)
 	{
@@ -88,6 +105,18 @@ private:
 	 * @throws
 	*/
 	void test_compiler_value();
+	/**
+	 * Passes one parameter item.
+	 *
+	 * @since 3.67.135.751
+	 * @date 6-Aug-18
+	 *
+	 * @param [in,out] _passed The size of passed items.
+	 *
+	 * @throws See machine::platform::toolset::pass_varg().
+	 *
+	 * @return The char of the item type.
+	*/
 	char handle_parameter_item(machine::platform::toolset::pass_count & _passed);
 	/**
 	 * Handles a math expression or a math term token.
@@ -306,7 +335,34 @@ private:
 	 * @return The end of the report.
 	*/
 	const grammar::report * handle_math_factor(const grammar::report * _report);
+	/**
+	 * Handles the member token.
+	 *
+	 * @since 3.67.135.751
+	 * @date 6-Aug-18
+	 *
+	 * @param _report The member token.
+	 *
+	 * @throws See handle_string(), handle_identifier() and handle_parameter().
+	 * @throws See machine::platform::toolset::call().
+	 *
+	 * @return The end of the report.
+	*/
 	const grammar::report * handle_member(const grammar::report * _report);
+	/**
+	 * Handles the parameter token.
+	 *
+	 * @since 3.64.127.716
+	 * @date 6-Aug-18
+	 *
+	 * @param _report The parameter token.
+	 *
+	 * @throws See handle_parameter_execute(), handle_parameter_item() and handle_value_insecure().
+	 * @throws See temp_counter::pop().
+	 * @throws See machine::platform::toolset::save_result_value().
+	 *
+	 * @return The end of the report.
+	*/
 	const grammar::report * handle_parameter(const grammar::report * _report);
 	const grammar::report * handle_instantiation(const grammar::report * _report);
 	const grammar::report * handle_string(const grammar::report * _report);
