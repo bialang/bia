@@ -303,66 +303,65 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
-	for (auto i = _report + 1; i < _report->content.end;) {
+	const auto _end = _report->content.end;
+
+	++_report;
+
+	// First member
+	if (_report->type == report::TYPE::STRING) {
+		_report = handle_string(_report);
+	} else if (_report->type == report::TYPE::MEMBER) {
 		void(framework::member::*_function)(framework::member*) = nullptr;
 
-		switch (i->type) {
-		case report::TYPE::BEGIN:
-		{
-			// Handle instantiation
-			if (i->rule_id == BGR_INSTANTIATION) {
-				i = handle_instantiation(i);
-			} else {
-				BIA_COMPILER_DEV_INVALID;
-			}
-
-			break;
-		}
-		case report::TYPE::STRING:
-			i = handle_string(i);
-
-			break;
-		case report::TYPE::KEYWORD:
-		{
-			// Ref of
-			if (i->content.keyword == keyword_refof::string_id()) {
-				_function = &framework::member::refer;
-			} // Copy of
-			else {
-				_function = &framework::member::copy;
-			}
-
-			++i;
-		}
-		case report::TYPE::MEMBER:
-		{
-			i = handle_identifier(i);
-
-			// Get refof/copyof
-			if (_function) {
-				_toolset.call(_function, _value.value().rt_member, machine::platform::toolset::to_temp_member(_counter.next()));
-				_value.set_return_temp(_counter.current());
-			}
-
-			break;
-		}
-		default:
-			BIA_COMPILER_DEV_INVALID;
+		// Ref of
+		if (_report->custom_parameter == keyword_refof::string_id()) {
+			_function = &framework::member::refer;
+		} // Copy of
+		else if (_report->custom_parameter) {
+			_function = &framework::member::copy;
 		}
 
-		// Function call or item access
-		while (i < _report->content.end) {
-			if (i->rule_id == grammar::BGR_PARAMETER) {
-				i = handle_parameter(i);
-			} else if (i->rule_id == grammar::BGR_PARAMETER_ITEM_ACCESS) {
-				BIA_COMPILER_DEV_INVALID;
-			} else {
+		_report = handle_identifier(_report);
+
+		// Get refof/copyof
+		if (_function) {
+			_toolset.call(_function, _value.value().rt_member, machine::platform::toolset::to_temp_member(_counter.next()));
+			_value.set_return_temp(_counter.current());
+		}
+	} else {
+		BIA_COMPILER_DEV_INVALID;
+	}
+
+	// Handle rest
+	while (_report < _end) {
+		// Handle parameter
+		if (_report->rule_id == BGR_PARAMETER || _report->rule_id == BGR_PARAMETER_ITEM_ACCESS) {
+			_report = handle_parameter(_report);
+		} // Get member
+		else if (_report->type == report::TYPE::MEMBER) {
+			switch (_value.type()) {
+			case compiler_value::VALUE_TYPE::MEMBER:
+				_toolset.call(&framework::member::object_member, _value.value().rt_member, _report->content.member);
+
 				break;
+			case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+				_toolset.call(&framework::member::object_member, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member), _report->content.member);
+
+				break;
+			case compiler_value::VALUE_TYPE::MEMBER_REGISTER:
+				_toolset.call(&framework::member::object_member, machine::platform::toolset::result_value(), _report->content.member);
+
+				break;
+			default:
+				BIA_COMPILER_DEV_INVALID;
 			}
+
+			_value.set_return_member();
+			++_report;
 		}
 	}
 
-	return _report->content.end;
+	return _end;
 }
 
 const grammar::report * compiler::handle_parameter(const grammar::report * _report)
