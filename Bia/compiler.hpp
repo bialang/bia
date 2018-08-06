@@ -203,7 +203,7 @@ private:
 			break;
 		}
 		default:
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 
 		// Test

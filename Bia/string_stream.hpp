@@ -102,7 +102,7 @@ public:
 		case CODEC::UTF16:
 		case CODEC::UTF32:
 		default:
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 	}
 	/**
@@ -123,8 +123,8 @@ public:
 				++_length;
 
 				break;
-			} catch (const exception::encoding_error & e) {
-				auto _cursor_pos = _cursor - _buffer.first;
+			} catch (const exception::encoding_error&) {
+				auto _cursor_pos = _cursor - static_cast<int8_t*>(_buffer.first);
 
 				_buffer = _allocator->reallocate(_buffer, (_buffer.second + 4) * 2);
 				_cursor = static_cast<int8_t*>(_buffer.first) + _cursor_pos;
@@ -146,7 +146,7 @@ public:
 		append(encoding::encoder::eos);
 		
 		// Commit buffer
-		_buffer = _allocator->commit(_buffer, _cursor - _buffer.first);
+		_buffer = _allocator->commit(_buffer, _cursor - static_cast<int8_t*>(_buffer.first));
 
 		std::memcpy(_buffer.first, &_buffer.second, sizeof(size_type));
 		std::memcpy(static_cast<int8_t*>(_buffer.first) + sizeof(_buffer.second), &_length, sizeof(length_type));

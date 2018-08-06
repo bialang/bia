@@ -73,7 +73,7 @@ public:
 
 			break;
 		default:
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 	}
 
@@ -133,7 +133,7 @@ private:
 
 			break;
 		default:
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 
 		_value.set_return_test();
@@ -208,7 +208,7 @@ private:
 
 			break;
 		default:
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 	}
 	/**
@@ -263,7 +263,7 @@ private:
 
 			break;
 		default:
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 	}
 };

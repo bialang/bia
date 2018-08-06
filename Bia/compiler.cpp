@@ -60,7 +60,7 @@ void compiler::test_compiler_value()
 	case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
 		break;
 	default:
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 }
 
@@ -116,7 +116,7 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 	case BGR_VALUE:
 		return handle_value<false>(_report, [] {});
 	default:
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 }
 
@@ -144,7 +144,7 @@ const grammar::report * compiler::handle_root_ignore(const grammar::report * _re
 	case BGR_VALUE:
 		break;
 	default:
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	return _report->content.end;
@@ -243,7 +243,7 @@ const grammar::report *  compiler::handle_number(const grammar::report * _report
 
 		break;
 	default:
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	return _report;
@@ -269,7 +269,7 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 
 		break;
 	default:
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	return _report->content.end;
@@ -295,7 +295,7 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 
 		break;
 	default:
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	return _report->content.end;
@@ -329,7 +329,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 			_value.set_return_temp(_counter.current());
 		}
 	} else {
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	// Handle rest
@@ -353,7 +353,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 				break;
 			default:
-				BIA_COMPILER_DEV_INVALID;
+				BIA_IMPLEMENTATION_ERROR;
 			}
 
 			_value.set_return_member();
@@ -444,7 +444,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 
 				break;
 			default:
-				BIA_COMPILER_DEV_INVALID;
+				BIA_IMPLEMENTATION_ERROR;
 			}
 
 			// Add type to format
@@ -473,7 +473,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 
 		break;
 	default:
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	return _report->content.end;
@@ -506,7 +506,7 @@ const grammar::report * compiler::handle_string(const grammar::report * _report)
 	case report::UTF16:
 	case report::UTF32:
 	default:
-		BIA_COMPILER_DEV_INVALID;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	return _report + 1;
@@ -584,7 +584,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 		break;*/
 		default:
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 	});
 
@@ -705,7 +705,7 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 
 			break;*/
 		default:
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 	});
 
@@ -759,7 +759,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 			_jump_type = toolset::JUMP::JUMP;
 		} // Not a test register
 		else if (_value.type() != compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER) {
-			BIA_COMPILER_DEV_INVALID;
+			BIA_IMPLEMENTATION_ERROR;
 		}
 
 		_condition_jump = _toolset.jump(_jump_type);

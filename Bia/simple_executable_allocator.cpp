@@ -71,7 +71,7 @@ void simple_executable_allocator::protect(universal_allocation _allocation, int 
 
 simple_executable_allocator::universal_allocation simple_executable_allocator::reallocate(universal_allocation _allocation, size_type _size)
 {
-	BIA_COMPILER_DEV_INVALID;
+	BIA_IMPLEMENTATION_ERROR;
 }
 
 simple_executable_allocator::universal_allocation simple_executable_allocator::commit(universal_allocation _allocation, size_type _size)

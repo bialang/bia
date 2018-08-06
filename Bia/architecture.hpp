@@ -101,6 +101,8 @@ public:
 		case OP_CODE::RETURN_NEAR:
 			return _output.write_all(0xc3_8);
 		}
+
+		BIA_IMPLEMENTATION_ERROR;
 	}
 	/**
 	 * Writes the specified instruction with one register to the output stream.
@@ -128,6 +130,8 @@ public:
 		case OP_CODE::CALL:
 			return _output.write_all(0xff_8, static_cast<uint8_t>(0320 | get_register_code<_Register>()));
 		}
+
+		BIA_IMPLEMENTATION_ERROR;
 	}
 	/**
 	 * Writes the specified instruction with a source and destination register to the output stream.
@@ -195,6 +199,8 @@ public:
 			return _output.write_all(0x85_8, static_cast<uint8_t>(0300 | get_register_code<_Src>() << 3 | get_register_code<_Dest>()));
 		}
 		}
+
+		BIA_IMPLEMENTATION_ERROR;
 	}
 	template<OP_CODE _Op_code, REGISTER _Register, typename _Offset>
 	static size_t instruction(stream::output_stream & _output, _Offset _offset)
@@ -218,6 +224,8 @@ public:
 			return _output.write_all(0xff_8, static_cast<uint8_t>(0260 | get_register_code<_Register>()), _offset);
 		}
 		}
+
+		BIA_IMPLEMENTATION_ERROR;
 	}
 	template<OP_CODE _Op_code>
 	static size_t instruction32(stream::output_stream & _output, int32_t _value)
@@ -234,6 +242,8 @@ public:
 		case OP_CODE::JUMP_NOT_EQUAL:
 			return _output.write_all(0x850f_16, static_cast<uint32_t>(_value));
 		}
+
+		BIA_IMPLEMENTATION_ERROR;
 	}
 	template<OP_CODE _Op_code>
 	static size_t instruction8(stream::output_stream & _output, int8_t _value)
@@ -250,6 +260,8 @@ public:
 		case OP_CODE::JUMP_NOT_EQUAL:
 			return _output.write_all(0x75_8, static_cast<uint8_t>(_value));
 		}
+
+		BIA_IMPLEMENTATION_ERROR;
 	}
 	template<OP_CODE _Op_code, REGISTER _Register>
 	static size_t instruction32(stream::output_stream & _output, int32_t _value)
@@ -278,6 +290,8 @@ public:
 			return _output.write_all(0x81_8, static_cast<uint8_t>(0350 | get_register_code<_Register>()), static_cast<uint32_t>(_value));
 		}
 		}
+
+		BIA_IMPLEMENTATION_ERROR;
 	}
 	template<OP_CODE _Op_code, REGISTER _Register>
 	static size_t instruction8(stream::output_stream & _output, int8_t _value)
@@ -304,6 +318,8 @@ public:
 			return _output.write_all(0x83_8, static_cast<uint8_t>(0350 | get_register_code<_Register>()), static_cast<uint8_t>(_value));
 		}
 		}
+
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 private:

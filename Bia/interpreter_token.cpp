@@ -795,14 +795,14 @@ std::tuple<bool, int64_t, double, bool> interpreter_token::match_decimal(stream:
 		// Is floating point
 		if (_code_point == '.') {
 			std::get<3>(_result) = true;
-			std::get<2>(_result) = std::get<1>(_result);
+			std::get<2>(_result) = static_cast<double>(std::get<1>(_result));
 
 			goto gt_after_dot;
 		} else if (_code_point != '\'') {
 			// Floating point
 			if (_code_point == 'f' || _code_point == 'F') {
 				std::get<3>(_result) = true;
-				std::get<2>(_result) = std::get<1>(_result);
+				std::get<2>(_result) = static_cast<double>(std::get<1>(_result));
 
 				return _result;
 			}

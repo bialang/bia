@@ -81,7 +81,7 @@ public:
 	*/
 	void finalize(temp_index_type _temp_count)
 	{
-		if (_temp_count > std::numeric_limits<temp_index_type>::max() / sizeof(void*) || _temp_count < 0) {
+		if (_temp_count > std::numeric_limits<temp_index_type>::max() / static_cast<int>(sizeof(void*)) || _temp_count < 0) {
 			throw 1;
 		}
 
