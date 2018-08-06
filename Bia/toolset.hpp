@@ -12,6 +12,7 @@
 #include "output_stream.hpp"
 #include "machine_context.hpp"
 #include "member.hpp"
+#include "type_traits.hpp"
 
 
 namespace bia
@@ -35,6 +36,9 @@ public:
 	typedef long long position;
 	typedef std::tuple<position, position, position> temp_members;
 	typedef register_offset<REGISTER::EBP, int8_t, false> temp_result;
+	typedef register_offset<REGISTER::EAX, void, false> result_register;
+	typedef register_offset<REGISTER::ESP, int8_t, false> saved_result_register;
+	typedef register_offset<REGISTER::EAX, void, false> test_result_register;
 	typedef int32_t pass_count;
 	typedef int32_t temp_index_type;
 
@@ -181,7 +185,7 @@ public:
 
 		// Push all parameters
 		auto _passed = pass(std::forward<_Args2>(_args)...);
-		
+
 		pass_instance(_instance);
 
 		// Convert
@@ -190,7 +194,7 @@ public:
 			member_function_signature<_Class, _Return, _Args...> member;
 			void * address;
 		} address;
-		
+
 		address.member = _function;
 
 		// Move the address of the function into EAX and call it
@@ -230,7 +234,7 @@ public:
 
 		// Push all parameters
 		auto _passed = pass(std::forward<_Args2>(_args)...);
-		
+
 		pass_instance(_instance);
 
 		// Convert
@@ -239,7 +243,7 @@ public:
 			const_member_function_signature<_Class, _Return, _Args...> member;
 			void * address;
 		} address;
-		
+
 		address.member = _function;
 
 		// Move the address of the function into EAX and call it
@@ -284,9 +288,14 @@ public:
 
 		// Push all parameters
 		_passed += pass(std::forward<_Args2>(_args)...);
-		
+
 		// Push instance
-		_passed += pass(_instance);
+		if (std::is_same<_Instance, result_register>::value) {
+			// +1 for the saved result value
+			_passed += pass(saved_result_value(_passed)) + 1;
+		} else {
+			_passed += pass(_instance);
+		}
 
 		// Convert
 		union
@@ -294,7 +303,7 @@ public:
 			varg_member_function_signature<_Class, _Return, _Args...> member;
 			void * address;
 		} address;
-		
+
 		address.member = _function;
 
 		// Move the address of the function into EAX and call it
@@ -307,6 +316,32 @@ public:
 	void write_test()
 	{
 		architecture::instruction<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*_output, 0);
+	}
+	/**
+	 * Reverts the last action with the parameter.
+	 *
+	 * @since 3.67.135.749
+	 * @date 6-Aug-18
+	 *
+	 * @param _code The return code the revertable action.
+	 *
+	 * @throws See stream::output_stream::set_position().
+	*/
+	void revert_action(position _code)
+	{
+		_output->set_position(_code);
+	}
+	/**
+	 * Saves the result value.
+	 *
+	 * @since 3.67.135.749
+	 * @date 6-Aug-18
+	 *
+	 * @throws See architecture::instruction().
+	*/
+	void save_result_value()
+	{
+		architecture::instruction<OP_CODE::PUSH, result_register::register_value>(*_output);
 	}
 	template<typename _Ty>
 	pass_count pass_varg(_Ty _value)
@@ -354,13 +389,13 @@ public:
 	{
 		return *_output;
 	}
-	static register_offset<REGISTER::EAX, void, false> test_result_value() noexcept
+	static test_result_register test_result_value() noexcept
 	{
-		return register_offset<REGISTER::EAX, void, false>();
+		return test_result_register();
 	}
-	static register_offset<REGISTER::EAX, void, false> result_value() noexcept
+	static result_register result_value() noexcept
 	{
-		return register_offset<REGISTER::EAX, void, false>();
+		return result_register();
 	}
 
 private:
@@ -372,7 +407,7 @@ private:
 	stream::output_stream::cursor_type _setup_end_pos;
 	/** The machine context. */
 	machine_context * _context;
-	
+
 
 	template<typename _Ty>
 	void pass_instance(_Ty * _instance)
@@ -407,6 +442,19 @@ private:
 			}
 		}
 	}
+	template<typename _Ty>
+	static bool is_one_byte_value(_Ty _value) noexcept
+	{
+		return false;
+	}
+	static bool is_one_byte_value(int32_t _value) noexcept
+	{
+		return _value <= 127 && _value >= -128;
+	}
+	static bool is_one_byte_value(uint32_t _value) noexcept
+	{
+		return _value <= 127;
+	}
 	pass_count pass() noexcept
 	{
 		return 0;
@@ -423,14 +471,14 @@ private:
 		return _passed + pass(_value);
 	}
 	template<typename _Ty>
-	typename std::enable_if<sizeof(_Ty) == 1, pass_count>::type pass(_Ty _value)
+	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 1, pass_count>::type pass(_Ty _value)
 	{
-		architecture::instruction8<OP_CODE::PUSH>(*_output, static_cast<int8_t>(_value));
+		architecture::instruction<OP_CODE::PUSH>(*_output, *reinterpret_cast<int8_t*>(&_value));
 
 		return 1;
 	}
 	template<typename _Ty>
-	typename std::enable_if<sizeof(_Ty) == 4, pass_count>::type pass(_Ty _value)
+	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 4, pass_count>::type pass(_Ty _value)
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_value)) {
@@ -443,7 +491,7 @@ private:
 		return 1;
 	}
 	template<typename _Ty>
-	typename std::enable_if<sizeof(_Ty) == 8, pass_count>::type pass(_Ty _value)
+	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 8, pass_count>::type pass(_Ty _value)
 	{
 		pass(static_cast<int32_t>(*reinterpret_cast<int64_t*>(&_value) >> 32));
 		pass(*reinterpret_cast<int32_t*>(&_value));
@@ -455,24 +503,24 @@ private:
 	{
 		return pass(reinterpret_cast<intptr_t>(_ptr));
 	}
-	template<REGISTER _Register, typename _Offset, bool _Effective_address>
-	pass_count pass(register_offset<_Register, _Offset, _Effective_address> _offset)
+	template<REGISTER _Register, typename _Offset>
+	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value, pass_count>::type pass(register_offset<_Register, _Offset, true> _offset)
 	{
 		static_assert(std::is_same<_Offset, int32_t>::value || std::is_same<_Offset, int8_t>::value, "Invalid offset type.");
 
 		// Push address
-		if (_Effective_address) {
-			architecture::instruction<OP_CODE::LEA, REGISTER::EAX, _Register, _Offset>(*_output, _offset.offset);
-			architecture::instruction<OP_CODE::PUSH, REGISTER::EAX>(*_output);
-		} else {
-			// 32 bit signed offset
-			if (std::is_same<_Offset, int32_t>::value) {
-				architecture::instruction32<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
-			} // 8 bit signed offset
-			else {
-				architecture::instruction8<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
-			}
-		}
+		architecture::instruction<OP_CODE::LEA, REGISTER::EAX, _Register, _Offset>(*_output, _offset.offset);
+		architecture::instruction<OP_CODE::PUSH, REGISTER::EAX>(*_output);
+
+		return 1;
+	}
+	template<REGISTER _Register, typename _Offset>
+	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value, pass_count>::type pass(register_offset<_Register, _Offset, false> _offset)
+	{
+		static_assert(std::is_same<_Offset, int32_t>::value || std::is_same<_Offset, int8_t>::value, "Invalid offset type.");
+
+		// Push address
+		architecture::instruction<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
 
 		return 1;
 	}
@@ -489,19 +537,20 @@ private:
 		}
 
 		return 1;
-	}
-	template<typename _Ty>
-	static bool is_one_byte_value(_Ty _value) noexcept
+	}	
+	/**
+	 * Returns the saved result value.
+	 *
+	 * @since 3.67.135.749
+	 * @date 6-Aug-18
+	 *
+	 * @param _passed The pass count since the save.
+	 *
+	 * @return The save destination.
+	*/
+	static saved_result_register saved_result_value(pass_count _passed) noexcept
 	{
-		return false;
-	}
-	static bool is_one_byte_value(int32_t _value) noexcept
-	{
-		return _value <= 127 && _value >= -128;
-	}
-	static bool is_one_byte_value(uint32_t _value) noexcept
-	{
-		return _value <= 127;
+		return saved_result_register(_passed * 4);
 	}
 };
 #endif
