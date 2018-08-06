@@ -348,7 +348,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 				_toolset.call(&framework::member::object_member, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member), _report->content.member);
 
 				break;
-			case compiler_value::VALUE_TYPE::MEMBER_REGISTER:
+			case compiler_value::VALUE_TYPE::RESULT_REGISTER:
 				_toolset.call(&framework::member::object_member, machine::platform::toolset::result_value(), _report->content.member);
 
 				break;
@@ -356,7 +356,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 				BIA_IMPLEMENTATION_ERROR;
 			}
 
-			_value.set_return_member();
+			_value.set_return_result();
 			++_report;
 		}
 	}
@@ -376,7 +376,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 
 	if (_report->type != grammar::report::TYPE::EMPTY_CHILD) {
 		// Save member before it gets lost
-		if (_caller.type() == VT::MEMBER_REGISTER) {
+		if (_caller.type() == VT::RESULT_REGISTER) {
 			_toolset.save_result_value();
 		}
 
@@ -468,7 +468,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		handle_parameter_execute(machine::platform::toolset::to_temp_member(_caller.value().rt_temp_member), _format, _mixed, _count, _passed);
 
 		break;
-	case VT::MEMBER_REGISTER:
+	case VT::RESULT_REGISTER:
 		handle_parameter_execute(machine::platform::toolset::result_value(), _format, _mixed, _count, _passed);
 
 		break;
@@ -515,6 +515,7 @@ const grammar::report * compiler::handle_string(const grammar::report * _report)
 const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)
 {
 	using T = machine::platform::toolset;
+	using VT = compiler_value::VALUE_TYPE;
 
 	// Handle value and prepare the result for a function call
 	handle_value<false>(_report + 3, [&] {
@@ -526,9 +527,9 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 		// Make call
 		switch (_expression.type()) {
-		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
+		case VT::TEST_VALUE_CONSTANT:
 			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
-		case compiler_value::VALUE_TYPE::INT:
+		case VT::INT:
 		{
 			// Optimize common used constant values
 			switch (_expression.value().rt_int) {
@@ -559,30 +560,26 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 			break;
 		}
-		case compiler_value::VALUE_TYPE::DOUBLE:
+		case VT::DOUBLE:
 			_toolset.call(&machine::link::instantiate_double, _expression.value().rt_double, _destination);
 
 			break;
-		case compiler_value::VALUE_TYPE::STRING:
+		case VT::STRING:
 			_toolset.call(&machine::link::instantiate_string, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length, _destination);
 
 			break;
-		case compiler_value::VALUE_TYPE::MEMBER:
+		case VT::MEMBER:
 			_toolset.call(&framework::member::clone, _expression.value().rt_member, _destination);
 
 			break;
-		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+		case VT::TEMPORARY_MEMBER:
 			_toolset.call(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
 
 			break;
-		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
+		case VT::TEST_VALUE_REGISTER:
 			_toolset.call(&machine::link::instantiate_int32, T::test_result_value(), _destination);
 
 			break;
-	/*case compiler_value::VALUE_TYPE::RESULT_REGISTER:
-		m_toolset.Call(&framework::BiaMember::Clone, machine::architecture::BiaToolset::ResultValue(), pVariable);
-
-		break;*/
 		default:
 			BIA_IMPLEMENTATION_ERROR;
 		}
@@ -650,11 +647,13 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 
 const grammar::report * compiler::handle_print(const grammar::report * _report)
 {
+	using VT = compiler_value::VALUE_TYPE;
+
 	// Handle value to print
 	handle_value<false>(_report + 1, [this] {
 		// Call print function
 		switch (_value.type()) {
-		case compiler_value::VALUE_TYPE::INT:
+		case VT::INT:
 		{
 			// Can be int32
 			if (_value.is_int32()) {
@@ -665,31 +664,31 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 
 			break;
 		}
-		case compiler_value::VALUE_TYPE::DOUBLE:
+		case VT::DOUBLE:
 			_toolset.call(&machine::link::print_double, _value.value().rt_double);
 
 			break;
-		case compiler_value::VALUE_TYPE::STRING:
+		case VT::STRING:
 			_toolset.call(&machine::link::print_string, _value.value().rt_string.data);
 
 			break;
-		case compiler_value::VALUE_TYPE::MEMBER:
+		case VT::MEMBER:
 			_toolset.call(&framework::member::print, _value.value().rt_member);
 
 			break;
-		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
+		case VT::TEMPORARY_MEMBER:
 			_toolset.call(&framework::member::print, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 
 			break;
-		case compiler_value::VALUE_TYPE::MEMBER_REGISTER:
+		case VT::RESULT_REGISTER:
 			_toolset.call(&framework::member::print, machine::platform::toolset::result_value());
 
 			break;
-		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
+		case VT::TEST_VALUE_REGISTER:
 			_toolset.call(&machine::link::print_bool, machine::platform::toolset::test_result_value());
 
 			break;
-		case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
+		case VT::TEST_VALUE_CONSTANT:
 		{
 			if (_value.value().rt_test_result) {
 				_toolset.call(&machine::link::print_true);
@@ -699,11 +698,6 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 
 			break;
 		}
-		/*case compiler_value::VALUE_TYPE::RESULT_REGISTER:
-			_toolset.call(&framework::member::print)
-			m_toolset.Call(&framework::BiaMember::Print, machine::architecture::BiaToolset::ResultValue());
-
-			break;*/
 		default:
 			BIA_IMPLEMENTATION_ERROR;
 		}

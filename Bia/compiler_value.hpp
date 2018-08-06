@@ -38,8 +38,6 @@ public:
 		WSTRING,
 		MEMBER,
 		TEMPORARY_MEMBER,
-		/** The default return location containing the member. */
-		MEMBER_REGISTER,
 		/** Defines that the test value is stored in the test register. */
 		TEST_VALUE_REGISTER,
 		/** Defines that the test value is known at compile time. */
@@ -104,9 +102,9 @@ public:
 	{
 		_return_type = VALUE_TYPE::TEST_VALUE_REGISTER;
 	}
-	void set_return_member() noexcept
+	void set_return_result() noexcept
 	{
-		_return_type = VALUE_TYPE::MEMBER_REGISTER;
+		_return_type = VALUE_TYPE::RESULT_REGISTER;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::TEST_VALUE_CONSTANT.
