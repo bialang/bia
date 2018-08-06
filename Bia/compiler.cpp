@@ -375,6 +375,11 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	auto _mixed = false;
 
 	if (_report->type != grammar::report::TYPE::EMPTY_CHILD) {
+		// Save member before it gets lost
+		if (_caller.type() == VT::MEMBER_REGISTER) {
+			_toolset.save_result_value();
+		}
+
 		// Save old counter
 		auto _old = _counter.peek();
 
@@ -399,61 +404,45 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 				break;
 			}
 			case VT::DOUBLE:
-			{
 				_passed += _toolset.pass_varg(_value.value().rt_double);
 				_type = 'd';
 
 				break;
-			}
 			case VT::STRING:
-			{
 				_passed += _toolset.pass_varg(_value.value().rt_string.data);
 				_type = 'a';
 
 				break;
-			}
 			case VT::STRING16:
-			{
 				_passed += _toolset.pass_varg(_value.value().rt_string.data);
 				_type = 'u';
 
 				break;
-			}
 			case VT::STRING32:
-			{
 				_passed += _toolset.pass_varg(_value.value().rt_string.data);
 				_type = 'U';
 
 				break;
-			}
 			case VT::WSTRING:
-			{
 				_passed += _toolset.pass_varg(_value.value().rt_string.data);
 				_type = 'w';
 
 				break;
-			}
 			case VT::MEMBER:
-			{
 				_passed += _toolset.pass_varg(_value.value().rt_member);
 				_type = 'M';
 
 				break;
-			}
 			case VT::TEMPORARY_MEMBER:
-			{
 				_passed += _toolset.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 				_type = 'M';
 
 				break;
-			}
 			case VT::TEST_VALUE_REGISTER:
-			{
 				_passed += _toolset.pass_varg(machine::platform::toolset::test_result_value());
 				_type = 'i';
 
 				break;
-			}
 			default:
 				BIA_COMPILER_DEV_INVALID;
 			}
@@ -472,25 +461,17 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	// Call function
 	switch (_caller.type()) {
 	case VT::MEMBER:
-	{
-		_value.set_return_temp(_counter.next());
-		auto _destination = machine::platform::toolset::to_temp_member(_counter.current());
-
-		// Execute without parameters
-		if (!_count) {
-			_toolset.call(&framework::member::execute, _caller.value().rt_member, _destination);
-		} // Formatted execute
-		else if (_mixed) {
-			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
-
-			_toolset.call(&framework::member::execute_format, _caller.value().rt_member, _passed, _destination, _format_ptr, static_cast<uint32_t>(_count));
-		} // Only members as parameters
-		else {
-			_toolset.call(&framework::member::execute_count, _caller.value().rt_member, _passed, _destination, static_cast<uint32_t>(_count));
-		}
+		handle_parameter_execute(_caller.value().rt_member, _format, _mixed, _count, _passed);
 
 		break;
-	}
+	case VT::TEMPORARY_MEMBER:
+		handle_parameter_execute(machine::platform::toolset::to_temp_member(_caller.value().rt_temp_member), _format, _mixed, _count, _passed);
+
+		break;
+	case VT::MEMBER_REGISTER:
+		handle_parameter_execute(machine::platform::toolset::result_value(), _format, _mixed, _count, _passed);
+
+		break;
 	default:
 		BIA_COMPILER_DEV_INVALID;
 	}
@@ -698,6 +679,10 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 			break;
 		case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
 			_toolset.call(&framework::member::print, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+
+			break;
+		case compiler_value::VALUE_TYPE::MEMBER_REGISTER:
+			_toolset.call(&framework::member::print, machine::platform::toolset::result_value());
 
 			break;
 		case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:

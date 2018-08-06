@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "exception.hpp"
 #include "output_stream.hpp"
 #include "toolset.hpp"
@@ -58,6 +60,25 @@ private:
 	machine::platform::toolset _toolset;
 	machine::machine_context & _context;
 
+	template<typename _Ty>
+	void handle_parameter_execute(_Ty _member, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::toolset::pass_count _passed)
+	{
+		_value.set_return_temp(_counter.next());
+		auto _destination = machine::platform::toolset::to_temp_member(_counter.current());
+
+		// Execute without parameters
+		if (!_count) {
+			_toolset.call(&framework::member::execute, _member, _destination);
+		} // Formatted execute
+		else if (_mixed) {
+			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
+
+			_toolset.call(&framework::member::execute_format, _member, _passed, _destination, _format_ptr, _count);
+		} // Only members as parameters
+		else {
+			_toolset.call(&framework::member::execute_count, _member, _passed, _destination, _count);
+		}
+	}
 	/**
 	 * Tests the compiler value and returns a test value.
 	 *
