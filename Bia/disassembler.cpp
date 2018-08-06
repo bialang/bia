@@ -124,6 +124,18 @@ disassembler::instruction_list disassembler::init_instructions()
 	_instruction(0x50, 5, 1, [](const disassembler * _disassembler, const uint8_t * _buffer) {
 		printf("push\t%s\n", _register_name(*_buffer & 07));
 	});
+	_instruction(0xffb42400000000, 24, 7, [](const disassembler * _disassembler, const uint8_t * _buffer) {
+		printf("push\t[esp%+i]\n", *reinterpret_cast<const int32_t*>(_buffer + 3));
+	});
+	_instruction(0xff0000000000 | 0260ll << 32, 13, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
+		printf("push\t[%s%+i]\n", _register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+	});
+	_instruction(0xff742400, 24, 4, [](const disassembler * _disassembler, const uint8_t * _buffer) {
+		printf("push\t[esp%+hhi]\n", _buffer[3]);
+	});
+	_instruction(0xff0000 | 0160 << 8, 13, 3, [](const disassembler * _disassembler, const uint8_t * _buffer) {
+		printf("push\t[%s%+hhi]\n", _register_name(_buffer[1] & 07), _buffer[2]);
+	});
 	_instruction(0xff00 | 0320, 13, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
 		printf("call\t%s\n", _register_name(_buffer[1] & 07));
 	});
@@ -153,9 +165,6 @@ disassembler::instruction_list disassembler::init_instructions()
 
 
 	// Opcode + register + 32 bit constant
-	_instruction(0xff0000000000 | 0260ll << 32, 13, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("push\t[%s%+i]\n", _register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
-	});
 	_instruction(0xb800000000, 5, 5, [](const disassembler * _disassembler, const uint8_t * _buffer) {
 		auto szName = _disassembler->name(*reinterpret_cast<void* const*>(_buffer + 1));
 
@@ -178,9 +187,6 @@ disassembler::instruction_list disassembler::init_instructions()
 	});
 
 	// Opcode + register + 8 bit constant
-	_instruction(0xff0000 | 0160 << 8, 13, 3, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("push\t[%s%+hhi]\n", _register_name(_buffer[1] & 07), _buffer[2]);
-	});
 	_instruction(0x0400, 8, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
 		printf("add\teax,%hhi\n", _buffer[1]);
 	});
