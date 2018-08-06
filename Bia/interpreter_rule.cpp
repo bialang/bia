@@ -67,10 +67,10 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 			switch (_tokens[i](_input, _token_param, _output)) {
 			case ACTION::REPORT:
 			{
-				_output.content.rule_id = _id;
-				_output.content.token_id = _token_param.token_id;
+				_output.rule_id = _id;
+				_output.token_id = _token_param.token_id;
 
-				_token_param.bundle->add(_output.content);
+				_token_param.bundle->add(_output);
 			}
 			case ACTION::DONT_REPORT:
 			{
@@ -84,10 +84,10 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _toke
 			}
 			case ACTION::REPORT_AND_LOOP:
 			{
-				_output.content.rule_id = _id;
-				_output.content.token_id = _token_param.token_id;
+				_output.rule_id = _id;
+				_output.token_id = _token_param.token_id;
 
-				_token_param.bundle->add(_output.content);
+				_token_param.bundle->add(_output);
 			}
 			case ACTION::DONT_REPORT_AND_LOOP:
 				continue;

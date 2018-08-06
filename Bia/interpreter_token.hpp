@@ -258,7 +258,7 @@ public:
 				case '&':
 				case '|':
 				case '$':
-					_output.content.content.operator_code = _output.content.content.operator_code << 8 | _code_point;
+					_output.content.operator_code = _output.content.operator_code << 8 | _code_point;
 
 					break;
 				default:
@@ -268,8 +268,8 @@ public:
 
 		gt_break:;
 
-			if (_output.content.content.operator_code) {
-				_output.content.type = report::TYPE::OPERATOR_CODE;
+			if (_output.content.operator_code) {
+				_output.type = report::TYPE::OPERATOR_CODE;
 
 				// Move cursor
 				_input.skip(_prev);
@@ -329,8 +329,8 @@ public:
 
 				if (!--_length) {
 					// Set output
-					_output.content.type = report::TYPE::KEYWORD;
-					_output.content.content.keyword = _Ty::string_id();
+					_output.type = report::TYPE::KEYWORD;
+					_output.content.keyword = _Ty::string_id();
 
 					// Move cursor
 					_input.skip(_buffer.first);

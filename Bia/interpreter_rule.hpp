@@ -71,11 +71,7 @@ struct token_param
 	encoding::encoder * encoder;
 };
 
-struct token_output
-{
-	report content;
-	report::custom_type custom;
-};
+typedef report token_output;
 
 /** The interper token signature. */
 typedef ACTION(*bia_token_function)(stream::input_stream&, token_param, token_output&);

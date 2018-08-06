@@ -206,11 +206,11 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 gt_set_value:;
 	// Set value
 	if (_is_double) {
-		_output.content.type = report::TYPE::DOUBLE_VALUE;
-		_output.content.content.double_value = _negative ? -_double : _double;
+		_output.type = report::TYPE::DOUBLE_VALUE;
+		_output.content.double_value = _negative ? -_double : _double;
 	} else {
-		_output.content.type = report::TYPE::INT_VALUE;
-		_output.content.content.int_value = _negative ? -_int : _int;
+		_output.type = report::TYPE::INT_VALUE;
+		_output.content.int_value = _negative ? -_int : _int;
 	}
 
 	// Move input cursor
@@ -284,7 +284,7 @@ ACTION interpreter_token::string(stream::input_stream & _input, token_param _par
 				}
 
 				_string.set_codec(stream::string_stream::CODEC::UTF32);
-				_output.content.custom_parameter = report::UTF32;
+				_output.custom_parameter = report::UTF32;
 
 				break;
 			}
@@ -295,7 +295,7 @@ ACTION interpreter_token::string(stream::input_stream & _input, token_param _par
 				}
 
 				_string.set_codec(stream::string_stream::CODEC::UTF8);
-				_output.content.custom_parameter = report::UTF8;
+				_output.custom_parameter = report::UTF8;
 				_flags &= ~F_PREFIX_LOWER_U;
 
 				break;
@@ -316,11 +316,11 @@ gt_break:;
 		// Set UTF-16
 		if (_flags & F_PREFIX_LOWER_U) {
 			_string.set_codec(stream::string_stream::CODEC::UTF16);
-			_output.content.custom_parameter = report::UTF16;
+			_output.custom_parameter = report::UTF16;
 		} // Fall back to ASCII
 		else {
 			_string.set_codec(stream::string_stream::CODEC::ASCII);
-			_output.content.custom_parameter = report::ASCII;
+			_output.custom_parameter = report::ASCII;
 		}
 	}
 
@@ -399,9 +399,9 @@ gt_end:;
 	_string.finish();
 
 	// Get buffer and register
-	_output.content.type = report::TYPE::STRING;
-	_output.content.content.string = _string.buffer();
-	_params.context->string_manager().register_string(_output.content.content.string);
+	_output.type = report::TYPE::STRING;
+	_output.content.string = _string.buffer();
+	_params.context->string_manager().register_string(_output.content.string);
 
 	return success;
 }
@@ -452,8 +452,8 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	}
 
 	// Get address
-	_output.content.type = report::TYPE::MEMBER;
-	_output.content.content.member = _params.context->name_address(utility::string_key(reinterpret_cast<const char*>(_begin), _length));
+	_output.type = report::TYPE::MEMBER;
+	_output.content.member = _params.context->name_address(utility::string_key(reinterpret_cast<const char*>(_begin), _length));
 
 	// Move cursor
 	_input.skip(_buffer.first);
@@ -489,13 +489,13 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 			case '&':
 			case '|':
 			case '$':
-				_output.content.content.operator_code = _output.content.content.operator_code << 8 | _code_point;
+				_output.content.operator_code = _output.content.operator_code << 8 | _code_point;
 
 				break;
 			case '=':
 			{
-				_output.content.content.operator_code = _output.content.content.operator_code << 8 | '=';
-				_output.content.type = report::TYPE::OPERATOR_CODE;
+				_output.content.operator_code = _output.content.operator_code << 8 | '=';
+				_output.type = report::TYPE::OPERATOR_CODE;
 
 				// Move cursor
 				_input.skip(_buffer.first);
@@ -524,10 +524,10 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 	auto _buffer = _input.buffer();
 	auto _optional = false;
 
-	_output.content.type = report::TYPE::OPERATOR_CODE;
-	_output.content.content.operator_code = _params.encoder->next(_buffer.first, _buffer.second);
+	_output.type = report::TYPE::OPERATOR_CODE;
+	_output.content.operator_code = _params.encoder->next(_buffer.first, _buffer.second);
 
-	switch (_output.content.content.operator_code) {
+	switch (_output.content.operator_code) {
 	case '<':
 	case '>':
 		_optional = true;
@@ -548,14 +548,14 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 			}
 		}
 
-		_output.content.content.operator_code = _output.content.content.operator_code << 8 | '=';
+		_output.content.operator_code = _output.content.operator_code << 8 | '=';
 
 		if (!_optional) {
 			// Can be the same operator
 			_prev = _buffer.first;
 
 			if (_params.encoder->next(_buffer.first, _buffer.second) == '=') {
-				_output.content.content.operator_code = _output.content.content.operator_code << 8 | '=';
+				_output.content.operator_code = _output.content.operator_code << 8 | '=';
 			} else {
 				_buffer.first = _prev;
 			}
@@ -585,7 +585,7 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 
 	auto _buffer = _input.buffer();
 
-	_output.content.type = report::TYPE::OPERATOR_CODE;
+	_output.type = report::TYPE::OPERATOR_CODE;
 
 	switch (_params.encoder->next(_buffer.first, _buffer.second)) {
 	case '*':
@@ -594,9 +594,9 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 		auto _prev = _buffer.first;
 
 		if (_params.encoder->next(_buffer.first, _buffer.second) == '*') {
-			_output.content.content.operator_code = '*' << 8 | '*';
+			_output.content.operator_code = '*' << 8 | '*';
 		} else {
-			_output.content.content.operator_code = '*';
+			_output.content.operator_code = '*';
 			_buffer.first = _prev;
 		}
 
@@ -608,16 +608,16 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 		auto _prev = _buffer.first;
 
 		if (_params.encoder->next(_buffer.first, _buffer.second) == '/') {
-			_output.content.content.operator_code = '/' << 8 | '/';
+			_output.content.operator_code = '/' << 8 | '/';
 		} else {
-			_output.content.content.operator_code = '/';
+			_output.content.operator_code = '/';
 			_buffer.first = _prev;
 		}
 
 		break;
 	}
 	case '%':
-		_output.content.content.operator_code = '*';
+		_output.content.operator_code = '*';
 
 		break;
 	default:
