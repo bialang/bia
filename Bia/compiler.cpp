@@ -31,33 +31,41 @@ void compiler::finalize()
 
 void compiler::test_compiler_value()
 {
+	using VT = compiler_value::VALUE_TYPE;
+
 	switch (_value.type()) {
-	case compiler_value::VALUE_TYPE::INT:
+	case VT::INT:
 		_value.set_return(_value.value().rt_int != 0);
 
 		break;
-	case compiler_value::VALUE_TYPE::DOUBLE:
+	case VT::DOUBLE:
 		_value.set_return(_value.value().rt_double != 0.);
 
 		break;
-	case compiler_value::VALUE_TYPE::STRING:
+	case VT::STRING:
 		_value.set_return(_value.value().rt_string.length != 0);
 
 		break;
-	case compiler_value::VALUE_TYPE::MEMBER:
+	case VT::MEMBER:
 		_toolset.call(&framework::member::test, _value.value().rt_member);
 		_value.set_return_test();
 		_toolset.write_test();
 
 		break;
-	case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-		_toolset.call(&framework::member::test, _toolset.to_temp_member(_value.value().rt_temp_member));
+	case VT::TEMPORARY_MEMBER:
+		_toolset.call(&framework::member::test, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 		_value.set_return_test();
 		_toolset.write_test();
 
 		break;
-	case compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER:
-	case compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT:
+	case VT::RESULT_REGISTER:
+		_toolset.call(&framework::member::test, machine::platform::toolset::result_value());
+		_value.set_return_test();
+		_toolset.write_test();
+
+		break;
+	case VT::TEST_VALUE_REGISTER:
+	case VT::TEST_VALUE_CONSTANT:
 		break;
 	default:
 		BIA_IMPLEMENTATION_ERROR;
@@ -183,12 +191,6 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 			//_counter.pop(_old_counter);
 			_value.set_return_temp(_counter.next());
 		}
-		/*if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_counter.pop(_old_counter);
-			_value.set_return_temp(_counter.next());
-		} else if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_value.set_return_temp(_left.value().rt_temp_member);
-		}*/
 
 		// Call operator
 		compile_normal_operation(_toolset, _value).operate(_left, _operator, _right);
@@ -574,6 +576,10 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;
 		case VT::TEMPORARY_MEMBER:
 			_toolset.call(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
+
+			break;
+		case VT::RESULT_REGISTER:
+			_toolset.call(&framework::member::clone, T::result_value(), _destination);
 
 			break;
 		case VT::TEST_VALUE_REGISTER:
