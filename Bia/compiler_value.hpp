@@ -38,6 +38,8 @@ public:
 		WSTRING,
 		MEMBER,
 		TEMPORARY_MEMBER,
+		/** The default return location containing the member. */
+		MEMBER_REGISTER,
 		/** Defines that the test value is stored in the test register. */
 		TEST_VALUE_REGISTER,
 		/** Defines that the test value is known at compile time. */
@@ -101,6 +103,10 @@ public:
 	void set_return_test() noexcept
 	{
 		_return_type = VALUE_TYPE::TEST_VALUE_REGISTER;
+	}
+	void set_return_member() noexcept
+	{
+		_return_type = VALUE_TYPE::MEMBER_REGISTER;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::TEST_VALUE_CONSTANT.
@@ -223,19 +229,6 @@ public:
 		_return_value.rt_member = _value;
 	}
 	/**
-	 * Sets the return _value and the type VALUE_TYPE::TEMPORARY_MEMBER.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return_temp(temp_counter::counter_type _value) noexcept
-	{
-		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
-		_return_value.rt_temp_member = _value;
-	}
-	/**
 	 * Sets the return _value and the type VALUE_TYPE::PARAMETER.
 	 *
 	 * @since 3.64.127.716
@@ -247,6 +240,19 @@ public:
 	{
 		_return_type = VALUE_TYPE::PARAMETER;
 		_return_value.rt_parameter = _value;
+	}
+	/**
+	 * Sets the return _value and the type VALUE_TYPE::TEMPORARY_MEMBER.
+	 *
+	 * @since 3.64.127.716
+	 * @date 7-Apr-18
+	 *
+	 * @param _value Defines the _value.
+	*/
+	void set_return_temp(temp_counter::counter_type _value) noexcept
+	{
+		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
+		_return_value.rt_temp_member = _value;
 	}
 	/**
 	 * Checks whether the int value can be stored in a int32 type.
