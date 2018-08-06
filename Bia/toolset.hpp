@@ -395,13 +395,7 @@ private:
 	template<REGISTER _Register, bool _Effective_address>
 	void pass_instance(register_offset<_Register, void, _Effective_address> _offset)
 	{
-		//Effective address
-		if (_Effective_address) {
-			architecture::instruction<OP_CODE::LEA, REGISTER::ECX, _Register, int8_t>(*_output, 0);
-		} //Just content
-		else {
-			architecture::instruction<OP_CODE::MOVE, REGISTER::ECX, _Register, int8_t>(*_output, 0);
-		}
+		architecture::instruction<OP_CODE::MOVE, REGISTER::ECX, _Register, int8_t>(*_output, 0);
 	}
 	void pop(pass_count _count)
 	{
