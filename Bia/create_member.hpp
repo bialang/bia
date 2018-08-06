@@ -11,7 +11,7 @@
 #include "static_function.hpp"
 #include "member_function.hpp"
 #include "lambda_function.hpp"
-#include "raw_class_member.hpp"
+#include "raw_object.hpp"
 
 
 namespace bia
@@ -183,7 +183,7 @@ template<typename _Ty>
 inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<_Ty>::type>::type>::value>::value>::type create_member(member * _destination, _Ty && _value)
 {
 	if (_destination) {
-		_destination->replace_this<object::raw_class_member<typename std::remove_reference<_Ty>::type>>(std::move(_value));
+		_destination->replace_this<object::raw_object<typename std::remove_reference<_Ty>::type>>(std::move(_value));
 	}
 }
 
@@ -191,7 +191,7 @@ template<typename _Ty>
 inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<_Ty>::type>::type>::value>::value>::type create_member(member * _destination, const _Ty & _value)
 {
 	if (_destination) {
-		_destination->replace_this<object::raw_class_member<typename std::remove_reference<_Ty>::type>>(_value);
+		_destination->replace_this<object::raw_object<typename std::remove_reference<_Ty>::type>>(_value);
 	}
 }
 
