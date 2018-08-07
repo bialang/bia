@@ -52,6 +52,14 @@ public:
 		{
 			return first != nullptr;
 		}
+		operator _Ty*() noexcept
+		{
+			return first;
+		}
+		operator const _Ty*() const noexcept
+		{
+			return first;
+		}
 		_Ty * operator->() noexcept
 		{
 			return first;
@@ -86,6 +94,14 @@ public:
 		operator bool() const noexcept
 		{
 			return first != nullptr;
+		}
+		operator void*() noexcept
+		{
+			return first;
+		}
+		operator const void*() const noexcept
+		{
+			return first;
 		}
 	};
 	/** An universal allocation. */
