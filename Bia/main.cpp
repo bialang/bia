@@ -8,7 +8,7 @@
 #include "disassembler.hpp"
 #include "static_function.hpp"
 #include "bia.hpp"
-
+#include "class_template.hpp"
 #include <chrono>
 #include <iostream>
 #include <regex>
@@ -74,28 +74,25 @@ int main()
 			*_s = "alksdalksd";
 			return 4;
 		}));
-		set_lambda(_context, "ser", [&](int & a, const char * b) -> const printer&& {
+		set_lambda(_context, "ser", [&](int & a, const char * b) -> const printer& {
 			printf("s%d---%s\n", a, b);
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
 			a = 3434.453;
 			static printer _p;
-			return std::move(_p);
+			return _p;
 		});
+		_context.emplace_member<framework::object::class_template<printer>>("printer");
 
 		//SetConsoleOutputCP(65001);
 
 		// Script
 		char _script[] = u8R""(
 
-var i = 5
-var b = "hey"
+var i = printer()
 
-var c = ser(copyof i, b)
-
-
-print c
+print i
 
 )"";
 

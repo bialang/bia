@@ -132,6 +132,7 @@ public:
 	 * @throws exception::execution_error If this object cannot be executed.
 	 * @throws exception::argument_error If arguments are required.
 	 * @throws See cast().
+	 * @throws See force::initiator::instantiate().
 	*/
 	virtual void execute(member * _destination) = 0;
 	/**
@@ -149,6 +150,7 @@ public:
 	 * @throws exception::argument_error If the passed arguments are wrong.
 	 * @throws exception::type_error If one argument is invalid.
 	 * @throws See cast().
+	 * @throws See force::initiator::instantiate_count().
 	*/
 	virtual void execute_count(member * _destination, parameter_count _count...) = 0;
 	/**
@@ -167,6 +169,7 @@ public:
 	 * @throws exception::argument_error If the passed arguments are wrong.
 	 * @throws exception::type_error If one argument is invalid.
 	 * @throws See cast().
+	 * @throws See force::initiator::instantiate_format().
 	*/
 	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) = 0;
 	/**

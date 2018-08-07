@@ -63,7 +63,7 @@ public:
 	 * @param [in] _object The object address. This address must not be null.
 	 * @param _owner true if this object is in charge of deallocating the object or not.
 	*/
-	raw_object(_Ty * _object, bool _owner) noexcept : _data(nullptr, _owner)
+	raw_object(_Ty * _object, bool _owner) noexcept : _data(_object, _owner)
 	{
 	}
 	/**

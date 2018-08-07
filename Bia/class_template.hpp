@@ -9,6 +9,8 @@
 #include "string_manager.hpp"
 #include "machine_context.hpp"
 #include "allocator.hpp"
+#include "initiator.hpp"
+#include "raw_object.hpp"
 
 
 namespace bia
@@ -22,23 +24,11 @@ template<typename _Ty>
 class class_template : public member
 {
 public:
-	typedef utility::share<std::map<machine::string_manager::name_type, member*>> data_type;
+	typedef utility::share<std::pair<std::map<machine::string_manager::name_type, member*>, machine::memory::allocator::allocation<force::initiator>>> data_type;
 
-	/**
-	 * Move-Constructor.
-	 *
-	 * @since 3.67.135.752
-	 * @date 5-Aug-18
-	 *
-	 * @param [in,out] _object The object that should be set.
-	 *
-	 * @throws See constructor_chain().
-	*/
-	template<typename _T, typename A = typename std::enable_if<std::is_same<typename std::remove_cv<typename std::remove_reference<_T>::type>::type, typename std::remove_cv<typename std::remove_reference<_Ty>::type>::type>::value, int>::type>
-	class_template(_T && _object) : _data(nullptr, false)
+	class_template()
 	{
-		_data.get().first = constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), std::forward<_T>(_object));
-		_data.get().second = true;
+		_data.get().second = machine::machine_context::active_allocator()->construct<force::initiator, force::real_initiator<_Ty>>();
 	}
 	/**
 	 * Refer-Constructor.
@@ -49,18 +39,6 @@ public:
 	 * @param _data The data.
 	*/
 	class_template(const data_type & _data) noexcept : _data(_data)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.67.135.752
-	 * @date 5-Aug-18
-	 *
-	 * @param [in] _object The object address. This address must not be null.
-	 * @param _owner true if this object is in charge of deallocating the object or not.
-	*/
-	class_template(_Ty * _object, bool _owner) noexcept : _data(nullptr, _owner)
 	{
 	}
 	/**
@@ -76,7 +54,7 @@ public:
 		if (_data.only_owner()) {
 			auto _allocator = machine::machine_context::active_allocator();
 
-			for (auto & _member : _data.get()) {
+			for (auto & _member : _data.get().first) {
 				_allocator->destroy_blocks<member>({ _member.second, 1 });
 			}
 		}
@@ -91,7 +69,7 @@ public:
 	}
 	virtual void copy(member * _destination) override
 	{
-		_destination->replace_this<class_template<_Ty>>(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().first), true);
+	//	_destination->replace_this<class_template<_Ty>>(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().first), true);
 	}
 	virtual void refer(member * _destination) override
 	{
@@ -103,13 +81,16 @@ public:
 	}
 	virtual void execute(member * _destination) override
 	{
-		promote()->execute(_destination);
+		auto _instance = static_cast<_Ty*>(_data.get().second->instantiate());
+
+		_destination->replace_this<raw_object<_Ty>>(_instance, true);
 	}
 	virtual void execute_count(member * _destination, parameter_count _count...) override
 	{
 		va_list _args;
 		va_start(_args, _count);
 
+		//auto _instance = _data.get().second->instantiate_count(_count, _args);
 
 		va_end(_args);
 	}
@@ -136,6 +117,14 @@ public:
 	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+	}
+	template<typename... _Args>
+	void set_constructor()
+	{
+		auto _allocator = machine::machine_context::active_allocator();
+
+		_allocator->destroy(_data.get().second);
+		_data.get().second = _allocator->construct<force::real_initiator<_Args...>>();
 	}
 	virtual int flags() const override
 	{
