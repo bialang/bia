@@ -8,6 +8,8 @@
 #include "lambda_function.hpp"
 #include "member_function.hpp"
 #include "raw_object.hpp"
+#include "object.hpp"
+#include "class_template.hpp"
 
 
 namespace bia
@@ -31,7 +33,9 @@ constexpr auto max_member_size = max(
 	sizeof(native::cstring_member<char>), 
 	sizeof(native::int_member), 
 	sizeof(executable::static_function<void>),
-	sizeof(object::raw_object<int>));
+	sizeof(object::raw_object<int>),
+	sizeof(object::object<int>),
+	sizeof(object::class_template<int>));
 
 }
 }

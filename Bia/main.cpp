@@ -83,10 +83,7 @@ int main()
 			static printer _p(3);
 			return _p;
 		});
-		auto _member = _context.emplace_member<framework::object::class_template<printer>>("printer");
-
-		_member->set_constructor<int>();
-		_member->emplace_member<framework::executable::static_function<void>>(_context.name_address("hey"), &test);
+		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test);
 
 		//SetConsoleOutputCP(65001);
 
@@ -97,7 +94,6 @@ var i = printer(3333)
 
 print i
 print i.hey
-print printer.lol
 
 )"";
 
