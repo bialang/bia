@@ -17,9 +17,9 @@
 
 struct printer
 {
-	printer()
+	printer(int i)
 	{
-		puts("default constructor");
+		printf("default constructor%i\n", i);
 	}
 	printer(const printer&)
 	{
@@ -80,12 +80,12 @@ int main()
 				puts("bye");
 			});
 			a = 3434.453;
-			static printer _p;
+			static printer _p(3);
 			return _p;
 		});
 		auto _member = _context.emplace_member<framework::object::class_template<printer>>("printer");
 
-		_member->set_constructor();
+		_member->set_constructor<int>();
 		_member->emplace_member<framework::executable::static_function<void>>(_context.name_address("hey"), &test);
 
 		//SetConsoleOutputCP(65001);
@@ -93,7 +93,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = printer()
+var i = printer(3333)
 
 print i
 print i.hey

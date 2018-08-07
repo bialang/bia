@@ -10,6 +10,7 @@
 #include "initiator.hpp"
 #include "object.hpp"
 #include "member_map.hpp"
+#include "guard.hpp"
 
 
 namespace bia
@@ -82,7 +83,7 @@ public:
 	{
 		object<_Ty>::data_holder _object;
 
-		_object.instance = machine::memory::allocator::cast_allocation<_Ty>( _data.get().second->instantiate());
+		_object.instance = machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate());
 		_object.members = _data.get().first;
 		_object.owner = true;
 
@@ -92,18 +93,31 @@ public:
 	{
 		va_list _args;
 		va_start(_args, _count);
+		auto _guard = utility::make_guard(_args, [](va_list _args) {
+			va_end(_args);
+		});
+		object<_Ty>::data_holder _object;
 
-		//auto _instance = _data.get().second->instantiate_count(_count, _args);
+		_object.instance = machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate_count(_count, _args));
+		_object.members = _data.get().first;
+		_object.owner = true;
 
-		va_end(_args);
+		_destination->replace_this<object<_Ty>>(_object);
 	}
 	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) override
 	{
 		va_list _args;
 		va_start(_args, _count);
+		auto _guard = utility::make_guard(_args, [](va_list _args) {
+			va_end(_args);
+		});
+		object<_Ty>::data_holder _object;
 
+		_object.instance = machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate_format(_format, _count, _args));
+		_object.members = _data.get().first;
+		_object.owner = true;
 
-		va_end(_args);
+		_destination->replace_this<object<_Ty>>(_object);
 	}
 	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{
