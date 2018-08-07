@@ -138,13 +138,6 @@ interpreter syntax::init_rules()
 		interpreter_token::rule_pointer<BGR_MEMBER> // BV_MEMBER
 		}));
 
-	// Instantiation
-	_interpreter.set_rule(interpreter_rule(BGR_INSTANTIATION, interpreter_rule::F_WRAP_UP, {
-		interpreter_token::keyword<keyword_new, flags::filler_token | flags::ending_ws_token>,
-		interpreter_token::identifier,
-		interpreter_token::rule_pointer<BGR_PARAMETER, flags::filler_token | flags::starting_ws_opt_token>
-		}));
-
 	// Parameter
 	_interpreter.set_rule(interpreter_rule(BGR_PARAMETER, interpreter_rule::F_WRAP_UP, {
 		interpreter_token::keyword<operator_bracket_open, flags::filler_token>,
