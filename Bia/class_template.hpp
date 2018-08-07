@@ -11,6 +11,7 @@
 #include "allocator.hpp"
 #include "initiator.hpp"
 #include "raw_object.hpp"
+#include "member_map.hpp"
 
 
 namespace bia
@@ -24,7 +25,7 @@ template<typename _Ty>
 class class_template : public member
 {
 public:
-	typedef utility::share<std::pair<std::map<machine::string_manager::name_type, machine::memory::allocator::allocation<member>>, machine::memory::allocator::allocation<force::initiator>>> data_type;
+	typedef utility::share<std::pair<member_map, machine::memory::allocator::allocation<force::initiator>>> data_type;
 
 	class_template()
 	{
