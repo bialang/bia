@@ -1,7 +1,5 @@
 #pragma once
 
-#include <map>
-
 #include "member.hpp"
 #include "share.hpp"
 #include "undefined_member.hpp"
@@ -10,7 +8,7 @@
 #include "machine_context.hpp"
 #include "allocator.hpp"
 #include "initiator.hpp"
-#include "raw_object.hpp"
+#include "object.hpp"
 #include "member_map.hpp"
 
 
@@ -82,9 +80,13 @@ public:
 	}
 	virtual void execute(member * _destination) override
 	{
-		auto _instance = static_cast<_Ty*>(_data.get().second->instantiate());
+		object<_Ty>::data_holder _object;
 
-		_destination->replace_this<raw_object<_Ty>>(_instance, true);
+		_object.instance = machine::memory::allocator::cast_allocation<_Ty>( _data.get().second->instantiate());
+		_object.members = _data.get().first;
+		_object.owner = true;
+
+		_destination->replace_this<object<_Ty>>(_object);
 	}
 	virtual void execute_count(member * _destination, parameter_count _count...) override
 	{

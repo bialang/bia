@@ -95,8 +95,8 @@ int main()
 
 var i = printer()
 
-print printer
-print printer.hey
+print i
+print i.hey
 print printer.lol
 
 )"";

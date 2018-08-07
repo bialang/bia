@@ -55,7 +55,7 @@ set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "native_member.hpp" "native_ope
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
 
-set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "constructor_chain.hpp" "raw_object.hpp")
+set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "constructor_chain.hpp" "member_map.hpp" "object.hpp" "raw_object.hpp")
 
 source_group("Header Files\\framework\\object" FILES ${Bia_HEADER_FILES_OBJECT})
 
