@@ -38,7 +38,7 @@ _context.execute(_code.c_str(), _code.length());
 - Global variables `global`: `global i = 0`
 
   Global variables can be access by any script in the same context at any time.
-- ~~Instantiation: `global obj = new my_class()`~~ (In development)
+- Instantiation: `global obj = my_class()`
 - The types of the variables will be deducted from the value
 - Once a variable has a tpye it cannot be changed, unless it is redeclared:
 
@@ -144,10 +144,16 @@ public:
   {
     printf("your value: %i\n", _value);
   }
+  void print_me()
+  {
+    puts("hi i'm printing to the screen");
+  }
 };
 
 // Adding the class
-_context.set_class<my_class>("my_class")->set_constructor<int>();
+bia::set_class<my_class>(_context, "my_class")
+  ->set_constructor<int>()
+  ->set_function("print_me", &my_class::print_me);
 ```
 
 # How It Works
