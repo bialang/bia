@@ -161,7 +161,7 @@ inline _Class * disguised_caller()
 }
 
 template<typename _Class, typename... _Args>
-inline _Class * disguised_caller()
+inline typename std::enable_if<(sizeof...(_Args) > 0), _Class*>::type disguised_caller()
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
