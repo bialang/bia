@@ -55,9 +55,13 @@ public:
 	{
 	}
 	template<typename _Ty, typename... _Args>
-	void emplace_member(const char * _name, _Args &&... _args)
+	_Ty * emplace_member(const char * _name, _Args &&... _args)
 	{
-		address_of_member(name_address(_name))->replace_this<_Ty>(std::forward<_Args>(_args)...);
+		auto _object = address_of_member(name_address(_name));
+
+		_object->replace_this<_Ty>(std::forward<_Args>(_args)...);
+
+		return static_cast<_Ty*>(_object);
 	}
 	/**
 	 * Returns the currently active allocator of the current thread.

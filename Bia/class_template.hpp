@@ -24,11 +24,11 @@ template<typename _Ty>
 class class_template : public member
 {
 public:
-	typedef utility::share<std::pair<std::map<machine::string_manager::name_type, member*>, machine::memory::allocator::allocation<force::initiator>>> data_type;
+	typedef utility::share<std::pair<std::map<machine::string_manager::name_type, machine::memory::allocator::allocation<member>>, machine::memory::allocator::allocation<force::initiator>>> data_type;
 
 	class_template()
 	{
-		_data.get().second = machine::machine_context::active_allocator()->construct<force::initiator, force::real_initiator<_Ty>>();
+		_data.get().second = machine::machine_context::active_allocator()->construct<force::initiator>();
 	}
 	/**
 	 * Refer-Constructor.
@@ -55,7 +55,7 @@ public:
 			auto _allocator = machine::machine_context::active_allocator();
 
 			for (auto & _member : _data.get().first) {
-				_allocator->destroy_blocks<member>({ _member.second, 1 });
+				_allocator->destroy_blocks(_member.second);
 			}
 		}
 	}
@@ -124,7 +124,20 @@ public:
 		auto _allocator = machine::machine_context::active_allocator();
 
 		_allocator->destroy(_data.get().second);
-		_data.get().second = _allocator->construct<force::real_initiator<_Args...>>();
+		_data.get().second = _allocator->construct<force::initiator, force::real_initiator<_Ty, _Args...>>();
+	}
+	template<typename _Ty, typename... _Args>
+	void emplace_member(machine::string_manager::name_type _name, _Args &&... _args)
+	{
+		auto & _map = _data.get().first;
+		auto _result = _map.find(_name);
+
+		// Create new
+		if (_result == _map.end()) {
+			_map.emplace(_name, machine::machine_context::active_allocator()->construct_blocks<member, _Ty>(1, std::forward<_Args>(_args)...));
+		} else {
+			_result->second->replace_this<_Ty>(std::forward<_Args>(_args)...);
+		}
 	}
 	virtual int flags() const override
 	{
@@ -160,7 +173,15 @@ public:
 	}
 	virtual member * object_member(machine::string_manager::name_type _name) override
 	{
-		BIA_NOT_IMPLEMENTED;
+		auto & _map = _data.get().first;
+		auto _result = _map.find(_name);
+
+		// Create new
+		if (_result == _map.end()) {
+			throw exception::symbol_error(BIA_EM_UNDEFINED_MEMBER);
+		}
+
+		return _result->second;
 	}
 
 protected:
