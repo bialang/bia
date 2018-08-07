@@ -5,9 +5,11 @@
 #include <type_traits>
 
 #include "member.hpp"
+#include "allocator.hpp"
 #include "exception.hpp"
 #include "create_member.hpp"
 #include "type_traits.hpp"
+#include "machine_context.hpp"
 
 
 namespace bia
@@ -135,9 +137,9 @@ inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * 
 }
 
 template<typename _Class>
-inline _Class * disguised_caller()
+inline machine::memory::allocator::allocation<_Class> disguised_caller()
 {
-	return new _Class();
+	return machine::machine_context::active_allocator()->construct<_Class>();
 }
 
 template<typename _Class, typename... _Args>
@@ -447,28 +449,28 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2) const, c
 }
 
 template<typename _Class>
-inline _Class * disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocator::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
-	return new _Class();
+	return machine::machine_context::active_allocator()->construct<_Class>();
 }
 
 template<typename _Class, typename _0>
-inline _Class * disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocator::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
 
-	return new _Class(*_v0);
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0);
 }
 
 template<typename _Class, typename _0, typename _1>
-inline _Class * disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocator::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -476,11 +478,11 @@ inline _Class * disguised_caller_count(framework::member::parameter_count _count
 	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
 
-	return new _Class(*_v0, *_v1);
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1);
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline _Class * disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocator::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -489,7 +491,7 @@ inline _Class * disguised_caller_count(framework::member::parameter_count _count
 	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
 
-	return new _Class(*_v0, *_v1, *_v2);
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2);
 }
 
 template<typename _Return>
@@ -793,28 +795,28 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, 
 }
 
 template<typename _Class>
-inline _Class * disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocator::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
-	return new _Class();
+	return machine::machine_context::active_allocator()->construct<_Class>();
 }
 
 template<typename _Class, typename _0>
-inline _Class * disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocator::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto _v0 = format_cast<_0>(_args, _format);
 
-	return new _Class(std::forward<_0>(_v0));
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0));
 }
 
 template<typename _Class, typename _0, typename _1>
-inline _Class * disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocator::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -822,11 +824,11 @@ inline _Class * disguised_caller_format(const char * _format, framework::member:
 	auto _v1 = format_cast<_1>(_args, _format);
 	auto _v0 = format_cast<_0>(_args, _format);
 
-	return new _Class(std::forward<_0>(_v0), std::forward<_1>(_v1));
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1));
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline _Class * disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocator::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -835,7 +837,7 @@ inline _Class * disguised_caller_format(const char * _format, framework::member:
 	auto _v1 = format_cast<_1>(_args, _format);
 	auto _v0 = format_cast<_0>(_args, _format);
 
-	return new _Class(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
 }
 
 }

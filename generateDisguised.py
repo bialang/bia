@@ -25,9 +25,11 @@ f.write(b"""#pragma once
 #include <type_traits>
 
 #include "member.hpp"
+#include "allocator.hpp"
 #include "exception.hpp"
 #include "create_member.hpp"
 #include "type_traits.hpp"
+#include "machine_context.hpp"
 
 
 namespace bia
@@ -155,9 +157,9 @@ inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * 
 }
 
 template<typename _Class>
-inline _Class * disguised_caller()
+inline machine::memory::allocator::allocation<_Class> disguised_caller()
 {
-	return new _Class();
+	return machine::machine_context::active_allocator()->construct<_Class>();
 }
 
 template<typename _Class, typename... _Args>
@@ -259,11 +261,11 @@ for type in ["count", "format"]:
 			filler["template_begin"] = "template<typename _Class"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
-			filler["function_return"] = "_Class *"
+			filler["function_return"] = "machine::memory::allocator::allocation<_Class>"
 			filler["param1"] = ""
 			filler["param2"] = ""
 			filler["param3"] = ""
-			filler["body1"] = "return new _Class("
+			filler["body1"] = "return machine::machine_context::active_allocator()->construct<_Class>("
 			filler["body2"] = ""
 			filler["body3"] = ");"
 
