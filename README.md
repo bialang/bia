@@ -152,8 +152,8 @@ public:
 
 // Adding the class
 bia::set_class<my_class>(_context, "my_class")
-  ->set_constructor<int>()
-  ->set_function("print_me", &my_class::print_me);
+  .set_constructor<int>()
+  .set_function("print_me", &my_class::print_me);
 ```
 
 # How It Works
