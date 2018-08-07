@@ -68,6 +68,14 @@ public:
 		{
 			return first;
 		}
+		_Ty ** operator&() noexcept
+		{
+			return &first;
+		}
+		_Ty * const* operator&() const noexcept
+		{
+			return &first;
+		}
 	};
 	/** An universal allocation. */
 	template<>
@@ -102,6 +110,14 @@ public:
 		operator const void*() const noexcept
 		{
 			return first;
+		}
+		void ** operator&() noexcept
+		{
+			return &first;
+		}
+		void * const* operator&() const noexcept
+		{
+			return &first;
 		}
 	};
 	/** An universal allocation. */
