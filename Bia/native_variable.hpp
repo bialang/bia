@@ -31,38 +31,9 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	/*virtual void call(member * _instance, member * _destination) override
+	virtual void set_instance(const void * _instance, const std::type_info & _type) override
 	{
-		throw exception::BadCallException("Invalid function call on native type.");
 	}
-	inline virtual void CallCount(BiaMember*, BiaMember*, parameter_count, ...) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
-	inline virtual void CallFormat(BiaMember*, BiaMember*, parameter_count, const char*, ...) override
-	{
-		throw exception::BadCallException("Invalid function call on native type.");
-	}
-	inline virtual void Instantiate(BiaMember*) override
-	{
-		throw exception::BadCallException("Invalid instantiation call on native type.");
-	}
-	inline virtual void InstantiateCount(BiaMember*, parameter_count, ...) override
-	{
-		throw exception::BadCallException("Invalid instantiation call on native type.");
-	}
-	inline virtual void InstantiateFormat(BiaMember*, parameter_count, const char*, ...) override
-	{
-		throw exception::BadCallException("Invalid instantiation call on native type.");
-	}
-	virtual bool is_custom_type(const std::type_info & _type) const override
-	{
-		return false;
-	}
-	inline virtual BiaMember * GetMember(const char * p_szName) override
-	{
-		throw exception::SymbolException("Unkown member.");
-	}*/
 
 protected:
 	virtual void * data(const std::type_info & _type) override

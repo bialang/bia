@@ -50,15 +50,6 @@ public:
 
 
 	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.132.730
-	 * @date 16-Jun-18
-	*/
-	member() noexcept
-	{
-	}
-	/**
 	 * Destructor.
 	 *
 	 * @since 3.64.127.716
@@ -239,6 +230,8 @@ public:
 	/**
 	 * Returns a member of this member.
 	 *
+	 * @remarks This and @a _destination can be the same address.
+	 *
 	 * @since 3.66.135.747
 	 * @date 5-Aug-18
 	 *
@@ -248,6 +241,19 @@ public:
 	 * @throws exception::symbol_error If this member or the wanted member is not valid.
 	*/
 	virtual void  object_member(member * _destination, machine::string_manager::name_type _name) = 0;
+	/**
+	 * Sets the instance of the member.
+	 *
+	 * @since 3.67.135.755
+	 * @date 8-Aug-18
+	 *
+	 * @param _instance The instance holder.
+	 * @param _type The type of the instance.
+	 *
+	 * @throws exception::symbol_error If this member is not valid.
+	 * @throws exception::type_error If the instance type is not the right one.
+	*/
+	virtual void set_instance(const void * _instance, const std::type_info & _type) = 0;
 	/**
 	 * Some details about the content.
 	 *
@@ -443,7 +449,7 @@ protected:
 	 *
 	 * @param _type The type.
 	 *
-	 * @throws exception::symbol_error If this member is not valid.s
+	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.

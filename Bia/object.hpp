@@ -108,9 +108,12 @@ public:
 		// Get instance, because this could be _destination
 		auto _instance = _data.get().first;
 
-		_data.get().second.get(_name)->clone(_destination);
+		_data.get().second.get(_name)->copy(_destination);
 
-		//_destination->set_instance(_data.get().first.get());
+		_destination->set_instance(&_instance, typeid(_Ty));
+	}
+	virtual void set_instance(const void * _instance, const std::type_info & _type) override
+	{
 	}
 	virtual int flags() const override
 	{

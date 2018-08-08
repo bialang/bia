@@ -170,6 +170,9 @@ public:
 	}
 
 protected:
+	virtual void set_instance(const void * _instance, const std::type_info & _type) override
+	{
+	}
 	virtual void * native_data(native::NATIVE_TYPE _type) override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);

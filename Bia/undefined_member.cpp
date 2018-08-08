@@ -73,6 +73,11 @@ void undefined_member::object_member(member * _destination, machine::string_mana
 	BIA_UNDEFINED_ERROR;
 }
 
+void undefined_member::set_instance(const void * _instance, const std::type_info & _type)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 int undefined_member::flags() const
 {
 	BIA_UNDEFINED_ERROR;

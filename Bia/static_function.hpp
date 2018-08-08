@@ -74,6 +74,9 @@ public:
 
 		va_end(_args);
 	}
+	virtual void set_instance(const void * _instance, const std::type_info & _type) override
+	{
+	}
 
 private:
 	/** The function pointer. */

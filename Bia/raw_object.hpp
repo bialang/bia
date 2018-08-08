@@ -127,6 +127,9 @@ public:
 	{
 		promote()->object_member(_destination, _name);
 	}
+	virtual void set_instance(const void * _instance, const std::type_info & _type) override
+	{
+	}
 	virtual int flags() const override
 	{
 		return F_NONE;
