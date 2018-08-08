@@ -52,11 +52,7 @@ public:
 	~class_template()
 	{
 		if (_data.only_owner()) {
-			auto _allocator = machine::machine_context::active_allocator();
-
-			for (auto & _member : _data.get().first) {
-				_allocator->destroy_blocks(_member.second);
-			}
+			machine::machine_context::active_allocator()->destroy(_data.get().second);
 		}
 	}
 	virtual void undefine() noexcept override
@@ -69,7 +65,7 @@ public:
 	}
 	virtual void copy(member * _destination) override
 	{
-	//	_destination->replace_this<class_template<_Ty>>(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().first), true);
+		BIA_NOT_IMPLEMENTED;
 	}
 	virtual void refer(member * _destination) override
 	{
@@ -134,15 +130,8 @@ public:
 	template<typename _Ty, typename... _Args>
 	void emplace_member(machine::string_manager::name_type _name, _Args &&... _args)
 	{
-		auto & _map = _data.get().first;
-		auto _result = _map.find(_name);
-
-		// Create new
-		if (_result == _map.end()) {
-			_map.emplace(_name, machine::machine_context::active_allocator()->construct_blocks<member, _Ty>(1, std::forward<_Args>(_args)...));
-		} else {
-			_result->second->replace_this<_Ty>(std::forward<_Args>(_args)...);
-		}
+		_data.get().first.emplace<_Ty, _Args...>(_name, std::forward<_Args>(_args)...);
+	}
 	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
 	{
 		_data.get().first.get(_name)->clone(_destination);
