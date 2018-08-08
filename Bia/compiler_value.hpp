@@ -42,9 +42,6 @@ public:
 		TEST_VALUE_REGISTER,
 		/** Defines that the test value is known at compile time. */
 		TEST_VALUE_CONSTANT,
-		PARAMETER,
-		/** Defines that the result is stored in the result register. */
-		RESULT_REGISTER,
 		NONE,
 	};
 
@@ -64,12 +61,6 @@ public:
 		} rt_string;
 		framework::member * rt_member;
 		temp_counter::counter_type rt_temp_member;
-		struct parameter
-		{
-			const char * format;
-			framework::member::parameter_count parameter_count;
-		//	machine::platform::toolset::pass_count passed_quartets;
-		} rt_parameter;
 	};
 
 	/**
@@ -101,10 +92,6 @@ public:
 	void set_return_test() noexcept
 	{
 		_return_type = VALUE_TYPE::TEST_VALUE_REGISTER;
-	}
-	void set_return_result() noexcept
-	{
-		_return_type = VALUE_TYPE::RESULT_REGISTER;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::TEST_VALUE_CONSTANT.
@@ -225,19 +212,6 @@ public:
 	{
 		_return_type = VALUE_TYPE::MEMBER;
 		_return_value.rt_member = _value;
-	}
-	/**
-	 * Sets the return _value and the type VALUE_TYPE::PARAMETER.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @param _value Defines the _value.
-	*/
-	void set_return(return_value::parameter _value) noexcept
-	{
-		_return_type = VALUE_TYPE::PARAMETER;
-		_return_value.rt_parameter = _value;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::TEMPORARY_MEMBER.
