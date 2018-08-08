@@ -58,12 +58,6 @@ void compiler::test_compiler_value()
 		_toolset.write_test();
 
 		break;
-	case VT::RESULT_REGISTER:
-		_toolset.call(&framework::member::test, machine::platform::toolset::result_value());
-		_value.set_return_test();
-		_toolset.write_test();
-
-		break;
 	case VT::TEST_VALUE_REGISTER:
 	case VT::TEST_VALUE_CONSTANT:
 		break;
@@ -361,6 +355,8 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
+	using T = machine::platform::toolset;
+
 	const auto _end = _report->content.end;
 
 	++_report;
@@ -383,7 +379,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 		// Get refof/copyof
 		if (_function) {
-			_toolset.call(_function, _value.value().rt_member, machine::platform::toolset::to_temp_member(_counter.next()));
+			_toolset.call(_function, _value.value().rt_member, T::to_temp_member(_counter.next()));
 			_value.set_return_temp(_counter.current());
 		}
 	} else {
@@ -399,22 +395,28 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 		else if (_report->type == report::TYPE::MEMBER) {
 			switch (_value.type()) {
 			case compiler_value::VALUE_TYPE::MEMBER:
-				_toolset.call(&framework::member::object_member, _value.value().rt_member, _report->content.member);
+			{
+				auto _member = _value.value().rt_member;
+
+				// Create temporary member destination
+				_value.set_return_temp(_counter.next());
+
+				_toolset.call(&framework::member::object_member, _member, T::to_temp_member(_counter.current()), _report->content.member);
 
 				break;
+			}
 			case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-				_toolset.call(&framework::member::object_member, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member), _report->content.member);
+			{
+				auto _member = T::to_temp_member(_value.value().rt_temp_member);
+
+				_toolset.call(&framework::member::object_member, _member, _member, _report->content.member);
 
 				break;
-			case compiler_value::VALUE_TYPE::RESULT_REGISTER:
-				_toolset.call(&framework::member::object_member, machine::platform::toolset::result_value(), _report->content.member);
-
-				break;
+			}
 			default:
 				BIA_IMPLEMENTATION_ERROR;
 			}
 
-			_value.set_return_result();
 			++_report;
 		}
 	}
@@ -433,11 +435,6 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	auto _mixed = false;
 
 	if (_report->type != grammar::report::TYPE::EMPTY_CHILD) {
-		// Save member before it gets lost
-		if (_caller.type() == VT::RESULT_REGISTER) {
-			_toolset.save_result_value();
-		}
-
 		// Save old counter
 		auto _old = _counter.peek();
 
@@ -460,32 +457,23 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	// Call function
 	switch (_caller.type()) {
 	case VT::MEMBER:
+	{
+		// Create temporary member destination
+		_counter.next();
+		_value.set_return_temp(_counter.current());
+
 		handle_parameter_execute(_caller.value().rt_member, _format, _mixed, _count, _passed);
 
 		break;
+	}
 	case VT::TEMPORARY_MEMBER:
+		_value = _caller;
 		handle_parameter_execute(machine::platform::toolset::to_temp_member(_caller.value().rt_temp_member), _format, _mixed, _count, _passed);
-
-		break;
-	case VT::RESULT_REGISTER:
-		handle_parameter_execute(machine::platform::toolset::result_value(), _format, _mixed, _count, _passed);
 
 		break;
 	default:
 		BIA_IMPLEMENTATION_ERROR;
 	}
-
-	return _report->content.end;
-}
-
-const grammar::report * compiler::handle_instantiation(const grammar::report * _report)
-{
-	// Set identifier
-	//_value.set_return(_report[1].content.member);
-
-	// Handle parameters
-
-	// Instantiate
 
 	return _report->content.end;
 }
@@ -573,10 +561,6 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;
 		case VT::TEMPORARY_MEMBER:
 			_toolset.call(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
-
-			break;
-		case VT::RESULT_REGISTER:
-			_toolset.call(&framework::member::clone, T::result_value(), _destination);
 
 			break;
 		case VT::TEST_VALUE_REGISTER:
@@ -681,10 +665,6 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 			break;
 		case VT::TEMPORARY_MEMBER:
 			_toolset.call(&framework::member::print, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
-
-			break;
-		case VT::RESULT_REGISTER:
-			_toolset.call(&framework::member::print, machine::platform::toolset::result_value());
 
 			break;
 		case VT::TEST_VALUE_REGISTER:

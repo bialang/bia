@@ -63,6 +63,8 @@ private:
 	/**
 	 * Executes the given member.
 	 *
+	 * @remarks The @ref compiler::_value must contain the temporary destination.
+	 *
 	 * @since 3.67.135.751
 	 * @date 6-Aug-18
 	 *
@@ -80,8 +82,7 @@ private:
 	template<typename _Ty>
 	void handle_parameter_execute(_Ty _member, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::toolset::pass_count _passed)
 	{
-		_value.set_return_temp(_counter.next());
-		auto _destination = machine::platform::toolset::to_temp_member(_counter.current());
+		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
 
 		// Execute without parameters
 		if (!_count) {
@@ -364,7 +365,6 @@ private:
 	 * @return The end of the report.
 	*/
 	const grammar::report * handle_parameter(const grammar::report * _report);
-	const grammar::report * handle_instantiation(const grammar::report * _report);
 	const grammar::report * handle_string(const grammar::report * _report);
 	/**
 	 * Handles a variable declaration token.
