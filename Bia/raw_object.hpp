@@ -10,7 +10,7 @@
 #include "type_traits.hpp"
 #include "constructor_chain.hpp"
 #include "machine_context.hpp"
-#include "static_function.hpp"
+#include "instance_holder.hpp"
 
 
 namespace bia
@@ -24,8 +24,7 @@ template<typename _Ty>
 class raw_object : public member
 {
 public:
-	/** The data of @ref raw_object. The first parameter is a pointer to the real data and the second is a boolean defining whether the first parameter needs to be deallocated or not. */
-	typedef utility::share<std::pair<_Ty*, bool>> data_type;
+	typedef instance_holder<_Ty> data_type;
 
 	/**
 	 * Move-Constructor.
@@ -38,10 +37,8 @@ public:
 	 * @throws See constructor_chain().
 	*/
 	template<typename _T, typename A = typename std::enable_if<std::is_same<typename std::remove_cv<typename std::remove_reference<_T>::type>::type, typename std::remove_cv<typename std::remove_reference<_Ty>::type>::type>::value, int>::type>
-	raw_object(_T && _object) : _data(nullptr, false)
+	raw_object(_T && _object) : _data(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), std::forward<_T>(_object)), true)
 	{
-		_data.get().first = constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), std::forward<_T>(_object));
-		_data.get().second = true;
 	}
 	/**
 	 * Refer-Constructor.
@@ -63,22 +60,8 @@ public:
 	 * @param [in] _object The object address. This address must not be null.
 	 * @param _owner true if this object is in charge of deallocating the object or not.
 	*/
-	raw_object(_Ty * _object, bool _owner) noexcept : _data(_object, _owner)
+	raw_object(machine::memory::allocator::allocation<_Ty> _object, bool _owner) noexcept : _data(_object, _owner)
 	{
-	}
-	/**
-	 * Destructor.
-	 *
-	 * @since 3.66.135.746
-	 * @date 5-Aug-18
-	 *
-	 * @throws See machine::memory::allocator::destroy().
-	*/
-	~raw_object()
-	{
-		if (_data.only_owner() && _data.get().second) {
-			machine::machine_context::active_allocator()->destroy<_Ty>({ _data.get().first, sizeof(_Ty) });
-		}
 	}
 	virtual void undefine() noexcept override
 	{
@@ -90,7 +73,7 @@ public:
 	}
 	virtual void copy(member * _destination) override
 	{
-		_destination->replace_this<raw_object<_Ty>>(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().first), true);
+		_destination->replace_this<raw_object<_Ty>>(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get()), true);
 	}
 	virtual void refer(member * _destination) override
 	{
@@ -174,15 +157,7 @@ public:
 	}
 	virtual member * object_member(machine::string_manager::name_type _name) override
 	{
-		static executable::static_function<void, int> a(&raw_object<_Ty>::asd);
-		printf("your addr: %p\n", &a);
-		return &a;
-
-		BIA_NOT_IMPLEMENTED;
-	}
-	static void asd(int a)
-	{
-		printf("michse said hello%i\n", a);
+		return promote()->object_member(_name);
 	}
 	member * promote() const
 	{
@@ -202,9 +177,9 @@ protected:
 	{
 		if (!std::is_const<_Ty>::value) {
 			if (typeid(_Ty) == _type) {
-				return const_cast<typename std::remove_cv<_Ty>::type*>(_data.get().first);
+				return const_cast<typename std::remove_cv<_Ty>::type*>(static_cast<_Ty*>(_data.get()));
 			} else if (typeid(_Ty*) == _type) {
-				return &_data.get().first;
+				return &_data.get();
 			}
 		}
 
@@ -213,9 +188,9 @@ protected:
 	virtual const void * const_data(const std::type_info & _type) const override
 	{
 		if (typeid(_Ty) == _type) {
-			return _data.get().first;
+			return _data.get();
 		} else if (typeid(_Ty*) == _type) {
-			return &_data.get().first;
+			return &_data.get();
 		}
 
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
