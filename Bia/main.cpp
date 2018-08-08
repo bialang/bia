@@ -19,6 +19,7 @@ struct printer
 {
 	printer(int i)
 	{
+		a = i;
 		printf("default constructor%i\n", i);
 	}
 	printer(const printer&)
@@ -33,6 +34,11 @@ struct printer
 	{
 		puts("destructor");
 	}
+	void hi()
+	{
+		printf("hi: %i\n", a);
+	}
+	int a;
 };
 
 template<typename _Lambda>
@@ -83,17 +89,17 @@ int main()
 			static printer _p(3);
 			return _p;
 		});
-		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test);
+		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		//SetConsoleOutputCP(65001);
 
 		// Script
 		char _script[] = u8R""(
 
-var i = printer(3333)
+var i = printer(3333).hi
 
-print i
-print i.hey
+print "hey"
+i()
 
 )"";
 

@@ -19,6 +19,7 @@
 #define BIA_EM_NOT_ENOUGH_SPACE "Not enough space."
 #define BIA_EM_INVALID_UNICODE "Invalid unicode character."
 #define BIA_EM_INVALID_ASCII "Invalid ascii character."
+#define BIA_EM_INVALID_INSTANCE_TYPE "The type of the instance is invalid."
 #define BIA_EM_UNSUPPORTED_EXECUTE "This type cannot be executed."
 #define BIA_EM_UNSUPPORTED_TEST "This member cannot be tested."
 #define BIA_EM_UNSUPPORTED_OPERATION "This operation is not supported."

@@ -5,6 +5,7 @@
 #include "class_template.hpp"
 #include "static_function.hpp"
 #include "lambda_function.hpp"
+#include "member_function.hpp"
 #include "string_manager.hpp"
 
 
@@ -40,6 +41,16 @@ public:
 		machine::machine_context::_active_allocator = _context.allocator();
 
 		_template->emplace_member<framework::executable::static_function<_Return, _Args...>>(_context.name_address(_name), _function);
+
+		return *this;
+	}
+	template<typename _Class, typename _Return, typename... _Args>
+	class_template_wrapper & set_function(machine::string_manager::name_type _name, _Return(_Class::*_function)(_Args...))
+	{
+		// Set the active allocator
+		machine::machine_context::_active_allocator = _context.allocator();
+
+		_template->emplace_member<framework::executable::member_function<_Return(_Class::*)(_Args...)>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
