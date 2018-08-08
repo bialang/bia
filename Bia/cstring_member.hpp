@@ -82,6 +82,10 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
+	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
+	{
+		BIA_NOT_IMPLEMENTED;
+	}
 	virtual int flags() const override
 	{
 		return F_CONST;
@@ -113,10 +117,6 @@ public:
 	virtual double to_double() const override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
-	virtual member * object_member(machine::string_manager::name_type _name) override
-	{
-		BIA_NOT_IMPLEMENTED;
 	}
 
 protected:

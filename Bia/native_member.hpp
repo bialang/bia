@@ -85,6 +85,10 @@ public:
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
+	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
+	{
+		BIA_NOT_IMPLEMENTED;
+	}
 	virtual int flags() const override
 	{
 		return F_TO_INT | F_TO_DOUBLE | (std::is_same<_Ty, int64_t>::value ? F_INT : F_DOUBLE);
@@ -120,10 +124,6 @@ public:
 	virtual double to_double() const override
 	{
 		return static_cast<double>(_data.get().first);
-	}
-	virtual member * object_member(machine::string_manager::name_type _name) override
-	{
-		BIA_NOT_IMPLEMENTED;
 	}
 
 protected:

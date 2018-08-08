@@ -143,6 +143,9 @@ public:
 		} else {
 			_result->second->replace_this<_Ty>(std::forward<_Args>(_args)...);
 		}
+	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
+	{
+		_data.get().first.get(_name)->clone(_destination);
 	}
 	virtual int flags() const override
 	{
@@ -175,18 +178,6 @@ public:
 	virtual double to_double() const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual member * object_member(machine::string_manager::name_type _name) override
-	{
-		auto & _map = _data.get().first;
-		auto _result = _map.find(_name);
-
-		// Create new
-		if (_result == _map.end()) {
-			throw exception::symbol_error(BIA_EM_UNDEFINED_MEMBER);
-		}
-
-		return _result->second;
 	}
 
 protected:

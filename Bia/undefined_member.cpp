@@ -68,6 +68,11 @@ void undefined_member::operator_call_double(member * _destination, operator_type
 	BIA_UNDEFINED_ERROR;
 }
 
+void undefined_member::object_member(member * _destination, machine::string_manager::name_type _name)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 int undefined_member::flags() const
 {
 	BIA_UNDEFINED_ERROR;
@@ -104,11 +109,6 @@ int64_t undefined_member::to_int() const
 }
 
 double undefined_member::to_double() const
-{
-	BIA_UNDEFINED_ERROR;
-}
-
-member * undefined_member::object_member(machine::string_manager::name_type _name)
 {
 	BIA_UNDEFINED_ERROR;
 }

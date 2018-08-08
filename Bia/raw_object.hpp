@@ -123,6 +123,10 @@ public:
 	{
 		return promote()->operator_call_double(_destination, _operator, _right);
 	}
+	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
+	{
+		promote()->object_member(_destination, _name);
+	}
 	virtual int flags() const override
 	{
 		return F_NONE;
@@ -154,10 +158,6 @@ public:
 	virtual double to_double() const override
 	{
 		return promote()->to_double();
-	}
-	virtual member * object_member(machine::string_manager::name_type _name) override
-	{
-		return promote()->object_member(_name);
 	}
 	member * promote() const
 	{

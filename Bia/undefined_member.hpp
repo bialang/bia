@@ -23,6 +23,7 @@ public:
 	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override;
 	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override;
 	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) override;
+	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override;
 	virtual int flags() const override;
 	virtual int32_t test() const override;
 	virtual int32_t test_member(operator_type _operator, member * _right) const override;
@@ -31,7 +32,6 @@ public:
 	virtual int32_t test_double(operator_type _operator, double _right) const override;
 	virtual int64_t to_int() const override;
 	virtual double to_double() const override;
-	virtual member * object_member(machine::string_manager::name_type _name) override;
 
 protected:
 	virtual void * native_data(native::NATIVE_TYPE _type) override;

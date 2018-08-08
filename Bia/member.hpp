@@ -237,6 +237,18 @@ public:
 	*/
 	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) = 0;
 	/**
+	 * Returns a member of this member.
+	 *
+	 * @since 3.66.135.747
+	 * @date 5-Aug-18
+	 *
+	 * @param [out] _destination The member.
+	 * @param _name The name of the member.
+	 *
+	 * @throws exception::symbol_error If this member or the wanted member is not valid.
+	*/
+	virtual void  object_member(member * _destination, machine::string_manager::name_type _name) = 0;
+	/**
 	 * Some details about the content.
 	 *
 	 * @since 3.64.127.716
@@ -347,19 +359,6 @@ public:
 	 * @return The double representation.
 	*/
 	virtual double to_double() const = 0;
-	/**
-	 * Returns a member of this member.
-	 *
-	 * @since 3.66.135.747
-	 * @date 5-Aug-18
-	 *
-	 * @param _name The name of the member.
-	 *
-	 * @throws exception::symbol_error If this member or the wanted member is not valid.
-	 *
-	 * @return The member.
-	*/
-	virtual member * object_member(machine::string_manager::name_type _name) = 0;
 	/**
 	 * Casts this member to the specified mutable type.
 	 *

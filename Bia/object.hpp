@@ -103,6 +103,15 @@ public:
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
+	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
+	{
+		// Get instance, because this could be _destination
+		auto _instance = _data.get().first;
+
+		_data.get().second.get(_name)->clone(_destination);
+
+		//_destination->set_instance(_data.get().first.get());
+	}
 	virtual int flags() const override
 	{
 		return F_NONE;
@@ -134,16 +143,6 @@ public:
 	virtual double to_double() const override
 	{
 		BIA_NOT_IMPLEMENTED;
-	}
-	virtual member * object_member(machine::string_manager::name_type _name) override
-	{
-		auto _result = _data.get().second.find(_name);
-
-		if (_result == _data.get().second.end()) {
-			throw exception::symbol_error(BIA_EM_UNDEFINED_MEMBER);
-		}
-
-		return _result->second;
 	}
 
 protected:
