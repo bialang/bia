@@ -81,13 +81,9 @@ public:
 	}
 	virtual void execute(member * _destination) override
 	{
-		object<_Ty>::data_holder _object;
+		instance_holder<_Ty> _instance(machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate()), true);
 
-		_object.instance = machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate());
-		_object.members = _data.get().first;
-		_object.owner = true;
-
-		_destination->replace_this<object<_Ty>>(_object);
+		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
 	}
 	virtual void execute_count(member * _destination, parameter_count _count...) override
 	{
@@ -96,13 +92,9 @@ public:
 		auto _guard = utility::make_guard(_args, [](va_list _args) {
 			va_end(_args);
 		});
-		object<_Ty>::data_holder _object;
+		instance_holder<_Ty> _instance(machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate_count(_count, _args)), true);
 
-		_object.instance = machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate_count(_count, _args));
-		_object.members = _data.get().first;
-		_object.owner = true;
-
-		_destination->replace_this<object<_Ty>>(_object);
+		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
 	}
 	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) override
 	{
@@ -111,13 +103,9 @@ public:
 		auto _guard = utility::make_guard(_args, [](va_list _args) {
 			va_end(_args);
 		});
-		object<_Ty>::data_holder _object;
+		instance_holder<_Ty> _instance(machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate_format(_format, _count, _args)), true);
 
-		_object.instance = machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate_format(_format, _count, _args));
-		_object.members = _data.get().first;
-		_object.owner = true;
-
-		_destination->replace_this<object<_Ty>>(_object);
+		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
 	}
 	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{

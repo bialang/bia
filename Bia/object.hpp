@@ -12,6 +12,7 @@
 #include "constructor_chain.hpp"
 #include "machine_context.hpp"
 #include "member_map.hpp"
+#include "instance_holder.hpp"
 
 
 namespace bia
@@ -25,14 +26,7 @@ template<typename _Ty>
 class object : public member
 {
 public:
-	struct data_holder
-	{
-		machine::memory::allocator::allocation<_Ty> instance;
-		member_map members;
-		bool owner;
-	};
-
-	typedef utility::share<data_holder> data_type;
+	typedef utility::share<std::pair<instance_holder<_Ty>, member_map>> data_type;
 
 	/**
 	 * Constructor.
@@ -42,9 +36,10 @@ public:
 	 * @since 3.67.135.753
 	 * @date 7-Aug-18
 	 *
-	 * @param _data The object.
+	 * @param _instance The instance.
+	 * @param _members The known members.
 	*/
-	object(data_holder _data) noexcept : _data(_data)
+	object(const instance_holder<_Ty> & _instance, const member_map & _members) noexcept : _data(_instance, _members)
 	{
 	}
 	/**
@@ -58,20 +53,6 @@ public:
 	object(const data_type & _data) noexcept : _data(_data)
 	{
 	}
-	/**
-	 * Destructor.
-	 *
-	 * @since 3.67.135.753
-	 * @date 7-Aug-18
-	 *
-	 * @throws See machine::memory::allocator::destroy().
-	*/
-	~object()
-	{
-		if (_data.only_owner() && _data.get().owner) {
-			machine::machine_context::active_allocator()->destroy<_Ty>(_data.get().instance);
-		}
-	}
 	virtual void undefine() noexcept override
 	{
 		replace_this<undefined_member>();
@@ -82,13 +63,9 @@ public:
 	}
 	virtual void copy(member * _destination) override
 	{
-		data_holder _copy{};
+		instance_holder<_Ty> _instance(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().first.get()), true);
 
-		_copy.instance = constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().instance);
-		_copy.members = _data.get().members;
-		_copy.owner = true;
-
-		_destination->replace_this<object<_Ty>>(_copy);
+		_destination->replace_this<object<_Ty>>(_instance, _data.get().second);
 	}
 	virtual void refer(member * _destination) override
 	{
@@ -160,9 +137,9 @@ public:
 	}
 	virtual member * object_member(machine::string_manager::name_type _name) override
 	{
-		auto _result = _data.get().members.find(_name);
+		auto _result = _data.get().second.find(_name);
 
-		if (_result == _data.get().members.end()) {
+		if (_result == _data.get().second.end()) {
 			throw exception::symbol_error(BIA_EM_UNDEFINED_MEMBER);
 		}
 
@@ -182,9 +159,9 @@ protected:
 	{
 		if (!std::is_const<_Ty>::value) {
 			if (typeid(_Ty) == _type) {
-				return const_cast<typename std::remove_cv<_Ty>::type*>(static_cast<_Ty*>(_data.get().instance));
+				return const_cast<typename std::remove_cv<_Ty>::type*>(static_cast<_Ty*>(_data.get().first.get()));
 			} else if (typeid(_Ty*) == _type) {
-				return &_data.get().instance;
+				return &_data.get().first.get();
 			}
 		}
 
@@ -193,9 +170,9 @@ protected:
 	virtual const void * const_data(const std::type_info & _type) const override
 	{
 		if (typeid(_Ty) == _type) {
-			return _data.get().instance;
+			return _data.get().first.get();
 		} else if (typeid(_Ty*) == _type) {
-			return &_data.get().instance;
+			return &_data.get().first.get();
 		}
 
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
