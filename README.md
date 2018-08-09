@@ -110,7 +110,7 @@ if 1 == 0 {
 }
 ```
 
-# The Simple C++ Interface (In development)
+# The Simple C++ Interface
 - Adding a static function to your `_context`:
 
 ```
@@ -133,7 +133,7 @@ bia::set_lambda(_context, "int_sqrt", [] (double _value) {
 });
 ```
 
- ~~- Adding a C++ class:~~
+ - Adding a C++ class:
 
 ```
 // A C++ class
