@@ -157,13 +157,13 @@ inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * 
 }
 
 template<typename _Class>
-inline machine::memory::allocator::allocation<_Class> disguised_caller()
+inline machine::memory::allocation<_Class> disguised_caller()
 {
 	return machine::machine_context::active_allocator()->construct<_Class>();
 }
 
 template<typename _Class, typename... _Args>
-inline typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocator::allocation<_Class>>::type disguised_caller()
+inline typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocation<_Class>>::type disguised_caller()
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
@@ -261,7 +261,7 @@ for type in ["count", "format"]:
 			filler["template_begin"] = "template<typename _Class"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
-			filler["function_return"] = "machine::memory::allocator::allocation<_Class>"
+			filler["function_return"] = "machine::memory::allocation<_Class>"
 			filler["param1"] = ""
 			filler["param2"] = ""
 			filler["param3"] = ""

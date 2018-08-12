@@ -15,6 +15,126 @@ namespace machine
 namespace memory
 {
 
+typedef size_t size_type;
+
+/** An allocation with type. */
+template<typename _Ty>
+class allocation
+{
+public:
+	_Ty * first;
+	size_type second;
+
+	allocation() noexcept
+	{
+		clear();
+	}
+	allocation(_Ty * _first, size_type _second) noexcept
+	{
+		first = _first;
+		second = _second;
+	}
+	void clear() noexcept
+	{
+		first = nullptr;
+		second = 0;
+	}
+	operator bool() const noexcept
+	{
+		return first != nullptr;
+	}
+	operator _Ty*() noexcept
+	{
+		return first;
+	}
+	operator const _Ty*() const noexcept
+	{
+		return first;
+	}
+	_Ty * operator->() noexcept
+	{
+		return first;
+	}
+	const _Ty * operator->() const noexcept
+	{
+		return first;
+	}
+	_Ty ** operator&() noexcept
+	{
+		return &first;
+	}
+	_Ty * const* operator&() const noexcept
+	{
+		return &first;
+	}
+};
+/** An universal allocation. */
+template<>
+class allocation<void>
+{
+public:
+	void * first;
+	size_type second;
+
+	allocation() noexcept
+	{
+		clear();
+	}
+	allocation(void * _first, size_type _second) noexcept
+	{
+		first = _first;
+		second = _second;
+	}
+	void clear() noexcept
+	{
+		first = nullptr;
+		second = 0;
+	}
+	operator bool() const noexcept
+	{
+		return first != nullptr;
+	}
+	operator void*() noexcept
+	{
+		return first;
+	}
+	operator const void*() const noexcept
+	{
+		return first;
+	}
+	void ** operator&() noexcept
+	{
+		return &first;
+	}
+	void * const* operator&() const noexcept
+	{
+		return &first;
+	}
+};
+
+/** An universal allocation. */
+typedef allocation<void> universal_allocation;
+
+
+/**
+ * Casts an allocation to an @ref universal_allocation.
+ *
+ * @since 3.64.127.716
+ * @date 7-Apr-18
+ *
+ * @tparam _Return The wanted type.
+ * @tparam _Ty The passed type.
+ *
+ * @param _allocaiton Defines the allocation.
+ *
+ * @return The @ref universal_allocation.
+*/
+template<typename _Return, typename _Ty>
+inline allocation<_Return> cast_allocation(allocation<_Ty> _allocation) noexcept
+{
+	return { static_cast<_Return*>(_allocation.first), _allocation.second };
+}
+
 /**
  * @brief An allocator interface.
  *
@@ -25,104 +145,6 @@ namespace memory
 class allocator
 {
 public:
-	typedef size_t size_type;
-	/** An allocation with type. */
-	template<typename _Ty>
-	class allocation
-	{
-	public:
-		_Ty * first;
-		size_type second;
-
-		allocation() noexcept
-		{
-			clear();
-		}
-		allocation(_Ty * _first, size_type _second) noexcept
-		{
-			first = _first;
-			second = _second;
-		}
-		void clear() noexcept
-		{
-			first = nullptr;
-			second = 0;
-		}
-		operator bool() const noexcept
-		{
-			return first != nullptr;
-		}
-		operator _Ty*() noexcept
-		{
-			return first;
-		}
-		operator const _Ty*() const noexcept
-		{
-			return first;
-		}
-		_Ty * operator->() noexcept
-		{
-			return first;
-		}
-		const _Ty * operator->() const noexcept
-		{
-			return first;
-		}
-		_Ty ** operator&() noexcept
-		{
-			return &first;
-		}
-		_Ty * const* operator&() const noexcept
-		{
-			return &first;
-		}
-	};
-	/** An universal allocation. */
-	template<>
-	class allocation<void>
-	{
-	public:
-		void * first;
-		size_type second;
-
-		allocation() noexcept
-		{
-			clear();
-		}
-		allocation(void * _first, size_type _second) noexcept
-		{
-			first = _first;
-			second = _second;
-		}
-		void clear() noexcept
-		{
-			first = nullptr;
-			second = 0;
-		}
-		operator bool() const noexcept
-		{
-			return first != nullptr;
-		}
-		operator void*() noexcept
-		{
-			return first;
-		}
-		operator const void*() const noexcept
-		{
-			return first;
-		}
-		void ** operator&() noexcept
-		{
-			return &first;
-		}
-		void * const* operator&() const noexcept
-		{
-			return &first;
-		}
-	};
-	/** An universal allocation. */
-	typedef allocation<void> universal_allocation;
-
 	/**
 	 * Destructor.
 	 *
@@ -284,24 +306,6 @@ public:
 	 * @see For commiting the actual size use commit().
 	*/
 	virtual universal_allocation prepare(size_type _size) = 0;
-	/**
-	 * Casts an allocation to an @ref universal_allocation.
-	 *
-	 * @since 3.64.127.716
-	 * @date 7-Apr-18
-	 *
-	 * @tparam _Return The wanted type.
-	 * @tparam _Ty The passed type.
-	 *
-	 * @param _allocaiton Defines the allocation.
-	 *
-	 * @return The @ref universal_allocation.
-	*/
-	template<typename _Return, typename _Ty>
-	static allocation<_Return> cast_allocation(allocation<_Ty> _allocation) noexcept
-	{
-		return { static_cast<_Return*>(_allocation.first), _allocation.second };
-	}
 	/**
 	 * Allocates and constructs the desired type.
 	 *

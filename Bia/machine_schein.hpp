@@ -53,7 +53,7 @@ public:
 	 *
 	 * @throws See std::vector::push_back().
 	*/
-	void register_allocation(memory::executable_allocator::universal_allocation _allocation);
+	void register_allocation(memory::universal_allocation _allocation);
 	/**
 	 * Deletes all registered allocations.
 	 *
@@ -101,7 +101,7 @@ private:
 	/** The memory allocator for executable memory. */
 	memory::executable_allocator * _executable_allocator;
 	/** Stores all the registered allocations. */
-	std::vector<memory::allocator::universal_allocation> _allocated;
+	std::vector<memory::universal_allocation> _allocated;
 };
 
 }

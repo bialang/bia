@@ -27,7 +27,7 @@ class variable_index
 {
 public:
 	/** The value type. */
-	typedef memory::allocator::allocation<framework::member> value_type;
+	typedef memory::allocation<framework::member> value_type;
 
 	/**
 	 * Constructor.

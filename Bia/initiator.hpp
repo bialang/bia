@@ -41,7 +41,7 @@ public:
 	 *
 	 * @return The created instance
 	*/
-	virtual machine::memory::allocator::universal_allocation instantiate() const
+	virtual machine::memory::universal_allocation instantiate() const
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_INSTANTIATION);
 	}
@@ -59,7 +59,7 @@ public:
 	 *
 	 * @return The created instance
 	*/
-	virtual machine::memory::allocator::universal_allocation instantiate_count(framework::member::parameter_count _count, va_list _args) const
+	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count _count, va_list _args) const
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_INSTANTIATION);
 	}
@@ -78,7 +78,7 @@ public:
 	 *
 	 * @return The created instance
 	*/
-	virtual machine::memory::allocator::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, va_list _args) const
+	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, va_list _args) const
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_INSTANTIATION);
 	}
@@ -91,17 +91,17 @@ template<typename _Ty, typename... _Args>
 class real_initiator final : public initiator
 {
 public:
-	virtual machine::memory::allocator::universal_allocation instantiate() const override
+	virtual machine::memory::universal_allocation instantiate() const override
 	{
-		return machine::memory::allocator::cast_allocation<void>(force::disguised_caller<_Ty, _Args...>());
+		return machine::memory::cast_allocation<void>(force::disguised_caller<_Ty, _Args...>());
 	}
-	virtual machine::memory::allocator::universal_allocation instantiate_count(framework::member::parameter_count _count, va_list _args) const override
+	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count _count, va_list _args) const override
 	{
-		return machine::memory::allocator::cast_allocation<void>(force::disguised_caller_count<_Ty, _Args...>(_count, _args));
+		return machine::memory::cast_allocation<void>(force::disguised_caller_count<_Ty, _Args...>(_count, _args));
 	}
-	virtual machine::memory::allocator::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, va_list _args) const override
+	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, va_list _args) const override
 	{
-		return machine::memory::allocator::cast_allocation<void>(force::disguised_caller_format<_Ty, _Args...>(_format, _count, _args));
+		return machine::memory::cast_allocation<void>(force::disguised_caller_format<_Ty, _Args...>(_format, _count, _args));
 	}
 };
 

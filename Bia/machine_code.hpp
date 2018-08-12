@@ -100,7 +100,7 @@ private:
 	typedef void(*entry_point)();
 
 	/** If non-null, defines the entry point of the machine code. */
-	memory::allocator::universal_allocation _entry_point;
+	memory::universal_allocation _entry_point;
 	/** Defines the machine code details. */
 	machine_schein _machine_schein;
 };

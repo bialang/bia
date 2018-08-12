@@ -22,7 +22,7 @@ class string_stream
 {
 public:
 	/** The type of the size variable. */
-	typedef decltype(machine::memory::allocator::universal_allocation::second) size_type;
+	typedef decltype(machine::memory::universal_allocation::second) size_type;
 	/** The type of the length variable. */
 	typedef size_t length_type;
 
@@ -277,9 +277,9 @@ private:
 	/** The memory allocator. */
 	machine::memory::allocator * _allocator;
 	/** The string encoder. */
-	machine::memory::allocator::allocation<encoding::encoder> _encoder;
+	machine::memory::allocation<encoding::encoder> _encoder;
 	/** The allocated space. */
-	machine::memory::allocator::universal_allocation _buffer;
+	machine::memory::universal_allocation _buffer;
 	/** The current position. */
 	int8_t * _cursor;
 	/** The end of the buffer. */

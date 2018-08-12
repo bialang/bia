@@ -19,7 +19,7 @@ machine_stack::machine_stack(memory::allocator * _allocator, size_t _size)
 
 machine_stack::~machine_stack()
 {
-	_allocator->deallocate(memory::allocator::universal_allocation(_buffer, _max_size));
+	_allocator->deallocate(memory::universal_allocation(_buffer, _max_size));
 }
 
 void machine_stack::pop(uint32_t _member_count)

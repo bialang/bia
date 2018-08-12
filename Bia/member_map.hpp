@@ -75,7 +75,7 @@ public:
 
 private:
 	/** The map with all the members. */
-	utility::share<std::map<machine::string_manager::name_type, machine::memory::allocator::allocation<member>>> _data;
+	utility::share<std::map<machine::string_manager::name_type, machine::memory::allocation<member>>> _data;
 };
 
 }

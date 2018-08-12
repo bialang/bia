@@ -87,7 +87,7 @@ private:
 			this->_string = _string;
 			this->_length = _length;
 		}
-		string_entry(memory::allocator::universal_allocation _allocation) noexcept
+		string_entry(memory::universal_allocation _allocation) noexcept
 		{
 			_string = static_cast<const char*>(_allocation.first);
 			_length = _allocation.second;
@@ -96,7 +96,7 @@ private:
 		{
 			return _length == _right._length ? memcmp(_string, _right._string, _length) == 0 : false;
 		}
-		memory::allocator::universal_allocation allocation() const noexcept
+		memory::universal_allocation allocation() const noexcept
 		{
 			return { const_cast<char*>(_string), _length };
 		}

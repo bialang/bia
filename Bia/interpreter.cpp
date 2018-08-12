@@ -47,7 +47,7 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 
 		try {
 			_rules[BGR_ROOT].run_rule(_input, _param);
-		} catch (const exception::limitation_error & ex) {
+		} catch (const exception::limitation_error&) {
 			// Reset
 			auto _buffer = _input.buffer();
 

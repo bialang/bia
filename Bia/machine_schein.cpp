@@ -16,7 +16,7 @@ machine_schein::~machine_schein()
 	delete_all_allocations();
 }
 
-void machine_schein::register_allocation(memory::allocator::universal_allocation _allocation)
+void machine_schein::register_allocation(memory::universal_allocation _allocation)
 {
 	_allocated.push_back(_allocation);
 }

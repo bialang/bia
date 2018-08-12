@@ -38,7 +38,7 @@ public:
 	 *
 	 * @param _function The member function address.
 	*/
-	member_function(_Return(_Class::*_function)(_Args...)) noexcept : _data(_function, object::instance_holder<_Class>(machine::memory::allocator::allocation<_Class>(), false))
+	member_function(_Return(_Class::*_function)(_Args...)) noexcept : _data(_function, object::instance_holder<_Class>(machine::memory::allocation<_Class>(), false))
 	{
 	}
 	member_function(const data_type & _data) noexcept : _data(_data)

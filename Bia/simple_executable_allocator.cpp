@@ -69,17 +69,17 @@ void simple_executable_allocator::protect(universal_allocation _allocation, int 
 #endif
 }
 
-simple_executable_allocator::universal_allocation simple_executable_allocator::reallocate(universal_allocation _allocation, size_type _size)
+universal_allocation simple_executable_allocator::reallocate(universal_allocation _allocation, size_type _size)
 {
 	BIA_IMPLEMENTATION_ERROR;
 }
 
-simple_executable_allocator::universal_allocation simple_executable_allocator::commit(universal_allocation _allocation, size_type _size)
+universal_allocation simple_executable_allocator::commit(universal_allocation _allocation, size_type _size)
 {
 	return _allocation;
 }
 
-simple_executable_allocator::universal_allocation simple_executable_allocator::allocate(size_type _size)
+universal_allocation simple_executable_allocator::allocate(size_type _size)
 {
 #if defined(BIA_OS_WINDOWS)
 	auto _ptr = VirtualAlloc(nullptr, _size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
@@ -96,12 +96,12 @@ simple_executable_allocator::universal_allocation simple_executable_allocator::a
 	return { _ptr, _size };
 }
 
-simple_executable_allocator::universal_allocation simple_executable_allocator::allocate_blocks(size_type _count)
+universal_allocation simple_executable_allocator::allocate_blocks(size_type _count)
 {
 	return { allocate(block_size() * _count).first, _count };
 }
 
-simple_executable_allocator::universal_allocation simple_executable_allocator::prepare(size_type _size)
+universal_allocation simple_executable_allocator::prepare(size_type _size)
 {
 	return allocate(_size);
 }

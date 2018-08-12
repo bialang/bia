@@ -30,7 +30,7 @@ public:
 	/** The type of the allocated pointers. */
 	typedef _Ty* pointer;
 	/** The type of the size of the pointers. */
-	typedef allocator::size_type size_type;
+	typedef size_type size_type;
 
 	/**
 	 * Constructor.
@@ -81,7 +81,7 @@ public:
 	*/
 	void deallocate(pointer _ptr, size_type _size)
 	{
-		_allocator->deallocate(allocator::cast_allocation<void>(allocator::allocation<_Ty>{ _ptr, _size * sizeof(_Ty) }));
+		_allocator->deallocate(cast_allocation<void>(allocation<_Ty>{ _ptr, _size * sizeof(_Ty) }));
 	}
 	/**
 	 * Allocates memory with the desired size.

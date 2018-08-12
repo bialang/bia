@@ -65,7 +65,7 @@ public:
 	~share()
 	{
 		if (!--_data->ref_counter) {
-			machine::machine_context::active_allocator()->destroy(machine::memory::allocator::allocation<data>(_data, sizeof(data)));
+			machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_data, sizeof(data)));
 		}
 	}
 	/**

@@ -24,7 +24,7 @@ template<typename _Ty>
 class class_template : public member
 {
 public:
-	typedef utility::share<std::pair<member_map, machine::memory::allocator::allocation<force::initiator>>> data_type;
+	typedef utility::share<std::pair<member_map, machine::memory::allocation<force::initiator>>> data_type;
 
 	class_template()
 	{
@@ -77,7 +77,7 @@ public:
 	}
 	virtual void execute(member * _destination) override
 	{
-		instance_holder<_Ty> _instance(machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate()), true);
+		instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate()), true);
 
 		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
 	}
@@ -88,7 +88,7 @@ public:
 		auto _guard = utility::make_guard(_args, [](va_list _args) {
 			va_end(_args);
 		});
-		instance_holder<_Ty> _instance(machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate_count(_count, _args)), true);
+		instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate_count(_count, _args)), true);
 
 		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
 	}
@@ -99,7 +99,7 @@ public:
 		auto _guard = utility::make_guard(_args, [](va_list _args) {
 			va_end(_args);
 		});
-		instance_holder<_Ty> _instance(machine::memory::allocator::cast_allocation<_Ty>(_data.get().second->instantiate_format(_format, _count, _args)), true);
+		instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate_format(_format, _count, _args)), true);
 
 		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
 	}

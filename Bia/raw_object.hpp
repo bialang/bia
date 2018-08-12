@@ -60,7 +60,7 @@ public:
 	 * @param [in] _object The object address. This address must not be null.
 	 * @param _owner true if this object is in charge of deallocating the object or not.
 	*/
-	raw_object(machine::memory::allocator::allocation<_Ty> _object, bool _owner) noexcept : _data(_object, _owner)
+	raw_object(machine::memory::allocation<_Ty> _object, bool _owner) noexcept : _data(_object, _owner)
 	{
 	}
 	virtual void undefine() noexcept override

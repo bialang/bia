@@ -137,13 +137,13 @@ inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * 
 }
 
 template<typename _Class>
-inline machine::memory::allocator::allocation<_Class> disguised_caller()
+inline machine::memory::allocation<_Class> disguised_caller()
 {
 	return machine::machine_context::active_allocator()->construct<_Class>();
 }
 
 template<typename _Class, typename... _Args>
-inline typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocator::allocation<_Class>>::type disguised_caller()
+inline typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocation<_Class>>::type disguised_caller()
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
@@ -449,7 +449,7 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2) const, c
 }
 
 template<typename _Class>
-inline machine::memory::allocator::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -459,7 +459,7 @@ inline machine::memory::allocator::allocation<_Class> disguised_caller_count(fra
 }
 
 template<typename _Class, typename _0>
-inline machine::memory::allocator::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -470,7 +470,7 @@ inline machine::memory::allocator::allocation<_Class> disguised_caller_count(fra
 }
 
 template<typename _Class, typename _0, typename _1>
-inline machine::memory::allocator::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -482,7 +482,7 @@ inline machine::memory::allocator::allocation<_Class> disguised_caller_count(fra
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline machine::memory::allocator::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -795,7 +795,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, 
 }
 
 template<typename _Class>
-inline machine::memory::allocator::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -805,7 +805,7 @@ inline machine::memory::allocator::allocation<_Class> disguised_caller_format(co
 }
 
 template<typename _Class, typename _0>
-inline machine::memory::allocator::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -816,7 +816,7 @@ inline machine::memory::allocator::allocation<_Class> disguised_caller_format(co
 }
 
 template<typename _Class, typename _0, typename _1>
-inline machine::memory::allocator::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -828,7 +828,7 @@ inline machine::memory::allocator::allocation<_Class> disguised_caller_format(co
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline machine::memory::allocator::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
