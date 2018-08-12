@@ -61,9 +61,9 @@ struct register_offset
 	constexpr static REGISTER register_value = _Register;
 	_Offset offset;
 
-	register_offset(_Offset _Offset) noexcept
+	register_offset(_Offset _offset) noexcept
 	{
-		offset = _Offset;
+		offset = _offset;
 	}
 };
 
