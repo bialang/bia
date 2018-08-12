@@ -1,4 +1,4 @@
-#cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.1)
 
 set(Bia_HEADER_FILES "config.hpp")
 set(Bia_SOURCE_FILES "")
@@ -123,8 +123,12 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_STREAM})
 set(Bia_HEADER_FILES_UTILITY "guard.hpp" "hasher.hpp" "share.hpp" "string_key.hpp" "type_traits.hpp")
 
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
- 
- set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
- 
- # Add library
- add_library(Bia ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
+
+# Adding the library
+add_library(Bia ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+
+# Install
+install(TARGETS Bia DESTINATION lib)
+install(FILES ${Bia_HEADER_FILES} DESTINATION include)

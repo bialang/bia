@@ -1,4 +1,4 @@
-#cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.1)
 
 # Project info
 project(Bia)
@@ -16,7 +16,6 @@ endif()
 
 # Project
 include_directories(Bia)
-
 add_subdirectory(Bia)
 
 # Tests
