@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <typeinfo>
 #include <exception>
+#include <stdexcept>
 
 #define BIA_IMPLEMENTATION_EXCEPTION(msg) bia::exception::implementation_error(msg, __FILE__, __LINE__)
 #define BIA_IMPLEMENTATION_ERROR throw BIA_IMPLEMENTATION_EXCEPTION("Implementation error.")
@@ -107,7 +108,7 @@ public:
 	{
 		this->_message.append(_file).append(":").append(std::to_string(_line)).append(":").append(_message);
 	}
-	virtual const char * what() const override
+	virtual const char * what() const noexcept override
 	{
 		return _message.c_str();
 	}
