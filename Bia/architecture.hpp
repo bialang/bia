@@ -188,10 +188,13 @@ public:
 		}
 		case OP_CODE::TEST:
 		{
-			static_assert(RegisterSize<_Dest>() == RegisterSize<_Src>() || _Op_code != OP_CODE::TEST, "Registers must be the same size for testing.");
+			//static_assert(register_size<_Dest>() == register_size<_Src>() || _Op_code != OP_CODE::TEST, "Registers must be the same size for testing.");
+			if (register_size<_Dest>() == register_size<_Src>()) {
+				throw;
+			}
 
 			// 8 bit register
-			if (RegisterSize<_Dest>() == 8) {
+			if (register_size<_Dest>() == 8) {
 				return _output.write_all(0x84_8, static_cast<uint8_t>(0300 | get_register_code<_Src>() << 3 | get_register_code<_Dest>()));
 			}
 			
@@ -324,7 +327,7 @@ public:
 
 private:
 	template<REGISTER _Register>
-	constexpr static uint8_t get_register_code() noexcept
+	static uint8_t get_register_code() noexcept
 	{
 		static_assert(_Register == REGISTER::AL || _Register == REGISTER::EAX || _Register == REGISTER::ECX || _Register == REGISTER::ESP || _Register == REGISTER::EBP, "This register is not supported.");
 
@@ -345,7 +348,7 @@ private:
 		return 0;
 	}
 	template<REGISTER _Register>
-	constexpr static int RegisterSize() noexcept
+	static int register_size() noexcept
 	{
 		static_assert(_Register == REGISTER::AL || _Register == REGISTER::EAX || _Register == REGISTER::ECX || _Register == REGISTER::ESP || _Register == REGISTER::EBP, "This register is not supported.");
 

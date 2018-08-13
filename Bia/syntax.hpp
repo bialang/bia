@@ -24,7 +24,7 @@ public:
 	 *
 	 * @return The interpreter.
 	*/
-	static const interpreter & interpreter() noexcept;
+	static const grammar::interpreter & interpreter() noexcept;
 
 private:
 	/**	Defines the interpreter for the Bia grammar.	*/

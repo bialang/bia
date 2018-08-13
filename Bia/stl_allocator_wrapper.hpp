@@ -30,7 +30,7 @@ public:
 	/** The type of the allocated pointers. */
 	typedef _Ty* pointer;
 	/** The type of the size of the pointers. */
-	typedef size_type size_type;
+	typedef memory::size_type size_type;
 
 	/**
 	 * Constructor.

@@ -473,7 +473,7 @@ private:
 	template<typename _Ty>
 	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 1, pass_count>::type pass(_Ty _value)
 	{
-		architecture::instruction<OP_CODE::PUSH>(*_output, *reinterpret_cast<int8_t*>(&_value));
+		architecture::instruction8<OP_CODE::PUSH>(*_output, *reinterpret_cast<int8_t*>(&_value));
 
 		return 1;
 	}

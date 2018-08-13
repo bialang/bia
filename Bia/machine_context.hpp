@@ -90,7 +90,7 @@ public:
 	 * @return The memory allocator of this context.
 	*/
 	memory::executable_allocator * executable_allocator() noexcept;
-	string_manager & string_manager() noexcept;
+	machine::string_manager & string_manager() noexcept;
 
 //private:
 

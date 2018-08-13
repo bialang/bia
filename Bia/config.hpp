@@ -36,9 +36,6 @@
 
 // Calling conventions
 #define BIA_STATIC_CALLING_CONVETION(_return, _signature) _return __cdecl _signature
-/*#define BIA_MEMBER_CALLING_CONVENTION __thiscall
-#define BIA_MEMBER_VARARG_CALLING_CONVENTION __cdecl
-#define BIA_STATIC_CALLING_CONEVENTION __cdecl*/
 
 template<typename _Return, typename... _Args>
 using static_function_signature = _Return(__cdecl*)(_Args...);
@@ -65,10 +62,19 @@ using varg_member_function_signature = _Return(__cdecl _Class::*)(_Args..., ...)
 #elif defined(BIA_COMPILER_GNU)
 
 // Calling conventions
-#define BIA_INSTRUCTION_CALLING_CONVETION(_return, _signature) __attribute__((cdecl)) _return _signature
-#define BIA_MEMBER_CALLING_CONVENTION
-#define BIA_MEMBER_VARARG_CALLING_CONVENTION __attribute__((cdecl))
-#define BIA_STATIC_CALLING_CONEVENTION __attribute__((cdecl))
+#define BIA_STATIC_CALLING_CONVETION(_return, _signature) __attribute__((cdecl)) _return _signature
+
+template<typename _Return, typename... _Args>
+using static_function_signature = __attribute__((cdecl)) _Return(*)(_Args...);
+
+template<typename _Class, typename _Return, typename... _Args>
+using member_function_signature = _Return(_Class::*)(_Args...);
+
+template<typename _Class, typename _Return, typename... _Args>
+using const_member_function_signature = _Return(_Class::*)(_Args...) const;
+
+template<typename _Class, typename _Return, typename... _Args>
+using varg_member_function_signature = __attribute__((cdecl)) _Return(_Class::*)(_Args..., ...);
 
 // Export
 #define BIA_EXPORT

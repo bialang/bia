@@ -83,6 +83,12 @@ disassembler::instruction_list disassembler::init_instructions()
 	auto _byteswap = [](uint64_t _value) {
 #if defined(BIA_COMPILER_MSVC)
 		return _byteswap_uint64(_value);
+#else
+		_value = (_value & 0x00000000ffffffff) << 32 | (_value & 0xffffffff00000000) >> 32;
+		_value = (_value & 0x0000ffff0000ffff) << 16 | (_value & 0xffff0000ffff0000) >> 16;
+		_value = (_value & 0x00ff00ff00ff00ff) << 8  | (_value & 0xff00ff00ff00ff00) >> 8;
+
+		return _value;
 #endif
 	};
 	auto _instruction = [&](uint64_t _op_code, uint8_t _first_bits, uint8_t _instruction_size, instruction::callback_function && _callback) {
