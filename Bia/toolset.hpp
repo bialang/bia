@@ -35,12 +35,18 @@ public:
 
 	typedef long long position;
 	typedef std::tuple<position, position, position> temp_members;
+	typedef int32_t pass_count;
+	typedef int32_t temp_index_type;
+	typedef register_offset<REGISTER::EAX, void, false> test_result_register;
+#if defined(BIA_ARCHITECTURE_X86_32)
 	typedef register_offset<REGISTER::EBP, int8_t, false> temp_result;
 	typedef register_offset<REGISTER::EAX, void, false> result_register;
 	typedef register_offset<REGISTER::ESP, int8_t, false> saved_result_register;
-	typedef register_offset<REGISTER::EAX, void, false> test_result_register;
-	typedef int32_t pass_count;
-	typedef int32_t temp_index_type;
+#elif defined(BIA_ARCHITECTURE_X86_64)
+	typedef register_offset<REGISTER::RBP, int8_t, false> temp_result;
+	typedef register_offset<REGISTER::RAX, void, false> result_register;
+	typedef register_offset<REGISTER::RSP, int8_t, false> saved_result_register;
+#endif
 
 	/**
 	 * Constructor.
@@ -58,14 +64,14 @@ public:
 		this->_context = _context;
 
 		// Create new stack frame for this entry point
-		architecture::instruction<OP_CODE::PUSH, REGISTER::EBP>(_output);
-		architecture::instruction<OP_CODE::MOVE, REGISTER::EBP, REGISTER::ESP>(_output, 0);
+		instruction<OP_CODE::PUSH, base_pointer>(_output);
+		instruction<OP_CODE::MOVE, base_pointer, stack_pointer>(_output);
 
 		// Allocate temp members
 		_temp_member_pos = _output.position();
 
-		architecture::instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(_output, 0);
-		call(&machine_context::create_on_stack, _context, register_offset<REGISTER::EBP, int32_t, true>(0), uint32_t(0));
+		instruction32<OP_CODE::SUB, stack_pointer>(_output, 0);
+		call(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>(0), uint32_t(0));
 
 		_setup_end_pos = _output.position();
 	}
@@ -92,24 +98,24 @@ public:
 
 			_output->set_position(_temp_member_pos);
 
-			architecture::instruction32<OP_CODE::SUBTRACT, REGISTER::ESP>(*_output, _temp_count * sizeof(void*));
-			call(&machine_context::create_on_stack, _context, register_offset<REGISTER::EBP, int32_t, true>(-_temp_count * sizeof(void*)), static_cast<uint32_t>(_temp_count));
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, _temp_count * element_size);
+			call(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>(-_temp_count * element_size), static_cast<uint32_t>(_temp_count));
 
 			_output->set_position(_current_pos);
 
 			// Member deletion
 			call(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
-			architecture::instruction32<OP_CODE::ADD, REGISTER::ESP>(*_output, _temp_count * sizeof(void*));
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, _temp_count * sizeof(void*));
 
 			// Clean up stack
-			architecture::instruction<OP_CODE::LEAVE>(*_output);
+			instruction<OP_CODE::POP, base_pointer>(*_output);
 		} // Skip setup
 		else {
 			_output->set_beginning(_setup_end_pos);
 		}
 
 		// Return
-		architecture::instruction<OP_CODE::RETURN_NEAR>(*_output);
+		instruction<OP_CODE::RETURN_NEAR>(*_output);
 	}
 	/**
 	 * Sets the output stream.
@@ -150,8 +156,13 @@ public:
 		auto _passed = pass(std::forward<_Args2>(_args)...);
 
 		// Move the address of the function into EAX and call it
-		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(_function));
-		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
+#if defined(BIA_ARCHITECTURE_X86_32)
+		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(_function));
+#elif defined(BIA_ARCHITECTURE_X86_64)
+		instruction64<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int64_t>(_function));
+#endif
+
+		instruction<OP_CODE::CALL, accumulator>(*_output);
 
 		// Pop parameter
 		pop(_passed);
@@ -198,8 +209,13 @@ public:
 		address.member = _function;
 
 		// Move the address of the function into EAX and call it
-		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
-		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
+#if defined(BIA_ARCHITECTURE_X86_32)
+		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
+#elif defined(BIA_ARCHITECTURE_X86_64)
+		instruction64<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int64_t>(address.address));
+#endif
+
+		instruction<OP_CODE::CALL, accumulator>(*_output);
 
 #if defined(BIA_COMPILER_GNU)
 		// Pop
@@ -247,8 +263,13 @@ public:
 		address.member = _function;
 
 		// Move the address of the function into EAX and call it
-		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
-		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
+#if defined(BIA_ARCHITECTURE_X86_32)
+		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
+#elif defined(BIA_ARCHITECTURE_X86_64)
+		instruction64<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int64_t>(address.address));
+#endif
+
+		instruction<OP_CODE::CALL, accumulator>(*_output);
 
 #if defined(BIA_COMPILER_GNU)
 		// Pop
@@ -307,15 +328,20 @@ public:
 		address.member = _function;
 
 		// Move the address of the function into EAX and call it
-		architecture::instruction32<OP_CODE::MOVE, REGISTER::EAX>(*_output, reinterpret_cast<int32_t>(address.address));
-		architecture::instruction<OP_CODE::CALL, REGISTER::EAX>(*_output);
+#if defined(BIA_ARCHITECTURE_X86_32)
+		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
+#elif defined(BIA_ARCHITECTURE_X86_64)
+		instruction64<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int64_t>(address.address));
+#endif
+
+		instruction<OP_CODE::CALL, accumulator>(*_output);
 
 		// Pop
 		pop(_passed);
 	}
 	void write_test()
 	{
-		architecture::instruction<OP_CODE::TEST, REGISTER::EAX, REGISTER::EAX>(*_output, 0);
+		instruction<OP_CODE::XOR, REGISTER::EAX, REGISTER::EAX>(*_output);
 	}
 	/**
 	 * Reverts the last action with the parameter.
@@ -341,7 +367,7 @@ public:
 	*/
 	void save_result_value()
 	{
-		architecture::instruction<OP_CODE::PUSH, result_register::register_value>(*_output);
+		instruction<OP_CODE::PUSH, result_register::register_value>(*_output);
 	}
 	template<typename _Ty>
 	pass_count pass_varg(_Ty _value)
@@ -359,15 +385,15 @@ public:
 
 		switch (_type) {
 		case JUMP::JUMP:
-			architecture::instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _start);
+			instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _start);
 
 			break;
 		case JUMP::JUMP_IF_TRUE:
-			architecture::instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _start);
+			instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _start);
 
 			break;
 		case JUMP::JUMP_IF_FALSE:
-			architecture::instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _start);
+			instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _start);
 
 			break;
 		}
@@ -412,33 +438,40 @@ private:
 	template<typename _Ty>
 	void pass_instance(_Ty * _instance)
 	{
-		architecture::instruction32<OP_CODE::MOVE, REGISTER::ECX>(*_output, reinterpret_cast<int32_t>(_instance));
+#if defined(BIA_ARCHITECTURE_X86_32)
+		instruction32<OP_CODE::MOVE, REGISTER::ECX>(*_output, reinterpret_cast<int32_t>(_instance));
+#elif defined(BIA_ARCHITECTURE_X86_64)
+#error "fix me"
+		instruction64<OP_CODE::MOVE, REGISTER::>(*_output, reinterpret_cast<int64_t>(_instance));
+#endif
 	}
 	template<REGISTER _Register, typename _Offset, bool _Effective_address>
 	void pass_instance(register_offset<_Register, _Offset, _Effective_address> _offset)
 	{
-		static_assert(std::is_same<_Offset, int32_t>::value || std::is_same<_Offset, int8_t>::value, "Invalid offset type.");
-
+#if defined(BIA_ARCHITECTURE_X86_32)
 		//Effective address
 		if (_Effective_address) {
-			architecture::instruction<OP_CODE::LEA, REGISTER::ECX, _Register, _Offset>(*_output, _offset.offset);
+			instruction<OP_CODE::LEA, REGISTER::ECX, _offset.register_value>(*_output, _offset.offset);
 		} // Just content
 		else {
-			architecture::instruction<OP_CODE::MOVE, REGISTER::ECX, _Register, _Offset>(*_output, _offset.offset);
+			instruction<OP_CODE::MOVE, REGISTER::ECX, _offset.register_value>(*_output, _offset.offset);
 		}
+#elif defined(BIA_ARCHITECTURE_X86_64)
+#error "fix me"
+#endif
 	}
-	template<REGISTER _Register, bool _Effective_address>
+	/*template<REGISTER _Register, bool _Effective_address>
 	void pass_instance(register_offset<_Register, void, _Effective_address> _offset)
 	{
 		architecture::instruction<OP_CODE::MOVE, REGISTER::ECX, _Register, int8_t>(*_output, 0);
-	}
+	}*/
 	void pop(pass_count _count)
 	{
 		if (_count > 0) {
-			if (_count * 4 < 128) {
-				architecture::instruction8<OP_CODE::ADD, REGISTER::ESP>(*_output, static_cast<int8_t>(_count * 4));
+			if (_count * element_size <= std::numeric_limits<int8_t>::max()) {
+				instruction8<OP_CODE::ADD, stack_pointer>(*_output, static_cast<int8_t>(_count * element_size));
 			} else {
-				architecture::instruction32<OP_CODE::ADD, REGISTER::ESP>(*_output, static_cast<int32_t>(_count * 4));
+				instruction32<OP_CODE::ADD, stack_pointer>(*_output, static_cast<int32_t>(_count * element_size));
 			}
 		}
 	}
@@ -449,19 +482,15 @@ private:
 	}
 	static bool is_one_byte_value(int32_t _value) noexcept
 	{
-		return _value <= 127 && _value >= -128;
+		return _value <= std::numeric_limits<int8_t>::max() && _value >= std::numeric_limits<int8_t>::min();
 	}
 	static bool is_one_byte_value(uint32_t _value) noexcept
 	{
-		return _value <= 127;
+		return _value <= std::numeric_limits<int8_t>::max();
 	}
 	pass_count pass() noexcept
 	{
 		return 0;
-	}
-	pass_count pass(std::nullptr_t)
-	{
-		return pass(intptr_t(0));
 	}
 	template<typename _Ty, typename... _Args>
 	pass_count pass(_Ty _value, _Args &&... _args)
@@ -470,10 +499,14 @@ private:
 
 		return _passed + pass(_value);
 	}
+	pass_count pass(std::nullptr_t)
+	{
+		return pass(intptr_t(0));
+	}
 	template<typename _Ty>
 	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 1, pass_count>::type pass(_Ty _value)
 	{
-		architecture::instruction8<OP_CODE::PUSH>(*_output, *reinterpret_cast<int8_t*>(&_value));
+		instruction8<OP_CODE::PUSH>(*_output, *reinterpret_cast<int8_t*>(&_value));
 
 		return 1;
 	}
@@ -482,10 +515,10 @@ private:
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_value)) {
-			architecture::instruction8<OP_CODE::PUSH>(*_output, static_cast<int8_t>(_value));
+			instruction8<OP_CODE::PUSH>(*_output, static_cast<int8_t>(_value));
 		} // Push all 4 bytes
 		else {
-			architecture::instruction32<OP_CODE::PUSH>(*_output, *reinterpret_cast<int32_t*>(&_value));
+			instruction32<OP_CODE::PUSH>(*_output, *reinterpret_cast<int32_t*>(&_value));
 		}
 
 		return 1;
@@ -493,10 +526,14 @@ private:
 	template<typename _Ty>
 	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 8, pass_count>::type pass(_Ty _value)
 	{
+#if defined(BIA_ARCHITECTURE_X86_32)
 		pass(static_cast<int32_t>(*reinterpret_cast<int64_t*>(&_value) >> 32));
 		pass(*reinterpret_cast<int32_t*>(&_value));
 
 		return 2;
+#elif
+#error "fix me"
+#endif
 	}
 	template<typename _Ty>
 	pass_count pass(_Ty * _ptr)
@@ -506,21 +543,17 @@ private:
 	template<REGISTER _Register, typename _Offset>
 	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value, pass_count>::type pass(register_offset<_Register, _Offset, true> _offset)
 	{
-		static_assert(std::is_same<_Offset, int32_t>::value || std::is_same<_Offset, int8_t>::value, "Invalid offset type.");
-
 		// Push address
-		architecture::instruction<OP_CODE::LEA, REGISTER::EAX, _Register, _Offset>(*_output, _offset.offset);
-		architecture::instruction<OP_CODE::PUSH, REGISTER::EAX>(*_output);
+		instruction<OP_CODE::LEA, accumulator, _offset.register_value>(*_output, _offset.offset);
+		instruction<OP_CODE::PUSH, accumulator>(*_output);
 
 		return 1;
 	}
 	template<REGISTER _Register, typename _Offset>
 	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value, pass_count>::type pass(register_offset<_Register, _Offset, false> _offset)
 	{
-		static_assert(std::is_same<_Offset, int32_t>::value || std::is_same<_Offset, int8_t>::value, "Invalid offset type.");
-
 		// Push address
-		architecture::instruction<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
+		instruction<OP_CODE::PUSH, _offset.register_value>(*_output, _offset.offset);
 
 		return 1;
 	}
@@ -529,11 +562,11 @@ private:
 	{
 		// Push address
 		if (_Effective_address) {
-			architecture::instruction<OP_CODE::LEA, REGISTER::EAX, _Register, int8_t>(*_output, 0);
-			architecture::instruction<OP_CODE::PUSH, REGISTER::EAX>(*_output);
+			instruction<OP_CODE::LEA, accumulator, _offset.register_value, int8_t>(*_output, 0);
+			instruction<OP_CODE::PUSH, accumulator>(*_output);
 		} // Push register
 		else {
-			architecture::instruction<OP_CODE::PUSH, _Register>(*_output);
+			instruction<OP_CODE::PUSH, _offset.register_value>(*_output);
 		}
 
 		return 1;
