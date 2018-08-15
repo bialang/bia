@@ -101,7 +101,7 @@ set(Bia_SOURCE_FILES_MODULAR "")
 source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})
 source_group("Source Files\\machine\\modular" FILES ${Bia_SOURCE_FILES_MODULAR})
 
-set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "toolset.hpp")
+set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "toolset.hpp")
 
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
 
