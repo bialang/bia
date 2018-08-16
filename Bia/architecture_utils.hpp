@@ -1,8 +1,10 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 
 #include "config.hpp"
+#include "type_traits.hpp"
 #include "exception.hpp"
 
 
@@ -14,20 +16,87 @@ namespace platform
 {
 
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
-enum class REGISTER
+struct register32
 {
-	EAX = 0,
-	ECX = 1,
-	ESP = 4,
-	EBP = 5,
+	constexpr static size_t size()
+	{
+		return 32;
+	}
+};
+
+struct eax : register32
+{
+	constexpr static size_t value()
+	{
+		return 0;
+	}
+};
+
+struct ecx : register32
+{
+	constexpr static size_t value()
+	{
+		return 1;
+	}
+};
+
+struct esp : register32
+{
+	constexpr static size_t value()
+	{
+		return 4;
+	}
+};
+
+struct ebp : register32
+{
+	constexpr static size_t value()
+	{
+		return 5;
+	}
+};
 
 #if defined(BIA_ARCHITECTURE_X86_64)
-	RAX = 0,
-	RCX = 1,
-	RSP = 4,
-	RBP = 5
-#endif
+struct register64
+{
+	constexpr static size_t size()
+	{
+		return 64;
+	}
 };
+
+struct rax : register64
+{
+	constexpr static size_t value()
+	{
+		return 0;
+	}
+};
+
+struct rcx : register64
+{
+	constexpr static size_t value()
+	{
+		return 1;
+	}
+};
+
+struct rsp : register64
+{
+	constexpr static size_t value()
+	{
+		return 4;
+	}
+};
+
+struct rbp : register64
+{
+	constexpr static size_t value()
+	{
+		return 5;
+	}
+};
+#endif
 
 enum class OP_CODE
 {
@@ -47,14 +116,14 @@ enum class OP_CODE
 
 #if defined(BIA_ARCHITECTURE_X86_32)
 constexpr auto element_size = 4;
-constexpr auto accumulator = REGISTER::EAX;
-constexpr auto base_pointer = REGISTER::EBP;
-constexpr auto stack_pointer = REGISTER::ESP;
+typedef eax accumulator;
+typedef esp stack_pointer;
+typedef ebp base_pointer;
 #elif defined(BIA_ARCHITECTURE_X86_64)
 constexpr auto element_size = 8;
-constexpr auto accumulator = REGISTER::RAX;
-constexpr auto base_pointer = REGISTER::RBP;
-constexpr auto stack_pointer = REGISTER::RSP;
+typedef rax accumulator;
+typedef rsp stack_pointer;
+typedef rbp base_pointer;
 #endif
 
 static_assert(element_size == sizeof(void*), "Invalid element size.");
@@ -79,66 +148,10 @@ inline int64_t operator "" _64(unsigned long long _value)
 	return static_cast<int64_t>(_value);
 }
 
-template<REGISTER _Register>
-constexpr inline size_t register_size()
-{
-	BIA_NOT_IMPLEMENTED;
-}
-
-template<>
-constexpr inline size_t register_size<REGISTER::EAX>()
-{
-	return 32;
-}
-
-template<>
-constexpr inline size_t register_size<REGISTER::ECX>()
-{
-	return 32;
-}
-
-template<>
-constexpr inline size_t register_size<REGISTER::EBP>()
-{
-	return 32;
-}
-
-template<>
-constexpr inline size_t register_size<REGISTER::ESP>()
-{
-	return 32;
-}
-
-#if defined(BIA_ARCHITECTURE_X86_64)
-template<>
-constexpr inline size_t register_size<REGISTER::RAX>()
-{
-	return 64;
-}
-
-template<>
-constexpr inline size_t register_size<REGISTER::RCX>()
-{
-	return 64;
-}
-
-template<>
-constexpr inline size_t register_size<REGISTER::RBP>()
-{
-	return 64;
-}
-
-template<>
-constexpr inline size_t register_size<REGISTER::RSP>()
-{
-	return 64;
-}
-#endif
-
-template<REGISTER _Register, typename _Offset, bool _Effective_address>
+template<typename _Register, typename _Offset, bool _Effective_address>
 struct register_offset
 {
-	constexpr static REGISTER register_value = _Register;
+	typedef _Register register_type;
 	_Offset offset;
 
 	register_offset(_Offset _offset) noexcept
@@ -147,10 +160,10 @@ struct register_offset
 	}
 };
 
-template<REGISTER _Register, bool _Effective_address>
+template<typename _Register, bool _Effective_address>
 struct register_offset<_Register, void, _Effective_address>
 {
-	constexpr static REGISTER register_value = _Register;
+	typedef _Register register_type;
 };
 #endif
 
