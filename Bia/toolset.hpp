@@ -37,16 +37,10 @@ public:
 	typedef std::tuple<position, position, position> temp_members;
 	typedef int32_t pass_count;
 	typedef int32_t temp_index_type;
-	typedef register_offset<REGISTER::EAX, void, false> test_result_register;
-#if defined(BIA_ARCHITECTURE_X86_32)
-	typedef register_offset<REGISTER::EBP, int8_t, false> temp_result;
-	typedef register_offset<REGISTER::EAX, void, false> result_register;
-	typedef register_offset<REGISTER::ESP, int8_t, false> saved_result_register;
-#elif defined(BIA_ARCHITECTURE_X86_64)
-	typedef register_offset<REGISTER::RBP, int8_t, false> temp_result;
-	typedef register_offset<REGISTER::RAX, void, false> result_register;
-	typedef register_offset<REGISTER::RSP, int8_t, false> saved_result_register;
-#endif
+	typedef register_offset<eax, void, false> test_result_register;
+	typedef register_offset<base_pointer, int32_t, false> temp_result;
+	typedef register_offset<accumulator, void, false> result_register;
+	typedef register_offset<stack_pointer, int32_t, false> saved_result_register;
 
 	/**
 	 * Constructor.
@@ -341,7 +335,7 @@ public:
 	}
 	void write_test()
 	{
-		instruction<OP_CODE::XOR, REGISTER::EAX, REGISTER::EAX>(*_output);
+		instruction<OP_CODE::XOR, eax, eax>(*_output);
 	}
 	/**
 	 * Reverts the last action with the parameter.
@@ -367,7 +361,7 @@ public:
 	*/
 	void save_result_value()
 	{
-		instruction<OP_CODE::PUSH, result_register::register_value>(*_output);
+		instruction<OP_CODE::PUSH, result_register::register_type>(*_output);
 	}
 	template<typename _Ty>
 	pass_count pass_varg(_Ty _value)
@@ -439,22 +433,33 @@ private:
 	void pass_instance(_Ty * _instance)
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
-		instruction32<OP_CODE::MOVE, REGISTER::ECX>(*_output, reinterpret_cast<int32_t>(_instance));
+		instruction32<OP_CODE::MOVE, ecx>(*_output, reinterpret_cast<int32_t>(_instance));
 #elif defined(BIA_ARCHITECTURE_X86_64)
 #error "fix me"
 		instruction64<OP_CODE::MOVE, REGISTER::>(*_output, reinterpret_cast<int64_t>(_instance));
 #endif
 	}
-	template<REGISTER _Register, typename _Offset, bool _Effective_address>
+	template<typename _Register, typename _Offset, bool _Effective_address>
 	void pass_instance(register_offset<_Register, _Offset, _Effective_address> _offset)
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
-		//Effective address
-		if (_Effective_address) {
-			instruction<OP_CODE::LEA, REGISTER::ECX, _offset.register_value>(*_output, _offset.offset);
-		} // Just content
-		else {
-			instruction<OP_CODE::MOVE, REGISTER::ECX, _offset.register_value>(*_output, _offset.offset);
+		// Save 3 bytes
+		if (is_one_byte_value(_offset.offset)) {
+			//Effective address
+			if (_Effective_address) {
+				instruction<OP_CODE::LEA, ecx, _Register>(*_output, static_cast<int8_t>(_offset.offset));
+			} // Just content
+			else {
+				instruction<OP_CODE::MOVE, ecx, _Register>(*_output, static_cast<int8_t>(_offset.offset));
+			}
+		} else {
+			//Effective address
+			if (_Effective_address) {
+				instruction<OP_CODE::LEA, ecx, _Register>(*_output, _offset.offset);
+			} // Just content
+			else {
+				instruction<OP_CODE::MOVE, ecx, _Register>(*_output, _offset.offset);
+			}
 		}
 #elif defined(BIA_ARCHITECTURE_X86_64)
 #error "fix me"
@@ -540,37 +545,48 @@ private:
 	{
 		return pass(reinterpret_cast<intptr_t>(_ptr));
 	}
-	template<REGISTER _Register, typename _Offset>
+	template<typename _Register, typename _Offset>
 	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value, pass_count>::type pass(register_offset<_Register, _Offset, true> _offset)
 	{
+		// Save 3 bytes
+		if (is_one_byte_value(_offset.offset)) {
+			instruction<OP_CODE::LEA, accumulator, _Register>(*_output, static_cast<int8_t>(_offset.offset));
+		} else {
+			instruction<OP_CODE::LEA, accumulator, _Register>(*_output, _offset.offset);
+		}
+
 		// Push address
-		instruction<OP_CODE::LEA, accumulator, _offset.register_value>(*_output, _offset.offset);
 		instruction<OP_CODE::PUSH, accumulator>(*_output);
 
 		return 1;
 	}
-	template<REGISTER _Register, typename _Offset>
+	template<typename _Register, typename _Offset>
 	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value, pass_count>::type pass(register_offset<_Register, _Offset, false> _offset)
 	{
-		// Push address
-		instruction<OP_CODE::PUSH, _offset.register_value>(*_output, _offset.offset);
+		// Save 3 bytes
+		if (is_one_byte_value(_offset.offset)) {
+			instruction<OP_CODE::PUSH, _Register>(*_output, static_cast<int8_t>(_offset.offset));
+		} else {
+			// Push address
+			instruction<OP_CODE::PUSH, _Register>(*_output, _offset.offset);
+		}
 
 		return 1;
 	}
-	template<REGISTER _Register, bool _Effective_address>
+	template<typename _Register, bool _Effective_address>
 	pass_count pass(register_offset<_Register, void, _Effective_address> _offset)
 	{
 		// Push address
 		if (_Effective_address) {
-			instruction<OP_CODE::LEA, accumulator, _offset.register_value, int8_t>(*_output, 0);
+			instruction<OP_CODE::LEA, accumulator, _Register, int8_t>(*_output, 0);
 			instruction<OP_CODE::PUSH, accumulator>(*_output);
 		} // Push register
 		else {
-			instruction<OP_CODE::PUSH, _offset.register_value>(*_output);
+			instruction<OP_CODE::PUSH, _Register>(*_output);
 		}
 
 		return 1;
-	}	
+	}
 	/**
 	 * Returns the saved result value.
 	 *
