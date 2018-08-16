@@ -104,6 +104,8 @@ inline size_t instruction(stream::output_stream & _output)
 #if defined(BIA_ARCHITECTURE_X86_32)
 		static_assert(!(_Op_code == OP_CODE::MOVE && register_size<_Dest>() != 32), "Register is not supported.");
 #elif defined(BIA_ARCHITECTURE_X86_64)
+		static_assert(!(_Op_code == OP_CODE::MOVE && register_size<_Dest>() != 32 && register_size<_Dest>() != 64), "Register is not supported.");
+
 		// Write prefix for 64 bit register
 		if (register_size<_Dest>() == 64) {
 			return _output.write_all(0x48_8, 0x89_8, static_cast<uint8_t>(0300 | static_cast<int>(_Src) << 3 | static_cast<int>(_Dest)));
@@ -117,6 +119,8 @@ inline size_t instruction(stream::output_stream & _output)
 #if defined(BIA_ARCHITECTURE_X86_32)
 		static_assert(!(_Op_code == OP_CODE::XOR && register_size<_Dest>() != 32), "Register is not supported.");
 #elif defined(BIA_ARCHITECTURE_X86_64)
+		static_assert(!(_Op_code == OP_CODE::XOR && register_size<_Dest>() != 32 && register_size<_Dest>() != 64), "Register is not supported.");
+
 		// Write prefix for 64 bit register
 		if (register_size<_Dest>() == 64) {
 			return _output.write_all(0x48_8, 0x31_8, static_cast<uint8_t>(0300 | static_cast<int>(_Src) << 3 | static_cast<int>(_Dest)));
@@ -154,35 +158,23 @@ inline size_t instruction(stream::output_stream & _output, _Src_offset _offset)
 	constexpr auto _mode = std::is_same<_Src_offset, int8_t>::value ? 0100 : 0200;
 
 #if defined(BIA_ARCHITECTURE_X86_32)
-	static_assert(register_size<_Dest>() == register_size<_Src>() && register_size<_Dest>() == 32, "Register is not supported.");
+	static_assert(register_size<_Src>() == 32 && register_size<_Dest>() == 32, "Register is not supported.");
 
 	// Add SIB byte for stack pointer register
 	constexpr auto _special_register = _Src == REGISTER::ESP;
 #elif defined(BIA_ARCHITECTURE_X86_64)
-	static_assert(register_size<_Dest>() == 32 || register_size<_Dest>() == 64 || register_size<_Src>() == 32 || register_size<_Src>() == 64, "Register is not supported.");
+	static_assert((register_size<_Dest>() == 32 || register_size<_Dest>() == 64) && register_size<_Src>() == 64, "Register is not supported.");
 
 	// Add SIB byte for stack pointer register
 	constexpr auto _special_register = _Src == REGISTER::ESP || _Src == REGISTER::RSP;
 
 	// Write prefix for 64 bit register
 	if (register_size<_Dest>() == 64) {
-		if (register_size<_Src>() == 64) {
-			if (_special_register) {
-				return _output.write_all(0x48_8, _op_code, static_cast<uint8_t>(_mode | static_cast<int>(_Dest) << 3 | static_cast<int>(_Src)), 0x24_8, _offset);
-			}
-
-			return _output.write_all(0x48_8, _op_code, static_cast<uint8_t>(_mode | static_cast<int>(_Dest) << 3 | static_cast<int>(_Src)), _offset);
-		} else if (_special_register) {
-			return _output.write_all(0x67_8, 0x48_8, _op_code, static_cast<uint8_t>(_mode | static_cast<int>(_Dest) << 3 | static_cast<int>(_Src)), 0x24_8, _offset);
-		}
-
-		return _output.write_all(0x67_8, 0x48_8, _op_code, static_cast<uint8_t>(_mode | static_cast<int>(_Dest) << 3 | static_cast<int>(_Src)), _offset);
-	} else if (register_size<_Src>() == 32) {
 		if (_special_register) {
-			return _output.write_all(0x67_8, _op_code, static_cast<uint8_t>(_mode | static_cast<int>(_Dest) << 3 | static_cast<int>(_Src)), 0x24_8, _offset);
+			return _output.write_all(0x48_8, _op_code, static_cast<uint8_t>(_mode | static_cast<int>(_Dest) << 3 | static_cast<int>(_Src)), 0x24_8, _offset);
 		}
 
-		return _output.write_all(0x67_8, _op_code, static_cast<uint8_t>(_mode | static_cast<int>(_Dest) << 3 | static_cast<int>(_Src)), _offset);
+		return _output.write_all(0x48_8, _op_code, static_cast<uint8_t>(_mode | static_cast<int>(_Dest) << 3 | static_cast<int>(_Src)), _offset);
 	}
 #endif
 
@@ -206,6 +198,8 @@ inline size_t instruction8(stream::output_stream & _output, int8_t _value)
 #if defined(BIA_ARCHITECTURE_X86_32)
 		static_assert(!(_Op_code == OP_CODE::ADD && register_size<_Register>() != 32), "Register is not supported.");
 #elif defined(BIA_ARCHITECTURE_X86_64)
+		static_assert(!(_Op_code == OP_CODE::ADD && register_size<_Register>() != 32 && register_size<_Register>() != 64), "Register is not supported.");
+
 		// Write prefix for 64 bit register
 		if (register_size<_Register>() == 64) {
 			return _output.write_all(0x48_8, 0x83_8, static_cast<uint8_t>(0300 | static_cast<int>(_Register)), _value);
@@ -219,6 +213,8 @@ inline size_t instruction8(stream::output_stream & _output, int8_t _value)
 #if defined(BIA_ARCHITECTURE_X86_32)
 		static_assert(!(_Op_code == OP_CODE::SUB && register_size<_Register>() != 32), "Register is not supported.");
 #elif defined(BIA_ARCHITECTURE_X86_64)
+		static_assert(!(_Op_code == OP_CODE::SUB && register_size<_Register>() != 32 && register_size<_Register>() != 64), "Register is not supported.");
+
 		// Write prefix for 64 bit register
 		if (register_size<_Register>() == 64) {
 			return _output.write_all(0x48_8, 0x83_8, static_cast<uint8_t>(0350 | static_cast<int>(_Register)), _value);
@@ -230,7 +226,7 @@ inline size_t instruction8(stream::output_stream & _output, int8_t _value)
 	}
 
 	BIA_IMPLEMENTATION_ERROR;
-}
+	}
 
 template<OP_CODE _Op_code, REGISTER _Register>
 inline size_t instruction32(stream::output_stream & _output, int32_t _value)
@@ -243,6 +239,8 @@ inline size_t instruction32(stream::output_stream & _output, int32_t _value)
 #if defined(BIA_ARCHITECTURE_X86_32)
 		static_assert(!(_Op_code == OP_CODE::MOVE && register_size<_Register>() != 32), "Register is not supported.");
 #elif defined(BIA_ARCHITECTURE_X86_64)
+		static_assert(!(_Op_code == OP_CODE::MOVE && register_size<_Register>() != 32 && register_size<_Register>() != 64), "Register is not supported.");
+
 		// Write prefix for 64 bit register
 		if (register_size<_Register>() == 64) {
 			return _output.write_all(0x48_8, 0xc7_8, static_cast<uint8_t>(0300 | static_cast<int>(_Register)), _value);
@@ -256,6 +254,8 @@ inline size_t instruction32(stream::output_stream & _output, int32_t _value)
 #if defined(BIA_ARCHITECTURE_X86_32)
 		static_assert(!(_Op_code == OP_CODE::ADD && register_size<_Register>() != 32), "Register is not supported.");
 #elif defined(BIA_ARCHITECTURE_X86_64)
+		static_assert(!(_Op_code == OP_CODE::ADD && register_size<_Register>() != 32 && register_size<_Register>() != 64), "Register is not supported.");
+
 		// Write prefix for 64 bit register
 		if (register_size<_Register>() == 64) {
 			return _output.write_all(0x48_8, 0x81_8, static_cast<uint8_t>(0300 | static_cast<int>(_Register)), _value);
@@ -274,6 +274,8 @@ inline size_t instruction32(stream::output_stream & _output, int32_t _value)
 #if defined(BIA_ARCHITECTURE_X86_32)
 		static_assert(!(_Op_code == OP_CODE::SUB && register_size<_Register>() != 32), "Register is not supported.");
 #elif defined(BIA_ARCHITECTURE_X86_64)
+		static_assert(!(_Op_code == OP_CODE::SUB && register_size<_Register>() != 32 && register_size<_Register>() != 64), "Register is not supported.");
+
 		// Write prefix for 64 bit register
 		if (register_size<_Register>() == 64) {
 			return _output.write_all(0x48_8, 0x81_8, static_cast<uint8_t>(0350 | static_cast<int>(_Register)), _value);
@@ -344,5 +346,5 @@ inline size_t instruction32(stream::output_stream & _output, int32_t _value)
 #endif
 
 }
-}
+	}
 }
