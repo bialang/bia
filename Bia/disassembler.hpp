@@ -34,7 +34,7 @@ public:
 private:
 	struct instruction
 	{
-		typedef std::function<void(const disassembler*, const uint8_t*)> callback_function;
+		typedef std::function<void(const disassembler*, const int8_t*)> callback_function;
 
 		uint64_t op_code;
 		uint64_t mask;
