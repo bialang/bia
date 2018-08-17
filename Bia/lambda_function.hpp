@@ -61,23 +61,23 @@ public:
 	explicit lambda_function(const utility::share<_Lambda> & _data) noexcept : _data(_data)
 	{
 	}
-	virtual void print() const override
+	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
 		puts(typeid(&_Lambda::operator()).name());
 	}
-	virtual void copy(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
 		_destination->replace_this<lambda_function<_Lambda>>(_data.get());
 	}
-	virtual void refer(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
 		_destination->replace_this<lambda_function<_Lambda>>(_data);
 	}
-	virtual void clone(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
 		refer(_destination);
 	}
-	virtual void execute(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
 		force::disguised_caller(&_Lambda::operator(), &_data.get(), _destination);
 	}

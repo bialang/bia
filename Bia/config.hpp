@@ -36,15 +36,7 @@
 
 // Calling conventions
 #define BIA_STATIC_CALLING_CONVETION __fastcall
-
-template<typename _Return, typename... _Args>
-using static_function_signature = _Return(BIA_STATIC_CALLING_CONVETION *)(_Args...);
-
-template<typename _Class, typename _Return, typename... _Args>
-using member_function_signature = _Return(__thiscall _Class::*)(_Args...);
-
-template<typename _Class, typename _Return, typename... _Args>
-using const_member_function_signature = _Return(__thiscall _Class::*)(_Args...) const;
+#define BIA_MEMBER_CALLING_CONVENTION __fastcall
 
 template<typename _Class, typename _Return, typename... _Args>
 using varg_member_function_signature = _Return(__cdecl _Class::*)(_Args..., ...);
@@ -62,16 +54,8 @@ using varg_member_function_signature = _Return(__cdecl _Class::*)(_Args..., ...)
 #elif defined(BIA_COMPILER_GNU)
 
 // Calling conventions
-#define BIA_STATIC_CALLING_CONVETION(_return, _signature) __attribute__((cdecl)) _return _signature
-
-template<typename _Return, typename... _Args>
-using static_function_signature = __attribute__((cdecl)) _Return(*)(_Args...);
-
-template<typename _Class, typename _Return, typename... _Args>
-using member_function_signature = _Return(_Class::*)(_Args...);
-
-template<typename _Class, typename _Return, typename... _Args>
-using const_member_function_signature = _Return(_Class::*)(_Args...) const;
+#define BIA_STATIC_CALLING_CONVETION __attribute__((__fastcall__))
+#define BIA_MEMBER_CALLING_CONVENTION __attribute__((__fastcall__))
 
 template<typename _Class, typename _Return, typename... _Args>
 using varg_member_function_signature = __attribute__((cdecl)) _Return(_Class::*)(_Args..., ...);
@@ -80,6 +64,16 @@ using varg_member_function_signature = __attribute__((cdecl)) _Return(_Class::*)
 #define BIA_EXPORT
 
 #endif
+
+// Function signatures
+template<typename _Return, typename... _Args>
+using static_function_signature = _Return(BIA_STATIC_CALLING_CONVETION *)(_Args...);
+
+template<typename _Class, typename _Return, typename... _Args>
+using member_function_signature = _Return(BIA_MEMBER_CALLING_CONVENTION _Class::*)(_Args...);
+
+template<typename _Class, typename _Return, typename... _Args>
+using const_member_function_signature = _Return(BIA_MEMBER_CALLING_CONVENTION _Class::*)(_Args...) const;
 
 // Universal macros
 #define BIA_MAX_KEYWORD_LENGTH 16

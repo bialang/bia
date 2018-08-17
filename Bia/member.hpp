@@ -62,7 +62,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 8-Apr-18
 	*/
-	virtual void undefine() noexcept = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept = 0;
 	/**
 	 * Prints this value to stdout.
 	 *
@@ -71,7 +71,7 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	*/
-	virtual void print() const = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION print() const = 0;
 	/**
 	 * Copy this member to the specified destination.
 	 *
@@ -84,7 +84,7 @@ public:
 	 * @throws exception::execution_error If the operation is not supported by the member.
 	 * @throws See replace_this().
 	*/
-	virtual void copy(member * _destination) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) = 0;
 	/**
 	 * Creates a reference to this member.
 	 *
@@ -97,7 +97,7 @@ public:
 	 * @throws exception::execution_error If the operation is not supported by the member.
 	 * @throws See replace_this().
 	*/
-	virtual void refer(member * _destination) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) = 0;
 	/**
 	 * Clones this member to the specified location.
 	 *
@@ -110,7 +110,7 @@ public:
 	 * @throws exception::execution_error If the operation is not supported by the member.
 	 * @throws See replace_this().
 	*/
-	virtual void clone(member * _destination) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) = 0;
 	/**
 	 * Executes this object as function.
 	 *
@@ -125,7 +125,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate().
 	*/
-	virtual void execute(member * _destination) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) = 0;
 	/**
 	 * Executes this object as function with only member parameters.
 	 *
@@ -178,7 +178,7 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) = 0;
 	/**
 	 * An operator call with an int32 as right value.
 	 *
@@ -194,7 +194,7 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) = 0;
 	/**
 	 * An operator call with an int64 as right value.
 	 *
@@ -210,7 +210,7 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) = 0;
 	/**
 	 * An operator call with a double as right value.
 	 *
@@ -226,7 +226,7 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) = 0;
 	/**
 	 * Returns a member of this member.
 	 *
@@ -240,7 +240,7 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member or the wanted member is not valid.
 	*/
-	virtual void  object_member(member * _destination, machine::string_manager::name_type _name) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) = 0;
 	/**
 	 * Sets the instance of the member.
 	 *
@@ -276,7 +276,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t test() const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const = 0;
 	/**
 	 * Tests the contents of this member to the right member.
 	 *
@@ -292,7 +292,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t test_member(operator_type _operator, member * _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -308,7 +308,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t test_int32(operator_type _operator, int32_t _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -324,7 +324,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t test_int64(operator_type _operator, int64_t _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -340,7 +340,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t test_double(operator_type _operator, double _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const = 0;
 	/**
 	 * Returns the int representation of the content.
 	 *

@@ -365,7 +365,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 	if (_report->type == report::TYPE::STRING) {
 		_report = handle_string(_report);
 	} else if (_report->type == report::TYPE::MEMBER) {
-		void(framework::member::*_function)(framework::member*) = nullptr;
+		member_function_signature<framework::member, void, framework::member*> _function = nullptr;
 
 		// Ref of
 		if (_report->custom_parameter == keyword_refof::string_id()) {

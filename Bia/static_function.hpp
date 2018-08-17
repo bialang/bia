@@ -36,23 +36,23 @@ public:
 	{
 		this->_function = _function;
 	}
-	virtual void print() const override
+	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
 		puts(typeid(_function).name());
 	}
-	virtual void copy(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
 		_destination->replace_this<static_function<_Return, _Args...>>(_function);
 	}
-	virtual void refer(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
 		_destination->replace_this<static_function<_Return, _Args...>>(_function);
 	}
-	virtual void clone(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
 		_destination->replace_this<static_function<_Return, _Args...>>(_function);
 	}
-	virtual void execute(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
 		force::disguised_caller(_function, _destination);
 	}

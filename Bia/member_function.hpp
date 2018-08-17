@@ -44,23 +44,23 @@ public:
 	member_function(const data_type & _data) noexcept : _data(_data)
 	{
 	}
-	virtual void print() const override
+	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
 		puts(typeid(_Return(_Class::*)(_Args...)).name());
 	}
-	virtual void copy(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
 		_destination->replace_this<member_function<_Return(_Class::*)(_Args...)>>(_data.get().first);
 	}
-	virtual void refer(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
 		_destination->replace_this<member_function<_Return(_Class::*)(_Args...)>>(_data);
 	}
-	virtual void clone(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
 		refer(_destination);
 	}
-	virtual void execute(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
 		force::disguised_caller(_data.get().first, cast_instance(), _destination);
 	}

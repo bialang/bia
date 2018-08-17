@@ -20,27 +20,27 @@ namespace executable
 class function : public member
 {
 public:
-	virtual void undefine() noexcept override
+	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
 	{
 		replace_this<undefined_member>();
 	}
-	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void operator_call_double(member * _destination, operator_type _operator, double _right)
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right)
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
@@ -48,23 +48,23 @@ public:
 	{
 		return F_CONST;
 	}
-	virtual int32_t test() const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
-	virtual int32_t test_member(operator_type _operator, member * _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
-	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
-	virtual int32_t test_int64(operator_type _operator, int64_t _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
-	virtual int32_t test_double(operator_type _operator, double _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}

@@ -48,12 +48,12 @@ string_manager & machine_context::string_manager() noexcept
 	return _string_manager;
 }
 
-void machine_context::destroy_from_stack(uint32_t _member_count)
+void BIA_MEMBER_CALLING_CONVENTION machine_context::destroy_from_stack(uint32_t _member_count)
 {
 	_stack.pop(_member_count);
 }
 
-void machine_context::create_on_stack(framework::member ** _destination, uint32_t _member_count)
+void BIA_MEMBER_CALLING_CONVENTION machine_context::create_on_stack(framework::member ** _destination, uint32_t _member_count)
 {
 	_stack.push(_destination, _member_count);
 }

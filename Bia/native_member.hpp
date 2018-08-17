@@ -49,23 +49,23 @@ public:
 	native_member(const utility::share<std::pair<_Ty, bool>> & _data) noexcept : _data(_data)
 	{
 	}
-	virtual void print() const override
+	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
 		machine::link::print(_data.get().first);
 	}
-	virtual void copy(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
 		create_result_member(_data.get().first, _destination);
 	}
-	virtual void refer(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
 		_destination->replace_this<native_member<_Ty>>(_data);
 	}
-	virtual void clone(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
 		copy(_destination);
 	}
-	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{
 		if (std::is_same<_Ty, int64_t>::value) {
 			create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right->to_int()), _destination);
@@ -73,19 +73,19 @@ public:
 			create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right->to_double()), _destination);
 		}
 	}
-	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
-	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
-	virtual void operator_call_double(member * _destination, operator_type _operator, double _right)
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right)
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
-	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
@@ -93,11 +93,11 @@ public:
 	{
 		return F_TO_INT | F_TO_DOUBLE | (std::is_same<_Ty, int64_t>::value ? F_INT : F_DOUBLE);
 	}
-	virtual int32_t test() const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const override
 	{
 		return native::test(_data.get().first);
 	}
-	virtual int32_t test_member(operator_type _operator, member * _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override
 	{
 		if (std::is_same<_Ty, int64_t>::value) {
 			return test_operation(_data.get().first, _operator, _right->to_int());
@@ -105,15 +105,15 @@ public:
 			return test_operation(_data.get().first, _operator, _right->to_double());
 		}
 	}
-	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const override
 	{
 		return test_operation(_data.get().first, _operator, _right);
 	}
-	virtual int32_t test_int64(operator_type _operator, int64_t _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const override
 	{
 		return test_operation(_data.get().first, _operator, _right);
 	}
-	virtual int32_t test_double(operator_type _operator, double _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override
 	{
 		return test_operation(_data.get().first, _operator, _right);
 	}

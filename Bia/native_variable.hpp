@@ -15,11 +15,11 @@ namespace native
 class native_variable : public member
 {
 public:
-	virtual void undefine() noexcept override
+	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
 	{
 		replace_this<undefined_member>();
 	}
-	virtual void execute(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
