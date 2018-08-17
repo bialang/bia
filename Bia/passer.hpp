@@ -17,6 +17,10 @@ namespace platform
 {
 
 #if defined(BIA_ARCHITECTURE_X86_32) && (defined (BIA_COMPILER_MSVC) || defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
+struct reserved_parameter 
+{
+};
+
 /**
  * @brief Passes parameters of a static function.
  *
@@ -70,7 +74,7 @@ public:
 		register_pass<edx>(_passed - _tmp, _second);
 	}
 
-private:
+protected:
 	stream::output_stream & _output;
 	pass_count_type _passed;
 
@@ -88,18 +92,15 @@ private:
 	{
 		pass(intptr_t(0));
 	}
+	void pass(reserved_parameter _value)
+	{
+		pass(0);
+	}
 	template<typename _Ty>
 	void pass(_Ty * _ptr)
 	{
 		pass(reinterpret_cast<intptr_t>(_ptr));
 	}
-	/*template<typename _Ty>
-	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 1, pass_count_type>::type pass(_Ty _value)
-	{
-		instruction8<OP_CODE::PUSH>(_output, *reinterpret_cast<int8_t*>(&_value));
-
-		return 1;
-	}*/
 	template<typename _Ty>
 	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 4>::type pass(_Ty _value)
 	{
@@ -157,7 +158,17 @@ private:
 		++_passed;
 	}
 	template<typename _Register>
-	void register_pass(pass_count_type _left_passed, std::nullptr_t)
+	void register_pass(pass_count_type _left_passed, reserved_parameter _value)
+	{
+		if ((std::is_same<_Register, ecx>::value && !_left_passed) || (std::is_same<_Register, edx>::value && _left_passed == 1)) {
+			++_passed;
+		} // Just push
+		else {
+			pass(_value);
+		}
+	}
+	template<typename _Register>
+	void register_pass(pass_count_type _left_passed, std::nullptr_t _value)
 	{
 		if ((std::is_same<_Register, ecx>::value && !_left_passed) || (std::is_same<_Register, edx>::value && _left_passed == 1)) {
 			instruction32<OP_CODE::MOVE, _Register>(_output, 0);
@@ -252,6 +263,36 @@ class member_passer : public static_passer
 public:
 	member_passer(stream::output_stream & _output) noexcept : static_passer(_output)
 	{
+	}
+};
+
+class varg_member_passer : protected static_passer
+{
+public:
+	varg_member_passer(stream::output_stream & _output) noexcept : static_passer(_output)
+	{
+	}
+
+	virtual void pop_all() override
+	{
+		if (_passed > 0) {
+			if (_passed * element_size <= std::numeric_limits<int8_t>::max()) {
+				instruction8<OP_CODE::ADD, stack_pointer>(_output, static_cast<int8_t>(_passed * element_size));
+			} else {
+				instruction32<OP_CODE::ADD, stack_pointer>(_output, static_cast<int32_t>(_passed * element_size));
+			}
+		}
+	}
+	template<typename _Ty>
+	void pass_varg(_Ty _value)
+	{
+		pass(_value);
+	}
+	template<typename _First, typename _Second, typename _Third, typename _Fourth>
+	void pass_all(_First _first, _Second _second, _Third _third, _Fourth _fourth)
+	{
+		// Push to stack
+		pass(_first, _second, _third, _fourth);
 	}
 };
 #endif
