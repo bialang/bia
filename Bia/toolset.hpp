@@ -292,23 +292,13 @@ public:
 	 * @throws See pass() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call(varg_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, pass_count _passed_vargs, _Args2 &&... _args)
+	void call(varg_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, varg_member_passer & _passer, _Args2 &&... _args)
 	{
 		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
-		pass_count _passed = _passed_vargs;
-
 		// Push all parameters
-		_passed += pass<0>(std::forward<_Args2>(_args)...);
-
-		// Push instance
-		if (std::is_same<_Instance, result_register>::value) {
-			// +1 for the saved result value
-			_passed += pass<0>(saved_result_value(_passed)) + 1;
-		} else {
-			_passed += pass<0>(_instance);
-		}
+		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
 
 		// Convert
 		union
@@ -329,11 +319,15 @@ public:
 		instruction<OP_CODE::CALL, accumulator>(*_output);
 
 		// Pop
-		pop(_passed);
+		_passer.pop_all();
 	}
 	void write_test()
 	{
 		instruction<OP_CODE::XOR, eax, eax>(*_output);
+	}
+	varg_member_passer create_varg_passer()
+	{
+		return varg_member_passer(*_output);
 	}
 	position jump(JUMP _type, position _destination = 0, position _start = -1)
 	{

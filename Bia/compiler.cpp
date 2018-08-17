@@ -66,7 +66,7 @@ void compiler::test_compiler_value()
 	}
 }
 
-char compiler::handle_parameter_item(machine::platform::toolset::pass_count & _passed)
+char compiler::handle_parameter_item(machine::platform::varg_member_passer & _passer)
 {
 	using VT = compiler_value::VALUE_TYPE;
 
@@ -76,45 +76,45 @@ char compiler::handle_parameter_item(machine::platform::toolset::pass_count & _p
 	case VT::INT:
 	{
 		if (_value.is_int32()) {
-			_passed += _toolset.pass_varg(static_cast<int32_t>(_value.value().rt_int));
+			_passer.pass_varg(static_cast<int32_t>(_value.value().rt_int));
 
 			return 'i';
 		}
 
-		_passed += _toolset.pass_varg(_value.value().rt_int);
+		_passer.pass_varg(_value.value().rt_int);
 
 		return 'I';
 	}
 	case VT::DOUBLE:
-		_passed += _toolset.pass_varg(_value.value().rt_double);
+		_passer.pass_varg(_value.value().rt_double);
 
 		return 'd';
 	case VT::STRING:
-		_passed += _toolset.pass_varg(_value.value().rt_string.data);
+		_passer.pass_varg(_value.value().rt_string.data);
 
 		return 'a';
 	case VT::STRING16:
-		_passed += _toolset.pass_varg(_value.value().rt_string.data);
+		_passer.pass_varg(_value.value().rt_string.data);
 
 		return 'u';
 	case VT::STRING32:
-		_passed += _toolset.pass_varg(_value.value().rt_string.data);
+		_passer.pass_varg(_value.value().rt_string.data);
 
 		return 'U';
 	case VT::WSTRING:
-		_passed += _toolset.pass_varg(_value.value().rt_string.data);
+		_passer.pass_varg(_value.value().rt_string.data);
 
 		return 'w';
 	case VT::MEMBER:
-		_passed += _toolset.pass_varg(_value.value().rt_member);
+		_passer.pass_varg(_value.value().rt_member);
 
 		return 'M';
 	case VT::TEMPORARY_MEMBER:
-		_passed += _toolset.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+		_passer.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 
 		return 'M';
 	case VT::TEST_VALUE_REGISTER:
-		_passed += _toolset.pass_varg(machine::platform::toolset::test_result_value());
+		_passer.pass_varg(machine::platform::toolset::test_result_value());
 
 		return 'i';
 	default:
@@ -429,7 +429,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	using VT = compiler_value::VALUE_TYPE;
 
 	auto _caller = _value;
-	machine::platform::toolset::pass_count _passed = 0;
+	auto _passer = _toolset.create_varg_passer();
 	uint32_t _count = 0;
 	std::string _format;
 	auto _mixed = false;
@@ -442,7 +442,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 			i = handle_value_insecure<false>(i);
 
 			// Add type to format
-			auto _type = handle_parameter_item(_passed);
+			auto _type = handle_parameter_item(_passer);
 
 			_format += _type;
 
@@ -462,13 +462,13 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		_counter.next();
 		_value.set_return_temp(_counter.current());
 
-		handle_parameter_execute(_caller.value().rt_member, _format, _mixed, _count, _passed);
+		handle_parameter_execute(_caller.value().rt_member, _format, _mixed, _count, _passer);
 
 		break;
 	}
 	case VT::TEMPORARY_MEMBER:
 		_value = _caller;
-		handle_parameter_execute(machine::platform::toolset::to_temp_member(_caller.value().rt_temp_member), _format, _mixed, _count, _passed);
+		handle_parameter_execute(machine::platform::toolset::to_temp_member(_caller.value().rt_temp_member), _format, _mixed, _count, _passer);
 
 		break;
 	default:
