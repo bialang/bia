@@ -35,10 +35,10 @@
 #if defined(BIA_COMPILER_MSVC)
 
 // Calling conventions
-#define BIA_STATIC_CALLING_CONVETION(_return, _signature) _return __cdecl _signature
+#define BIA_STATIC_CALLING_CONVETION __fastcall
 
 template<typename _Return, typename... _Args>
-using static_function_signature = _Return(__cdecl*)(_Args...);
+using static_function_signature = _Return(BIA_STATIC_CALLING_CONVETION *)(_Args...);
 
 template<typename _Class, typename _Return, typename... _Args>
 using member_function_signature = _Return(__thiscall _Class::*)(_Args...);

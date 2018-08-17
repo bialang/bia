@@ -160,12 +160,12 @@ private:
 		if (std::is_same<typename std::remove_reference<_Left>::type, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
-				_toolset.call(&machine::link::compare_operation_int32, static_cast<int32_t>(_left), _operator, _right);
+				_toolset.call(&machine::link::compare_operation_int32, _operator, _right, static_cast<int32_t>(_left));
 			} else {
-				_toolset.call(&machine::link::compare_operation_int64, _left, _operator, _right);
+				_toolset.call(&machine::link::compare_operation_int64, _operator, _right, _left);
 			}
 		} else {
-			_toolset.call(&machine::link::compare_operation_double, _left, _operator, _right);
+			_toolset.call(&machine::link::compare_operation_double, _operator, _right, _left);
 		}
 
 		_value.set_return_test();

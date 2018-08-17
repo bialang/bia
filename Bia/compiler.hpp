@@ -11,7 +11,6 @@
 #include "temp_counter.hpp"
 #include "operator.hpp"
 #include "machine_context.hpp"
-#include "compile_compare_operation.hpp"
 #include "compile_normal_operation.hpp"
 
 #include "interpreter.hpp"

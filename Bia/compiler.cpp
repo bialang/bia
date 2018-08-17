@@ -1,6 +1,6 @@
 #include "compiler.hpp"
 #include "link.hpp"
-#include "compile_normal_operation.hpp"
+#include "compile_compare_operation.hpp"
 #include "buffer_output_stream.hpp"
 #include "string_stream.hpp"
 
@@ -536,9 +536,9 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			{
 				// Can be int32
 				if (_expression.is_int32()) {
-					_toolset.call(&machine::link::instantiate_int32, static_cast<int32_t>(_expression.value().rt_int), _destination);
+					_toolset.call(&machine::link::instantiate_int32, _destination, static_cast<int32_t>(_expression.value().rt_int));
 				} else {
-					_toolset.call(&machine::link::instantiate_int64, _expression.value().rt_int, _destination);
+					_toolset.call(&machine::link::instantiate_int64, _destination, _expression.value().rt_int);
 				}
 
 				break;
@@ -548,11 +548,11 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&machine::link::instantiate_double, _expression.value().rt_double, _destination);
+			_toolset.call(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
 
 			break;
 		case VT::STRING:
-			_toolset.call(&machine::link::instantiate_string, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length, _destination);
+			_toolset.call(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
 
 			break;
 		case VT::MEMBER:
@@ -564,7 +564,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 			break;
 		case VT::TEST_VALUE_REGISTER:
-			_toolset.call(&machine::link::instantiate_int32, T::test_result_value(), _destination);
+			_toolset.call(&machine::link::instantiate_int32, _destination, T::test_result_value());
 
 			break;
 		default:
