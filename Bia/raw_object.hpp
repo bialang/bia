@@ -87,13 +87,13 @@ public:
 	{
 		promote()->execute(_destination);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
 	{
 		auto _this = promote();
 		va_list _args;
 		va_start(_args, _count);
 
-		_this->execute_count(_destination, _count, _args);
+		_this->execute_count(_destination, _reserved, _count, _args);
 
 		va_end(_args);
 	}

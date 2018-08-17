@@ -133,6 +133,7 @@ public:
 	 * @date 6-May-18
 	 *
 	 * @param [out] _destination The destination of the return result.
+	 * @param _reserved Reserved parameter. Do not use this.
 	 * @param _count The amount of the passed arguments.
 	 * @param ... The arguments.
 	 *
@@ -143,7 +144,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_count().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, parameter_count _count...) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) = 0;
 	/**
 	 * Executes this object as function with mixed parameters.
 	 *

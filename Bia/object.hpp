@@ -79,7 +79,7 @@ public:
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}

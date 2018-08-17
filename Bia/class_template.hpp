@@ -81,7 +81,7 @@ public:
 
 		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
 	{
 		va_list _args;
 		va_start(_args, _count);

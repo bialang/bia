@@ -38,7 +38,7 @@ void BIA_MEMBER_CALLING_CONVENTION undefined_member::execute(member * _destinati
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_VARG_MEMBER_CALLING_CONVENTION undefined_member::execute_count(member * _destination, parameter_count _count...)
+void BIA_VARG_MEMBER_CALLING_CONVENTION undefined_member::execute_count(member * _destination, void * _reserved, parameter_count _count...)
 {
 	BIA_UNDEFINED_ERROR;
 }
