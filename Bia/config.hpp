@@ -37,9 +37,7 @@
 // Calling conventions
 #define BIA_STATIC_CALLING_CONVETION __fastcall
 #define BIA_MEMBER_CALLING_CONVENTION __fastcall
-
-template<typename _Class, typename _Return, typename... _Args>
-using varg_member_function_signature = _Return(__cdecl _Class::*)(_Args..., ...);
+#define BIA_VARG_MEMBER_CALLING_CONVENTION __cdecl
 
 // Export
 #if defined(BIA_IMPORT)
@@ -56,9 +54,7 @@ using varg_member_function_signature = _Return(__cdecl _Class::*)(_Args..., ...)
 // Calling conventions
 #define BIA_STATIC_CALLING_CONVETION __attribute__((__fastcall__))
 #define BIA_MEMBER_CALLING_CONVENTION __attribute__((__fastcall__))
-
-template<typename _Class, typename _Return, typename... _Args>
-using varg_member_function_signature = __attribute__((cdecl)) _Return(_Class::*)(_Args..., ...);
+#define BIA_VARG_MEMBER_CALLING_CONVENTION __attribute__((__cdecl__))
 
 // Export
 #define BIA_EXPORT
@@ -74,6 +70,9 @@ using member_function_signature = _Return(BIA_MEMBER_CALLING_CONVENTION _Class::
 
 template<typename _Class, typename _Return, typename... _Args>
 using const_member_function_signature = _Return(BIA_MEMBER_CALLING_CONVENTION _Class::*)(_Args...) const;
+
+template<typename _Class, typename _Return, typename... _Args>
+using varg_member_function_signature = _Return(BIA_VARG_MEMBER_CALLING_CONVENTION _Class::*)(_Args..., ...);
 
 // Universal macros
 #define BIA_MAX_KEYWORD_LENGTH 16

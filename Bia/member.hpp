@@ -143,7 +143,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_count().
 	*/
-	virtual void execute_count(member * _destination, parameter_count _count...) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, parameter_count _count...) = 0;
 	/**
 	 * Executes this object as function with mixed parameters.
 	 *
@@ -162,7 +162,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_format().
 	*/
-	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) = 0;
 	/**
 	 * An operator call with another member as right value.
 	 *
