@@ -13,6 +13,7 @@
 #include "machine_context.hpp"
 #include "member.hpp"
 #include "type_traits.hpp"
+#include "passer.hpp"
 
 
 namespace bia
@@ -36,6 +37,7 @@ public:
 	typedef long long position;
 	typedef std::tuple<position, position, position> temp_members;
 	typedef int32_t pass_count;
+	typedef int32_t index_type;
 	typedef int32_t temp_index_type;
 	typedef register_offset<eax, void, false> test_result_register;
 	typedef register_offset<base_pointer, int32_t, false> temp_result;
@@ -147,7 +149,9 @@ public:
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
-		auto _passed = pass(std::forward<_Args2>(_args)...);
+		static_passer _passer(*_output);
+
+		_passer.pass_all(std::forward<_Args2>(_args)...);
 
 		// Move the address of the function into EAX and call it
 #if defined(BIA_ARCHITECTURE_X86_32)
@@ -159,7 +163,7 @@ public:
 		instruction<OP_CODE::CALL, accumulator>(*_output);
 
 		// Pop parameter
-		pop(_passed);
+		_passer.pop_all();
 	}
 	/**
 	 * Performs a member function call.
@@ -189,9 +193,9 @@ public:
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
-		auto _passed = pass(std::forward<_Args2>(_args)...);
+		member_passer _passer(*_output);
 
-		pass_instance(_instance);
+		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
 
 		// Convert
 		union
@@ -211,10 +215,7 @@ public:
 
 		instruction<OP_CODE::CALL, accumulator>(*_output);
 
-#if defined(BIA_COMPILER_GNU)
-		// Pop
-		pop(_passed);
-#endif
+		_passer.pop_all();
 	}
 	/**
 	 * Performs a member function call.
@@ -243,9 +244,9 @@ public:
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
-		auto _passed = pass(std::forward<_Args2>(_args)...);
+		member_passer _passer(*_output);
 
-		pass_instance(_instance);
+		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
 
 		// Convert
 		union
@@ -265,10 +266,7 @@ public:
 
 		instruction<OP_CODE::CALL, accumulator>(*_output);
 
-#if defined(BIA_COMPILER_GNU)
-		// Pop
-		pop(_passed);
-#endif
+		_passer.pop_all();
 	}
 	/**
 	 * Performs a member function call with varg.
@@ -302,14 +300,14 @@ public:
 		pass_count _passed = _passed_vargs;
 
 		// Push all parameters
-		_passed += pass(std::forward<_Args2>(_args)...);
+		_passed += pass<0>(std::forward<_Args2>(_args)...);
 
 		// Push instance
 		if (std::is_same<_Instance, result_register>::value) {
 			// +1 for the saved result value
-			_passed += pass(saved_result_value(_passed)) + 1;
+			_passed += pass<0>(saved_result_value(_passed)) + 1;
 		} else {
-			_passed += pass(_instance);
+			_passed += pass<0>(_instance);
 		}
 
 		// Convert
@@ -366,7 +364,7 @@ public:
 	template<typename _Ty>
 	pass_count pass_varg(_Ty _value)
 	{
-		return pass(_value);
+		return pass<0>(_value);
 	}
 	position jump(JUMP _type, position _destination = 0, position _start = -1)
 	{
@@ -480,42 +478,31 @@ private:
 			}
 		}
 	}
-	template<typename _Ty>
-	static bool is_one_byte_value(_Ty _value) noexcept
-	{
-		return false;
-	}
-	static bool is_one_byte_value(int32_t _value) noexcept
-	{
-		return _value <= std::numeric_limits<int8_t>::max() && _value >= std::numeric_limits<int8_t>::min();
-	}
-	static bool is_one_byte_value(uint32_t _value) noexcept
-	{
-		return _value <= std::numeric_limits<int8_t>::max();
-	}
+	template<index_type _Index>
 	pass_count pass() noexcept
 	{
 		return 0;
 	}
-	template<typename _Ty, typename... _Args>
+	template<index_type _Index, typename _Ty, typename... _Args>
 	pass_count pass(_Ty _value, _Args &&... _args)
 	{
-		auto _passed = pass(std::forward<_Args>(_args)...);
+		auto _passed = pass<_Index + 1>(std::forward<_Args>(_args)...);
 
-		return _passed + pass(_value);
+		return _passed + pass<_Index>(_value);
 	}
+	template<index_type _Index>
 	pass_count pass(std::nullptr_t)
 	{
-		return pass(intptr_t(0));
+		return pass<_Index>(intptr_t(0));
 	}
-	template<typename _Ty>
+	template<index_type _Index, typename _Ty>
 	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 1, pass_count>::type pass(_Ty _value)
 	{
 		instruction8<OP_CODE::PUSH>(*_output, *reinterpret_cast<int8_t*>(&_value));
 
 		return 1;
 	}
-	template<typename _Ty>
+	template<index_type _Index, typename _Ty>
 	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 4, pass_count>::type pass(_Ty _value)
 	{
 		// Save 3 bytes
@@ -528,24 +515,24 @@ private:
 
 		return 1;
 	}
-	template<typename _Ty>
+	template<index_type _Index, typename _Ty>
 	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 8, pass_count>::type pass(_Ty _value)
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
-		pass(static_cast<int32_t>(*reinterpret_cast<int64_t*>(&_value) >> 32));
-		pass(*reinterpret_cast<int32_t*>(&_value));
+		pass<_Index>(static_cast<int32_t>(*reinterpret_cast<int64_t*>(&_value) >> 32));
+		pass<_Index>(*reinterpret_cast<int32_t*>(&_value));
 
 		return 2;
 #elif
 #error "fix me"
 #endif
 	}
-	template<typename _Ty>
+	template<index_type _Index, typename _Ty>
 	pass_count pass(_Ty * _ptr)
 	{
-		return pass(reinterpret_cast<intptr_t>(_ptr));
+		return pass<_Index>(reinterpret_cast<intptr_t>(_ptr));
 	}
-	template<typename _Register, typename _Offset>
+	template<index_type _Index, typename _Register, typename _Offset>
 	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value, pass_count>::type pass(register_offset<_Register, _Offset, true> _offset)
 	{
 		// Save 3 bytes
@@ -560,7 +547,7 @@ private:
 
 		return 1;
 	}
-	template<typename _Register, typename _Offset>
+	template<index_type _Index, typename _Register, typename _Offset>
 	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value, pass_count>::type pass(register_offset<_Register, _Offset, false> _offset)
 	{
 		// Save 3 bytes
@@ -573,7 +560,7 @@ private:
 
 		return 1;
 	}
-	template<typename _Register, bool _Effective_address>
+	template<index_type _Index, typename _Register, bool _Effective_address>
 	pass_count pass(register_offset<_Register, void, _Effective_address> _offset)
 	{
 		// Push address
