@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <type_traits>
+#include <limits>
 
 #include "config.hpp"
 #include "type_traits.hpp"
@@ -14,6 +15,20 @@ namespace machine
 {
 namespace platform
 {
+
+template<typename _Ty>
+inline bool is_one_byte_value(_Ty _value) noexcept
+{
+	return false;
+}
+inline bool is_one_byte_value(int32_t _value) noexcept
+{
+	return _value <= std::numeric_limits<int8_t>::max() && _value >= std::numeric_limits<int8_t>::min();
+}
+inline bool is_one_byte_value(uint32_t _value) noexcept
+{
+	return _value <= std::numeric_limits<int8_t>::max();
+}
 
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
 struct register32
@@ -37,6 +52,14 @@ struct ecx : register32
 	constexpr static size_t value()
 	{
 		return 1;
+	}
+};
+
+struct edx : register32
+{
+	constexpr static size_t value()
+	{
+		return 2;
 	}
 };
 

@@ -21,6 +21,8 @@ inline const char * register_name32(int _register)
 		return "eax";
 	case 1:
 		return "ecx";
+	case 2:
+		return "edx";
 	case 4:
 		return "esp";
 	case 5:
