@@ -88,6 +88,14 @@ struct register64
 	}
 };
 
+struct xmm
+{
+	constexpr static size_t size()
+	{
+		return 128;
+	}
+};
+
 struct rax : register64
 {
 	constexpr static size_t value()
@@ -117,6 +125,38 @@ struct rbp : register64
 	constexpr static size_t value()
 	{
 		return 5;
+	}
+};
+
+struct xmm0 : xmm
+{
+	constexpr static size_t value()
+	{
+		return 0;
+	}
+};
+
+struct xmm1 : xmm
+{
+	constexpr static size_t value()
+	{
+		return 1;
+	}
+};
+
+struct xmm2 : xmm
+{
+	constexpr static size_t value()
+	{
+		return 2;
+	}
+};
+
+struct xmm3 : xmm
+{
+	constexpr static size_t value()
+	{
+		return 3;
 	}
 };
 #endif
