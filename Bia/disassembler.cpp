@@ -54,6 +54,22 @@ inline const char * register_name64(int _register)
 	}
 }
 
+inline const char * register_xmm(int _register)
+{
+	switch (_register) {
+	case 0:
+		return "xmm0";
+	case 1:
+		return "xmm1";
+	case 2:
+		return "xmm2";
+	case 3:
+		return "xmm3";
+	default:
+		return "unkown";
+	}
+}
+
 inline const char * register_name(int _register)
 {
 	return register_name64(_register);
@@ -211,6 +227,12 @@ disassembler::instruction_list disassembler::init_instructions()
 
 	// Opcode + destination + source + source offset
 #if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction(0xf20f100000 | 0100 << 8, 0xffffffc000, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("movsd\t%s,[%s%+hhi]\n", register_xmm(_buffer[3] >> 3 & 07), register_name64(_buffer[3] & 07), _buffer[4]);
+	});
+	_instruction((0xf20f1000LL | 0200) << 32, 0xffffffc0LL << 32, 8, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("movsd\t%s,[%s%+i]\n", register_xmm(_buffer[3] >> 3 & 07), register_name64(_buffer[3] & 07), *reinterpret_cast<const int32_t*>(_buffer + 4));
+	});
 	_instruction(0x488b002400 | 0104 << 16, 0xffffc7ff00, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
 		printf("mov\t%s,[rsp%+hhi]\n", register_name64(_buffer[2] >> 3 & 07), _buffer[4]);
 	});

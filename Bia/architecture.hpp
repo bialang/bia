@@ -137,10 +137,17 @@ inline size_t instruction(stream::output_stream & _output)
 template<OP_CODE _Op_code, typename _Dest, typename _Src, typename _Src_offset>
 inline size_t instruction(stream::output_stream & _output, _Src_offset _offset)
 {
-	static_assert(_Op_code == OP_CODE::MOVE || _Op_code == OP_CODE::LEA, "This opcode is not supported.");
+	static_assert(
+		_Op_code == OP_CODE::MOVE 
+		|| _Op_code == OP_CODE::LEA
+#if defined(BIA_ARCHITECTURE_X86_64)
+		|| _Op_code == OP_CODE::MOVE_DOUBLE
+#endif
+		, "This opcode is not supported.");
 	static_assert(std::is_same<_Src_offset, int8_t>::value || std::is_same<_Src_offset, int32_t>::value, "Offset must be int8_t or int32_t.");
 
 	int8_t _op_code = 0;
+	constexpr auto _mode = std::is_same<_Src_offset, int8_t>::value ? 0100 : 0200;
 
 	switch (_Op_code) {
 	case OP_CODE::MOVE:
@@ -151,11 +158,16 @@ inline size_t instruction(stream::output_stream & _output, _Src_offset _offset)
 		_op_code = 0x8d;
 
 		break;
+#if defined(BIA_ARCHITECTURE_X86_64)
+	case OP_CODE::MOVE_DOUBLE:
+		static_assert(_Op_code != OP_CODE::MOVE_DOUBLE || (std::is_base_of<xmm, _Dest>::value && _Src::size() == 64), "Register is not supported.");
+
+		return _output.write_all(0xf2_8, 0x0f_8, 0x10_8, static_cast<uint8_t>(_mode | _Dest::value() << 3 | _Src::value()));
+#endif
 	default:
 		BIA_IMPLEMENTATION_ERROR;
 	}
 
-	constexpr auto _mode = std::is_same<_Src_offset, int8_t>::value ? 0100 : 0200;
 
 #if defined(BIA_ARCHITECTURE_X86_32)
 	static_assert(_Src::size() == 32 && _Dest::size() == 32, "Register is not supported.");
@@ -163,7 +175,7 @@ inline size_t instruction(stream::output_stream & _output, _Src_offset _offset)
 	// Add SIB byte for stack pointer register
 	constexpr auto _special_register = std::is_same<_Src, esp>::value;
 #elif defined(BIA_ARCHITECTURE_X86_64)
-	static_assert((_Dest::size() == 32 || _Dest::size() == 64) && _Src::size() == 64, "Register is not supported.");
+	static_assert((_Op_code != OP_CODE::MOVE && _Op_code != OP_CODE::LEA) || ((_Dest::size() == 32 || _Dest::size() == 64) && _Src::size() == 64), "Register is not supported.");
 
 	// Add SIB byte for stack pointer register
 	constexpr auto _special_register = std::is_same<_Src, esp>::value || std::is_same<_Src, rsp>::value;

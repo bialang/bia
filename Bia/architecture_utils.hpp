@@ -175,6 +175,10 @@ enum class OP_CODE
 	JUMP_RELATIVE,
 	JUMP_EQUAL,
 	JUMP_NOT_EQUAL,
+
+#if defined(BIA_ARCHITECTURE_X86_64)
+	MOVE_DOUBLE,
+#endif
 };
 
 #if defined(BIA_ARCHITECTURE_X86_32)
