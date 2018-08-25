@@ -39,7 +39,7 @@ public:
 	typedef int32_t pass_count;
 	typedef int32_t index_type;
 	typedef int32_t temp_index_type;
-	typedef register_offset<eax, void, false> test_result_register;
+	typedef register_offset<accumulator, void, false> test_result_register;
 	typedef register_offset<base_pointer, int32_t, false> temp_result;
 	typedef register_offset<accumulator, void, false> result_register;
 	typedef register_offset<stack_pointer, int32_t, false> saved_result_register;
@@ -67,7 +67,10 @@ public:
 		_temp_member_pos = _output.position();
 
 		instruction32<OP_CODE::SUB, stack_pointer>(_output, 0);
+
 		call(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>(0), uint32_t(0));
+
+		instruction32<OP_CODE::ADD, stack_pointer>(_output, 0);
 
 		_setup_end_pos = _output.position();
 	}
@@ -88,20 +91,38 @@ public:
 		}
 
 		// Adjust setup
+#if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
+		{
+#else
 		if (_temp_count > 0) {
+#endif
 			// Overwrite temp member creation
 			auto _current_pos = _output->position();
 
 			_output->set_position(_temp_member_pos);
 
+#if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
+			// Allocate temp members + shadow space
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, (4 + _temp_count + _temp_count % 2) * element_size);
+#else
+			// Allocate temp members
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, _temp_count * element_size);
-			call(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>(-_temp_count * element_size), static_cast<uint32_t>(_temp_count));
+#endif
+
+			call(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>((0 + _temp_count) * -element_size), static_cast<uint32_t>(_temp_count));
 
 			_output->set_position(_current_pos);
 
 			// Member deletion
 			call(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
-			instruction32<OP_CODE::ADD, stack_pointer>(*_output, _temp_count * sizeof(void*));
+
+#if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
+			// Deallocate temp members + shadow space
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, (4 + _temp_count + _temp_count % 2) * element_size);
+#else
+			// Deallocate temp members
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, _temp_count * element_size);
+#endif
 
 			// Clean up stack
 			instruction<OP_CODE::POP, base_pointer>(*_output);
@@ -364,7 +385,7 @@ public:
 	}
 	static temp_result to_temp_member(temp_index_type _index) noexcept
 	{
-		return temp_result(_index * -4);
+		return temp_result((0 + _index) * -element_size);
 	}
 	stream::output_stream & output_stream() noexcept
 	{
