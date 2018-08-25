@@ -21,10 +21,12 @@ inline bool is_one_byte_value(_Ty _value) noexcept
 {
 	return false;
 }
+
 inline bool is_one_byte_value(int32_t _value) noexcept
 {
 	return _value <= std::numeric_limits<int8_t>::max() && _value >= std::numeric_limits<int8_t>::min();
 }
+
 inline bool is_one_byte_value(uint32_t _value) noexcept
 {
 	return _value <= std::numeric_limits<int8_t>::max();
@@ -80,7 +82,15 @@ struct ebp : register32
 };
 
 #if defined(BIA_ARCHITECTURE_X86_64)
-struct register64
+struct register64_basic
+{
+	constexpr static size_t size()
+	{
+		return 64;
+	}
+};
+
+struct register64_extended
 {
 	constexpr static size_t size()
 	{
@@ -96,7 +106,7 @@ struct xmm
 	}
 };
 
-struct rax : register64
+struct rax : register64_basic
 {
 	constexpr static size_t value()
 	{
@@ -104,7 +114,7 @@ struct rax : register64
 	}
 };
 
-struct rcx : register64
+struct rcx : register64_basic
 {
 	constexpr static size_t value()
 	{
@@ -112,7 +122,15 @@ struct rcx : register64
 	}
 };
 
-struct rsp : register64
+struct rdx : register64_basic
+{
+	constexpr static size_t value()
+	{
+		return 2;
+	}
+};
+
+struct rsp : register64_basic
 {
 	constexpr static size_t value()
 	{
@@ -120,11 +138,27 @@ struct rsp : register64
 	}
 };
 
-struct rbp : register64
+struct rbp : register64_basic
 {
 	constexpr static size_t value()
 	{
 		return 5;
+	}
+};
+
+struct r8 : register64_extended
+{
+	constexpr static size_t value()
+	{
+		return 0;
+	}
+};
+
+struct r9 : register64_extended
+{
+	constexpr static size_t value()
+	{
+		return 1;
 	}
 };
 
