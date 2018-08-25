@@ -32,6 +32,22 @@ inline bool is_one_byte_value(uint32_t _value) noexcept
 	return _value <= std::numeric_limits<int8_t>::max();
 }
 
+template<typename _Ty>
+inline bool is_four_byte_value(_Ty _value) noexcept
+{
+	return false;
+}
+
+inline bool is_four_byte_value(int64_t _value) noexcept
+{
+	return _value <= std::numeric_limits<int32_t>::max() && _value >= std::numeric_limits<int32_t>::min();
+}
+
+inline bool is_four_byte_value(uint64_t _value) noexcept
+{
+	return _value <= std::numeric_limits<int32_t>::max();
+}
+
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
 struct register32
 {
@@ -211,7 +227,7 @@ enum class OP_CODE
 	JUMP_NOT_EQUAL,
 
 #if defined(BIA_ARCHITECTURE_X86_64)
-	MOVE_DOUBLE,
+	MOVE_QUADWORD,
 #endif
 };
 
