@@ -87,7 +87,7 @@ disassembler::disassembler(const void * _context_address) noexcept
 
 void disassembler::disassemble(const void * _code, size_t _size) const
 {
-	auto _buffer = static_cast<const int8_t*>(_code);
+	/*auto _buffer = static_cast<const int8_t*>(_code);
 
 	while (_size) {
 		// Check all instruction
@@ -128,7 +128,7 @@ void disassembler::disassemble(const void * _code, size_t _size) const
 		break;
 
 	gt_continue:;
-	}
+	}*/
 }
 
 const char * disassembler::name(const void * _address) const noexcept
@@ -176,7 +176,7 @@ disassembler::instruction_list disassembler::init_instructions()
 		_instructions.emplace_back(std::move(_instruction));
 	};
 
-#if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
+/*#if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
 	// Only opcode
 	_instruction(0xc3, 0xff, 1, [](const disassembler * _disassembler, const int8_t * _buffer) {
 		puts("ret");
@@ -345,7 +345,7 @@ disassembler::instruction_list disassembler::init_instructions()
 
 	// Opcode + register + imm64
 #if defined(BIA_ARCHITECTURE_X86_64)
-#error "fix me"
+//#error "fix me"
 	_instruction(0x48b8LL << 64, 0xfff8LL << 64, 10, [](const disassembler * _disassembler, const int8_t * _buffer) {
 		printf("mov\t%s,%lli\n", register_name64(_buffer[1] & 07), *reinterpret_cast<const int64_t*>(_buffer + 2));
 	});
@@ -374,7 +374,7 @@ disassembler::instruction_list disassembler::init_instructions()
 		printf("jne\t%p\n", _buffer + 6 + *reinterpret_cast<const int32_t*>(_buffer + 2));
 	});
 #endif
-
+*/
 	return _instructions;
 	}
 

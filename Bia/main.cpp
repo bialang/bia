@@ -89,6 +89,10 @@ int main()
 			static printer _p(3);
 			return _p;
 		});
+
+		set_lambda(_context, "hey", []() {
+			puts("hey world");
+		});
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		//SetConsoleOutputCP(65001);
@@ -96,10 +100,10 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = printer(3333).hi
+print 34.
+hey()
+print 43.
 
-print "hey"
-i()
 
 )"";
 
@@ -115,10 +119,19 @@ i()
 		_compiler.finalize();
 
 		// Disassemble
-		bia::machine::disassembler _disassembler(&_context);
+
+		for (auto i = 0; i < _output.size(); ++i) {
+			printf("%02x ", static_cast<uint8_t>(_output.buffer()[i]));
+
+			if ((i + 1) % 10 == 0) {
+				puts("");
+			}
+		}
+		puts("");
+	/*	bia::machine::disassembler _disassembler(&_context);
 
 		_disassembler.disassemble(_output.buffer(), _output.size());
-
+		*/
 		system("pause");
 
 		// Run
