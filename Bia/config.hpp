@@ -24,9 +24,9 @@
 
 // Architecture
 #if defined(__i386) || defined(_M_IX86)
-#define BIA_ARCHITECTURE_X86
-//#elif defined(__x86_64__) || defined(_M_X64)
-//#define BIA_ARCHITECTURE_X86_64
+#define BIA_ARCHITECTURE_X86_32 1
+#elif defined(__x86_64__) || defined(_M_X64)
+#define BIA_ARCHITECTURE_X86_64 1
 #else
 #error "Unsupported architecture."
 #endif
@@ -35,9 +35,15 @@
 #if defined(BIA_COMPILER_MSVC)
 
 // Calling conventions
+#if defined(BIA_ARCHITECTURE_X86_32)
 #define BIA_STATIC_CALLING_CONVETION __fastcall
 #define BIA_MEMBER_CALLING_CONVENTION __fastcall
 #define BIA_VARG_MEMBER_CALLING_CONVENTION __cdecl
+#elif defined(BIA_ARCHITECTURE_X86_64)
+#define BIA_STATIC_CALLING_CONVETION
+#define BIA_MEMBER_CALLING_CONVENTION
+#define BIA_VARG_MEMBER_CALLING_CONVENTION
+#endif
 
 // Export
 #if defined(BIA_IMPORT)
