@@ -31,7 +31,7 @@ public:
 	 *
 	 * @throws exception::argument_error If either the buffer or the length is invalid.
 	*/
-	buffer_input_stream(const std::shared_ptr<const void> & _buffer, size_t _length);
+	buffer_input_stream(const std::shared_ptr<const int8_t> & _buffer, size_t _length);
 	/**
 	 * Constructor.
 	 *
@@ -43,7 +43,7 @@ public:
 	 *
 	 * @throws exception::argument_error If either the buffer or the length is invalid.
 	*/
-	buffer_input_stream(std::shared_ptr<const void> && _buffer, size_t _length);
+	buffer_input_stream(std::shared_ptr<const int8_t> && _buffer, size_t _length);
 
 	virtual void reset(cursor_type _mark) override;
 	virtual void skip(cursor_type _length) override;
@@ -55,7 +55,7 @@ public:
 
 private:
 	/** The buffer. */
-	std::shared_ptr<const void> _buffer;
+	std::shared_ptr<const int8_t> _buffer;
 	/** The length of the buffer. */
 	size_t _length;
 	/** The current position. */
