@@ -8,11 +8,11 @@
 #include "disassembler.hpp"
 #include "static_function.hpp"
 #include "bia.hpp"
+#include "disguised_caller_source.hpp"
 #include "class_template.hpp"
 #include <chrono>
 #include <iostream>
 #include <regex>
-#include <Windows.h>
 
 
 struct printer
@@ -93,7 +93,7 @@ int main()
 		set_lambda(_context, "hey", []() {
 			puts("hey world");
 		});
-		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
+		//set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		//SetConsoleOutputCP(65001);
 
@@ -108,7 +108,7 @@ print 43.
 )"";
 
 		// Compile
-		bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);
+		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
 		bia::stream::buffer_output_stream _output;
 		bia::compiler::compiler _compiler(_output, _context);
 

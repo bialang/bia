@@ -68,6 +68,7 @@ public:
 		return &first;
 	}
 };
+
 /** An universal allocation. */
 template<>
 class allocation<void>

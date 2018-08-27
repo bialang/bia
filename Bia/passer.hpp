@@ -180,7 +180,7 @@ protected:
 		}
 	}
 	template<typename _Register, typename _Ty>
-	typename void register_pass(pass_count_type _left_passed, _Ty * _value)
+	void register_pass(pass_count_type _left_passed, _Ty * _value)
 	{
 		register_pass<_Register>(_left_passed, reinterpret_cast<intptr_t>(_value));
 	}

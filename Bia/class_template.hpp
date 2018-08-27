@@ -127,10 +127,10 @@ public:
 		_allocator->destroy(_data.get().second);
 		_data.get().second = _allocator->construct<force::initiator, force::real_initiator<_Ty, _Args...>>();
 	}
-	template<typename _Ty, typename... _Args>
+	template<typename _T, typename... _Args>
 	void emplace_member(machine::string_manager::name_type _name, _Args &&... _args)
 	{
-		_data.get().first.emplace<_Ty, _Args...>(_name, std::forward<_Args>(_args)...);
+		_data.get().first.emplace<_T, _Args...>(_name, std::forward<_Args>(_args)...);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override
 	{
