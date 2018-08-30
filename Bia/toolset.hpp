@@ -68,9 +68,7 @@ public:
 
 		instruction32<OP_CODE::SUB, stack_pointer>(_output, 0);
 
-		call(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>(0), uint32_t(0));
-
-		instruction32<OP_CODE::ADD, stack_pointer>(_output, 0);
+		call_member(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>(0), uint32_t(0));
 
 		_setup_end_pos = _output.position();
 	}
@@ -109,12 +107,12 @@ public:
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, _temp_count * element_size);
 #endif
 
-			call(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>((0 + _temp_count) * -element_size), static_cast<uint32_t>(_temp_count));
+			call_member(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>((0 + _temp_count) * -element_size), static_cast<uint32_t>(_temp_count));
 
 			_output->set_position(_current_pos);
 
 			// Member deletion
-			call(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
+			call_member(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
 
 #if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
 			// Deallocate temp members + shadow space
@@ -165,7 +163,7 @@ public:
 	 * @throws See pass() and pop().
 	*/
 	template<typename _Return, typename... _Args, typename... _Args2>
-	void call(static_function_signature<_Return, _Args...> _function, _Args2 &&... _args)
+	void call_static(static_function_signature<_Return, _Args...> _function, _Args2 &&... _args)
 	{
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
@@ -208,7 +206,7 @@ public:
 	 * @throws See pass(), pass_instance() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call(member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
+	void call_member(member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
 	{
 		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
@@ -253,6 +251,67 @@ public:
 	 * @tparam _Args2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
+	 * @param [in] _instance The class instance.
+	 * @param _args The arguments for the function.
+	 *
+	 * @throws See architecture::instruction32() and architecture::instruction().
+	 * @throws See pass(), pass_instance() and pop().
+	*/
+	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
+	void call_virtual(member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
+	{
+		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
+		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
+
+		// Push all parameters
+		member_passer _passer(*_output);
+
+		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
+
+		// Convert
+		union
+		{
+			member_function_signature<_Class, _Return, _Args...> member;
+			void * address;
+		} address;
+
+		address.member = _function;
+
+#if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
+		auto _index = reinterpret_cast<int32_t>(address.address);
+
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, ecx>(*_output, static_cast<int8_t>(_index));
+	} else {
+			instruction<OP_CODE::CALL, ecx>(*_output, _index);
+		}
+#elif defined(BIA_ARCHITECTURE_X86_32)
+		// Move the address of the function into EAX and call it
+		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
+		instruction<OP_CODE::CALL, accumulator>(*_output);
+#elif defined(BIA_ARCHITECTURE_X86_64)
+		// Move the address of the function into EAX and call it
+		instruction64<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int64_t>(address.address));
+		instruction<OP_CODE::CALL, accumulator>(*_output);
+#endif
+
+		_passer.pop_all();
+	}
+	/**
+	 * Performs a member function call.
+	 *
+	 * @remarks Passing invalid parameters can lead to undefined behavior.
+	 *
+	 * @since 3.64.127.716
+	 * @date 29-Apr-18
+	 *
+	 * @tparam _Class The class.
+	 * @tparam _Return The return type of the function.
+	 * @tparam _Instance The instance type.
+	 * @tparam _Args The arguments of the function.
+	 * @tparam _Args2 The arguemtns that should be passed.
+	 *
+	 * @param _function The function address.
 	 * @param _instance The class instance.
 	 * @param _args The arguments for the function.
 	 *
@@ -260,7 +319,7 @@ public:
 	 * @throws See pass(), pass_instance() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call(const_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
+	void call_virtual(const_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
 	{
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
@@ -278,14 +337,22 @@ public:
 
 		address.member = _function;
 
+#if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
+		auto _index = reinterpret_cast<int32_t>(address.address);
+
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, ecx>(*_output, static_cast<int8_t>(_index));
+	} else {
+			instruction<OP_CODE::CALL, ecx>(*_output, _index);
+		}
+#elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
-#if defined(BIA_ARCHITECTURE_X86_32)
 		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
+		instruction<OP_CODE::CALL, accumulator>(*_output);
 #elif defined(BIA_ARCHITECTURE_X86_64)
 		instruction64<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int64_t>(address.address));
-#endif
-
 		instruction<OP_CODE::CALL, accumulator>(*_output);
+#endif
 
 		_passer.pop_all();
 	}
@@ -313,7 +380,7 @@ public:
 	 * @throws See pass() and pop().
 	*/
 	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call(varg_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, varg_member_passer & _passer, _Args2 &&... _args)
+	void call_virtual(varg_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, varg_member_passer & _passer, _Args2 &&... _args)
 	{
 		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
@@ -329,19 +396,27 @@ public:
 		} address;
 
 		address.member = _function;
+		
+#if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
+		auto _index = reinterpret_cast<int32_t>(address.address);
 
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, ecx>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, ecx>(*_output, _index);
+		}
+#elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
-#if defined(BIA_ARCHITECTURE_X86_32)
 		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
+		instruction<OP_CODE::CALL, accumulator>(*_output);
 #elif defined(BIA_ARCHITECTURE_X86_64)
 		instruction64<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int64_t>(address.address));
-#endif
-
 		instruction<OP_CODE::CALL, accumulator>(*_output);
+#endif
 
 		// Pop
 		_passer.pop_all();
-	}
+}
 	void write_test()
 	{
 		instruction<OP_CODE::XOR, eax, eax>(*_output);

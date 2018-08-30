@@ -86,15 +86,15 @@ private:
 
 		// Execute without parameters
 		if (!_count) {
-			_toolset.call(&framework::member::execute, _member, _destination);
+			_toolset.call_virtual(&framework::member::execute, _member, _destination);
 		} // Formatted execute
 		else if (_mixed) {
 			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
 
-			_toolset.call(&framework::member::execute_format, _member, _passer, _destination, _format_ptr, _count);
+			_toolset.call_virtual(&framework::member::execute_format, _member, _passer, _destination, _format_ptr, _count);
 		} // Only members as parameters
 		else {
-			_toolset.call(&framework::member::execute_count, _member, _passer, _destination, machine::platform::reserved_parameter(), _count);
+			_toolset.call_virtual(&framework::member::execute_count, _member, _passer, _destination, machine::platform::reserved_parameter(), _count);
 		}
 	}
 	/**

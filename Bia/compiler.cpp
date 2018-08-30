@@ -47,13 +47,13 @@ void compiler::test_compiler_value()
 
 		break;
 	case VT::MEMBER:
-		_toolset.call(&framework::member::test, _value.value().rt_member);
+		_toolset.call_virtual(&framework::member::test, _value.value().rt_member);
 		_value.set_return_test();
 		_toolset.write_test();
 
 		break;
 	case VT::TEMPORARY_MEMBER:
-		_toolset.call(&framework::member::test, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+		_toolset.call_virtual(&framework::member::test, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 		_value.set_return_test();
 		_toolset.write_test();
 
@@ -379,7 +379,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 		// Get refof/copyof
 		if (_function) {
-			_toolset.call(_function, _value.value().rt_member, T::to_temp_member(_counter.next()));
+			_toolset.call_virtual(_function, _value.value().rt_member, T::to_temp_member(_counter.next()));
 			_value.set_return_temp(_counter.current());
 		}
 	} else {
@@ -401,7 +401,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 				// Create temporary member destination
 				_value.set_return_temp(_counter.next());
 
-				_toolset.call(&framework::member::object_member, _member, T::to_temp_member(_counter.current()), _report->content.member);
+				_toolset.call_virtual(&framework::member::object_member, _member, T::to_temp_member(_counter.current()), _report->content.member);
 
 				break;
 			}
@@ -409,7 +409,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 			{
 				auto _member = T::to_temp_member(_value.value().rt_temp_member);
 
-				_toolset.call(&framework::member::object_member, _member, _member, _report->content.member);
+				_toolset.call_virtual(&framework::member::object_member, _member, _member, _report->content.member);
 
 				break;
 			}
@@ -521,24 +521,24 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			// Optimize common used constant values
 			switch (_expression.value().rt_int) {
 			case 0:
-				_toolset.call(&machine::link::instantiate_int_0, _destination);
+				_toolset.call_static(&machine::link::instantiate_int_0, _destination);
 
 				break;
 			case 1:
-				_toolset.call(&machine::link::instantiate_int_1, _destination);
+				_toolset.call_static(&machine::link::instantiate_int_1, _destination);
 
 				break;
 			case -1:
-				_toolset.call(&machine::link::instantiate_int_n1, _destination);
+				_toolset.call_static(&machine::link::instantiate_int_n1, _destination);
 
 				break;
 			default:
 			{
 				// Can be int32
 				if (_expression.is_int32()) {
-					_toolset.call(&machine::link::instantiate_int32, _destination, static_cast<int32_t>(_expression.value().rt_int));
+					_toolset.call_static(&machine::link::instantiate_int32, _destination, static_cast<int32_t>(_expression.value().rt_int));
 				} else {
-					_toolset.call(&machine::link::instantiate_int64, _destination, _expression.value().rt_int);
+					_toolset.call_static(&machine::link::instantiate_int64, _destination, _expression.value().rt_int);
 				}
 
 				break;
@@ -548,23 +548,23 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
+			_toolset.call_static(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
 
 			break;
 		case VT::STRING:
-			_toolset.call(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
+			_toolset.call_static(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
 
 			break;
 		case VT::MEMBER:
-			_toolset.call(&framework::member::clone, _expression.value().rt_member, _destination);
+			_toolset.call_virtual(&framework::member::clone, _expression.value().rt_member, _destination);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
+			_toolset.call_virtual(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
 
 			break;
 		case VT::TEST_VALUE_REGISTER:
-			_toolset.call(&machine::link::instantiate_int32, _destination, T::test_result_value());
+			_toolset.call_static(&machine::link::instantiate_int32, _destination, T::test_result_value());
 
 			break;
 		default:
@@ -644,39 +644,39 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 		{
 			// Can be int32
 			if (_value.is_int32()) {
-				_toolset.call(&machine::link::print_int32, static_cast<int32_t>(_value.value().rt_int));
+				_toolset.call_static(&machine::link::print_int32, static_cast<int32_t>(_value.value().rt_int));
 			} else {
-				_toolset.call(&machine::link::print_int64, _value.value().rt_int);
+				_toolset.call_static(&machine::link::print_int64, _value.value().rt_int);
 			}
 
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&machine::link::print_double, _value.value().rt_double);
+			_toolset.call_static(&machine::link::print_double, _value.value().rt_double);
 
 			break;
 		case VT::STRING:
-			_toolset.call(&machine::link::print_string, _value.value().rt_string.data);
+			_toolset.call_static(&machine::link::print_string, _value.value().rt_string.data);
 
 			break;
 		case VT::MEMBER:
-			_toolset.call(&framework::member::print, _value.value().rt_member);
+			_toolset.call_virtual(&framework::member::print, _value.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::print, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+			_toolset.call_virtual(&framework::member::print, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 
 			break;
 		case VT::TEST_VALUE_REGISTER:
-			_toolset.call(&machine::link::print_bool, machine::platform::toolset::test_result_value());
+			_toolset.call_static(&machine::link::print_bool, machine::platform::toolset::test_result_value());
 
 			break;
 		case VT::TEST_VALUE_CONSTANT:
 		{
 			if (_value.value().rt_test_result) {
-				_toolset.call(&machine::link::print_true);
+				_toolset.call_static(&machine::link::print_true);
 			} else {
-				_toolset.call(&machine::link::print_false);
+				_toolset.call_static(&machine::link::print_false);
 			}
 
 			break;
