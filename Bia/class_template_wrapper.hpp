@@ -30,7 +30,7 @@ public:
 		// Set the active allocator
 		machine::machine_context::_active_allocator = _context.allocator();
 
-		_template->set_constructor<_Args...>();
+		_template->template set_constructor<_Args...>();
 
 		return *this;
 	}

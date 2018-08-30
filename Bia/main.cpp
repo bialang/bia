@@ -100,9 +100,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-print 34.
 hey()
-print 43.
 
 
 )"";

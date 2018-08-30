@@ -14,7 +14,7 @@
 #endif
 
 //Operating System
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
 #define BIA_OS_WINDOWS 1
 #elif defined(__linux__)
 #define BIA_OS_LINUX 1
