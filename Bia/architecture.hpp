@@ -75,44 +75,39 @@ inline size_t instruction(stream::output_stream & _output)
 template<OP_CODE _Op_code, typename _Register, typename _Offset>
 inline size_t instruction(stream::output_stream & _output, _Offset _offset)
 {
-	static_assert(_Op_code == OP_CODE::PUSH, "This opcode is not supported.");
+	static_assert(_Op_code == OP_CODE::PUSH || _Op_code == OP_CODE::CALL, "This opcode is not supported.");
 	static_assert(std::is_same<_Offset, int8_t>::value || std::is_same<_Offset, int32_t>::value, "Offset must be int8_t or int32_t.");
 
 	size_t _written = 0;
+	constexpr auto _mode = std::is_same<_Offset, int8_t>::value ? 0100 : 0200;
+
+#if defined(BIA_ARCHITECTURE_X86_32)
+	static_assert(_Register::size() == 32, "Register is not supported.");
+#elif defined(BIA_ARCHITECTURE_X86_64)
+	static_assert(_Register::size() == 64, "Register is not supported.");
+
+	if (register_prefix<_Register>()) {
+		_written = _output.write_all(register_prefix<_Register>());
+	}
+#endif	
 
 	switch (_Op_code) {
 	case OP_CODE::PUSH:
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
-		static_assert(!(_Op_code == OP_CODE::PUSH && _Register::size() != 32), "Register is not supported.");
 		constexpr auto _special_register = std::is_same<_Register, esp>::value;
 #elif defined(BIA_ARCHITECTURE_X86_64)
-		static_assert(!(_Op_code == OP_CODE::PUSH && _Register::size() != 64), "Register is not supported.");
 		constexpr auto _special_register = std::is_same<_Register, rsp>::value;
-
-		if (register_prefix<_Register>()) {
-			_written = _output.write_all(register_prefix<_Register>());
-		}
 #endif
 
 		if (_special_register) {
-			// 8 bit offset
-			if (std::is_same<int8_t, _Offset>::value) {
-				return _written + _output.write_all(0xff_8, static_cast<uint8_t>(0160 | _Register::value()), 0x24_8, _offset);
-			}
-
-			// 32 bit offset
-			return _written + _output.write_all(0xff_8, static_cast<uint8_t>(0260 | _Register::value()), 0x24_8, _offset);
+			return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 060 | _Register::value()), 0x24_8, _offset);
 		}
 
-		// 8 bit offset
-		if (std::is_same<int8_t, _Offset>::value) {
-			return _written + _output.write_all(0xff_8, static_cast<uint8_t>(0160 | _Register::value()), _offset);
-		}
-
-		// 32 bit offset
-		return _written + _output.write_all(0xff_8, static_cast<uint8_t>(0260 | _Register::value()), _offset);
+		return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 060 | _Register::value()), _offset);
 	}
+	case OP_CODE::CALL:
+		return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 020 | _Register::value()), _offset);
 	}
 
 	BIA_IMPLEMENTATION_ERROR;
