@@ -29,6 +29,9 @@ public:
 	typedef _Ty value_type;
 	/** The type of the allocated pointers. */
 	typedef _Ty* pointer;
+	typedef const _Ty* const_pointer;
+	typedef _Ty& reference;
+	typedef const _Ty& const_reference;
 	/** The type of the size of the pointers. */
 	typedef memory::size_type size_type;
 
