@@ -53,57 +53,57 @@ public:
 	object(const data_type & _data) noexcept : _data(_data)
 	{
 	}
-	virtual void undefine() noexcept override
+	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
 	{
 		replace_this<undefined_member>();
 	}
-	virtual void print() const override
+	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
 		printf("<%s at %p>\n", typeid(_Ty).name(), this);
 	}
-	virtual void copy(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
 		instance_holder<_Ty> _instance(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().first.get()), true);
 
 		_destination->replace_this<object<_Ty>>(_instance, _data.get().second);
 	}
-	virtual void refer(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
 		_destination->replace_this<object<_Ty>>(_data);
 	}
-	virtual void clone(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
 		refer(_destination);
 	}
-	virtual void execute(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual void execute_count(member * _destination, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual void execute_format(member * _destination, const char * _format, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual void operator_call(member * _destination, operator_type _operator, const member * _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual void operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual void operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual void operator_call_double(member * _destination, operator_type _operator, double _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual void object_member(member * _destination, machine::string_manager::name_type _name) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override
 	{
 		// Get instance, because this could be _destination
 		auto _instance = _data.get().first;
@@ -119,23 +119,23 @@ public:
 	{
 		return F_NONE;
 	}
-	virtual int32_t test() const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual int32_t test_member(operator_type _operator, member * _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual int32_t test_int32(operator_type _operator, int32_t _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual int32_t test_int64(operator_type _operator, int64_t _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
-	virtual int32_t test_double(operator_type _operator, double _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override
 	{
 		BIA_NOT_IMPLEMENTED;
 	}

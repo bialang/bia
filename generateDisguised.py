@@ -16,14 +16,68 @@ def move_position(s):
 	return re.sub(""" \* \d+\)""", c, s)
 
 
-f = open("Bia/disguised_caller.hpp", "wb")
+h = open("Bia/disguised_caller.hpp", "wb")
+f = open("Bia/disguised_caller_source.hpp", "wb")
 
+h.write(b"""#pragma once
+
+#include <cstdarg>
+#include <cstdint>
+#include <type_traits>
+
+#include "member.hpp"
+#include "allocator.hpp"
+#include "type_traits.hpp"
+
+
+namespace bia
+{
+namespace force
+{
+
+template<typename _Return>
+_Return format_cast(va_list & _args, const char *& _format);
+
+void disguised_caller(void(*_function)(), framework::member * _destination);
+
+template<typename _Return>
+void disguised_caller(_Return(*_function)(), framework::member * _destination);
+
+template<typename _Return, typename... _Args>
+void disguised_caller(_Return(*)(_Args...), framework::member * _destination);
+
+template<typename _Class>
+void disguised_caller(void(_Class::*_function)(), _Class * _instance, framework::member * _destination);
+
+template<typename _Class>
+void disguised_caller(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination);
+
+template<typename _Return, typename _Class>
+void disguised_caller(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination);
+
+template<typename _Return, typename _Class>
+void disguised_caller(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination);
+
+template<typename _Return, typename _Class, typename... _Args>
+void disguised_caller(_Return(_Class::*)(_Args...), _Class * _instance, framework::member * _destination);
+
+template<typename _Return, typename _Class, typename... _Args>
+void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * _instance, framework::member * _destination);
+
+template<typename _Class>
+machine::memory::allocation<_Class> disguised_caller();
+
+template<typename _Class, typename... _Args>
+typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocation<_Class>>::type disguised_caller();
+
+""")
 f.write(b"""#pragma once
 
 #include <cstdarg>
 #include <cstdint>
 #include <type_traits>
 
+#include "disguised_caller.hpp"
 #include "member.hpp"
 #include "allocator.hpp"
 #include "exception.hpp"
@@ -272,6 +326,10 @@ for type in ["count", "format"]:
 		for i in range(0, max_args + 1):
 			filler["arg_count"] = i
 
+			h.write("""{template_begin}{template_middle}{template_end}
+{function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list _args);
+
+""".format(**filler).encode())
 			f.write("""{template_begin}{template_middle}{template_end}
 inline {function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list _args)
 {{
@@ -302,5 +360,7 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 				filler["template_begin"] = "template<"
 				filler["template_end"] = ">"
 
+h.write(b"}\n}")
 f.write(b"}\n}")
+h.close()
 f.close()

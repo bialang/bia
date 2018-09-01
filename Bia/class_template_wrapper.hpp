@@ -30,7 +30,7 @@ public:
 		// Set the active allocator
 		machine::machine_context::_active_allocator = _context.allocator();
 
-		_template->set_constructor<_Args...>();
+		_template->template set_constructor<_Args...>();
 
 		return *this;
 	}
@@ -40,7 +40,7 @@ public:
 		// Set the active allocator
 		machine::machine_context::_active_allocator = _context.allocator();
 
-		_template->emplace_member<framework::executable::static_function<_Return, _Args...>>(_context.name_address(_name), _function);
+		_template->template emplace_member<framework::executable::static_function<_Return, _Args...>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
@@ -50,7 +50,7 @@ public:
 		// Set the active allocator
 		machine::machine_context::_active_allocator = _context.allocator();
 
-		_template->emplace_member<framework::executable::member_function<_Return(_Class::*)(_Args...)>>(_context.name_address(_name), _function);
+		_template->template emplace_member<framework::executable::member_function<_Return(_Class::*)(_Args...)>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
@@ -60,7 +60,7 @@ public:
 		// Set the active allocator
 		machine::machine_context::_active_allocator = _context.allocator();
 
-		_template->emplace_member<framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_context.name_address(_name), std::forward<_Lambda>(_lambda));
+		_template->template emplace_member<framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_context.name_address(_name), std::forward<_Lambda>(_lambda));
 
 		return *this;
 	}

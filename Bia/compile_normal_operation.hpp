@@ -162,9 +162,9 @@ private:
 	void function_caller_helper(_Function && _function, _Member && _member, machine::platform::toolset::temp_result * _destination, framework::operator_type _operator, _Right && _right)
 	{
 		if (_destination) {
-			_toolset.call(std::forward<_Function>(_function), std::forward<_Member>(_member), *_destination, _operator, std::forward<_Right>(_right));
+			_toolset.call_virtual(std::forward<_Function>(_function), std::forward<_Member>(_member), *_destination, _operator, std::forward<_Right>(_right));
 		} else {
-			_toolset.call(std::forward<_Function>(_function), std::forward<_Member>(_member), nullptr, _operator, std::forward<_Right>(_right));
+			_toolset.call_virtual(std::forward<_Function>(_function), std::forward<_Member>(_member), nullptr, _operator, std::forward<_Right>(_right));
 		}
 	}
 	/**
@@ -194,12 +194,12 @@ private:
 		if (std::is_same<typename std::remove_reference<_Left>::type, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
-				_toolset.call(&machine::link::operation_int32, static_cast<int32_t>(_left), _destination, _operator, _right);
+				_toolset.call_static(&machine::link::operation_int32, _destination, _operator, _right, static_cast<int32_t>(_left));
 			} else {
-				_toolset.call(&machine::link::operation_int64, _left, _destination, _operator, _right);
+				_toolset.call_static(&machine::link::operation_int64, _destination, _operator, _right, _left);
 			}
 		} else {
-			_toolset.call(&machine::link::operation_double, _left, _destination, _operator, _right);
+			_toolset.call_static(&machine::link::operation_double, _destination, _operator, _right, _left);
 		}
 	}
 	/**

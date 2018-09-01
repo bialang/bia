@@ -8,11 +8,11 @@
 #include "disassembler.hpp"
 #include "static_function.hpp"
 #include "bia.hpp"
+#include "disguised_caller_source.hpp"
 #include "class_template.hpp"
 #include <chrono>
 #include <iostream>
 #include <regex>
-#include <Windows.h>
 
 
 struct printer
@@ -89,22 +89,24 @@ int main()
 			static printer _p(3);
 			return _p;
 		});
-		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
+
+		set_lambda(_context, "hey", []() {
+			puts("hey world");
+		});
+		//set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		//SetConsoleOutputCP(65001);
 
 		// Script
 		char _script[] = u8R""(
 
-var i = printer(3333).hi
+hey()
 
-print "hey"
-i()
 
 )"";
 
 		// Compile
-		bia::stream::buffer_input_stream _input(std::shared_ptr<const void>(_script, [](const void*) {}), sizeof(_script) - 1);
+		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
 		bia::stream::buffer_output_stream _output;
 		bia::compiler::compiler _compiler(_output, _context);
 
@@ -115,10 +117,19 @@ i()
 		_compiler.finalize();
 
 		// Disassemble
-		bia::machine::disassembler _disassembler(&_context);
+
+		for (auto i = 0; i < _output.size(); ++i) {
+			printf("%02x ", static_cast<uint8_t>(_output.buffer()[i]));
+
+			if ((i + 1) % 10 == 0) {
+				puts("");
+			}
+		}
+		puts("");
+	/*	bia::machine::disassembler _disassembler(&_context);
 
 		_disassembler.disassemble(_output.buffer(), _output.size());
-
+		*/
 		system("pause");
 
 		// Run

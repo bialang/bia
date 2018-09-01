@@ -14,6 +14,69 @@ namespace bia
 namespace machine
 {
 
+inline const char * register_name32(int _register)
+{
+	switch (_register) {
+	case 0:
+		return "eax";
+	case 1:
+		return "ecx";
+	case 2:
+		return "edx";
+	case 4:
+		return "esp";
+	case 5:
+		return "ebp";
+	default:
+		return "unkown";
+	}
+}
+
+#if defined(BIA_ARCHITECTURE_X86_32)
+inline const char * register_name(int _register)
+{
+	return register_name32(_register);
+}
+#elif defined(BIA_ARCHITECTURE_X86_64)
+inline const char * register_name64(int _register)
+{
+	switch (_register) {
+	case 0:
+		return "rax";
+	case 1:
+		return "rcx";
+	case 4:
+		return "rsp";
+	case 5:
+		return "rbp";
+	default:
+		return "unkown";
+	}
+}
+
+inline const char * register_xmm(int _register)
+{
+	switch (_register) {
+	case 0:
+		return "xmm0";
+	case 1:
+		return "xmm1";
+	case 2:
+		return "xmm2";
+	case 3:
+		return "xmm3";
+	default:
+		return "unkown";
+	}
+}
+
+inline const char * register_name(int _register)
+{
+	return register_name64(_register);
+}
+#endif
+
+
 disassembler::instruction_list disassembler::_instructions = disassembler::init_instructions();
 disassembler::function_map disassembler::_function_map = disassembler::init_function_map();
 
@@ -24,7 +87,7 @@ disassembler::disassembler(const void * _context_address) noexcept
 
 void disassembler::disassemble(const void * _code, size_t _size) const
 {
-	auto _buffer = static_cast<const uint8_t*>(_code);
+	/*auto _buffer = static_cast<const int8_t*>(_code);
 
 	while (_size) {
 		// Check all instruction
@@ -36,7 +99,17 @@ void disassembler::disassemble(const void * _code, size_t _size) const
 
 				//This it the instruction
 				if ((_op_code & _instruction.mask) == _instruction.op_code) {
-					printf("%p: ", _buffer);
+					printf("%p:", _buffer);
+
+					for (auto i = 0; i < 8; ++i) {
+						if (i < _instruction.size) {
+							printf(" %02x", static_cast<uint8_t>(_buffer[i]));
+						} else {
+							printf("   ");
+						}
+					}
+
+					printf(" | ");
 
 					_instruction.callback(this, _buffer);
 
@@ -55,7 +128,7 @@ void disassembler::disassemble(const void * _code, size_t _size) const
 		break;
 
 	gt_continue:;
-	}
+	}*/
 }
 
 const char * disassembler::name(const void * _address) const noexcept
@@ -86,162 +159,224 @@ disassembler::instruction_list disassembler::init_instructions()
 #else
 		_value = (_value & 0x00000000ffffffff) << 32 | (_value & 0xffffffff00000000) >> 32;
 		_value = (_value & 0x0000ffff0000ffff) << 16 | (_value & 0xffff0000ffff0000) >> 16;
-		_value = (_value & 0x00ff00ff00ff00ff) << 8  | (_value & 0xff00ff00ff00ff00) >> 8;
+		_value = (_value & 0x00ff00ff00ff00ff) << 8 | (_value & 0xff00ff00ff00ff00) >> 8;
 
 		return _value;
 #endif
 	};
-	auto _instruction = [&](uint64_t _op_code, uint8_t _first_bits, uint8_t _instruction_size, instruction::callback_function && _callback) {
+	auto _instruction = [&](uint64_t _op_code, uint64_t _mask, uint8_t _instruction_size, instruction::callback_function && _callback) {
 		instruction _instruction{};
 
 		_instruction.op_code = _byteswap(_op_code) >> (8 - _instruction_size) * 8;
-		_instruction.mask = ~(~0ull << (_first_bits & 0xf8)) | (0xff00ull >> (_first_bits & 0x7) & 0xff) << (_first_bits & 0xf8);
+		_instruction.mask = _byteswap(_mask) >> (8 - _instruction_size) * 8;
+		//_instruction.mask = ~(~0ull << (_first_bits & 0xf8)) | (0xff00ull >> (_first_bits & 0x7) & 0xff) << (_first_bits & 0xf8);
 		_instruction.callback = std::move(_callback);
 		_instruction.size = _instruction_size;
 
 		_instructions.emplace_back(std::move(_instruction));
 	};
 
-#if defined(BIA_ARCHITECTURE_X86)
-	static auto _register_name = [](uint8_t _register) {
-		switch (_register) {
-		case 0:
-			return "eax";
-		case 1:
-			return "ecx";
-		case 4:
-			return "esp";
-		case 5:
-			return "ebp";
-		default:
-			return "unkown";
-		}
-	};
-
+/*#if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
 	// Only opcode
-	_instruction(0xc9, 8, 1, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		puts("leave");
-	});
-	_instruction(0xc3, 8, 1, [](const disassembler * _disassembler, const uint8_t * _buffer) {
+	_instruction(0xc3, 0xff, 1, [](const disassembler * _disassembler, const int8_t * _buffer) {
 		puts("ret");
 	});
 
 	// Opcode + register
-	_instruction(0x50, 5, 1, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("push\t%s\n", _register_name(*_buffer & 07));
+	_instruction(0x50, 0xf8, 1, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("push\t%s\n", register_name(*_buffer & 07));
 	});
-	_instruction(0xffb42400000000, 24, 7, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("push\t[esp%+i]\n", *reinterpret_cast<const int32_t*>(_buffer + 3));
+	_instruction(0x58, 0xf8, 1, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("pop\t%s\n", register_name(*_buffer & 07));
 	});
-	_instruction(0xff0000000000 | 0260ll << 32, 13, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("push\t[%s%+i]\n", _register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+	_instruction(0xff00 | 0320, 0xfff8, 2, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("call\t%s\n", register_name(_buffer[1] & 07));
 	});
-	_instruction(0xff742400, 24, 4, [](const disassembler * _disassembler, const uint8_t * _buffer) {
+
+	// Opcode + register + offset
+	_instruction(0xff002400 | 0164 << 16, 0xffffff00, 4, [](const disassembler * _disassembler, const int8_t * _buffer) {
 		printf("push\t[esp%+hhi]\n", _buffer[3]);
 	});
-	_instruction(0xff0000 | 0160 << 8, 13, 3, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("push\t[%s%+hhi]\n", _register_name(_buffer[1] & 07), _buffer[2]);
+	_instruction((0xff0024LL | 0264 << 8) << 32, 0xffffffLL << 32, 7, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("push\t[%s%+i]\n", register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 3));
 	});
-	_instruction(0xff00 | 0320, 13, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("call\t%s\n", _register_name(_buffer[1] & 07));
+	_instruction((0xff00 | 0160) << 8, 0xfff800, 3, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("push\t[%s%+hhi]\n", register_name(_buffer[1] & 07), _buffer[2]);
+	});
+	_instruction((0xff00LL | 0260) << 32, 0xfff8LL << 32, 6, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("push\t[%s%+i]\n", register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
 	});
 
 	// Opcode + register + register
-	_instruction(0x8900 | 0300, 10, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("mov\t%s,%s\n", _register_name(_buffer[1] & 07), _register_name(_buffer[1] >> 3 & 07));
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction(0x488900 | 0300, 0xffffc0, 3, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,%s\n", register_name64(_buffer[2] & 07), register_name64(_buffer[2] >> 3 & 07));
 	});
-	_instruction(0x8b0000 | 0100 << 8, 10, 3, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("mov\t%s,[%s%+hhi]\n", _register_name(_buffer[1] >> 3 & 07), _register_name(_buffer[1] & 07), _buffer[2]);
+#endif
+	_instruction(0x8900 | 0300, 0xffc0, 2, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,%s\n", register_name32(_buffer[1] & 07), register_name32(_buffer[1] >> 3 & 07));
 	});
-	_instruction(0x8b0000000000 | 0200ll << 32, 10, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("mov\t%s,[%s%+i]\n", _register_name(_buffer[1] >> 3 & 07), _register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction(0x483100 | 0300, 0xffffc0, 3, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("xor\t%s,%s\n", register_name64(_buffer[2] & 07), register_name64(_buffer[2] >> 3 & 07));
 	});
-	_instruction(0x8400 | 0300, 10, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("test_8\t%s,%s\n", _register_name(_buffer[1] & 07), _register_name(_buffer[1] >> 3 & 07));
-	});
-	_instruction(0x8500 | 0300, 10, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("test\t%s,%s\n", _register_name(_buffer[1] & 07), _register_name(_buffer[1] >> 3 & 07));
-	});
-	_instruction(0x8d0000 | 0100 << 8, 10, 3, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("lea\t%s,[%s%+hhi]\n", _register_name(_buffer[1] >> 3 & 07), _register_name(_buffer[1] & 07), _buffer[2]);
-	});
-	_instruction(0x8d0000000000 | 0200ll << 32, 10, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("lea\t%s,[%s%+i]\n", _register_name(_buffer[1] >> 3 & 07), _register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+#endif
+	_instruction(0x3100 | 0300, 0xffc0, 2, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("xor\t%s,%s\n", register_name32(_buffer[1] & 07), register_name32(_buffer[1] >> 3 & 07));
 	});
 
+	// Opcode + destination + source + source offset
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction(0xf20f100000 | 0100 << 8, 0xffffffc000, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("movsd\t%s,[%s%+hhi]\n", register_xmm(_buffer[3] >> 3 & 07), register_name64(_buffer[3] & 07), _buffer[4]);
+	});
+	_instruction((0xf20f1000LL | 0200) << 32, 0xffffffc0LL << 32, 8, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("movsd\t%s,[%s%+i]\n", register_xmm(_buffer[3] >> 3 & 07), register_name64(_buffer[3] & 07), *reinterpret_cast<const int32_t*>(_buffer + 4));
+	});
+	_instruction(0x488b002400 | 0104 << 16, 0xffffc7ff00, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,[rsp%+hhi]\n", register_name64(_buffer[2] >> 3 & 07), _buffer[4]);
+	});
+	_instruction((0x488b0024LL | 0204 << 8) << 32, 0xffffc7ffLL << 32, 8, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,[rsp%+i]\n", register_name64(_buffer[2] >> 3 & 07), *reinterpret_cast<const int32_t*>(_buffer + 4));
+	});
+	_instruction((0x488b00 | 0100) << 8, 0xffffc000, 4, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,[%s%+hhi]\n", register_name64(_buffer[2] >> 3 & 07), register_name64(_buffer[2] & 07), _buffer[3]);
+	});
+	_instruction((0x488b00LL | 0200) << 32, 0xffffc0LL << 32, 7, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,[%s%+i]\n", register_name64(_buffer[2] >> 3 & 07), register_name64(_buffer[2] & 07), *reinterpret_cast<const int32_t*>(_buffer + 3));
+	});
+#endif
+	_instruction(0x8b002400 | 0104 << 16, 0xffc7ff00, 4, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,[%s%+hhi]\n", register_name32(_buffer[1] >> 3 & 07), register_name(_buffer[1] & 07), _buffer[3]);
+	});
+	_instruction((0x8b0024LL | 0204 << 8) << 32, 0xffc7ffLL << 32, 7, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,[%s%+i]\n", register_name32(_buffer[1] >> 3 & 07), register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 3));
+	});
+	_instruction((0x8b00 | 0100) << 8, 0xffc000, 3, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,[%s%+hhi]\n", register_name32(_buffer[1] >> 3 & 07), register_name(_buffer[1] & 07), _buffer[2]);
+	});
+	_instruction((0x8b00LL | 0200) << 32, 0xffc0LL << 32, 6, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,[%s%+i]\n", register_name32(_buffer[1] >> 3 & 07), register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+	});
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction(0x488d002400 | 0104 << 16, 0xffffc7ff00, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("lea\t%s,[rsp%+hhi]\n", register_name64(_buffer[2] >> 3 & 07), _buffer[4]);
+	});
+	_instruction((0x488d0024LL | 0204 << 8) << 32, 0xffffc7ffLL << 32, 8, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("lea\t%s,[rsp%+i]\n", register_name64(_buffer[2] >> 3 & 07), *reinterpret_cast<const int32_t*>(_buffer + 4));
+	});
+	_instruction((0x488d00 | 0100) << 8, 0xffffc000, 4, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("lea\t%s,[%s%+hhi]\n", register_name64(_buffer[2] >> 3 & 07), register_name64(_buffer[2] & 07), _buffer[3]);
+	});
+	_instruction((0x488d00LL | 0200) << 32, 0xffffc0LL << 32, 7, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("lea\t%s,[%s%+i]\n", register_name64(_buffer[2] >> 3 & 07), register_name64(_buffer[2] & 07), *reinterpret_cast<const int32_t*>(_buffer + 3));
+	});
+#endif
+	_instruction(0x8d002400 | 0104 << 16, 0xffc7ff00, 4, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("lea\t%s,[%s%+hhi]\n", register_name32(_buffer[1] >> 3 & 07), register_name(_buffer[1] & 07), _buffer[3]);
+	});
+	_instruction((0x8d0024LL | 0204 << 8) << 32, 0xffc7ffLL << 32, 7, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("lea\t%s,[%s%+i]\n", register_name32(_buffer[1] >> 3 & 07), register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 3));
+	});
+	_instruction((0x8d00 | 0100) << 8, 0xffc000, 3, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("lea\t%s,[%s%+hhi]\n", register_name32(_buffer[1] >> 3 & 07), register_name(_buffer[1] & 07), _buffer[2]);
+	});
+	_instruction((0x8d00LL | 0200) << 32, 0xffc0LL << 32, 6, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("lea\t%s,[%s%+i]\n", register_name32(_buffer[1] >> 3 & 07), register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+	});
 
-	// Opcode + register + 32 bit constant
-	_instruction(0xb800000000, 5, 5, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		auto szName = _disassembler->name(*reinterpret_cast<void* const*>(_buffer + 1));
-
-		if (szName)
-			printf("mov\t%s,%s at 0x%x\n", _register_name(*_buffer & 07), szName, *reinterpret_cast<const int32_t*>(_buffer + 1));
-		else
-			printf("mov\t%s,%i\n", _register_name(*_buffer & 07), *reinterpret_cast<const int32_t*>(_buffer + 1));
+	// Opcode + register + imm8
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction((0x488300 | 0300) << 8, 0xfffff800, 4, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("add\t%s,%hhi\n", register_name64(_buffer[2] & 07), _buffer[3]);
 	});
-	_instruction(0x0500000000, 8, 5, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("add\teax,%i\n", *reinterpret_cast<const int32_t*>(_buffer + 1));
+#endif
+	_instruction((0x8300 | 0300) << 8, 0xfff800, 3, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("add\t%s,%hhi\n", register_name32(_buffer[1] & 07), _buffer[2]);
 	});
-	_instruction(0x810000000000 | 0300ll << 32, 13, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("add\t%s,%i\n", _register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction((0x488300 | 0350) << 8, 0xfffff800, 4, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("sub\t%s,%hhi\n", register_name64(_buffer[2] & 07), _buffer[3]);
 	});
-	_instruction(0x2d00000000, 8, 5, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("sub\teax,%i\n", *reinterpret_cast<const int32_t*>(_buffer + 1));
-	});
-	_instruction(0x810000000000 | 0350ll << 32, 13, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("sub\t%s,%i\n", _register_name(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+#endif
+	_instruction((0x8300 | 0350) << 8, 0xfff800, 3, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("sub\t%s,%hhi\n", register_name32(_buffer[1] & 07), _buffer[2]);
 	});
 
-	// Opcode + register + 8 bit constant
-	_instruction(0x0400, 8, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("add\teax,%hhi\n", _buffer[1]);
+	// Opcode + register + imm32
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction((0x48c700LL | 0300) << 32, 0xfffff8LL << 32, 7, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		if (auto _name = _disassembler->name(*reinterpret_cast<void* const*>(_buffer + 3))) {
+			printf("mov\t%s, %s at 0x%x\n", register_name64(_buffer[2] & 07), _name, *reinterpret_cast<const int32_t*>(_buffer + 3));
+		} else {
+			printf("mov\t%s,%i\n", register_name64(_buffer[2] & 07), *reinterpret_cast<const int32_t*>(_buffer + 3));
+		}
 	});
-	_instruction(0x830000 | 0300 << 8, 13, 3, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("add\t%s,%hhi\n", _register_name(_buffer[1] & 07), _buffer[2]);
+#endif
+	_instruction(0xb8LL << 32, 0xf8LL << 32, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		if (auto _name = _disassembler->name(*reinterpret_cast<void* const*>(_buffer + 1))) {
+			printf("mov\t%s, %s at 0x%x\n", register_name32(*_buffer & 07), _name, *reinterpret_cast<const int32_t*>(_buffer + 1));
+		} else {
+			printf("mov\t%s,%i\n", register_name32(*_buffer & 07), *reinterpret_cast<const int32_t*>(_buffer + 1));
+	}
 	});
-	_instruction(0x2c00, 8, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("sub\teax,%hhi\n", _buffer[1]);
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction((0x488100LL | 0300) << 32, 0xfffff8LL << 32, 7, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("add\t%s,%i\n", register_name64(_buffer[2] & 07), *reinterpret_cast<const int32_t*>(_buffer + 3));
 	});
-	_instruction(0x830000 | 0350 << 8, 13, 3, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("sub\t%s,%hhi\n", _register_name(_buffer[1] & 07), _buffer[2]);
+#endif
+	_instruction(0x05LL << 32, 0xffLL << 32, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("add\tesp,%i\n", *reinterpret_cast<const int32_t*>(_buffer + 1));
+	});
+	_instruction((0x8100LL | 0300) << 32, 0xfff8LL << 32, 6, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("add\t%s,%i\n", register_name32(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
+	});
+#if defined(BIA_ARCHITECTURE_X86_64)
+	_instruction((0x488100LL | 0350) << 32, 0xfffff8LL << 32, 7, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("sub\t%s,%i\n", register_name64(_buffer[2] & 07), *reinterpret_cast<const int32_t*>(_buffer + 3));
+	});
+#endif
+	_instruction(0x2dLL << 32, 0xffLL << 32, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("sub\tesp,%i\n", *reinterpret_cast<const int32_t*>(_buffer + 1));
+	});
+	_instruction((0x8100LL | 0350) << 32, 0xfff8LL << 32, 6, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("sub\t%s,%i\n", register_name32(_buffer[1] & 07), *reinterpret_cast<const int32_t*>(_buffer + 2));
 	});
 
-	// Opcode + 32 bit constant
-	_instruction(0x6800000000, 8, 5, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		auto szName = _disassembler->name(*reinterpret_cast<void* const*>(_buffer + 1));
-
-		if (szName)
-			printf("push\t%s at 0x%x\n", szName, *reinterpret_cast<const int32_t*>(_buffer + 1));
-		else
-			printf("push\t%i\n", *reinterpret_cast<const int32_t*>(_buffer + 1));
-	});
-	_instruction(0xe900000000, 8, 5, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("jmp\t%p\n", _buffer + 5 + *reinterpret_cast<const int32_t*>(_buffer + 1));
-	});
-	_instruction(0x0f8400000000, 16, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("je\t%p\n", _buffer + 6 + *reinterpret_cast<const int32_t*>(_buffer + 2));
-	});
-	_instruction(0x0f8500000000, 16, 6, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("jne\t%p\n", _buffer + 6 + *reinterpret_cast<const int32_t*>(_buffer + 2));
-	});
-
-	// Opcode + 8 bit constant
-	_instruction(0x6a00, 8, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("push\t%hhi\n", static_cast<int8_t>(_buffer[1]));
-	});
-	_instruction(0xeb00, 8, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("jmp\t%p\n", _buffer + 2 + static_cast<int8_t>(_buffer[1]));
-	});
-	_instruction(0x7400, 8, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("je\t%p\n", _buffer + 2 + static_cast<int8_t>(_buffer[1]));
-	});
-	_instruction(0x7500, 8, 2, [](const disassembler * _disassembler, const uint8_t * _buffer) {
-		printf("jne\t%p\n", _buffer + 2 + static_cast<int8_t>(_buffer[1]));
+	// Opcode + register + imm64
+#if defined(BIA_ARCHITECTURE_X86_64)
+//#error "fix me"
+	_instruction(0x48b8LL << 64, 0xfff8LL << 64, 10, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("mov\t%s,%lli\n", register_name64(_buffer[1] & 07), *reinterpret_cast<const int64_t*>(_buffer + 2));
 	});
 #endif
 
+	// Opcode + imm8
+	_instruction(0x6a00, 0xff00, 2, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("push\t%hhi\n", _buffer[1]);
+	});
+
+	// Opcode + imm32
+	_instruction(0x68LL << 32, 0xffLL << 32, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		if (auto _name = _disassembler->name(*reinterpret_cast<void* const*>(_buffer + 1))) {
+			printf("push\t%s at 0x%x\n", _name, *reinterpret_cast<const int32_t*>(_buffer + 1));
+		} else {
+			printf("push\t%i\n", *reinterpret_cast<const int32_t*>(_buffer + 1));
+		}
+	});
+	_instruction(0xe9LL << 32, 0xffLL << 32, 5, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("jmp\t%i\n", _buffer + 5 + *reinterpret_cast<const int32_t*>(_buffer + 1));
+	});
+	_instruction(0x0f84LL << 32, 0xffffLL << 32, 6, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("je\t%p\n", _buffer + 6 + *reinterpret_cast<const int32_t*>(_buffer + 2));
+	});
+	_instruction(0x0f85LL << 32, 0xffffLL << 32, 6, [](const disassembler * _disassembler, const int8_t * _buffer) {
+		printf("jne\t%p\n", _buffer + 6 + *reinterpret_cast<const int32_t*>(_buffer + 2));
+	});
+#endif
+*/
 	return _instructions;
-}
+	}
 
 disassembler::function_map disassembler::init_function_map()
 {
@@ -299,5 +434,5 @@ disassembler::function_map disassembler::init_function_map()
 	return _function_map;
 }
 
-}
+		}
 }

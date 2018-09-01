@@ -14,7 +14,7 @@
 #endif
 
 //Operating System
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
 #define BIA_OS_WINDOWS 1
 #elif defined(__linux__)
 #define BIA_OS_LINUX 1
@@ -24,9 +24,9 @@
 
 // Architecture
 #if defined(__i386) || defined(_M_IX86)
-#define BIA_ARCHITECTURE_X86
-//#elif defined(__x86_64__) || defined(_M_X64)
-//#define BIA_ARCHITECTURE_X86_64
+#define BIA_ARCHITECTURE_X86_32 1
+#elif defined(__x86_64__) || defined(_M_X64)
+#define BIA_ARCHITECTURE_X86_64 1
 #else
 #error "Unsupported architecture."
 #endif
@@ -35,19 +35,15 @@
 #if defined(BIA_COMPILER_MSVC)
 
 // Calling conventions
-#define BIA_STATIC_CALLING_CONVETION(_return, _signature) _return __cdecl _signature
-
-template<typename _Return, typename... _Args>
-using static_function_signature = _Return(__cdecl*)(_Args...);
-
-template<typename _Class, typename _Return, typename... _Args>
-using member_function_signature = _Return(__thiscall _Class::*)(_Args...);
-
-template<typename _Class, typename _Return, typename... _Args>
-using const_member_function_signature = _Return(__thiscall _Class::*)(_Args...) const;
-
-template<typename _Class, typename _Return, typename... _Args>
-using varg_member_function_signature = _Return(__cdecl _Class::*)(_Args..., ...);
+#if defined(BIA_ARCHITECTURE_X86_32)
+#define BIA_STATIC_CALLING_CONVETION __fastcall
+#define BIA_MEMBER_CALLING_CONVENTION __fastcall
+#define BIA_VARG_MEMBER_CALLING_CONVENTION __cdecl
+#elif defined(BIA_ARCHITECTURE_X86_64)
+#define BIA_STATIC_CALLING_CONVETION
+#define BIA_MEMBER_CALLING_CONVENTION
+#define BIA_VARG_MEMBER_CALLING_CONVENTION
+#endif
 
 // Export
 #if defined(BIA_IMPORT)
@@ -62,24 +58,27 @@ using varg_member_function_signature = _Return(__cdecl _Class::*)(_Args..., ...)
 #elif defined(BIA_COMPILER_GNU)
 
 // Calling conventions
-#define BIA_STATIC_CALLING_CONVETION(_return, _signature) __attribute__((cdecl)) _return _signature
-
-template<typename _Return, typename... _Args>
-using static_function_signature = __attribute__((cdecl)) _Return(*)(_Args...);
-
-template<typename _Class, typename _Return, typename... _Args>
-using member_function_signature = _Return(_Class::*)(_Args...);
-
-template<typename _Class, typename _Return, typename... _Args>
-using const_member_function_signature = _Return(_Class::*)(_Args...) const;
-
-template<typename _Class, typename _Return, typename... _Args>
-using varg_member_function_signature = __attribute__((cdecl)) _Return(_Class::*)(_Args..., ...);
+#define BIA_STATIC_CALLING_CONVETION __attribute__((__fastcall__))
+#define BIA_MEMBER_CALLING_CONVENTION __attribute__((__fastcall__))
+#define BIA_VARG_MEMBER_CALLING_CONVENTION __attribute__((__cdecl__))
 
 // Export
 #define BIA_EXPORT
 
 #endif
+
+// Function signatures
+template<typename _Return, typename... _Args>
+using static_function_signature = _Return(BIA_STATIC_CALLING_CONVETION *)(_Args...);
+
+template<typename _Class, typename _Return, typename... _Args>
+using member_function_signature = _Return(BIA_MEMBER_CALLING_CONVENTION _Class::*)(_Args...);
+
+template<typename _Class, typename _Return, typename... _Args>
+using const_member_function_signature = _Return(BIA_MEMBER_CALLING_CONVENTION _Class::*)(_Args...) const;
+
+template<typename _Class, typename _Return, typename... _Args>
+using varg_member_function_signature = _Return(BIA_VARG_MEMBER_CALLING_CONVENTION _Class::*)(_Args..., ...);
 
 // Universal macros
 #define BIA_MAX_KEYWORD_LENGTH 16

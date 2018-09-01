@@ -30,7 +30,7 @@ void simple_executable_allocator::deallocate_blocks(universal_allocation _blocks
 #if defined(BIA_OS_WINDOWS)
 	VirtualFree(_blocks.first, 0, MEM_RELEASE);
 #elif defined(BIA_OS_LINUX)
-	munmap(_blocks.first, block_size * _blocks.second);
+	munmap(_blocks.first, block_size() * _blocks.second);
 #endif
 }
 

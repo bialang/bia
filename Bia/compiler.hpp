@@ -11,7 +11,6 @@
 #include "temp_counter.hpp"
 #include "operator.hpp"
 #include "machine_context.hpp"
-#include "compile_compare_operation.hpp"
 #include "compile_normal_operation.hpp"
 
 #include "interpreter.hpp"
@@ -75,27 +74,27 @@ private:
 	 * @param _format The format of the passed parameters.
 	 * @param _mixed Whether some constants were passed too or not.
 	 * @param _count The amount of passed parameters.
-	 * @param _passed The size of the passed parameters.
+	 * @param [in] _passer The varg passer.
 	 *
 	 * @throws See machine::string_manager::format_address().
 	 * @throws See machine::platform::toolset::call().
 	*/
 	template<typename _Ty>
-	void handle_parameter_execute(_Ty _member, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::toolset::pass_count _passed)
+	void handle_parameter_execute(_Ty _member, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::varg_member_passer & _passer)
 	{
 		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
 
 		// Execute without parameters
 		if (!_count) {
-			_toolset.call(&framework::member::execute, _member, _destination);
+			_toolset.call_virtual(&framework::member::execute, _member, _destination);
 		} // Formatted execute
 		else if (_mixed) {
 			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
 
-			_toolset.call(&framework::member::execute_format, _member, _passed, _destination, _format_ptr, _count);
+			_toolset.call_virtual(&framework::member::execute_format, _member, _passer, _destination, _format_ptr, _count);
 		} // Only members as parameters
 		else {
-			_toolset.call(&framework::member::execute_count, _member, _passed, _destination, _count);
+			_toolset.call_virtual(&framework::member::execute_count, _member, _passer, _destination, machine::platform::reserved_parameter(), _count);
 		}
 	}
 	/**
@@ -113,13 +112,13 @@ private:
 	 * @since 3.67.135.751
 	 * @date 6-Aug-18
 	 *
-	 * @param [in,out] _passed The size of passed items.
+	 * @param [in,out] _passer The varg parameter passer.
 	 *
-	 * @throws See machine::platform::toolset::pass_varg().
+	 * @throws See machine::platform::varg_member_passer::pass().
 	 *
 	 * @return The char of the item type.
 	*/
-	char handle_parameter_item(machine::platform::toolset::pass_count & _passed);
+	char handle_parameter_item(machine::platform::varg_member_passer & _passer);
 	/**
 	 * Handles a math expression or a math term token.
 	 *

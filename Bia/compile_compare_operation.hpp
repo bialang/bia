@@ -109,27 +109,27 @@ private:
 		case VT::INT:
 		{
 			if (_right.is_int32()) {
-				_toolset.call(&framework::member::test_int32, _member, _operator, static_cast<int32_t>(_right.value().rt_int));
+				_toolset.call_virtual(&framework::member::test_int32, _member, _operator, static_cast<int32_t>(_right.value().rt_int));
 			} else {
-				_toolset.call(&framework::member::test_int64, _member, _operator, _right.value().rt_int);
+				_toolset.call_virtual(&framework::member::test_int64, _member, _operator, _right.value().rt_int);
 			}
 
 			break;
 		}
 		case VT::DOUBLE:
-			_toolset.call(&framework::member::test_double, _member, _operator, _right.value().rt_double);
+			_toolset.call_virtual(&framework::member::test_double, _member, _operator, _right.value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			_toolset.call(&framework::member::test_member, _member, _operator, _right.value().rt_member);
+			_toolset.call_virtual(&framework::member::test_member, _member, _operator, _right.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			_toolset.call(&framework::member::test_member, _member, _operator, T::to_temp_member(_right.value().rt_temp_member));
+			_toolset.call_virtual(&framework::member::test_member, _member, _operator, T::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		case VT::TEST_VALUE_REGISTER:
-			_toolset.call(&framework::member::test_int32, _member, _operator, T::test_result_value());
+			_toolset.call_virtual(&framework::member::test_int32, _member, _operator, T::test_result_value());
 
 			break;
 		default:
@@ -160,12 +160,12 @@ private:
 		if (std::is_same<typename std::remove_reference<_Left>::type, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
-				_toolset.call(&machine::link::compare_operation_int32, static_cast<int32_t>(_left), _operator, _right);
+				_toolset.call_static(&machine::link::compare_operation_int32, _operator, _right, static_cast<int32_t>(_left));
 			} else {
-				_toolset.call(&machine::link::compare_operation_int64, _left, _operator, _right);
+				_toolset.call_static(&machine::link::compare_operation_int64, _operator, _right, _left);
 			}
 		} else {
-			_toolset.call(&machine::link::compare_operation_double, _left, _operator, _right);
+			_toolset.call_static(&machine::link::compare_operation_double, _operator, _right, _left);
 		}
 
 		_value.set_return_test();

@@ -3,6 +3,7 @@
 #include <memory>
 #include <utility>
 
+#include "config.hpp"
 #include "allocator.hpp"
 #include "executable_allocator.hpp"
 #include "input_stream.hpp"
@@ -118,7 +119,7 @@ public:
 	 *
 	 * @throws See machine_stack::pop().
 	*/
-	void destroy_from_stack(uint32_t _member_count);
+	void BIA_MEMBER_CALLING_CONVENTION destroy_from_stack(uint32_t _member_count);
 	/**
 	 * Pushes the variables to the stack.
 	 *
@@ -132,7 +133,7 @@ public:
 	 *
 	 * @return The address of the allocated space.
 	*/
-	void create_on_stack(framework::member ** _destination, uint32_t _member_count);
+	void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
 	const char * name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.

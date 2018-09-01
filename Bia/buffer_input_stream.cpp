@@ -10,7 +10,7 @@ namespace bia
 namespace stream
 {
 
-buffer_input_stream::buffer_input_stream(const std::shared_ptr<const void> & _buffer, size_t _length) : _buffer(_buffer)
+buffer_input_stream::buffer_input_stream(const std::shared_ptr<const int8_t> & _buffer, size_t _length) : _buffer(_buffer)
 {
 	if (!_length && _buffer.get()) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -20,7 +20,7 @@ buffer_input_stream::buffer_input_stream(const std::shared_ptr<const void> & _bu
 	_position = 0;
 }
 
-buffer_input_stream::buffer_input_stream(std::shared_ptr<const void> && _buffer, size_t _length) : _buffer(std::move(_buffer))
+buffer_input_stream::buffer_input_stream(std::shared_ptr<const int8_t> && _buffer, size_t _length) : _buffer(std::move(_buffer))
 {
 	if (!_length && _buffer.get()) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -70,7 +70,7 @@ void buffer_input_stream::read(void * _destination, size_t _size)
 		throw;
 	}
 
-	std::memcpy(_destination, static_cast<const int8_t*>(_buffer.get()) + _position, _size);
+	std::memcpy(_destination, _buffer.get() + _position, _size);
 
 	_position += _size;
 }
@@ -87,7 +87,7 @@ buffer_input_stream::cursor_type buffer_input_stream::available() const
 
 buffer_input_stream::buffer_type buffer_input_stream::buffer()
 {
-	return { static_cast<const int8_t*>(_buffer.get()) + _position, static_cast<const int8_t*>(_buffer.get()) + _length };
+	return { _buffer.get() + _position, _buffer.get() + _length };
 }
 
 }
