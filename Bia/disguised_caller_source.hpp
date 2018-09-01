@@ -18,8 +18,8 @@ namespace bia
 namespace force
 {
 
-template<typename _Return>
-inline _Return format_cast(va_list & _args, const char *& _format)
+template<typename _Return, typename _List>
+inline _Return format_cast(_List & _args, const char *& _format)
 {
 	using namespace utility;
 

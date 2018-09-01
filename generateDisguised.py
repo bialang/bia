@@ -5,14 +5,14 @@ max_args = 3
 def move_position(s):
 	def c(x):
 		return " * " + str(next(c.counter)) + ")"
-		
+
 	is_numbers = []
-	
+
 	for n in range(1, max_args + 1):
 		is_numbers.append(n)
-		
+
 	c.counter = iter(is_numbers)
-	
+
 	return re.sub(""" \* \d+\)""", c, s)
 
 
@@ -35,8 +35,8 @@ namespace bia
 namespace force
 {
 
-template<typename _Return>
-_Return format_cast(va_list & _args, const char *& _format);
+template<typename _Return, typename _List>
+_Return format_cast(_List & _args, const char *& _format);
 
 void disguised_caller(void(*_function)(), framework::member * _destination);
 
@@ -91,8 +91,8 @@ namespace bia
 namespace force
 {
 
-template<typename _Return>
-inline _Return format_cast(va_list & _args, const char *& _format)
+template<typename _Return, typename _List>
+inline _Return format_cast(_List & _args, const char *& _format)
 {
 	using namespace utility;
 
@@ -343,10 +343,10 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 """.format(**filler).encode())
 
 			filler["template_middle"] += ("" if not filler["template_begin"] else ", ") + "typename _" + str(i)
-			
+
 			if template != "initiator":
 				filler["param2"] += (", " if i != 0 else "") + "_" + str(i)
-		
+
 			if type == "count":
 				filler["body2"] += (", " if i != 0 else "") + "*_v{0}".format(i)
 				filler["preparations"] = """
@@ -355,7 +355,7 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 				filler["preparations"] = """
 	auto _v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]
 				filler["body2"] += (", " if i != 0 else "") + "std::forward<_{0}>(_v{0})".format(i)
-			
+
 			if template == "static_void":
 				filler["template_begin"] = "template<"
 				filler["template_end"] = ">"

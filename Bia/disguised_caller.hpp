@@ -14,8 +14,8 @@ namespace bia
 namespace force
 {
 
-template<typename _Return>
-_Return format_cast(va_list & _args, const char *& _format);
+template<typename _Return, typename _List>
+_Return format_cast(_List & _args, const char *& _format);
 
 void disguised_caller(void(*_function)(), framework::member * _destination);
 
