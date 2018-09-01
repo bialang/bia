@@ -287,6 +287,16 @@ public:
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
+#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
+
+		instruction<OP_CODE::MOVE, rax, rdi, void>(*_output);
+
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, rax>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, rax>(*_output, _index);
+		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
 		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
@@ -349,6 +359,16 @@ public:
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
+#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
+
+		instruction<OP_CODE::MOVE, rax, rdi, void>(*_output);
+
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, rax>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, rax>(*_output, _index);
+		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
 		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
@@ -410,6 +430,16 @@ public:
 			instruction<OP_CODE::CALL, eax>(*_output, static_cast<int8_t>(_index));
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
+		}
+#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
+
+		instruction<OP_CODE::MOVE, r11, rdi, void>(*_output);
+
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, r11>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, r11>(*_output, _index);
 		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
