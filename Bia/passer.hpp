@@ -40,15 +40,6 @@ public:
 	virtual ~static_passer() = default;
 	virtual void pop_all()
 	{
-		/*_passed -= 2;
-
-		if (_passed > 0) {
-			if (_passed * element_size <= std::numeric_limits<int8_t>::max()) {
-				instruction8<OP_CODE::ADD, stack_pointer>(_output, static_cast<int8_t>(_passed * element_size));
-			} else {
-				instruction32<OP_CODE::ADD, stack_pointer>(_output, static_cast<int32_t>(_passed * element_size));
-			}
-		}*/
 	}
 	void pass_all() noexcept
 	{
@@ -291,8 +282,17 @@ public:
 	template<typename _First, typename _Second, typename _Third, typename _Fourth>
 	void pass_all(_First _first, _Second _second, _Third _third, _Fourth _fourth)
 	{
+#if defined(BIA_COMPILER_MSVC)
 		// Push to stack
 		pass(_first, _second, _third, _fourth);
+#else
+		// Push to stack
+		pass(_second, _third, _fourth);
+
+		// Move first to ecx because it is needed in the toolset to calculate the function address
+		register_pass<ecx>(0, _first);
+		instruction<OP_CODE::PUSH, ecx>(_output);
+#endif
 	}
 };
 #elif defined(BIA_ARCHITECTURE_X86_64) && defined (BIA_COMPILER_MSVC)

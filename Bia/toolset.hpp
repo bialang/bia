@@ -278,12 +278,14 @@ public:
 		address.member = _function;
 
 #if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
-		auto _index = reinterpret_cast<int32_t>(address.address);
+		auto _index = reinterpret_cast<int32_t>(address.address) ^ 1;
+
+		instruction<OP_CODE::MOVE, eax, ecx, void>(*_output);
 
 		if (is_one_byte_value(_index)) {
-			instruction<OP_CODE::CALL, ecx>(*_output, static_cast<int8_t>(_index));
-	} else {
-			instruction<OP_CODE::CALL, ecx>(*_output, _index);
+			instruction<OP_CODE::CALL, eax>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
@@ -338,12 +340,14 @@ public:
 		address.member = _function;
 
 #if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
-		auto _index = reinterpret_cast<int32_t>(address.address);
+		auto _index = reinterpret_cast<int32_t>(address.address) ^ 1;
+
+		instruction<OP_CODE::MOVE, eax, ecx, void>(*_output);
 
 		if (is_one_byte_value(_index)) {
-			instruction<OP_CODE::CALL, ecx>(*_output, static_cast<int8_t>(_index));
-	} else {
-			instruction<OP_CODE::CALL, ecx>(*_output, _index);
+			instruction<OP_CODE::CALL, eax>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
@@ -396,14 +400,16 @@ public:
 		} address;
 
 		address.member = _function;
-		
+
 #if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
-		auto _index = reinterpret_cast<int32_t>(address.address);
+		auto _index = reinterpret_cast<int32_t>(address.address) ^ 1;
+
+		instruction<OP_CODE::MOVE, eax, ecx, void>(*_output);
 
 		if (is_one_byte_value(_index)) {
-			instruction<OP_CODE::CALL, ecx>(*_output, static_cast<int8_t>(_index));
+			instruction<OP_CODE::CALL, eax>(*_output, static_cast<int8_t>(_index));
 		} else {
-			instruction<OP_CODE::CALL, ecx>(*_output, _index);
+			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
