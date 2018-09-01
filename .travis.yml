@@ -1,6 +1,14 @@
+dist: trusty
 sudo: false
 language: cpp
 
+addons:
+  apt:
+	  sources:
+		  - ubuntu-toolchain-r-test
+	  packages:
+		  - g++-4.9
+
 script:
-  - cmake .
+  - CXX=/usr/bin/g++-4.9 cmake .
   - cmake --build . -- -j2
