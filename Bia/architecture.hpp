@@ -89,7 +89,7 @@ inline size_t instruction(stream::output_stream & _output, _Offset _offset)
 	if (register_prefix<_Register>()) {
 		_written = _output.write_all(register_prefix<_Register>());
 	}
-#endif	
+#endif
 
 	switch (_Op_code) {
 	case OP_CODE::PUSH:
@@ -117,7 +117,7 @@ template<OP_CODE _Op_code, typename _Dest, typename _Src>
 inline size_t instruction(stream::output_stream & _output)
 {
 	static_assert(
-		_Op_code == OP_CODE::MOVE 
+		_Op_code == OP_CODE::MOVE
 		|| _Op_code == OP_CODE::XOR
 #if defined(BIA_ARCHITECTURE_X86_64)
 		|| _Op_code == OP_CODE::MOVE_QUADWORD
@@ -186,7 +186,7 @@ inline size_t instruction(stream::output_stream & _output, _Src_offset _offset)
 	static_assert((_Op_code != OP_CODE::MOVE && _Op_code != OP_CODE::LEA) || ((_Dest::size() == 32 || _Dest::size() == 64) && _Src::size() == 64), "Register is not supported.");
 
 	// Add SIB byte for stack pointer register
-	constexpr auto _special_register = std::is_same<_Src, esp>::value || std::is_same<_Src, rsp>::value;
+	constexpr auto _special_register = std::is_same<_Src, rsp>::value;
 
 	// Write prefix for 64 bit register
 	_written = _output.write_all(static_cast<uint8_t>(0x48 | register_prefix<_Dest, _Src>()));
@@ -197,6 +197,43 @@ inline size_t instruction(stream::output_stream & _output, _Src_offset _offset)
 	}
 
 	return _written + _output.write_all(_op_code, static_cast<uint8_t>(_mode | _Dest::value() << 3 | _Src::value()), _offset);
+}
+
+template<OP_CODE _Op_code, typename _Dest, typename _Src, typename _Src_offset>
+inline size_t instruction(stream::output_stream & _output)
+{
+	static_assert(_Op_code == OP_CODE::MOVE, "This opcode is not supported.");
+	static_assert(std::is_void<_Src_offset>::value, "Offset must be void.");
+
+	size_t _written = 0;
+
+	#if defined(BIA_ARCHITECTURE_X86_32)
+		static_assert(_Src::size() == 32 && _Dest::size() == 32, "Register is not supported.");
+
+		// Add SIB byte for stack pointer register
+		constexpr auto _special_register = std::is_same<_Src, esp>::value;
+	#elif defined(BIA_ARCHITECTURE_X86_64)
+		static_assert((_Dest::size() == 32 || _Dest::size() == 64) && _Src::size() == 64, "Register is not supported.");
+
+		// Add SIB byte for stack pointer register
+		constexpr auto _special_register = std::is_same<_Src, rsp>::value;
+
+		// Write prefix for 64 bit register
+		_written = _output.write_all(static_cast<uint8_t>(0x48 | register_prefix<_Dest, _Src>()));
+	#endif
+
+	switch (_Op_code) {
+	case OP_CODE::MOVE:
+	{
+		if (_special_register) {
+			return _written + _output.write_all(0x8b_8, static_cast<uint8_t>(_Dest::value() << 3 | _Src::value()), 0x24_8);
+		}
+
+		return _written + _output.write_all(0x8b_8, static_cast<uint8_t>(_Dest::value() << 3 | _Src::value()));
+	}
+	default:
+		BIA_IMPLEMENTATION_ERROR;
+	}
 }
 
 
