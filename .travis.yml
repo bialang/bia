@@ -2,5 +2,5 @@ sudo: false
 language: cpp
 
 script:
-  - cmake . -DCMAKE_CXX_FLAGS="-m32"
+  - cmake .
   - cmake --build . -- -j2
