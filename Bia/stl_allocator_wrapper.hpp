@@ -34,6 +34,11 @@ public:
 	typedef const _Ty& const_reference;
 	/** The type of the size of the pointers. */
 	typedef memory::size_type size_type;
+	template<typename _T>
+	struct rebind
+	{
+  	typedef stl_allocator_wrapper<_T> other;
+	};
 
 	/**
 	 * Constructor.
