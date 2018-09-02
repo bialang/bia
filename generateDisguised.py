@@ -96,6 +96,8 @@ inline _Return format_cast(_List & _args, const char *& _format)
 {
 	using namespace utility;
 
+gt_redo:;
+
 	switch (*_format++)
 	{
 	case 'i':
@@ -123,7 +125,9 @@ inline _Return format_cast(_List & _args, const char *& _format)
 		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, double>().choose(va_arg(_args, double));
+			auto _value = va_arg(_args, int64_t);
+
+			return chooser<is_number, _Return, double>().choose(*reinterpret_cast<double*>(&_value));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
@@ -146,6 +150,10 @@ inline _Return format_cast(_List & _args, const char *& _format)
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
+	case 'r':
+		va_arg(_args, void*);
+
+		goto gt_redo;
 	default:
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
 	}
