@@ -316,7 +316,7 @@ public:
 	virtual ~static_passer() = default;
 	virtual void pop_all()
 	{
-		auto _pushed = std::max(_integral_passed, 6) - 6 + _floating_point_passed;
+		auto _pushed = std::max(_integral_passed, 6) - 6 + std::max(_floating_point_passed, 8) - 8;
 
 		if (_pushed > 0) {
 			if (_pushed * element_size <= std::numeric_limits<int8_t>::max()) {
@@ -420,12 +420,6 @@ protected:
 			push(_value);
 
 			break;
-		}
-
-		if (_floating_point_passed < 8) {
-			instruction<OP_CODE::PUSH, accumulator>(_output);
-
-			++_integral_passed;
 		}
 
 		++_floating_point_passed;
@@ -565,8 +559,9 @@ class varg_member_passer : protected static_passer
 public:
 	varg_member_passer(stream::output_stream & _output) noexcept : static_passer(_output)
 	{
-		// Reserve 4 registers because of framework::member::execute_count() and framework::member::execute_format()
-		_integral_passed = 4;
+		// Reserve 4 registers because of framework::member::execute_count() and framework::member::execute_format() and with 2 more the vargs are going to be pushed onto the stack
+		_integral_passed = 6;
+		_floating_point_passed = 8;
 	}
 	void pop_all()
 	{
@@ -590,8 +585,8 @@ public:
 
 		_integral_passed = _tmp;
 
-		// Write amount of passed floating points
-		instruction32<OP_CODE::MOVE, eax>(_output, std::min(_floating_point_passed, 8));
+		// All floating point values are pushed onto the stack (mov al, 0)
+		_output.write_all(0xb0_8, 0x00_8);
 	}
 };
 #elif defined(BIA_ARCHITECTURE_X86_64) && defined (BIA_COMPILER_MSVC)

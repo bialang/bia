@@ -100,8 +100,11 @@ public:
 			_output->set_position(_temp_member_pos);
 
 #if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
-			// Allocate temp members + shadow space
+			// Allocate temp members + shadow space + align stack to 16 bytes
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, (4 + _temp_count + _temp_count % 2) * element_size);
+#elif defined(BIA_ARCHITECTURE_X86_64)
+			// Allocate temp members + align stack to 16 bytes
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, (_temp_count + _temp_count % 2) * element_size);
 #else
 			// Allocate temp members
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, _temp_count * element_size);
@@ -117,6 +120,9 @@ public:
 #if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
 			// Deallocate temp members + shadow space
 			instruction32<OP_CODE::ADD, stack_pointer>(*_output, (4 + _temp_count + _temp_count % 2) * element_size);
+#elif defined(BIA_ARCHITECTURE_X86_64)
+			// Allocate temp members + align stack to 16 bytes
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, (_temp_count + _temp_count % 2) * element_size);
 #else
 			// Deallocate temp members
 			instruction32<OP_CODE::ADD, stack_pointer>(*_output, _temp_count * element_size);
