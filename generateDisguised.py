@@ -361,7 +361,7 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 	auto _v{0} = va_arg(_args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
 			else:
 				filler["preparations"] = """
-	auto _v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]
+	_{0} _v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]
 				filler["body2"] += (", " if i != 0 else "") + "std::forward<_{0}>(_v{0})".format(i)
 
 			if template == "static_void":

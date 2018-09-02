@@ -519,7 +519,7 @@ inline void disguised_caller_format(_Return(*_function)(_0), framework::member *
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = format_cast<_0>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0)));
 }
@@ -530,8 +530,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::memb
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1)));
 }
@@ -542,9 +542,9 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = format_cast<_2>(_args, _format);
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
@@ -567,7 +567,7 @@ inline void disguised_caller_format(void(*_function)(_0), framework::member * _d
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = format_cast<_0>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	_function(std::forward<_0>(_v0));
 
@@ -580,8 +580,8 @@ inline void disguised_caller_format(void(*_function)(_0, _1), framework::member 
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	_function(std::forward<_0>(_v0), std::forward<_1>(_v1));
 
@@ -594,9 +594,9 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::mem
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = format_cast<_2>(_args, _format);
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
 
@@ -619,7 +619,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _i
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = format_cast<_0>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0)));
 }
@@ -630,8 +630,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class 
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1)));
 }
@@ -642,9 +642,9 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Cl
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = format_cast<_2>(_args, _format);
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
@@ -667,7 +667,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _inst
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = format_cast<_0>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	(_instance->*_function)(std::forward<_0>(_v0));
 
@@ -680,8 +680,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1));
 
@@ -694,9 +694,9 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = format_cast<_2>(_args, _format);
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
 
@@ -719,7 +719,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = format_cast<_0>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0)));
 }
@@ -730,8 +730,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, c
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1)));
 }
@@ -742,9 +742,9 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) cons
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = format_cast<_2>(_args, _format);
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
@@ -767,7 +767,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _C
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = format_cast<_0>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	(_instance->*_function)(std::forward<_0>(_v0));
 
@@ -780,8 +780,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, cons
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1));
 
@@ -794,9 +794,9 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, 
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = format_cast<_2>(_args, _format);
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
 
@@ -819,7 +819,7 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = format_cast<_0>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0));
 }
@@ -830,8 +830,8 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1));
 }
@@ -842,9 +842,9 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = format_cast<_2>(_args, _format);
-	auto _v1 = format_cast<_1>(_args, _format);
-	auto _v0 = format_cast<_0>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
 	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
 }

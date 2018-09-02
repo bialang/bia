@@ -81,7 +81,7 @@ int main()
 			return 4;
 		}));
 		set_lambda(_context, "ser", [&](int & a, const char * b) -> const printer& {
-			printf("s%d---%s\n", a, b);
+			printf("s%d,%p---%s\n", a, &a, b);
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
@@ -103,7 +103,8 @@ int main()
 
 var i = 34
 hey(23.3, 5.53)
-ser(i, "yhes")
+ser(copyof i, "yhes")
+print i
 
 )"";
 
