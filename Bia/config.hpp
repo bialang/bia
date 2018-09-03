@@ -58,9 +58,15 @@
 #elif defined(BIA_COMPILER_GNU)
 
 // Calling conventions
+#if defined(BIA_ARCHITECTURE_X86_32)
 #define BIA_STATIC_CALLING_CONVETION __attribute__((__fastcall__))
 #define BIA_MEMBER_CALLING_CONVENTION __attribute__((__fastcall__))
 #define BIA_VARG_MEMBER_CALLING_CONVENTION __attribute__((__cdecl__))
+#elif defined(BIA_ARCHITECTURE_X86_64)
+#define BIA_STATIC_CALLING_CONVETION
+#define BIA_MEMBER_CALLING_CONVENTION
+#define BIA_VARG_MEMBER_CALLING_CONVENTION
+#endif
 
 // Export
 #define BIA_EXPORT

@@ -90,7 +90,7 @@ public:
 
 		// Adjust setup
 #if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
-		{
+		if (true) {
 #else
 		if (_temp_count > 0) {
 #endif
@@ -100,8 +100,11 @@ public:
 			_output->set_position(_temp_member_pos);
 
 #if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
-			// Allocate temp members + shadow space
+			// Allocate temp members + shadow space + align stack to 16 bytes
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, (4 + _temp_count + _temp_count % 2) * element_size);
+#elif defined(BIA_ARCHITECTURE_X86_64)
+			// Allocate temp members + align stack to 16 bytes
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, (_temp_count + _temp_count % 2) * element_size);
 #else
 			// Allocate temp members
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, _temp_count * element_size);
@@ -117,6 +120,9 @@ public:
 #if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
 			// Deallocate temp members + shadow space
 			instruction32<OP_CODE::ADD, stack_pointer>(*_output, (4 + _temp_count + _temp_count % 2) * element_size);
+#elif defined(BIA_ARCHITECTURE_X86_64)
+			// Allocate temp members + align stack to 16 bytes
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, (_temp_count + _temp_count % 2) * element_size);
 #else
 			// Deallocate temp members
 			instruction32<OP_CODE::ADD, stack_pointer>(*_output, _temp_count * element_size);
@@ -287,6 +293,16 @@ public:
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
+#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
+
+		instruction<OP_CODE::MOVE, rax, rdi, void>(*_output);
+
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, rax>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, rax>(*_output, _index);
+		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
 		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
@@ -349,6 +365,16 @@ public:
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
+#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
+
+		instruction<OP_CODE::MOVE, rax, rdi, void>(*_output);
+
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, rax>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, rax>(*_output, _index);
+		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it
 		instruction32<OP_CODE::MOVE, accumulator>(*_output, reinterpret_cast<int32_t>(address.address));
@@ -410,6 +436,16 @@ public:
 			instruction<OP_CODE::CALL, eax>(*_output, static_cast<int8_t>(_index));
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
+		}
+#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
+
+		instruction<OP_CODE::MOVE, r11, rdi, void>(*_output);
+
+		if (is_one_byte_value(_index)) {
+			instruction<OP_CODE::CALL, r11>(*_output, static_cast<int8_t>(_index));
+		} else {
+			instruction<OP_CODE::CALL, r11>(*_output, _index);
 		}
 #elif defined(BIA_ARCHITECTURE_X86_32)
 		// Move the address of the function into EAX and call it

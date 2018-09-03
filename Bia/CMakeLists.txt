@@ -56,7 +56,7 @@ set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "native_member.hpp" "native_ope
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
 
 set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "class_template_wrapper.hpp" "constructor_chain.hpp" "instance_holder.hpp" "member_map.hpp" "object.hpp" "raw_object.hpp")
-set(Bia_SOURCE_FILES_OBJECT "member_map.hpp")
+set(Bia_SOURCE_FILES_OBJECT "member_map.cpp")
 
 source_group("Header Files\\framework\\object" FILES ${Bia_HEADER_FILES_OBJECT})
 source_group("Source Files\\framework\\object" FILES ${Bia_SOURCE_FILES_OBJECT})
@@ -78,7 +78,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_GRAMMAR})
 
 # machine namespace
 set(Bia_HEADER_FILES_MACHINE "disassembler.hpp" "machine_code.hpp" "machine_context.hpp" "machine_schein.hpp" "machine_stack.hpp" "string_manager.hpp" "variable_index.hpp")
-set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_code.cpp" "machine_context.cpp" "machine_schein.cpp" "machine_stack.cpp" "string_manager.cpp" "string_manager.cpp" "variable_index.cpp")
+set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_code.cpp" "machine_context.cpp" "machine_schein.cpp" "machine_stack.cpp" "string_manager.cpp" "variable_index.cpp")
 
 source_group("Header Files\\machine" FILES ${Bia_HEADER_FILES_MACHINE})
 source_group("Source Files\\machine" FILES ${Bia_SOURCE_FILES_MACHINE})
@@ -101,7 +101,7 @@ set(Bia_SOURCE_FILES_MODULAR "")
 source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})
 source_group("Source Files\\machine\\modular" FILES ${Bia_SOURCE_FILES_MODULAR})
 
-set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "toolset.hpp")
+set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "passer.hpp" "toolset.hpp")
 
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
 

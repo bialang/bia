@@ -68,10 +68,10 @@ struct report
 	} content;
 
 
-	void serialize(stream::output_stream & _output)
+	/*void serialize(stream::output_stream & _output)
 	{
 		_output.write_all<uint32_t, uint32_t>(static_cast<uint32_t>(type) << custom_bits | custom_parameter, rule_id << token_bits | token_id);
-		
+
 		switch (type) {
 		case TYPE::STRING:
 		case TYPE::INT_VALUE:
@@ -135,7 +135,7 @@ struct report
 		default:
 			throw;
 		}
-	}
+	}*/
 };
 
 }

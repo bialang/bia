@@ -10,7 +10,6 @@
 #include "initiator.hpp"
 #include "object.hpp"
 #include "member_map.hpp"
-#include "guard.hpp"
 
 
 namespace bia
@@ -83,25 +82,46 @@ public:
 	}
 	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
 	{
-		va_list _args;
-		va_start(_args, _count);
-		auto _guard = utility::make_guard(_args, [](va_list _args) {
-			va_end(_args);
-		});
-		instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate_count(_count, _args)), true);
+		force::va_list_wrapper _args;
+		va_start(_args.args, _count);
+		auto _instance_created = false;
 
-		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+		try {
+			instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate_count(_count, _args)), true);
+			_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+
+			_instance_created = true;
+			va_end(_args.args);
+
+			_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+		} catch (...) {
+			if (!_instance_created) {
+				va_end(_args.args);
+			}
+
+			throw;
+		}
 	}
 	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) override
 	{
-		va_list _args;
-		va_start(_args, _count);
-		auto _guard = utility::make_guard(_args, [](va_list _args) {
-			va_end(_args);
-		});
-		instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate_format(_format, _count, _args)), true);
+		force::va_list_wrapper _args;
+		va_start(_args.args, _count);
+		auto _instance_created = false;
 
-		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+		try {
+			instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate_format(_format, _count, _args)), true);
+
+			_instance_created = true;
+			va_end(_args.args);
+
+			_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+		} catch (...) {
+			if (!_instance_created) {
+				va_end(_args.args);
+			}
+
+			throw;
+		}
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{

@@ -52,14 +52,14 @@ public:
 	 * @date 5-May-18
 	 *
 	 * @param _count The count of the passed arguments.
-	 * @param _args The passed arguments.
+	 * @param [in,out] _args The passed arguments.
 	 *
 	 * @throw exception::execution_error Unsupported instantiation.
 	 * @throw See force::disguised_caller_count().
 	 *
 	 * @return The created instance
 	*/
-	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count _count, va_list _args) const
+	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count _count, va_list_wrapper & _args) const
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_INSTANTIATION);
 	}
@@ -71,14 +71,14 @@ public:
 	 *
 	 * @param _format The types of the passed arguments.
 	 * @param _count The count of the passed arguments.
-	 * @param _args The passed arguments.
+	 * @param [in,out] _args The passed arguments.
 	 *
 	 * @throw exception::execution_error Unsupported instantiation.
 	 * @throw See force::disguised_caller_format().
 	 *
 	 * @return The created instance
 	*/
-	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, va_list _args) const
+	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args) const
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_INSTANTIATION);
 	}
@@ -95,11 +95,11 @@ public:
 	{
 		return machine::memory::cast_allocation<void>(force::disguised_caller<_Ty, _Args...>());
 	}
-	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count _count, va_list _args) const override
+	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count _count, va_list_wrapper & _args) const override
 	{
 		return machine::memory::cast_allocation<void>(force::disguised_caller_count<_Ty, _Args...>(_count, _args));
 	}
-	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, va_list _args) const override
+	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args) const override
 	{
 		return machine::memory::cast_allocation<void>(force::disguised_caller_format<_Ty, _Args...>(_format, _count, _args));
 	}

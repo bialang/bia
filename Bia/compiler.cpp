@@ -285,7 +285,7 @@ const grammar::report *  compiler::handle_number(const grammar::report * _report
 {
 	using TYPE = report::TYPE;
 
-	switch (_report->type) {
+	switch (static_cast<report::TYPE>(_report->type)) {
 	case TYPE::INT_VALUE:
 		_value.set_return(_report->content.int_value);
 
@@ -362,9 +362,9 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 	++_report;
 
 	// First member
-	if (_report->type == report::TYPE::STRING) {
+	if (static_cast<report::TYPE>(_report->type) == report::TYPE::STRING) {
 		_report = handle_string(_report);
-	} else if (_report->type == report::TYPE::MEMBER) {
+	} else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
 		member_function_signature<framework::member, void, framework::member*> _function = nullptr;
 
 		// Ref of
@@ -392,7 +392,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 		if (_report->rule_id == BGR_PARAMETER || _report->rule_id == BGR_PARAMETER_ITEM_ACCESS) {
 			_report = handle_parameter(_report);
 		} // Get member
-		else if (_report->type == report::TYPE::MEMBER) {
+		else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
 			switch (_value.type()) {
 			case compiler_value::VALUE_TYPE::MEMBER:
 			{
@@ -434,7 +434,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	std::string _format;
 	auto _mixed = false;
 
-	if (_report->type != grammar::report::TYPE::EMPTY_CHILD) {
+	if (static_cast<report::TYPE>(_report->type) != grammar::report::TYPE::EMPTY_CHILD) {
 		// Save old counter
 		auto _old = _counter.peek();
 
@@ -450,6 +450,11 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 				_mixed = true;
 			}
 		}
+
+#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_GNU)
+		// Reserve the last two integral registers
+		_format.append("rr");
+#endif
 
 		_counter.pop(_old);
 	}

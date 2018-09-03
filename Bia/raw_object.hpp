@@ -89,23 +89,25 @@ public:
 	}
 	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
 	{
+		BIA_NOT_IMPLEMENTED;
 		auto _this = promote();
-		va_list _args;
-		va_start(_args, _count);
+		force::va_list_wrapper _args;
+		va_start(_args.args, _count);
 
-		_this->execute_count(_destination, _reserved, _count, _args);
+		_this->execute_count(_destination, _reserved, _count, _args.args);
 
-		va_end(_args);
+		va_end(_args.args);
 	}
 	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) override
 	{
+		BIA_NOT_IMPLEMENTED;
 		auto _this = promote();
-		va_list _args;
-		va_start(_args, _count);
+		force::va_list_wrapper _args;
+		va_start(_args.args, _count);
 
-		_this->execute_format(_destination, _format, _count, _args);
+		_this->execute_format(_destination, _format, _count, _args.args);
 
-		va_end(_args);
+		va_end(_args.args);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{

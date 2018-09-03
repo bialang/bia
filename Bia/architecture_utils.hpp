@@ -162,6 +162,22 @@ struct rbp : register64_basic
 	}
 };
 
+struct rsi : register64_basic
+{
+	constexpr static size_t value()
+	{
+		return 6;
+	}
+};
+
+struct rdi : register64_basic
+{
+	constexpr static size_t value()
+	{
+		return 7;
+	}
+};
+
 struct r8 : register64_extended
 {
 	constexpr static size_t value()
@@ -175,6 +191,14 @@ struct r9 : register64_extended
 	constexpr static size_t value()
 	{
 		return 1;
+	}
+};
+
+struct r11 : register64_extended
+{
+	constexpr static size_t value()
+	{
+		return 3;
 	}
 };
 
@@ -207,6 +231,38 @@ struct xmm3 : xmm
 	constexpr static size_t value()
 	{
 		return 3;
+	}
+};
+
+struct xmm4 : xmm
+{
+	constexpr static size_t value()
+	{
+		return 4;
+	}
+};
+
+struct xmm5 : xmm
+{
+	constexpr static size_t value()
+	{
+		return 5;
+	}
+};
+
+struct xmm6 : xmm
+{
+	constexpr static size_t value()
+	{
+		return 6;
+	}
+};
+
+struct xmm7 : xmm
+{
+	constexpr static size_t value()
+	{
+		return 7;
 	}
 };
 #endif
