@@ -90,7 +90,7 @@ public:
 
 		// Adjust setup
 #if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
-		{
+		if (true) {
 #else
 		if (_temp_count > 0) {
 #endif

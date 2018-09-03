@@ -607,6 +607,10 @@ public:
 	virtual ~static_passer() = default;
 	virtual void pop_all()
 	{
+		// Shadow space if parameters were pushed onto the stack
+		if (_passed > 4) {
+			instruction8<OP_CODE::ADD, stack_pointer>(_output, 4 * element_size);
+		}
 	}
 	void pass_all() noexcept
 	{
@@ -648,6 +652,11 @@ public:
 		register_pass<arg_destination<1, _Second>::register_type>(_passed - _tmp, _second);
 		register_pass<arg_destination<2, _Third>::register_type>(_passed - _tmp, _third);
 		register_pass<arg_destination<3, _Fourth>::register_type>(_passed - _tmp, _fourth);
+
+		// Shadow space if parameters were pushed onto the stack
+		if (_passed > 4) {
+			instruction8<OP_CODE::SUB, stack_pointer>(_output, 4 * element_size);
+		}
 	}
 
 protected:
@@ -890,13 +899,7 @@ protected:
  *
  * @warning If the function has at least one 32 Bit parameter, the first parameter must be 32 Bit and the order of the rest does not matter.
 */
-class member_passer : public static_passer
-{
-public:
-	member_passer(stream::output_stream & _output) noexcept : static_passer(_output)
-	{
-	}
-};
+typedef static_passer member_passer;
 
 class varg_member_passer : protected static_passer
 {
@@ -907,9 +910,7 @@ public:
 
 	virtual void pop_all() override
 	{
-		_passed -= 4;
-
-		if (_passed > 0) {
+		if (_passed > 4) {
 			if (_passed * element_size <= std::numeric_limits<int8_t>::max()) {
 				instruction8<OP_CODE::ADD, stack_pointer>(_output, static_cast<int8_t>(_passed * element_size));
 			} else {
