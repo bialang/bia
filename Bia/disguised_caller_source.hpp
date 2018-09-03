@@ -18,8 +18,8 @@ namespace bia
 namespace force
 {
 
-template<typename _Return, typename _List>
-inline _Return format_cast(_List & _args, const char *& _format)
+template<typename _Return>
+inline _Return format_cast(va_list_wrapper & _args, const char *& _format)
 {
 	using namespace utility;
 
@@ -32,7 +32,7 @@ gt_redo:;
 		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args, int32_t));
+			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args.args, int32_t));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
@@ -42,7 +42,7 @@ gt_redo:;
 		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args, int64_t));
+			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args.args, int64_t));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
@@ -52,7 +52,7 @@ gt_redo:;
 		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
 		if (is_number) {
-			auto _value = va_arg(_args, int64_t);
+			auto _value = va_arg(_args.args, int64_t);
 
 			return chooser<is_number, _Return, double>().choose(*reinterpret_cast<double*>(&_value));
 		} else {
@@ -64,21 +64,21 @@ gt_redo:;
 		constexpr auto is_string = std::is_same<_Return, const char*>::value;
 
 		if (is_string) {
-			return chooser<is_string, _Return, const char*>().choose(va_arg(_args, const char*));
+			return chooser<is_string, _Return, const char*>().choose(va_arg(_args.args, const char*));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'M':
 	{
-		if (auto _ptr = va_arg(_args, framework::member*)->cast<_Return>()) {
+		if (auto _ptr = va_arg(_args.args, framework::member*)->cast<_Return>()) {
 			return *_ptr;
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'r':
-		va_arg(_args, void*);
+		va_arg(_args.args, void*);
 
 		goto gt_redo;
 	default:
@@ -158,7 +158,7 @@ inline typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocati
 }
 
 template<typename _Return>
-inline void disguised_caller_count(_Return(*_function)(), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(*_function)(), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -168,43 +168,417 @@ inline void disguised_caller_count(_Return(*_function)(), framework::member * _d
 }
 
 template<typename _Return, typename _0>
-inline void disguised_caller_count(_Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, _function(*_v0));
 }
 
 template<typename _Return, typename _0, typename _1>
-inline void disguised_caller_count(_Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, _function(*_v0, *_v1));
 }
 
 template<typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = va_arg(_args, framework::member*)->cast<_2>();
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2));
 }
 
+template<typename _Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-inline void disguised_caller_count(void(*_function)(), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19));
+}
+
+
+inline void disguised_caller_count(void(*_function)(), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -216,12 +590,12 @@ inline void disguised_caller_count(void(*_function)(), framework::member * _dest
 }
 
 template<typename _0>
-inline void disguised_caller_count(void(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	_function(*_v0);
 
@@ -229,13 +603,13 @@ inline void disguised_caller_count(void(*_function)(_0), framework::member * _de
 }
 
 template<typename _0, typename _1>
-inline void disguised_caller_count(void(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	_function(*_v0, *_v1);
 
@@ -243,22 +617,430 @@ inline void disguised_caller_count(void(*_function)(_0, _1), framework::member *
 }
 
 template<typename _0, typename _1, typename _2>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = va_arg(_args, framework::member*)->cast<_2>();
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	_function(*_v0, *_v1, *_v2);
 
 	framework::create_member(_destination);
 }
 
+template<typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18);
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	_function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19);
+
+	framework::create_member(_destination);
+}
+
 template<typename _Class, typename _Return>
-inline void disguised_caller_count(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -268,43 +1050,417 @@ inline void disguised_caller_count(_Return(_Class::*_function)(), _Class * _inst
 }
 
 template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(*_v0));
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1));
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = va_arg(_args, framework::member*)->cast<_2>();
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2));
 }
 
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19));
+}
+
 template<typename _Class>
-inline void disguised_caller_count(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -316,12 +1472,12 @@ inline void disguised_caller_count(void(_Class::*_function)(), _Class * _instanc
 }
 
 template<typename _Class, typename _0>
-inline void disguised_caller_count(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(*_v0);
 
@@ -329,13 +1485,13 @@ inline void disguised_caller_count(void(_Class::*_function)(_0), _Class * _insta
 }
 
 template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(*_v0, *_v1);
 
@@ -343,22 +1499,430 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1), _Class * _i
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = va_arg(_args, framework::member*)->cast<_2>();
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(*_v0, *_v1, *_v2);
 
 	framework::create_member(_destination);
 }
 
+template<typename _Class, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19);
+
+	framework::create_member(_destination);
+}
+
 template<typename _Class, typename _Return>
-inline void disguised_caller_count(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -368,43 +1932,417 @@ inline void disguised_caller_count(_Return(_Class::*_function)() const, const _C
 }
 
 template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(*_v0));
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1));
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = va_arg(_args, framework::member*)->cast<_2>();
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2));
 }
 
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19));
+}
+
 template<typename _Class>
-inline void disguised_caller_count(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -416,12 +2354,12 @@ inline void disguised_caller_count(void(_Class::*_function)() const, const _Clas
 }
 
 template<typename _Class, typename _0>
-inline void disguised_caller_count(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(*_v0);
 
@@ -429,13 +2367,13 @@ inline void disguised_caller_count(void(_Class::*_function)(_0) const, const _Cl
 }
 
 template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(*_v0, *_v1);
 
@@ -443,22 +2381,430 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1) const, const
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = va_arg(_args, framework::member*)->cast<_2>();
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	(_instance->*_function)(*_v0, *_v1, *_v2);
 
 	framework::create_member(_destination);
 }
 
+template<typename _Class, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18);
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	(_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19);
+
+	framework::create_member(_destination);
+}
+
 template<typename _Class>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -468,43 +2814,417 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 }
 
 template<typename _Class, typename _0>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	return machine::machine_context::active_allocator()->construct<_Class>(*_v0);
 }
 
 template<typename _Class, typename _0, typename _1>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1);
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
-	auto _v2 = va_arg(_args, framework::member*)->cast<_2>();
-	auto _v1 = va_arg(_args, framework::member*)->cast<_1>();
-	auto _v0 = va_arg(_args, framework::member*)->cast<_0>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
 	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2);
 }
 
+template<typename _Class, typename _0, typename _1, typename _2, typename _3>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	auto _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
+	auto _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
+	auto _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
+	auto _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
+	auto _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
+	auto _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
+	auto _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
+	auto _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
+	auto _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
+	auto _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
+	auto _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
+	auto _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
+	auto _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
+	auto _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
+	auto _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
+	auto _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
+	auto _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
+	auto _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
+	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
+	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
+
+	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19);
+}
+
 template<typename _Return>
-inline void disguised_caller_format(_Return(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -514,7 +3234,7 @@ inline void disguised_caller_format(_Return(*_function)(), framework::member * _
 }
 
 template<typename _Return, typename _0>
-inline void disguised_caller_format(_Return(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -525,7 +3245,7 @@ inline void disguised_caller_format(_Return(*_function)(_0), framework::member *
 }
 
 template<typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -537,7 +3257,7 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::memb
 }
 
 template<typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -549,8 +3269,382 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
 
+template<typename _Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
 
-inline void disguised_caller_format(void(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18)));
+}
+
+template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_19 _v19 = format_cast<_19>(_args, _format);
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19)));
+}
+
+
+inline void disguised_caller_format(void(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -562,7 +3656,7 @@ inline void disguised_caller_format(void(*_function)(), framework::member * _des
 }
 
 template<typename _0>
-inline void disguised_caller_format(void(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -575,7 +3669,7 @@ inline void disguised_caller_format(void(*_function)(_0), framework::member * _d
 }
 
 template<typename _0, typename _1>
-inline void disguised_caller_format(void(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -589,7 +3683,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1), framework::member 
 }
 
 template<typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -603,8 +3697,416 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::mem
 	framework::create_member(_destination);
 }
 
+template<typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18));
+
+	framework::create_member(_destination);
+}
+
+template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_19 _v19 = format_cast<_19>(_args, _format);
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	_function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19));
+
+	framework::create_member(_destination);
+}
+
 template<typename _Class, typename _Return>
-inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -614,7 +4116,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _ins
 }
 
 template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -625,7 +4127,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _i
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -637,7 +4139,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class 
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -649,8 +4151,382 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Cl
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
 
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_19 _v19 = format_cast<_19>(_args, _format);
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19)));
+}
+
 template<typename _Class>
-inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -662,7 +4538,7 @@ inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instan
 }
 
 template<typename _Class, typename _0>
-inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -675,7 +4551,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _inst
 }
 
 template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -689,7 +4565,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -703,8 +4579,416 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class
 	framework::create_member(_destination);
 }
 
+template<typename _Class, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_19 _v19 = format_cast<_19>(_args, _format);
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19));
+
+	framework::create_member(_destination);
+}
+
 template<typename _Class, typename _Return>
-inline void disguised_caller_format(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -714,7 +4998,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)() const, const _
 }
 
 template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -725,7 +5009,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -737,7 +5021,7 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, c
 }
 
 template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -749,8 +5033,382 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) cons
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
 
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18)));
+}
+
+template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_19 _v19 = format_cast<_19>(_args, _format);
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19)));
+}
+
 template<typename _Class>
-inline void disguised_caller_format(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -762,7 +5420,7 @@ inline void disguised_caller_format(void(_Class::*_function)() const, const _Cla
 }
 
 template<typename _Class, typename _0>
-inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -775,7 +5433,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _C
 }
 
 template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -789,7 +5447,7 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, cons
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list _args)
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -803,8 +5461,416 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, 
 	framework::create_member(_destination);
 }
 
+template<typename _Class, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18));
+
+	framework::create_member(_destination);
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_19 _v19 = format_cast<_19>(_args, _format);
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	(_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19));
+
+	framework::create_member(_destination);
+}
+
 template<typename _Class>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -814,7 +5880,7 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 }
 
 template<typename _Class, typename _0>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -825,7 +5891,7 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 }
 
 template<typename _Class, typename _0, typename _1>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -837,7 +5903,7 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 }
 
 template<typename _Class, typename _0, typename _1, typename _2>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list _args)
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -847,6 +5913,380 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_0 _v0 = format_cast<_0>(_args, _format);
 
 	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 4) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 5) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 6) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 7) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 8) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 9) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 10) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 11) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 12) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 13) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 14) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 15) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 16) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 17) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 18) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 19) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18));
+}
+
+template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+{
+	if (_count != 20) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+	_19 _v19 = format_cast<_19>(_args, _format);
+	_18 _v18 = format_cast<_18>(_args, _format);
+	_17 _v17 = format_cast<_17>(_args, _format);
+	_16 _v16 = format_cast<_16>(_args, _format);
+	_15 _v15 = format_cast<_15>(_args, _format);
+	_14 _v14 = format_cast<_14>(_args, _format);
+	_13 _v13 = format_cast<_13>(_args, _format);
+	_12 _v12 = format_cast<_12>(_args, _format);
+	_11 _v11 = format_cast<_11>(_args, _format);
+	_10 _v10 = format_cast<_10>(_args, _format);
+	_9 _v9 = format_cast<_9>(_args, _format);
+	_8 _v8 = format_cast<_8>(_args, _format);
+	_7 _v7 = format_cast<_7>(_args, _format);
+	_6 _v6 = format_cast<_6>(_args, _format);
+	_5 _v5 = format_cast<_5>(_args, _format);
+	_4 _v4 = format_cast<_4>(_args, _format);
+	_3 _v3 = format_cast<_3>(_args, _format);
+	_2 _v2 = format_cast<_2>(_args, _format);
+	_1 _v1 = format_cast<_1>(_args, _format);
+	_0 _v0 = format_cast<_0>(_args, _format);
+
+	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19));
 }
 
 }

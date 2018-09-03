@@ -1,6 +1,6 @@
 import re
 
-max_args = 3
+max_args = 20
 
 def move_position(s):
 	def c(x):
@@ -35,8 +35,13 @@ namespace bia
 namespace force
 {
 
-template<typename _Return, typename _List>
-_Return format_cast(_List & _args, const char *& _format);
+struct va_list_wrapper
+{
+	std::va_list args;
+};
+
+template<typename _Return>
+_Return format_cast(va_list_wrapper & _args, const char *& _format);
 
 void disguised_caller(void(*_function)(), framework::member * _destination);
 
@@ -91,8 +96,8 @@ namespace bia
 namespace force
 {
 
-template<typename _Return, typename _List>
-inline _Return format_cast(_List & _args, const char *& _format)
+template<typename _Return>
+inline _Return format_cast(va_list_wrapper & _args, const char *& _format)
 {
 	using namespace utility;
 
@@ -105,7 +110,7 @@ gt_redo:;
 		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args, int32_t));
+			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args.args, int32_t));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
@@ -115,7 +120,7 @@ gt_redo:;
 		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args, int64_t));
+			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args.args, int64_t));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
@@ -125,7 +130,7 @@ gt_redo:;
 		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
 
 		if (is_number) {
-			auto _value = va_arg(_args, int64_t);
+			auto _value = va_arg(_args.args, int64_t);
 
 			return chooser<is_number, _Return, double>().choose(*reinterpret_cast<double*>(&_value));
 		} else {
@@ -137,21 +142,21 @@ gt_redo:;
 		constexpr auto is_string = std::is_same<_Return, const char*>::value;
 
 		if (is_string) {
-			return chooser<is_string, _Return, const char*>().choose(va_arg(_args, const char*));
+			return chooser<is_string, _Return, const char*>().choose(va_arg(_args.args, const char*));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'M':
 	{
-		if (auto _ptr = va_arg(_args, framework::member*)->cast<_Return>()) {
+		if (auto _ptr = va_arg(_args.args, framework::member*)->cast<_Return>()) {
 			return *_ptr;
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'r':
-		va_arg(_args, void*);
+		va_arg(_args.args, void*);
 
 		goto gt_redo;
 	default:
@@ -335,11 +340,11 @@ for type in ["count", "format"]:
 			filler["arg_count"] = i
 
 			h.write("""{template_begin}{template_middle}{template_end}
-{function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list _args);
+{function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list_wrapper & _args);
 
 """.format(**filler).encode())
 			f.write("""{template_begin}{template_middle}{template_end}
-inline {function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list _args)
+inline {function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list_wrapper & _args)
 {{
 	if (_count != {arg_count}) {{
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -358,7 +363,7 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 			if type == "count":
 				filler["body2"] += (", " if i != 0 else "") + "*_v{0}".format(i)
 				filler["preparations"] = """
-	auto _v{0} = va_arg(_args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
+	auto _v{0} = va_arg(_args.args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
 			else:
 				filler["preparations"] = """
 	_{0} _v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]
