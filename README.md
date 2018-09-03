@@ -1,5 +1,5 @@
 # Bia
-Embedded C++ Scripting Language
+Embedded C++11 Scripting Language
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hgg15mmsrffx3dua/branch/master?svg=true)](https://ci.appveyor.com/project/terrakuh/bia/branch/master) [![Build Status](https://travis-ci.org/terrakuh/Bia.svg?branch=master)](https://travis-ci.org/terrakuh/Bia)
 
@@ -44,25 +44,25 @@ _context.execute(_code.c_str(), _code.length());
 
 ```
 # var is now a string
-global var = "hello"
+global _var = "hello"
 
 # this is invalid
-var = 34
+_var = 34
 
 # redeclare as an integral
-global var = 0
+global _var = 0
 
 # this is now valid
-var = 34
+_var = 34
 ```
 
 **Function Calls** (In development)
 - Normal function call: `normal_function()`
-- Member function call: `object.function()`
+- Member function call: `_object.function()`
 - Optimized member function call. This is more efficient in loops:
 
 ```
-global function_pointer = object.function
+global function_pointer = _object.function
 function_pointer()
 ```
 
@@ -105,7 +105,7 @@ do until false {
 ```
 if 1 == 0 {
   print true
-} else if some_value == 3 {
+} else if _some_value == 3 {
   print false
 }
 ```
@@ -160,4 +160,4 @@ bia::set_class<my_class>(_context, "my_class")
 Bia compiles the script directly to memory before the first run and executes it as a normal C++ function. This technique allows very fast run times since the code is directly executed on the CPU.
 
 # Supported Platforms
-Currently the x86 architecture with the MSVC compiler is supported. Additional support for x64, ARM, GCC and Clang is planned.
+Currently the MSVC and GNU (>=4.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for ARM and Clang is planned.
