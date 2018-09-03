@@ -94,16 +94,18 @@ int main()
 			puts("hey world");
 			printf("%f, %f\n", a, b);
 		});
-		//set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
+		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		//SetConsoleOutputCP(65001);
 
 		// Script
 		char _script[] = u8R""(
 
-var i = 34
-hey(23.3, 5.53)
-ser(copyof i, "yhes")
+hey(3.4,4.5)
+var i = printer(399)
+i.hey()
+i.hi()
+printer.hey()
 print i
 
 )"";
