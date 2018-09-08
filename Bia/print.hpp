@@ -20,7 +20,7 @@ inline void BIA_STATIC_CALLING_CONVETION print_int32(int32_t _value)
 
 inline void BIA_STATIC_CALLING_CONVETION print_int64(int64_t _value)
 {
-	printf("%lli\n", _value);
+	printf("%li\n", _value);
 }
 
 inline void BIA_STATIC_CALLING_CONVETION print_true()
