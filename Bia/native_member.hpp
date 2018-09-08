@@ -77,11 +77,11 @@ public:
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right)
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override
 	{
 		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
