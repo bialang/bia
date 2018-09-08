@@ -5,7 +5,8 @@
 #define BIA_COMPILER_MSVC 1
 #elif defined(__GNUC__) || defined(__GNUG__)
 #define BIA_COMPILER_GNU 1
-//#elif defined(__clang__)
+#elif defined(__clang__)
+#define BIA_COMPILER_CLANG 1
 //#elif defined(__ICC) || defined(__INTEL_COMPILER)
 //#elif defined(__IBMC__) || defined(__IBMCPP__)
 //#elif defined(__SUNPRO_C)  || defined(__SUNPRO_CC)
@@ -54,8 +55,8 @@
 #define BIA_EXPORT
 #endif
 
-// GNU
-#elif defined(BIA_COMPILER_GNU)
+// GNU and Clang
+#elif defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)
 
 // Calling conventions
 #if defined(BIA_ARCHITECTURE_X86_32)
