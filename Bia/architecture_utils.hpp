@@ -289,11 +289,20 @@ enum class OP_CODE
 
 #if defined(BIA_ARCHITECTURE_X86_32)
 constexpr auto element_size = 4;
+
+#if defined(BIA_COMPILER_MSVC)
+constexpr auto stack_alignment = 4;
+#else
+constexpr auto stack_alignment = 16;
+#endif
+
 typedef eax accumulator;
 typedef esp stack_pointer;
 typedef ebp base_pointer;
 #elif defined(BIA_ARCHITECTURE_X86_64)
 constexpr auto element_size = 8;
+constexpr auto stack_alignment = 16;
+
 typedef rax accumulator;
 typedef rsp stack_pointer;
 typedef rbp base_pointer;
@@ -301,24 +310,35 @@ typedef rbp base_pointer;
 
 static_assert(element_size == sizeof(void*), "Invalid element size.");
 
-inline int8_t operator "" _8(unsigned long long _value)
+inline int8_t operator "" _8(unsigned long long _value) noexcept
 {
 	return static_cast<int8_t>(_value);
 }
 
-inline int16_t operator "" _16(unsigned long long _value)
+inline int16_t operator "" _16(unsigned long long _value) noexcept
 {
 	return static_cast<int16_t>(_value);
 }
 
-inline int32_t operator "" _32(unsigned long long _value)
+inline int32_t operator "" _32(unsigned long long _value) noexcept
 {
 	return static_cast<int32_t>(_value);
 }
 
-inline int64_t operator "" _64(unsigned long long _value)
+inline int64_t operator "" _64(unsigned long long _value) noexcept
 {
 	return static_cast<int64_t>(_value);
+}
+
+inline int32_t align_stack(int32_t _value) noexcept
+{
+	auto _tmp = _value % stack_alignment;
+
+	if (_tmp) {
+		_value += stack_alignment - _tmp;
+	}
+
+	return _value;
 }
 
 template<typename _Register, typename _Offset, bool _Effective_address>
