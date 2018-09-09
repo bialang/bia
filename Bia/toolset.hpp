@@ -14,6 +14,9 @@
 #include "member.hpp"
 #include "type_traits.hpp"
 #include "passer.hpp"
+#include "static_passer.hpp"
+#include "member_passer.hpp"
+#include "varg_member_passer.hpp"
 
 
 namespace bia
@@ -23,7 +26,7 @@ namespace machine
 namespace platform
 {
 
-#if defined(BIA_COMPILER_MSVC) || defined(BIA_COMPILER_GNU)
+#if defined(BIA_COMPILER_MSVC) || defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)
 class toolset
 {
 public:
@@ -55,7 +58,7 @@ public:
 	 *
 	 * @throws See architecture::instruction().
 	*/
-	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output)
+	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output), _global_passer(_output)
 	{
 		this->_context = _context;
 
@@ -89,7 +92,7 @@ public:
 		}
 
 		// Adjust setup
-#if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
+#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 		if (true) {
 #else
 		if (_temp_count > 0) {
@@ -99,36 +102,31 @@ public:
 
 			_output->set_position(_temp_member_pos);
 
-#if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
-			// Allocate temp members + shadow space + align stack to 16 bytes
-			instruction32<OP_CODE::SUB, stack_pointer>(*_output, (4 + _temp_count + _temp_count % 2) * element_size);
-#elif defined(BIA_ARCHITECTURE_X86_64)
-			// Allocate temp members + align stack to 16 bytes
-			instruction32<OP_CODE::SUB, stack_pointer>(*_output, (_temp_count + _temp_count % 2) * element_size);
+#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
+			// Allocate temp members + shadow space + align stack
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((4 + _temp_count) * element_size));
 #else
-			// Allocate temp members
-			instruction32<OP_CODE::SUB, stack_pointer>(*_output, _temp_count * element_size);
+			// Allocate temp members + align stack
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack(_temp_count * element_size));
 #endif
 
-			call_member(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>((0 + _temp_count) * -element_size), static_cast<uint32_t>(_temp_count));
+			call_member(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>((_temp_count) * -element_size), static_cast<uint32_t>(_temp_count));
 
 			_output->set_position(_current_pos);
 
 			// Member deletion
 			call_member(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
 
-#if defined(BIA_COMPILER_MSVC) && defined(BIA_ARCHITECTURE_X86_64)
+#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 			// Deallocate temp members + shadow space
-			instruction32<OP_CODE::ADD, stack_pointer>(*_output, (4 + _temp_count + _temp_count % 2) * element_size);
-#elif defined(BIA_ARCHITECTURE_X86_64)
-			// Allocate temp members + align stack to 16 bytes
-			instruction32<OP_CODE::ADD, stack_pointer>(*_output, (_temp_count + _temp_count % 2) * element_size);
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack((4 + _temp_count) * element_size));
 #else
 			// Deallocate temp members
-			instruction32<OP_CODE::ADD, stack_pointer>(*_output, _temp_count * element_size);
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack(_temp_count * element_size));
 #endif
 
 			// Clean up stack
+			instruction<OP_CODE::MOVE, stack_pointer, base_pointer>(*_output);
 			instruction<OP_CODE::POP, base_pointer>(*_output);
 		} // Skip setup
 		else {
@@ -174,7 +172,7 @@ public:
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
-		static_passer _passer(*_output);
+		static_passer _passer(_global_passer);
 
 		_passer.pass_all(std::forward<_Args2>(_args)...);
 
@@ -187,7 +185,6 @@ public:
 
 		instruction<OP_CODE::CALL, accumulator>(*_output);
 
-		// Pop parameter
 		_passer.pop_all();
 	}
 	/**
@@ -218,7 +215,7 @@ public:
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
-		member_passer _passer(*_output);
+		member_passer _passer(_global_passer);
 
 		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
 
@@ -270,7 +267,7 @@ public:
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
-		member_passer _passer(*_output);
+		member_passer _passer(_global_passer);
 
 		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
 
@@ -283,7 +280,7 @@ public:
 
 		address.member = _function;
 
-#if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
+#if defined(BIA_ARCHITECTURE_X86_32) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 		auto _index = reinterpret_cast<int32_t>(address.address) ^ 1;
 
 		instruction<OP_CODE::MOVE, eax, ecx, void>(*_output);
@@ -293,7 +290,7 @@ public:
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
-#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+#elif defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
 
 		instruction<OP_CODE::MOVE, rax, rdi, void>(*_output);
@@ -342,7 +339,7 @@ public:
 		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
 
 		// Push all parameters
-		member_passer _passer(*_output);
+		member_passer _passer(_global_passer);
 
 		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
 
@@ -355,7 +352,7 @@ public:
 
 		address.member = _function;
 
-#if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
+#if defined(BIA_ARCHITECTURE_X86_32) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 		auto _index = reinterpret_cast<int32_t>(address.address) ^ 1;
 
 		instruction<OP_CODE::MOVE, eax, ecx, void>(*_output);
@@ -365,7 +362,7 @@ public:
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
-#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+#elif defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
 
 		instruction<OP_CODE::MOVE, rax, rdi, void>(*_output);
@@ -427,7 +424,7 @@ public:
 
 		address.member = _function;
 
-#if defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_32)
+#if defined(BIA_ARCHITECTURE_X86_32) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 		auto _index = reinterpret_cast<int32_t>(address.address) ^ 1;
 
 		instruction<OP_CODE::MOVE, eax, ecx, void>(*_output);
@@ -437,7 +434,7 @@ public:
 		} else {
 			instruction<OP_CODE::CALL, eax>(*_output, _index);
 		}
-#elif defined(BIA_COMPILER_GNU) && defined(BIA_ARCHITECTURE_X86_64)
+#elif defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 		auto _index = static_cast<int32_t>(reinterpret_cast<int64_t>(address.address) ^ 1);
 
 		instruction<OP_CODE::MOVE, r11, rdi, void>(*_output);
@@ -456,16 +453,15 @@ public:
 		instruction<OP_CODE::CALL, accumulator>(*_output);
 #endif
 
-		// Pop
 		_passer.pop_all();
 }
 	void write_test()
 	{
 		instruction<OP_CODE::XOR, eax, eax>(*_output);
 	}
-	varg_member_passer create_varg_passer()
+	varg_member_passer create_varg_passer() noexcept
 	{
-		return varg_member_passer(*_output);
+		return varg_member_passer(_global_passer);
 	}
 	position jump(JUMP _type, position _destination = 0, position _start = -1)
 	{
@@ -526,6 +522,8 @@ private:
 	stream::output_stream::cursor_type _setup_end_pos;
 	/** The machine context. */
 	machine_context * _context;
+	/** The parameter passer manager. */
+	passer _global_passer;
 };
 #endif
 
