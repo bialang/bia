@@ -90,9 +90,12 @@ int main()
 			return _p;
 		});
 
-		set_lambda(_context, "hey", [](double a, double b) {
+		set_lambda(_context, "hey", [](double a, double b, int x, int y) {
 			puts("hey world");
-			printf("%f, %f\n", a, b);
+			printf("%f, %f, %i-%i\n", a, b, x, y);
+		});
+		set_lambda(_context, "oj", [](int a) {
+			printf("hey world%i\n", a);
 		});
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
@@ -101,7 +104,8 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-hey(3.4,4.5)
+oj(0x6161)
+hey(3.4,4.5, 555, 666)
 var i = printer(399)
 i.hey()
 i.hi()
