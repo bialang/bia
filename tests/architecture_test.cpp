@@ -47,3 +47,32 @@ void architecture_test::test_xor()
 	CPPUNIT_ASSERT_MESSAGE("xor r12, r12", compare<OP_CODE::XOR, r12, r12>({ 0x4D, 0x31, 0xE4 }));
 #endif
 }
+
+void architecture_test::test_function_call()
+{
+#if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
+	CPPUNIT_ASSERT_MESSAGE("ret", compare<OP_CODE::RETURN_NEAR>({ 0xC3 }));
+#endif
+	
+#if defined(BIA_ARCHITECTURE_X86_32)
+	CPPUNIT_ASSERT_MESSAGE("call eax", compare<OP_CODE::CALL, eax>({ 0xFF, 0xD0 }));
+	CPPUNIT_ASSERT_MESSAGE("call esp", compare<OP_CODE::CALL, esp>({ 0xFF, 0xD4 }));
+	CPPUNIT_ASSERT_MESSAGE("call [eax+0x66]", compare<OP_CODE::CALL, eax, int8_t>(0x66, { 0xFF, 0x50, 0x66 }));
+	CPPUNIT_ASSERT_MESSAGE("call [esp-0x18]", compare<OP_CODE::CALL, esp, int8_t>(-0x18, { 0xFF, 0x54, 0x24, 0xE8 }));
+	CPPUNIT_ASSERT_MESSAGE("call [eax-0x65381]", compare<OP_CODE::CALL, eax, int32_t>(-0x65381, { 0xFF, 0x90, 0x7F, 0xAC, 0xF9, 0xFF }));
+	CPPUNIT_ASSERT_MESSAGE("call [esp+0x481235]", compare<OP_CODE::CALL, esp, int32_t>(0x481235, { 0xFF, 0x94, 0x24, 0x35, 0x12, 0x48, 0x00 }));
+#elif defined(BIA_ARCHITECTURE_X86_64)
+	CPPUNIT_ASSERT_MESSAGE("call rax", compare<OP_CODE::CALL, rax>({ 0xFF, 0xD0 }));
+	CPPUNIT_ASSERT_MESSAGE("call rsp", compare<OP_CODE::CALL, rsp>({ 0xFF, 0xD4 }));
+	CPPUNIT_ASSERT_MESSAGE("call r8", compare<OP_CODE::CALL, r8>({ 0x41, 0xFF, 0xD0 }));
+	CPPUNIT_ASSERT_MESSAGE("call r12", compare<OP_CODE::CALL, r12>({ 0x41, 0xFF, 0xD4 }));
+	CPPUNIT_ASSERT_MESSAGE("call [rax+0x65]", compare<OP_CODE::CALL, rax, int8_t>(0x65, { 0xFF, 0x50, 0x65 }));
+	CPPUNIT_ASSERT_MESSAGE("call [rsp+0x65]", compare<OP_CODE::CALL, rsp, int8_t>(0x65, { 0xFF, 0x54, 0x24, 0x65 }));
+	CPPUNIT_ASSERT_MESSAGE("call [r8+0x65]", compare<OP_CODE::CALL, r8, int8_t>(0x65, { 0x41, 0xFF, 0x50, 0x65 }));
+	CPPUNIT_ASSERT_MESSAGE("call [r12+0x65]", compare<OP_CODE::CALL, r12, int8_t>(0x65, { 0x41, 0xFF, 0x54, 0x24, 0x65 }));
+	CPPUNIT_ASSERT_MESSAGE("call [rax-0x653215]", compare<OP_CODE::CALL, rax, int32_t>(-0x653215, { 0xFF, 0x90, 0xEB, 0xCD, 0x9A, 0xFF }));
+	CPPUNIT_ASSERT_MESSAGE("call [rsp-0x653215]", compare<OP_CODE::CALL, rsp, int32_t>(-0x653215, { 0xFF, 0x94, 0x24, 0xEB, 0xCD, 0x9A, 0xFF }));
+	CPPUNIT_ASSERT_MESSAGE("call [r8-0x653215]", compare<OP_CODE::CALL, r8, int32_t>(-0x653215, { 0x41, 0xFF, 0x90, 0xEB, 0xCD, 0x9A, 0xFF }));
+	CPPUNIT_ASSERT_MESSAGE("call [r12-0x653215]", compare<OP_CODE::CALL, r12, int32_t>(-0x653215, { 0x41, 0xFF, 0x94, 0x24, 0xEB, 0xCD, 0x9A, 0xFF }));
+#endif
+}
