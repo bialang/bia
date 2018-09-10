@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include "output_stream.hpp"
+#include "architecture.hpp"
 #include "architecture_utils.hpp"
 
 
@@ -17,6 +18,10 @@ struct reserved_parameter
 {
 };
 
+class static_passer;
+class member_passer;
+class varg_member_passer;
+
 class passer
 {
 public:
@@ -30,29 +35,33 @@ public:
 	}
 	void prepare_pushing(pass_count_type _element_count, bool _caller_cleans)
 	{
-		auto _padding = align_stack(_element_count * element_size) - _element_count * element_size;
+		auto _padding = align_stack(_stack_offset * element_size) - _stack_offset * element_size;
 
 		// Write padding
 		if (_padding) {
-
+			instruction8<OP_CODE::SUB, stack_pointer>(_output, _padding);
+			
+			if (_caller_cleans) {
+				_credit_entry += _padding / element_size;
+			}
 		}
 
-		_push_tracker.push(std::make_pair(_padding / element_size, _caller_cleans));
+		if (_caller_cleans) {
+			_credit_entry += _element_count;
+		}
 	}
 	void pop()
 	{
-
-	}
-	pass_count_type stack_offset() const noexcept
-	{
-		return _stack_offset;
-	}
-	stream::output_stream & output() noexcept
-	{
-		return _output;
+		if (_credit_entry) {
+			instruction8<OP_CODE::ADD, stack_pointer>(_output, _credit_entry * element_size);
+		}
 	}
 
 private:
+	friend static_passer;
+	friend member_passer;
+	friend varg_member_passer;
+
 	typedef std::pair<pass_count_type, bool> entry_type;
 
 	constexpr static pass_count_type _max_credit_entry = 0x7f / element_size;

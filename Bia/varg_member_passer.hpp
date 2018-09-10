@@ -48,12 +48,12 @@ public:
 
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 		// All floating point values are pushed onto the stack (mov al, 0)
-		_passer.output().write_all(0xb0_8, 0x00_8);
+		_passer._output.write_all(0xb0_8, 0x00_8);
 #endif
 	}
 	pass_count_type compensatory_pushes()
 	{
-		return (align_stack(_passer.stack_offset() * element_size) - _passer.stack_offset() * element_size) / element_size;
+		return (align_stack(_passer._stack_offset * element_size) - _passer._stack_offset * element_size) / element_size;
 	}
 };
 
