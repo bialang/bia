@@ -30,7 +30,8 @@ public:
 	static_passer(passer & _passer) noexcept : _passer(_passer)
 	{
 		_count_only = false;
-		_caller_cleans = false;
+		_caller_pops_parameters = false;
+		_caller_pops_padding = false;
 		_pushed = 0;
 		_integral_passed = 0;
 		_floating_point_passed = 0;
@@ -54,10 +55,11 @@ public:
 		// Allocate shadow space
 		if (_old_pushed + _pushed) {
 			_pushed += 4;
+			_passer._stack_offset += 4;
 		}
 #endif
 
-		_passer.prepare_pushing(_old_pushed + _pushed, _caller_cleans);
+		_passer.prepare_pushing(_old_pushed + _pushed, _caller_pops_parameters, _caller_pops_padding);
 
 		// Pass arguments
 		pass(_args...);
@@ -73,8 +75,10 @@ public:
 protected:
 	/** If true, nothing will be written to the._output. */
 	bool _count_only;
-	/** Whether the caller cleans the stack after a funtion call or not. */
-	bool _caller_cleans;
+	/** Whether the caller cleans the parameters after a funtion call or not. */
+	bool _caller_pops_parameters;
+	/** Whether the caller cleans the padding after a function call or not. */
+	bool _caller_pops_padding;
 	/** The._output stream. */
 	passer & _passer;
 	/** The amount of pushed elements. */

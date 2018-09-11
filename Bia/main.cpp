@@ -90,9 +90,9 @@ int main()
 			return _p;
 		});
 
-		set_lambda(_context, "hey", [](double a, double b, int x, int y) {
+		set_lambda(_context, "hey", [](int x, int y) {
 			puts("hey world");
-			printf("%f, %f, %i-%i\n", a, b, x, y);
+			printf("%f, %f, %i-%i\n", 1.,2., x, y);
 		});
 		set_lambda(_context, "oj", [](int a) {
 			printf("hey world%i\n", a);
@@ -104,13 +104,8 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-oj(0x6161)
-hey(3.4,4.5, 555, 666)
-var i = printer(399)
-i.hey()
-i.hi()
-printer.hey()
-print i
+#hey(1,2)
+oj(443)
 
 )"";
 

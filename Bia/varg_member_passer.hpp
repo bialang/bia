@@ -15,7 +15,8 @@ class varg_member_passer : protected static_passer
 public:
 	varg_member_passer(passer & _passer) noexcept : static_passer(_passer)
 	{
-		_caller_cleans = true;
+		_caller_pops_parameters = true;
+		_caller_pops_padding = true;
 
 #if defined(BIA_ARCHITECTURE_X86_32)
 		_integral_passed = 2;

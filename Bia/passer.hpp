@@ -6,7 +6,7 @@
 #include "architecture.hpp"
 #include "architecture_utils.hpp"
 
-
+#include <cstdio>
 namespace bia
 {
 namespace machine
@@ -33,27 +33,36 @@ public:
 		_stack_offset = 0;
 		_credit_entry = 0;
 	}
-	void prepare_pushing(pass_count_type _element_count, bool _caller_cleans)
+	void prepare_pushing(pass_count_type _element_count, bool _caller_pops_parameters, bool _caller_pops_padding)
 	{
 		auto _padding = align_stack(_stack_offset * element_size) - _stack_offset * element_size;
-
+		printf("padding: %i for %i (%i)\n", _padding, _element_count, _stack_offset);
 		// Write padding
 		if (_padding) {
 			instruction8<OP_CODE::SUB, stack_pointer>(_output, _padding);
 			
-			if (_caller_cleans) {
+			// Add padding
+			if (_caller_pops_padding) {
+				_stack_offset += _padding / element_size;
 				_credit_entry += _padding / element_size;
 			}
 		}
 
-		if (_caller_cleans) {
+		// Caller pops -> they can be used later -> credit entry
+		if (_caller_pops_parameters) {
 			_credit_entry += _element_count;
+		} // Callee pops -> can't be used
+		else {
+			_stack_offset -= _element_count;
 		}
 	}
 	void pop()
 	{
 		if (_credit_entry) {
 			instruction8<OP_CODE::ADD, stack_pointer>(_output, _credit_entry * element_size);
+			
+			_stack_offset -= _credit_entry;
+			_credit_entry = 0;
 		}
 	}
 
