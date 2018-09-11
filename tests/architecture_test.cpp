@@ -16,9 +16,9 @@ template<OP_CODE _Op_code, REGISTER _Destination, REGISTER _Source>
 inline bool compare(std::initalizer_list<int8_t> _expected)
 {
 	bia::stream::buffer_output_stream _output;
-	
+
 	instruction<_Op_code, _Destination, _Source>(_output);
-	
+
 	// Compare
 }
 
@@ -48,12 +48,24 @@ void architecture_test::test_xor()
 #endif
 }
 
+void architecture_test::test_jump()
+{
+#if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
+	CPPUNIT_ASSERT_MESSAGE("jmp 0x426464", compare32<OP_CODE::JUMP_RELATIVE>(0x426464, { 0xE9, 0x60, 0x64, 0x42, 0x00 }));
+	CPPUNIT_ASSERT_MESSAGE("jmp -0x426464", compare32<OP_CODE::JUMP_RELATIVE>(-0x426464, { 0xE9, 0x98, 0x9B, 0xBD, 0xFF }));
+	CPPUNIT_ASSERT_MESSAGE("je 0x426464", compare32<OP_CODE::JUMP_EQUAL>(0x426464, { 0x0F, 0x84, 0x60, 0x64, 0x42, 0x00 }));
+	CPPUNIT_ASSERT_MESSAGE("je -0x426464", compare32<OP_CODE::JUMP_EQUAL>(-0x426464, { 0x0F, 0x84, 0x98, 0x9B, 0xBD, 0xFF }));
+	CPPUNIT_ASSERT_MESSAGE("jne 0x426464", compare32<OP_CODE::JUMP_NOT_EQUAL>(0x426464, { 0x0F, 0x85, 0x60, 0x64, 0x42, 0x00 }));
+	CPPUNIT_ASSERT_MESSAGE("jne -0x426464", compare32<OP_CODE::JUMP_NOT_EQUAL>(-0x426464, { 0x0F, 0x85, 0x98, 0x9B, 0xBD, 0xFF }));
+#endif
+}
+
 void architecture_test::test_function_call()
 {
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
 	CPPUNIT_ASSERT_MESSAGE("ret", compare<OP_CODE::RETURN_NEAR>({ 0xC3 }));
 #endif
-	
+
 #if defined(BIA_ARCHITECTURE_X86_32)
 	CPPUNIT_ASSERT_MESSAGE("call eax", compare<OP_CODE::CALL, eax>({ 0xFF, 0xD0 }));
 	CPPUNIT_ASSERT_MESSAGE("call esp", compare<OP_CODE::CALL, esp>({ 0xFF, 0xD4 }));

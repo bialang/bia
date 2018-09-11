@@ -28,13 +28,4 @@ public:
 	void test_pop();
 	void test_function_call();
 	void test_other();
-
-public:
-  void setUp();
-
-protected:
-  void example();
-  void anotherExample();
-  void testAdd();
-  void testEquals();
 };
