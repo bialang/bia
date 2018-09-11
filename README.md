@@ -5,7 +5,7 @@ Embedded C++11 Scripting Language
 
 # Embedded Example
 
-```
+``` cpp
 // Create a context with the default memory allocators
 bia::machine::machine_context _context;
 
@@ -113,7 +113,7 @@ if 1 == 0 {
 # The Simple C++ Interface
 - Adding a static function to your `_context`:
 
-```
+``` cpp
 // A static C++ function
 int square(int _base)
 {
@@ -126,7 +126,7 @@ bia::set_function(_context, "square", &square);
 
 - Adding a lambda function:
 
-```
+``` cpp
 // Adding the function
 bia::set_lambda(_context, "int_sqrt", [] (double _value) {
   return static_cast<int>(sqrt(_value));
@@ -135,7 +135,7 @@ bia::set_lambda(_context, "int_sqrt", [] (double _value) {
 
  - Adding a C++ class:
 
-```
+``` cpp
 // A C++ class
 class my_class
 {
