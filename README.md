@@ -5,7 +5,7 @@ Embedded C++11 Scripting Language
 
 # Embedded Example
 
-```
+``` cpp
 // Create a context with the default memory allocators
 bia::machine::machine_context _context;
 
@@ -29,12 +29,12 @@ _context.execute(_code.c_str(), _code.length());
 ```
 
 # Language Features
-**Native types**
+## Native types
 - Integrals with a range from -2^32 to 2^32-1
 - 64-Bit floating point numbers
 - Classic C-style string with C++11 string literal support
 
-**Variable Declaration:**
+## Variable Declaration
 - Global variables `global`: `global i = 0`
 
   Global variables can be access by any script in the same context at any time.
@@ -56,7 +56,7 @@ global _var = 0
 _var = 34
 ```
 
-**Function Calls** (In development)
+## Function Calls
 - Normal function call: `normal_function()`
 - Member function call: `_object.function()`
 - Optimized member function call. This is more efficient in loops:
@@ -66,8 +66,8 @@ global function_pointer = _object.function
 function_pointer()
 ```
 
-**Loops**
-- While loop:
+## Loops
+### `while` loop
 
 ```
 while true {
@@ -75,7 +75,7 @@ while true {
 }
 ```
 
-- Do-While loop:
+### `do while` loop
 
 ```
 do while true {
@@ -83,7 +83,9 @@ do while true {
 }
 ```
 
-- Until loop. These loops are just like `while` loops but with negated condition:
+### `until` loop
+
+These loops are just like `while` loops but with negated condition:
 
 ```
 until false {
@@ -91,7 +93,7 @@ until false {
 }
 ```
 
-- Do-Until loop.
+### `do until` loop
 
 ```
 do until false {
@@ -99,8 +101,8 @@ do until false {
 }
 ```
 
-**Conditional Statements**
-- If statements. Conditions that can be evaluated at compile time will be optimized away:
+## Conditional Statements
+- `if` statements. Conditions that can be evaluated at compile time will be optimized away:
 
 ```
 if 1 == 0 {
@@ -111,9 +113,9 @@ if 1 == 0 {
 ```
 
 # The Simple C++ Interface
-- Adding a static function to your `_context`:
+## Adding a static function to your context
 
-```
+``` cpp
 // A static C++ function
 int square(int _base)
 {
@@ -124,18 +126,18 @@ int square(int _base)
 bia::set_function(_context, "square", &square);
 ```
 
-- Adding a lambda function:
+## Adding a lambda function
 
-```
+``` cpp
 // Adding the function
 bia::set_lambda(_context, "int_sqrt", [] (double _value) {
   return static_cast<int>(sqrt(_value));
 });
 ```
 
- - Adding a C++ class:
+ ## Adding a C++ class
 
-```
+``` cpp
 // A C++ class
 class my_class
 {
@@ -160,4 +162,4 @@ bia::set_class<my_class>(_context, "my_class")
 Bia compiles the script directly to memory before the first run and executes it as a normal C++ function. This technique allows very fast run times since the code is directly executed on the CPU.
 
 # Supported Platforms
-Currently the MSVC and GNU (>=4.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for ARM and Clang is planned.
+Currently the MSVC , GNU (>=4.9) and Clang (>=3.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for the ARM architecture is planned.
