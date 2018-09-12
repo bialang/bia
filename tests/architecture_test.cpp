@@ -60,6 +60,40 @@ void architecture_test::test_jump()
 #endif
 }
 
+void architecture_test::test_push()
+{
+#if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
+	CPPUNIT_ASSERT_MESSAGE("push 0x5", compare8<OP_CODE::PUSH>(0x5, { 0x6A, 0x05 }));
+	CPPUNIT_ASSERT_MESSAGE("push -0x5", compare8<OP_CODE::PUSH>(-0x5, { 0x6A, 0xFB }));
+	CPPUNIT_ASSERT_MESSAGE("push 0x56985", compare32<OP_CODE::PUSH>(0x56985, { 0x68, 0x85, 0x69, 0x05, 0x00 }));
+	CPPUNIT_ASSERT_MESSAGE("push -0x56985", compare32<OP_CODE::PUSH>(-0x56985, { 0x68, 0x7B, 0x96, 0xFA, 0xFF }));
+#endif
+
+#if defined(BIA_ARCHITECTURE_X86_32)
+	CPPUNIT_ASSERT_MESSAGE("push eax", compare<OP_CODE::PUSH, eax>({ 0x50 }));
+	CPPUNIT_ASSERT_MESSAGE("push esp", compare<OP_CODE::PUSH, esp>({ 0x54 }));
+	CPPUNIT_ASSERT_MESSAGE("push [eax+0x35]", compare<OP_CODE::PUSH, eax, int8_t>(0x35, { 0xFF, 0x70, 0x35 }));
+	CPPUNIT_ASSERT_MESSAGE("push [esp-0x35]", compare<OP_CODE::PUSH, esp, int8_t>(-0x35, { 0xFF, 0x74, 0x24, 0xCB }));
+	CPPUNIT_ASSERT_MESSAGE("push [eax-0x398655]", compare<OP_CODE::PUSH, eax, int32_t>(-0x398655, { 0xFF, 0xB0, 0xAB, 0x79, 0xC6, 0xFF }));
+	CPPUNIT_ASSERT_MESSAGE("push [esp+0x398655]", compare<OP_CODE::PUSH, esp, int32_t>(0x398655, { 0xFF, 0xB4, 0x24, 0x55, 0x86, 0x39, 0x00 }));
+#endif
+
+#if defined(BIA_ARCHITECTURE_X86_64)
+	CPPUNIT_ASSERT_MESSAGE("push rax", compare<OP_CODE::PUSH, rax>({ 0x50 }));
+	CPPUNIT_ASSERT_MESSAGE("push rsp", compare<OP_CODE::PUSH, rsp>({ 0x54 }));
+	CPPUNIT_ASSERT_MESSAGE("push r8", compare<OP_CODE::PUSH, r8>({ 0x41, 0x50 }));
+	CPPUNIT_ASSERT_MESSAGE("push r12", compare<OP_CODE::PUSH, r12>({ 0x41, 0x54 }));
+	CPPUNIT_ASSERT_MESSAGE("push [rax+0x35]", compare<OP_CODE::PUSH, rax, int8_t>(0x35, { 0xFF, 0x70, 0x35 }));
+	CPPUNIT_ASSERT_MESSAGE("push [rsp-0x35]", compare<OP_CODE::PUSH, rsp, int8_t>(-0x35, { 0xFF, 0x74, 0x24, 0xCB }));
+	CPPUNIT_ASSERT_MESSAGE("push [r8-0x35]", compare<OP_CODE::PUSH, r8, int8_t>(-0x35, { 0x41, 0xFF, 0x70, 0xCB }));
+	CPPUNIT_ASSERT_MESSAGE("push [r12+0x35]", compare<OP_CODE::PUSH, r12, int8_t>(0x35, { 0x41, 0xFF, 0x74, 0x24, 0x35 }));
+	CPPUNIT_ASSERT_MESSAGE("push [rax-0x398655]", compare<OP_CODE::PUSH, rax, int32_t>(-0x398655, { 0xFF, 0xB0, 0xAB, 0x79, 0xC6, 0xFF }));
+	CPPUNIT_ASSERT_MESSAGE("push [rsp+0x398655]", compare<OP_CODE::PUSH, rsp, int32_t>(0x398655, { 0xFF, 0xB4, 0x24, 0x55, 0x86, 0x39, 0x00 }));
+	CPPUNIT_ASSERT_MESSAGE("push [r8+0x398655]", compare<OP_CODE::PUSH, r8, int32_t>(0x398655, { 0x41, 0xFF, 0xB0, 0x55, 0x86, 0x39, 0x00 }));
+	CPPUNIT_ASSERT_MESSAGE("push [r12-0x398655]", compare<OP_CODE::PUSH, r12, int32_t>(-0x398655, { 0x41, 0xFF, 0xB4, 0x24, 0xAB, 0x79, 0xC6, 0xFF }));
+#endif
+}
+
 void architecture_test::test_function_call()
 {
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
