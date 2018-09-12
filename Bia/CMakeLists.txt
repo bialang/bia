@@ -101,7 +101,7 @@ set(Bia_SOURCE_FILES_MODULAR "")
 source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})
 source_group("Source Files\\machine\\modular" FILES ${Bia_SOURCE_FILES_MODULAR})
 
-set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "passer.hpp" "toolset.hpp")
+set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "member_passer.hpp" "passer.hpp" "static_passer.hpp" "toolset.hpp" "varg_member_passer.hpp")
 
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
 

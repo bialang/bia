@@ -51,7 +51,7 @@ public:
 			// No characters were skipped
 			if (!skipper(_input, _encoder)) {
 				// But they are required
-				if (_Begin && (_Flags & (flags::starting_ws_token | flags::starting_padding_token)) || !_Begin && (_Flags & flags::ending_ws_token)) {
+				if ((_Begin && (_Flags & (flags::starting_ws_token | flags::starting_padding_token))) || (!_Begin && (_Flags & flags::ending_ws_token))) {
 					return false;
 				}
 			}

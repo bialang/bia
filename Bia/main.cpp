@@ -94,6 +94,10 @@ int main()
 			puts("hey world");
 			printf("%f, %f\n", a, b);
 		});
+
+		set_lambda(_context, "o", [](double a) {
+			printf("%f\n", a);
+		});
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		//SetConsoleOutputCP(65001);
@@ -102,6 +106,7 @@ int main()
 		char _script[] = u8R""(
 
 hey(3.4,4.5)
+o(43.5)
 var i = printer(399)
 i.hey()
 i.hi()
