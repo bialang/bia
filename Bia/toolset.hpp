@@ -104,10 +104,10 @@ public:
 
 #if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 			// Allocate temp members + shadow space + align stack
-			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((4 + _temp_count) * element_size));
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((4 + _temp_count + 1) * element_size) - element_size);
 #else
 			// Allocate temp members + align stack
-			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack(_temp_count * element_size));
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((_temp_count + 1) * element_size) - element_size);
 #endif
 
 			call_member(&machine_context::create_on_stack, _context, register_offset<base_pointer, int32_t, true>((_temp_count) * -element_size), static_cast<uint32_t>(_temp_count));
@@ -116,15 +116,15 @@ public:
 
 			// Member deletion
 			call_member(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
-
-#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
+			
+/*#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 			// Deallocate temp members + shadow space
-			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack((4 + _temp_count) * element_size));
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack((4 + _temp_count + 1) * element_size) - element_size);
 #else
 			// Deallocate temp members
-			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack(_temp_count * element_size));
-#endif
-
+			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack((_temp_count + 1) * element_size) - element_size);
+#endif*/
+			
 			// Clean up stack
 			instruction<OP_CODE::MOVE, stack_pointer, base_pointer>(*_output);
 			instruction<OP_CODE::POP, base_pointer>(*_output);

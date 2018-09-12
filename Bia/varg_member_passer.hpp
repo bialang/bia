@@ -20,10 +20,8 @@ public:
 
 #if defined(BIA_ARCHITECTURE_X86_32)
 		_integral_passed = 2;
-		_floating_point_passed = 0;
 #elif defined(BIA_COMPILER_MSVC)
 		_integral_passed = 4;
-		_floating_point_passed = 0;
 #else
 		_integral_passed = 6;
 		_floating_point_passed = 8;
@@ -43,18 +41,28 @@ public:
 	{
 		static_assert(!(std::is_floating_point<_First>::value || std::is_floating_point<_Second>::value || std::is_floating_point<_Third>::value || std::is_floating_point<_Fourth>::value), "All parameters must be of integral types.");
 
+#if defined(BIA_ARCHITECTURE_X86_32) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
+		// Move to ecx because of virtual member call
+		register_pass<ecx>(_first);
+
+		static_passer::pass_all(register_offset<ecx, void, false>(), _second, _third, _fourth);
+#elif defined(BIA_ARCHITECTURE_X86_32) && defined(BIA_COMPILER_MSVC)
+		static_passer::pass_all(_first, _second, _third, _fourth);
+#elif defined(BIA_ARCHITECTURE_X86_64)
 		_integral_passed = 0;
 
 		static_passer::pass_all(_first, _second, _third, _fourth);
 
-#if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
+#if defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)
 		// All floating point values are pushed onto the stack (mov al, 0)
 		_passer._output.write_all(0xb0_8, 0x00_8);
+#endif
 #endif
 	}
 	pass_count_type compensatory_pushes()
 	{
-		return (align_stack(_passer._stack_offset * element_size) - _passer._stack_offset * element_size) / element_size;
+		// +1 because of call return address
+		return (align_stack((_passer._stack_offset + 1) * element_size) - _passer._stack_offset * element_size - element_size) / element_size;
 	}
 };
 

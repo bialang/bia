@@ -31,7 +31,7 @@ public:
 	{
 		_count_only = false;
 		_caller_pops_parameters = false;
-		_caller_pops_padding = false;
+		_caller_pops_padding = true;
 		_pushed = 0;
 		_integral_passed = 0;
 		_floating_point_passed = 0;
@@ -44,22 +44,20 @@ public:
 	template<typename... _Args>
 	void pass_all(_Args... _args)
 	{
-		pass_count_type _old_pushed;
-		pass_count_type _old_integral_passed;
-		pass_count_type _old_floating_point_passed;
+		pass_count_type _to_be_pushed;
 
 		// Count parameters
-		std::tie(_old_pushed, _old_integral_passed, _old_floating_point_passed) = count_arguments(_args...);
+		std::tie(_to_be_pushed, std::ignore, std::ignore) = count_arguments(_args...);
 
 #if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 		// Allocate shadow space
-		if (_old_pushed + _pushed) {
+		if (_to_be_pushed + _pushed) {
 			_pushed += 4;
 			_passer._stack_offset += 4;
 		}
 #endif
 
-		_passer.prepare_pushing(_old_pushed + _pushed, _caller_pops_parameters, _caller_pops_padding);
+		_passer.prepare_pushing(_pushed, _to_be_pushed, _caller_pops_parameters, _caller_pops_padding);
 
 		// Pass arguments
 		pass(_args...);
@@ -125,11 +123,10 @@ protected:
 			++_pushed;
 			++_passer._stack_offset;
 			
-
 			goto gt_push;
 		}
 #elif defined(BIA_COMPILER_MSVC)
-		switch (_integral_passed) {
+		switch (_integral_passed + _floating_point_passed) {
 		case 0:
 		{
 			if (!_count_only) {
@@ -250,7 +247,7 @@ protected:
 
 		goto gt_push;
 #elif defined(BIA_COMPILER_MSVC)
-		switch (_floating_point_passed) {
+		switch (_floating_point_passed + _integral_passed) {
 		case 0:
 		{
 			if (!_count_only) {
@@ -507,6 +504,7 @@ protected:
 	template<typename... _Args>
 	std::tuple<pass_count_type, pass_count_type, pass_count_type> count_arguments(_Args... _args)
 	{
+		auto _old_stack_offset = _passer._stack_offset;
 		auto _old_pushed = _pushed;
 		auto _old_integral_passed = _integral_passed;
 		auto _old_floating_point_passed = _floating_point_passed;
@@ -516,6 +514,7 @@ protected:
 		pass(_args...);
 		_count_only = false;
 
+		std::swap(_old_stack_offset, _passer._stack_offset);
 		std::swap(_old_pushed, _pushed);
 		std::swap(_old_integral_passed, _integral_passed);
 		std::swap(_old_floating_point_passed, _floating_point_passed);

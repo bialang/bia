@@ -33,10 +33,11 @@ public:
 		_stack_offset = 0;
 		_credit_entry = 0;
 	}
-	void prepare_pushing(pass_count_type _element_count, bool _caller_pops_parameters, bool _caller_pops_padding)
+	void prepare_pushing(pass_count_type _already_pushed, pass_count_type _to_be_pushed, bool _caller_pops_parameters, bool _caller_pops_padding)
 	{
-		auto _padding = align_stack(_stack_offset * element_size) - _stack_offset * element_size;
-		printf("padding: %i for %i (%i)\n", _padding, _element_count, _stack_offset);
+		// +1 because of call return address
+		auto _padding = align_stack((_stack_offset + _to_be_pushed + 1) * element_size) - (_stack_offset + _to_be_pushed) * element_size - element_size;
+
 		// Write padding
 		if (_padding) {
 			instruction8<OP_CODE::SUB, stack_pointer>(_output, _padding);
@@ -50,10 +51,10 @@ public:
 
 		// Caller pops -> they can be used later -> credit entry
 		if (_caller_pops_parameters) {
-			_credit_entry += _element_count;
+			_credit_entry += _already_pushed + _to_be_pushed;
 		} // Callee pops -> can't be used
 		else {
-			_stack_offset -= _element_count;
+			_stack_offset -= _already_pushed + _to_be_pushed;
 		}
 	}
 	void pop()
