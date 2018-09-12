@@ -94,6 +94,21 @@ void architecture_test::test_push()
 #endif
 }
 
+void architecture_test::test_pop()
+{
+#if defined(BIA_ARCHITECTURE_X86_32)
+	CPPUNIT_ASSERT_MESSAGE("pop eax", compare<OP_CODE::POP, eax>({ 0x58 }));
+	CPPUNIT_ASSERT_MESSAGE("pop esp", compare<OP_CODE::POP, esp>({ 0x5C }));
+#endif
+
+#if defined(BIA_ARCHITECTURE_X86_64)
+	CPPUNIT_ASSERT_MESSAGE("pop rax", compare<OP_CODE::POP, rax>({ 0x58 }));
+	CPPUNIT_ASSERT_MESSAGE("pop rsp", compare<OP_CODE::POP, rsp>({ 0x5C }));
+	CPPUNIT_ASSERT_MESSAGE("pop r8", compare<OP_CODE::POP, r8>({ 0x41, 0x58 }));
+	CPPUNIT_ASSERT_MESSAGE("pop r12", compare<OP_CODE::POP, r12>({ 0x41, 0x5C }));
+#endif
+}
+
 void architecture_test::test_function_call()
 {
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
