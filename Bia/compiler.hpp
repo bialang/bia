@@ -409,6 +409,7 @@ private:
 	*/
 	const grammar::report * handle_print(const grammar::report * _report);
 	const grammar::report * handle_test_loop(const grammar::report * _report);
+	const grammar::report * handle_import(const grammar::report * _report);
 };
 
 }

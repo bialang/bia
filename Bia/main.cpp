@@ -104,6 +104,7 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
+import hi
 
 hey(3.4,4.5)
 o(43.5)

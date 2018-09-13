@@ -58,6 +58,11 @@ void BIA_MEMBER_CALLING_CONVENTION machine_context::create_on_stack(framework::m
 	_stack.push(_destination, _member_count);
 }
 
+void BIA_MEMBER_CALLING_CONVENTION machine_context::import(const char * _module)
+{
+	printf("import: %s\n", _module);
+}
+
 const char * machine_context::name_address(utility::string_key _name)
 {
 	return _string_manager.name_address(_name.string(), _name.length());
