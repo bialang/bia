@@ -1,12 +1,10 @@
 #pragma once
 
-#include "member.hpp"
+#include "object_variable.hpp"
 #include "share.hpp"
-#include "undefined_member.hpp"
 #include "exception.hpp"
 #include "string_manager.hpp"
 #include "machine_context.hpp"
-#include "allocator.hpp"
 #include "initiator.hpp"
 #include "object.hpp"
 #include "member_map.hpp"
@@ -20,7 +18,7 @@ namespace object
 {
 
 template<typename _Ty>
-class class_template : public member
+class class_template : public object_variable
 {
 public:
 	typedef utility::share<std::pair<member_map, machine::memory::allocation<force::initiator>>> data_type;
@@ -54,10 +52,6 @@ public:
 			machine::machine_context::active_allocator()->destroy(_data.get().second);
 		}
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
-	{
-		replace_this<undefined_member>();
-	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
 		printf("<class_template of %s>\n", typeid(_Ty).name());
@@ -69,10 +63,6 @@ public:
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
 		_destination->replace_this<class_template<_Ty>>(_data);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
-	{
-		refer(_destination);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
@@ -123,22 +113,6 @@ public:
 			throw;
 		}
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
 	template<typename... _Args>
 	void set_constructor()
 	{
@@ -159,55 +133,6 @@ public:
 	virtual int flags() const override
 	{
 		return F_NONE;
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual int64_t to_int() const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual double to_double() const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-
-protected:
-	virtual void set_instance(const void * _instance, const std::type_info & _type) override
-	{
-	}
-	virtual void * native_data(native::NATIVE_TYPE _type) override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
-	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
-	virtual void * data(const std::type_info & _type) override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
-	virtual const void * const_data(const std::type_info & _type) const override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 
 private:

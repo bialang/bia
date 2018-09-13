@@ -4,11 +4,8 @@
 #include <cstdarg>
 #include <utility>
 
-#include "member.hpp"
-#include "allocator.hpp"
-#include "undefined_member.hpp"
+#include "object_variable.hpp"
 #include "share.hpp"
-#include "type_traits.hpp"
 #include "constructor_chain.hpp"
 #include "machine_context.hpp"
 #include "member_map.hpp"
@@ -23,7 +20,7 @@ namespace object
 {
 
 template<typename _Ty>
-class object : public member
+class object : public object_variable
 {
 public:
 	typedef utility::share<std::pair<instance_holder<_Ty>, member_map>> data_type;
@@ -53,10 +50,6 @@ public:
 	object(const data_type & _data) noexcept : _data(_data)
 	{
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
-	{
-		replace_this<undefined_member>();
-	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
 		printf("<%s at %p>\n", typeid(_Ty).name(), this);
@@ -70,10 +63,6 @@ public:
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
 		_destination->replace_this<object<_Ty>>(_data);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
-	{
-		refer(_destination);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
@@ -111,9 +100,6 @@ public:
 		_data.get().second.get(_name)->copy(_destination);
 
 		_destination->set_instance(&_instance, typeid(_Ty));
-	}
-	virtual void set_instance(const void * _instance, const std::type_info & _type) override
-	{
 	}
 	virtual int flags() const override
 	{
