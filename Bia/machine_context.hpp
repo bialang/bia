@@ -40,7 +40,7 @@ public:
 	 *
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
-	machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::executable_allocator> & _executable_allocator);
+	BIA_EXPORT machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::executable_allocator> & _executable_allocator);
 	/**
 	 * Constructor.
 	 *
@@ -52,7 +52,7 @@ public:
 	 *
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
-	machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
+	BIA_EXPORT machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
 	void execute(stream::input_stream & _script)
 	{
 	}
@@ -73,7 +73,7 @@ public:
 	 *
 	 * @return The active allocator.
 	*/
-	static memory::allocator * active_allocator() noexcept;
+	BIA_EXPORT static memory::allocator * active_allocator() noexcept;
 	 /**
 	  * Returns the memory allocator.
 	  *
@@ -82,7 +82,7 @@ public:
 	  *
 	  * @return The memory allocator of this context.
 	 */
-	memory::allocator * allocator() noexcept;
+	BIA_EXPORT memory::allocator * allocator() noexcept;
 	/**
 	 * Returns the memory allocator for executable memory.
 	 *
@@ -91,8 +91,8 @@ public:
 	 *
 	 * @return The memory allocator of this context.
 	*/
-	memory::executable_allocator * executable_allocator() noexcept;
-	machine::string_manager & string_manager() noexcept;
+	BIA_EXPORT memory::executable_allocator * executable_allocator() noexcept;
+	BIA_EXPORT machine::string_manager & string_manager() noexcept;
 
 //private:
 
@@ -138,7 +138,7 @@ public:
 	*/
 	void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
 	void BIA_MEMBER_CALLING_CONVENTION import(const char * _name);
-	const char * name_address(utility::string_key _name);
+	BIA_EXPORT const char * name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.
 	 *
@@ -151,7 +151,7 @@ public:
 	 *
 	 * @return The member address.
 	*/
-	framework::member * address_of_member(const char * _name);
+	BIA_EXPORT framework::member * address_of_member(const char * _name);
 	machine_code compile_script(stream::input_stream & _script);
 };
 

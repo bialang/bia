@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config_cmake.hpp"
+
 // Compiler macro
 #if defined(_MSC_VER)
 #define BIA_COMPILER_MSVC 1
@@ -47,10 +49,10 @@
 #endif
 
 // Export
-#if defined(BIA_IMPORT)
-#define BIA_EXPORT __declspec(dllimport)
-#elif defined(BIA_BUILD_SHARED)
+#if defined(BIA_BUILD_SHARED) && defined(BIA_BUILDING)
 #define BIA_EXPORT __declspec(dllexport)
+#elif defined(BIA_BUILD_SHARED)
+#define BIA_EXPORT __declspec(dllimport)
 #else
 #define BIA_EXPORT
 #endif

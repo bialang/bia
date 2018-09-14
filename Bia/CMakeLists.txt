@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(Bia_HEADER_FILES "bia.hpp" "config.hpp")
+set(Bia_HEADER_FILES "bia.hpp" "config.hpp" "config_cmake.hpp")
 set(Bia_SOURCE_FILES "")
 
 # compiler namespace
@@ -127,7 +127,11 @@ source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
 
 # Adding the library
-add_library(Bia ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+if(BIA_BUILD_SHARED)
+  add_library(Bia SHARED ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+else(BIA_BUILD_SHARED)
+  add_library(Bia STATIC ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+endif(BIA_BUILD_SHARED)
 
 # Install
 install(TARGETS Bia DESTINATION lib)

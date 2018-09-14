@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "config.hpp"
 #include "exception.hpp"
 #include "output_stream.hpp"
 #include "toolset.hpp"
@@ -27,13 +28,13 @@ namespace compiler
 class compiler : public grammar::report_receiver
 {
 public:
-	compiler(stream::output_stream & _output, machine::machine_context & _context);
+	BIA_EXPORT compiler(stream::output_stream & _output, machine::machine_context & _context);
 	compiler(const compiler & _copy) = delete;
 	compiler(compiler && _rvalue) = delete;
 	~compiler()
 	{
 	}
-	virtual void report(const grammar::report * _begin, const grammar::report * _end) override;
+	BIA_EXPORT virtual void report(const grammar::report * _begin, const grammar::report * _end) override;
 	/**
 	 * Finalizes the machine code.
 	 *
@@ -42,7 +43,7 @@ public:
 	 *
 	 * @throws See machine::platform::toolset::finalize().
 	*/
-	void finalize();
+	BIA_EXPORT void finalize();
 	machine::machine_code code()
 	{
 		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(_context.allocator(), _context.executable_allocator()));
