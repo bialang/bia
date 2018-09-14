@@ -5,12 +5,6 @@
 #include "buffer_output_stream.hpp"
 #include "undefined_member.hpp"
 
-#if defined(BIA_OS_WINDOWS)
-#include <Windows.h>
-#elif defined(BIA_OS_LINUX)
-#include <dlfcn.h>
-#endif
-
 
 namespace bia
 {
@@ -124,7 +118,7 @@ bool machine_context::import(const char * _path, const char * _module)
 		auto _library = dlopen("", RTLD_LAZY);
 
 		if (!_library) {
-			
+
 		}
 
 		auto _module_loader = static_cast<moduler::module_fnunction_signature>(dlsym(_library, (std::string(BIA_MODULE_LOADER_PREFIX) + _module).c_str())));

@@ -17,7 +17,8 @@ public:
   ~module_loader();
 
   void unload_module(module * _module);
-  module * load_module(const char * _name);
+  module * load_bs(const char * )
+  module * load_bm(const char * _filepath, const char * _name);
 
 private:
   struct impl;
