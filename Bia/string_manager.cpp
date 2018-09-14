@@ -50,9 +50,10 @@ string_manager::name_type string_manager::name_address(const char * _name, size_
 
 	// Create new entry
 	if (_result == _index.end()) {
-		auto _allocation = _allocator->allocate(_length);
+		auto _allocation = _allocator->allocate(_length + 1);
 
-		memcpy(_allocation.first, _name, _length);
+		memcpy(_allocation.first, _name, _length + 1);
+		static_cast<char*>(_allocation.first)[_length] = 0;
 
 		_result = _index.emplace(string_entry(_allocation)).first;
 	}

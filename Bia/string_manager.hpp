@@ -58,7 +58,7 @@ public:
 	 *
 	 * @throws See memory::allocator::allocate().
 	 *
-	 * @return The name address. It's valid until destruction of this name manager. This address is not zero-terminated.
+	 * @return The name address. It's valid until destruction of this name manager. This address is zero-terminated.
 	*/
 	name_type name_address(const char * _name, size_t _length);
 	/**
