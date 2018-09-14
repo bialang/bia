@@ -135,6 +135,7 @@ public:
 	*/
 	void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
 	void BIA_MEMBER_CALLING_CONVENTION import(const char * _module);
+	bool import(const char * _path, const char * _module);
 	const char * name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.

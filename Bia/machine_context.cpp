@@ -5,6 +5,12 @@
 #include "buffer_output_stream.hpp"
 #include "undefined_member.hpp"
 
+#if defined(BIA_OS_WINDOWS)
+#include <Windows.h>
+#elif defined(BIA_OS_LINUX)
+#include <dlfcn.h>
+#endif
+
 
 namespace bia
 {
@@ -61,6 +67,69 @@ void BIA_MEMBER_CALLING_CONVENTION machine_context::create_on_stack(framework::m
 void BIA_MEMBER_CALLING_CONVENTION machine_context::import(const char * _module)
 {
 	printf("import: %s\n", _module);
+
+	// Search module in local directory
+	if (import("", _module)) {
+			return;
+	}
+
+	// Search module in working directory
+	if (import(".", _module)) {
+		return;
+	}
+
+	// Search module in defined library directories
+
+
+	// Search module in default lib directory
+
+}
+
+bool machine_context::import(const char * _path, const char * _module)
+{
+	// Search for .bia file
+
+	// Search for .bll file
+	if (file exists) {
+#if defined(BIA_OS_WINDOWS)
+		auto _library = LoadLibrary("");
+
+		// Could not load library
+		if (!_library) {
+			return false;
+		}
+
+		auto _module_loader = static_cast<modular::module_loader_signature>(GetProcAddress(_library, (std::string(BIA_MODULE_LOADER_PREFIX) + _module).c_str()));
+
+		// Loader not defined
+		if (!_module_loader) {
+			return false;
+		}
+
+		auto _loader = _module_loader(allocator());
+
+		// Loader could not be loaded
+		if (!_loader) {
+			return false;
+		}
+
+		// Unsupported loader version
+		if (!_loader->version()) {
+			return false;
+		}
+
+		auto _member = address_of_member(name_address(_module));
+		auto _error = _module->load_all(_member);
+#elif defined(BIA_OS_LINUX)
+		auto _library = dlopen("", RTLD_LAZY);
+
+		if (!_library) {
+			
+		}
+
+		auto _module_loader = static_cast<moduler::module_fnunction_signature>(dlsym(_library, (std::string(BIA_MODULE_LOADER_PREFIX) + _module).c_str())));
+#endif
+	}
 }
 
 const char * machine_context::name_address(utility::string_key _name)
