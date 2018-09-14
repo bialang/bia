@@ -19,10 +19,8 @@ public:
 	/**
 	 * Constructor.
 	 *
-	 * @remarks A new share will be created for the object.
-	 *
-	 * @since 3.67.135.753
-	 * @date 7-Aug-18
+	 * @since 3.68.138.785
+	 * @date 14-Sep-18
 	 *
 	 * @param _members The known members.
 	*/
@@ -30,8 +28,8 @@ public:
 	/**
 	 * Refer-Constructor.
 	 *
-	 * @since 3.67.135.753
-	 * @date 7-Aug-18
+	 * @since 3.68.138.785
+	 * @date 14-Sep-18
 	 *
 	 * @param _data The data.
 	*/
