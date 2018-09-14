@@ -6,7 +6,7 @@
 #include "allocator.hpp"
 
 #define BIA_MODLE_LOADER_PREFIX "bia_module_loader_"
-#define BIA_REGISTER_MODULE_LOADER(loader, name) extern "C" bia::machine::memory::allocation<bia::machine::modular::module_loader> bia_module_loader_##name(bia::machine::memory::allocator * _allocator){ return _allocator->construct<bia::machine::modular::module_loader, loader>(); }
+#define BIA_REGISTER_MODULE_LOADER(module, name) extern "C" bia::machine::memory::allocation<bia::machine::modular::module> bia_module_loader_##name(bia::machine::memory::allocator * _allocator){ return _allocator->construct<bia::machine::modular::module, module>(); }
 
 
 namespace bia
@@ -24,7 +24,7 @@ public:
   virtual int32_t version() = 0;
 };
 
-typedef memory::allocation<module_loader>(*module_loader_signature)(memory::allocator*);
+typedef memory::allocation<module>(*module_loader_signature)(memory::allocator*);
 
 }
 }

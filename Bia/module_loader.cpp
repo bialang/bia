@@ -1,6 +1,6 @@
 #include "module_loader.hpp"
 
-#include <vector>
+#include <string>
 
 #if defined(BIA_OS_WINDOWS)
 #include <Windows.h>
@@ -21,46 +21,51 @@ struct module_loader::impl
 
 };
 
-module_loader::module_loader()
+module_loader::module_loader(memory::allocator * _allocator)
 {
-  _impl = new impl();
+	this->_allocator = _allocator;
+	_impl = _allocator->construct<impl>();
 }
 
 module_loader::~module_loader()
 {
-  delete _impl;
+	_allocator->destroy(_impl);
 }
 
-module * module_loader::load_bm(const char * _filepath, const char * _name)
+void module_loader::unload_module(module * _module)
+{
+}
+
+module * module_loader::load_bll(const char * _filepath, const char * _name)
 {
 #if defined(BIA_OS_WINDOWS)
-  auto _library = LoadLibrary(_filepath);
+	auto _library = LoadLibrary(_filepath);
 
-  if (!_library) {
+	if (!_library) {
+		return nullptr;
+	}
 
-  }
+	auto _module_loader = reinterpret_cast<modular::module_loader_signature>(GetProcAddress(_library, std::string(BIA_MODLE_LOADER_PREFIX).append(_name).c_str()));
 
-  auto _module = static_cast<modular::module_loader_signature>(GetProcAddress(_library, (std::string(BIA_MODULE_LOADER_PREFIX) + _module).c_str()));
+	// Loader not defined
+	if (!_module_loader) {
+		return nullptr;
+	}
 
-  // Loader not defined
-  if (!_module) {
-    return false;
-  }
+	auto _module = _module_loader(_allocator);
 
-  auto _loader = _module_loader(allocator());
+	// Module could not be loaded
+	if (!_module) {
+		return nullptr;
+	}
 
-  // Loader could not be loaded
-  if (!_loader) {
-    return false;
-  }
+	// Unsupported loader version
+	if (!_module->version()) {
+		return nullptr;
+	}
 
-  // Unsupported loader version
-  if (!_loader->version()) {
-    return false;
-  }
-
-  auto _member = address_of_member(name_address(_module));
-  auto _error = _module->load_all(_member);
+	return _module;
+#endif
 }
 
 }

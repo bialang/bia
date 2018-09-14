@@ -1,6 +1,7 @@
 #pragma once
 
 #include "module.hpp"
+#include "allocator.hpp"
 
 
 namespace bia
@@ -13,17 +14,17 @@ namespace modular
 class module_loader
 {
 public:
-  module_loader();
-  ~module_loader();
+	module_loader(memory::allocator * _allocator);
+	~module_loader();
 
-  void unload_module(module * _module);
-  module * load_bs(const char * )
-  module * load_bm(const char * _filepath, const char * _name);
+	void unload_module(module * _module);
+	module * load_bll(const char * _filepath, const char * _name);
 
 private:
-  struct impl;
+	struct impl;
 
-  impl * _impl;
+	memory::allocator * _allocator;
+	memory::allocation<impl> _impl;
 };
 
 }

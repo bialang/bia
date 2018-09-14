@@ -13,6 +13,7 @@
 #include "string_manager.hpp"
 #include "variable_index.hpp"
 #include "machine_stack.hpp"
+#include "module_loader.hpp"
 
 
 namespace bia
@@ -108,6 +109,8 @@ public:
 	variable_index _variable_index;
 	/** The virtual machine stack. */
 	machine_stack _stack;
+	/** The module loader. */
+	modular::module_loader _module_loader;
 
 	/**
 	 * Pops the variables from the stack.
@@ -134,8 +137,7 @@ public:
 	 * @return The address of the allocated space.
 	*/
 	void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
-	void BIA_MEMBER_CALLING_CONVENTION import(const char * _module);
-	bool import(const char * _path, const char * _module);
+	void BIA_MEMBER_CALLING_CONVENTION import(const char * _name);
 	const char * name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.
