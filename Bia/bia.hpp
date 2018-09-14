@@ -10,6 +10,7 @@
 #include "lambda_function.hpp"
 #include "class_template.hpp"
 #include "class_template_wrapper.hpp"
+#include "disguised_caller_source.hpp"
 
 
 namespace bia

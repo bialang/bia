@@ -2,11 +2,20 @@
 
 #include <cstdint>
 
+#include "config.hpp"
 #include "member.hpp"
 #include "allocator.hpp"
 
-#define BIA_MODLE_LOADER_PREFIX "bia_module_loader_"
-#define BIA_REGISTER_MODULE_LOADER(module, name) extern "C" bia::machine::memory::allocation<bia::machine::modular::module> bia_module_loader_##name(bia::machine::memory::allocator * _allocator){ return _allocator->construct<bia::machine::modular::module, module>(); }
+#if defined(BIA_OS_WINDOWS)
+#define BIA_MODULE_EXPORT __declspec(dllexport)
+#else
+#define BIA_MODULE_EXPORT
+#endif
+
+#define BIA_MODULE_LOAD_PREFIX "bia_module_load_"
+#define BIA_MODULE_UNLOAD_PREFIX "bia_module_unload_"
+#define BIA_REGISTER_MODULE_LOADER(_module_, _name_) extern "C" BIA_MODULE_EXPORT bia::machine::modular::module * bia_module_load_##_name_(bia::machine::memory::allocator * _allocator){ return _allocator->construct<bia::machine::modular::module, _module_>(); } \
+	extern "C" BIA_MODULE_EXPORT void bia_module_unload_##_name_(bia::machine::memory::allocator * _allocator, bia::machine::modular::module * _module) { _allocator->destroy<_module_>({ _module, sizeof(_module_) }); }
 
 
 namespace bia
@@ -20,11 +29,12 @@ class module
 {
 public:
   virtual ~module() = default;
-  virtual int32_t load_all(framework::member * _destination) = 0;
+  virtual int32_t load_all(bia::framework::member * _destination) = 0;
   virtual int32_t version() = 0;
 };
 
-typedef memory::allocation<module>(*module_loader_signature)(memory::allocator*);
+typedef module*(*module_loader_signature)(memory::allocator*);
+typedef void(*module_unloader_signature)(memory::allocator*, module*);
 
 }
 }

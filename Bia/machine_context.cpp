@@ -77,6 +77,7 @@ void BIA_MEMBER_CALLING_CONVENTION machine_context::import(const char * _name)
 
 	// Search module in default lib directory
 
+	throw exception::symbol_error(BIA_EM_MODULE_NOT_FOUND);
 }
 
 const char * machine_context::name_address(utility::string_key _name)

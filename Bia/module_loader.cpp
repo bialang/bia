@@ -45,7 +45,7 @@ module * module_loader::load_bll(const char * _filepath, const char * _name)
 		return nullptr;
 	}
 
-	auto _module_loader = reinterpret_cast<modular::module_loader_signature>(GetProcAddress(_library, std::string(BIA_MODLE_LOADER_PREFIX).append(_name).c_str()));
+	auto _module_loader = reinterpret_cast<modular::module_loader_signature>(GetProcAddress(_library, std::string(BIA_MODULE_LOAD_PREFIX).append(_name).c_str()));
 
 	// Loader not defined
 	if (!_module_loader) {
