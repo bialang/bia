@@ -53,6 +53,13 @@ public:
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
 	BIA_EXPORT machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
+	/**
+	 * Activates the current context.
+	 *
+	 * @since 3.68.138.786
+	 * @date 15-Sep-18
+	*/
+	BIA_EXPORT void activate_context() noexcept;
 	void execute(stream::input_stream & _script)
 	{
 	}

@@ -29,7 +29,7 @@ public:
 	typename std::enable_if<_T, template_wrapper&>::type set_constructor()
 	{
 		// Set the active allocator
-		machine::machine_context::_active_allocator = _context.allocator();
+		_context.activate_context();
 
 		_template_member->template set_constructor<_Args...>();
 
@@ -39,7 +39,7 @@ public:
 	template_wrapper & set_function(machine::string_manager::name_type _name, _Return(*_function)(_Args...))
 	{
 		// Set the active allocator
-		machine::machine_context::_active_allocator = _context.allocator();
+		_context.activate_context();
 
 		_template_member->template emplace_member<framework::executable::static_function<_Return, _Args...>>(_context.name_address(_name), _function);
 
@@ -49,7 +49,7 @@ public:
 	template_wrapper & set_function(machine::string_manager::name_type _name, _Return(_Class::*_function)(_Args...))
 	{
 		// Set the active allocator
-		machine::machine_context::_active_allocator = _context.allocator();
+		_context.activate_context();
 
 		_template_member->template emplace_member<framework::executable::member_function<_Return(_Class::*)(_Args...)>>(_context.name_address(_name), _function);
 
@@ -59,7 +59,7 @@ public:
 	template_wrapper & set_lambda(machine::string_manager::name_type _name, _Lambda && _lambda)
 	{
 		// Set the active allocator
-		machine::machine_context::_active_allocator = _context.allocator();
+		_context.activate_context();
 
 		_template_member->template emplace_member<framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_context.name_address(_name), std::forward<_Lambda>(_lambda));
 

@@ -29,6 +29,12 @@ machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator
 	}
 }
 
+void machine_context::activate_context() noexcept
+{
+	_active_context = this;
+	_active_allocator = allocator();
+}
+
 machine_context * machine_context::active_context() noexcept
 {
 	return _active_context;

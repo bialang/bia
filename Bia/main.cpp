@@ -148,8 +148,7 @@ print i
 
 		if (_machine_code.is_executable()) {
 			// Set active allocator
-			bia::machine::machine_context::_active_context = &_context;
-			bia::machine::machine_context::_active_allocator = _context.allocator();
+			_context.activate_context();
 
 			try {
 				_machine_code.execute();
