@@ -25,8 +25,8 @@ public:
 	{
 		this->_template_member = _template_member;
 	}
-	template<typename... _Args>
-	typename std::enable_if<_Enable_set_constructor, template_wrapper&>::type set_constructor()
+	template<typename... _Args, bool _T = _Enable_set_constructor>
+	typename std::enable_if<_T, template_wrapper&>::type set_constructor()
 	{
 		// Set the active allocator
 		machine::machine_context::_active_allocator = _context.allocator();

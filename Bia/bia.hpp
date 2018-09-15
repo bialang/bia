@@ -9,6 +9,7 @@
 #include "member_function.hpp"
 #include "lambda_function.hpp"
 #include "class_template.hpp"
+#include "namespace_member.hpp"
 #include "template_wrapper.hpp"
 #include "disguised_caller_source.hpp"
 
@@ -49,6 +50,26 @@ inline framework::object::template_wrapper<framework::object::class_template<_Cl
 	auto _template = _context.emplace_member<framework::object::class_template<_Class>>(_name);
 
 	return framework::object::template_wrapper<framework::object::class_template<_Class>, true>(_context, _template);
+}
+
+inline framework::object::template_wrapper<framework::object::namespace_member, false> set_namespace(machine::machine_context & _context, machine::string_manager::name_type _name)
+{
+	// Set the active allocator
+	machine::machine_context::_active_allocator = _context.allocator();
+
+	auto _template = _context.emplace_member<framework::object::namespace_member>(_name, framework::object::member_map());
+
+	return framework::object::template_wrapper<framework::object::namespace_member, false>(_context, _template);
+}
+
+inline framework::object::template_wrapper<framework::object::namespace_member, false> set_namespace(machine::machine_context & _context, framework::member & _member)
+{
+	// Set the active allocator
+	machine::machine_context::_active_allocator = _context.allocator();
+
+	auto _template = _member.replace_this<framework::object::namespace_member>(framework::object::member_map());
+
+	return framework::object::template_wrapper<framework::object::namespace_member, false>(_context, _template);
 }
 
 }
