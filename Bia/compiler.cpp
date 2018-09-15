@@ -784,7 +784,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 const grammar::report * compiler::handle_import(const grammar::report * _report)
 {
 	// Call import
-	_toolset.call_member(&machine::machine_context::import, &_context, _report[1].content.member);
+	_toolset.call_member(&machine::machine_context::import_module, &_context, _report[1].content.member);
 
 	return _report->content.end;
 }

@@ -137,7 +137,7 @@ public:
 	 * @return The address of the allocated space.
 	*/
 	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
-	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION import(const char * _name);
+	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION import_module(const char * _name);
 	BIA_EXPORT const char * name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.

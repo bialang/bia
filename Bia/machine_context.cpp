@@ -58,7 +58,7 @@ void BIA_MEMBER_CALLING_CONVENTION machine_context::create_on_stack(framework::m
 	_stack.push(_destination, _member_count);
 }
 
-void BIA_MEMBER_CALLING_CONVENTION machine_context::import(const char * _name)
+void BIA_MEMBER_CALLING_CONVENTION machine_context::import_module(const char * _name)
 {
 	printf("import: %s\n", _name);
 

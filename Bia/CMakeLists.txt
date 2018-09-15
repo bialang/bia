@@ -95,7 +95,7 @@ set(Bia_SOURCE_FILES_MEMORY "allocator.cpp" "simple_allocator.cpp" "simple_execu
 source_group("Header Files\\machine\\memory" FILES ${Bia_HEADER_FILES_MEMORY})
 source_group("Source Files\\machine\\memory" FILES ${Bia_SOURCE_FILES_MEMORY})
 
-set(Bia_HEADER_FILES_MODULAR "module.hpp" "module_loader.hpp")
+set(Bia_HEADER_FILES_MODULAR "module_library.hpp" "module_loader.hpp")
 set(Bia_SOURCE_FILES_MODULAR "module_loader.cpp")
 
 source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})

@@ -32,11 +32,11 @@ module_loader::~module_loader()
 	_allocator->destroy(_impl);
 }
 
-void module_loader::unload_module(module * _module)
+void module_loader::unload_module(module_library * _module)
 {
 }
 
-module * module_loader::load_bll(const char * _filepath, const char * _name)
+module_library * module_loader::load_bll(const char * _filepath, const char * _name)
 {
 #if defined(BIA_OS_WINDOWS)
 	auto _library = LoadLibrary(_filepath);
