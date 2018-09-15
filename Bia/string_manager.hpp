@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "config.hpp"
 #include "allocator.hpp"
 #include "hasher.hpp"
 
@@ -28,7 +29,7 @@ public:
 	 *
 	 * @param [in] _allocator Defines the memory allocator.
 	*/
-	explicit string_manager(memory::allocator * _allocator) noexcept;
+	BIA_EXPORT explicit string_manager(memory::allocator * _allocator) noexcept;
 	string_manager(const string_manager & _copy) = delete;
 	/**
 	 * Move-Constructor.
@@ -38,15 +39,15 @@ public:
 	 *
 	 * @param [in,out] _rvalue Defines the object that should be moved.
 	*/
-	string_manager(string_manager && _rvalue) noexcept;
+	BIA_EXPORT string_manager(string_manager && _rvalue) noexcept;
 	/**
 	 * Destructor.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	*/
-	~string_manager() noexcept;
-	void register_string(int8_t * _resource);
+	BIA_EXPORT ~string_manager() noexcept;
+	BIA_EXPORT void register_string(int8_t * _resource);
 	/**
 	 * Returns the name address. This address will be the same for the same name value.
 	 *
@@ -60,7 +61,7 @@ public:
 	 *
 	 * @return The name address. It's valid until destruction of this name manager. This address is zero-terminated.
 	*/
-	name_type name_address(const char * _name, size_t _length);
+	BIA_EXPORT name_type name_address(const char * _name, size_t _length);
 	/**
 	 * Returns the format address. This address will be the same for the same format value.
 	 *
@@ -74,7 +75,7 @@ public:
 	 *
 	 * @return The format address. It's valid until destruction of this name manager. This address is in reverse order and not zero-terminated.
 	*/
-	const char * format_address(const char * _format, size_t _length);
+	BIA_EXPORT const char * format_address(const char * _format, size_t _length);
 
 private:
 	struct string_entry

@@ -122,7 +122,7 @@ public:
 	 *
 	 * @throws See machine_stack::pop().
 	*/
-	void BIA_MEMBER_CALLING_CONVENTION destroy_from_stack(uint32_t _member_count);
+	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION destroy_from_stack(uint32_t _member_count);
 	/**
 	 * Pushes the variables to the stack.
 	 *
@@ -136,8 +136,8 @@ public:
 	 *
 	 * @return The address of the allocated space.
 	*/
-	void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
-	void BIA_MEMBER_CALLING_CONVENTION import(const char * _name);
+	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
+	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION import(const char * _name);
 	BIA_EXPORT const char * name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.
@@ -152,7 +152,7 @@ public:
 	 * @return The member address.
 	*/
 	BIA_EXPORT framework::member * address_of_member(const char * _name);
-	machine_code compile_script(stream::input_stream & _script);
+	BIA_EXPORT machine_code compile_script(stream::input_stream & _script);
 };
 
 }

@@ -233,7 +233,7 @@ public:
 	 *
 	 * @return The block size.
 	*/
-	static size_t block_size() noexcept;
+	BIA_EXPORT static size_t block_size() noexcept;
 	/**
 	 * Can be used to expand or shrinken an allocation.
 	 *

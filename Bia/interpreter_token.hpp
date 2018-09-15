@@ -73,7 +73,7 @@ public:
 	 *
 	 * @return true if any whitespace was matched, otherwise false.
 	*/
-	static bool whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder);
+	BIA_EXPORT static bool whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder);
 	/**
 	 * Matches all padding characters it can.
 	 *
@@ -88,7 +88,7 @@ public:
 	 *
 	 * @return true if any padding character was matched, otherwise false.
 	*/
-	static bool padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder);
+	BIA_EXPORT static bool padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder);
 	/**
 	 * Matches a number token.
 	 *
@@ -102,8 +102,8 @@ public:
 	 *
 	 * @return	Defines the success code. See @ref ACTION.
 	*/
-	static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output);
-	static ACTION string(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION string(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches an identifier. An identifier conists of alphanumeric characters and an underscore without a leading number.
 	 *
@@ -119,7 +119,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION identifier(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION identifier(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches the first member of a member chain.
 	 *
@@ -135,7 +135,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION first_member(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION first_member(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches an assign operator.
 	 *
@@ -154,7 +154,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION assign_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION assign_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a compare operator.
 	 *
@@ -173,7 +173,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a dot operator like `*`, `/` and so on.
 	 *
@@ -192,7 +192,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION dot_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION dot_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a comment which starts with '#' and ends with a line feed.
 	 *
@@ -208,7 +208,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a commend terminator.
 	 *
@@ -224,7 +224,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	static ACTION command_end(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION command_end(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
 	 * Matches a custom operator.
 	 *
@@ -421,7 +421,7 @@ private:
 	 *
 	 * @return A pair with the success value as first and the parsed integral as second.
 	*/
-	static  std::pair<bool, int64_t> match_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base);
+	BIA_EXPORT static  std::pair<bool, int64_t> match_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base);
 	/**
 	 * Matches integral values with a base up to 16.
 	 *
@@ -437,7 +437,7 @@ private:
 	 *
 	 * @return A pair with the success value as first and the parsed integral as second.
 	*/
-	static  std::tuple<bool, int64_t, double, bool> match_decimal(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
+	BIA_EXPORT static  std::tuple<bool, int64_t, double, bool> match_decimal(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
 };
 
 }

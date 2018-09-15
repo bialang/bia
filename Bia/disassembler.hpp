@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 
+#include "config.hpp"
 #include "machine_context.hpp"
 
 
@@ -17,8 +18,8 @@ namespace machine
 class disassembler
 {
 public:
-	disassembler(const void * _context_address) noexcept;
-	void disassemble(const void * _code, size_t _size) const;
+	BIA_EXPORT disassembler(const void * _context_address) noexcept;
+	BIA_EXPORT void disassemble(const void * _code, size_t _size) const;
 	/**
 	 * Returns the name for the given address.
 	 *
@@ -29,7 +30,7 @@ public:
 	 *
 	 * @return The name if available, otherwise null.
 	*/
-	const char * name(const void * _address) const noexcept;
+	BIA_EXPORT const char * name(const void * _address) const noexcept;
 
 private:
 	struct instruction
@@ -66,7 +67,7 @@ private:
 	 *
 	 * @return The instruction list.
 	*/
-	static instruction_list init_instructions();
+	BIA_EXPORT static instruction_list init_instructions();
 	/**
 	 * Creates a map with all addresses of the Bia functions.
 	 *
@@ -77,7 +78,7 @@ private:
 	 *
 	 * @return The function map.
 	*/
-	static function_map init_function_map();
+	BIA_EXPORT static function_map init_function_map();
 };
 
 }

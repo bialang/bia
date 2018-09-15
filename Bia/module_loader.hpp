@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.hpp"
 #include "module.hpp"
 #include "allocator.hpp"
 
@@ -14,11 +15,11 @@ namespace modular
 class module_loader
 {
 public:
-	module_loader(memory::allocator * _allocator);
-	~module_loader();
-
-	void unload_module(module * _module);
-	module * load_bll(const char * _filepath, const char * _name);
+	BIA_EXPORT module_loader(memory::allocator * _allocator);
+	BIA_EXPORT ~module_loader();
+	
+	BIA_EXPORT void unload_module(module * _module);
+	BIA_EXPORT module * load_bll(const char * _filepath, const char * _name);
 
 private:
 	struct impl;

@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "config.hpp"
 #include "report_bundle.hpp"
 #include "input_stream.hpp"
 #include "machine_context.hpp"
@@ -97,7 +98,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	*/
-	interpreter_rule() noexcept;
+	BIA_EXPORT interpreter_rule() noexcept;
 	/**
 	 * Constructor.
 	 *
@@ -108,7 +109,7 @@ public:
 	 * @param _flags The flags.
 	 * @param [in] _tokens The tokens for this rule.
 	*/
-	interpreter_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
+	BIA_EXPORT interpreter_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
 	/**
 	 * Runs this rule. If this function fails, the input stream will be resetted to its original position.
 	 *
@@ -122,7 +123,7 @@ public:
 	 *
 	 * @throws
 	*/
-	bool run_rule(stream::input_stream & _input, token_param _token_param) const;
+	BIA_EXPORT bool run_rule(stream::input_stream & _input, token_param _token_param) const;
 	/**
 	 * Returns the id of this rule.
 	 *
@@ -131,7 +132,7 @@ public:
 	 *
 	 * @return The id.
 	*/
-	report::rule_type id() const noexcept;
+	BIA_EXPORT report::rule_type id() const noexcept;
 
 private:
 	/** The id of this rule. */
@@ -150,7 +151,7 @@ private:
 	 *
 	 * @param _token_param The parameter.
 	*/
-	void begin_wrap_up(token_param _token_param) const;
+	BIA_EXPORT void begin_wrap_up(token_param _token_param) const;
 };
 
 }

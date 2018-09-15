@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <utility>
 
+#include "config.hpp"
 #include "machine_schein.hpp"
 
 
@@ -33,8 +34,8 @@ public:
 	 *
 	 * @throws See memory::allocator::allocate() and memory::executable_allocator::protect().
 	 */
-	machine_code(std::pair<const uint8_t *, size_t> _machine_code, machine_schein _machine_schein);
-	machine_code(const machine_code & _copy) = delete;
+	BIA_EXPORT machine_code(std::pair<const uint8_t *, size_t> _machine_code, machine_schein _machine_schein);
+	BIA_EXPORT machine_code(const machine_code & _copy) = delete;
 	/**
 	 * Move-Constructor.
 	 *
@@ -43,7 +44,7 @@ public:
 	 *
 	 * @param [in,out] _rvalue Defines the object that should be moved.
 	*/
-	machine_code(machine_code && _rvalue) noexcept;
+	BIA_EXPORT machine_code(machine_code && _rvalue) noexcept;
 	/**
 	 * Destructor.
 	 *
@@ -52,7 +53,7 @@ public:
 	 *
 	 * @throws See clear().
 	*/
-	~machine_code();
+	BIA_EXPORT ~machine_code();
 	/**
 	 * Executes the machine code.
 	 * 
@@ -61,7 +62,7 @@ public:
 	 *
 	 * @throws Any exception from the Bia script.
 	 */
-	void execute() const;
+	BIA_EXPORT void execute() const;
 	/**
 	 * Clears the machine code. Cannot be executed afterwards.
 	 *
@@ -70,7 +71,7 @@ public:
 	 *
 	 * @throws See memory::allocator::deallocate().
 	*/
-	void clear();
+	BIA_EXPORT void clear();
 	/**
 	 * Checks wheter the code is executable.
 	 * 
@@ -81,7 +82,7 @@ public:
 	 * 
 	 * @return true if the code can be executed, otherwise false.
 	 */
-	bool is_executable() const noexcept;
+	BIA_EXPORT bool is_executable() const noexcept;
 	/**
 	 * Move operator.
 	 *
@@ -94,7 +95,7 @@ public:
 	 *
 	 * @return This.
 	*/
-	machine_code & operator=(machine_code && _rvalue);
+	BIA_EXPORT machine_code & operator=(machine_code && _rvalue);
 
 private:
 	typedef void(*entry_point)();

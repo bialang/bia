@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.hpp"
 #include "object_variable.hpp"
 #include "member_map.hpp"
 
@@ -24,7 +25,7 @@ public:
 	 *
 	 * @param _members The known members.
 	*/
-	namespace_member(member_map && _members) noexcept;
+	BIA_EXPORT namespace_member(member_map && _members) noexcept;
 	/**
 	 * Refer-Constructor.
 	 *
@@ -33,11 +34,11 @@ public:
 	 *
 	 * @param _data The data.
 	*/
-	namespace_member(const data_type & _data) noexcept;
-	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override;
+	BIA_EXPORT namespace_member(const data_type & _data) noexcept;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override;
 
 private:
 	data_type _data;

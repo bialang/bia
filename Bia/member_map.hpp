@@ -2,6 +2,7 @@
 
 #include <map>
 
+#include "config.hpp"
 #include "member.hpp"
 #include "allocator.hpp"
 #include "share.hpp"
@@ -28,7 +29,7 @@ public:
 	 *
 	 * @throws See machine::memory::allocator::destroy_blocks().
 	*/
-	~member_map();
+	BIA_EXPORT ~member_map();
 	
 	/**
 	 * Emplaces a new member.
@@ -71,7 +72,7 @@ public:
 	 *
 	 * @return The member.
 	*/
-	member * get(machine::string_manager::name_type _name);
+	BIA_EXPORT member * get(machine::string_manager::name_type _name);
 
 private:
 	/** The map with all the members. */
