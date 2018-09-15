@@ -9,7 +9,7 @@
 #include "member_function.hpp"
 #include "lambda_function.hpp"
 #include "class_template.hpp"
-#include "class_template_wrapper.hpp"
+#include "template_wrapper.hpp"
 #include "disguised_caller_source.hpp"
 
 
@@ -41,14 +41,14 @@ inline void set_lambda(machine::machine_context & _context, machine::string_mana
 }
 
 template<typename _Class>
-inline framework::object::class_template_wrapper<_Class> set_class(machine::machine_context & _context, machine::string_manager::name_type _name)
+inline framework::object::template_wrapper<framework::object::class_template<_Class>, true> set_class(machine::machine_context & _context, machine::string_manager::name_type _name)
 {
 	// Set the active allocator
 	machine::machine_context::_active_allocator = _context.allocator();
 
 	auto _template = _context.emplace_member<framework::object::class_template<_Class>>(_name);
 
-	return framework::object::class_template_wrapper<_Class>(_context, _template);
+	return framework::object::template_wrapper<framework::object::class_template<_Class>, true>(_context, _template);
 }
 
 }
