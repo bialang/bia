@@ -33,7 +33,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_EXCEPTION})
 
 
 # force namespace
-set(Bia_HEADER_FILES_FORCE "disguised_caller.hpp" "initiator.hpp")
+set(Bia_HEADER_FILES_FORCE "disguised_caller.hpp" "disguised_caller_source.hpp" "initiator.hpp")
 
 source_group("Header Files\\force" FILES ${Bia_HEADER_FILES_FORCE})
 
@@ -135,4 +135,4 @@ endif(BIA_BUILD_SHARED)
 
 # Install
 install(TARGETS Bia DESTINATION lib)
-install(FILES ${Bia_HEADER_FILES} DESTINATION include)
+install(FILES ${Bia_HEADER_FILES} DESTINATION "include/Bia")
