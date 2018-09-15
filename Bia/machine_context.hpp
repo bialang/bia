@@ -66,12 +66,21 @@ public:
 		return static_cast<_Ty*>(_object);
 	}
 	/**
+	 * Returns the currently active machine context in the current thread.
+	 *
+	 * @since 3.68.138.786
+	 * @date 15-Sep-18
+	 *
+	 * @return The active context or null if there is no active context.
+	*/
+	BIA_EXPORT static machine_context * active_context() noexcept;
+	/**
 	 * Returns the currently active allocator of the current thread.
 	 *
 	 * @since 3.65.132.733
 	 * @date 29-Jun-18
 	 *
-	 * @return The active allocator.
+	 * @return The active allocator or null if there is no active allocator.
 	*/
 	BIA_EXPORT static memory::allocator * active_allocator() noexcept;
 	 /**
@@ -97,6 +106,7 @@ public:
 //private:
 
 
+	static thread_local machine_context * _active_context;
 	/** The allocator of the context currently active. */
 	static thread_local memory::allocator * _active_allocator;
 	/** The allocator for normal memory. */

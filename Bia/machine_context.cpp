@@ -11,6 +11,7 @@ namespace bia
 namespace machine
 {
 
+thread_local machine_context * machine_context::_active_context = nullptr;
 thread_local memory::allocator * machine_context::_active_allocator = nullptr;
 
 
@@ -26,6 +27,11 @@ machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
+}
+
+machine_context * machine_context::active_context() noexcept
+{
+	return _active_context;
 }
 
 memory::allocator * machine_context::active_allocator() noexcept
