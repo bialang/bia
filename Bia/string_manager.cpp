@@ -46,7 +46,7 @@ void string_manager::register_string(int8_t * _resource)
 
 string_manager::name_type string_manager::name_address(const char * _name, size_t _length)
 {
-	auto _result = _index.find({ _name, _length });
+	auto _result = _index.find({ _name, _length + 1 });
 
 	// Create new entry
 	if (_result == _index.end()) {

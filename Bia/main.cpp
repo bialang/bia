@@ -105,7 +105,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 import test
-test()
+test.foo()
 hey(3.4,4.5)
 o(43.5)
 var i = printer(399)
