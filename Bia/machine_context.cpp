@@ -78,7 +78,7 @@ void BIA_MEMBER_CALLING_CONVENTION machine_context::import_module(const char * _
 
 	// Search module in working directory
 	if (auto _module = _module_loader.load_bll(std::string("./").append(_name).append(".bll").c_str(), _name)) {
-		_module->load_all(address_of_member(_name));
+		_module->load_all(this, address_of_member(_name));
 		_module_loader.unload_module(_module);
 
 		return;

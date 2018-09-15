@@ -14,7 +14,7 @@
 
 #define BIA_MODULE_LOAD_PREFIX "bia_module_load_"
 #define BIA_MODULE_UNLOAD_PREFIX "bia_module_unload_"
-#define BIA_REGISTER_MODULE_LOADER(_module_, _name_) extern "C" BIA_MODULE_EXPORT bia::machine::modular::module_library * bia_module_load_##_name_(bia::machine::memory::allocator * _allocator){ return _allocator->construct<bia::machine::modular::module_library, _module_>(); } \
+#define BIA_REGISTER_MODULE_LIBRARY(_module_, _name_) extern "C" BIA_MODULE_EXPORT bia::machine::modular::module_library * bia_module_load_##_name_(bia::machine::memory::allocator * _allocator){ return _allocator->construct<bia::machine::modular::module_library, _module_>(); } \
 	extern "C" BIA_MODULE_EXPORT void bia_module_unload_##_name_(bia::machine::memory::allocator * _allocator, bia::machine::modular::module_library * _module) { _allocator->destroy<_module_>({ static_cast<_module_*>(_module), sizeof(_module_) }); }
 
 
@@ -22,6 +22,9 @@ namespace bia
 {
 namespace machine
 {
+
+class machine_context;
+
 namespace modular
 {
 
@@ -29,7 +32,7 @@ class module_library
 {
 public:
   virtual ~module_library() = default;
-  virtual int32_t load_all(bia::framework::member * _destination) = 0;
+  virtual int32_t load_all(bia::machine::machine_context * _context, bia::framework::member * _destination) = 0;
   virtual int32_t version() = 0;
 };
 
