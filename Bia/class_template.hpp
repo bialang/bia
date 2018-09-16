@@ -121,18 +121,25 @@ public:
 		_allocator->destroy(_data.get().second);
 		_data.get().second = _allocator->construct<force::initiator, force::real_initiator<_Ty, _Args...>>();
 	}
-	template<typename _T, typename... _Args>
-	void emplace_member(machine::string_manager::name_type _name, _Args &&... _args)
-	{
-		_data.get().first.template emplace<_T, _Args...>(_name, std::forward<_Args>(_args)...);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, member_map::name_type _name) override
 	{
 		_data.get().first.get(_name)->clone(_destination);
 	}
 	virtual int flags() const override
 	{
 		return F_NONE;
+	}
+	/**
+	 * Returns the member map.
+	 *
+	 * @since 3.68.140.788
+	 * @date 16-Sep-18
+	 *
+	 * @return A reference to the member map.
+	*/
+	member_map & members() noexcept
+	{
+		return _data.get().first;
 	}
 
 private:
