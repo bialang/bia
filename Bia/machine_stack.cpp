@@ -17,9 +17,23 @@ machine_stack::machine_stack(memory::allocator * _allocator, size_t _size)
 	_cursor = 0;
 }
 
+machine_stack::machine_stack(machine_stack && _move) noexcept
+{
+	_allocator = _move._allocator;
+	_buffer = _move._buffer;
+	_max_size = _move._max_size;
+	_cursor = _move._cursor;
+
+	_move._buffer = nullptr;
+	_move._max_size = 0;
+	_move._cursor = 0;
+}
+
 machine_stack::~machine_stack()
 {
-	_allocator->deallocate(memory::universal_allocation(_buffer, _max_size));
+	if (_buffer) {
+		_allocator->deallocate(memory::universal_allocation(_buffer, _max_size));
+	}
 }
 
 void machine_stack::pop(uint32_t _member_count)

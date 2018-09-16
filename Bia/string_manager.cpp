@@ -15,9 +15,9 @@ string_manager::string_manager(memory::allocator * _allocator) noexcept
 	this->_allocator = _allocator;
 }
 
-string_manager::string_manager(string_manager && _rvalue) noexcept : _index(std::move(_rvalue._index))
+string_manager::string_manager(string_manager && _move) noexcept : _index(std::move(_move._index))
 {
-	_allocator = _rvalue._allocator;
+	_allocator = _move._allocator;
 }
 
 string_manager::~string_manager() noexcept

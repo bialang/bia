@@ -16,6 +16,8 @@ class module_loader
 {
 public:
 	BIA_EXPORT module_loader(memory::allocator * _allocator);
+	module_loader(const module_loader & _copy) = delete;
+	BIA_EXPORT module_loader(module_loader && _move) noexcept;
 	BIA_EXPORT ~module_loader();
 	
 	BIA_EXPORT void unload_module(module_library * _module);

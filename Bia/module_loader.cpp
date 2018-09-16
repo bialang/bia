@@ -27,6 +27,11 @@ module_loader::module_loader(memory::allocator * _allocator)
 	_impl = _allocator->construct<impl>();
 }
 
+module_loader::module_loader(module_loader && _move) noexcept : _impl(std::move(_move._impl))
+{
+	_allocator = _move._allocator;
+}
+
 module_loader::~module_loader()
 {
 	_allocator->destroy(_impl);
@@ -39,6 +44,8 @@ void module_loader::unload_module(module_library * _module)
 module_library * module_loader::load_bll(const char * _filepath, const char * _name)
 {
 #if defined(BIA_OS_WINDOWS)
+	// Convert filepath to wide char
+
 	auto _library = LoadLibrary(_filepath);
 
 	if (!_library) {

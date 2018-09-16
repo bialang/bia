@@ -53,6 +53,8 @@ public:
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
 	BIA_EXPORT machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
+	machine_context(const machine_context & _copy) = delete;
+	machine_context(machine_context && _move) = default;
 	/**
 	 * Activates the current context.
 	 *

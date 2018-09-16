@@ -37,9 +37,9 @@ public:
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	 *
-	 * @param [in,out] _rvalue Defines the object that should be moved.
+	 * @param [in,out] _move Defines the object that should be moved.
 	*/
-	BIA_EXPORT string_manager(string_manager && _rvalue) noexcept;
+	BIA_EXPORT string_manager(string_manager && _move) noexcept;
 	/**
 	 * Destructor.
 	 *

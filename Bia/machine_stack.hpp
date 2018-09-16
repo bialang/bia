@@ -34,6 +34,16 @@ public:
 	 * @throws See memory::allocator::allocate().
 	*/
 	BIA_EXPORT machine_stack(memory::allocator * _allocator, size_t _size);
+	machine_stack(const machine_stack & _copy) = delete;
+	/**
+	 * Move-Constructor.
+	 *
+	 * @since 3.68.140.788
+	 * @date 16-Sep-18
+	 *
+	 * @param [in,out] _move The instance that should be moved.
+	*/
+	BIA_EXPORT machine_stack(machine_stack && _move) noexcept;
 	/**
 	 * Destructor.
 	 *

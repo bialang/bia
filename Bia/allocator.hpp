@@ -34,6 +34,14 @@ public:
 		first = _first;
 		second = _second;
 	}
+	allocation(const allocation<_Ty> & _copy) noexcept = default;
+	allocation(allocation<_Ty> && _move) noexcept
+	{
+		first = _move.first;
+		second = _move.second;
+
+		_move.clear();
+	}
 	void clear() noexcept
 	{
 		first = nullptr;
