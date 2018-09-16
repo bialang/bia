@@ -79,7 +79,7 @@ public:
 	*/
 	member * member_address(member_map::name_type _name)
 	{
-		return _template_member->members().get_or_create(_name);
+		return _template_member->members().get_or_create(_context.name_address(_name));
 	}
 
 protected:

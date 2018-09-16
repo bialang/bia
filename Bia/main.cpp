@@ -159,9 +159,9 @@ print time.millis(_start, _end)
 		if (_machine_code.is_executable()) {
 			// Set active allocator
 			_context.activate_context();
-				_machine_code.execute();
 
 			try {
+				_machine_code.execute();
 			} catch (const std::exception & e) {
 				printf("%s: %s\n", typeid(e).name(), e.what());
 			}

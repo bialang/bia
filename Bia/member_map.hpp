@@ -90,8 +90,8 @@ public:
 	 *
 	 * @param _name The name of the member.
 	 *
-	 * @throws See emplace().
-	 * @throws See std::map::find().
+	 * @throws See machine::memory::allocator::construct_blocks().
+	 * @throws See std::map::find() and std::map::emplace().
 	 *
 	 * @return The member.
 	*/

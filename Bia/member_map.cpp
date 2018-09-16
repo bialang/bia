@@ -38,7 +38,11 @@ member * member_map::get_or_create(name_type _name)
 
 	// Create new
 	if (_result == _data.get().end()) {
-		return emplace<undefined_member>(_name);
+		auto _member = machine::machine_context::active_allocator()->construct_blocks<member, undefined_member>(1);
+
+		_data.get().emplace(_name, _member);
+
+		return _member.first;
 	}
 
 	return _result->second;
