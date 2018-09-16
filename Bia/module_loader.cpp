@@ -72,6 +72,33 @@ module_library * module_loader::load_bll(const char * _filepath, const char * _n
 	}
 
 	return _module;
+#elif defined(BIA_OS_LINUX)
+	auto _library = dlopen(_filepath, RTLD_LAZY);
+
+	if (!_library) {
+		return nullptr;
+	}
+
+	auto _module_loader = reinterpret_cast<modular::module_loader_signature>(dlsym(_library, std::string(BIA_MODULE_LOAD_PREFIX).append(_name).c_str()));
+
+	// Loader not defined
+	if (!_module_loader) {
+		return nullptr;
+	}
+
+	auto _module = _module_loader(_allocator);
+
+	// Module could not be loaded
+	if (!_module) {
+		return nullptr;
+	}
+
+	// Unsupported loader version
+	if (!_module->version()) {
+		return nullptr;
+	}
+
+	return _module;
 #endif
 }
 
