@@ -104,8 +104,14 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
-import test
-test.foo()
+import time
+
+var _start = time.time_point()
+
+print time.now()
+
+
+
 hey(3.4,4.5)
 o(43.5)
 var i = printer(399)
@@ -113,6 +119,10 @@ i.hey()
 i.hi()
 printer.hey()
 print i
+
+var _end = time.time_point()
+
+print time.millis(_start, _end)
 
 )"";
 
@@ -149,9 +159,9 @@ print i
 		if (_machine_code.is_executable()) {
 			// Set active allocator
 			_context.activate_context();
+				_machine_code.execute();
 
 			try {
-				_machine_code.execute();
 			} catch (const std::exception & e) {
 				printf("%s: %s\n", typeid(e).name(), e.what());
 			}
