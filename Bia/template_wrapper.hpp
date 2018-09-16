@@ -65,9 +65,27 @@ public:
 
 		return *this;
 	}
+	/**
+	 * Returns the member or creates it if needed.
+	 *
+	 * @since 3.68.140.788
+	 * @date 16-Sep-18
+	 *
+	 * @param _name The name of the member.
+	 *
+	 * @throws See member_map::get_or_create().
+	 *
+	 * @return The member.
+	*/
+	member * member_address(member_map::name_type _name)
+	{
+		return _template_member->members().get_or_create(_name);
+	}
 
 protected:
+	/** The machine context. */
 	machine::machine_context & _context;
+	/** The template member with a member map. */
 	_Ty * _template_member;
 };
 

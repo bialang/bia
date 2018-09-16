@@ -52,6 +52,17 @@ inline framework::object::template_wrapper<framework::object::class_template<_Cl
 	return framework::object::template_wrapper<framework::object::class_template<_Class>, true>(_context, _template);
 }
 
+template<typename _Class>
+inline framework::object::template_wrapper<framework::object::class_template<_Class>, true> set_class(machine::machine_context & _context, framework::member & _member)
+{
+	// Set the active allocator
+	_context.activate_context();
+
+	auto _template = _member.replace_this<framework::object::class_template<_Class>>();
+
+	return framework::object::template_wrapper<framework::object::class_template<_Class>, true>(_context, _template);
+}
+
 inline framework::object::template_wrapper<framework::object::namespace_member, false> set_namespace(machine::machine_context & _context, machine::string_manager::name_type _name)
 {
 	// Set the active allocator
