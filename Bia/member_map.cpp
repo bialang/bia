@@ -1,4 +1,6 @@
 #include "member_map.hpp"
+#include "undefined_member.hpp"
+
 
 namespace bia
 {
@@ -18,13 +20,25 @@ member_map::~member_map()
 	}
 }
 
-member * member_map::get(machine::string_manager::name_type _name)
+member * member_map::get(name_type _name)
 {
 	auto _result = _data.get().find(_name);
 
 	// Not found
 	if (_result == _data.get().end()) {
 		throw exception::symbol_error(BIA_EM_UNDEFINED_MEMBER);
+	}
+
+	return _result->second;
+}
+
+member * member_map::get_or_create(name_type _name)
+{
+	auto _result = _data.get().find(_name);
+
+	// Create new
+	if (_result == _data.get().end()) {
+		return emplace<undefined_member>(_name);
 	}
 
 	return _result->second;
