@@ -45,13 +45,13 @@ public:
 
 		return *this;
 	}
-	template<typename _Class, typename _Return, typename... _Args>
-	template_wrapper & set_function(member_map::name_type _name, _Return(_Class::*_function)(_Args...))
+	template<typename Active_class, typename _Class, typename _Return, typename... _Args>
+	typename std::enable_if<std::is_base_of<_Class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_type _name, _Return(_Class::*_function)(_Args...))
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::member_function<_Return(_Class::*)(_Args...)>>(_context.name_address(_name), _function);
+		_template_member->members().template emplace<framework::executable::member_function<_Return(Active_class::*)(_Args...)>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
