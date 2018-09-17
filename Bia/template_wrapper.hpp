@@ -17,7 +17,7 @@ namespace framework
 namespace object
 {
 
-template<typename _Ty, bool _Enable_set_constructor>
+template<typename _Ty, typename Class>
 class template_wrapper
 {
 public:
@@ -25,7 +25,7 @@ public:
 	{
 		this->_template_member = _template_member;
 	}
-	template<typename... _Args, bool _T = _Enable_set_constructor>
+	template<typename... _Args, bool _T = std::is_class<Class>::value>
 	typename std::enable_if<_T, template_wrapper&>::type set_constructor()
 	{
 		// Set the active allocator
@@ -45,7 +45,7 @@ public:
 
 		return *this;
 	}
-	template<typename Active_class, typename _Class, typename _Return, typename... _Args>
+	template<typename Active_class = Class, typename _Class, typename _Return, typename... _Args>
 	typename std::enable_if<std::is_base_of<_Class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_type _name, _Return(_Class::*_function)(_Args...))
 	{
 		// Set the active allocator

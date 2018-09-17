@@ -42,45 +42,45 @@ inline void set_lambda(machine::machine_context & _context, machine::string_mana
 }
 
 template<typename _Class>
-inline framework::object::template_wrapper<framework::object::class_template<_Class>, true> set_class(machine::machine_context & _context, machine::string_manager::name_type _name)
+inline framework::object::template_wrapper<framework::object::class_template<_Class>, _Class> set_class(machine::machine_context & _context, machine::string_manager::name_type _name)
 {
 	// Set the active allocator
 	_context.activate_context();
 
 	auto _template = _context.emplace_member<framework::object::class_template<_Class>>(_name);
 
-	return framework::object::template_wrapper<framework::object::class_template<_Class>, true>(_context, _template);
+	return framework::object::template_wrapper<framework::object::class_template<_Class>, _Class>(_context, _template);
 }
 
 template<typename _Class>
-inline framework::object::template_wrapper<framework::object::class_template<_Class>, true> set_class(machine::machine_context & _context, framework::member & _member)
+inline framework::object::template_wrapper<framework::object::class_template<_Class>, _Class> set_class(machine::machine_context & _context, framework::member & _member)
 {
 	// Set the active allocator
 	_context.activate_context();
 
 	auto _template = _member.replace_this<framework::object::class_template<_Class>>();
 
-	return framework::object::template_wrapper<framework::object::class_template<_Class>, true>(_context, _template);
+	return framework::object::template_wrapper<framework::object::class_template<_Class>, _Class>(_context, _template);
 }
 
-inline framework::object::template_wrapper<framework::object::namespace_member, false> set_namespace(machine::machine_context & _context, machine::string_manager::name_type _name)
+inline framework::object::template_wrapper<framework::object::namespace_member, void> set_namespace(machine::machine_context & _context, machine::string_manager::name_type _name)
 {
 	// Set the active allocator
 	_context.activate_context();
 
 	auto _template = _context.emplace_member<framework::object::namespace_member>(_name, framework::object::member_map());
 
-	return framework::object::template_wrapper<framework::object::namespace_member, false>(_context, _template);
+	return framework::object::template_wrapper<framework::object::namespace_member, void>(_context, _template);
 }
 
-inline framework::object::template_wrapper<framework::object::namespace_member, false> set_namespace(machine::machine_context & _context, framework::member & _member)
+inline framework::object::template_wrapper<framework::object::namespace_member, void> set_namespace(machine::machine_context & _context, framework::member & _member)
 {
 	// Set the active allocator
 	_context.activate_context();
 
 	auto _template = _member.replace_this<framework::object::namespace_member>(framework::object::member_map());
 
-	return framework::object::template_wrapper<framework::object::namespace_member, false>(_context, _template);
+	return framework::object::template_wrapper<framework::object::namespace_member, void>(_context, _template);
 }
 
 }
