@@ -123,7 +123,7 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, member_map::name_type _name) override
 	{
-		_data.get().first.get(_name)->clone(_destination);
+		_data.get().first.get(_name)->refer(_destination);
 	}
 	virtual int flags() const override
 	{
