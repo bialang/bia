@@ -41,7 +41,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_FORCE})
 
 
 # framework namespace
-set(Bia_HEADER_FILES_FRAMEWORK "create_member.hpp" "max_member_size.hpp" "member.hpp" "operator.hpp" "undefined_member.hpp")
+set(Bia_HEADER_FILES_FRAMEWORK "create_member.hpp" "custom_member.hpp" "max_member_size.hpp" "member.hpp" "operator.hpp" "undefined_member.hpp")
 set(Bia_SOURCE_FILES_FRAMEWORK "undefined_member.cpp")
 
 source_group("Header Files\\framework" FILES ${Bia_HEADER_FILES_FRAMEWORK})
