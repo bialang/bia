@@ -16,8 +16,8 @@ namespace machine
 namespace platform
 {
 
-template<typename _Ty>
-inline bool is_one_byte_value(_Ty _value) noexcept
+template<typename Type>
+inline bool is_one_byte_value(Type _value) noexcept
 {
 	return false;
 }
@@ -32,8 +32,8 @@ inline bool is_one_byte_value(uint32_t _value) noexcept
 	return _value <= std::numeric_limits<int8_t>::max();
 }
 
-template<typename _Ty>
-inline bool is_four_byte_value(_Ty _value) noexcept
+template<typename Type>
+inline bool is_four_byte_value(Type _value) noexcept
 {
 	return false;
 }
@@ -341,22 +341,22 @@ inline int32_t align_stack(int32_t _value) noexcept
 	return _value;
 }
 
-template<typename _Register, typename _Offset, bool _Effective_address>
+template<typename Register, typename Offset_type, bool Effective_address>
 struct register_offset
 {
-	typedef _Register register_type;
-	_Offset offset;
+	typedef Register register_type;
+	Offset_type offset;
 
-	register_offset(_Offset _offset) noexcept
+	register_offset(Offset_type _offset) noexcept
 	{
 		offset = _offset;
 	}
 };
 
-template<typename _Register, bool _Effective_address>
-struct register_offset<_Register, void, _Effective_address>
+template<typename Register, bool Effective_address>
+struct register_offset<Register, void, Effective_address>
 {
-	typedef _Register register_type;
+	typedef Register register_type;
 };
 #endif
 

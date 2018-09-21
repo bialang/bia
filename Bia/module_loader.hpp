@@ -19,15 +19,12 @@ public:
 	module_loader(const module_loader & _copy) = delete;
 	BIA_EXPORT module_loader(module_loader && _move) noexcept;
 	BIA_EXPORT ~module_loader();
-	
+
 	BIA_EXPORT void unload_module(module_library * _module);
 	BIA_EXPORT module_library * load_bll(const char * _filepath, const char * _name);
 
 private:
-	struct impl;
-
 	memory::allocator * _allocator;
-	memory::allocation<impl> _impl;
 };
 
 }

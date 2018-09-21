@@ -54,12 +54,12 @@ public:
 	virtual cursor_type mark() const = 0;
 	virtual cursor_type available() const = 0;
 	virtual buffer_type buffer() = 0;
-	template<typename _Ty>
-	_Ty read()
+	template<typename Type>
+	Type read()
 	{
-		_Ty _value;
+		Type _value;
 
-		read(&_value, sizeof(_Ty));
+		read(&_value, sizeof(Type));
 
 		return _value;
 	}

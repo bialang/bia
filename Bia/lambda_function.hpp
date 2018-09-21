@@ -20,10 +20,12 @@ namespace executable
  *
  * @tparam _Lambda The lambda function.
 */
-template<typename _Lambda>
+template<typename Lambda>
 class lambda_function final : public function
 {
 public:
+	typedef utility::share<Lambda> data_type;
+
 	/**
 	 * Constructor.
 	 *
@@ -34,7 +36,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	explicit lambda_function(const _Lambda & _lambda) : _data(_lambda)
+	explicit lambda_function(const Lambda & _lambda) : _data(_lambda)
 	{
 	}
 	/**
@@ -47,7 +49,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	explicit lambda_function(_Lambda && _lambda) : _data(std::move(_lambda))
+	explicit lambda_function(Lambda && _lambda) : _data(std::move(_lambda))
 	{
 	}
 	/**
@@ -58,20 +60,20 @@ public:
 	 *
 	 * @param _lambda The lambda function.
 	*/
-	explicit lambda_function(const utility::share<_Lambda> & _data) noexcept : _data(_data)
+	explicit lambda_function(const data_type & _data) noexcept : _data(_data)
 	{
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
-		puts(typeid(&_Lambda::operator()).name());
+		puts(typeid(&Lambda::operator()).name());
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
-		_destination->replace_this<lambda_function<_Lambda>>(_data.get());
+		_destination->replace_this<lambda_function<Lambda>>(_data.get());
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
-		_destination->replace_this<lambda_function<_Lambda>>(_data);
+		_destination->replace_this<lambda_function<Lambda>>(_data);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
@@ -79,14 +81,14 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
-		force::disguised_caller(&_Lambda::operator(), &_data.get(), _destination);
+		force::disguised_caller(&Lambda::operator(), &_data.get(), _destination);
 	}
 	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
 	{
 		force::va_list_wrapper _args;
 		va_start(_args.args, _count);
 
-		force::disguised_caller_count(&_Lambda::operator(), &_data.get(), _destination, _count, _args);
+		force::disguised_caller_count(&Lambda::operator(), &_data.get(), _destination, _count, _args);
 
 		va_end(_args.args);
 	}
@@ -95,7 +97,7 @@ public:
 		force::va_list_wrapper _args;
 		va_start(_args.args, _count);
 
-		force::disguised_caller_format(&_Lambda::operator(), &_data.get(), _destination, _format, _count, _args);
+		force::disguised_caller_format(&Lambda::operator(), &_data.get(), _destination, _format, _count, _args);
 
 		va_end(_args.args);
 	}
@@ -105,7 +107,7 @@ public:
 
 private:
 	/** The lambda function. */
-	utility::share<_Lambda> _data;
+	data_type _data;
 };
 
 }

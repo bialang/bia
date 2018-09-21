@@ -18,7 +18,7 @@ namespace framework
 namespace native
 {
 
-template<typename _Ty>
+template<typename Type>
 class native_member final : public native_variable
 {
 public:
@@ -35,7 +35,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	native_member(typename std::enable_if<std::is_same<_Ty, int64_t>::value || std::is_same<_Ty, double>::value, _Ty>::type _value) : _data(_value, false)
+	native_member(typename std::enable_if<std::is_same<Type, int64_t>::value || std::is_same<Type, double>::value, Type>::type _value) : _data(_value, false)
 	{
 	}
 	/**
@@ -46,7 +46,7 @@ public:
 	 *
 	 * @param _data The data of the referred object.
 	*/
-	native_member(const utility::share<std::pair<_Ty, bool>> & _data) noexcept : _data(_data)
+	native_member(const utility::share<std::pair<Type, bool>> & _data) noexcept : _data(_data)
 	{
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
@@ -59,7 +59,7 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
-		_destination->replace_this<native_member<_Ty>>(_data);
+		_destination->replace_this<native_member<Type>>(_data);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
@@ -67,23 +67,23 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
 	{
-		if (std::is_same<_Ty, int64_t>::value) {
-			create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right->to_int()), _destination);
+		if (std::is_same<Type, int64_t>::value) {
+			create_result_member(operation_chooser_l<Type>::operate_result(_data.get().first, _operator, _right->to_int()), _destination);
 		} else {
-			create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right->to_double()), _destination);
+			create_result_member(operation_chooser_l<Type>::operate_result(_data.get().first, _operator, _right->to_double()), _destination);
 		}
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
 	{
-		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
+		create_result_member(operation_chooser_l<Type>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override
 	{
-		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
+		create_result_member(operation_chooser_l<Type>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override
 	{
-		create_result_member(operation_chooser_l<_Ty>::operate_result(_data.get().first, _operator, _right), _destination);
+		create_result_member(operation_chooser_l<Type>::operate_result(_data.get().first, _operator, _right), _destination);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override
 	{
@@ -91,7 +91,7 @@ public:
 	}
 	virtual int flags() const override
 	{
-		return F_TO_INT | F_TO_DOUBLE | (std::is_same<_Ty, int64_t>::value ? F_INT : F_DOUBLE);
+		return F_TO_INT | F_TO_DOUBLE | (std::is_same<Type, int64_t>::value ? F_INT : F_DOUBLE);
 	}
 	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const override
 	{
@@ -99,7 +99,7 @@ public:
 	}
 	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override
 	{
-		if (std::is_same<_Ty, int64_t>::value) {
+		if (std::is_same<Type, int64_t>::value) {
 			return test_operation(_data.get().first, _operator, _right->to_int());
 		} else {
 			return test_operation(_data.get().first, _operator, _right->to_double());
@@ -130,7 +130,7 @@ protected:
 	virtual void * native_data(native::NATIVE_TYPE _type) override
 	{
 		// Integral
-		if (std::is_same<_Ty, int64_t>::value) {
+		if (std::is_same<Type, int64_t>::value) {
 			switch (_type) {
 			case NATIVE_TYPE::BOOL:
 				_data.get().second = static_cast<bool>(_data.get().first);
@@ -162,7 +162,7 @@ protected:
 	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override
 	{
 		// Integral
-		if (std::is_same<_Ty, int64_t>::value) {
+		if (std::is_same<Type, int64_t>::value) {
 			switch (_type) {
 			case NATIVE_TYPE::BOOL:
 				//_non_zero = static_cast<bool>(_value);
@@ -193,10 +193,10 @@ protected:
 	}
 
 private:
-	utility::share<std::pair<_Ty, bool>> _data;
+	utility::share<std::pair<Type, bool>> _data;
 	/** The arithmetic value of type: int64_t, float or double. */
 	//mutable bool _non_zero;
-	//_Ty _value;
+	//Type _value;
 	/** True if the value is non zero. */
 
 	template<typename _T>

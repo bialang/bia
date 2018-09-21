@@ -15,8 +15,8 @@ namespace framework
 namespace native
 {
 
-template<typename _Ty>
-inline int32_t test_operation(_Ty _value)
+template<typename Type>
+inline int32_t test_operation(Type _value)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 }
@@ -41,14 +41,14 @@ inline int32_t test_operation(double _value)
 	return static_cast<int32_t>(_value != 0.);
 }
 
-template<typename _Ty>
-inline int32_t test(_Ty _value)
+template<typename Type>
+inline int32_t test(Type _value)
 {
-	return test_operation(static_cast<typename utility::native_type_adapter<_Ty, std::is_integral<_Ty>::value, sizeof(_Ty)>::type>(_value));
+	return test_operation(static_cast<typename utility::native_type_adapter<Type, std::is_integral<Type>::value, sizeof(Type)>::type>(_value));
 }
 
-template<typename _Left, typename _Right>
-inline int32_t test_operation(_Left _left, uint32_t _operator, _Right _right)
+template<typename Left, typename Right>
+inline int32_t test_operation(Left _left, uint32_t _operator, Right _right)
 {
 	switch (_operator)
 	{
@@ -57,9 +57,9 @@ inline int32_t test_operation(_Left _left, uint32_t _operator, _Right _right)
 	case O_EQUALS_NOT:
 		return static_cast<int32_t>(_left != _right);
 	/*case O_SAME:
-		return static_cast<int32_t>(std::is_same<_Left, _Right>::value && _left == _right);
+		return static_cast<int32_t>(std::is_same<Left, Right>::value && _left == _right);
 	case O_NOT_SAME:
-		return static_cast<int32_t>(!std::is_same<_Left, _Right>::value || _left != _right);*/
+		return static_cast<int32_t>(!std::is_same<Left, Right>::value || _left != _right);*/
 	case O_LESS_THAN:
 		return static_cast<int32_t>(_left < _right);
 	case O_LESS_EQUALS:

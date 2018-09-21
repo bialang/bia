@@ -116,7 +116,7 @@ public:
 
 			// Member deletion
 			call_member(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
-			
+
 /*#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 			// Deallocate temp members + shadow space
 			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack((4 + _temp_count + 1) * element_size) - element_size);
@@ -124,7 +124,7 @@ public:
 			// Deallocate temp members
 			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack((_temp_count + 1) * element_size) - element_size);
 #endif*/
-			
+
 			// Clean up stack
 			instruction<OP_CODE::MOVE, stack_pointer, base_pointer>(*_output);
 			instruction<OP_CODE::POP, base_pointer>(*_output);
@@ -156,25 +156,25 @@ public:
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
-	 * @tparam _Return The return type of the function.
-	 * @tparam _Args The arguments of the function.
-	 * @tparam _Args2 The arguemtns that should be passed.
+	 * @tparam Return The return type of the function.
+	 * @tparam Arguments The arguments of the function.
+	 * @tparam Arguments2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
-	 * @param _args The arguments for the function.
+	 * @param _arguments The arguments for the function.
 	 *
 	 * @throws See architecture::instruction32() and architecture::instruction().
 	 * @throws See pass() and pop().
 	*/
-	template<typename _Return, typename... _Args, typename... _Args2>
-	void call_static(static_function_signature<_Return, _Args...> _function, _Args2 &&... _args)
+	template<typename Return, typename... Arguments, typename... Arguments2>
+	void call_static(static_function_signature<Return, Arguments...> _function, Arguments2 &&... _arguments)
 	{
-		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
+		static_assert(sizeof...(Arguments) == sizeof...(Arguments2), "Argument count does not match.");
 
 		// Push all parameters
 		static_passer _passer(_global_passer);
 
-		_passer.pass_all(std::forward<_Args2>(_args)...);
+		_passer.pass_all(std::forward<Arguments2>(_arguments)...);
 
 		// Move the address of the function into EAX and call it
 #if defined(BIA_ARCHITECTURE_X86_32)
@@ -195,34 +195,34 @@ public:
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
-	 * @tparam _Class The class.
-	 * @tparam _Return The return type of the function.
-	 * @tparam _Instance The instance type.
-	 * @tparam _Args The arguments of the function.
-	 * @tparam _Args2 The arguemtns that should be passed.
+	 * @tparam Class The class.
+	 * @tparam Return The return type of the function.
+	 * @tparam Instance The instance type.
+	 * @tparam Arguments The arguments of the function.
+	 * @tparam Arguments2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
 	 * @param [in] _instance The class instance.
-	 * @param _args The arguments for the function.
+	 * @param _arguments The arguments for the function.
 	 *
 	 * @throws See architecture::instruction32() and architecture::instruction().
 	 * @throws See pass(), pass_instance() and pop().
 	*/
-	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call_member(member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
+	template<typename Class, typename Return, typename Instance, typename... Arguments, typename... Arguments2>
+	void call_member(member_function_signature<Class, Return, Arguments...> _function, Instance _instance, Arguments2 &&... _arguments)
 	{
-		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
-		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
+		static_assert(std::is_const<Instance>::value == false, "Instance must not be const.");
+		static_assert(sizeof...(Arguments) == sizeof...(Arguments2), "Argument count does not match.");
 
 		// Push all parameters
 		member_passer _passer(_global_passer);
 
-		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
+		_passer.pass_all(_instance, std::forward<Arguments2>(_arguments)...);
 
 		// Convert
 		union
 		{
-			member_function_signature<_Class, _Return, _Args...> member;
+			member_function_signature<Class, Return, Arguments...> member;
 			void * address;
 		} address;
 
@@ -247,34 +247,34 @@ public:
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
-	 * @tparam _Class The class.
-	 * @tparam _Return The return type of the function.
-	 * @tparam _Instance The instance type.
-	 * @tparam _Args The arguments of the function.
-	 * @tparam _Args2 The arguemtns that should be passed.
+	 * @tparam Class The class.
+	 * @tparam Return The return type of the function.
+	 * @tparam Instance The instance type.
+	 * @tparam Arguments The arguments of the function.
+	 * @tparam Arguments2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
 	 * @param [in] _instance The class instance.
-	 * @param _args The arguments for the function.
+	 * @param _arguments The arguments for the function.
 	 *
 	 * @throws See architecture::instruction32() and architecture::instruction().
 	 * @throws See pass(), pass_instance() and pop().
 	*/
-	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call_virtual(member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
+	template<typename Class, typename Return, typename Instance, typename... Arguments, typename... Arguments2>
+	void call_virtual(member_function_signature<Class, Return, Arguments...> _function, Instance _instance, Arguments2 &&... _arguments)
 	{
-		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
-		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
+		static_assert(std::is_const<Instance>::value == false, "Instance must not be const.");
+		static_assert(sizeof...(Arguments) == sizeof...(Arguments2), "Argument count does not match.");
 
 		// Push all parameters
 		member_passer _passer(_global_passer);
 
-		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
+		_passer.pass_all(_instance, std::forward<Arguments2>(_arguments)...);
 
 		// Convert
 		union
 		{
-			member_function_signature<_Class, _Return, _Args...> member;
+			member_function_signature<Class, Return, Arguments...> member;
 			void * address;
 		} address;
 
@@ -320,33 +320,33 @@ public:
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
-	 * @tparam _Class The class.
-	 * @tparam _Return The return type of the function.
-	 * @tparam _Instance The instance type.
-	 * @tparam _Args The arguments of the function.
-	 * @tparam _Args2 The arguemtns that should be passed.
+	 * @tparam Class The class.
+	 * @tparam Return The return type of the function.
+	 * @tparam Instance The instance type.
+	 * @tparam Arguments The arguments of the function.
+	 * @tparam Arguments2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
 	 * @param _instance The class instance.
-	 * @param _args The arguments for the function.
+	 * @param _arguments The arguments for the function.
 	 *
 	 * @throws See architecture::instruction32() and architecture::instruction().
 	 * @throws See pass(), pass_instance() and pop().
 	*/
-	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call_virtual(const_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, _Args2 &&... _args)
+	template<typename Class, typename Return, typename Instance, typename... Arguments, typename... Arguments2>
+	void call_virtual(const_member_function_signature<Class, Return, Arguments...> _function, Instance _instance, Arguments2 &&... _arguments)
 	{
-		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
+		static_assert(sizeof...(Arguments) == sizeof...(Arguments2), "Argument count does not match.");
 
 		// Push all parameters
 		member_passer _passer(_global_passer);
 
-		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
+		_passer.pass_all(_instance, std::forward<Arguments2>(_arguments)...);
 
 		// Convert
 		union
 		{
-			const_member_function_signature<_Class, _Return, _Args...> member;
+			const_member_function_signature<Class, Return, Arguments...> member;
 			void * address;
 		} address;
 
@@ -391,34 +391,34 @@ public:
 	 * @since 3.66.135.745
 	 * @date 3-Aug-18
 	 *
-	 * @tparam _Class The class.
-	 * @tparam _Return The return type of the function.
-	 * @tparam _Instance The instance type.
-	 * @tparam _Args The arguments of the function.
-	 * @tparam _Args2 The arguemtns that should be passed.
+	 * @tparam Class The class.
+	 * @tparam Return The return type of the function.
+	 * @tparam Instance The instance type.
+	 * @tparam Arguments The arguments of the function.
+	 * @tparam Arguments2 The arguemtns that should be passed.
 	 *
 	 * @param _function The function address.
 	 * @param [in] _instance The class instance.
 	 * @param _variable_parameter An array with the variable parameters.
 	 * @param _count The size of @a _variable_parameter.
-	 * @param _args The arguments for the function.
+	 * @param _arguments The arguments for the function.
 	 *
 	 * @throws See architecture::instruction32() and architecture::instruction().
 	 * @throws See pass() and pop().
 	*/
-	template<typename _Class, typename _Return, typename _Instance, typename... _Args, typename... _Args2>
-	void call_virtual(varg_member_function_signature<_Class, _Return, _Args...> _function, _Instance _instance, varg_member_passer & _passer, _Args2 &&... _args)
+	template<typename Class, typename Return, typename Instance, typename... Arguments, typename... Arguments2>
+	void call_virtual(varg_member_function_signature<Class, Return, Arguments...> _function, Instance _instance, varg_member_passer & _passer, Arguments2 &&... _arguments)
 	{
-		static_assert(std::is_const<_Instance>::value == false, "Instance must not be const.");
-		static_assert(sizeof...(_Args) == sizeof...(_Args2), "Argument count does not match.");
+		static_assert(std::is_const<Instance>::value == false, "Instance must not be const.");
+		static_assert(sizeof...(Arguments) == sizeof...(Arguments2), "Argument count does not match.");
 
 		// Push all parameters
-		_passer.pass_all(_instance, std::forward<_Args2>(_args)...);
+		_passer.pass_all(_instance, std::forward<Arguments2>(_arguments)...);
 
 		// Convert
 		union
 		{
-			varg_member_function_signature<_Class, _Return, _Args...> member;
+			varg_member_function_signature<Class, Return, Arguments...> member;
 			void * address;
 		} address;
 

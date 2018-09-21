@@ -17,11 +17,11 @@ namespace framework
 namespace object
 {
 
-template<typename _Ty>
+template<typename Type>
 class raw_object : public object_variable
 {
 public:
-	typedef instance_holder<_Ty> data_type;
+	typedef instance_holder<Type> data_type;
 
 	/**
 	 * Move-Constructor.
@@ -29,12 +29,15 @@ public:
 	 * @since 3.66.135.746
 	 * @date 5-Aug-18
 	 *
+	 * @tparam Ty The real type.
+	 * @tparam Switch Enables this constructor if @a Ty is valid.
+	 *
 	 * @param [in,out] _object The object that should be set.
 	 *
 	 * @throws See constructor_chain().
 	*/
-	template<typename _T, typename A = typename std::enable_if<std::is_same<typename std::remove_cv<typename std::remove_reference<_T>::type>::type, typename std::remove_cv<typename std::remove_reference<_Ty>::type>::type>::value, int>::type>
-	raw_object(_T && _object) : _data(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), std::forward<_T>(_object)), true)
+	template<typename Ty, typename Switch = typename std::enable_if<std::is_same<typename std::remove_cv<typename std::remove_reference<Ty>::type>::type, typename std::remove_cv<typename std::remove_reference<Type>::type>::type>::value, int>::type>
+	raw_object(Ty && _object) : _data(constructor_chain_wrapper<Type>(machine::machine_context::active_allocator(), std::forward<Ty>(_object)), true)
 	{
 	}
 	/**
@@ -57,20 +60,20 @@ public:
 	 * @param [in] _object The object address. This address must not be null.
 	 * @param _owner true if this object is in charge of deallocating the object or not.
 	*/
-	raw_object(machine::memory::allocation<_Ty> _object, bool _owner) noexcept : _data(_object, _owner)
+	raw_object(machine::memory::allocation<Type> _object, bool _owner) noexcept : _data(_object, _owner)
 	{
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
-		printf("<%s at %p>\n", typeid(_Ty).name(), this);
+		printf("<%s at %p>\n", typeid(Type).name(), this);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
-		_destination->replace_this<raw_object<_Ty>>(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get()), true);
+		_destination->replace_this<raw_object<Type>>(constructor_chain_wrapper<Type>(machine::machine_context::active_allocator(), *_data.get()), true);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
-		_destination->replace_this<raw_object<_Ty>>(_data);
+		_destination->replace_this<raw_object<Type>>(_data);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
@@ -158,10 +161,10 @@ public:
 protected:
 	virtual void * data(const std::type_info & _type) override
 	{
-		if (!std::is_const<_Ty>::value) {
-			if (typeid(_Ty) == _type) {
-				return const_cast<typename std::remove_cv<_Ty>::type*>(static_cast<_Ty*>(_data.get()));
-			} else if (typeid(_Ty*) == _type) {
+		if (!std::is_const<Type>::value) {
+			if (typeid(Type) == _type) {
+				return const_cast<typename std::remove_cv<Type>::type*>(static_cast<Type*>(_data.get()));
+			} else if (typeid(Type*) == _type) {
 				return &_data.get();
 			}
 		}
@@ -170,9 +173,9 @@ protected:
 	}
 	virtual const void * const_data(const std::type_info & _type) const override
 	{
-		if (typeid(_Ty) == _type) {
+		if (typeid(Type) == _type) {
 			return _data.get();
-		} else if (typeid(_Ty*) == _type) {
+		} else if (typeid(Type*) == _type) {
 			return &_data.get();
 		}
 

@@ -41,13 +41,13 @@ public:
 	{
 		_passer.pop();
 	}
-	template<typename... _Args>
-	void pass_all(_Args... _args)
+	template<typename... Arguments>
+	void pass_all(Arguments... _arguments)
 	{
 		pass_count_type _to_be_pushed;
 
 		// Count parameters
-		std::tie(_to_be_pushed, std::ignore, std::ignore) = count_arguments(_args...);
+		std::tie(_to_be_pushed, std::ignore, std::ignore) = count_arguments(_arguments...);
 
 #if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 		// Allocate shadow space
@@ -60,7 +60,7 @@ public:
 		_passer.prepare_pushing(_pushed, _to_be_pushed, _caller_pops_parameters, _caller_pops_padding);
 
 		// Pass arguments
-		pass(_args...);
+		pass(_arguments...);
 
 #if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 		// Allocate shadow space
@@ -90,11 +90,11 @@ protected:
 	void pass() noexcept
 	{
 	}
-	template<typename _Ty, typename... _Args>
-	void pass(_Ty _value, _Args... _args)
+	template<typename Type, typename... Arguments>
+	void pass(Type _value, Arguments... _arguments)
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
-		if (sizeof(_Ty) <= element_size) {
+		if (sizeof(Type) <= element_size) {
 			switch (_integral_passed) {
 			case 0:
 			{
@@ -220,12 +220,12 @@ protected:
 		++_integral_passed;
 
 		// Pass rest
-		pass(_args...);
+		pass(_arguments...);
 
 		return;
 
 	gt_push:;
-		pass(_args...);
+		pass(_arguments...);
 
 		if (!_count_only) {
 			push(_value);
@@ -234,8 +234,8 @@ protected:
 		++_pushed;
 		++_passer._stack_offset;
 	}
-	template<typename... _Args>
-	void pass(double _value, _Args... _args)
+	template<typename... Arguments>
+	void pass(double _value, Arguments... _arguments)
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
 #if defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)
@@ -357,12 +357,12 @@ protected:
 		++_floating_point_passed;
 
 		// Pass rest
-		pass(_args...);
+		pass(_arguments...);
 
 		return;
 
 	gt_push:;
-		pass(_args...);
+		pass(_arguments...);
 
 		if (!_count_only) {
 			push(_value);
@@ -379,13 +379,13 @@ protected:
 	{
 		push(intptr_t(0));
 	}
-	template<typename _Ty>
-	void push(_Ty * _ptr)
+	template<typename Type>
+	void push(Type * _ptr)
 	{
 		push(reinterpret_cast<intptr_t>(_ptr));
 	}
-	template<typename _Ty>
-	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 4>::type push(_Ty _value)
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value && sizeof(Type) == 4>::type push(Type _value)
 	{
 		// Push onto stack
 		if (is_one_byte_value(_value)) {
@@ -395,8 +395,8 @@ protected:
 			instruction32<OP_CODE::PUSH>(_passer._output, *reinterpret_cast<int32_t*>(&_value));
 		}
 	}
-	template<typename _Ty>
-	typename std::enable_if<std::is_arithmetic<_Ty>::value && sizeof(_Ty) == 8>::type push(_Ty _value)
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value && sizeof(Type) == 8>::type push(Type _value)
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
 		push(static_cast<int32_t>(*reinterpret_cast<int64_t*>(&_value) >> 32));
@@ -410,100 +410,100 @@ protected:
 		}
 #endif
 	}
-	template<typename _Register, typename _Offset>
-	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value>::type push(register_offset<_Register, _Offset, true> _offset)
+	template<typename Register, typename Offset_type>
+	typename std::enable_if<utility::negation<std::is_void<Offset_type>::value>::value>::type push(register_offset<Register, Offset_type, true> _offset)
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_offset.offset)) {
-			instruction<OP_CODE::LEA, accumulator, _Register>(_passer._output, static_cast<int8_t>(_offset.offset));
+			instruction<OP_CODE::LEA, accumulator, Register>(_passer._output, static_cast<int8_t>(_offset.offset));
 		} else {
-			instruction<OP_CODE::LEA, accumulator, _Register>(_passer._output, _offset.offset);
+			instruction<OP_CODE::LEA, accumulator, Register>(_passer._output, _offset.offset);
 		}
 
 		// Push address
 		instruction<OP_CODE::PUSH, accumulator>(_passer._output);
 	}
-	template<typename _Register, typename _Offset>
-	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value>::type push(register_offset<_Register, _Offset, false> _offset)
+	template<typename Register, typename Offset_type>
+	typename std::enable_if<utility::negation<std::is_void<Offset_type>::value>::value>::type push(register_offset<Register, Offset_type, false> _offset)
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_offset.offset)) {
-			instruction<OP_CODE::PUSH, _Register>(_passer._output, static_cast<int8_t>(_offset.offset));
+			instruction<OP_CODE::PUSH, Register>(_passer._output, static_cast<int8_t>(_offset.offset));
 		} else {
 			// Push address
-			instruction<OP_CODE::PUSH, _Register>(_passer._output, _offset.offset);
+			instruction<OP_CODE::PUSH, Register>(_passer._output, _offset.offset);
 		}
 	}
-	template<typename _Register, bool _Effective_address>
-	void push(register_offset<_Register, void, _Effective_address> _offset)
+	template<typename Register, bool Effective_address>
+	void push(register_offset<Register, void, Effective_address> _offset)
 	{
-		instruction<OP_CODE::PUSH, _Register>(_passer._output);
+		instruction<OP_CODE::PUSH, Register>(_passer._output);
 	}
-	template<typename _Register>
+	template<typename Register>
 	void register_pass(reserved_parameter _value)
 	{
 	}
-	template<typename _Register>
+	template<typename Register>
 	void register_pass(std::nullptr_t _value)
 	{
-		register_pass<_Register>(intptr_t(0));
+		register_pass<Register>(intptr_t(0));
 	}
-	template<typename _Register, typename _Ty>
-	void register_pass(_Ty * _value)
+	template<typename Register, typename Type>
+	void register_pass(Type * _value)
 	{
-		register_pass<_Register>(reinterpret_cast<intptr_t>(_value));
+		register_pass<Register>(reinterpret_cast<intptr_t>(_value));
 	}
-	template<typename _Dest, typename _Src, typename _Offset>
-	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value>::type register_pass(register_offset<_Src, _Offset, true> _offset)
-	{
-		// Save 3 bytes
-		if (is_one_byte_value(_offset.offset)) {
-			instruction<OP_CODE::LEA, _Dest, _Src>(_passer._output, static_cast<int8_t>(_offset.offset));
-		} else {
-			instruction<OP_CODE::LEA, _Dest, _Src>(_passer._output, _offset.offset);
-		}
-	}
-	template<typename _Dest, typename _Src, typename _Offset>
-	typename std::enable_if<utility::negation<std::is_void<_Offset>::value>::value>::type register_pass(register_offset<_Src, _Offset, false> _offset)
+	template<typename Destination, typename Source, typename Offset_type>
+	typename std::enable_if<utility::negation<std::is_void<Offset_type>::value>::value>::type register_pass(register_offset<Source, Offset_type, true> _offset)
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_offset.offset)) {
-			instruction<OP_CODE::MOVE, _Dest, _Src>(_passer._output, static_cast<int8_t>(_offset.offset));
+			instruction<OP_CODE::LEA, Destination, Source>(_passer._output, static_cast<int8_t>(_offset.offset));
 		} else {
-			instruction<OP_CODE::MOVE, _Dest, _Src>(_passer._output, _offset.offset);
+			instruction<OP_CODE::LEA, Destination, Source>(_passer._output, _offset.offset);
 		}
 	}
-	template<typename _Dest, typename _Src>
-	void register_pass(register_offset<_Src, void, false> _offset)
+	template<typename Destination, typename Source, typename Offset_type>
+	typename std::enable_if<utility::negation<std::is_void<Offset_type>::value>::value>::type register_pass(register_offset<Source, Offset_type, false> _offset)
 	{
-		instruction<OP_CODE::MOVE, _Dest, _Src>(_passer._output);
+		// Save 3 bytes
+		if (is_one_byte_value(_offset.offset)) {
+			instruction<OP_CODE::MOVE, Destination, Source>(_passer._output, static_cast<int8_t>(_offset.offset));
+		} else {
+			instruction<OP_CODE::MOVE, Destination, Source>(_passer._output, _offset.offset);
+		}
 	}
-	template<typename _Register>
+	template<typename Destination, typename Source>
+	void register_pass(register_offset<Source, void, false> _offset)
+	{
+		instruction<OP_CODE::MOVE, Destination, Source>(_passer._output);
+	}
+	template<typename Register>
 	void register_pass(double _value)
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
 		BIA_IMPLEMENTATION_ERROR;
 #elif defined(BIA_ARCHITECTURE_X86_64)
 		instruction64<OP_CODE::MOVE, accumulator>(_passer._output, *reinterpret_cast<int64_t*>(&_value));
-		instruction<OP_CODE::MOVE_QUADWORD, _Register, accumulator>(_passer._output);
+		instruction<OP_CODE::MOVE_QUADWORD, Register, accumulator>(_passer._output);
 #endif
 	}
-	template<typename _Register, typename _Ty>
-	typename std::enable_if<std::is_integral<_Ty>::value && sizeof(_Ty) == 4>::type register_pass(_Ty _value)
+	template<typename Register, typename Type>
+	typename std::enable_if<std::is_integral<Type>::value && sizeof(Type) == 4>::type register_pass(Type _value)
 	{
-		instruction32<OP_CODE::MOVE, _Register>(_passer._output, *reinterpret_cast<int32_t*>(&_value));
+		instruction32<OP_CODE::MOVE, Register>(_passer._output, *reinterpret_cast<int32_t*>(&_value));
 	}
-	template<typename _Register, typename _Ty>
-	typename std::enable_if<std::is_integral<_Ty>::value && sizeof(_Ty) == 8>::type register_pass(_Ty _value)
+	template<typename Register, typename Type>
+	typename std::enable_if<std::is_integral<Type>::value && sizeof(Type) == 8>::type register_pass(Type _value)
 	{
 #if defined(BIA_ARCHITECTURE_X86_32)
 		BIA_IMPLEMENTATION_ERROR;
 #else
-		instruction64<OP_CODE::MOVE, _Register>(_passer._output, *reinterpret_cast<int64_t*>(&_value));
+		instruction64<OP_CODE::MOVE, Register>(_passer._output, *reinterpret_cast<int64_t*>(&_value));
 #endif
 	}
-	template<typename... _Args>
-	std::tuple<pass_count_type, pass_count_type, pass_count_type> count_arguments(_Args... _args)
+	template<typename... Arguments>
+	std::tuple<pass_count_type, pass_count_type, pass_count_type> count_arguments(Arguments... _arguments)
 	{
 		auto _old_stack_offset = _passer._stack_offset;
 		auto _old_pushed = _pushed;
@@ -512,7 +512,7 @@ protected:
 
 		// Count parameters
 		_count_only = true;
-		pass(_args...);
+		pass(_arguments...);
 		_count_only = false;
 
 		std::swap(_old_stack_offset, _passer._stack_offset);

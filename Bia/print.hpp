@@ -62,10 +62,10 @@ inline void BIA_STATIC_CALLING_CONVETION print(double _value)
 	print_double(_value);
 }
 
-template<typename _Ty>
-inline void BIA_STATIC_CALLING_CONVETION print(_Ty)
+template<typename Type>
+inline void BIA_STATIC_CALLING_CONVETION print(Type)
 {
-	printf("%s\n", typeid(_Ty).name());
+	printf("%s\n", typeid(Type).name());
 }
 
 }

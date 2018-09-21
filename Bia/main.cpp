@@ -41,8 +41,8 @@ struct printer
 	int a;
 };
 
-template<typename _Lambda>
-inline void test_and_time(int _count, _Lambda && _lambda)
+template<typename Lambda>
+inline void test_and_time(int _count, Lambda && _lambda)
 {
 	auto _time_taken = 0ll;
 

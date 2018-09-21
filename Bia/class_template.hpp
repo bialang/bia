@@ -17,7 +17,7 @@ namespace framework
 namespace object
 {
 
-template<typename _Ty>
+template<typename Type>
 class class_template : public object_variable
 {
 public:
@@ -54,7 +54,7 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
-		printf("<class_template of %s>\n", typeid(_Ty).name());
+		printf("<class_template of %s>\n", typeid(Type).name());
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
@@ -62,13 +62,13 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
-		_destination->replace_this<class_template<_Ty>>(_data);
+		_destination->replace_this<class_template<Type>>(_data);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
-		instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate()), true);
+		instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate()), true);
 
-		_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+		_destination->replace_this<object<Type>>(_instance, _data.get().first);
 	}
 	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
 	{
@@ -77,13 +77,13 @@ public:
 		auto _instance_created = false;
 
 		try {
-			instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate_count(_count, _args)), true);
-			_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+			instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_count(_count, _args)), true);
+			_destination->replace_this<object<Type>>(_instance, _data.get().first);
 
 			_instance_created = true;
 			va_end(_args.args);
 
-			_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+			_destination->replace_this<object<Type>>(_instance, _data.get().first);
 		} catch (...) {
 			if (!_instance_created) {
 				va_end(_args.args);
@@ -99,12 +99,12 @@ public:
 		auto _instance_created = false;
 
 		try {
-			instance_holder<_Ty> _instance(machine::memory::cast_allocation<_Ty>(_data.get().second->instantiate_format(_format, _count, _args)), true);
+			instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_format(_format, _count, _args)), true);
 
 			_instance_created = true;
 			va_end(_args.args);
 
-			_destination->replace_this<object<_Ty>>(_instance, _data.get().first);
+			_destination->replace_this<object<Type>>(_instance, _data.get().first);
 		} catch (...) {
 			if (!_instance_created) {
 				va_end(_args.args);
@@ -113,13 +113,13 @@ public:
 			throw;
 		}
 	}
-	template<typename... _Args>
+	template<typename... Arguments>
 	void set_constructor()
 	{
 		auto _allocator = machine::machine_context::active_allocator();
 
 		_allocator->destroy(_data.get().second);
-		_data.get().second = _allocator->construct<force::initiator, force::real_initiator<_Ty, _Args...>>();
+		_data.get().second = _allocator->construct<force::initiator, force::real_initiator<Type, Arguments...>>();
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, member_map::name_type _name) override
 	{

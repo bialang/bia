@@ -23,7 +23,7 @@ enum class NATIVE_TYPE
 	CUSTOM
 };
 
-template<typename _Ty, bool _Integral, size_t _Size>
+template<typename Type, bool Is_integral, size_t Size_type>
 struct native_type
 {
 	constexpr static NATIVE_TYPE type = NATIVE_TYPE::CUSTOM;
@@ -35,26 +35,26 @@ struct native_type<bool, true, 1>
 	constexpr static NATIVE_TYPE type = NATIVE_TYPE::BOOL;
 };
 
-template<typename _Ty>
-struct native_type<_Ty, true, 1>
+template<typename Type>
+struct native_type<Type, true, 1>
 {
 	constexpr static NATIVE_TYPE type = NATIVE_TYPE::INT_8;
 };
 
-template<typename _Ty>
-struct native_type<_Ty, true, 2>
+template<typename Type>
+struct native_type<Type, true, 2>
 {
 	constexpr static NATIVE_TYPE type = NATIVE_TYPE::INT_16;
 };
 
-template<typename _Ty>
-struct native_type<_Ty, true, 4>
+template<typename Type>
+struct native_type<Type, true, 4>
 {
 	constexpr static NATIVE_TYPE type = NATIVE_TYPE::INT_32;
 };
 
-template<typename _Ty>
-struct native_type<_Ty, true, 8>
+template<typename Type>
+struct native_type<Type, true, 8>
 {
 	constexpr static NATIVE_TYPE type = NATIVE_TYPE::INT_64;
 };
@@ -77,10 +77,10 @@ struct native_type<const char*, false, sizeof(const char*)>
 	constexpr static NATIVE_TYPE type = NATIVE_TYPE::CONST_STRING;
 };
 
-template<typename _Ty>
+template<typename Type>
 constexpr NATIVE_TYPE determine_native_type() noexcept
 {
-	return native_type<_Ty, std::is_integral<_Ty>::value, sizeof(_Ty)>::type;
+	return native_type<Type, std::is_integral<Type>::value, sizeof(Type)>::type;
 }
 
 }

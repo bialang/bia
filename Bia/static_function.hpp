@@ -17,10 +17,10 @@ namespace executable
 /**
  * @brief A static function member.
  *
- * @tparam _Return The return type of the function.
- * @tparam _Args The arguments of the function.
+ * @tparam Return The return type of the function.
+ * @tparam Arguments The arguments of the function.
 */
-template<typename _Return, typename... _Args>
+template<typename Return, typename... Arguments>
 class static_function final : public function
 {
 public:
@@ -32,7 +32,7 @@ public:
 	 *
 	 * @param _function The static function address.
 	*/
-	static_function(_Return(*_function)(_Args...)) noexcept
+	static_function(Return(*_function)(Arguments...)) noexcept
 	{
 		this->_function = _function;
 	}
@@ -42,15 +42,15 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
-		_destination->replace_this<static_function<_Return, _Args...>>(_function);
+		_destination->replace_this<static_function<Return, Arguments...>>(_function);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
-		_destination->replace_this<static_function<_Return, _Args...>>(_function);
+		_destination->replace_this<static_function<Return, Arguments...>>(_function);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
-		_destination->replace_this<static_function<_Return, _Args...>>(_function);
+		_destination->replace_this<static_function<Return, Arguments...>>(_function);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
@@ -80,7 +80,7 @@ public:
 
 private:
 	/** The function pointer. */
-	_Return(*_function)(_Args...);
+	Return(*_function)(Arguments...);
 };
 
 }

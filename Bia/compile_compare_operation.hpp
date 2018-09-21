@@ -89,7 +89,7 @@ private:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam _Left The left member value.
+	 * @tparam Member The left member type.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
@@ -97,8 +97,8 @@ private:
 	 *
 	 * @throws See machine::platform::toolset::call() and machine::platform::toolset::write_test().
 	*/
-	template<typename _Member>
-	void left_member_operation(_Member && _member, framework::operator_type _operator, compiler_value _right)
+	template<typename Member>
+	void left_member_operation(Member && _member, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 		using T = machine::platform::toolset;
@@ -145,8 +145,8 @@ private:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam _Left Either int64_t or double.
-	 * @tparam _Right The right member value.
+	 * @tparam Left Either int64_t or double.
+	 * @tparam Right The right member value.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
@@ -154,10 +154,10 @@ private:
 	 *
 	 * @throws See machine::platform::toolset::call() and machine::platform::toolset::write_test().
 	*/
-	template<typename _Left, typename _Right>
-	void left_constant_right_member_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
+	template<typename Left, typename Right>
+	void left_constant_right_member_operation(Left && _left, framework::operator_type _operator, Right && _right)
 	{
-		if (std::is_same<typename std::remove_reference<_Left>::type, int64_t>::value) {
+		if (std::is_same<typename std::remove_reference<Left>::type, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
 				_toolset.call_static(&machine::link::compare_operation_int32, _operator, _right, static_cast<int32_t>(_left));
@@ -177,7 +177,7 @@ private:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam _Left Either int64_t or double.
+	 * @tparam Left Either int64_t or double.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
@@ -185,26 +185,26 @@ private:
 	 *
 	 * @throws See left_constant_right_member_operation().
 	*/
-	template<typename _Left>
-	void left_constant_operation(_Left && _left, framework::operator_type _operator, compiler_value _right)
+	template<typename Left>
+	void left_constant_operation(Left && _left, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
 		switch (_right.type()) {
 		case VT::INT:
-			both_constant_operation(std::forward<_Left>(_left), _operator, _right.value().rt_int);
+			both_constant_operation(std::forward<Left>(_left), _operator, _right.value().rt_int);
 
 			break;
 		case VT::DOUBLE:
-			both_constant_operation(std::forward<_Left>(_left), _operator, _right.value().rt_double);
+			both_constant_operation(std::forward<Left>(_left), _operator, _right.value().rt_double);
 
 			break;
 		case VT::MEMBER:
-			left_constant_right_member_operation(std::forward<_Left>(_left), _operator, _right.value().rt_member);
+			left_constant_right_member_operation(std::forward<Left>(_left), _operator, _right.value().rt_member);
 
 			break;
 		case VT::TEMPORARY_MEMBER:
-			left_constant_right_member_operation(std::forward<_Left>(_left), _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
+			left_constant_right_member_operation(std::forward<Left>(_left), _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		default:
@@ -217,15 +217,15 @@ private:
 	 * @since 3.64.131.725
 	 * @date 19-May-18
 	 *
-	 * @tparam _Left The type of the left value.
-	 * @tparam _Right The type of the right value.
+	 * @tparam Left The type of the left value.
+	 * @tparam Right The type of the right value.
 	 *
 	 * @param [in] _left The left hand value.
 	 * @param _operator The operator.
 	 * @param [in] _right The right hand value.
 	*/
-	template<typename _Left, typename _Right>
-	void both_constant_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
+	template<typename Left, typename Right>
+	void both_constant_operation(Left && _left, framework::operator_type _operator, Right && _right)
 	{
 		using namespace framework;
 
@@ -239,11 +239,11 @@ private:
 
 			break;
 		case O_SAME:
-			_value.set_return(std::is_same<_Left, _Right>::value && _left == _right);
-			
+			_value.set_return(std::is_same<Left, Right>::value && _left == _right);
+
 			break;
 		case O_NOT_SAME:
-			_value.set_return(!std::is_same<_Left, _Right>::value || _left != _right);
+			_value.set_return(!std::is_same<Left, Right>::value || _left != _right);
 
 			break;
 		case O_LESS_THAN:

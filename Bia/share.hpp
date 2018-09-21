@@ -17,9 +17,9 @@ namespace utility
  *
  * A shared object with reference counting in only one thread.
  *
- * @tparam _Ty The type of the object.
+ * @tparam Type The type of the object.
 */
-template<typename _Ty>
+template<typename Type>
 class share
 {
 public:
@@ -29,16 +29,16 @@ public:
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18
 	 *
-	 * @tparam _Args The arguments needed to create the underlying object.
+	 * @tparam Arguments The arguments needed to create the underlying object.
 	 *
-	 * @param _args The arguments.
+	 * @param _arguments The arguments.
 	 *
 	 * @throws See machine::memory::allocator::construct().
 	*/
-	template<typename... _Args>
-	share(_Args &&... _args)
+	template<typename... Arguments>
+	share(Arguments &&... _arguments)
 	{
-		_data = machine::machine_context::active_allocator()->construct<data>(_Ty(std::forward<_Args>(_args)...)).first;
+		_data = machine::machine_context::active_allocator()->construct<data>(Type(std::forward<Arguments>(_arguments)...)).first;
 	}
 	/**
 	 * Constructor.
@@ -48,12 +48,12 @@ public:
 	 *
 	 * @param _copy The copy.
 	*/
-	share(const share<_Ty> & _copy) noexcept
+	share(const share & _copy) noexcept
 	{
 		_data = _copy._data;
 		++_data->ref_counter;
 	}
-	share(share<_Ty>&&) = delete;
+	share(share && _move) = delete;
 	/**
 	 * Destructor.
 	 *
@@ -88,7 +88,7 @@ public:
 	 *
 	 * @return The object.
 	*/
-	_Ty & get() noexcept
+	Type & get() noexcept
 	{
 		return _data->object;
 	}
@@ -100,7 +100,7 @@ public:
 	 *
 	 * @return The object.
 	*/
-	const _Ty & get() const noexcept
+	const Type & get() const noexcept
 	{
 		return _data->object;
 	}
@@ -109,11 +109,11 @@ private:
 	struct data
 	{
 		/** The referenced object. */
-		_Ty object;
+		Type object;
 		/** The reference counter. */
 		size_t ref_counter;
 
-		data(_Ty && _object) : object(std::forward<_Ty>(_object))
+		data(Type && _object) : object(std::forward<Type>(_object))
 		{
 			ref_counter = 1;
 		}

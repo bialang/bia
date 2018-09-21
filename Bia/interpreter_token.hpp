@@ -39,19 +39,19 @@ public:
 	 *
 	 * @return true if succeded according to the @a _Flags, otherwise false.
 	*/
-	template<flags::flag_type _Flags, bool _Begin>
+	template<flags::flag_type Flags, bool Called_at_beginning>
 	static bool whitespace_deleter(stream::input_stream & _input, encoding::encoder * _encoder) noexcept
 	{
-		constexpr auto match_begin = _Begin && (_Flags & (flags::starting_ws_token | flags::starting_ws_opt_token | flags::starting_padding_token | flags::starting_padding_opt_token));
-		constexpr auto match_end = !_Begin && (_Flags & (flags::ending_ws_token | flags::ending_ws_opt_token));
+		constexpr auto match_begin = Called_at_beginning && (Flags & (flags::starting_ws_token | flags::starting_ws_opt_token | flags::starting_padding_token | flags::starting_padding_opt_token));
+		constexpr auto match_end = !Called_at_beginning && (Flags & (flags::ending_ws_token | flags::ending_ws_opt_token));
 
 		if (match_begin || match_end) {
-			constexpr auto skipper = _Flags & (flags::starting_padding_token | flags::starting_padding_opt_token) ? padding_skipper : whitespace_skipper;
+			constexpr auto skipper = Flags & (flags::starting_padding_token | flags::starting_padding_opt_token) ? padding_skipper : whitespace_skipper;
 
 			// No characters were skipped
 			if (!skipper(_input, _encoder)) {
 				// But they are required
-				if ((_Begin && (_Flags & (flags::starting_ws_token | flags::starting_padding_token))) || (!_Begin && (_Flags & flags::ending_ws_token))) {
+				if ((Called_at_beginning && (Flags & (flags::starting_ws_token | flags::starting_padding_token))) || (!Called_at_beginning && (Flags & flags::ending_ws_token))) {
 					return false;
 				}
 			}
@@ -231,7 +231,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @tparam _Flags Manipulating the behavior of this function. See @ref grammar::flags.
+	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
 	 * @param _params Additional interpreter information.
@@ -243,14 +243,14 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	template<flags::flag_type _Flags>
+	template<flags::flag_type Flags>
 	static ACTION custom_operator(stream::input_stream & _input, token_param _params, token_output & _output)
 	{
-		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-		constexpr auto error = _Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
+		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
+		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
 
 		// Starting whitespaces
-		if (!whitespace_deleter<_Flags, true>(_input, _params.encoder)) {
+		if (!whitespace_deleter<Flags, true>(_input, _params.encoder)) {
 			return error;
 		}
 
@@ -291,7 +291,7 @@ public:
 				_input.skip(_prev);
 
 				// Ending whitespaces
-				if (!whitespace_deleter<_Flags, false>(_input, _params.encoder)) {
+				if (!whitespace_deleter<Flags, false>(_input, _params.encoder)) {
 					return error;
 				}
 
@@ -308,7 +308,7 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @tparam _Ty The keyword. See @file interpreter_id.hpp for all keywords and operators.
-	 * @tparam _Flags Manipulating the behavior of this function. See @ref grammar::flags.
+	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
 	 * @param _params Additional interpreter information.
@@ -320,23 +320,23 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	template<typename _Ty, flags::flag_type _Flags = flags::none>
+	template<typename Type, flags::flag_type Flags = flags::none>
 	static ACTION keyword(stream::input_stream & _input, token_param _params, token_output & _output)
 	{
-		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-		constexpr auto error = _Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
+		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
+		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
 
-		static_assert(_Ty::length() <= BIA_MAX_KEYWORD_LENGTH, "Keyword length exceeded.");
+		static_assert(Type::length() <= BIA_MAX_KEYWORD_LENGTH, "Keyword length exceeded.");
 
 		// Starting whitespaces
-		if (!whitespace_deleter<_Flags, true>(_input, _params.encoder)) {
+		if (!whitespace_deleter<Flags, true>(_input, _params.encoder)) {
 			return error;
 		}
 
-		if (_input.available() >= _Ty::length()) {
+		if (_input.available() >= Type::length()) {
 			auto _buffer = _input.buffer();
-			auto _keyword = _Ty::token();
-			auto _length = _Ty::length();
+			auto _keyword = Type::token();
+			auto _length = Type::length();
 
 			while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
 				if (_params.encoder->next(_buffer.first, _buffer.second) != *_keyword++) {
@@ -346,13 +346,13 @@ public:
 				if (!--_length) {
 					// Set output
 					_output.type = report::TYPE::KEYWORD;
-					_output.content.keyword = _Ty::string_id();
+					_output.content.keyword = Type::string_id();
 
 					// Move cursor
 					_input.skip(_buffer.first);
 
 					// Ending whitespaces
-					if (!whitespace_deleter<_Flags, false>(_input, _params.encoder)) {
+					if (!whitespace_deleter<Flags, false>(_input, _params.encoder)) {
 						return error;
 					}
 
@@ -370,7 +370,7 @@ public:
 	 * @date 9-Apr-18
 	 *
 	 * @tparam _Rule The rule id. See @ref BIA_GRAMMAR_RULE.
-	 * @tparam _Flags Manipulating the behavior of this function. See @ref grammar::flags.
+	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
 	 * @param _params Additional interpreter information.
@@ -381,20 +381,20 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	template<report::rule_type _Rule, flags::flag_type _Flags = flags::filler_token>
+	template<report::rule_type Rule, flags::flag_type Flags = flags::filler_token>
 	static ACTION rule_pointer(stream::input_stream & _input, token_param _params, token_output & _output)
 	{
-		constexpr auto success = _Flags & flags::filler_token ? (_Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (_Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
-		constexpr auto error = _Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
+		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
+		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
 		
 		// Starting whitespaces
-		if (!whitespace_deleter<_Flags, true>(_input, _params.encoder)) {
+		if (!whitespace_deleter<Flags, true>(_input, _params.encoder)) {
 			return error;
 		}
 
-		if (_params.rules[_Rule].run_rule(_input, _params)) {
+		if (_params.rules[Rule].run_rule(_input, _params)) {
 			// Ending whitespaces
-			if (!whitespace_deleter<_Flags, false>(_input, _params.encoder)) {
+			if (!whitespace_deleter<Flags, false>(_input, _params.encoder)) {
 				return error;
 			}
 

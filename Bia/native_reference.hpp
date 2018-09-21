@@ -12,7 +12,7 @@ namespace framework
 namespace native
 {
 
-template<typename _Ty>
+template<typename Type>
 class native_reference final : public native_variable
 {
 public:
@@ -24,7 +24,7 @@ public:
 	 *
 	 * @param [in] _ptr The reference.
 	*/
-	explicit native_reference(_Ty * _ptr) noexcept
+	explicit native_reference(Type * _ptr) noexcept
 	{
 		this->_ptr = _ptr;
 	}
@@ -36,7 +36,7 @@ public:
 	 *
 	 * @param [in] _ptr The reference.
 	*/
-	explicit native_reference(_Ty & _ref) noexcept
+	explicit native_reference(Type & _ref) noexcept
 	{
 		this->_ptr = &_ref;
 	}
@@ -47,7 +47,7 @@ public:
 
 private:
 	/** The reference. */
-	_Ty * _ptr;
+	Type * _ptr;
 };
 
 }

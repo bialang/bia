@@ -13,8 +13,8 @@ namespace bia
 namespace compiler
 {
 
-template<typename _Left, typename _Right>
-inline typename std::enable_if<std::is_integral<_Left>::value && std::is_integral<_Right>::value, typename utility::native_operation_result<_Left, _Right>::type>::type constant_operation(_Left _left, _Right _right, framework::OPERATOR _operator)
+template<typename Left, typename Right>
+inline typename std::enable_if<std::is_integral<Left>::value && std::is_integral<Right>::value, typename utility::native_operation_result<Left, Right>::type>::type constant_operation(Left _left, Right _right, framework::OPERATOR _operator)
 {
 	using namespace framework;
 
@@ -45,20 +45,20 @@ inline typename std::enable_if<std::is_integral<_Left>::value && std::is_integra
 		return _left ^ _right;
 	case O_BITWISE_ARITHMETIC_LEFT_SHIFT:
 	case O_BITWISE_ASSIGN_ARITHMETIC_LEFT_SHIFT:
-		return static_cast<typename utility::native_operation_result<_Left, _Right>::type>(_left) << _right;
+		return static_cast<typename utility::native_operation_result<Left, Right>::type>(_left) << _right;
 	case O_BITWISE_ARITHMETIC_RIGHT_SHIFT:
 	case O_BITWISE_ASSIGN_ARITHMETIC_RIGHT_SHIFT:
 		return _left >> _right;
 	case O_BITWISE_LOGICAL_RIGHT_SHIFT:
 	case O_BITWISE_ASSIGN_LOGICAL_RIGHT_SHIFT:
-		return static_cast<typename std::make_unsigned<_Left>::type>(_left) >> _right;
+		return static_cast<typename std::make_unsigned<Left>::type>(_left) >> _right;
 	default:
 		throw exception::operator_error();
 	}
 }
 
-template<typename _Left, typename _Right>
-inline typename std::enable_if<utility::negation<std::is_integral<_Left>::value && std::is_integral<_Right>::value>::value, typename utility::native_operation_result<_Left, _Right>::type>::type constant_operation(_Left _left, _Right _right, framework::OPERATOR _operator)
+template<typename Left, typename Right>
+inline typename std::enable_if<utility::negation<std::is_integral<Left>::value && std::is_integral<Right>::value>::value, typename utility::native_operation_result<Left, Right>::type>::type constant_operation(Left _left, Right _right, framework::OPERATOR _operator)
 {
 	using namespace framework;
 

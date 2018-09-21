@@ -15,71 +15,71 @@ namespace framework
 namespace object
 {
 
-template<typename _Ty, bool _Movable, bool _Copyable>
+template<typename Type, bool Is_movable, bool Is_copyable>
 struct constructor_chain;
 
-template<typename _Ty>
-struct constructor_chain<_Ty, true, true>
+template<typename Type>
+struct constructor_chain<Type, true, true>
 {
-	static machine::memory::allocation<_Ty> construct(machine::memory::allocator * _allocator, _Ty && _object)
+	static machine::memory::allocation<Type> construct(machine::memory::allocator * _allocator, Type && _object)
 	{
-		return _allocator->construct<_Ty>(std::move(_object));
+		return _allocator->construct<Type>(std::move(_object));
 	}
-	static machine::memory::allocation<_Ty> construct(machine::memory::allocator * _allocator, const _Ty & _object)
+	static machine::memory::allocation<Type> construct(machine::memory::allocator * _allocator, const Type & _object)
 	{
-		return _allocator->construct<_Ty>(_object);
+		return _allocator->construct<Type>(_object);
 	}
 };
 
-template<typename _Ty>
-struct constructor_chain<_Ty, true, false>
+template<typename Type>
+struct constructor_chain<Type, true, false>
 {
-	static machine::memory::allocation<_Ty> construct(machine::memory::allocator * _allocator, _Ty && _object)
+	static machine::memory::allocation<Type> construct(machine::memory::allocator * _allocator, Type && _object)
 	{
-		return _allocator->construct<_Ty>(std::move(_object));
+		return _allocator->construct<Type>(std::move(_object));
 	}
-	static machine::memory::allocation<_Ty> construct(machine::memory::allocator * _allocator, const _Ty & _object)
+	static machine::memory::allocation<Type> construct(machine::memory::allocator * _allocator, const Type & _object)
 	{
 		throw;
 	}
 };
 
-template<typename _Ty>
-struct constructor_chain<_Ty, false, true>
+template<typename Type>
+struct constructor_chain<Type, false, true>
 {
-	static machine::memory::allocation<_Ty> construct(machine::memory::allocator * _allocator, _Ty && _object)
+	static machine::memory::allocation<Type> construct(machine::memory::allocator * _allocator, Type && _object)
 	{
-		return _allocator->construct<_Ty>(_object);
+		return _allocator->construct<Type>(_object);
 	}
-	static machine::memory::allocation<_Ty> construct(machine::memory::allocator * _allocator, const _Ty & _object)
+	static machine::memory::allocation<Type> construct(machine::memory::allocator * _allocator, const Type & _object)
 	{
-		return _allocator->construct<_Ty>(_object);
+		return _allocator->construct<Type>(_object);
 	}
 };
 
-template<typename _Ty>
-struct constructor_chain<_Ty, false, false>
+template<typename Type>
+struct constructor_chain<Type, false, false>
 {
-	static machine::memory::allocation<_Ty> construct(machine::memory::allocator * _allocator, _Ty && _object)
+	static machine::memory::allocation<Type> construct(machine::memory::allocator * _allocator, Type && _object)
 	{
 		throw;
 	}
-	static machine::memory::allocation<_Ty> construct(machine::memory::allocator * _allocator, const _Ty & _object)
+	static machine::memory::allocation<Type> construct(machine::memory::allocator * _allocator, const Type & _object)
 	{
 		throw;
 	}
 };
 
-template<typename _Ty>
-machine::memory::allocation<_Ty> constructor_chain_wrapper(machine::memory::allocator * _allocator, _Ty && _object)
+template<typename Type>
+machine::memory::allocation<Type> constructor_chain_wrapper(machine::memory::allocator * _allocator, Type && _object)
 {
-	return constructor_chain<_Ty, std::is_move_constructible<_Ty>::value, std::is_copy_constructible<_Ty>::value>::construct(_allocator, std::move(_object));
+	return constructor_chain<Type, std::is_move_constructible<Type>::value, std::is_copy_constructible<Type>::value>::construct(_allocator, std::move(_object));
 }
 
-template<typename _Ty>
-machine::memory::allocation<_Ty> constructor_chain_wrapper(machine::memory::allocator * _allocator, const _Ty & _object)
+template<typename Type>
+machine::memory::allocation<Type> constructor_chain_wrapper(machine::memory::allocator * _allocator, const Type & _object)
 {
-	return constructor_chain<_Ty, std::is_move_constructible<_Ty>::value, std::is_copy_constructible<_Ty>::value>::construct(_allocator, _object);
+	return constructor_chain<Type, std::is_move_constructible<Type>::value, std::is_copy_constructible<Type>::value>::construct(_allocator, _object);
 }
 
 }

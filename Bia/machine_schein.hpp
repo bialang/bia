@@ -34,7 +34,7 @@ public:
 	*/
 	BIA_EXPORT machine_schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator) noexcept;
 	machine_schein(const machine_schein & _copy) = delete;
-	machine_schein(machine_schein && _rvalue) noexcept = default;
+	machine_schein(machine_schein && _move) noexcept = default;
 	/**
 	 * Destructor.
 	 *
@@ -88,13 +88,13 @@ public:
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	 *
-	 * @param [in,out] _rvalue Defines the value that should be moved.
+	 * @param [in,out] _move Defines the value that should be moved.
 	 *
 	 * @throws See delete_all_allocations().
 	 *
 	 * @return This.
 	*/
-	BIA_EXPORT machine_schein & operator=(machine_schein && _rvalue);
+	BIA_EXPORT machine_schein & operator=(machine_schein && _move);
 
 private:
 	/** The memory allocator for normal memory. */

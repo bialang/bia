@@ -18,16 +18,16 @@ namespace bia
 namespace framework
 {
 
-template<typename _Ty>
-inline constexpr _Ty max(_Ty _first, _Ty _second)
+template<typename Type>
+inline constexpr Type max(Type _first, Type _second)
 {
 	return _first > _second ? _first : _second;
 }
 
-template<typename _Ty, typename... _Args>
-inline constexpr typename std::enable_if<(sizeof...(_Args) > 1), _Ty>::type max(_Ty _first, _Args... _args)
+template<typename Type, typename... Arguments>
+inline constexpr typename std::enable_if<(sizeof...(Arguments) > 1), Type>::type max(Type _first, Arguments... _arguments)
 {
-	return _first > max(_args...) ? _first : max(_args...);
+	return _first > max(_arguments...) ? _first : max(_arguments...);
 }
 
 constexpr auto max_member_size = max(

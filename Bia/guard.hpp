@@ -8,7 +8,7 @@ namespace bia
 namespace utility
 {
 
-template<typename _Ty, typename _Action>
+template<typename Type, typename Action>
 class guard
 {
 public:
@@ -21,9 +21,9 @@ public:
 	 * @param _object The object that should be guarded.
 	 * @param [in] _action The guard function.
 	 *
-	 * @throws See the constructor of @a _Ty.
+	 * @throws See the constructor of @a Type.
 	*/
-	guard(_Ty && _object, _Action && _action) : _object(std::forward<_Ty>(_object)), _action(std::forward<_Action>(_action))
+	guard(Type && _object, Action && _action) : _object(std::forward<Type>(_object)), _action(std::forward<Action>(_action))
 	{
 		_valid = true;
 	}
@@ -35,9 +35,9 @@ public:
 	 *
 	 * @param [in] _move The guard that should be moved.
 	 *
-	 * @throws See the move constructor of @a _Ty.
+	 * @throws See the move constructor of @a Type.
 	*/
-	guard(guard<_Ty, _Action> && _move) : _object(std::move(_move._object)), _action(std::move(_move._action))
+	guard(guard<Type, Action> && _move) : _object(std::move(_move._object)), _action(std::move(_move._action))
 	{
 		_valid = true;
 		_move._valid = false;
@@ -48,7 +48,7 @@ public:
 	 * @since 3.64.131.726
 	 * @date 2-Jun-18
 	 *
-	 * @throws See @a _Action
+	 * @throws See @a Action
 	*/
 	~guard()
 	{
@@ -76,7 +76,7 @@ public:
 	 *
 	 * @return A reference.
 	*/
-	_Ty & get() noexcept
+	Type & get() noexcept
 	{
 		return _object;
 	}
@@ -88,7 +88,7 @@ public:
 	 *
 	 * @return A reference.
 	*/
-	const _Ty & get() const noexcept
+	const Type & get() const noexcept
 	{
 		return _object;
 	}
@@ -97,15 +97,15 @@ private:
 	/** The state of this guard. */
 	bool _valid;
 	/** The guarded object. */
-	_Ty _object;
+	Type _object;
 	/** The action that is taken just before destruction of the guarded object. */
-	_Action _action;
+	Action _action;
 };
 
-template<typename _Ty, typename _Action>
-inline guard<_Ty, _Action> make_guard(_Ty && _object, _Action && _action)
+template<typename Type, typename Action>
+inline guard<Type, Action> make_guard(Type && _object, Action && _action)
 {
-	return guard<_Ty, _Action>(std::forward<_Ty>(_object), std::forward<_Action>(_action));
+	return guard<Type, Action>(std::forward<Type>(_object), std::forward<Action>(_action));
 }
 
 }

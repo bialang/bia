@@ -40,40 +40,40 @@ struct va_list_wrapper
 	std::va_list args;
 };
 
-template<typename _Return>
-_Return format_cast(va_list_wrapper & _args, const char *& _format);
+template<typename Return>
+Return format_cast(va_list_wrapper & _args, const char *& _format);
 
 void disguised_caller(void(*_function)(), framework::member * _destination);
 
-template<typename _Return>
-void disguised_caller(_Return(*_function)(), framework::member * _destination);
+template<typename Return>
+void disguised_caller(Return(*_function)(), framework::member * _destination);
 
-template<typename _Return, typename... _Args>
-void disguised_caller(_Return(*)(_Args...), framework::member * _destination);
+template<typename Return, typename... Arguments>
+void disguised_caller(Return(*)(Arguments...), framework::member * _destination);
 
-template<typename _Class>
-void disguised_caller(void(_Class::*_function)(), _Class * _instance, framework::member * _destination);
+template<typename Class>
+void disguised_caller(void(Class::*_function)(), Class * _instance, framework::member * _destination);
 
-template<typename _Class>
-void disguised_caller(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination);
+template<typename Class>
+void disguised_caller(void(Class::*_function)() const, const Class * _instance, framework::member * _destination);
 
-template<typename _Return, typename _Class>
-void disguised_caller(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination);
+template<typename Return, typename Class>
+void disguised_caller(Return(Class::*_function)(), Class * _instance, framework::member * _destination);
 
-template<typename _Return, typename _Class>
-void disguised_caller(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination);
+template<typename Return, typename Class>
+void disguised_caller(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination);
 
-template<typename _Return, typename _Class, typename... _Args>
-void disguised_caller(_Return(_Class::*)(_Args...), _Class * _instance, framework::member * _destination);
+template<typename Return, typename Class, typename... Arguments>
+void disguised_caller(Return(Class::*)(Arguments...), Class * _instance, framework::member * _destination);
 
-template<typename _Return, typename _Class, typename... _Args>
-void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * _instance, framework::member * _destination);
+template<typename Return, typename Class, typename... Arguments>
+void disguised_caller(Return(Class::*)(Arguments...) const, const Class * _instance, framework::member * _destination);
 
-template<typename _Class>
-machine::memory::allocation<_Class> disguised_caller();
+template<typename Class>
+machine::memory::allocation<Class> disguised_caller();
 
-template<typename _Class, typename... _Args>
-typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocation<_Class>>::type disguised_caller();
+template<typename Class, typename... Arguments>
+typename std::enable_if<(sizeof...(Arguments) > 0), machine::memory::allocation<Class>>::type disguised_caller();
 
 """)
 f.write(b"""#pragma once
@@ -96,8 +96,8 @@ namespace bia
 namespace force
 {
 
-template<typename _Return>
-inline _Return format_cast(va_list_wrapper & _args, const char *& _format)
+template<typename Return>
+inline Return format_cast(va_list_wrapper & _args, const char *& _format)
 {
 	using namespace utility;
 
@@ -107,49 +107,49 @@ gt_redo:;
 	{
 	case 'i':
 	{
-		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
+		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args.args, int32_t));
+			return chooser<is_number, Return, int32_t>::choose(va_arg(_args.args, int32_t));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'I':
 	{
-		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
+		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args.args, int64_t));
+			return chooser<is_number, Return, int64_t>().choose(va_arg(_args.args, int64_t));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'd':
 	{
-		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
+		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
 
 		if (is_number) {
 			auto _value = va_arg(_args.args, int64_t);
 
-			return chooser<is_number, _Return, double>().choose(*reinterpret_cast<double*>(&_value));
+			return chooser<is_number, Return, double>().choose(*reinterpret_cast<double*>(&_value));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'a':
 	{
-		constexpr auto is_string = std::is_same<_Return, const char*>::value;
+		constexpr auto is_string = std::is_same<Return, const char*>::value;
 
 		if (is_string) {
-			return chooser<is_string, _Return, const char*>().choose(va_arg(_args.args, const char*));
+			return chooser<is_string, Return, const char*>().choose(va_arg(_args.args, const char*));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'M':
 	{
-		if (auto _ptr = va_arg(_args.args, framework::member*)->cast<_Return>()) {
+		if (auto _ptr = va_arg(_args.args, framework::member*)->cast<Return>()) {
 			return *_ptr;
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
@@ -171,66 +171,66 @@ inline void disguised_caller(void(*_function)(), framework::member * _destinatio
 	framework::create_member(_destination);
 }
 
-template<typename _Return>
-inline void disguised_caller(_Return(*_function)(), framework::member * _destination)
+template<typename Return>
+inline void disguised_caller(Return(*_function)(), framework::member * _destination)
 {
 	framework::create_member(_destination, _function());
 }
 
-template<typename _Return, typename... _Args>
-inline void disguised_caller(_Return(*)(_Args...), framework::member * _destination)
+template<typename Return, typename... Arguments>
+inline void disguised_caller(Return(*)(Arguments...), framework::member * _destination)
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _Class>
-inline void disguised_caller(void(_Class::*_function)(), _Class * _instance, framework::member * _destination)
+template<typename Class>
+inline void disguised_caller(void(Class::*_function)(), Class * _instance, framework::member * _destination)
 {
 	(_instance->*_function)();
 
 	framework::create_member(_destination);
 }
 
-template<typename _Class>
-inline void disguised_caller(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination)
+template<typename Class>
+inline void disguised_caller(void(Class::*_function)() const, const Class * _instance, framework::member * _destination)
 {
 	(_instance->*_function)();
 
 	framework::create_member(_destination);
 }
 
-template<typename _Return, typename _Class>
-inline void disguised_caller(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination)
+template<typename Return, typename Class>
+inline void disguised_caller(Return(Class::*_function)(), Class * _instance, framework::member * _destination)
 {
 	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _Return, typename _Class>
-inline void disguised_caller(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination)
+template<typename Return, typename Class>
+inline void disguised_caller(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination)
 {
 	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _Return, typename _Class, typename... _Args>
-inline void disguised_caller(_Return(_Class::*)(_Args...), _Class * _instance, framework::member * _destination)
+template<typename Return, typename Class, typename... Arguments>
+inline void disguised_caller(Return(Class::*)(Arguments...), Class * _instance, framework::member * _destination)
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _Return, typename _Class, typename... _Args>
-inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * _instance, framework::member * _destination)
+template<typename Return, typename Class, typename... Arguments>
+inline void disguised_caller(Return(Class::*)(Arguments...) const, const Class * _instance, framework::member * _destination)
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _Class>
-inline machine::memory::allocation<_Class> disguised_caller()
+template<typename Class>
+inline machine::memory::allocation<Class> disguised_caller()
 {
-	return machine::machine_context::active_allocator()->construct<_Class>();
+	return machine::machine_context::active_allocator()->construct<Class>();
 }
 
-template<typename _Class, typename... _Args>
-inline typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocation<_Class>>::type disguised_caller()
+template<typename Class, typename... Arguments>
+inline typename std::enable_if<(sizeof...(Arguments) > 0), machine::memory::allocation<Class>>::type disguised_caller()
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
@@ -253,11 +253,11 @@ for type in ["count", "format"]:
 		filler = upper.copy()
 
 		if template == "static":
-			filler["template_begin"] = "template<typename _Return"
+			filler["template_begin"] = "template<typename Return"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "_Return(*_function)("
+			filler["param1"] = "Return(*_function)("
 			filler["param2"] = ""
 			filler["param3"] = "), framework::member * _destination, "
 			filler["body1"] = "framework::create_member(_destination, _function("
@@ -277,62 +277,62 @@ for type in ["count", "format"]:
 
 	framework::create_member(_destination);"""
 		elif template == "member":
-			filler["template_begin"] = "template<typename _Class, typename _Return"
+			filler["template_begin"] = "template<typename Class, typename Return"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "_Return(_Class::*_function)("
+			filler["param1"] = "Return(Class::*_function)("
 			filler["param2"] = ""
-			filler["param3"] = "), _Class * _instance, framework::member * _destination, "
+			filler["param3"] = "), Class * _instance, framework::member * _destination, "
 			filler["body1"] = "framework::create_member(_destination, (_instance->*_function)("
 			filler["body2"] = ""
 			filler["body3"] = "));"
 		elif template == "member_void":
-			filler["template_begin"] = "template<typename _Class"
+			filler["template_begin"] = "template<typename Class"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "void(_Class::*_function)("
+			filler["param1"] = "void(Class::*_function)("
 			filler["param2"] = ""
-			filler["param3"] = "), _Class * _instance, framework::member * _destination, "
+			filler["param3"] = "), Class * _instance, framework::member * _destination, "
 			filler["body1"] = "(_instance->*_function)("
 			filler["body2"] = ""
 			filler["body3"] = """);
 
 	framework::create_member(_destination);"""
 		elif template == "member_const":
-			filler["template_begin"] = "template<typename _Class, typename _Return"
+			filler["template_begin"] = "template<typename Class, typename Return"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "_Return(_Class::*_function)("
+			filler["param1"] = "Return(Class::*_function)("
 			filler["param2"] = ""
-			filler["param3"] = ") const, const _Class * _instance, framework::member * _destination, "
+			filler["param3"] = ") const, const Class * _instance, framework::member * _destination, "
 			filler["body1"] = "framework::create_member(_destination, (_instance->*_function)("
 			filler["body2"] = ""
 			filler["body3"] = "));"
 		elif template == "member_void_const":
-			filler["template_begin"] = "template<typename _Class"
+			filler["template_begin"] = "template<typename Class"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
 			filler["function_return"] = "void"
-			filler["param1"] = "void(_Class::*_function)("
+			filler["param1"] = "void(Class::*_function)("
 			filler["param2"] = ""
-			filler["param3"] = ") const, const _Class * _instance, framework::member * _destination, "
+			filler["param3"] = ") const, const Class * _instance, framework::member * _destination, "
 			filler["body1"] = "(_instance->*_function)("
 			filler["body2"] = ""
 			filler["body3"] = """);
 
 	framework::create_member(_destination);"""
 		elif template == "initiator":
-			filler["template_begin"] = "template<typename _Class"
+			filler["template_begin"] = "template<typename Class"
 			filler["template_middle"] = ""
 			filler["template_end"] = ">"
-			filler["function_return"] = "machine::memory::allocation<_Class>"
+			filler["function_return"] = "machine::memory::allocation<Class>"
 			filler["param1"] = ""
 			filler["param2"] = ""
 			filler["param3"] = ""
-			filler["body1"] = "return machine::machine_context::active_allocator()->construct<_Class>("
+			filler["body1"] = "return machine::machine_context::active_allocator()->construct<Class>("
 			filler["body2"] = ""
 			filler["body3"] = ");"
 

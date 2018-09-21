@@ -17,41 +17,41 @@ namespace framework
 namespace object
 {
 
-template<typename _Ty, typename Class>
+template<typename Type, typename Class>
 class template_wrapper
 {
 public:
-	template_wrapper(machine::machine_context & _context, _Ty * _template_member) : _context(_context)
+	template_wrapper(machine::machine_context & _context, Type * _template_member) : _context(_context)
 	{
 		this->_template_member = _template_member;
 	}
-	template<typename... _Args, bool _T = std::is_class<Class>::value>
-	typename std::enable_if<_T, template_wrapper&>::type set_constructor()
+	template<typename... Arguments, bool Is_class = std::is_class<Class>::value>
+	typename std::enable_if<Is_class, template_wrapper&>::type set_constructor()
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->template set_constructor<_Args...>();
+		_template_member->template set_constructor<Arguments...>();
 
 		return *this;
 	}
-	template<typename _Return, typename... _Args>
-	template_wrapper & set_function(member_map::name_type _name, _Return(*_function)(_Args...))
+	template<typename Return, typename... Arguments>
+	template_wrapper & set_function(member_map::name_type _name, Return(*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::static_function<_Return, _Args...>>(_context.name_address(_name), _function);
+		_template_member->members().template emplace<framework::executable::static_function<Return, Arguments...>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
-	template<typename Active_class = Class, typename _Class, typename _Return, typename... _Args>
-	typename std::enable_if<std::is_base_of<_Class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_type _name, _Return(_Class::*_function)(_Args...))
+	template<typename Active_class = Class, typename Function_class, typename Return, typename... Arguments>
+	typename std::enable_if<std::is_base_of<Function_class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_type _name, Return(Function_class::*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::member_function<_Return(Active_class::*)(_Args...)>>(_context.name_address(_name), _function);
+		_template_member->members().template emplace<framework::executable::member_function<Return(Active_class::*)(Arguments...)>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
@@ -86,7 +86,7 @@ protected:
 	/** The machine context. */
 	machine::machine_context & _context;
 	/** The template member with a member map. */
-	_Ty * _template_member;
+	Type * _template_member;
 };
 
 }

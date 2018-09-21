@@ -59,6 +59,7 @@ private:
 	temp_counter _counter;
 	/** The compilers toolset for writing the machine code. */
 	machine::platform::toolset _toolset;
+	/** The context. */
 	machine::machine_context & _context;
 
 	/**
@@ -69,7 +70,7 @@ private:
 	 * @since 3.67.135.751
 	 * @date 6-Aug-18
 	 *
-	 * @tparam _Ty The type of the member.
+	 * @tparam Type The type of the member.
 	 *
 	 * @param _member The member.
 	 * @param _format The format of the passed parameters.
@@ -80,8 +81,8 @@ private:
 	 * @throws See machine::string_manager::format_address().
 	 * @throws See machine::platform::toolset::call().
 	*/
-	template<typename _Ty>
-	void handle_parameter_execute(_Ty _member, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::varg_member_passer & _passer)
+	template<typename Type>
+	void handle_parameter_execute(Type _member, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::varg_member_passer & _passer)
 	{
 		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
 
@@ -126,7 +127,7 @@ private:
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
 	 *
-	 * @tparam _Expression true for math expression, otherwise math term.
+	 * @tparam Expression true for math expression, otherwise math term.
 	 *
 	 * @param _report The math report.
 	 *
@@ -134,10 +135,10 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	template<bool _Expression = true>
+	template<bool Expression = true>
 	const grammar::report * handle_math_expression_and_term(const grammar::report * _report)
 	{
-		constexpr handle_function next = _Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
+		constexpr handle_function next = Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
 
 		// Only one math expression or term to handle
 		if (_report[1].content.end == _report->content.end) {
@@ -154,8 +155,8 @@ private:
 	 * @since 3.64.127.716
 	 * @date 22-Apr-18
 	 *
-	 * @tparam _Test If the result value should be guaranteed testable.
-	 * @tparam _Lambda The callback lambda function.
+	 * @tparam Test If the result value should be guaranteed testable.
+	 * @tparam Lambda The callback lambda function.
 	 *
 	 * @param _report The value report.
 	 * @param [in] _callback The callback for safe execution.
@@ -165,14 +166,14 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	template<bool _Test, typename _Lambda>
-	const grammar::report * handle_value(const grammar::report * _report, _Lambda && _callback)
+	template<bool Test, typename Lambda>
+	const grammar::report * handle_value(const grammar::report * _report, Lambda && _callback)
 	{
 		// Save old counter
 		auto _old = _counter.peek();
 
 		// Handle value
-		handle_value_insecure<_Test>(_report);
+		handle_value_insecure<Test>(_report);
 
 		// Execute callback
 		_callback();
@@ -190,7 +191,7 @@ private:
 	 * @since 3.64.127.716
 	 * @date 22-Apr-18
 	 *
-	 * @tparam _Test If the result value should be guaranteed testable.
+	 * @tparam Test If the result value should be guaranteed testable.
 	 *
 	 * @param _report The corresponding report.
 	 *
@@ -199,7 +200,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	template<bool _Test>
+	template<bool Test>
 	const grammar::report * handle_value_insecure(const grammar::report * _report)
 	{
 		switch (_report[1].rule_id) {
@@ -239,7 +240,7 @@ private:
 		}
 
 		// Test
-		if (_Test) {
+		if (Test) {
 			test_compiler_value();
 		}
 

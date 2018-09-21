@@ -18,24 +18,24 @@ namespace memory
 typedef size_t size_type;
 
 /** An allocation with type. */
-template<typename _Ty>
+template<typename Type>
 class allocation
 {
 public:
-	_Ty * first;
+	Type * first;
 	size_type second;
 
 	allocation() noexcept
 	{
 		clear();
 	}
-	allocation(_Ty * _first, size_type _second) noexcept
+	allocation(Type * _first, size_type _second) noexcept
 	{
 		first = _first;
 		second = _second;
 	}
-	allocation(const allocation<_Ty> & _copy) noexcept = default;
-	allocation(allocation<_Ty> && _move) noexcept
+	allocation(const allocation & _copy) noexcept = default;
+	allocation(allocation && _move) noexcept
 	{
 		first = _move.first;
 		second = _move.second;
@@ -51,31 +51,31 @@ public:
 	{
 		return first != nullptr;
 	}
-	operator _Ty*() noexcept
+	operator Type*() noexcept
 	{
 		return first;
 	}
-	operator const _Ty*() const noexcept
+	operator const Type*() const noexcept
 	{
 		return first;
 	}
-	_Ty * operator->() noexcept
+	Type * operator->() noexcept
 	{
 		return first;
 	}
-	const _Ty * operator->() const noexcept
+	const Type * operator->() const noexcept
 	{
 		return first;
 	}
-	_Ty ** operator&() noexcept
+	Type ** operator&() noexcept
 	{
 		return &first;
 	}
-	_Ty * const* operator&() const noexcept
+	Type * const* operator&() const noexcept
 	{
 		return &first;
 	}
-	allocation & operator=(const allocation<_Ty> & _copy) noexcept = default;
+	allocation & operator=(const allocation & _copy) noexcept = default;
 	allocation & operator=(allocation && _move) noexcept
 	{
 		first = _move.first;
@@ -97,17 +97,17 @@ typedef allocation<void> universal_allocation;
  * @since 3.64.127.716
  * @date 7-Apr-18
  *
- * @tparam _Return The wanted type.
- * @tparam _Ty The passed type.
+ * @tparam Cast_type The wanted type.
+ * @tparam Type The passed type.
  *
  * @param _allocation Defines the allocation.
  *
  * @return The cast allocation.
 */
-template<typename _Return, typename _Ty>
-inline allocation<_Return> cast_allocation(allocation<_Ty> _allocation) noexcept
+template<typename Cast_type, typename Type>
+inline allocation<Cast_type> cast_allocation(allocation<Type> _allocation) noexcept
 {
-	return { static_cast<_Return*>(_allocation.first), _allocation.second };
+	return { static_cast<Cast_type*>(_allocation.first), _allocation.second };
 }
 
 /**
@@ -133,20 +133,20 @@ public:
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18
 	 *
-	 * @tparam _Base The returned type.
-	 * @tparam _Deriviate The constructed type.
+	 * @tparam Base The returned type.
+	 * @tparam Deriviate The constructed type.
 	 *
 	 * @param _allocation The allocation.
 	 *
 	 * @throws See deallocate().
-	 * @throws See the destructor of @a _Deriviate.
+	 * @throws See the destructor of @a Deriviate.
 	*/
-	template<typename _Base, typename _Deriviate = _Base>
-	void destroy(allocation<_Base> _allocation)
+	template<typename Base, typename Deriviate = Base>
+	void destroy(allocation<Base> _allocation)
 	{
 		// Destroy element
 		if (_allocation) {
-			_allocation.first->~_Deriviate();
+			_allocation.first->~Deriviate();
 
 			deallocate(cast_allocation<void>(_allocation));
 		}
@@ -157,22 +157,22 @@ public:
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
-	 * @tparam _Ty The allocation type.
+	 * @tparam Type The allocation type.
 	 *
 	 * @param _allocation The allocation.
 	 *
 	 * @throws See deallocate_blocks().
 	 * @throws See the destructor of @a _Ty.
 	*/
-	template<typename _Ty>
-	void destroy_blocks(allocation<_Ty> _allocation)
+	template<typename Type>
+	void destroy_blocks(allocation<Type> _allocation)
 	{
 		auto _ptr = reinterpret_cast<int8_t*>(_allocation.first);
 		auto _block_size = block_size();
 
 		// Destroy all elements
 		for (size_type i = 0; i < _allocation.second; ++i) {
-			reinterpret_cast<_Ty*>(_ptr + i * _block_size)->~_Ty();
+			reinterpret_cast<Type*>(_ptr + i * _block_size)->~Type();
 		}
 
 		deallocate_blocks(cast_allocation<void>(_allocation));
@@ -289,26 +289,26 @@ public:
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18
 	 *
-	 * @tparam _Base The returned type.
-	 * @tparam _Deriviate The constructed type.
-	 * @tparam _Args The arguments that will be used to construct the element.
+	 * @tparam Base The returned type.
+	 * @tparam Deriviate The constructed type.
+	 * @tparam Arguments The arguments that will be used to construct the element.
 	 *
-	 * @param _args The arguments used to create the element.
+	 * @param _arguments The arguments used to create the element.
 	 *
 	 * @throws See allocate().
-	 * @throws See the constructor of @a _Deriviate.
+	 * @throws See the constructor of @a Deriviate.
 	 *
 	 * @return The allocated and constructed block.
 	*/
-	template<typename _Base, typename _Deriviate = _Base, typename... _Args>
-	allocation<_Base> construct(_Args &&... _args)
+	template<typename Base, typename Deriviate = Base, typename... Arguments>
+	allocation<Base> construct(Arguments &&... _arguments)
 	{
-		auto _allocation = allocate(sizeof(_Deriviate));
+		auto _allocation = allocate(sizeof(Deriviate));
 
 		// Construct element
-		new(_allocation.first) _Deriviate(std::forward<_Args>(_args)...);
+		new(_allocation.first) Deriviate(std::forward<Arguments>(_arguments)...);
 
-		return cast_allocation<_Base>(_allocation);
+		return cast_allocation<Base>(_allocation);
 	}
 	/**
 	 * Allocates and constructs blocks of the desired type.
@@ -318,24 +318,24 @@ public:
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
-	 * @tparam _Base The returned type.
-	 * @tparam _Deriviate The constructed type.
-	 * @tparam _Args The arguments that will be used to construct the blocks.
+	 * @tparam Base The returned type.
+	 * @tparam Deriviate The constructed type.
+	 * @tparam Arguments The arguments that will be used to construct the blocks.
 	 *
 	 * @param _count How many blocks should be constructed.
-	 * @param _args The arguments used to create the blocks.
+	 * @param _arguments The arguments used to create the blocks.
 	 *
 	 * @throws See allocate_blocks().
-	 * @throws See the constructor of @a _Deriviate.
+	 * @throws See the constructor of @a Deriviate.
 	 *
 	 * @return The allocated blocks.
 	*/
-	template<typename _Base, typename _Deriviate = _Base, typename... _Args>
-	allocation<_Base> construct_blocks(size_type _count, _Args &&... _args)
+	template<typename Base, typename Deriviate = Base, typename... Arguments>
+	allocation<Base> construct_blocks(size_type _count, Arguments &&... _arguments)
 	{
 		auto _block_size = block_size();
 
-		if (sizeof(_Deriviate) > _block_size) {
+		if (sizeof(Deriviate) > _block_size) {
 			throw BIA_IMPLEMENTATION_EXCEPTION("Elements exceeds block size.");
 		}
 
@@ -344,10 +344,10 @@ public:
 
 		// Construct all elements
 		for (size_type i = 0; i < _count; ++i) {
-			new(_ptr + i * _block_size) _Deriviate(std::forward<_Args>(_args)...);
+			new(_ptr + i * _block_size) Deriviate(std::forward<Arguments>(_arguments)...);
 		}
 
-		return cast_allocation<_Base>(_allocation);
+		return cast_allocation<Base>(_allocation);
 	}
 
 };

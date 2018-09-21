@@ -42,13 +42,13 @@ memory::executable_allocator * machine_schein::executable_allocator() noexcept
 	return _executable_allocator;
 }
 
-machine_schein & machine_schein::operator=(machine_schein && _rvalue)
+machine_schein & machine_schein::operator=(machine_schein && _move)
 {
 	delete_all_allocations();
 
-	_allocator = _rvalue._allocator;
-	_executable_allocator = _rvalue._executable_allocator;
-	_allocated = std::move(_rvalue._allocated);
+	_allocator = _move._allocator;
+	_executable_allocator = _move._executable_allocator;
+	_allocated = std::move(_move._allocated);
 
 	return *this;
 }

@@ -9,7 +9,7 @@ namespace bia
 namespace utility
 {
 
-template<typename _Ty>
+template<typename Type>
 class hasher;
 
 template<>

@@ -44,15 +44,15 @@ inline void create_member(member * _destination) noexcept
  * @since 3.64.127.716
  * @date 21-Apr-18
  *
- * @tparam _Ty An integral type.
+ * @tparam Type An integral type.
  *
  * @param [in,out] _destination Defines the destination of the member.
  * @param _value The integral value.
  *
  * @throws See member::replace_this().
  */
-template<typename _Ty>
-inline typename std::enable_if<std::is_integral<_Ty>::value>::type create_member(member * _destination, _Ty _value)
+template<typename Type>
+inline typename std::enable_if<std::is_integral<Type>::value>::type create_member(member * _destination, Type _value)
 {
 	if (_destination) {
 		_destination->replace_this<native::int_member>(static_cast<int64_t>(_value));
@@ -67,15 +67,15 @@ inline typename std::enable_if<std::is_integral<_Ty>::value>::type create_member
  * @since 3.64.127.716
  * @date 21-Apr-18
  *
- * @tparam _Ty A floating point type.
+ * @tparam Type A floating point type.
  *
  * @param [in,out] _destination Defines the destination of the member.
  * @param _value The floating point value.
  *
  * @throws See member::replace_this().
  */
-template<typename _Ty>
-inline typename std::enable_if<std::is_floating_point<_Ty>::value>::type create_member(member * _destination, _Ty _value)
+template<typename Type>
+inline typename std::enable_if<std::is_floating_point<Type>::value>::type create_member(member * _destination, Type _value)
 {
 	if (_destination) {
 		_destination->replace_this<native::double_member>(static_cast<double>(_value));
@@ -90,15 +90,15 @@ inline typename std::enable_if<std::is_floating_point<_Ty>::value>::type create_
  * @since 3.64.127.716
  * @date 5-May-18
  *
- * @tparam _Ty Must be `const char*`.
+ * @tparam Type Must be `const char*`.
  *
  * @param [in,out] _destination Defines the destination of the member.
  * @param _value The string.
  *
  * @throws See member::replace_this().
  */
-template<typename _Ty>
-inline typename std::enable_if<std::is_same<_Ty, const char*>::value>::type create_member(member * _destination, _Ty _value)
+template<typename Type>
+inline typename std::enable_if<std::is_same<Type, const char*>::value>::type create_member(member * _destination, Type _value)
 {
 	if (_destination) {
 		_destination->replace_this<native::cstring_member<char>>(_value);
@@ -113,19 +113,19 @@ inline typename std::enable_if<std::is_same<_Ty, const char*>::value>::type crea
  * @since 3.64.127.716
  * @date 5-May-18
  *
- * @tparam _Return The return type of the function.
- * @tparam _Args The arguments of the function.
+ * @tparam Return The return type of the function.
+ * @tparam Arguments The arguments of the function.
  *
  * @param [in,out] _destination Defines the destination of the member.
  * @param _function The function address.
  *
  * @throws See member::replace_this().
  */
-template<typename _Return, typename... _Args>
-inline void create_member(member * _destination, _Return(*_function)(_Args...))
+template<typename Return, typename... Arguments>
+inline void create_member(member * _destination, Return(*_function)(Arguments...))
 {
 	if (_destination) {
-		_destination->replace_this<executable::static_function<_Return, _Args...>>(_function);
+		_destination->replace_this<executable::static_function<Return, Arguments...>>(_function);
 	}
 }
 
@@ -137,20 +137,20 @@ inline void create_member(member * _destination, _Return(*_function)(_Args...))
  * @since 3.64.127.716
  * @date 5-May-18
  *
- * @tparam _Class The class of the function.
- * @tparam _Return The return type of the function.
- * @tparam _Args The arguments of the function.
+ * @tparam Class The class of the function.
+ * @tparam Return The return type of the function.
+ * @tparam Arguments The arguments of the function.
  *
  * @param [in,out] _destination Defines the destination of the member.
  * @param _function The function address.
  *
  * @throws See member::replace_this().
  */
-template<typename _Class, typename _Return, typename... _Args>
-inline void create_member(member * _destination, _Return(_Class::*_function)(_Args...))
+template<typename Class, typename Return, typename... Arguments>
+inline void create_member(member * _destination, Return(Class::*_function)(Arguments...))
 {
 	if (_destination) {
-		_destination->replace_this<executable::member_function<_Return(_Class::*)(_Args...)>>(_function);
+		_destination->replace_this<executable::member_function<Return(Class::*)(Arguments...)>>(_function);
 	}
 }
 
@@ -162,36 +162,36 @@ inline void create_member(member * _destination, _Return(_Class::*_function)(_Ar
  * @since 3.64.127.716
  * @date 5-May-18
  *
- * @tparam _Class The class of the function.
- * @tparam _Return The return type of the function.
- * @tparam _Args The arguments of the function.
+ * @tparam Class The class of the function.
+ * @tparam Return The return type of the function.
+ * @tparam Arguments The arguments of the function.
  *
  * @param [in,out] _destination Defines the destination of the member.
  * @param _function The function address.
  *
  * @throws See member::replace_this().
  */
-template<typename _Class, typename _Return, typename... _Args>
-inline void create_member(member * _destination, _Return(_Class::*_function)(_Args...) const)
+template<typename Class, typename Return, typename... Arguments>
+inline void create_member(member * _destination, Return(Class::*_function)(Arguments...) const)
 {
 	if (_destination) {
-		_destination->replace_this<executable::member_function<_Return(_Class::*)(_Args...) const>>(_function);
+		_destination->replace_this<executable::member_function<Return(Class::*)(Arguments...) const>>(_function);
 	}
 }
 
-template<typename _Ty>
-inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<_Ty>::type>::type>::value>::value>::type create_member(member * _destination, _Ty && _value)
+template<typename Type>
+inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<Type>::type>::type>::value>::value>::type create_member(member * _destination, Type && _value)
 {
 	if (_destination) {
-		_destination->replace_this<object::raw_object<typename std::remove_reference<_Ty>::type>>(std::move(_value));
+		_destination->replace_this<object::raw_object<typename std::remove_reference<Type>::type>>(std::move(_value));
 	}
 }
 
-template<typename _Ty>
-inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<_Ty>::type>::type>::value>::value>::type create_member(member * _destination, const _Ty & _value)
+template<typename Type>
+inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<Type>::type>::type>::value>::value>::type create_member(member * _destination, const Type & _value)
 {
 	if (_destination) {
-		_destination->replace_this<object::raw_object<typename std::remove_reference<_Ty>::type>>(_value);
+		_destination->replace_this<object::raw_object<typename std::remove_reference<Type>::type>>(_value);
 	}
 }
 

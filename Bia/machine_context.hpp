@@ -65,14 +65,14 @@ public:
 	void execute(stream::input_stream & _script)
 	{
 	}
-	template<typename _Ty, typename... _Args>
-	_Ty * emplace_member(const char * _name, _Args &&... _args)
+	template<typename Member, typename... Arguments>
+	Member * emplace_member(const char * _name, Arguments &&... _arguments)
 	{
 		auto _object = address_of_member(name_address(_name));
 
-		_object->replace_this<_Ty>(std::forward<_Args>(_args)...);
+		_object->replace_this<Member>(std::forward<Arguments>(_arguments)...);
 
-		return static_cast<_Ty*>(_object);
+		return static_cast<Member*>(_object);
 	}
 	/**
 	 * Returns the currently active machine context in the current thread.

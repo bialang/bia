@@ -19,25 +19,27 @@ namespace memory
  *
  * A STL compatible allocator for wrapping a Bia allocator.
  *
+ * @tparam Type The type that should be allocated.
+ *
  * @see @ref allocator, @ref executable_allocator
 */
-template<typename _Ty>
+template<typename Type>
 class stl_allocator_wrapper
 {
 public:
 	/** The value type of this allocator. */
-	typedef _Ty value_type;
+	typedef Type value_type;
 	/** The type of the allocated pointers. */
-	typedef _Ty* pointer;
-	typedef const _Ty* const_pointer;
-	typedef _Ty& reference;
-	typedef const _Ty& const_reference;
+	typedef Type* pointer;
+	typedef const Type* const_pointer;
+	typedef Type& reference;
+	typedef const Type& const_reference;
 	/** The type of the size of the pointers. */
 	typedef memory::size_type size_type;
-	template<typename _T>
+	template<typename Ty>
 	struct rebind
 	{
-  	typedef stl_allocator_wrapper<_T> other;
+  	typedef stl_allocator_wrapper<Ty> other;
 	};
 
 	/**
@@ -68,12 +70,12 @@ public:
 	 * @since 3.64.131.725
 	 * @date 19-May-18
 	 *
-	 * @tparam _T The type of the copy.
+	 * @tparam Ty The type of the copy.
 	 *
 	 * @param _copy The object that should be copied.
 	*/
-	template<typename _T>
-	explicit stl_allocator_wrapper(const stl_allocator_wrapper<_T> & _copy) noexcept : _allocator(_copy._allocator)
+	template<typename Ty>
+	explicit stl_allocator_wrapper(const stl_allocator_wrapper<Ty> & _copy) noexcept : _allocator(_copy._allocator)
 	{
 	}
 	/**
@@ -89,7 +91,7 @@ public:
 	*/
 	void deallocate(pointer _ptr, size_type _size)
 	{
-		_allocator->deallocate(cast_allocation<void>(allocation<_Ty>{ _ptr, _size * sizeof(_Ty) }));
+		_allocator->deallocate(cast_allocation<void>(allocation<Type>{ _ptr, _size * sizeof(Type) }));
 	}
 	/**
 	 * Allocates memory with the desired size.
@@ -103,11 +105,11 @@ public:
 	*/
 	pointer allocate(size_type _size)
 	{
-		return static_cast<pointer>(_allocator->allocate(_size * sizeof(_Ty)).first);
+		return static_cast<pointer>(_allocator->allocate(_size * sizeof(Type)).first);
 	}
 
 private:
-	template<typename _T>
+	template<typename Ty>
 	friend class stl_allocator_wrapper;
 
 	/** The underlying Bia allocator. */

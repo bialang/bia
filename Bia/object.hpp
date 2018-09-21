@@ -19,11 +19,11 @@ namespace framework
 namespace object
 {
 
-template<typename _Ty>
+template<typename Type>
 class object : public object_variable
 {
 public:
-	typedef utility::share<std::pair<instance_holder<_Ty>, member_map>> data_type;
+	typedef utility::share<std::pair<instance_holder<Type>, member_map>> data_type;
 
 	/**
 	 * Constructor.
@@ -36,7 +36,7 @@ public:
 	 * @param _instance The instance.
 	 * @param _members The known members.
 	*/
-	object(const instance_holder<_Ty> & _instance, const member_map & _members) noexcept : _data(_instance, _members)
+	object(const instance_holder<Type> & _instance, const member_map & _members) noexcept : _data(_instance, _members)
 	{
 	}
 	/**
@@ -52,17 +52,17 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
-		printf("<%s at %p>\n", typeid(_Ty).name(), this);
+		printf("<%s at %p>\n", typeid(Type).name(), this);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
-		instance_holder<_Ty> _instance(constructor_chain_wrapper<_Ty>(machine::machine_context::active_allocator(), *_data.get().first.get()), true);
+		instance_holder<Type> _instance(constructor_chain_wrapper<Type>(machine::machine_context::active_allocator(), *_data.get().first.get()), true);
 
-		_destination->replace_this<object<_Ty>>(_instance, _data.get().second);
+		_destination->replace_this<object<Type>>(_instance, _data.get().second);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
-		_destination->replace_this<object<_Ty>>(_data);
+		_destination->replace_this<object<Type>>(_data);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
@@ -99,7 +99,7 @@ public:
 
 		_data.get().second.get(_name)->copy(_destination);
 
-		_destination->set_instance(&_instance, typeid(_Ty));
+		_destination->set_instance(&_instance, typeid(Type));
 	}
 	virtual int flags() const override
 	{
@@ -145,10 +145,10 @@ protected:
 	}
 	virtual void * data(const std::type_info & _type) override
 	{
-		if (!std::is_const<_Ty>::value) {
-			if (typeid(_Ty) == _type) {
-				return const_cast<typename std::remove_cv<_Ty>::type*>(static_cast<_Ty*>(_data.get().first.get()));
-			} else if (typeid(_Ty*) == _type) {
+		if (!std::is_const<Type>::value) {
+			if (typeid(Type) == _type) {
+				return const_cast<typename std::remove_cv<Type>::type*>(static_cast<Type*>(_data.get().first.get()));
+			} else if (typeid(Type*) == _type) {
 				return &_data.get().first.get();
 			}
 		}
@@ -157,9 +157,9 @@ protected:
 	}
 	virtual const void * const_data(const std::type_info & _type) const override
 	{
-		if (typeid(_Ty) == _type) {
+		if (typeid(Type) == _type) {
 			return _data.get().first.get();
-		} else if (typeid(_Ty*) == _type) {
+		} else if (typeid(Type*) == _type) {
 			return &_data.get().first.get();
 		}
 

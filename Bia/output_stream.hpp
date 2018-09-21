@@ -63,7 +63,7 @@ public:
 	 * @param _buffer The buffer.
 	 * @param _size The size of the buffer.
 	 *
-	 * @throws 
+	 * @throws
 	*/
 	virtual void write(const void * _buffer, size_t _size) = 0;
 	/**
@@ -72,19 +72,21 @@ public:
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	 *
-	 * @param _args Defines the parameters.
+	 * @tparam Arguments The types of the values.
+	 *
+	 * @param _arguments Defines the parameters.
 	 *
 	 * @return The amount of bytes written.
 	*/
-	template<typename... _Args>
-	size_t write_all(_Args &&... _args)
+	template<typename... Arguments>
+	size_t write_all(Arguments &&... _arguments)
 	{
 		// Prepare underlying implementation
-		auto _size = size<_Args...>();
+		auto _size = size<Arguments...>();
 
 		prepare(_size);
 
-		write_forward(std::forward<_Args>(_args)...);
+		write_forward(std::forward<Arguments>(_arguments)...);
 
 		return _size;
 	}
@@ -117,12 +119,12 @@ private:
 	void write_forward() noexcept
 	{
 	}
-	template<typename _Ty, typename... _Args>
-	void write_forward(_Ty && _value, _Args &&... _args)
+	template<typename Type, typename... Arguments>
+	void write_forward(Type && _value, Arguments &&... _arguments)
 	{
-		write(&_value, sizeof(_Ty));
+		write(&_value, sizeof(Type));
 
-		write_forward(std::forward<_Args>(_args)...);
+		write_forward(std::forward<Arguments>(_arguments)...);
 	}
 	/**
 	 * Returns the size of the arguments at compile time.
@@ -130,12 +132,14 @@ private:
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	 *
+	 * @tparam Type The type.
+	 *
 	 * @return The total size in bytes.
 	*/
-	template<typename _Ty>
+	template<typename Type>
 	constexpr static size_t size() noexcept
 	{
-		return sizeof(_Ty);
+		return sizeof(Type);
 	}
 	/**
 	 * Returns the size of the arguments at compile time.
@@ -143,12 +147,15 @@ private:
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	 *
+	 * @tparam Type The type.
+	 * @tparam Arguments The types of the values.
+	 *
 	 * @return The total size in bytes.
 	*/
-	template<typename _Ty, typename... _Args>
-	constexpr static typename std::enable_if<(sizeof...(_Args) > 0), size_t>::type size() noexcept
+	template<typename Type, typename... Arguments>
+	constexpr static typename std::enable_if<(sizeof...(Arguments) > 0), size_t>::type size() noexcept
 	{
-		return sizeof(_Ty) + size<_Args...>();
+		return sizeof(Type) + size<Arguments...>();
 	}
 };
 

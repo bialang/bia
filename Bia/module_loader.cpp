@@ -16,15 +16,9 @@ namespace machine
 namespace modular
 {
 
-struct module_loader::impl
-{
-
-};
-
 module_loader::module_loader(memory::allocator * _allocator)
 {
 	this->_allocator = _allocator;
-	_impl = _allocator->construct<impl>();
 }
 
 module_loader::module_loader(module_loader && _move) noexcept : _impl(std::move(_move._impl))
@@ -34,7 +28,6 @@ module_loader::module_loader(module_loader && _move) noexcept : _impl(std::move(
 
 module_loader::~module_loader()
 {
-	_allocator->destroy(_impl);
 }
 
 void module_loader::unload_module(module_library * _module)

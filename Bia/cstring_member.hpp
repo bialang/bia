@@ -16,13 +16,13 @@ namespace framework
 namespace native
 {
 
-template<typename _Char>
+template<typename Char_type>
 class cstring_member final : public native_variable
 {
 public:
 	typedef stream::string_stream::size_type size_type;
 	typedef stream::string_stream::length_type length_type;
-	typedef utility::share<std::tuple<const _Char*, size_type, length_type>> data_type;
+	typedef utility::share<std::tuple<const Char_type*, size_type, length_type>> data_type;
 
 	/**
 	 * Constructor.
@@ -36,7 +36,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	cstring_member(const _Char * _string, size_type _size, length_type _length) : _data(_string, _size, _length)
+	cstring_member(const Char_type * _string, size_type _size, length_type _length) : _data(_string, _size, _length)
 	{
 	}
 	/**
@@ -56,11 +56,11 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
 	{
-		_destination->replace_this<cstring_member<_Char>>(std::get<0>(_data.get()), std::get<1>(_data.get()), std::get<2>(_data.get()));
+		_destination->replace_this<cstring_member<Char_type>>(std::get<0>(_data.get()), std::get<1>(_data.get()), std::get<2>(_data.get()));
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
-		_destination->replace_this<cstring_member<_Char>>(_data);
+		_destination->replace_this<cstring_member<Char_type>>(_data);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
 	{
@@ -145,8 +145,8 @@ private:
 	{
 		machine::link::print_string(_string);
 	}
-	template<typename _Ty>
-	static void print(const _Ty * _string) noexcept
+	template<typename Type>
+	static void print(const Type * _string) noexcept
 	{
 	}
 };

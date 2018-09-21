@@ -374,22 +374,23 @@ public:
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
-	 * @tparam _Ty The required type. References will be converted to pointers.
+	 * @tparam Type The required type. References will be converted to pointers.
+	 * @tparam Real_type The actual type without references.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If this member cannot be casted to _Ty.
+	 * @throws exception::type_error If this member cannot be casted to @a Type.
 	 *
 	 * @return A point containing the casted type.
 	*/
-	template<typename _Ty, typename _T = typename std::remove_reference<_Ty>::type>
-	typename std::enable_if<utility::negation<std::is_const<typename std::remove_pointer<_T>::type>::value>::value, _T*>::type cast()
+	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
+	typename std::enable_if<utility::negation<std::is_const<typename std::remove_pointer<Real_type>::type>::value>::value, Real_type*>::type cast()
 	{
 		// Native type
-		if (native::determine_native_type<_T>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<_T*>(native_data(native::determine_native_type<_T>()));
+		if (native::determine_native_type<Real_type>() != native::NATIVE_TYPE::CUSTOM) {
+			return static_cast<Real_type*>(native_data(native::determine_native_type<Real_type>()));
 		} // Custom type
 		else {
-			return static_cast<_T*>(data(typeid(_T)));
+			return static_cast<Real_type*>(data(typeid(Real_type)));
 		}
 	}
 	/**
@@ -398,22 +399,23 @@ public:
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
-	 * @tparam _Ty The required type. References will be converted to pointers.
+	 * @tparam Type The required type. References will be converted to pointers.
+	 * @tparam Real_type The actual type without references.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If this member cannot be casted to _Ty.
+	 * @throws exception::type_error If this member cannot be casted to @a Type.
 	 *
 	 * @return A point containing the casted type.
 	*/
-	template<typename _Ty, typename _T = typename std::remove_reference<_Ty>::type>
-	typename std::enable_if<std::is_const<typename std::remove_pointer<_T>::type>::value, _T const*>::type cast() const
+	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
+	typename std::enable_if<std::is_const<typename std::remove_pointer<Real_type>::type>::value, Real_type const*>::type cast() const
 	{
 		// Native type
-		if (native::determine_native_type<_T>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<_T const*>(const_native_data(native::determine_native_type<_T>()));
+		if (native::determine_native_type<Real_type>() != native::NATIVE_TYPE::CUSTOM) {
+			return static_cast<Real_type const*>(const_native_data(native::determine_native_type<Real_type>()));
 		} // Custom type
 		else {
-			return static_cast<_T const*>(const_data(typeid(_T)));
+			return static_cast<Real_type const*>(const_data(typeid(Real_type)));
 		}
 	}
 	/**
@@ -424,23 +426,23 @@ public:
 	 * @since 3.64.127.716
 	 * @date 8-Apr-18
 	 *
-	 * @tparam _Ty The new member type. Must be a deriviate of \ref member.
-	 * @tparam _Args The arguments that should be passed to the constructor.
+	 * @tparam Type The new member type. Must be a deriviate of @ref member.
+	 * @tparam Arguments The arguments that should be passed to the constructor.
 	 *
-	 * @param _args Defines the arguments used to create the new object.
+	 * @param _arguments Defines the arguments used to create the new object.
 	 *
 	 * @throws ... See the destructor of this class and the constructor of the new class.
 	 *
 	 * @return The newly constructed object.
 	*/
-	template<typename _Ty, typename... _Args>
-	typename std::enable_if<std::is_base_of<member, _Ty>::value, _Ty*>::type replace_this(_Args &&... _args)
+	template<typename Type, typename... Arguments>
+	typename std::enable_if<std::is_base_of<member, Type>::value, Type*>::type replace_this(Arguments &&... _arguments)
 	{
 		// Destroy this
 		this->~member();
 
 		// Construct new object
-		return new(this) _Ty(std::forward<_Args>(_args)...);
+		return new(this) Type(std::forward<Arguments>(_arguments)...);
 	}
 
 protected:

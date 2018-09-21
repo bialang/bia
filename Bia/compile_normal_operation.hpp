@@ -89,7 +89,7 @@ private:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam _Left The left member value.
+	 * @tparam Member The left member value.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
@@ -97,8 +97,8 @@ private:
 	 *
 	 * @throws See function_caller_helper().
 	*/
-	template<typename _Member>
-	void left_member_operation(_Member && _member, framework::operator_type _operator, compiler_value _right)
+	template<typename Member>
+	void left_member_operation(Member && _member, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 		using T = machine::platform::toolset;
@@ -150,6 +150,10 @@ private:
 	 * @since 3.65.133.740
 	 * @date 31-Jul-18
 	 *
+	 * @tparam Function The function type.
+	 * @tparam Member the member type.
+	 * @tparam _Right The right value type.
+	 *
 	 * @param [in] _function The function.
 	 * @param [in] _member The instance of the function.
 	 * @param [in] _destination (Optional) The destination of the operation result.
@@ -158,13 +162,13 @@ private:
 	 *
 	 * @throws See machine::platform::toolset::call().
 	*/
-	template<typename _Function, typename _Member, typename _Right>
-	void function_caller_helper(_Function && _function, _Member && _member, machine::platform::toolset::temp_result * _destination, framework::operator_type _operator, _Right && _right)
+	template<typename Function, typename Member, typename Right>
+	void function_caller_helper(Function && _function, Member && _member, machine::platform::toolset::temp_result * _destination, framework::operator_type _operator, Right && _right)
 	{
 		if (_destination) {
-			_toolset.call_virtual(std::forward<_Function>(_function), std::forward<_Member>(_member), *_destination, _operator, std::forward<_Right>(_right));
+			_toolset.call_virtual(std::forward<Function>(_function), std::forward<Member>(_member), *_destination, _operator, std::forward<Right>(_right));
 		} else {
-			_toolset.call_virtual(std::forward<_Function>(_function), std::forward<_Member>(_member), nullptr, _operator, std::forward<_Right>(_right));
+			_toolset.call_virtual(std::forward<Function>(_function), std::forward<Member>(_member), nullptr, _operator, std::forward<Right>(_right));
 		}
 	}
 	/**
@@ -173,8 +177,8 @@ private:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam _Left Either int64_t or double.
-	 * @tparam _Right The right member value.
+	 * @tparam Left Either int64_t or double.
+	 * @tparam Right The right member value.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
@@ -182,8 +186,8 @@ private:
 	 *
 	 * @throws
 	*/
-	template<typename _Left, typename _Right>
-	void left_constant_right_member_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
+	template<typename Left, typename Right>
+	void left_constant_right_member_operation(Left && _left, framework::operator_type _operator, Right && _right)
 	{
 		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
 			throw;
@@ -191,7 +195,7 @@ private:
 
 		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
 
-		if (std::is_same<typename std::remove_reference<_Left>::type, int64_t>::value) {
+		if (std::is_same<typename std::remove_reference<Left>::type, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
 				_toolset.call_static(&machine::link::operation_int32, _destination, _operator, _right, static_cast<int32_t>(_left));
@@ -208,7 +212,7 @@ private:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam _Left Either int64_t or double.
+	 * @tparam Left Either int64_t or double.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
@@ -216,8 +220,8 @@ private:
 	 *
 	 * @throws See left_constant_right_member_operation().
 	*/
-	template<typename _Left>
-	void left_constant_operation(_Left && _left, framework::operator_type _operator, compiler_value _right)
+	template<typename Left>
+	void left_constant_operation(Left && _left, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
@@ -248,15 +252,15 @@ private:
 	 * @since 3.64.131.725
 	 * @date 19-May-18
 	 *
-	 * @tparam _Left The type of the left value.
-	 * @tparam _Right The type of the right value.
+	 * @tparam Left The type of the left value.
+	 * @tparam Right The type of the right value.
 	 *
 	 * @param [in] _left The left hand value.
 	 * @param _operator The operator.
 	 * @param [in] _right The right hand value.
 	*/
-	template<typename _Left, typename _Right>
-	typename std::enable_if<std::is_floating_point<_Left>::value || std::is_floating_point<_Right>::value || true>::type both_constant_operation(_Left && _left, framework::operator_type _operator, _Right && _right)
+	template<typename Left, typename Right>
+	typename std::enable_if<std::is_floating_point<Left>::value || std::is_floating_point<Right>::value || true>::type both_constant_operation(Left && _left, framework::operator_type _operator, Right && _right)
 	{
 		using namespace framework;
 

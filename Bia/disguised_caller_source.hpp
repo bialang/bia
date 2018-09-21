@@ -18,8 +18,8 @@ namespace bia
 namespace force
 {
 
-template<typename _Return>
-inline _Return format_cast(va_list_wrapper & _args, const char *& _format)
+template<typename Return>
+inline Return format_cast(va_list_wrapper & _args, const char *& _format)
 {
 	using namespace utility;
 
@@ -29,49 +29,49 @@ gt_redo:;
 	{
 	case 'i':
 	{
-		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
+		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, int32_t>::choose(va_arg(_args.args, int32_t));
+			return chooser<is_number, Return, int32_t>::choose(va_arg(_args.args, int32_t));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'I':
 	{
-		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
+		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
 
 		if (is_number) {
-			return chooser<is_number, _Return, int64_t>().choose(va_arg(_args.args, int64_t));
+			return chooser<is_number, Return, int64_t>().choose(va_arg(_args.args, int64_t));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'd':
 	{
-		constexpr auto is_number = std::is_integral<_Return>::value || std::is_floating_point<_Return>::value;
+		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
 
 		if (is_number) {
 			auto _value = va_arg(_args.args, int64_t);
 
-			return chooser<is_number, _Return, double>().choose(*reinterpret_cast<double*>(&_value));
+			return chooser<is_number, Return, double>().choose(*reinterpret_cast<double*>(&_value));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'a':
 	{
-		constexpr auto is_string = std::is_same<_Return, const char*>::value;
+		constexpr auto is_string = std::is_same<Return, const char*>::value;
 
 		if (is_string) {
-			return chooser<is_string, _Return, const char*>().choose(va_arg(_args.args, const char*));
+			return chooser<is_string, Return, const char*>().choose(va_arg(_args.args, const char*));
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 		}
 	}
 	case 'M':
 	{
-		if (auto _ptr = va_arg(_args.args, framework::member*)->cast<_Return>()) {
+		if (auto _ptr = va_arg(_args.args, framework::member*)->cast<Return>()) {
 			return *_ptr;
 		} else {
 			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
@@ -93,72 +93,72 @@ inline void disguised_caller(void(*_function)(), framework::member * _destinatio
 	framework::create_member(_destination);
 }
 
-template<typename _Return>
-inline void disguised_caller(_Return(*_function)(), framework::member * _destination)
+template<typename Return>
+inline void disguised_caller(Return(*_function)(), framework::member * _destination)
 {
 	framework::create_member(_destination, _function());
 }
 
-template<typename _Return, typename... _Args>
-inline void disguised_caller(_Return(*)(_Args...), framework::member * _destination)
+template<typename Return, typename... Arguments>
+inline void disguised_caller(Return(*)(Arguments...), framework::member * _destination)
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _Class>
-inline void disguised_caller(void(_Class::*_function)(), _Class * _instance, framework::member * _destination)
+template<typename Class>
+inline void disguised_caller(void(Class::*_function)(), Class * _instance, framework::member * _destination)
 {
 	(_instance->*_function)();
 
 	framework::create_member(_destination);
 }
 
-template<typename _Class>
-inline void disguised_caller(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination)
+template<typename Class>
+inline void disguised_caller(void(Class::*_function)() const, const Class * _instance, framework::member * _destination)
 {
 	(_instance->*_function)();
 
 	framework::create_member(_destination);
 }
 
-template<typename _Return, typename _Class>
-inline void disguised_caller(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination)
+template<typename Return, typename Class>
+inline void disguised_caller(Return(Class::*_function)(), Class * _instance, framework::member * _destination)
 {
 	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _Return, typename _Class>
-inline void disguised_caller(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination)
+template<typename Return, typename Class>
+inline void disguised_caller(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination)
 {
 	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _Return, typename _Class, typename... _Args>
-inline void disguised_caller(_Return(_Class::*)(_Args...), _Class * _instance, framework::member * _destination)
+template<typename Return, typename Class, typename... Arguments>
+inline void disguised_caller(Return(Class::*)(Arguments...), Class * _instance, framework::member * _destination)
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _Return, typename _Class, typename... _Args>
-inline void disguised_caller(_Return(_Class::*)(_Args...) const, const _Class * _instance, framework::member * _destination)
+template<typename Return, typename Class, typename... Arguments>
+inline void disguised_caller(Return(Class::*)(Arguments...) const, const Class * _instance, framework::member * _destination)
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _Class>
-inline machine::memory::allocation<_Class> disguised_caller()
+template<typename Class>
+inline machine::memory::allocation<Class> disguised_caller()
 {
-	return machine::machine_context::active_allocator()->construct<_Class>();
+	return machine::machine_context::active_allocator()->construct<Class>();
 }
 
-template<typename _Class, typename... _Args>
-inline typename std::enable_if<(sizeof...(_Args) > 0), machine::memory::allocation<_Class>>::type disguised_caller()
+template<typename Class, typename... Arguments>
+inline typename std::enable_if<(sizeof...(Arguments) > 0), machine::memory::allocation<Class>>::type disguised_caller()
 {
 	throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 }
 
-template<typename _Return>
-inline void disguised_caller_count(_Return(*_function)(), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return>
+inline void disguised_caller_count(Return(*_function)(), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -167,8 +167,8 @@ inline void disguised_caller_count(_Return(*_function)(), framework::member * _d
 	framework::create_member(_destination, _function());
 }
 
-template<typename _Return, typename _0>
-inline void disguised_caller_count(_Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0>
+inline void disguised_caller_count(Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -178,8 +178,8 @@ inline void disguised_caller_count(_Return(*_function)(_0), framework::member * 
 	framework::create_member(_destination, _function(*_v0));
 }
 
-template<typename _Return, typename _0, typename _1>
-inline void disguised_caller_count(_Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1>
+inline void disguised_caller_count(Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -190,8 +190,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1), framework::membe
 	framework::create_member(_destination, _function(*_v0, *_v1));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -203,8 +203,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2), framework::m
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -217,8 +217,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3), framewor
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -232,8 +232,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4), fram
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -248,8 +248,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5), 
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -265,8 +265,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -283,8 +283,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -302,8 +302,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -322,8 +322,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -343,8 +343,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -365,8 +365,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -388,8 +388,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -412,8 +412,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -437,8 +437,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -463,8 +463,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -490,8 +490,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -518,8 +518,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -547,8 +547,8 @@ inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	framework::create_member(_destination, _function(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1039,8 +1039,8 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _Return>
-inline void disguised_caller_count(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return>
+inline void disguised_caller_count(Return(Class::*_function)(), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1049,8 +1049,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(), _Class * _inst
 	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0>
+inline void disguised_caller_count(Return(Class::*_function)(_0), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1060,8 +1060,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0), _Class * _in
 	framework::create_member(_destination, (_instance->*_function)(*_v0));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1072,8 +1072,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1), _Class *
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1085,8 +1085,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2), _Cla
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1099,8 +1099,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3), 
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1114,8 +1114,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1130,8 +1130,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1147,8 +1147,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1165,8 +1165,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1184,8 +1184,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1204,8 +1204,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1225,8 +1225,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1247,8 +1247,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1270,8 +1270,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1294,8 +1294,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1319,8 +1319,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1345,8 +1345,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1372,8 +1372,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1400,8 +1400,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1429,8 +1429,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1459,8 +1459,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19));
 }
 
-template<typename _Class>
-inline void disguised_caller_count(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class>
+inline void disguised_caller_count(void(Class::*_function)(), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1471,8 +1471,8 @@ inline void disguised_caller_count(void(_Class::*_function)(), _Class * _instanc
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0>
-inline void disguised_caller_count(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0>
+inline void disguised_caller_count(void(Class::*_function)(_0), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1484,8 +1484,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0), _Class * _insta
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1498,8 +1498,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1), _Class * _i
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1513,8 +1513,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2), _Class 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1529,8 +1529,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3), _Cl
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1546,8 +1546,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4),
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1564,8 +1564,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1583,8 +1583,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1603,8 +1603,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1624,8 +1624,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1646,8 +1646,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1669,8 +1669,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1693,8 +1693,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1718,8 +1718,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1744,8 +1744,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1771,8 +1771,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1799,8 +1799,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1828,8 +1828,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1858,8 +1858,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1889,8 +1889,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1921,8 +1921,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _Return>
-inline void disguised_caller_count(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return>
+inline void disguised_caller_count(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1931,8 +1931,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)() const, const _C
 	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0>
+inline void disguised_caller_count(Return(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1942,8 +1942,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0) const, const 
 	framework::create_member(_destination, (_instance->*_function)(*_v0));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1954,8 +1954,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1) const, co
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1967,8 +1967,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2) const
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1981,8 +1981,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3) c
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -1996,8 +1996,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2012,8 +2012,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2029,8 +2029,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2047,8 +2047,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2066,8 +2066,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2086,8 +2086,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2107,8 +2107,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2129,8 +2129,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2152,8 +2152,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2176,8 +2176,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2201,8 +2201,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2227,8 +2227,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2254,8 +2254,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2282,8 +2282,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2311,8 +2311,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2341,8 +2341,8 @@ inline void disguised_caller_count(_Return(_Class::*_function)(_0, _1, _2, _3, _
 	framework::create_member(_destination, (_instance->*_function)(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19));
 }
 
-template<typename _Class>
-inline void disguised_caller_count(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class>
+inline void disguised_caller_count(void(Class::*_function)() const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2353,8 +2353,8 @@ inline void disguised_caller_count(void(_Class::*_function)() const, const _Clas
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0>
-inline void disguised_caller_count(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0>
+inline void disguised_caller_count(void(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2366,8 +2366,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0) const, const _Cl
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2380,8 +2380,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1) const, const
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2395,8 +2395,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2) const, c
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2411,8 +2411,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3) cons
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2428,8 +2428,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4) 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2446,8 +2446,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2465,8 +2465,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2485,8 +2485,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2506,8 +2506,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2528,8 +2528,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2551,8 +2551,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2575,8 +2575,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2600,8 +2600,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2626,8 +2626,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2653,8 +2653,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2681,8 +2681,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2710,8 +2710,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2740,8 +2740,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2771,8 +2771,8 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const _Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2803,29 +2803,29 @@ inline void disguised_caller_count(void(_Class::*_function)(_0, _1, _2, _3, _4, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
-	return machine::machine_context::active_allocator()->construct<_Class>();
+	return machine::machine_context::active_allocator()->construct<Class>();
 }
 
-template<typename _Class, typename _0>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0);
 }
 
-template<typename _Class, typename _0, typename _1>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2833,11 +2833,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2846,11 +2846,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2860,11 +2860,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2875,11 +2875,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2891,11 +2891,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2908,11 +2908,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2926,11 +2926,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2945,11 +2945,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2965,11 +2965,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -2986,11 +2986,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3008,11 +3008,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3031,11 +3031,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3055,11 +3055,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3080,11 +3080,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3106,11 +3106,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3133,11 +3133,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3161,11 +3161,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3190,11 +3190,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline machine::memory::allocation<_Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3220,11 +3220,11 @@ inline machine::memory::allocation<_Class> disguised_caller_count(framework::mem
 	auto _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	auto _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 
-	return machine::machine_context::active_allocator()->construct<_Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19);
+	return machine::machine_context::active_allocator()->construct<Class>(*_v0, *_v1, *_v2, *_v3, *_v4, *_v5, *_v6, *_v7, *_v8, *_v9, *_v10, *_v11, *_v12, *_v13, *_v14, *_v15, *_v16, *_v17, *_v18, *_v19);
 }
 
-template<typename _Return>
-inline void disguised_caller_format(_Return(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return>
+inline void disguised_caller_format(Return(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3233,8 +3233,8 @@ inline void disguised_caller_format(_Return(*_function)(), framework::member * _
 	framework::create_member(_destination, _function());
 }
 
-template<typename _Return, typename _0>
-inline void disguised_caller_format(_Return(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0>
+inline void disguised_caller_format(Return(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3244,8 +3244,8 @@ inline void disguised_caller_format(_Return(*_function)(_0), framework::member *
 	framework::create_member(_destination, _function(std::forward<_0>(_v0)));
 }
 
-template<typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1>
+inline void disguised_caller_format(Return(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3256,8 +3256,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1), framework::memb
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3269,8 +3269,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2), framework::
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3283,8 +3283,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3), framewo
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3298,8 +3298,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4), fra
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3314,8 +3314,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5),
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3331,8 +3331,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3349,8 +3349,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3368,8 +3368,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3388,8 +3388,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3409,8 +3409,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3431,8 +3431,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3454,8 +3454,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3478,8 +3478,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3503,8 +3503,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3529,8 +3529,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3556,8 +3556,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3584,8 +3584,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -3613,8 +3613,8 @@ inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, 
 	framework::create_member(_destination, _function(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18)));
 }
 
-template<typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(_Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4105,8 +4105,8 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _Return>
-inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return>
+inline void disguised_caller_format(Return(Class::*_function)(), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4115,8 +4115,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(), _Class * _ins
 	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0>
+inline void disguised_caller_format(Return(Class::*_function)(_0), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4126,8 +4126,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0), _Class * _i
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4138,8 +4138,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1), _Class 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4151,8 +4151,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2), _Cl
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4165,8 +4165,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3),
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4180,8 +4180,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4196,8 +4196,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4213,8 +4213,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4231,8 +4231,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4250,8 +4250,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4270,8 +4270,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4291,8 +4291,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4313,8 +4313,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4336,8 +4336,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4360,8 +4360,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4385,8 +4385,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4411,8 +4411,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4438,8 +4438,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4466,8 +4466,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4495,8 +4495,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4525,8 +4525,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19)));
 }
 
-template<typename _Class>
-inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class>
+inline void disguised_caller_format(void(Class::*_function)(), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4537,8 +4537,8 @@ inline void disguised_caller_format(void(_Class::*_function)(), _Class * _instan
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0>
-inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0>
+inline void disguised_caller_format(void(Class::*_function)(_0), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4550,8 +4550,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0), _Class * _inst
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4564,8 +4564,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1), _Class * _
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4579,8 +4579,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2), _Class
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4595,8 +4595,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3), _C
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4612,8 +4612,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4)
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4630,8 +4630,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4649,8 +4649,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4669,8 +4669,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4690,8 +4690,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4712,8 +4712,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4735,8 +4735,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4759,8 +4759,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4784,8 +4784,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4810,8 +4810,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4837,8 +4837,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4865,8 +4865,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4894,8 +4894,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4924,8 +4924,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4955,8 +4955,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4987,8 +4987,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _Return>
-inline void disguised_caller_format(_Return(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return>
+inline void disguised_caller_format(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -4997,8 +4997,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)() const, const _
 	framework::create_member(_destination, (_instance->*_function)());
 }
 
-template<typename _Class, typename _Return, typename _0>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0>
+inline void disguised_caller_format(Return(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5008,8 +5008,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0) const, const
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5020,8 +5020,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1) const, c
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5033,8 +5033,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2) cons
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5047,8 +5047,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3) 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5062,8 +5062,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5078,8 +5078,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5095,8 +5095,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5113,8 +5113,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5132,8 +5132,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5152,8 +5152,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5173,8 +5173,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5195,8 +5195,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5218,8 +5218,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5242,8 +5242,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5267,8 +5267,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5293,8 +5293,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5320,8 +5320,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5348,8 +5348,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5377,8 +5377,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18)));
 }
 
-template<typename _Class, typename _Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5407,8 +5407,8 @@ inline void disguised_caller_format(_Return(_Class::*_function)(_0, _1, _2, _3, 
 	framework::create_member(_destination, (_instance->*_function)(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19)));
 }
 
-template<typename _Class>
-inline void disguised_caller_format(void(_Class::*_function)() const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class>
+inline void disguised_caller_format(void(Class::*_function)() const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5419,8 +5419,8 @@ inline void disguised_caller_format(void(_Class::*_function)() const, const _Cla
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0>
-inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0>
+inline void disguised_caller_format(void(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5432,8 +5432,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0) const, const _C
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5446,8 +5446,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1) const, cons
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5461,8 +5461,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2) const, 
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5477,8 +5477,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3) con
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5494,8 +5494,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4)
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5512,8 +5512,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5531,8 +5531,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5551,8 +5551,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5572,8 +5572,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5594,8 +5594,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5617,8 +5617,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5641,8 +5641,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5666,8 +5666,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5692,8 +5692,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5719,8 +5719,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5747,8 +5747,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5776,8 +5776,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5806,8 +5806,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5837,8 +5837,8 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const _Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5869,29 +5869,29 @@ inline void disguised_caller_format(void(_Class::*_function)(_0, _1, _2, _3, _4,
 	framework::create_member(_destination);
 }
 
-template<typename _Class>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 0) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 
-	return machine::machine_context::active_allocator()->construct<_Class>();
+	return machine::machine_context::active_allocator()->construct<Class>();
 }
 
-template<typename _Class, typename _0>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 1) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0));
 }
 
-template<typename _Class, typename _0, typename _1>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 2) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5899,11 +5899,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 3) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5912,11 +5912,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 4) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5926,11 +5926,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 5) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5941,11 +5941,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 6) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5957,11 +5957,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 7) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5974,11 +5974,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 8) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -5992,11 +5992,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 9) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6011,11 +6011,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 10) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6031,11 +6031,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 11) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6052,11 +6052,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 12) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6074,11 +6074,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 13) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6097,11 +6097,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 14) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6121,11 +6121,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 15) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6146,11 +6146,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 16) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6172,11 +6172,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 17) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6199,11 +6199,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 18) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6227,11 +6227,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 19) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6256,11 +6256,11 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18));
 }
 
-template<typename _Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline machine::memory::allocation<_Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
+template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, va_list_wrapper & _args)
 {
 	if (_count != 20) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -6286,7 +6286,7 @@ inline machine::memory::allocation<_Class> disguised_caller_format(const char * 
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
 
-	return machine::machine_context::active_allocator()->construct<_Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19));
+	return machine::machine_context::active_allocator()->construct<Class>(std::forward<_0>(_v0), std::forward<_1>(_v1), std::forward<_2>(_v2), std::forward<_3>(_v3), std::forward<_4>(_v4), std::forward<_5>(_v5), std::forward<_6>(_v6), std::forward<_7>(_v7), std::forward<_8>(_v8), std::forward<_9>(_v9), std::forward<_10>(_v10), std::forward<_11>(_v11), std::forward<_12>(_v12), std::forward<_13>(_v13), std::forward<_14>(_v14), std::forward<_15>(_v15), std::forward<_16>(_v16), std::forward<_17>(_v17), std::forward<_18>(_v18), std::forward<_19>(_v19));
 }
 
 }
