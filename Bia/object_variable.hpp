@@ -16,7 +16,7 @@ namespace object
 class object_variable : public member
 {
 public:
-	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
+	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() override
 	{
 		replace_this<undefined_member>();
 	}

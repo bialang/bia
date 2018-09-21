@@ -11,7 +11,7 @@ namespace framework
 class undefined_member final : public member
 {
 public:
-	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION undefine() override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;

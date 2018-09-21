@@ -21,7 +21,7 @@ template<>
 class custom_member<void> : public member
 {
 public:
-	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
+	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() override
 	{
 		replace_this<undefined_member>();
 	}

@@ -20,7 +20,7 @@ namespace executable
 class function : public member
 {
 public:
-	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
+	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() override
 	{
 		replace_this<undefined_member>();
 	}
