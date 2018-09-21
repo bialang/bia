@@ -45,8 +45,15 @@ module_library * module_loader::load_bll(const char * _filepath, const char * _n
 {
 #if defined(BIA_OS_WINDOWS)
 	// Convert filepath to wide char
+	auto _required_size = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, _filepath, -1, nullptr, 0);
+	std::wstring _wfilepath;
 
-	auto _library = LoadLibrary(_filepath);
+	_wfilepath.resize(_required_size);
+
+	MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, _filepath, -1, &_wfilepath[0], _required_size);
+
+	// Load library
+	auto _library = LoadLibraryW(_wfilepath.c_str());
 
 	if (!_library) {
 		return nullptr;
