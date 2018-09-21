@@ -21,7 +21,7 @@ module_loader::module_loader(memory::allocator * _allocator)
 	this->_allocator = _allocator;
 }
 
-module_loader::module_loader(module_loader && _move) noexcept : _impl(std::move(_move._impl))
+module_loader::module_loader(module_loader && _move) noexcept
 {
 	_allocator = _move._allocator;
 }
