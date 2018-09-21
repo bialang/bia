@@ -13,6 +13,7 @@
 #include "string_manager.hpp"
 #include "variable_index.hpp"
 #include "machine_stack.hpp"
+#include "module_loader.hpp"
 
 
 namespace bia
@@ -39,7 +40,7 @@ public:
 	 *
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
-	machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::executable_allocator> & _executable_allocator);
+	BIA_EXPORT machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::executable_allocator> & _executable_allocator);
 	/**
 	 * Constructor.
 	 *
@@ -51,7 +52,16 @@ public:
 	 *
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
-	machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
+	BIA_EXPORT machine_context(std::shared_ptr<memory::allocator> && _allocator, std::shared_ptr<memory::executable_allocator> && _executable_allocator);
+	machine_context(const machine_context & _copy) = delete;
+	machine_context(machine_context && _move) = default;
+	/**
+	 * Activates the current context.
+	 *
+	 * @since 3.68.138.786
+	 * @date 15-Sep-18
+	*/
+	BIA_EXPORT void activate_context() noexcept;
 	void execute(stream::input_stream & _script)
 	{
 	}
@@ -65,14 +75,23 @@ public:
 		return static_cast<_Ty*>(_object);
 	}
 	/**
+	 * Returns the currently active machine context in the current thread.
+	 *
+	 * @since 3.68.138.786
+	 * @date 15-Sep-18
+	 *
+	 * @return The active context or null if there is no active context.
+	*/
+	BIA_EXPORT static machine_context * active_context() noexcept;
+	/**
 	 * Returns the currently active allocator of the current thread.
 	 *
 	 * @since 3.65.132.733
 	 * @date 29-Jun-18
 	 *
-	 * @return The active allocator.
+	 * @return The active allocator or null if there is no active allocator.
 	*/
-	static memory::allocator * active_allocator() noexcept;
+	BIA_EXPORT static memory::allocator * active_allocator() noexcept;
 	 /**
 	  * Returns the memory allocator.
 	  *
@@ -81,7 +100,7 @@ public:
 	  *
 	  * @return The memory allocator of this context.
 	 */
-	memory::allocator * allocator() noexcept;
+	BIA_EXPORT memory::allocator * allocator() noexcept;
 	/**
 	 * Returns the memory allocator for executable memory.
 	 *
@@ -90,12 +109,13 @@ public:
 	 *
 	 * @return The memory allocator of this context.
 	*/
-	memory::executable_allocator * executable_allocator() noexcept;
-	machine::string_manager & string_manager() noexcept;
+	BIA_EXPORT memory::executable_allocator * executable_allocator() noexcept;
+	BIA_EXPORT machine::string_manager & string_manager() noexcept;
 
 //private:
 
 
+	static thread_local machine_context * _active_context;
 	/** The allocator of the context currently active. */
 	static thread_local memory::allocator * _active_allocator;
 	/** The allocator for normal memory. */
@@ -108,6 +128,8 @@ public:
 	variable_index _variable_index;
 	/** The virtual machine stack. */
 	machine_stack _stack;
+	/** The module loader. */
+	modular::module_loader _module_loader;
 
 	/**
 	 * Pops the variables from the stack.
@@ -119,7 +141,7 @@ public:
 	 *
 	 * @throws See machine_stack::pop().
 	*/
-	void BIA_MEMBER_CALLING_CONVENTION destroy_from_stack(uint32_t _member_count);
+	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION destroy_from_stack(uint32_t _member_count);
 	/**
 	 * Pushes the variables to the stack.
 	 *
@@ -133,8 +155,9 @@ public:
 	 *
 	 * @return The address of the allocated space.
 	*/
-	void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
-	const char * name_address(utility::string_key _name);
+	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
+	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION import_module(const char * _name);
+	BIA_EXPORT const char * name_address(utility::string_key _name);
 	/**
 	 * Returns the member address of the key. If it does not exists, it will be created.
 	 *
@@ -147,8 +170,8 @@ public:
 	 *
 	 * @return The member address.
 	*/
-	framework::member * address_of_member(const char * _name);
-	machine_code compile_script(stream::input_stream & _script);
+	BIA_EXPORT framework::member * address_of_member(const char * _name);
+	BIA_EXPORT machine_code compile_script(stream::input_stream & _script);
 };
 
 }

@@ -15,9 +15,9 @@ string_manager::string_manager(memory::allocator * _allocator) noexcept
 	this->_allocator = _allocator;
 }
 
-string_manager::string_manager(string_manager && _rvalue) noexcept : _index(std::move(_rvalue._index))
+string_manager::string_manager(string_manager && _move) noexcept : _index(std::move(_move._index))
 {
-	_allocator = _rvalue._allocator;
+	_allocator = _move._allocator;
 }
 
 string_manager::~string_manager() noexcept
@@ -46,13 +46,14 @@ void string_manager::register_string(int8_t * _resource)
 
 string_manager::name_type string_manager::name_address(const char * _name, size_t _length)
 {
-	auto _result = _index.find({ _name, _length });
+	auto _result = _index.find({ _name, _length + 1 });
 
 	// Create new entry
 	if (_result == _index.end()) {
-		auto _allocation = _allocator->allocate(_length);
+		auto _allocation = _allocator->allocate(_length + 1);
 
-		memcpy(_allocation.first, _name, _length);
+		memcpy(_allocation.first, _name, _length + 1);
+		static_cast<char*>(_allocation.first)[_length] = 0;
 
 		_result = _index.emplace(string_entry(_allocation)).first;
 	}

@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 
+#include "config.hpp"
 #include "member.hpp"
 #include "allocator.hpp"
 #include "stl_allocator_wrapper.hpp"
@@ -37,7 +38,7 @@ public:
 	 *
 	 * @param _allocator The allocator that should be used.
 	*/
-	explicit variable_index(const std::shared_ptr<memory::allocator> & _allocator) noexcept;
+	BIA_EXPORT explicit variable_index(const std::shared_ptr<memory::allocator> & _allocator) noexcept;
 	/**
 	 * Adds a member to the global scope.
 	 *
@@ -54,7 +55,7 @@ public:
 	 *
 	 * @return The inserted member address.
 	*/
-	framework::member * add(const char * _key, value_type _value);
+	BIA_EXPORT framework::member * add(const char * _key, value_type _value);
 	/**
 	 * Searches for the key and returns the value.
 	 *
@@ -67,7 +68,7 @@ public:
 	 *
 	 * @return The value associated with the key if it succeeds, otherwise null.
 	*/
-	framework::member * find(const char * _key);
+	BIA_EXPORT framework::member * find(const char * _key);
 
 private:
 	static void guard_action(value_type & _value);

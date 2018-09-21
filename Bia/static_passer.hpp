@@ -122,7 +122,7 @@ protected:
 
 			++_pushed;
 			++_passer._stack_offset;
-			
+
 			goto gt_push;
 		}
 #elif defined(BIA_COMPILER_MSVC)
@@ -373,6 +373,7 @@ protected:
 	}
 	void push(reserved_parameter _value)
 	{
+		push(register_offset<accumulator, void, false>());
 	}
 	void push(std::nullptr_t _value)
 	{

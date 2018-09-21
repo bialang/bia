@@ -61,8 +61,10 @@ public:
 	 *
 	 * @since 3.64.127.716
 	 * @date 8-Apr-18
+	 *
+	 * @throws See replace_this().
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() = 0;
 	/**
 	 * Prints this value to stdout.
 	 *

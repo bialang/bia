@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "config.hpp"
 #include "executable_allocator.hpp"
 
 
@@ -31,7 +32,7 @@ public:
 	 * @param [in] _allocator The allocator for normal memory.
 	 * @param [in] _executable_allocator The allocator for executable memory.
 	*/
-	machine_schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator) noexcept;
+	BIA_EXPORT machine_schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator) noexcept;
 	machine_schein(const machine_schein & _copy) = delete;
 	machine_schein(machine_schein && _rvalue) noexcept = default;
 	/**
@@ -42,7 +43,7 @@ public:
 	 *
 	 * @throws See delete_all_allocations().
 	*/
-	~machine_schein();
+	BIA_EXPORT ~machine_schein();
 	/**
 	 * Registers an allocation. Must be created by get_allocator().
 	 *
@@ -53,7 +54,7 @@ public:
 	 *
 	 * @throws See std::vector::push_back().
 	*/
-	void register_allocation(memory::universal_allocation _allocation);
+	BIA_EXPORT void register_allocation(memory::universal_allocation _allocation);
 	/**
 	 * Deletes all registered allocations.
 	 *
@@ -62,7 +63,7 @@ public:
 	 *
 	 * @throws See memory::allocator::deallocate().
 	*/
-	void delete_all_allocations();
+	BIA_EXPORT void delete_all_allocations();
 	/**
 	 * Returns the normal memory allocator.
 	 *
@@ -71,7 +72,7 @@ public:
 	 *
 	 * @return The pointer to the allocator.
 	*/
-	memory::allocator * allocator() noexcept;
+	BIA_EXPORT memory::allocator * allocator() noexcept;
 	/**
 	 * Returns the executable memory allocator.
 	 *
@@ -80,7 +81,7 @@ public:
 	 *
 	 * @return The pointer to the allocator.
 	*/
-	memory::executable_allocator * executable_allocator() noexcept;
+	BIA_EXPORT memory::executable_allocator * executable_allocator() noexcept;
 	/**
 	 * Move operator.
 	 *
@@ -93,7 +94,7 @@ public:
 	 *
 	 * @return This.
 	*/
-	machine_schein & operator=(machine_schein && _rvalue);
+	BIA_EXPORT machine_schein & operator=(machine_schein && _rvalue);
 
 private:
 	/** The memory allocator for normal memory. */

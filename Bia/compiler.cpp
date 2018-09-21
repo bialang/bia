@@ -169,8 +169,8 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_print(_report);
 	case BGR_TEST_LOOP:
 		return handle_test_loop(_report);
-	//case BGR_IMPORT:
-		//return HandleImport(p_pReport->content.children);
+	case BGR_IMPORT:
+		return handle_import(_report);
 	case BGR_VALUE:
 		return handle_value<false>(_report, [] {});
 	default:
@@ -779,6 +779,14 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 	}
 
 	return _end;
+}
+
+const grammar::report * compiler::handle_import(const grammar::report * _report)
+{
+	// Call import
+	_toolset.call_member(&machine::machine_context::import_module, &_context, _report[1].content.member);
+
+	return _report->content.end;
 }
 
 }

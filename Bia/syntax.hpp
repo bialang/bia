@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.hpp"
 #include "interpreter.hpp"
 
 
@@ -24,7 +25,7 @@ public:
 	 *
 	 * @return The interpreter.
 	*/
-	static const grammar::interpreter & interpreter() noexcept;
+	BIA_EXPORT static const grammar::interpreter & interpreter() noexcept;
 
 private:
 	/**	Defines the interpreter for the Bia grammar.	*/
@@ -40,7 +41,7 @@ private:
 	 *
 	 * @return The newly created interpreter.
 	*/
-	static grammar::interpreter init_rules();
+	BIA_EXPORT static grammar::interpreter init_rules();
 };
 
 }

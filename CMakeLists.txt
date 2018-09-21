@@ -15,6 +15,14 @@ else()
 endif()
 
 # Project
+set(BIA_BUILD_SHARED ON CACHE BOOL "Build shared library")
+
+if(BIA_BUILD_SHARED)
+  add_definitions(-DBIA_BUILDING)
+endif(BIA_BUILD_SHARED)
+
+configure_file("${PROJECT_SOURCE_DIR}/Bia/config_cmake.in" "${PROJECT_SOURCE_DIR}/Bia/config_cmake.hpp")
+
 include_directories(Bia)
 add_subdirectory(Bia)
 

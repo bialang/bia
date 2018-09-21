@@ -104,6 +104,13 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
+import time
+
+var _start = time.time_point()
+
+print time.now()
+
+
 
 hey(3.4,4.5)
 o(43.5)
@@ -112,6 +119,10 @@ i.hey()
 i.hi()
 printer.hey()
 print i
+
+var _end = time.time_point()
+
+print time.millis(_start, _end)
 
 )"";
 
@@ -147,7 +158,7 @@ print i
 
 		if (_machine_code.is_executable()) {
 			// Set active allocator
-			bia::machine::machine_context::_active_allocator = _context.allocator();
+			_context.activate_context();
 
 			try {
 				_machine_code.execute();

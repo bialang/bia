@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(Bia_HEADER_FILES "bia.hpp" "config.hpp")
+set(Bia_HEADER_FILES "bia.hpp" "config.hpp" "config_cmake.hpp")
 set(Bia_SOURCE_FILES "")
 
 # compiler namespace
@@ -33,7 +33,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_EXCEPTION})
 
 
 # force namespace
-set(Bia_HEADER_FILES_FORCE "disguised_caller.hpp" "initiator.hpp")
+set(Bia_HEADER_FILES_FORCE "disguised_caller.hpp" "disguised_caller_source.hpp" "initiator.hpp")
 
 source_group("Header Files\\force" FILES ${Bia_HEADER_FILES_FORCE})
 
@@ -41,7 +41,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_FORCE})
 
 
 # framework namespace
-set(Bia_HEADER_FILES_FRAMEWORK "create_member.hpp" "max_member_size.hpp" "member.hpp" "operator.hpp" "undefined_member.hpp")
+set(Bia_HEADER_FILES_FRAMEWORK "create_member.hpp" "custom_member.hpp" "max_member_size.hpp" "member.hpp" "operator.hpp" "undefined_member.hpp")
 set(Bia_SOURCE_FILES_FRAMEWORK "undefined_member.cpp")
 
 source_group("Header Files\\framework" FILES ${Bia_HEADER_FILES_FRAMEWORK})
@@ -55,8 +55,8 @@ set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "native_member.hpp" "native_ope
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
 
-set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "class_template_wrapper.hpp" "constructor_chain.hpp" "instance_holder.hpp" "member_map.hpp" "object.hpp" "raw_object.hpp")
-set(Bia_SOURCE_FILES_OBJECT "member_map.cpp")
+set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "constructor_chain.hpp" "instance_holder.hpp" "member_map.hpp" "namespace_member.hpp" "object.hpp" "object_variable.hpp" "raw_object.hpp" "template_wrapper.hpp")
+set(Bia_SOURCE_FILES_OBJECT "member_map.cpp" "namespace_member.cpp")
 
 source_group("Header Files\\framework\\object" FILES ${Bia_HEADER_FILES_OBJECT})
 source_group("Source Files\\framework\\object" FILES ${Bia_SOURCE_FILES_OBJECT})
@@ -95,8 +95,8 @@ set(Bia_SOURCE_FILES_MEMORY "allocator.cpp" "simple_allocator.cpp" "simple_execu
 source_group("Header Files\\machine\\memory" FILES ${Bia_HEADER_FILES_MEMORY})
 source_group("Source Files\\machine\\memory" FILES ${Bia_SOURCE_FILES_MEMORY})
 
-set(Bia_HEADER_FILES_MODULAR "")
-set(Bia_SOURCE_FILES_MODULAR "")
+set(Bia_HEADER_FILES_MODULAR "module_library.hpp" "module_loader.hpp")
+set(Bia_SOURCE_FILES_MODULAR "module_loader.cpp")
 
 source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})
 source_group("Source Files\\machine\\modular" FILES ${Bia_SOURCE_FILES_MODULAR})
@@ -127,8 +127,12 @@ source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
 
 # Adding the library
-add_library(Bia ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+if(BIA_BUILD_SHARED)
+  add_library(Bia SHARED ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+else(BIA_BUILD_SHARED)
+  add_library(Bia STATIC ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+endif(BIA_BUILD_SHARED)
 
 # Install
 install(TARGETS Bia DESTINATION lib)
-install(FILES ${Bia_HEADER_FILES} DESTINATION include)
+install(FILES ${Bia_HEADER_FILES} DESTINATION "include/Bia")

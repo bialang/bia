@@ -9,7 +9,7 @@ namespace bia
 namespace framework
 {
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::undefine() noexcept
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::undefine()
 {
 }
 

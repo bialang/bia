@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.hpp"
 #include "report_bundle.hpp"
 #include "interpreter_id.hpp"
 #include "interpreter_rule.hpp"
@@ -30,8 +31,8 @@ public:
 	 *
 	 * @param _rule Defines the rule.
 	*/
-	void set_rule(interpreter_rule && _rule);
-	void interpret(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const;
+	BIA_EXPORT void set_rule(interpreter_rule && _rule);
+	BIA_EXPORT void interpret(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const;
 
 private:
 	/** All available rules. */

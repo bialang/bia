@@ -4,10 +4,7 @@
 #include <cstdarg>
 #include <utility>
 
-#include "member.hpp"
-#include "undefined_member.hpp"
-#include "share.hpp"
-#include "type_traits.hpp"
+#include "object_variable.hpp"
 #include "constructor_chain.hpp"
 #include "machine_context.hpp"
 #include "instance_holder.hpp"
@@ -21,7 +18,7 @@ namespace object
 {
 
 template<typename _Ty>
-class raw_object : public member
+class raw_object : public object_variable
 {
 public:
 	typedef instance_holder<_Ty> data_type;
@@ -63,10 +60,6 @@ public:
 	raw_object(machine::memory::allocation<_Ty> _object, bool _owner) noexcept : _data(_object, _owner)
 	{
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION undefine() noexcept override
-	{
-		replace_this<undefined_member>();
-	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
 	{
 		printf("<%s at %p>\n", typeid(_Ty).name(), this);
@@ -78,10 +71,6 @@ public:
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
 	{
 		_destination->replace_this<raw_object<_Ty>>(_data);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
-	{
-		refer(_destination);
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
@@ -129,9 +118,6 @@ public:
 	{
 		promote()->object_member(_destination, _name);
 	}
-	virtual void set_instance(const void * _instance, const std::type_info & _type) override
-	{
-	}
 	virtual int flags() const override
 	{
 		return F_NONE;
@@ -170,14 +156,6 @@ public:
 	}
 
 protected:
-	virtual void * native_data(native::NATIVE_TYPE _type) override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
-	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
 	virtual void * data(const std::type_info & _type) override
 	{
 		if (!std::is_const<_Ty>::value) {

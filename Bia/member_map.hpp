@@ -1,7 +1,9 @@
 #pragma once
 
 #include <map>
+#include <utility>
 
+#include "config.hpp"
 #include "member.hpp"
 #include "allocator.hpp"
 #include "share.hpp"
@@ -20,6 +22,8 @@ namespace object
 class member_map
 {
 public:
+	typedef machine::string_manager::name_type name_type;
+
 	/**
 	 * Destructor.
 	 *
@@ -28,7 +32,7 @@ public:
 	 *
 	 * @throws See machine::memory::allocator::destroy_blocks().
 	*/
-	~member_map();
+	BIA_EXPORT ~member_map();
 	
 	/**
 	 * Emplaces a new member.
@@ -45,17 +49,23 @@ public:
 	 * @throws See machine::memory::allocator::construct_blocks().
 	 * @throws See member::replace_this().
 	 * @throws See std::map::find() and std::map::emplace().
+	 *
+	 * @return The emplaced member.
 	*/
 	template<typename _Ty, typename... _Args>
-	void emplace(machine::string_manager::name_type _name, _Args &&... _args)
+	member * emplace(name_type _name, _Args &&... _args)
 	{
 		auto _result = _data.get().find(_name);
 
 		// Create new
 		if (_result == _data.get().end()) {
-			_data.get().emplace(_name, machine::machine_context::active_allocator()->construct_blocks<member, _Ty>(1, std::forward<_Args>(_args)...));
+			auto _member = machine::machine_context::active_allocator()->construct_blocks<member, _Ty>(1, std::forward<_Args>(_args)...);
+
+			_data.get().emplace(_name, _member);
+
+			return _member.first;
 		} else {
-			_result->second->replace_this<_Ty>(std::forward<_Args>(_args)...);
+			return _result->second->replace_this<_Ty>(std::forward<_Args>(_args)...);
 		}
 	}
 	/**
@@ -71,11 +81,25 @@ public:
 	 *
 	 * @return The member.
 	*/
-	member * get(machine::string_manager::name_type _name);
+	BIA_EXPORT member * get(name_type _name);
+	/**
+	 * Returns the member or creates a new if it does not exist.
+	 *
+	 * @since 3.68.140.788
+	 * @date 16-Sep-18
+	 *
+	 * @param _name The name of the member.
+	 *
+	 * @throws See machine::memory::allocator::construct_blocks().
+	 * @throws See std::map::find() and std::map::emplace().
+	 *
+	 * @return The member.
+	*/
+	BIA_EXPORT member * get_or_create(name_type _name);
 
 private:
 	/** The map with all the members. */
-	utility::share<std::map<machine::string_manager::name_type, machine::memory::allocation<member>>> _data;
+	utility::share<std::map<name_type, machine::memory::allocation<member>>> _data;
 };
 
 }

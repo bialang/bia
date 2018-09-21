@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "config.hpp"
 #include "input_stream.hpp"
 
 
@@ -31,7 +32,7 @@ public:
 	 *
 	 * @throws exception::argument_error If either the buffer or the length is invalid.
 	*/
-	buffer_input_stream(const std::shared_ptr<const int8_t> & _buffer, size_t _length);
+	BIA_EXPORT buffer_input_stream(const std::shared_ptr<const int8_t> & _buffer, size_t _length);
 	/**
 	 * Constructor.
 	 *
@@ -43,15 +44,15 @@ public:
 	 *
 	 * @throws exception::argument_error If either the buffer or the length is invalid.
 	*/
-	buffer_input_stream(std::shared_ptr<const int8_t> && _buffer, size_t _length);
+	BIA_EXPORT buffer_input_stream(std::shared_ptr<const int8_t> && _buffer, size_t _length);
 
-	virtual void reset(cursor_type _mark) override;
-	virtual void skip(cursor_type _length) override;
-	virtual void skip(buffer_type::first_type _ptr) override;
-	virtual void read(void * _destination, size_t _size) override;
-	virtual cursor_type mark() const override;
-	virtual cursor_type available() const override;
-	virtual buffer_type buffer() override;
+	BIA_EXPORT virtual void reset(cursor_type _mark) override;
+	BIA_EXPORT virtual void skip(cursor_type _length) override;
+	BIA_EXPORT virtual void skip(buffer_type::first_type _ptr) override;
+	BIA_EXPORT virtual void read(void * _destination, size_t _size) override;
+	BIA_EXPORT virtual cursor_type mark() const override;
+	BIA_EXPORT virtual cursor_type available() const override;
+	BIA_EXPORT virtual buffer_type buffer() override;
 
 private:
 	/** The buffer. */

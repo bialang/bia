@@ -3,7 +3,7 @@
 #include "exception.hpp"
 
 #if defined(BIA_OS_WINDOWS)
-#include <windows.h>
+#include <Windows.h>
 #elif defined(BIA_OS_LINUX)
 #include <sys/mman.h>
 #endif

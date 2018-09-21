@@ -34,6 +34,14 @@ public:
 		first = _first;
 		second = _second;
 	}
+	allocation(const allocation<_Ty> & _copy) noexcept = default;
+	allocation(allocation<_Ty> && _move) noexcept
+	{
+		first = _move.first;
+		second = _move.second;
+
+		_move.clear();
+	}
 	void clear() noexcept
 	{
 		first = nullptr;
@@ -67,49 +75,15 @@ public:
 	{
 		return &first;
 	}
-};
+	allocation & operator=(const allocation<_Ty> & _copy) noexcept = default;
+	allocation & operator=(allocation && _move) noexcept
+	{
+		first = _move.first;
+		second = _move.second;
 
-/** An universal allocation. */
-template<>
-class allocation<void>
-{
-public:
-	void * first;
-	size_type second;
+		_move.clear();
 
-	allocation() noexcept
-	{
-		clear();
-	}
-	allocation(void * _first, size_type _second) noexcept
-	{
-		first = _first;
-		second = _second;
-	}
-	void clear() noexcept
-	{
-		first = nullptr;
-		second = 0;
-	}
-	operator bool() const noexcept
-	{
-		return first != nullptr;
-	}
-	operator void*() noexcept
-	{
-		return first;
-	}
-	operator const void*() const noexcept
-	{
-		return first;
-	}
-	void ** operator&() noexcept
-	{
-		return &first;
-	}
-	void * const* operator&() const noexcept
-	{
-		return &first;
+		return *this;
 	}
 };
 
@@ -118,7 +92,7 @@ typedef allocation<void> universal_allocation;
 
 
 /**
- * Casts an allocation to an @ref universal_allocation.
+ * Casts an allocation to the defined type.
  *
  * @since 3.64.127.716
  * @date 7-Apr-18
@@ -126,9 +100,9 @@ typedef allocation<void> universal_allocation;
  * @tparam _Return The wanted type.
  * @tparam _Ty The passed type.
  *
- * @param _allocaiton Defines the allocation.
+ * @param _allocation Defines the allocation.
  *
- * @return The @ref universal_allocation.
+ * @return The cast allocation.
 */
 template<typename _Return, typename _Ty>
 inline allocation<_Return> cast_allocation(allocation<_Ty> _allocation) noexcept
@@ -233,7 +207,7 @@ public:
 	 *
 	 * @return The block size.
 	*/
-	static size_t block_size() noexcept;
+	BIA_EXPORT static size_t block_size() noexcept;
 	/**
 	 * Can be used to expand or shrinken an allocation.
 	 *
