@@ -15,3 +15,4 @@ main
 *.user
 
 *.bll
+Bia/config_cmake.hpp
