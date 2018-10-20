@@ -30,8 +30,8 @@ _context.execute(_code.c_str(), _code.length());
 
 # Language Features
 ## Native types
-- Integrals with a range from -2^32 to 2^32-1
-- 64-Bit floating point numbers
+- Integrals with an arbitrary length (uses [MPIR](http://mpir.org/))
+- Floating point numbers with an arbitrary precision (uses [MPIR](http://mpir.org/))
 - Classic C-style string with C++11 string literal support
 
 ## Variable Declaration
@@ -163,3 +163,6 @@ Bia compiles the script directly to memory before the first run and executes it 
 
 # Supported Platforms
 Currently the MSVC , GNU (>=4.9) and Clang (>=3.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for the ARM architecture is planned.
+
+# License
+Bia is distributed under the BSD-3-Clause.
