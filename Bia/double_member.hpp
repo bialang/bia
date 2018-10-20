@@ -22,7 +22,28 @@ class double_member : public native_variable
 public:
 	typedef utility::share<mpf_t> data_type;
 
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.68.140.790
+	 * @date 20-Oct-18
+	 *
+	 * @param _value The value of the MPIR big float.
+	 *
+	 * @throws See utility::share::share().
+	*/
 	double_member(double _value);
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.68.140.790
+	 * @date 20-Oct-18
+	 *
+	 * @param _value The value of the MPIR big float.
+	 *
+	 * @throws See utility::share::share().
+	*/
 	double_member(mpf_t _value);
 	/**
 	 * Refer-Constructor.
@@ -94,13 +115,24 @@ private:
 	template<typename Type>
 	Type convert() const noexcept
 	{
-		Type _converted = 0;
 		auto & _value = _data.get();
-		auto _needed = std::min<int64_t>((sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS, abs(_value->_mp_size));
+		auto _exponent = _value->_mp_exp;
+
+		if (_exponent <= 0) {
+			return 0;
+		}
+
+		Type _converted = 0;
+		auto _size = abs(_value->_mp_size);
+		auto _needed = std::min<int64_t>({ (sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS, _exponent, _size });
+		auto _ptr = _value->_mp_d + _size - _exponent;
 
 		while (_needed--) {
-			_converted = _converted << GMP_NUMB_BITS | _value->_mp_d[_needed] & GMP_NUMB_MASK;
+			_converted = _converted << GMP_NUMB_BITS | *_ptr++ & GMP_NUMB_MASK;
 		}
+
+		// Remove bit for sign
+		_converted &= ~(Type(1) << sizeof(_converted) * 8 - 1);
 
 		return _value->_mp_size < 0 ? -_converted : _converted;
 	}
