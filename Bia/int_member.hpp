@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mpir/mpir.h>
 #include <cstdint>
 #include <cstdlib>
 #include <algorithm>
@@ -17,10 +16,13 @@ namespace framework
 namespace native
 {
 
+#include <mpir/mpir.h>
+
+
 class int_member : public native_variable
 {
 public:
-	typedef utility::share<mpz_t> data_type;
+	typedef utility::share<__mpz_struct> data_type;
 
 
 	/**
@@ -126,7 +128,7 @@ private:
 	template<typename Type>
 	void set(Type _signed) noexcept
 	{
-		auto & _value = _data.get();
+		auto _value = &_data.get();
 		auto _unsigned = abs(_signed);
 		constexpr auto _needed = (sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
 
@@ -155,7 +157,7 @@ private:
 	Type convert() const noexcept
 	{
 		Type _converted = 0;
-		auto & _value = _data.get();
+		auto _value = &_data.get();
 		auto _needed = std::min<int64_t>((sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS, abs(_value->_mp_size));
 
 		while (_needed--) {

@@ -12,13 +12,16 @@ thread_local double_member::tmp_value double_member::_tmp_value;
 
 double_member::double_member(double _value)
 {
-	mpf_init2(_data.get(), BIA_MIN_FLOAT_PRECISION);
-	mpf_set_d(_data.get(), _value);
+	mpf_init2(&_data.get(), BIA_MIN_FLOAT_PRECISION);
+	mpf_set_d(&_data.get(), _value);
+
+	sizeof(mpf_t);
+	sizeof(__mpf_struct);
 }
 
 double_member::double_member(mpf_t _value)
 {
-	mpf_init_set(_data.get(), _value);
+	mpf_init_set(&_data.get(), _value);
 }
 
 double_member::double_member(const data_type & _data) noexcept : _data(_data)
@@ -28,13 +31,13 @@ double_member::double_member(const data_type & _data) noexcept : _data(_data)
 double_member::~double_member()
 {
 	if (_data.only_owner()) {
-		mpf_clear(_data.get());
+		mpf_clear(&_data.get());
 	}
 }
 
 void double_member::print() const
 {
-	mpf_out_str(stdout, 10, 0, _data.get());
+	mpf_out_str(stdout, 10, 0, &_data.get());
 }
 
 void double_member::copy(member * _destination)
@@ -84,7 +87,7 @@ int double_member::flags() const
 
 int32_t double_member::test() const
 {
-	return static_cast<bool>(_data.get()->_mp_size);
+	return static_cast<bool>(_data.get()._mp_size);
 }
 
 int32_t double_member::test_member(operator_type _operator, member * _right) const
@@ -118,7 +121,7 @@ int64_t double_member::to_int() const
 
 double double_member::to_double() const
 {
-	return mpf_get_d(_data.get());
+	return mpf_get_d(&_data.get());
 }
 
 void * double_member::native_data(native::NATIVE_TYPE _type)
@@ -130,7 +133,7 @@ const void * double_member::const_native_data(native::NATIVE_TYPE _type) const
 {
 	switch (_type) {
 	case NATIVE_TYPE::BOOL:
-		_tmp_value.bool_value = static_cast<bool>(_data.get()->_mp_size);
+		_tmp_value.bool_value = static_cast<bool>(_data.get()._mp_size);
 
 		return &_tmp_value.bool_value;
 	case NATIVE_TYPE::INT_8:
@@ -150,11 +153,11 @@ const void * double_member::const_native_data(native::NATIVE_TYPE _type) const
 
 		return &_tmp_value.int64_value;
 	case NATIVE_TYPE::FLOAT:
-		_tmp_value.float_value = static_cast<float>(mpf_get_d(_data.get()));
+		_tmp_value.float_value = static_cast<float>(mpf_get_d(&_data.get()));
 
 		return &_tmp_value.float_value;
 	case NATIVE_TYPE::DOUBLE:
-		_tmp_value.double_value = mpf_get_d(_data.get());
+		_tmp_value.double_value = mpf_get_d(&_data.get());
 
 		return &_tmp_value.double_value;
 	default:

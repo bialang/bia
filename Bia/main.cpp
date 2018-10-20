@@ -101,28 +101,13 @@ int main()
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		//SetConsoleOutputCP(65001);
-
+		
 		// Script
 		char _script[] = u8R""(
-import time
 
-var _start = time.time_point()
+global i = 65654534453445354453343434463
 
-print time.now()
-
-
-
-hey(3.4,4.5)
-o(43.5)
-var i = printer(399)
-i.hey()
-i.hi()
-printer.hey()
 print i
-
-var _end = time.time_point()
-
-print time.millis(_start, _end)
 
 )"";
 

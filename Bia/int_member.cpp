@@ -12,21 +12,21 @@ thread_local int_member::tmp_value int_member::_tmp_value;
 
 int_member::int_member(int32_t _value)
 {
-	mpz_init2(_data.get(), std::max<int>(BIA_MIN_INT_SIZE, sizeof(_value) * 8));
+	mpz_init2(&_data.get(), std::max<int>(BIA_MIN_INT_SIZE, sizeof(_value) * 8));
 
 	set(_value);
 }
 
 int_member::int_member(int64_t _value)
 {
-	mpz_init2(_data.get(), std::max<int>(BIA_MIN_INT_SIZE, sizeof(_value) * 8));
+	mpz_init2(&_data.get(), std::max<int>(BIA_MIN_INT_SIZE, sizeof(_value) * 8));
 
 	set(_value);
 }
 
 int_member::int_member(mpz_t _value)
 {
-	mpz_init_set(_data.get(), _value);
+	mpz_init_set(&_data.get(), _value);
 }
 
 int_member::int_member(const data_type & _data) noexcept : _data(_data)
@@ -36,13 +36,13 @@ int_member::int_member(const data_type & _data) noexcept : _data(_data)
 int_member::~int_member()
 {
 	if (_data.only_owner()) {
-		mpz_clear(_data.get());
+		mpz_clear(&_data.get());
 	}
 }
 
 void int_member::print() const
 {
-	mpz_out_str(stdout, 10, _data.get());
+	mpz_out_str(stdout, 10, &_data.get());
 	puts("");
 }
 
@@ -93,7 +93,7 @@ int int_member::flags() const
 
 int32_t int_member::test() const
 {
-	return static_cast<bool>(_data.get()->_mp_size);
+	return static_cast<bool>(_data.get()._mp_size);
 }
 
 int32_t int_member::test_member(operator_type _operator, member * _right) const
@@ -128,7 +128,7 @@ int64_t int_member::to_int() const
 
 double int_member::to_double() const
 {
-	return mpz_get_d(_data.get());
+	return mpz_get_d(&_data.get());
 }
 
 void * int_member::native_data(native::NATIVE_TYPE _type)
@@ -140,7 +140,7 @@ const void * int_member::const_native_data(native::NATIVE_TYPE _type) const
 {
 	switch (_type) {
 	case NATIVE_TYPE::BOOL:
-		_tmp_value.bool_value = static_cast<bool>(_data.get()->_mp_size);
+		_tmp_value.bool_value = static_cast<bool>(_data.get()._mp_size);
 
 		return &_tmp_value.bool_value;
 	case NATIVE_TYPE::INT_8:
@@ -160,11 +160,11 @@ const void * int_member::const_native_data(native::NATIVE_TYPE _type) const
 
 		return &_tmp_value.int64_value;
 	case NATIVE_TYPE::FLOAT:
-		_tmp_value.float_value = static_cast<float>(mpz_get_d(_data.get()));
+		_tmp_value.float_value = static_cast<float>(mpz_get_d(&_data.get()));
 
 		return &_tmp_value.float_value;
 	case NATIVE_TYPE::DOUBLE:
-		_tmp_value.double_value = mpz_get_d(_data.get());
+		_tmp_value.double_value = mpz_get_d(&_data.get());
 
 		return &_tmp_value.double_value;
 	default:

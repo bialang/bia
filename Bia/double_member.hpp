@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mpir/mpir.h>
 #include <cstdint>
 #include <cstdlib>
 #include <algorithm>
@@ -17,11 +16,13 @@ namespace framework
 namespace native
 {
 
+#include <mpir/mpir.h>
+
+
 class double_member : public native_variable
 {
 public:
-	typedef utility::share<mpf_t> data_type;
-
+	typedef utility::share<__mpf_struct> data_type;
 
 	/**
 	 * Constructor.
@@ -115,7 +116,7 @@ private:
 	template<typename Type>
 	Type convert() const noexcept
 	{
-		auto & _value = _data.get();
+		auto _value = &_data.get();
 		auto _exponent = _value->_mp_exp;
 
 		if (_exponent <= 0) {

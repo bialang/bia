@@ -1,5 +1,6 @@
 #include "operation.hpp"
-#include "native_member.hpp"
+#include "int_member.hpp"
+#include "double_member.hpp"
 #include "native_operator.hpp"
 #include "native_test_operator.hpp"
 

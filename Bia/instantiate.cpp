@@ -1,5 +1,6 @@
 #include "instantiate.hpp"
-#include "native_member.hpp"
+#include "int_member.hpp"
+#include "double_member.hpp"
 
 
 namespace bia
