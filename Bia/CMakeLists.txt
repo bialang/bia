@@ -51,9 +51,11 @@ set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "member_fun
 
 source_group("Header Files\\framework\\executable" FILES ${Bia_HEADER_FILES_EXECUTABLE})
 
-set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "native_member.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
+set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "double_member.hpp" "native_member.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
+set(Bia_SOURCE_FILES_NATIVE "double_member.cpp")
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
+source_group("Source Files\\framework\\native" FILES ${Bia_SOURCE_FILES_NATIVE})
 
 set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "constructor_chain.hpp" "instance_holder.hpp" "member_map.hpp" "namespace_member.hpp" "object.hpp" "object_variable.hpp" "raw_object.hpp" "template_wrapper.hpp")
 set(Bia_SOURCE_FILES_OBJECT "member_map.cpp" "namespace_member.cpp")
@@ -62,7 +64,7 @@ source_group("Header Files\\framework\\object" FILES ${Bia_HEADER_FILES_OBJECT})
 source_group("Source Files\\framework\\object" FILES ${Bia_SOURCE_FILES_OBJECT})
 
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_FRAMEWORK} ${Bia_HEADER_FILES_EXECUTABLE} ${Bia_HEADER_FILES_NATIVE} ${Bia_HEADER_FILES_OBJECT})
-set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_FRAMEWORK} ${Bia_SOURCE_FILES_OBJECT})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_FRAMEWORK} ${Bia_SOURCE_FILES_NATIVE} ${Bia_SOURCE_FILES_OBJECT})
 
 
 # grammar namespace
