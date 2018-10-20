@@ -90,6 +90,7 @@ template<typename _Class, typename _Return, typename... _Args>
 using varg_member_function_signature = _Return(BIA_VARG_MEMBER_CALLING_CONVENTION _Class::*)(_Args..., ...);
 
 // Universal macros
+#define BIA_MIN_INT_SIZE 64
 #define BIA_MIN_FLOAT_PRECISION 64
 #define BIA_MAX_KEYWORD_LENGTH 16
 #define BIA_MAX_OPERATOR_LENGTH 4
