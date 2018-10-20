@@ -22,8 +22,39 @@ class int_member : public native_variable
 public:
 	typedef utility::share<mpz_t> data_type;
 
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.68.140.790
+	 * @date 20-Oct-18
+	 *
+	 * @param _value The value of the MPIR big integer.
+	 *
+	 * @throws See utility::share::share().
+	*/
 	int_member(int32_t _value);
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.68.140.790
+	 * @date 20-Oct-18
+	 *
+	 * @param _value The value of the MPIR big integer.
+	 *
+	 * @throws See utility::share::share().
+	*/
 	int_member(int64_t _value);
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.68.140.790
+	 * @date 20-Oct-18
+	 *
+	 * @param _value The value of the MPIR big integer.
+	 *
+	 * @throws See utility::share::share().
+	*/
 	int_member(mpz_t _value);
 	/**
 	 * Refer-Constructor.

@@ -8,6 +8,8 @@ namespace framework
 namespace native
 {
 
+thread_local int_member::tmp_value int_member::_tmp_value;
+
 int_member::int_member(int32_t _value)
 {
 	mpz_init2(_data.get(), std::max<int>(BIA_MIN_INT_SIZE, sizeof(_value) * 8));
@@ -57,6 +59,61 @@ void int_member::refer(member * _destination)
 void int_member::clone(member * _destination)
 {
 	copy(_destination);
+}
+
+void int_member::operator_call(member * _destination, operator_type _operator, const member * _right)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+void int_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+void int_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+void int_member::operator_call_double(member * _destination, operator_type _operator, double _right)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+void int_member::object_member(member * _destination, machine::string_manager::name_type _name)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+int int_member::flags() const
+{
+	return 0;
+}
+
+int32_t int_member::test() const
+{
+	return static_cast<bool>(_data.get()->_mp_size);
+}
+
+int32_t int_member::test_member(operator_type _operator, member * _right) const
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+int32_t int_member::test_int32(operator_type _operator, int32_t _right) const
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+int32_t int_member::test_int64(operator_type _operator, int64_t _right) const
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+int32_t int_member::test_double(operator_type _operator, double _right) const
+{
+	BIA_NOT_IMPLEMENTED;
 }
 
 int64_t int_member::to_int() const
@@ -115,11 +172,6 @@ const void * int_member::const_native_data(native::NATIVE_TYPE _type) const
 	}
 
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-int32_t int_member::test() const
-{
-	return static_cast<bool>(_data.get()->_mp_size);
 }
 
 }
