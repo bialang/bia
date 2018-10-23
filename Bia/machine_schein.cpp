@@ -16,9 +16,9 @@ machine_schein::~machine_schein()
 	delete_all_allocations();
 }
 
-void machine_schein::register_allocation(memory::universal_allocation _allocation)
+void machine_schein::register_allocation(memory::universal_allocation _allocation, deleter_function_signature _deleter)
 {
-	_allocated.push_back(_allocation);
+	_allocated.push_back({ _allocation, _deleter });
 }
 
 void machine_schein::delete_all_allocations()
@@ -27,8 +27,12 @@ void machine_schein::delete_all_allocations()
 		auto _allocation = *i;
 
 		i = _allocated.erase(i);
-		
-		_allocator->deallocate(*i);
+
+		if (i->second) {
+			i->second(i->first);
+		}
+
+		_allocator->deallocate(i->first);
 	}
 }
 

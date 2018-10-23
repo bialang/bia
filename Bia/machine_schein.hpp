@@ -21,6 +21,8 @@ namespace machine
 class machine_schein
 {
 public:
+	typedef void(*deleter_function_signature)(memory::universal_allocation);
+
 	/**
 	 * Constructor.
 	 *
@@ -51,10 +53,11 @@ public:
 	 * @date 7-Apr-18
 	 *
 	 * @param _allocation Defines the allocation.
+	 * @param _deleter (Optional) The deleter function.
 	 *
 	 * @throws See std::vector::push_back().
 	*/
-	BIA_EXPORT void register_allocation(memory::universal_allocation _allocation);
+	BIA_EXPORT void register_allocation(memory::universal_allocation _allocation, deleter_function_signature _deleter = nullptr);
 	/**
 	 * Deletes all registered allocations.
 	 *
@@ -101,8 +104,8 @@ private:
 	memory::allocator * _allocator;
 	/** The memory allocator for executable memory. */
 	memory::executable_allocator * _executable_allocator;
-	/** Stores all the registered allocations. */
-	std::vector<memory::universal_allocation> _allocated;
+	/** Stores all registered allocations with deleter. */
+	std::vector<std::pair<memory::universal_allocation, deleter_function_signature>> _allocated;
 };
 
 }
