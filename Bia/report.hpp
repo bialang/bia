@@ -14,6 +14,9 @@ namespace bia
 namespace grammar
 {
 
+#include <mpir/mpir.h>
+
+
 /**
  * @brief A report from the interpreter.
  *
@@ -35,7 +38,9 @@ struct report
 	{
 		STRING,
 		INT_VALUE,
+		BIG_INT_VALUE,
 		DOUBLE_VALUE,
+		BIG_DOUBLE_VALUE,
 		MEMBER,
 		OPERATOR_CODE,
 		KEYWORD,
@@ -60,14 +65,15 @@ struct report
 	{
 		int8_t * string;
 		int64_t int_value;
+		__mpz_struct * big_int_value;
 		double double_value;
+		__mpf_struct * big_float_value;
 		const report *  end;
 		const char * member;
 		framework::operator_type operator_code;
 		INTERPRETER_STRING keyword;
 	} content;
-
-
+	
 	/*void serialize(stream::output_stream & _output)
 	{
 		_output.write_all<uint32_t, uint32_t>(static_cast<uint32_t>(type) << custom_bits | custom_parameter, rule_id << token_bits | token_id);
