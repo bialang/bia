@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['dont_5freport',['DONT_REPORT',['../namespacebia_1_1grammar.html#a1577ccd5118cec05e6127a749afd598fa25b2d4abdcaf3e91eb13a015d1962456',1,'bia::grammar']]],
-  ['dont_5freport_5fand_5floop',['DONT_REPORT_AND_LOOP',['../namespacebia_1_1grammar.html#a1577ccd5118cec05e6127a749afd598faf0939b49e4fdb6c4f9d9590b065c537b',1,'bia::grammar']]],
-  ['double',['DOUBLE',['../classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5afd3e4ece78a7d422280d5ed379482229',1,'bia::compiler::compiler_value::DOUBLE()'],['../namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8dafd3e4ece78a7d422280d5ed379482229',1,'bia::framework::native::DOUBLE()']]],
-  ['double_5fvalue',['DOUBLE_VALUE',['../structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831abb40dd0bceb01de2c068fa18c2c033e3',1,'bia::grammar::report']]]
+  ['const_5fstring',['CONST_STRING',['../namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8dafbc7123d5a9f44f025162e3869e024f6',1,'bia::framework::native']]],
+  ['custom',['CUSTOM',['../namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8da72baef04098f035e8a320b03ad197818',1,'bia::framework::native']]]
 ];

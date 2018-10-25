@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['key_5ftype',['key_type',['../classbia_1_1machine_1_1variable__index.html#af3959025674f70db8e466e4438cb6984',1,'bia::machine::variable_index']]],
   ['keyword',['keyword',['../structbia_1_1grammar_1_1report.html#aa019a417aaf7e4329146962eca3e7df7',1,'bia::grammar::report::keyword()'],['../classbia_1_1grammar_1_1interpreter__token.html#a225f26ba16902677d875da7271714ea6',1,'bia::grammar::interpreter_token::keyword()'],['../structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a780bc0722dd01d4a8d9869f060734be6',1,'bia::grammar::report::KEYWORD()']]],
   ['keyword_5fas',['keyword_as',['../structbia_1_1grammar_1_1keyword__as.html',1,'bia::grammar']]],
   ['keyword_5fcopyof',['keyword_copyof',['../structbia_1_1grammar_1_1keyword__copyof.html',1,'bia::grammar']]],

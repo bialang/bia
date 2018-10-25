@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['empty_5fchild',['EMPTY_CHILD',['../structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831aca829841d8ea8c90855413d2838fc411',1,'bia::grammar::report']]],
-  ['end',['END',['../structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831ab1a326c06d88bf042f73d70f50197905',1,'bia::grammar::report']]],
-  ['error',['ERROR',['../namespacebia_1_1grammar.html#a1577ccd5118cec05e6127a749afd598fabb1ca97ec761fc37101737ba0aa2e7c5',1,'bia::grammar']]]
+  ['dont_5freport',['DONT_REPORT',['../namespacebia_1_1grammar.html#a1577ccd5118cec05e6127a749afd598fa25b2d4abdcaf3e91eb13a015d1962456',1,'bia::grammar']]],
+  ['dont_5freport_5fand_5floop',['DONT_REPORT_AND_LOOP',['../namespacebia_1_1grammar.html#a1577ccd5118cec05e6127a749afd598faf0939b49e4fdb6c4f9d9590b065c537b',1,'bia::grammar']]],
+  ['double',['DOUBLE',['../classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5afd3e4ece78a7d422280d5ed379482229',1,'bia::compiler::compiler_value::DOUBLE()'],['../namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8dafd3e4ece78a7d422280d5ed379482229',1,'bia::framework::native::DOUBLE()']]],
+  ['double_5fvalue',['DOUBLE_VALUE',['../structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831abb40dd0bceb01de2c068fa18c2c033e3',1,'bia::grammar::report']]]
 ];

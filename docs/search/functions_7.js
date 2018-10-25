@@ -1,6 +1,28 @@
 var searchData=
 [
-  ['has_5fnext',['has_next',['../classbia_1_1encoding_1_1utf.html#a8db53d53ef67a2093bd969bd1f829f80',1,'bia::encoding::utf::has_next()'],['../classbia_1_1encoding_1_1utf8.html#aa4f3359835b0928a0a428dc77b68eedd',1,'bia::encoding::utf8::has_next()']]],
+  ['handle_5fcondition_5fexpression',['handle_condition_expression',['../classbia_1_1compiler_1_1compiler.html#a41aadc30be6fa94f0d9983a17677f471',1,'bia::compiler::compiler']]],
+  ['handle_5fidentifier',['handle_identifier',['../classbia_1_1compiler_1_1compiler.html#a678a7d3d747dc8b704806b7169131229',1,'bia::compiler::compiler']]],
+  ['handle_5fif',['handle_if',['../classbia_1_1compiler_1_1compiler.html#a3dd1491665c17bcbf8ab3cad881777e1',1,'bia::compiler::compiler']]],
+  ['handle_5fimport',['handle_import',['../classbia_1_1compiler_1_1compiler.html#ae48babb1a7c40d75a9115a0147cc9a44',1,'bia::compiler::compiler']]],
+  ['handle_5fmath_5fexpression_5fand_5fterm',['handle_math_expression_and_term',['../classbia_1_1compiler_1_1compiler.html#afb04524c9485fe44c7a8dbd0eb1497de',1,'bia::compiler::compiler']]],
+  ['handle_5fmath_5fexpression_5fand_5fterm_5finner',['handle_math_expression_and_term_inner',['../classbia_1_1compiler_1_1compiler.html#aee0e712961ca144acd2d59787db392c8',1,'bia::compiler::compiler']]],
+  ['handle_5fmath_5ffactor',['handle_math_factor',['../classbia_1_1compiler_1_1compiler.html#a72637dd90526af901407804041ce3b66',1,'bia::compiler::compiler']]],
+  ['handle_5fmember',['handle_member',['../classbia_1_1compiler_1_1compiler.html#a5d9068b682f3e394e1e81e6d9d7284fd',1,'bia::compiler::compiler']]],
+  ['handle_5fnumber',['handle_number',['../classbia_1_1compiler_1_1compiler.html#a2c9bc47463ca093499bf27cbd2f812f1',1,'bia::compiler::compiler']]],
+  ['handle_5fparameter',['handle_parameter',['../classbia_1_1compiler_1_1compiler.html#a9608014449731d09dcd559bf8978d6e9',1,'bia::compiler::compiler']]],
+  ['handle_5fparameter_5fexecute',['handle_parameter_execute',['../classbia_1_1compiler_1_1compiler.html#aeb9d0eb255b8302dbddca45b242f9c54',1,'bia::compiler::compiler']]],
+  ['handle_5fparameter_5fitem',['handle_parameter_item',['../classbia_1_1compiler_1_1compiler.html#ad953a442ad4ec239e378530ba4a1d382',1,'bia::compiler::compiler']]],
+  ['handle_5fprint',['handle_print',['../classbia_1_1compiler_1_1compiler.html#a0920610b0d9eee8aa0cfda6b15bf46f6',1,'bia::compiler::compiler']]],
+  ['handle_5fraw_5fvalue',['handle_raw_value',['../classbia_1_1compiler_1_1compiler.html#a21591f57c7c2fcd1d5481428fbcb45fc',1,'bia::compiler::compiler']]],
+  ['handle_5froot',['handle_root',['../classbia_1_1compiler_1_1compiler.html#a71e4951a68294f240aed5f82940a467a',1,'bia::compiler::compiler']]],
+  ['handle_5froot_5fignore',['handle_root_ignore',['../classbia_1_1compiler_1_1compiler.html#ade4bff7c42db435da27544be9aa3242e',1,'bia::compiler::compiler']]],
+  ['handle_5fstring',['handle_string',['../classbia_1_1compiler_1_1compiler.html#a43360952bc4f770b0eb41669ed5eed95',1,'bia::compiler::compiler']]],
+  ['handle_5ftest_5floop',['handle_test_loop',['../classbia_1_1compiler_1_1compiler.html#adcb6585a41650851ced5ba8d6863339f',1,'bia::compiler::compiler']]],
+  ['handle_5fvalue',['handle_value',['../classbia_1_1compiler_1_1compiler.html#a5ad611da6abafbf00f7b09b342935416',1,'bia::compiler::compiler']]],
+  ['handle_5fvalue_5fexpression',['handle_value_expression',['../classbia_1_1compiler_1_1compiler.html#aea6c247253891ce62d5b151f5085d6db',1,'bia::compiler::compiler']]],
+  ['handle_5fvalue_5finsecure',['handle_value_insecure',['../classbia_1_1compiler_1_1compiler.html#a30b6ef9b0394036ad8738303e0e1cc6d',1,'bia::compiler::compiler']]],
+  ['handle_5fvariable_5fdeclaration',['handle_variable_declaration',['../classbia_1_1compiler_1_1compiler.html#a5818a1dc06b00f7f23e36c06e2ecbe26',1,'bia::compiler::compiler']]],
+  ['has_5fnext',['has_next',['../classbia_1_1encoding_1_1ascii.html#aebabf845f6913c3ca47aa1628cf2eabb',1,'bia::encoding::ascii::has_next()'],['../classbia_1_1encoding_1_1encoder.html#a0418f428ba3f99b520446b4ae02cc484',1,'bia::encoding::encoder::has_next()'],['../classbia_1_1encoding_1_1utf8.html#a04b88b868f9b3d62206358056313dd4f',1,'bia::encoding::utf8::has_next()']]],
   ['hash',['hash',['../classbia_1_1utility_1_1hasher_3_01uint32__t_01_4.html#ad96926c5b54a270f993193b88bf97198',1,'bia::utility::hasher&lt; uint32_t &gt;::hash()'],['../classbia_1_1utility_1_1hasher_3_01uint64__t_01_4.html#a2f32c92380b32aa0dd02fb4b18704fa1',1,'bia::utility::hasher&lt; uint64_t &gt;::hash()']]],
-  ['hex_5fvalue',['hex_value',['../classbia_1_1encoding_1_1utf.html#a2045c81bc9e7994937947654570b189f',1,'bia::encoding::utf']]]
+  ['hex_5fvalue',['hex_value',['../classbia_1_1encoding_1_1encoder.html#a68486dd52f8c6cc9ea806e88dea67004',1,'bia::encoding::encoder']]]
 ];

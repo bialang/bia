@@ -1,10 +1,13 @@
 var searchData=
 [
+  ['object',['object',['../classbia_1_1framework_1_1object_1_1object.html',1,'bia::framework::object']]],
+  ['object_5fvariable',['object_variable',['../classbia_1_1framework_1_1object_1_1object__variable.html',1,'bia::framework::object']]],
   ['operation_5fchooser',['operation_chooser',['../structbia_1_1framework_1_1native_1_1operation__chooser.html',1,'bia::framework::native']]],
-  ['operation_5fchooser_3c_20_5fty_2c_20_5fallow_5fassign_2c_20false_20_3e',['operation_chooser&lt; _Ty, _Allow_assign, false &gt;',['../structbia_1_1framework_1_1native_1_1operation__chooser_3_01___ty_00_01___allow__assign_00_01false_01_4.html',1,'bia::framework::native']]],
-  ['operation_5fchooser_3c_20_5fty_2c_20false_2c_20true_20_3e',['operation_chooser&lt; _Ty, false, true &gt;',['../structbia_1_1framework_1_1native_1_1operation__chooser_3_01___ty_00_01false_00_01true_01_4.html',1,'bia::framework::native']]],
+  ['operation_5fchooser_3c_20type_2c_20false_20_3e',['operation_chooser&lt; Type, false &gt;',['../structbia_1_1framework_1_1native_1_1operation__chooser_3_01_type_00_01false_01_4.html',1,'bia::framework::native']]],
+  ['operation_5fchooser_3c_20type_2c_20true_20_3e',['operation_chooser&lt; Type, true &gt;',['../structbia_1_1framework_1_1native_1_1operation__chooser_3_01_type_00_01true_01_4.html',1,'bia::framework::native']]],
   ['operation_5ftype_5fchooser',['operation_type_chooser',['../structbia_1_1framework_1_1native_1_1operation__type__chooser.html',1,'bia::framework::native']]],
   ['operation_5ftype_5fchooser_3c_20false_20_3e',['operation_type_chooser&lt; false &gt;',['../structbia_1_1framework_1_1native_1_1operation__type__chooser_3_01false_01_4.html',1,'bia::framework::native']]],
+  ['operation_5ftype_5fchooser_3c_20true_20_3e',['operation_type_chooser&lt; true &gt;',['../structbia_1_1framework_1_1native_1_1operation__type__chooser_3_01true_01_4.html',1,'bia::framework::native']]],
   ['operator_5farrow',['operator_arrow',['../structbia_1_1grammar_1_1operator__arrow.html',1,'bia::grammar']]],
   ['operator_5fassign',['operator_assign',['../structbia_1_1grammar_1_1operator__assign.html',1,'bia::grammar']]],
   ['operator_5fbracket_5fclose',['operator_bracket_close',['../structbia_1_1grammar_1_1operator__bracket__close.html',1,'bia::grammar']]],

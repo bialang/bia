@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['size_5ftype',['size_type',['../classbia_1_1machine_1_1memory_1_1allocator.html#acf36624126755c24d7eb5a028879836a',1,'bia::machine::memory::allocator::size_type()'],['../classbia_1_1machine_1_1memory_1_1stl__allocator__wrapper.html#a8d1045cf9aa50ad480916aa731f384d5',1,'bia::machine::memory::stl_allocator_wrapper::size_type()']]]
+  ['length_5ftype',['length_type',['../classbia_1_1framework_1_1native_1_1cstring__member.html#ab4d55b3b2cf8e395136e6577628ff973',1,'bia::framework::native::cstring_member::length_type()'],['../classbia_1_1stream_1_1string__stream.html#a877e3f8a9fc56c178cc5ab701df5c43c',1,'bia::stream::string_stream::length_type()']]]
 ];
