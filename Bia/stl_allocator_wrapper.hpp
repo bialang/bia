@@ -29,17 +29,26 @@ class stl_allocator_wrapper
 public:
 	/** The value type of this allocator. */
 	typedef Type value_type;
-	/** The type of the allocated pointers. */
+	/** The type of the allocated pointer. */
 	typedef Type* pointer;
+	/** The type of the allocated pointer as const. */
 	typedef const Type* const_pointer;
+	/** The reference type of the allocated object. */
 	typedef Type& reference;
+	/** The const reference type of the allocated object. */
 	typedef const Type& const_reference;
 	/** The type of the size of the pointers. */
 	typedef memory::size_type size_type;
+	/**
+	 * @brief Rebinds the stl_allocator_wrapper to a new type.
+	 *
+	 * @tparam Ty The new type.
+	*/
 	template<typename Ty>
 	struct rebind
 	{
-  	typedef stl_allocator_wrapper<Ty> other;
+		/** The stl_allocator_wrapper with the new type. */
+		typedef stl_allocator_wrapper<Ty> other;
 	};
 
 	/**
