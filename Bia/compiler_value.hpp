@@ -26,7 +26,9 @@ class compiler_value
 public:
 	enum class VALUE_TYPE
 	{
+		/** The native 64 Bit signed integer type. */
 		INT,
+		/** The native 64 Bit floating point type. */
 		DOUBLE,
 		/** ASCII or UTF-8 encoded string. */
 		STRING,
@@ -36,12 +38,15 @@ public:
 		STRING32,
 		/** A wchar_t string. */
 		WSTRING,
+		/** A member address. */
 		MEMBER,
+		/** An index of a temp member. */
 		TEMPORARY_MEMBER,
 		/** Defines that the test value is stored in the test register. */
 		TEST_VALUE_REGISTER,
 		/** Defines that the test value is known at compile time. */
 		TEST_VALUE_CONSTANT,
+		/** No value. */
 		NONE,
 	};
 
