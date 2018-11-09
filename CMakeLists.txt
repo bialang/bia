@@ -17,6 +17,11 @@ endif()
 # Project
 set(BIA_BUILD_SHARED ON CACHE BOOL "Build shared library")
 
+# Dependencies
+find_path(MPIR_INCLUDE "mpir/mpir.h")
+find_library(MPIR_LIB mpir)
+install(FILES ${MPIR_INCLUDE} DESTINATION "include/Bia")
+
 if(BIA_BUILD_SHARED)
   add_definitions(-DBIA_BUILDING)
 endif(BIA_BUILD_SHARED)
