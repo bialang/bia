@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mpir/mpir.h>
 #include <cstdint>
 #include <cstdlib>
 #include <algorithm>
@@ -17,14 +18,11 @@ namespace framework
 namespace native
 {
 
-#include <mpir/mpir.h>
-
-
 class double_member : public native_variable
 {
 public:
 	/** The struct holding all arithmetic data. */
-	typedef typename std::decay<mpf_t>::type double_type;
+	typedef typename std::remove_all_extents<mpf_t>::type double_type;
 	typedef utility::share<double_type> data_type;
 
 	/**

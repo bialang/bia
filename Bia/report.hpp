@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mpir/mpir.h>
 #include <cstdint>
 #include <type_traits>
 
@@ -13,9 +14,6 @@ namespace bia
 {
 namespace grammar
 {
-
-#include <mpir/mpir.h>
-
 
 /**
  * @brief A report from the interpreter.
