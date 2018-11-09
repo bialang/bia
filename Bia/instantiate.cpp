@@ -20,6 +20,11 @@ void BIA_STATIC_CALLING_CONVETION instantiate_int64(framework::member *_destinat
 	_destination->replace_this<framework::native::int_member>(_value);
 }
 
+void BIA_STATIC_CALLING_CONVETION instantiate_big_int(framework::member * _destination, framework::native::int_member::int_type * _value)
+{
+	_destination->replace_this<framework::native::int_member>(_value);
+}
+
 void BIA_STATIC_CALLING_CONVETION instantiate_int_0(framework::member *_destination)
 {
 	_destination->replace_this<framework::native::int_member>(0);
@@ -36,6 +41,11 @@ void BIA_STATIC_CALLING_CONVETION instantiate_int_n1(framework::member *_destina
 }
 
 void BIA_STATIC_CALLING_CONVETION instantiate_double(framework::member *_destination, double _value)
+{
+	_destination->replace_this<framework::native::double_member>(_value);
+}
+
+void BIA_STATIC_CALLING_CONVETION instantiate_big_double(framework::member * _destination, framework::native::double_member::double_type * _value)
 {
 	_destination->replace_this<framework::native::double_member>(_value);
 }

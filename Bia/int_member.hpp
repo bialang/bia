@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <algorithm>
+#include <type_traits>
 
 #include "config.hpp"
 #include "native_variable.hpp"
@@ -22,7 +23,9 @@ namespace native
 class int_member : public native_variable
 {
 public:
-	typedef utility::share<__mpz_struct> data_type;
+	/** The struct holding all arithmetic data. */
+	typedef typename std::decay<mpz_t>::type int_type;
+	typedef utility::share<int_type> data_type;
 
 
 	/**
