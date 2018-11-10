@@ -13,6 +13,14 @@ namespace bia
 namespace utility
 {
 
+/**
+ * @brief Holds one object of different type.
+ *
+ * Holds up to one object of the specified types in @a Types. The object is stored in local memory.
+ *
+ * @tparam Default The default return type.
+ * @tparam Types The valid types.
+*/
 template<typename Default, typename... Types>
 class virtual_object
 {
