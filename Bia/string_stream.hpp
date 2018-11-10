@@ -6,6 +6,7 @@
 #include "encoder.hpp"
 #include "ascii.hpp"
 #include "utf8.hpp"
+#include "virtual_object.hpp"
 
 
 namespace bia
@@ -66,11 +67,10 @@ public:
 	 * @date 3-Aug-18
 	 *
 	 * @throws See machine::memory::allocator::destroy().
+	 * @throws See utility::virtual_object::~virtual_object().
 	*/
 	~string_stream()
 	{
-		_allocator->destroy(_encoder);
-
 		// Deallocate buffer
 		if (_buffer) {
 			_allocator->deallocate(_buffer);
@@ -84,19 +84,17 @@ public:
 	 *
 	 * @param _codec One of the supported string encodings.
 	 *
-	 * @throws See machine::memory::allocator::destroy() and machine::memory::allocator::construct().
+	 * @throws See utility::virtual_object::reinit().
 	*/
 	void set_codec(CODEC _codec)
 	{
-		_allocator->destroy(_encoder);
-
 		switch (_codec) {
 		case CODEC::ASCII:
-			_encoder = _allocator->construct<encoding::encoder, encoding::ascii>();
+			_encoder.template reconstruct<encoding::ascii>();
 
 			break;
 		case CODEC::UTF8:
-			_encoder = _allocator->construct<encoding::encoder, encoding::utf8>();
+			_encoder.template reconstruct<encoding::utf8>();
 
 			break;
 		case CODEC::UTF16:
@@ -114,12 +112,14 @@ public:
 	 * @param _code_point The character.
 	 *
 	 * @throws See machine::memory::allocator::reallocate().
+	 * @throws See encoding::encoder::append().
 	*/
 	void append(encoding::code_point _code_point)
 	{
 		while (true) {
 			try {
 				_encoder->append(_code_point, _cursor, _end);
+
 				++_length;
 
 				break;
@@ -231,7 +231,7 @@ public:
 	}
 	/**
 	 * Returns the size of the buffer.
-
+	 *
 	 * @remarks The @a _buffer must be from buffer(), otherwise the behavior is undefined.
 	 *
 	 * @since 3.66.135.743
@@ -245,7 +245,7 @@ public:
 	}
 	/**
 	 * Returns the length of the string.
-
+	 *
 	 * @remarks The @a _buffer must be from buffer(), otherwise the behavior is undefined.
 	 *
 	 * @since 3.66.135.743
@@ -259,27 +259,29 @@ public:
 	}
 	/**
 	 * Returns the string.
-
+	 *
 	 * @remarks The @a _buffer must be from buffer(), otherwise the behavior is undefined.
 	 *
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
 	 *
+	 * @tparam Char_type The desired char type.
+	 *
 	 * @return The string.
 	*/
-	template<typename _Char>
-	static const _Char * string(const int8_t * _buffer) noexcept
+	template<typename Char_type>
+	static const Char_type * string(const int8_t * _buffer) noexcept
 	{
-		return reinterpret_cast<const _Char*>(_buffer + offset());
+		return reinterpret_cast<const Char_type*>(_buffer + offset());
 	}
 
 private:
 	/** The memory allocator. */
 	machine::memory::allocator * _allocator;
-	/** The string encoder. */
-	machine::memory::allocation<encoding::encoder> _encoder;
 	/** The allocated space. */
 	machine::memory::universal_allocation _buffer;
+	/** The string encoder. */
+	utility::virtual_object<encoding::encoder, encoding::ascii, encoding::utf8> _encoder;
 	/** The current position. */
 	int8_t * _cursor;
 	/** The end of the buffer. */
