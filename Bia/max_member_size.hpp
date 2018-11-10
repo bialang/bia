@@ -1,7 +1,6 @@
 #pragma once
 
-#include <type_traits>
-
+#include "max.hpp"
 #include "int_member.hpp"
 #include "double_member.hpp"
 #include "cstring_member.hpp"
@@ -18,18 +17,6 @@ namespace bia
 {
 namespace framework
 {
-
-template<typename Type>
-inline constexpr Type max(Type _first, Type _second)
-{
-	return _first > _second ? _first : _second;
-}
-
-template<typename Type, typename... Arguments>
-inline constexpr typename std::enable_if<(sizeof...(Arguments) > 1), Type>::type max(Type _first, Arguments... _arguments)
-{
-	return _first > max(_arguments...) ? _first : max(_arguments...);
-}
 
 constexpr auto max_member_size = max(
 	sizeof(native::int_member),
