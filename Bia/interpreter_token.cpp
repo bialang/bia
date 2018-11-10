@@ -398,10 +398,13 @@ gt_end:;
 	_input.skip(_buffer.first);
 	_string.finish();
 
-	// Get buffer and register
+	// Transfer ownership
+	machine::memory::universal_allocation _string_buffer(std::move(_string.buffer()));
+
+	// Register the buffer
 	_output.type = report::TYPE::STRING;
-	_output.content.string = _string.buffer();
-	_params.context->string_manager().register_string(_output.content.string);
+	_output.content.string = _string_buffer;
+	_params.context->string_manager().register_string(_string_buffer);
 
 	return success;
 }

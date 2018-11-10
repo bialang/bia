@@ -39,7 +39,7 @@ string_manager::~string_manager() noexcept
 	}
 }
 
-void string_manager::register_string(int8_t * _resource)
+void string_manager::register_string(void * _resource)
 {
 	_string_resources.push_back(_resource);
 }

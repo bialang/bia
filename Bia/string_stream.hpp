@@ -84,7 +84,7 @@ public:
 	 *
 	 * @param _codec One of the supported string encodings.
 	 *
-	 * @throws See utility::virtual_object::reinit().
+	 * @throws See utility::virtual_object::reconstruct().
 	*/
 	void set_codec(CODEC _codec)
 	{
@@ -176,22 +176,18 @@ public:
 		return _length;
 	}
 	/**
-	 * Returns the formatted string.
+	 * Returns the formatted string buffer.
 	 *
-	 * @remarks This function can only be called once and if finish() was not called, the behavior is undefined. The string must be deallocated with same @ref machine::memory::allocator. The string is formatted as follows: (size) + (length) + (zero-terminated string)
+	 * @remarks If the buffer is moved, ownership of the buffer will be transfered and the string buffer will be cleared. This string stream should not be used after a buffer ownership transfer. The string is formatted as follows: (size) + (length) + (zero-terminated string)
 	 *
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
 	 *
-	 * @return The formatted string.
+	 * @return The formatted string buffer.
 	*/
-	int8_t * buffer() noexcept
+	machine::memory::universal_allocation & buffer() noexcept
 	{
-		auto _string = static_cast<int8_t*>(_buffer.first);
-
-		_buffer.clear();
-
-		return _string;
+		return _buffer;
 	}
 	/**
 	 * The total offset until the start of the string.
@@ -237,11 +233,13 @@ public:
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
 	 *
+	 * @param _buffer The buffer retrieved by buffer().
+	 *
 	 * @return The size.
 	*/
-	static size_type size(const int8_t * _buffer) noexcept
+	static size_type size(const void * _buffer) noexcept
 	{
-		return *reinterpret_cast<const size_type*>(_buffer + size_offset());
+		return *reinterpret_cast<const size_type*>(static_cast<const int8_t*>(_buffer) + size_offset());
 	}
 	/**
 	 * Returns the length of the string.
@@ -251,11 +249,13 @@ public:
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
 	 *
+	 * @param _buffer The buffer retrieved by buffer().
+	 *
 	 * @return The length.
 	*/
-	static length_type length(const int8_t * _buffer) noexcept
+	static length_type length(const void * _buffer) noexcept
 	{
-		return *reinterpret_cast<const length_type*>(_buffer + length_offset());
+		return *reinterpret_cast<const length_type*>(static_cast<const int8_t*>(_buffer) + length_offset());
 	}
 	/**
 	 * Returns the string.
@@ -267,12 +267,14 @@ public:
 	 *
 	 * @tparam Char_type The desired char type.
 	 *
+	 * @param _buffer The buffer retrieved by buffer().
+	 *
 	 * @return The string.
 	*/
 	template<typename Char_type>
-	static const Char_type * string(const int8_t * _buffer) noexcept
+	static const Char_type * string(const void * _buffer) noexcept
 	{
-		return reinterpret_cast<const Char_type*>(_buffer + offset());
+		return reinterpret_cast<const Char_type*>(static_cast<const int8_t*>(_buffer) + offset());
 	}
 
 private:

@@ -61,11 +61,12 @@ struct report
 	uint32_t token_id : token_bits;
 	union
 	{
-		int8_t * string;
+		/** A string buffer with a specific format. See @ref stream::string_stream for more information. */
+		void * string;
 		int64_t int_value;
-		__mpz_struct * big_int_value;
+		typename std::remove_extent<mpz_t>::type * big_int_value;
 		double double_value;
-		__mpf_struct * big_float_value;
+		typename std::remove_extent<mpf_t>::type * * big_float_value;
 		const report *  end;
 		const char * member;
 		framework::operator_type operator_code;
