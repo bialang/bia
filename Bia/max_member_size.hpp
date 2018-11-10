@@ -18,7 +18,7 @@ namespace bia
 namespace framework
 {
 
-constexpr auto max_member_size = max(
+constexpr auto max_member_size = utility::max(
 	sizeof(native::int_member),
 	sizeof(native::double_member),
 	sizeof(native::cstring_member<char>),
