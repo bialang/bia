@@ -406,6 +406,21 @@ public:
 
 private:
 	/**
+	 * Parses the sign before a number.
+	 *
+	 * @since 3.68.140.790
+	 * @date 10-Nov-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param [in] _encoder The encoder.
+	 *
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
+	 *
+	 * @return true if the sign is negative, otherwise false.
+	*/
+	BIA_EXPORT static bool parse_sign(stream::input_stream & _input, encoding::encoder * _encoder);
+	/**
 	 * Matches integral values with a base up to 16.
 	 *
 	 * @remarks The parameters are not checked.

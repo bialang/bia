@@ -746,6 +746,35 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 	return success;
 }
 
+bool interpreter_token::parse_sign(stream::input_stream & _input, encoding::encoder * _encoder)
+{
+	auto _negative = false;
+
+	// As long as input is available
+	while (_input.available() > 0) {
+		auto _buffer = _input.buffer();
+
+		while (_buffer.first < _buffer.second) {
+			auto _tmp = _buffer.second;
+
+			switch (_encoder->next(_buffer.first, _buffer.second)) {
+			case '-':
+				_negative = !_negative;
+			case '+':
+				break;
+			default:
+				_input.skip(_tmp);
+
+				return _negative;
+			}
+		}
+
+		_input.skip(_buffer.second);
+	}
+
+	return _negative;
+}
+
 std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base)
 {
 	const auto _begin = _buffer.first;
