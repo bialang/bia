@@ -45,13 +45,11 @@ void * mpir_allocator::allocate(size_t _size)
 void * mpir_allocator::reallocate(void * _buffer, size_t _old_size, size_t _new_size)
 {
 	// Memory is preallocated from int_type / double_type
-	if (_old_size == 2) {
+	if (_old_size == sizeof(*int_type::_mp_d) * 2) {
 		// Copy buffer
 		auto _new = _allocator->allocate(_new_size);
 
 		memcpy(_new, _buffer, _old_size);
-
-		_allocator->deallocate({ _buffer, _old_size });
 
 		return _new;
 	}
