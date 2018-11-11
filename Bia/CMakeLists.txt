@@ -91,8 +91,8 @@ set(Bia_SOURCE_FILES_LINK "instantiate.cpp" "operation.cpp")
 source_group("Header Files\\machine\\link" FILES ${Bia_HEADER_FILES_LINK})
 source_group("Source Files\\machine\\link" FILES ${Bia_SOURCE_FILES_LINK})
 
-set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "executable_allocator.hpp" "simple_allocator.hpp" "simple_executable_allocator.hpp" "stl_allocator_wrapper.hpp")
-set(Bia_SOURCE_FILES_MEMORY "allocator.cpp" "simple_allocator.cpp" "simple_executable_allocator.cpp")
+set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "executable_allocator.hpp" "mpir_allocator.hpp" "simple_allocator.hpp" "simple_executable_allocator.hpp" "stl_allocator_wrapper.hpp")
+set(Bia_SOURCE_FILES_MEMORY "allocator.cpp" "mpir_allocator.cpp" "simple_allocator.cpp" "simple_executable_allocator.cpp")
 
 source_group("Header Files\\machine\\memory" FILES ${Bia_HEADER_FILES_MEMORY})
 source_group("Source Files\\machine\\memory" FILES ${Bia_SOURCE_FILES_MEMORY})
