@@ -47,7 +47,7 @@ set(Bia_SOURCE_FILES_FRAMEWORK "undefined_member.cpp")
 source_group("Header Files\\framework" FILES ${Bia_HEADER_FILES_FRAMEWORK})
 source_group("Source Files\\framework" FILES ${Bia_SOURCE_FILES_FRAMEWORK})
 
-set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "member_function.hpp" "static_function.hpp")
+set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "lambda_function_def.hpp" "member_function.hpp" "static_function.hpp")
 
 source_group("Header Files\\framework\\executable" FILES ${Bia_HEADER_FILES_EXECUTABLE})
 
