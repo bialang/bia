@@ -1,5 +1,7 @@
 #include "member_map.hpp"
+#include "share.hpp"
 #include "undefined_member.hpp"
+#include "exception.hpp"
 
 
 namespace bia
@@ -15,7 +17,7 @@ member_map::~member_map()
 		auto _allocator = machine::machine_context::active_allocator();
 
 		for (auto & _member : _data.get()) {
-			_allocator->destroy_blocks(_member.second);
+			_allocator->destroy_block0(_member.second);
 		}
 	}
 }
@@ -38,7 +40,7 @@ member * member_map::get_or_create(name_type _name)
 
 	// Create new
 	if (_result == _data.get().end()) {
-		auto _member = machine::machine_context::active_allocator()->construct_blocks<member, undefined_member>(1);
+		auto _member = machine::machine_context::active_allocator()->template construct_block0<member, undefined_member>();
 
 		_data.get().emplace(_name, _member);
 
