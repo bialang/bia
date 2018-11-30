@@ -17,7 +17,7 @@ void simple_allocator::deallocate(universal_allocation _allocation)
 	std::free(_allocation.first);
 }
 
-void simple_allocator::deallocate_blocks(universal_allocation _blocks)
+void simple_allocator::deallocate_block0(universal_allocation _blocks)
 {
 	deallocate(_blocks);
 }
@@ -49,9 +49,9 @@ universal_allocation simple_allocator::allocate(size_type _size)
 	return { _ptr, _size };
 }
 
-universal_allocation simple_allocator::allocate_blocks(size_type _count)
+universal_allocation simple_allocator::allocate_block0()
 {
-	return { allocate(block_size() * _count).first, _count };
+	return allocate(block_size0);
 }
 
 universal_allocation simple_allocator::prepare(size_type _size)
