@@ -51,7 +51,7 @@ set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "lambda_fun
 
 source_group("Header Files\\framework\\executable" FILES ${Bia_HEADER_FILES_EXECUTABLE})
 
-set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "cstring_member_def.hpp" "native_member.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
+set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "cstring_member_def.hpp" "native_member.hpp" "native_member_def.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
 
