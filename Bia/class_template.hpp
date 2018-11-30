@@ -4,6 +4,7 @@
 #include "machine_context.hpp"
 #include "object.hpp"
 #include "member_map.hpp"
+#include "share.hpp"
 
 
 namespace bia
@@ -28,7 +29,7 @@ template<typename Type>
 inline class_template<Type>::~class_template()
 {
 	if (_data.only_owner()) {
-		machine::machine_context::active_allocator()->template destroy(_data.get().second);
+		machine::machine_context::active_allocator()->destroy(_data.get().second);
 	}
 }
 
@@ -47,7 +48,7 @@ inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::copy(member * _d
 template<typename Type>
 inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::refer(member * _destination)
 {
-	return void BIA_MEMBER_CALLING_CONVENTION();
+	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>

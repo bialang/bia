@@ -1,7 +1,7 @@
 #pragma once
 
 #include "object_variable.hpp"
-#include "share.hpp"
+#include "share_def.hpp"
 #include "allocator.hpp"
 #include "initiator.hpp"
 #include "member_map.hpp"

@@ -120,7 +120,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_STREAM})
 
 
 # utility namespace
-set(Bia_HEADER_FILES_UTILITY "guard.hpp" "hasher.hpp" "share.hpp" "string_key.hpp" "type_traits.hpp")
+set(Bia_HEADER_FILES_UTILITY "guard.hpp" "hasher.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp")
 
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 
