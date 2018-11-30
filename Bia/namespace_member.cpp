@@ -1,4 +1,5 @@
 #include "namespace_member.hpp"
+#include "member_map.hpp"
 
 #include <utility>
 

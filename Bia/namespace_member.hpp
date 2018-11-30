@@ -4,7 +4,7 @@
 
 #include "config.hpp"
 #include "object_variable.hpp"
-#include "member_map.hpp"
+#include "member_map_def.hpp"
 
 
 namespace bia
