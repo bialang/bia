@@ -55,7 +55,7 @@ set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "native_member.hpp" "native_ope
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
 
-set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "class_template_def.hpp" "constructor_chain.hpp" "instance_holder.hpp" "member_map.hpp" "namespace_member.hpp" "object.hpp" "object_variable.hpp" "raw_object.hpp" "template_wrapper.hpp")
+set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "class_template_def.hpp" "constructor_chain.hpp" "instance_holder.hpp" "member_map.hpp" "namespace_member.hpp" "object.hpp" "object_variable.hpp" "raw_object.hpp" "raw_object_def.hpp" "template_wrapper.hpp")
 set(Bia_SOURCE_FILES_OBJECT "member_map.cpp" "namespace_member.cpp")
 
 source_group("Header Files\\framework\\object" FILES ${Bia_HEADER_FILES_OBJECT})
