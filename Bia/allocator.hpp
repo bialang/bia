@@ -152,32 +152,6 @@ public:
 		}
 	}
 	/**
-	 * Destroys and deallocates the blocks created by allocate_blocks().
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @tparam Type The allocation type.
-	 *
-	 * @param _allocation The allocation.
-	 *
-	 * @throws See deallocate_blocks().
-	 * @throws See the destructor of @a _Ty.
-	*/
-	template<typename Type>
-	void destroy_blocks(allocation<Type> _allocation)
-	{
-		auto _ptr = reinterpret_cast<int8_t*>(_allocation.first);
-		auto _block_size = block_size();
-
-		// Destroy all elements
-		for (size_type i = 0; i < _allocation.second; ++i) {
-			reinterpret_cast<Type*>(_ptr + i * _block_size)->~Type();
-		}
-
-		deallocate_blocks(cast_allocation<void>(_allocation));
-	}
-	/**
 	 * Deallocates the allocation allocated by allocate().
 	 *
 	 * @since 3.64.127.716
@@ -188,26 +162,6 @@ public:
 	 * @throws exception::memory_error If the specified allocation is invalid.
 	*/
 	virtual void deallocate(universal_allocation _allocation) = 0;
-	/**
-	 * Deallocates the blocks allocated by allocate_blocks().
-	 *
-	 * @since 3.64.127.716
-	 * @date 5-May-18
-	 *
-	 * @param _blocks The allocation.
-	 *
-	 * @throws exception::memory_error If the specified allocation is invalid.
-	*/
-	virtual void deallocate_blocks(universal_allocation _blocks) = 0;
-	/**
-	 * Returns the required block size.
-	 *
-	 * @since 3.64.132.731
-	 * @date 28-Jun-18
-	 *
-	 * @return The block size.
-	*/
-	BIA_EXPORT static size_t block_size() noexcept;
 	/**
 	 * Can be used to expand or shrinken an allocation.
 	 *
@@ -254,19 +208,6 @@ public:
 	*/
 	virtual universal_allocation allocate(size_type _size) = 0;
 	/**
-	 * Allocates the specified amount of blocks.
-	 *
-	 * @since 3.64.127.716
-	 * @date 5-May-18
-	 *
-	 * @param _count The amount of the blocks.
-	 *
-	 * @throws exception::memory_error If the memory could not be allocated.
-	 *
-	 * @return The blocks.
-	*/
-	virtual universal_allocation allocate_blocks(size_type _count) = 0;
-	/**
 	 * Prepares memory if the actual size can be smaller.
 	 *
 	 * @since 3.64.127.716
@@ -307,45 +248,6 @@ public:
 
 		// Construct element
 		new(_allocation.first) Deriviate(std::forward<Arguments>(_arguments)...);
-
-		return cast_allocation<Base>(_allocation);
-	}
-	/**
-	 * Allocates and constructs blocks of the desired type.
-	 *
-	 * @remarks @a _Deriviate must inherit @a _Base and must be smaller than @ref block_size.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @tparam Base The returned type.
-	 * @tparam Deriviate The constructed type.
-	 * @tparam Arguments The arguments that will be used to construct the blocks.
-	 *
-	 * @param _count How many blocks should be constructed.
-	 * @param _arguments The arguments used to create the blocks.
-	 *
-	 * @throws See allocate_blocks().
-	 * @throws See the constructor of @a Deriviate.
-	 *
-	 * @return The allocated blocks.
-	*/
-	template<typename Base, typename Deriviate = Base, typename... Arguments>
-	allocation<Base> construct_blocks(size_type _count, Arguments &&... _arguments)
-	{
-		auto _block_size = block_size();
-
-		if (sizeof(Deriviate) > _block_size) {
-			throw BIA_IMPLEMENTATION_EXCEPTION("Elements exceeds block size.");
-		}
-
-		auto _allocation = allocate_blocks(_count);
-		auto _ptr = static_cast<int8_t*>(_allocation.first);
-
-		// Construct all elements
-		for (size_type i = 0; i < _count; ++i) {
-			new(_ptr + i * _block_size) Deriviate(std::forward<Arguments>(_arguments)...);
-		}
 
 		return cast_allocation<Base>(_allocation);
 	}
