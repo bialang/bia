@@ -5,6 +5,7 @@
 
 #include "raw_object_def.hpp"
 #include "constructor_chain.hpp"
+#include "instance_holder.hpp"
 #include "machine_context.hpp"
 
 

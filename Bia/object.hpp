@@ -8,6 +8,7 @@
 #include "constructor_chain.hpp"
 #include "machine_context.hpp"
 #include "member_map.hpp"
+#include "instance_holder.hpp"
 
 
 namespace bia
