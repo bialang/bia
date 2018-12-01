@@ -1,7 +1,6 @@
 #include "big_int.hpp"
 
 #include <cstring>
-#include <cstdlib>
 
 
 namespace bia
@@ -9,29 +8,12 @@ namespace bia
 namespace dependency
 {
 
-template<typename Type>
-inline void set_big_int(mpz_t _int, Type _signed) noexcept
-{
-	auto _unsigned = abs(_signed);
-	constexpr auto _needed = (sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
-
-	for (_int->_mp_size = 0; _int->_mp_size < _needed && _unsigned; ++_int->_mp_size) {
-		_int->_mp_d[_int->_mp_size] = _unsigned & GMP_NUMB_MASK;
-		_unsigned >>= GMP_NUMB_BITS;
-	}
-
-	// Apply sign
-	if (_signed < 0) {
-		_int->_mp_size = -_int->_mp_size;
-	}
-}
-
 big_int::big_int(int64_t _value) noexcept : _buffer{}
 {
 	reset();
 
 	// Set big int
-	set_big_int(reinterpret_cast<type*>(_buffer), _value);
+	set(_value);
 }
 
 big_int::big_int(const big_int & _copy)
