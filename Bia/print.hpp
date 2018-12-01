@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mpir/mpir.h>
 #include <cstdio>
 #include <cstdint>
 
@@ -21,6 +22,12 @@ inline void BIA_STATIC_CALLING_CONVETION print_int32(int32_t _value)
 inline void BIA_STATIC_CALLING_CONVETION print_int64(int64_t _value)
 {
 	printf("%li\n", _value);
+}
+
+inline void BIA_STATIC_CALLING_CONVETION print_big_int(mpz_srcptr _value)
+{
+	mpz_out_str(stdout, 10, _value);
+	puts("");
 }
 
 inline void BIA_STATIC_CALLING_CONVETION print_true()
