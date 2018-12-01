@@ -1,4 +1,5 @@
 #include "int_member.hpp"
+#include "share.hpp"
 
 
 namespace bia
@@ -10,23 +11,16 @@ namespace native
 
 thread_local int_member::tmp_value int_member::_tmp_value;
 
-int_member::int_member(int32_t _value)
+int_member::int_member(int32_t _value) : _data(_value)
 {
-	mpz_init2(&_data.get(), std::max<int>(BIA_MIN_INT_SIZE, sizeof(_value) * 8));
-
-	set(_value);
 }
 
-int_member::int_member(int64_t _value)
+int_member::int_member(int64_t _value) : _data(_value)
 {
-	mpz_init2(&_data.get(), std::max<int>(BIA_MIN_INT_SIZE, sizeof(_value) * 8));
-
-	set(_value);
 }
 
-int_member::int_member(mpz_t _value)
+int_member::int_member(const dependency::big_int & _value) : _data(_value)
 {
-	mpz_init_set(&_data.get(), _value);
 }
 
 int_member::int_member(const data_type & _data) noexcept : _data(_data)
@@ -35,14 +29,11 @@ int_member::int_member(const data_type & _data) noexcept : _data(_data)
 
 int_member::~int_member()
 {
-	if (_data.only_owner()) {
-		mpz_clear(&_data.get());
-	}
 }
 
 void int_member::print() const
 {
-	mpz_out_str(stdout, 10, &_data.get());
+	//mpz_out_str(stdout, 10, &_data.get());
 	puts("");
 }
 
@@ -93,7 +84,7 @@ int int_member::flags() const
 
 int32_t int_member::test() const
 {
-	return static_cast<bool>(_data.get()._mp_size);
+	BIA_NOT_IMPLEMENTED;
 }
 
 int32_t int_member::test_member(operator_type _operator, member * _right) const
@@ -118,17 +109,12 @@ int32_t int_member::test_double(operator_type _operator, double _right) const
 
 int64_t int_member::to_int() const
 {
-	// Check if it fits
-	if (false) {
-		throw std::overflow_error("");
-	}
-
-	return convert<int64_t>();
+	BIA_NOT_IMPLEMENTED;
 }
 
 double int_member::to_double() const
 {
-	return mpz_get_d(&_data.get());
+	BIA_NOT_IMPLEMENTED;
 }
 
 void * int_member::native_data(native::NATIVE_TYPE _type)
@@ -138,7 +124,8 @@ void * int_member::native_data(native::NATIVE_TYPE _type)
 
 const void * int_member::const_native_data(native::NATIVE_TYPE _type) const
 {
-	switch (_type) {
+	BIA_NOT_IMPLEMENTED;
+	/*switch (_type) {
 	case NATIVE_TYPE::BOOL:
 		_tmp_value.bool_value = static_cast<bool>(_data.get()._mp_size);
 
@@ -171,7 +158,7 @@ const void * int_member::const_native_data(native::NATIVE_TYPE _type) const
 		break;
 	}
 
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);*/
 }
 
 }

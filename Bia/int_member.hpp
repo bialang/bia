@@ -2,11 +2,10 @@
 
 #include <cstdint>
 #include <cstdlib>
-#include <algorithm>
 
 #include "config.hpp"
 #include "native_variable.hpp"
-#include "share.hpp"
+#include "share_def.hpp"
 #include "big_int.hpp"
 
 
@@ -20,9 +19,7 @@ namespace native
 class int_member : public native_variable
 {
 public:
-	/** The struct holding all arithmetic data. */
-	typedef dependency::big_int::type int_type;
-	typedef utility::share<int_type> data_type;
+	typedef utility::share<dependency::big_int> data_type;
 
 
 	/**
@@ -31,7 +28,7 @@ public:
 	 * @since 3.68.140.790
 	 * @date 20-Oct-18
 	 *
-	 * @param _value The value of the MPIR big integer.
+	 * @param _value The initial value.
 	 *
 	 * @throws See utility::share::share().
 	*/
@@ -42,7 +39,7 @@ public:
 	 * @since 3.68.140.790
 	 * @date 20-Oct-18
 	 *
-	 * @param _value The value of the MPIR big integer.
+	 * @param _value The initial value.
 	 *
 	 * @throws See utility::share::share().
 	*/
@@ -53,11 +50,11 @@ public:
 	 * @since 3.68.140.790
 	 * @date 20-Oct-18
 	 *
-	 * @param _value The value of the MPIR big integer.
+	 * @param _value The initial value.
 	 *
 	 * @throws See utility::share::share().
 	*/
-	int_member(mpz_t _value);
+	int_member(const dependency::big_int & _value);
 	/**
 	 * Refer-Constructor.
 	 *
@@ -108,64 +105,10 @@ private:
 		double double_value;
 	};
 
-	/** Holds the MPIR big integer. */
+	/** Holds the big integer. */
 	data_type _data;
 	/** A temporary value used for convertion. */
 	static thread_local tmp_value _tmp_value;
-
-	/**
-	 * Converts the signed C++ integral to an MPIR integer.
-	 *
-	 * @remarks The MPIR integer must be large enough to hold the C++ type.
-	 *
-	 * @since 3.68.140.790
-	 * @date 20-Oct-18
-	 *
-	 * @tparam Type The signed C++ integral.
-	 *
-	 * @param _signed The signed value.
-	*/
-	template<typename Type>
-	void set(Type _signed) noexcept
-	{
-		auto _value = &_data.get();
-		auto _unsigned = abs(_signed);
-		constexpr auto _needed = (sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
-
-		for (_value->_mp_size = 0; _value->_mp_size < _needed && _unsigned; ++_value->_mp_size) {
-			_value->_mp_d[_value->_mp_size] = _unsigned & GMP_NUMB_MASK;
-			_unsigned >>= GMP_NUMB_BITS;
-		}
-
-		if (_signed < 0) {
-			_value->_mp_size = -_value->_mp_size;
-		}
-	}
-	/**
-	 * Converts the MPIR integer to a signed C++ integral.
-	 *
-	 * @remarks If the type can't hold all the data, only the least significant bits will be converted.
-	 *
-	 * @since 3.68.140.790
-	 * @date 20-Oct-18
-	 *
-	 * @tparam Type The signed C++ integral.
-	 *
-	 * @return The converted value.
-	*/
-	template<typename Type>
-	Type convert() const noexcept
-	{
-		Type _converted = 0;
-		auto _value = &_data.get();
-		auto _needed = std::min<int64_t>((sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS, abs(_value->_mp_size));
-
-		while (_needed--) {
-			_converted = _converted << GMP_NUMB_BITS | _value->_mp_d[_needed] & GMP_NUMB_MASK;
-		}
-
-		return _value->_mp_size < 0 ? -_converted : _converted;
-	}
 };
 
 }
