@@ -104,7 +104,7 @@ framework::member * machine_context::address_of_member(const char * _name)
 	}
 
 	// Create
-	auto _allocation = _allocator->construct_block0<framework::member, framework::undefined_member>();
+	auto _allocation = _allocator->construct_block<framework::member, framework::undefined_member>();
 	auto a = _variable_index.add(_name, _allocation);
 	printf("created: %p\n", a);
 	return a;

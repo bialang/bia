@@ -30,7 +30,7 @@ namespace machine
 class machine_context final
 {
 public:
-	typedef memory::block_allocator0<framework::max_member_size> member_allocator;
+	typedef memory::block_allocator<framework::max_member_size> member_allocator;
 
 	/**
 	 * Constructor.

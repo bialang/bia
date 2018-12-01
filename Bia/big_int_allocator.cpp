@@ -11,9 +11,9 @@ namespace machine
 namespace memory
 {
 
-std::shared_ptr<block_allocator0<sizeof(dependency::big_int)>> big_int_allocator::_allocator;
+std::shared_ptr<block_allocator<sizeof(dependency::big_int)>> big_int_allocator::_allocator;
 
-void big_int_allocator::initialize(const std::shared_ptr<block_allocator0<sizeof(dependency::big_int)>>& _allocator)
+void big_int_allocator::initialize(const std::shared_ptr<block_allocator<sizeof(dependency::big_int)>>& _allocator)
 {
 	big_int_allocator::_allocator = _allocator;
 
@@ -23,12 +23,12 @@ void big_int_allocator::initialize(const std::shared_ptr<block_allocator0<sizeof
 
 void big_int_allocator::free_int(int_type _int)
 {
-	_allocator->destroy_block0(_int);
+	_allocator->destroy_block(_int);
 }
 
 big_int_allocator::int_type big_int_allocator::new_int()
 {
-	return _allocator->construct_block0<dependency::big_int>();
+	return _allocator->construct_block<dependency::big_int>();
 }
 
 void big_int_allocator::free(void * _ptr, size_t _size)

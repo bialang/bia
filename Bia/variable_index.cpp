@@ -33,7 +33,7 @@ void variable_index::guard_action(value_type & _value)
 {
 	printf("guard_action: destroying %p with %zi bytes\n", _value.first, _value.second);
 
-	machine_context::active_allocator()->destroy_block0(_value);
+	machine_context::active_allocator()->destroy_block(_value);
 }
 
 }
