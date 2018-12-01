@@ -39,7 +39,7 @@ public:
 	template<typename Ty>
 	struct rebind
 	{
-  	typedef stl_allocator_wrapper<Ty> other;
+		typedef stl_allocator_wrapper<Ty> other;
 	};
 
 	/**
