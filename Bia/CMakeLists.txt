@@ -146,7 +146,7 @@ else(BIA_BUILD_SHARED)
 endif(BIA_BUILD_SHARED)
 
 target_link_libraries(Bia ${MPIR_LIB})
-target_include_directories(Bia ${MPIR_INCLUDE})
+#target_include_directories(Bia ${MPIR_INCLUDE})
 
 # Install
 install(TARGETS Bia DESTINATION lib)

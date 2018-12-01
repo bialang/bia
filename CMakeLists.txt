@@ -20,7 +20,7 @@ set(BIA_BUILD_SHARED ON CACHE BOOL "Build shared library")
 # Dependencies
 find_path(MPIR_INCLUDE "mpir/mpir.h")
 find_library(MPIR_LIB mpir)
-install(FILES ${MPIR_INCLUDE} DESTINATION "include/Bia")
+#install(FILES ${MPIR_INCLUDE} DESTINATION "include/Bia")
 
 if(BIA_BUILD_SHARED)
   add_definitions(-DBIA_BUILDING)
@@ -28,6 +28,7 @@ endif(BIA_BUILD_SHARED)
 
 configure_file("${PROJECT_SOURCE_DIR}/Bia/config_cmake.in" "${PROJECT_SOURCE_DIR}/Bia/config_cmake.hpp")
 
+include_directories(${MPIR_INCLUDE})
 include_directories(Bia)
 add_subdirectory(Bia)
 
