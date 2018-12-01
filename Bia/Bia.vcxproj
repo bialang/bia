@@ -222,7 +222,9 @@
     <ClInclude Include="class_template_def.hpp" />
     <ClInclude Include="cstring_member_def.hpp" />
     <ClInclude Include="custom_member.hpp" />
+    <ClInclude Include="double_member.hpp" />
     <ClInclude Include="instance_holder_def.hpp" />
+    <ClInclude Include="int_member.hpp" />
     <ClInclude Include="lambda_function_def.hpp" />
     <ClInclude Include="max.hpp" />
     <ClInclude Include="member_function_def.hpp" />

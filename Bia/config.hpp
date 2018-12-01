@@ -91,7 +91,6 @@ using varg_member_function_signature = _Return(BIA_VARG_MEMBER_CALLING_CONVENTIO
 
 // Universal macros
 #define BIA_MIN_INT_SIZE 64
-#define BIA_MIN_FLOAT_PRECISION 64
 #define BIA_MAX_KEYWORD_LENGTH 16
 #define BIA_MAX_OPERATOR_LENGTH 4
 /** The minimum buffer size of stream::input_stream::get_buffer(). */

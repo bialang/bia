@@ -482,6 +482,12 @@
     <ClInclude Include="native_member.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
+    <ClInclude Include="int_member.hpp">
+      <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="double_member.hpp">
+      <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
