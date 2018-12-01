@@ -290,6 +290,10 @@ const grammar::report *  compiler::handle_number(const grammar::report * _report
 		_value.set_return(_report->content.int_value);
 
 		break;
+	case TYPE::BIG_INT_VALUE:
+		_value.set_return(_report->content.big_int_value);
+		
+		break;
 	case TYPE::DOUBLE_VALUE:
 		_value.set_return(_report->content.double_value);
 
@@ -554,6 +558,10 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 			break;
 		}
+		case VT::BIG_INT:
+			_toolset.call_static(&machine::link::instantiate_big_int, _destination, _expression.value().rt_big_int);
+
+			break;
 		case VT::DOUBLE:
 			_toolset.call_static(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
 
@@ -658,6 +666,10 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 
 			break;
 		}
+		case VT::BIG_INT:
+			_toolset.call_static(&machine::link::print_big_int, _value.value().rt_big_int);
+
+			break;
 		case VT::DOUBLE:
 			_toolset.call_static(&machine::link::print_double, _value.value().rt_double);
 

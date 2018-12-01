@@ -7,6 +7,7 @@
 #include "member.hpp"
 #include "temp_counter.hpp"
 #include "string_stream.hpp"
+#include "big_int.hpp"
 
 
 namespace bia
@@ -27,6 +28,7 @@ public:
 	enum class VALUE_TYPE
 	{
 		INT,
+		BIG_INT,
 		DOUBLE,
 		/** ASCII or UTF-8 encoded string. */
 		STRING,
@@ -49,8 +51,10 @@ public:
 	{
 		/** The constant test value. */
 		bool rt_test_result;
-		/** A constant integer. */
+		/** A constant 64 bit integer. */
 		int64_t rt_int;
+		/** A constant big integer. */
+		dependency::big_int::type * rt_big_int;
 		/** A constant floating point. */
 		double rt_double;
 		struct string
@@ -118,6 +122,19 @@ public:
 	{
 		_return_type = VALUE_TYPE::INT;
 		_return_value.rt_int = _value;
+	}
+	/**
+	 * Sets the return _value and the type VALUE_TYPE::BIG_INT.
+	 *
+	 * @since 3.68.140.792
+	 * @date 13-Nov-18
+	 *
+	 * @param _value Defines the _value.
+	*/
+	void set_return(dependency::big_int::type * _value) noexcept
+	{
+		_return_type = VALUE_TYPE::BIG_INT;
+		_return_value.rt_big_int = _value;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::DOUBLE.
