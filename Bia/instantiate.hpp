@@ -6,8 +6,7 @@
 #include "config.hpp"
 #include "member.hpp"
 #include "cstring_member.hpp"
-#include "int_member.hpp"
-#include "double_member.hpp"
+#include "big_int.hpp"
 
 
 namespace bia
@@ -19,7 +18,7 @@ namespace link
 
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_int32(framework::member * _destination, int32_t _value);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_int64(framework::member * _destination, int64_t _value);
-BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_big_int(framework::member * _destination, framework::native::int_member::int_type * _value);
+BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_big_int(framework::member * _destination, dependency::big_int * _value);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_int_0(framework::member * _destination);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_int_1(framework::member * _destination);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_int_n1(framework::member * _destination);

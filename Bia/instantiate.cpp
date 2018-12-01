@@ -20,9 +20,9 @@ void BIA_STATIC_CALLING_CONVETION instantiate_int64(framework::member *_destinat
 	_destination->replace_this<framework::native::int_member>(_value);
 }
 
-void BIA_STATIC_CALLING_CONVETION instantiate_big_int(framework::member * _destination, framework::native::int_member::int_type * _value)
+void BIA_STATIC_CALLING_CONVETION instantiate_big_int(framework::member * _destination, dependency::big_int * _value)
 {
-	_destination->replace_this<framework::native::int_member>(_value);
+	_destination->replace_this<framework::native::int_member>(*_value);
 }
 
 void BIA_STATIC_CALLING_CONVETION instantiate_int_0(framework::member *_destination)
