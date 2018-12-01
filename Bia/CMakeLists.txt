@@ -47,15 +47,15 @@ set(Bia_SOURCE_FILES_FRAMEWORK "undefined_member.cpp")
 source_group("Header Files\\framework" FILES ${Bia_HEADER_FILES_FRAMEWORK})
 source_group("Source Files\\framework" FILES ${Bia_SOURCE_FILES_FRAMEWORK})
 
-set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "member_function.hpp" "static_function.hpp")
+set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "lambda_function_def.hpp" "member_function.hpp" "member_function_def.hpp" "static_function.hpp")
 
 source_group("Header Files\\framework\\executable" FILES ${Bia_HEADER_FILES_EXECUTABLE})
 
-set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "native_member.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
+set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "cstring_member_def.hpp" "native_member.hpp" "native_member_def.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
 
-set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "constructor_chain.hpp" "instance_holder.hpp" "member_map.hpp" "namespace_member.hpp" "object.hpp" "object_variable.hpp" "raw_object.hpp" "template_wrapper.hpp")
+set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "class_template_def.hpp" "constructor_chain.hpp" "instance_holder.hpp" "instance_holder_def.hpp" "member_map.hpp" "member_map_def.hpp" "namespace_member.hpp" "object.hpp" "object_def.hpp" "object_variable.hpp" "raw_object.hpp" "raw_object_def.hpp" "template_wrapper.hpp")
 set(Bia_SOURCE_FILES_OBJECT "member_map.cpp" "namespace_member.cpp")
 
 source_group("Header Files\\framework\\object" FILES ${Bia_HEADER_FILES_OBJECT})
@@ -90,7 +90,7 @@ source_group("Header Files\\machine\\link" FILES ${Bia_HEADER_FILES_LINK})
 source_group("Source Files\\machine\\link" FILES ${Bia_SOURCE_FILES_LINK})
 
 set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "executable_allocator.hpp" "simple_allocator.hpp" "simple_executable_allocator.hpp" "stl_allocator_wrapper.hpp")
-set(Bia_SOURCE_FILES_MEMORY "allocator.cpp" "simple_allocator.cpp" "simple_executable_allocator.cpp")
+set(Bia_SOURCE_FILES_MEMORY "simple_allocator.cpp" "simple_executable_allocator.cpp")
 
 source_group("Header Files\\machine\\memory" FILES ${Bia_HEADER_FILES_MEMORY})
 source_group("Source Files\\machine\\memory" FILES ${Bia_SOURCE_FILES_MEMORY})
@@ -120,7 +120,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_STREAM})
 
 
 # utility namespace
-set(Bia_HEADER_FILES_UTILITY "guard.hpp" "hasher.hpp" "share.hpp" "string_key.hpp" "type_traits.hpp")
+set(Bia_HEADER_FILES_UTILITY "guard.hpp" "hasher.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp")
 
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 

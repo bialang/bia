@@ -1,12 +1,8 @@
 #pragma once
 
-#include <cstddef>
-#include <tuple>
-
-#include "native_variable.hpp"
+#include "cstring_member_def.hpp"
 #include "share.hpp"
 #include "print.hpp"
-#include "string_stream.hpp"
 
 
 namespace bia
@@ -17,139 +13,147 @@ namespace native
 {
 
 template<typename Char_type>
-class cstring_member final : public native_variable
+inline cstring_member<Char_type>::cstring_member(const Char_type * _string, size_type _size, length_type _length) : _data(_string, _size, _length)
 {
-public:
-	typedef stream::string_stream::size_type size_type;
-	typedef stream::string_stream::length_type length_type;
-	typedef utility::share<std::tuple<const Char_type*, size_type, length_type>> data_type;
+}
 
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 6-May-18
-	 *
-	 * @param _string The zero-terminated string.
-	 * @param _size The total size of the string.
-	 * @param _length The length of the string.
-	 *
-	 * @throws See utility::share::share().
-	*/
-	cstring_member(const Char_type * _string, size_type _size, length_type _length) : _data(_string, _size, _length)
-	{
-	}
-	/**
-	 * Refer-Constructor.
-	 *
-	 * @since 3.65.134.742
-	 * @date 1-Aug-18
-	 *
-	 * @param _data The data of the referred object.
-	*/
-	cstring_member(const data_type & _data) noexcept : _data(_data)
-	{
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
-	{
-		print(std::get<0>(_data.get()));
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
-	{
-		_destination->replace_this<cstring_member<Char_type>>(std::get<0>(_data.get()), std::get<1>(_data.get()), std::get<2>(_data.get()));
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
-	{
-		_destination->replace_this<cstring_member<Char_type>>(_data);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override
-	{
-		copy(_destination);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override
-	{
-		BIA_NOT_IMPLEMENTED;
-	}
-	virtual int flags() const override
-	{
-		return F_CONST;
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const override
-	{
-		return static_cast<int32_t>(std::get<2>(_data.get()) != 0);
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
-	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override
-	{
-		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
-	}
-	virtual int64_t to_int() const override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
-	virtual double to_double() const override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+template<typename Char_type>
+inline cstring_member<Char_type>::cstring_member(const data_type & _data) noexcept : _data(_data)
+{
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::print() const
+{
+	print(std::get<0>(_data.get()));
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::copy(member * _destination)
+{
+	_destination->replace_this<cstring_member<Char_type>>(std::get<0>(_data.get()), std::get<1>(_data.get()), std::get<2>(_data.get()));
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::refer(member * _destination)
+{
+	_destination->replace_this<cstring_member<Char_type>>(_data);
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::clone(member * _destination)
+{
+	copy(_destination);
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call(member * _destination, operator_type _operator, const member * _right)
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_double(member * _destination, operator_type _operator, double _right)
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+}
+
+template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::object_member(member * _destination, machine::string_manager::name_type _name)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+template<typename Char_type>
+inline int cstring_member<Char_type>::flags() const
+{
+	return F_CONST;
+}
+
+template<typename Char_type>
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test() const
+{
+	return static_cast<int32_t>(std::get<2>(_data.get()) != 0);
+}
+
+template<typename Char_type>
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_member(operator_type _operator, member * _right) const
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
+}
+
+template<typename Char_type>
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_int32(operator_type _operator, int32_t _right) const
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
+}
+
+template<typename Char_type>
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_int64(operator_type _operator, int64_t _right) const
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
+}
+
+template<typename Char_type>
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_double(operator_type _operator, double _right) const
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
+}
+
+template<typename Char_type>
+inline int64_t cstring_member<Char_type>::to_int() const
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Char_type>
+inline double cstring_member<Char_type>::to_double() const
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Char_type>
+inline void * cstring_member<Char_type>::native_data(native::NATIVE_TYPE _type)
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Char_type>
+inline const void * cstring_member<Char_type>::const_native_data(native::NATIVE_TYPE _type) const
+{
+	switch (_type) {
+	case NATIVE_TYPE::CONST_STRING:
+		return &std::get<0>(_data.get());
+	default:
+		break;
 	}
 
-protected:
-	virtual void * native_data(native::NATIVE_TYPE _type) override
-	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
-	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override
-	{
-		switch (_type) {
-		case NATIVE_TYPE::CONST_STRING:
-			return &std::get<0>(_data.get());
-		default:
-			break;
-		}
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
 
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-	}
+template<typename Char_type>
+inline void cstring_member<Char_type>::print(const char * _string)
+{
+	machine::link::print_string(_string);
+}
 
-private:
-	/** The zero-terminated C style string, its size and its length. */
-	data_type _data;
-
-
-	static void print(const char * _string)
-	{
-		machine::link::print_string(_string);
-	}
-	template<typename Type>
-	static void print(const Type * _string) noexcept
-	{
-	}
-};
+template<typename Char_type>
+template<typename Type>
+inline void cstring_member<Char_type>::print(const Type * _string) noexcept
+{
+}
 
 }
 }

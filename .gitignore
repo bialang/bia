@@ -9,9 +9,6 @@ x64/
 Makefile
 main
 *.o
-*.sln
-*.vcxproj
-*.filters
 *.user
 
 *.bll

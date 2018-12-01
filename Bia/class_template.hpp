@@ -1,13 +1,10 @@
 #pragma once
 
-#include "object_variable.hpp"
-#include "share.hpp"
-#include "exception.hpp"
-#include "string_manager.hpp"
+#include "class_template_def.hpp"
 #include "machine_context.hpp"
-#include "initiator.hpp"
 #include "object.hpp"
 #include "member_map.hpp"
+#include "share.hpp"
 
 
 namespace bia
@@ -18,133 +15,124 @@ namespace object
 {
 
 template<typename Type>
-class class_template : public object_variable
+inline class_template<Type>::class_template()
 {
-public:
-	typedef utility::share<std::pair<member_map, machine::memory::allocation<force::initiator>>> data_type;
+	_data.get().second = machine::machine_context::active_allocator()->template construct<force::initiator>();
+}
 
-	class_template()
-	{
-		_data.get().second = machine::machine_context::active_allocator()->construct<force::initiator>();
+template<typename Type>
+inline class_template<Type>::class_template(const data_type & _data) noexcept : _data(_data)
+{
+}
+
+template<typename Type>
+inline class_template<Type>::~class_template()
+{
+	if (_data.only_owner()) {
+		machine::machine_context::active_allocator()->destroy(_data.get().second);
 	}
-	/**
-	 * Refer-Constructor.
-	 *
-	 * @since 3.67.135.752
-	 * @date 5-Aug-18
-	 *
-	 * @param _data The data.
-	*/
-	class_template(const data_type & _data) noexcept : _data(_data)
-	{
-	}
-	/**
-	 * Destructor.
-	 *
-	 * @since 3.67.135.752
-	 * @date 5-Aug-18
-	 *
-	 * @throws See machine::memory::allocator::destroy().
-	*/
-	~class_template()
-	{
-		if (_data.only_owner()) {
-			machine::machine_context::active_allocator()->destroy(_data.get().second);
-		}
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override
-	{
-		printf("<class_template of %s>\n", typeid(Type).name());
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override
-	{
-		BIA_NOT_IMPLEMENTED;
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override
-	{
-		_destination->replace_this<class_template<Type>>(_data);
-	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
-	{
-		instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate()), true);
+}
+
+template<typename Type>
+inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::print() const
+{
+	printf("<class_template of %s>\n", typeid(Type).name());
+}
+
+template<typename Type>
+inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::copy(member * _destination)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+template<typename Type>
+inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::refer(member * _destination)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
+template<typename Type>
+inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::execute(member * _destination)
+{
+	instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate()), true);
+
+	_destination->template replace_this<object<Type>>(_instance, _data.get().first);
+}
+
+template<typename Type>
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count...)
+{
+	force::va_list_wrapper _args;
+	va_start(_args.args, _count);
+	auto _instance_created = false;
+
+	try {
+		instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_count(_count, _args)), true);
+		_destination->replace_this<object<Type>>(_instance, _data.get().first);
+
+		_instance_created = true;
+		va_end(_args.args);
 
 		_destination->replace_this<object<Type>>(_instance, _data.get().first);
-	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
-	{
-		force::va_list_wrapper _args;
-		va_start(_args.args, _count);
-		auto _instance_created = false;
-
-		try {
-			instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_count(_count, _args)), true);
-			_destination->replace_this<object<Type>>(_instance, _data.get().first);
-
-			_instance_created = true;
+	} catch (...) {
+		if (!_instance_created) {
 			va_end(_args.args);
-
-			_destination->replace_this<object<Type>>(_instance, _data.get().first);
-		} catch (...) {
-			if (!_instance_created) {
-				va_end(_args.args);
-			}
-
-			throw;
 		}
+
+		throw;
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) override
-	{
-		force::va_list_wrapper _args;
-		va_start(_args.args, _count);
-		auto _instance_created = false;
+}
 
-		try {
-			instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_format(_format, _count, _args)), true);
+template<typename Type>
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_format(member * _destination, const char * _format, parameter_count _count...)
+{
+	force::va_list_wrapper _args;
+	va_start(_args.args, _count);
+	auto _instance_created = false;
 
-			_instance_created = true;
+	try {
+		instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_format(_format, _count, _args)), true);
+
+		_instance_created = true;
+		va_end(_args.args);
+
+		_destination->replace_this<object<Type>>(_instance, _data.get().first);
+	} catch (...) {
+		if (!_instance_created) {
 			va_end(_args.args);
-
-			_destination->replace_this<object<Type>>(_instance, _data.get().first);
-		} catch (...) {
-			if (!_instance_created) {
-				va_end(_args.args);
-			}
-
-			throw;
 		}
-	}
-	template<typename... Arguments>
-	void set_constructor()
-	{
-		auto _allocator = machine::machine_context::active_allocator();
 
-		_allocator->destroy(_data.get().second);
-		_data.get().second = _allocator->construct<force::initiator, force::real_initiator<Type, Arguments...>>();
+		throw;
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, member_map::name_type _name) override
-	{
-		_data.get().first.get(_name)->refer(_destination);
-	}
-	virtual int flags() const override
-	{
-		return F_NONE;
-	}
-	/**
-	 * Returns the member map.
-	 *
-	 * @since 3.68.140.788
-	 * @date 16-Sep-18
-	 *
-	 * @return A reference to the member map.
-	*/
-	member_map & members() noexcept
-	{
-		return _data.get().first;
-	}
+}
 
-private:
-	data_type _data;
-};
+template<typename Type>
+template<typename ...Arguments>
+inline void class_template<Type>::set_constructor()
+{
+	auto _allocator = machine::machine_context::active_allocator();
+
+	_allocator->destroy(_data.get().second);
+	_data.get().second = _allocator->construct<force::initiator, force::real_initiator<Type, Arguments...>>();
+}
+
+template<typename Type>
+inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::object_member(member * _destination, member_map::name_type _name)
+{
+	_data.get().first.get(_name)->refer(_destination);
+}
+
+template<typename Type>
+inline int class_template<Type>::flags() const
+{
+	return F_NONE;
+}
+
+template<typename Type>
+inline member_map & class_template<Type>::members() noexcept
+{
+	return _data.get().first;
+}
 
 }
 }

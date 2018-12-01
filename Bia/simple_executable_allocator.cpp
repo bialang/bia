@@ -25,15 +25,6 @@ void simple_executable_allocator::deallocate(universal_allocation _allocation)
 #endif
 }
 
-void simple_executable_allocator::deallocate_blocks(universal_allocation _blocks)
-{
-#if defined(BIA_OS_WINDOWS)
-	VirtualFree(_blocks.first, 0, MEM_RELEASE);
-#elif defined(BIA_OS_LINUX)
-	munmap(_blocks.first, block_size() * _blocks.second);
-#endif
-}
-
 void simple_executable_allocator::protect(universal_allocation _allocation, int _protection)
 {
 #if defined(BIA_OS_WINDOWS)
@@ -94,11 +85,6 @@ universal_allocation simple_executable_allocator::allocate(size_type _size)
 	}
 
 	return { _ptr, _size };
-}
-
-universal_allocation simple_executable_allocator::allocate_blocks(size_type _count)
-{
-	return { allocate(block_size() * _count).first, _count };
 }
 
 universal_allocation simple_executable_allocator::prepare(size_type _size)
