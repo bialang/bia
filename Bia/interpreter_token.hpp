@@ -10,6 +10,7 @@
 #include "interpreter_rule.hpp"
 #include "interpreter_id.hpp"
 #include "input_stream.hpp"
+#include "string_stream.hpp"
 #include "encoder.hpp"
 
 
@@ -68,8 +69,8 @@ public:
 	 * @param [in] _input The input buffer.
 	 * @param [in] _encoder The encoder.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return true if any whitespace was matched, otherwise false.
 	*/
@@ -83,8 +84,8 @@ public:
 	 * @param [in] _input The input buffer.
 	 * @param [in] _encoder The encoder.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return true if any padding character was matched, otherwise false.
 	*/
@@ -114,8 +115,8 @@ public:
 	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -149,8 +150,8 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -168,8 +169,8 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -187,8 +188,8 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -203,8 +204,8 @@ public:
 	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -219,8 +220,8 @@ public:
 	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -238,8 +239,8 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -315,8 +316,8 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -420,6 +421,9 @@ private:
 	 * @return true if the sign is negative, otherwise false.
 	*/
 	BIA_EXPORT static bool parse_sign(stream::input_stream & _input, encoding::encoder * _encoder);
+	BIA_EXPORT static int parse_base(stream::input_stream & _input, encoding::encoder * _encoder);
+	BIA_EXPORT static std::tuple<bool, int64_t> match_native_integer(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative);
+	BIA_EXPORT static void match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base);
 	/**
 	 * Matches integral values with a base up to 16.
 	 *
@@ -432,7 +436,7 @@ private:
 	 * @param [in] _encoder The encoder.
 	 * @param _base The base.
 	 *
-	 * @throws See encoding::utf::next().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return A pair with the success value as first and the parsed integral as second.
 	*/
@@ -448,7 +452,7 @@ private:
 	 * @param [in,out] _buffer The buffer.
 	 * @param [in] _encoder The encoder.
 	 *
-	 * @throws See encoding::utf::next().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return A pair with the success value as first and the parsed integral as second.
 	*/
