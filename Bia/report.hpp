@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mpir/mpir.h>
 #include <cstdint>
 #include <type_traits>
 
@@ -8,6 +7,7 @@
 #include "interpreter_string.hpp"
 #include "output_stream.hpp"
 #include "input_stream.hpp"
+#include "big_int.hpp"
 
 
 namespace bia
@@ -64,9 +64,8 @@ struct report
 		/** A string buffer with a specific format. See @ref stream::string_stream for more information. */
 		void * string;
 		int64_t int_value;
-		typename std::remove_extent<mpz_t>::type * big_int_value;
+		dependency::big_int * big_int_value;
 		double double_value;
-		typename std::remove_extent<mpf_t>::type * * big_float_value;
 		const report *  end;
 		const char * member;
 		framework::operator_type operator_code;
