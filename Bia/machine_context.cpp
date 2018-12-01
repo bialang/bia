@@ -12,17 +12,17 @@ namespace machine
 {
 
 thread_local machine_context * machine_context::_active_context = nullptr;
-thread_local memory::allocator * machine_context::_active_allocator = nullptr;
+thread_local machine_context::member_allocator * machine_context::_active_allocator = nullptr;
 
 
-machine_context::machine_context(const std::shared_ptr<memory::allocator>& _allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
+machine_context::machine_context(const std::shared_ptr<member_allocator>& _allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}
 }
 
-machine_context::machine_context(std::shared_ptr<memory::allocator>&& _allocator, std::shared_ptr<memory::executable_allocator>&& _executable_allocator) : _allocator(std::move(_allocator)), _executable_allocator(std::move(_executable_allocator)), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
+machine_context::machine_context(std::shared_ptr<member_allocator>&& _allocator, std::shared_ptr<memory::executable_allocator>&& _executable_allocator) : _allocator(std::move(_allocator)), _executable_allocator(std::move(_executable_allocator)), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -40,12 +40,12 @@ machine_context * machine_context::active_context() noexcept
 	return _active_context;
 }
 
-memory::allocator * machine_context::active_allocator() noexcept
+machine_context::member_allocator * machine_context::active_allocator() noexcept
 {
 	return _active_allocator;
 }
 
-memory::allocator * machine_context::allocator() noexcept
+machine_context::member_allocator * machine_context::allocator() noexcept
 {
 	return _allocator.get();
 }
@@ -104,7 +104,7 @@ framework::member * machine_context::address_of_member(const char * _name)
 	}
 
 	// Create
-	auto _allocation = _allocator->construct_blocks<framework::member, framework::undefined_member>(1);
+	auto _allocation = _allocator->construct_block0<framework::member, framework::undefined_member>();
 	auto a = _variable_index.add(_name, _allocation);
 	printf("created: %p\n", a);
 	return a;

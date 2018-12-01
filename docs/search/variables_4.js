@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['encoder',['encoder',['../structbia_1_1grammar_1_1token__param.html#a774fd3ae5dedad99735d48c7763b46a2',1,'bia::grammar::token_param']]],
-  ['end',['end',['../structbia_1_1grammar_1_1report.html#a612a8ee5515c3e08edc96091337a4fc1',1,'bia::grammar::report']]],
-  ['ending_5fws_5fopt_5ftoken',['ending_ws_opt_token',['../structbia_1_1grammar_1_1flags.html#a0d86a0d86a1cf9b46d7361c915d89f40',1,'bia::grammar::flags']]],
-  ['ending_5fws_5ftoken',['ending_ws_token',['../structbia_1_1grammar_1_1flags.html#a3a201536d3909eda30618ec2d711c0b9',1,'bia::grammar::flags']]]
+  ['data',['data',['../structbia_1_1compiler_1_1compiler__value_1_1return__value_1_1string.html#a17c4951d39e50f6bb69e0c783747d936',1,'bia::compiler::compiler_value::return_value::string']]],
+  ['double_5fvalue',['double_value',['../structbia_1_1grammar_1_1report.html#a89eb2408aee31cb4c1f93af872f44b2c',1,'bia::grammar::report']]]
 ];

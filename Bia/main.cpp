@@ -102,7 +102,7 @@ int main()
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		//SetConsoleOutputCP(65001);
-		
+
 		// Script
 		char _script[] = u8R""(
 

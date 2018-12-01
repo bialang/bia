@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['type',['TYPE',['../structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831',1,'bia::grammar::report']]]
+  ['protection_5fflags',['PROTECTION_FLAGS',['../classbia_1_1machine_1_1memory_1_1executable__allocator.html#a77d47f942823d6f17b450ba6cd894feb',1,'bia::machine::memory::executable_allocator']]]
 ];

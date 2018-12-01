@@ -1,13 +1,16 @@
 var searchData=
 [
-  ['bia_5fcompiler_5fdev_5finvalid',['BIA_COMPILER_DEV_INVALID',['../exception_8hpp.html#a4d32fe617759c91c0f8c0d6e8d6c5fb6',1,'exception.hpp']]],
+  ['bia_5fbuild_5fshared',['BIA_BUILD_SHARED',['../config__cmake_8hpp.html#a08650d873f85713e619b3dfc60140687',1,'config_cmake.hpp']]],
   ['bia_5fem_5fassign_5fon_5fconst',['BIA_EM_ASSIGN_ON_CONST',['../exception_8hpp.html#adc9eb72875672ba15bf45f206390609a',1,'exception.hpp']]],
   ['bia_5fem_5ffailed_5fallocation',['BIA_EM_FAILED_ALLOCATION',['../exception_8hpp.html#a2e2aff65dc37eddff43f8b5bf23df6e2',1,'exception.hpp']]],
   ['bia_5fem_5ffailed_5fmemory_5fprotection',['BIA_EM_FAILED_MEMORY_PROTECTION',['../exception_8hpp.html#a8606995b60236bf995cfe6c2a40e6fb7',1,'exception.hpp']]],
   ['bia_5fem_5finvalid_5fargument',['BIA_EM_INVALID_ARGUMENT',['../exception_8hpp.html#ac8c0645265903b67e10066d2ded861f4',1,'exception.hpp']]],
+  ['bia_5fem_5finvalid_5fascii',['BIA_EM_INVALID_ASCII',['../exception_8hpp.html#a122e61c1f959f7777e88366c0e875191',1,'exception.hpp']]],
   ['bia_5fem_5finvalid_5fencoding',['BIA_EM_INVALID_ENCODING',['../exception_8hpp.html#aa438b056ffe8db4d652c1d9d1de20df3',1,'exception.hpp']]],
+  ['bia_5fem_5finvalid_5finstance_5ftype',['BIA_EM_INVALID_INSTANCE_TYPE',['../exception_8hpp.html#a3187028886228f2e06d35197bd7ef1bc',1,'exception.hpp']]],
   ['bia_5fem_5finvalid_5funicode',['BIA_EM_INVALID_UNICODE',['../exception_8hpp.html#ae803ddfbd9335a080f97fafdb370aef9',1,'exception.hpp']]],
   ['bia_5fem_5flimitation_5fexceeded',['BIA_EM_LIMITATION_EXCEEDED',['../exception_8hpp.html#a70aa810f96ce04ab093946219597b67c',1,'exception.hpp']]],
+  ['bia_5fem_5fmodule_5fnot_5ffound',['BIA_EM_MODULE_NOT_FOUND',['../exception_8hpp.html#a140a05146f561a256f4c704aea6d550a',1,'exception.hpp']]],
   ['bia_5fem_5fnot_5fenough_5fspace',['BIA_EM_NOT_ENOUGH_SPACE',['../exception_8hpp.html#a1d04bb51bc51776614eb46a93d9c541a',1,'exception.hpp']]],
   ['bia_5fem_5fnull_5finstance',['BIA_EM_NULL_INSTANCE',['../exception_8hpp.html#aadc7b7b3dbbf83c75103da2235608ad8',1,'exception.hpp']]],
   ['bia_5fem_5freport_5flimit',['BIA_EM_REPORT_LIMIT',['../exception_8hpp.html#a494fb91eee1e7cdbf921b409fdbac41c',1,'exception.hpp']]],
@@ -20,9 +23,15 @@ var searchData=
   ['bia_5fem_5funsupported_5foperator',['BIA_EM_UNSUPPORTED_OPERATOR',['../exception_8hpp.html#a605a3c12258a2656bde4e16390efcb92',1,'exception.hpp']]],
   ['bia_5fem_5funsupported_5ftest',['BIA_EM_UNSUPPORTED_TEST',['../exception_8hpp.html#a19012e668c467336a388f9372cc0e2d4',1,'exception.hpp']]],
   ['bia_5fem_5funsupported_5ftype',['BIA_EM_UNSUPPORTED_TYPE',['../exception_8hpp.html#af436ee0dfe5e2d2439d31d6ba9b4622f',1,'exception.hpp']]],
+  ['bia_5fimplementation_5ferror',['BIA_IMPLEMENTATION_ERROR',['../exception_8hpp.html#a5ec1d2c64e8d41a5e9d20a8c84849114',1,'exception.hpp']]],
   ['bia_5fimplementation_5fexception',['BIA_IMPLEMENTATION_EXCEPTION',['../exception_8hpp.html#aff6cf8b7fc1220b260842f4a8dec7141',1,'exception.hpp']]],
-  ['bia_5fmax_5fidentifier_5flength',['BIA_MAX_IDENTIFIER_LENGTH',['../allocator_8hpp.html#a0ca07d06c765c54baf1db8f1fa09fc19',1,'config.hpp']]],
+  ['bia_5fmax_5fidentifier_5flength',['BIA_MAX_IDENTIFIER_LENGTH',['../config_8hpp.html#a0ca07d06c765c54baf1db8f1fa09fc19',1,'config.hpp']]],
   ['bia_5fmax_5fkeyword_5flength',['BIA_MAX_KEYWORD_LENGTH',['../config_8hpp.html#a4ef735902fdd56f739b2cfe0dacc5e3a',1,'config.hpp']]],
   ['bia_5fmax_5foperator_5flength',['BIA_MAX_OPERATOR_LENGTH',['../config_8hpp.html#a62fa18e42d7df6701ba01d8bb8bc074e',1,'config.hpp']]],
-  ['bia_5fmin_5finput_5fbuffer_5fsize',['BIA_MIN_INPUT_BUFFER_SIZE',['../config_8hpp.html#a4901fc71a976a765803fa022219da3ea',1,'config.hpp']]]
+  ['bia_5fmin_5finput_5fbuffer_5fsize',['BIA_MIN_INPUT_BUFFER_SIZE',['../config_8hpp.html#a4901fc71a976a765803fa022219da3ea',1,'config.hpp']]],
+  ['bia_5fmodule_5fexport',['BIA_MODULE_EXPORT',['../module__library_8hpp.html#a9efc07697cbc4bf4d13e5a858eb7bd03',1,'module_library.hpp']]],
+  ['bia_5fmodule_5fload_5fprefix',['BIA_MODULE_LOAD_PREFIX',['../module__library_8hpp.html#ab438deb718e9ae91aedb0014155fec41',1,'module_library.hpp']]],
+  ['bia_5fmodule_5funload_5fprefix',['BIA_MODULE_UNLOAD_PREFIX',['../module__library_8hpp.html#af8793627e1a8da56174fd5d134833135',1,'module_library.hpp']]],
+  ['bia_5fnot_5fimplemented',['BIA_NOT_IMPLEMENTED',['../exception_8hpp.html#ac904ba7b2e317a8e72b4e53bc98e3309',1,'exception.hpp']]],
+  ['bia_5fregister_5fmodule_5flibrary',['BIA_REGISTER_MODULE_LIBRARY',['../module__library_8hpp.html#a49b2a117d8b22865bd15979b87190b13',1,'module_library.hpp']]]
 ];
