@@ -23,7 +23,6 @@ BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_int_0(framework::member
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_int_1(framework::member * _destination);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_int_n1(framework::member * _destination);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_double(framework::member * _destination, double _value);
-BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_big_double(framework::member * _destination, framework::native::double_member::double_type * _value);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_string(framework::member *_destination, const char *_string, framework::native::cstring_member<char>::size_type _size, framework::native::cstring_member<char>::length_type _length);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_string16(framework::member *_destination, const char16_t *_string, framework::native::cstring_member<char16_t>::size_type _size, framework::native::cstring_member<char16_t>::length_type _length);
 BIA_EXPORT void BIA_STATIC_CALLING_CONVETION instantiate_string32(framework::member *_destination, const char32_t *_string, framework::native::cstring_member<char32_t>::size_type _size, framework::native::cstring_member<char32_t>::length_type _length);

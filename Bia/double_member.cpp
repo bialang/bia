@@ -12,8 +12,9 @@ namespace native
 
 thread_local double_member::tmp_value double_member::_tmp_value;
 
-double_member::double_member(double _value) : _data(_value)
+double_member::double_member(double _value)
 {
+	_data.get() = _value;
 }
 
 double_member::double_member(const data_type & _data) noexcept : _data(_data)

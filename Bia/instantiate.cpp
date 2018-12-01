@@ -45,11 +45,6 @@ void BIA_STATIC_CALLING_CONVETION instantiate_double(framework::member *_destina
 	_destination->replace_this<framework::native::double_member>(_value);
 }
 
-void BIA_STATIC_CALLING_CONVETION instantiate_big_double(framework::member * _destination, framework::native::double_member::double_type * _value)
-{
-	_destination->replace_this<framework::native::double_member>(_value);
-}
-
 void BIA_STATIC_CALLING_CONVETION instantiate_string(framework::member *_destination, const char *_string, framework::native::cstring_member<char>::size_type _size, framework::native::cstring_member<char>::length_type _length)
 {
 	_destination->replace_this<framework::native::cstring_member<char>>(_string, _size, _length);
