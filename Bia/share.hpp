@@ -29,6 +29,8 @@ template<typename Type>
 inline share<Type>::~share()
 {
 	if (!_data->ref_counter.fetch_sub(1, std::memory_order_release)) {
+		atomic_thread_fence(std::memory_order_acquire);
+
 		machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_data, sizeof(data)));
 	}
 }
@@ -36,7 +38,7 @@ inline share<Type>::~share()
 template<typename Type>
 inline bool share<Type>::only_owner() const noexcept
 {
-	return _data->ref_counter.load(std::memory_order_release) == 1;
+	return _data->ref_counter.load() == 1;
 }
 
 template<typename Type>

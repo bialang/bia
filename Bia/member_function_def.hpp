@@ -2,7 +2,7 @@
 
 #include "function.hpp"
 #include "share_def.hpp"
-#include "instance_holder.hpp"
+#include "instance_holder_def.hpp"
 
 
 namespace bia

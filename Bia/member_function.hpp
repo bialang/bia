@@ -4,6 +4,7 @@
 #include "exception.hpp"
 #include "disguised_caller.hpp"
 #include "share.hpp"
+#include "instance_holder.hpp"
 
 
 namespace bia

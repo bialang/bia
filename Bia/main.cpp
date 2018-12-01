@@ -104,25 +104,9 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
-import time
 
-var _start = time.time_point()
-
-print time.now()
-
-
-
-hey(3.4,4.5)
-o(43.5)
-var i = printer(399)
-i.hey()
-i.hi()
-printer.hey()
-print i
-
-var _end = time.time_point()
-
-print time.millis(_start, _end)
+print "hi"
+print 69
 
 )"";
 
