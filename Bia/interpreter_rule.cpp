@@ -21,7 +21,7 @@ interpreter_rule::interpreter_rule(report::rule_type _id, uint32_t _flags, std::
 	this->_flags = _flags;
 }
 
-bool interpreter_rule::run_rule(stream::input_stream & _input, token_param _token_param) const
+bool interpreter_rule::run_rule(stream::input_stream & _input, token_param & _token_param) const
 {
 	const auto _begin_size = _token_param.bundle->size();
 	const auto _begin_mark = _input.mark();
@@ -124,7 +124,7 @@ report::rule_type interpreter_rule::id() const noexcept
 	return _id;
 }
 
-void interpreter_rule::begin_wrap_up(token_param _token_param) const
+void interpreter_rule::begin_wrap_up(token_param & _token_param) const
 {
 	if (_flags & F_WRAP_UP) {
 		report begin{};

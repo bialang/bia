@@ -98,13 +98,13 @@ public:
 	 *
 	 * @param	_buffer	Defines the buffer that should be matched.
 	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
+	 * @param	[in] _params	(Not used)	Defines additional interpreter information.
 	 * @param	[out]	_output	Defines the token result.
 	 *
 	 * @return	Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output);
-	BIA_EXPORT static ACTION string(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION number(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION string(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches an identifier. An identifier conists of alphanumeric characters and an underscore without a leading number.
 	 *
@@ -112,7 +112,7 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
@@ -120,7 +120,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION identifier(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION identifier(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches the first member of a member chain.
 	 *
@@ -128,7 +128,7 @@ public:
 	 * @date 6-Aug-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter(), string(), keyword() and identifier().
@@ -136,7 +136,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION first_member(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION first_member(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches an assign operator.
 	 *
@@ -146,7 +146,7 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
@@ -155,7 +155,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION assign_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a compare operator.
 	 *
@@ -165,7 +165,7 @@ public:
 	 * @date 6-May-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
@@ -174,7 +174,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION compare_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a dot operator like `*`, `/` and so on.
 	 *
@@ -184,7 +184,7 @@ public:
 	 * @date 15-Jun-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
@@ -193,7 +193,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION dot_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION dot_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a comment which starts with '#' and ends with a line feed.
 	 *
@@ -201,7 +201,7 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
@@ -209,7 +209,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION comment(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a commend terminator.
 	 *
@@ -217,7 +217,7 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
@@ -225,7 +225,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION command_end(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION command_end(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a custom operator.
 	 *
@@ -235,7 +235,7 @@ public:
 	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
@@ -245,7 +245,7 @@ public:
 	 * @return Defines the success code. See @ref ACTION.
 	*/
 	template<flags::flag_type Flags>
-	static ACTION custom_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+	static ACTION custom_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
@@ -312,7 +312,7 @@ public:
 	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
@@ -322,7 +322,7 @@ public:
 	 * @return Defines the success code. See @ref ACTION.
 	*/
 	template<typename Type, flags::flag_type Flags = flags::none>
-	static ACTION keyword(stream::input_stream & _input, token_param _params, token_output & _output)
+	static ACTION keyword(stream::input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
@@ -374,7 +374,7 @@ public:
 	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
@@ -383,7 +383,7 @@ public:
 	 * @return Defines the success code. See @ref ACTION.
 	*/
 	template<report::rule_type Rule, flags::flag_type Flags = flags::filler_token>
-	static ACTION rule_pointer(stream::input_stream & _input, token_param _params, token_output & _output)
+	static ACTION rule_pointer(stream::input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;

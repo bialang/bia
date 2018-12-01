@@ -1,5 +1,5 @@
 #include "interpreter_token.hpp"
-#include "mpir_allocator.hpp"
+#include "big_int_allocator.hpp"
 
 #include <cctype>
 #include <limits>
@@ -85,7 +85,7 @@ bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding:
 	return _skipped;
 }
 
-ACTION interpreter_token::number(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::number(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -119,18 +119,18 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param _par
 	_string.finish();
 
 	// Construct big integer
-	auto _new_int = machine::memory::mpir_allocator::new_int();
+	auto _new_int = machine::memory::big_int_allocator::new_int();
 
-	_params.schein.register_allocation(_new_int);
+	//_params.schein.register_allocation(_new_int);
 	_output.type = report::TYPE::BIG_INT_VALUE;
 	_output.content.big_int_value = _new_int;
 
-	mpz_set_str(_new_int, stream::string_stream::string<char>(_string.buffer()), _base);
+	//mpz_set_str(_new_int, stream::string_stream::string<char>(_string.buffer()), _base);
 
 	return success;
 }
 
-ACTION interpreter_token::string(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::string(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -320,7 +320,7 @@ gt_end:;
 	return success;
 }
 
-ACTION interpreter_token::identifier(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::identifier(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -375,7 +375,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	return success;
 }
 
-ACTION interpreter_token::first_member(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::first_member(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -412,7 +412,7 @@ ACTION interpreter_token::first_member(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -462,7 +462,7 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 	return error;
 }
 
-ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -524,7 +524,7 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 	return error;
 }
 
-ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -581,7 +581,7 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::comment(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::comment(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -623,7 +623,7 @@ ACTION interpreter_token::comment(stream::input_stream & _input, token_param _pa
 	return _first_iter ? success : error;
 }
 
-ACTION interpreter_token::command_end(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::command_end(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
