@@ -2,6 +2,8 @@
 
 #include <cstdarg>
 
+#include "config.hpp"
+#include "exception.hpp"
 #include "member.hpp"
 #include "undefined_member.hpp"
 

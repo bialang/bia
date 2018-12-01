@@ -1,11 +1,8 @@
 #pragma once
 
-#include <cstddef>
 #include <utility>
-#include <cstdint>
 
 #include "config.hpp"
-#include "exception.hpp"
 
 
 namespace bia
