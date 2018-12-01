@@ -235,8 +235,6 @@
     <ClInclude Include="member_function_def.hpp" />
     <ClInclude Include="member_map.hpp" />
     <ClInclude Include="big_int_allocator.hpp" />
-    <ClInclude Include="native_member.hpp" />
-    <ClInclude Include="native_member_def.hpp" />
     <ClInclude Include="object_def.hpp" />
     <ClInclude Include="object_variable.hpp" />
     <ClInclude Include="raw_object_def.hpp" />

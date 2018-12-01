@@ -491,12 +491,6 @@
     <ClInclude Include="cstring_member_def.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="native_member_def.hpp">
-      <Filter>Header Files\framework\native</Filter>
-    </ClInclude>
-    <ClInclude Include="native_member.hpp">
-      <Filter>Header Files\framework\native</Filter>
-    </ClInclude>
     <ClInclude Include="int_member.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
