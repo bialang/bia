@@ -1,14 +1,13 @@
 #pragma once
 
-#include <mpir/mpir.h>
 #include <cstdint>
 #include <cstdlib>
 #include <algorithm>
-#include <type_traits>
 
 #include "config.hpp"
 #include "native_variable.hpp"
 #include "share.hpp"
+#include "big_int.hpp"
 
 
 namespace bia
@@ -22,7 +21,7 @@ class int_member : public native_variable
 {
 public:
 	/** The struct holding all arithmetic data. */
-	typedef typename std::remove_all_extents<mpz_t>::type int_type;
+	typedef dependency::big_int::type int_type;
 	typedef utility::share<int_type> data_type;
 
 

@@ -7,6 +7,7 @@
 #include "report_bundle.hpp"
 #include "input_stream.hpp"
 #include "machine_context.hpp"
+#include "machine_schein.hpp"
 #include "encoder.hpp"
 
 
@@ -68,6 +69,8 @@ struct token_param
 	report::token_type token_id;
 	/** The corresponding machine context. */
 	machine::machine_context * context;
+	/** The machine schein of the resulting code. */
+	machine::machine_schein schein;
 	/** The decoder for the input stream. */
 	encoding::encoder * encoder;
 };

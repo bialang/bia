@@ -13,6 +13,7 @@
 #include <chrono>
 #include <iostream>
 #include <regex>
+#include "mpir_allocator.hpp"
 
 
 struct printer
@@ -68,7 +69,7 @@ void test()
 int main()
 {
 	//constructor_chain<const printer>(printer());
-
+	bia::machine::memory::mpir_allocator::initialize(std::make_shared<bia::machine::memory::simple_allocator>());
 	{
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
@@ -105,9 +106,10 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-global i = 65654534453445354453343434463
-
+global i = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff'ffff_ff
+print 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff'ffff_ff
 print i
+print "hi"
 
 )"";
 
