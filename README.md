@@ -30,8 +30,8 @@ _context.execute(_code.c_str(), _code.length());
 
 # Language Features
 ## Native types
-- Integrals with an arbitrary length (uses [MPIR](http://mpir.org/))
-- Floating point numbers with an arbitrary precision (uses [MPIR](http://mpir.org/))
+- Integrals with arbitrary length (uses [MPIR](http://mpir.org/))
+- 64-Bit floating point numbers
 - Classic C-style string with C++11 string literal support
 
 ## Variable Declaration
@@ -102,7 +102,9 @@ do until false {
 ```
 
 ## Conditional Statements
-- `if` statements. Conditions that can be evaluated at compile time will be optimized away:
+### `if`, `else if` and `else` statements
+
+Conditions that can be evaluated at compile time will be optimized away:
 
 ```
 if 1 == 0 {
@@ -162,7 +164,7 @@ bia::set_class<my_class>(_context, "my_class")
 Bia compiles the script directly to memory before the first run and executes it as a normal C++ function. This technique allows very fast run times since the code is directly executed on the CPU.
 
 # Supported Platforms
-Currently the MSVC , GNU (>=4.9) and Clang (>=3.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for the ARM architecture is planned.
+Currently the MSVC, GNU (>=4.9) and Clang (>=3.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for the ARM architecture is planned.
 
 # License
 Bia is distributed under the BSD-3-Clause.
