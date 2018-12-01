@@ -97,6 +97,9 @@
     <Filter Include="Header Files\dependency">
       <UniqueIdentifier>{f03efed1-96d9-4cec-9b65-31f7391608d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dependency">
+      <UniqueIdentifier>{dbdee223-1bca-42f3-b81e-08be42573bc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -173,6 +176,18 @@
     </ClCompile>
     <ClCompile Include="module_loader.cpp">
       <Filter>Source Files\machine\modular</Filter>
+    </ClCompile>
+    <ClCompile Include="double_member.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="int_member.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="big_int_allocator.cpp">
+      <Filter>Source Files\machine\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="big_int.cpp">
+      <Filter>Source Files\dependency</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -487,6 +502,12 @@
     </ClInclude>
     <ClInclude Include="double_member.hpp">
       <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="big_int.hpp">
+      <Filter>Header Files\dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="big_int_allocator.hpp">
+      <Filter>Header Files\machine\memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

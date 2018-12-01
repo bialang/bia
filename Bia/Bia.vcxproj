@@ -184,7 +184,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="big_int.cpp" />
+    <ClCompile Include="big_int_allocator.cpp" />
     <ClCompile Include="disassembler.cpp" />
+    <ClCompile Include="double_member.cpp" />
+    <ClCompile Include="int_member.cpp" />
     <ClCompile Include="machine_stack.cpp" />
     <ClCompile Include="member_map.cpp" />
     <ClCompile Include="module_loader.cpp" />
@@ -217,6 +221,7 @@
     <ClInclude Include="architecture_utils.hpp" />
     <ClInclude Include="ascii.hpp" />
     <ClInclude Include="bia.hpp" />
+    <ClInclude Include="big_int.hpp" />
     <ClInclude Include="block_allocator.hpp" />
     <ClInclude Include="class_template.hpp" />
     <ClInclude Include="class_template_def.hpp" />
@@ -229,6 +234,7 @@
     <ClInclude Include="max.hpp" />
     <ClInclude Include="member_function_def.hpp" />
     <ClInclude Include="member_map.hpp" />
+    <ClInclude Include="big_int_allocator.hpp" />
     <ClInclude Include="native_member.hpp" />
     <ClInclude Include="native_member_def.hpp" />
     <ClInclude Include="object_def.hpp" />

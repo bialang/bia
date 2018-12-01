@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "config.hpp"
-#include "allocator.hpp"
+#include "block_allocator.hpp"
 #include "big_int.hpp"
 
 

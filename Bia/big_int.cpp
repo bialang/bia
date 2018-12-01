@@ -1,30 +1,78 @@
 #include "big_int.hpp"
 
+#include <cstring>
+#include <cstdlib>
+
+
 namespace bia
 {
 namespace dependency
 {
 
-void big_int::free_int(type * _int)
+template<typename Type>
+inline void set_big_int(mpz_t _int, Type _signed) noexcept
 {
+	auto _unsigned = abs(_signed);
+	constexpr auto _needed = (sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
 
+	for (_int->_mp_size = 0; _int->_mp_size < _needed && _unsigned; ++_int->_mp_size) {
+		_int->_mp_d[_int->_mp_size] = _unsigned & GMP_NUMB_MASK;
+		_unsigned >>= GMP_NUMB_BITS;
+	}
+
+	// Apply sign
+	if (_signed < 0) {
+		_int->_mp_size = -_int->_mp_size;
+	}
 }
 
-big_int::type * big_int::new_int()
+big_int::big_int(int64_t _value) noexcept : _buffer{}
 {
-	constexpr auto int_size = sizeof(type) + sizeof(*type::_mp_d) * 2;
+	reset();
 
-	auto _int = static_cast<type*>(_allocator->allocate(int_size).first);
-
-	// Set
-	memset(_int, 0, int_size);
-
-	_int->_mp_alloc = 2;
-	_int->_mp_d = reinterpret_cast<decltype(type::_mp_d)>(_int + 1);
-
-	return _int;
+	// Set big int
+	set_big_int(reinterpret_cast<type*>(_buffer), _value);
 }
 
+big_int::big_int(const big_int & _copy)
+{
+	if (reinterpret_cast<const type*>(_copy._buffer)->_mp_alloc == reserved_space / sizeof(*type::_mp_d)) {
+		std::memcpy(_buffer, _copy._buffer, sizeof(_buffer));
+
+		auto _ptr = reinterpret_cast<type*>(_buffer);
+
+		_ptr->_mp_d = reinterpret_cast<decltype(type::_mp_d)>(_ptr + 1);
+	} else {
+		mpz_init_set(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_copy._buffer));
+	}
+}
+
+big_int::big_int(big_int && _move) noexcept
+{
+	std::memcpy(_buffer, _move._buffer, sizeof(_buffer));
+
+	auto _ptr = reinterpret_cast<type*>(_buffer);
+
+	_ptr->_mp_d = reinterpret_cast<decltype(type::_mp_d)>(_ptr + 1);
+
+	// Reset move big int
+	std::memset(_move._buffer, 0, sizeof(_buffer));
+
+	_move.reset();
+}
+
+big_int::~big_int()
+{
+	mpz_clear(reinterpret_cast<type*>(_buffer));
+}
+
+void big_int::reset() noexcept
+{
+	auto _ptr = reinterpret_cast<type*>(_buffer);
+
+	_ptr->_mp_alloc = reserved_space / sizeof(*type::_mp_d);
+	_ptr->_mp_d = reinterpret_cast<decltype(type::_mp_d)>(_ptr + 1);
+}
 
 }
 }
