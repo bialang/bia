@@ -82,6 +82,7 @@ public:
 	 * @date 2-Dec-18
 	 *
 	 * @tparam Type A deriviate of @ref framework::member which size must be less or equal to @ref member_allocation_size.
+	 * @tparam Arguments The type of the arguments.
 	 *
 	 * @param _arguments The arguments passed to the constructor of @a Type.
 	 *

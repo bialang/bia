@@ -1,4 +1,5 @@
 #include "big_int_allocator.hpp"
+#include "exception.hpp"
 
 #include <mpir/mpir.h>
 #include <cstring>
@@ -15,6 +16,10 @@ std::shared_ptr<allocator> big_int_allocator::_allocator;
 
 void big_int_allocator::initialize(const std::shared_ptr<allocator>& _allocator)
 {
+	if (!_allocator) {
+		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
+	}
+
 	big_int_allocator::_allocator = _allocator;
 
 	// Set allocation functions
