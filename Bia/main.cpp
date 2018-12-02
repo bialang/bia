@@ -109,6 +109,7 @@ int main()
 #global i = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff'ffff_ff
 #print 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff'ffff_ff
 var i = 34
+i += 33
 print i
 print "hi"
 

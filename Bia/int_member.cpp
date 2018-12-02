@@ -1,6 +1,8 @@
 #include "int_member.hpp"
 #include "share.hpp"
 #include "print.hpp"
+#include "native_operator.hpp"
+#include "native_test_operator.hpp"
 
 
 namespace bia
@@ -49,17 +51,17 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call(member * _destinati
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
 {
-	BIA_NOT_IMPLEMENTED;
+	_data.get() = integral_operation<true>(_data.get(), _operator, _right);
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
 {
-	BIA_NOT_IMPLEMENTED;
+	_data.get() = integral_operation<true>(_data.get(), _operator, _right);
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_double(member * _destination, operator_type _operator, double _right)
 {
-	BIA_NOT_IMPLEMENTED;
+	_data.get() = static_cast<int64_t>(arithmetic_operation<true>(_data.get(), _operator, _right));
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::object_member(member * _destination, machine::string_manager::name_type _name)
@@ -74,7 +76,7 @@ int int_member::flags() const
 
 int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test() const
 {
-	BIA_NOT_IMPLEMENTED;
+	return test_operation(_data.get());
 }
 
 int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_member(operator_type _operator, member * _right) const
@@ -84,17 +86,17 @@ int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_member(operator_type _ope
 
 int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_int32(operator_type _operator, int32_t _right) const
 {
-	BIA_NOT_IMPLEMENTED;
+	return test_operation(_data.get(), _operator, _right);
 }
 
 int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_int64(operator_type _operator, int64_t _right) const
 {
-	BIA_NOT_IMPLEMENTED;
+	return test_operation(_data.get(), _operator, _right);
 }
 
 int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_double(operator_type _operator, double _right) const
 {
-	BIA_NOT_IMPLEMENTED;
+	return test_operation(_data.get(), _operator, _right);
 }
 
 int64_t int_member::to_int() const
