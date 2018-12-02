@@ -189,6 +189,7 @@
     <ClCompile Include="disassembler.cpp" />
     <ClCompile Include="double_member.cpp" />
     <ClCompile Include="big_int_member.cpp" />
+    <ClCompile Include="int_member.cpp" />
     <ClCompile Include="machine_stack.cpp" />
     <ClCompile Include="member_map.cpp" />
     <ClCompile Include="module_loader.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="double_member.hpp" />
     <ClInclude Include="instance_holder_def.hpp" />
     <ClInclude Include="big_int_member.hpp" />
+    <ClInclude Include="int_member.hpp" />
     <ClInclude Include="lambda_function_def.hpp" />
     <ClInclude Include="max.hpp" />
     <ClInclude Include="member_allocator.hpp" />

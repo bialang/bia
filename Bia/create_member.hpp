@@ -6,6 +6,7 @@
 
 #include "type_traits.hpp"
 #include "member.hpp"
+#include "int_member.hpp"
 #include "big_int_member.hpp"
 #include "double_member.hpp"
 #include "cstring_member.hpp"
@@ -56,7 +57,7 @@ template<typename Type>
 inline typename std::enable_if<std::is_integral<Type>::value>::type create_member(member * _destination, Type _value)
 {
 	if (_destination) {
-		//_destination->replace_this<native::int_member>(_value);
+		_destination->replace_this<native::int_member>(_value);
 	}
 }
 

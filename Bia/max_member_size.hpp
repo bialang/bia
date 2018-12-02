@@ -1,6 +1,7 @@
 #pragma once
 
 #include "max.hpp"
+#include "int_member.hpp"
 #include "big_int_member.hpp"
 #include "double_member.hpp"
 #include "cstring_member_def.hpp"
@@ -19,6 +20,7 @@ namespace framework
 {
 
 constexpr auto max_member_size = utility::max(
+	sizeof(native::int_member),
 	sizeof(native::big_int_member),
 	sizeof(native::double_member),
 	sizeof(native::cstring_member<char>),

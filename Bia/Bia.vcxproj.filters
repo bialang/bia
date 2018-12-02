@@ -189,6 +189,9 @@
     <ClCompile Include="big_int_member.cpp">
       <Filter>Source Files\framework\native</Filter>
     </ClCompile>
+    <ClCompile Include="int_member.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -501,6 +504,9 @@
       <Filter>Header Files\machine\memory</Filter>
     </ClInclude>
     <ClInclude Include="big_int_member.hpp">
+      <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="int_member.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
   </ItemGroup>
