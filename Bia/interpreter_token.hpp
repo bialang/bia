@@ -68,8 +68,7 @@ public:
 	 * @param [in] _input The input buffer.
 	 * @param [in] _encoder The encoder.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See whitespace_automaton().
 	 *
 	 * @return true if any whitespace was matched, otherwise false.
 	*/
@@ -83,8 +82,7 @@ public:
 	 * @param [in] _input The input buffer.
 	 * @param [in] _encoder The encoder.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See whitespace_automaton().
 	 *
 	 * @return true if any padding character was matched, otherwise false.
 	*/
@@ -194,22 +192,6 @@ public:
 	*/
 	BIA_EXPORT static ACTION dot_operator(stream::input_stream & _input, token_param _params, token_output & _output);
 	/**
-	 * Matches a comment which starts with '#' and ends with a line feed.
-	 *
-	 * @since 3.64.127.716
-	 * @date 24-Apr-18
-	 *
-	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
-	 * @param [out] _output The token result.
-	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
-	 *
-	 * @return Defines the success code. See @ref ACTION.
-	*/
-	BIA_EXPORT static ACTION comment(stream::input_stream & _input, token_param _params, token_output & _output);
-	/**
 	 * Matches a commend terminator.
 	 *
 	 * @since 3.64.127.716
@@ -219,8 +201,7 @@ public:
 	 * @param _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See whitespace_automaton().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
@@ -405,6 +386,23 @@ public:
 	}
 
 private:
+	/**
+	 * Matches single- and multiline comments and @a _is_ws.
+	 *
+	 * @since 3.68.141.794
+	 * @date 2-Dec-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param [in] _encoder The encoder.
+	 * @param _is_ws The whitespace checker.
+	 * @param _end_predicate (Optional) If specified the automaton ends prematurely and returns -1. Multiline comments are not affected by this predicate.
+	 *
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
+	 *
+	 * @return 1 if the automaton matched whitespaces/comments successfully. -1 if @a _end_predicate fired, otherwise 0.
+	*/
+	BIA_EXPORT static int whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point) = nullptr);
 	/**
 	 * Matches integral values with a base up to 16.
 	 *
