@@ -17,14 +17,14 @@ void simple_allocator::deallocate(universal_allocation _allocation)
 	std::free(_allocation.first);
 }
 
-void simple_allocator::block_allocator<framework::max_member_size>::deallocate_block(universal_allocation _block)
+void simple_allocator::deallocate_member(allocation<framework::member> _allocation)
 {
-	deallocate(_block);
+	deallocate(cast_allocation<void>(_allocation));
 }
 
-void simple_allocator::block_allocator<sizeof(dependency::big_int)>::deallocate_block(universal_allocation _block)
+void simple_allocator::deallocate_big_int(allocation<dependency::big_int> _allocation)
 {
-	deallocate(_block);
+	deallocate(cast_allocation<void>(_allocation));
 }
 
 universal_allocation simple_allocator::reallocate(universal_allocation _allocation, size_type _size)
@@ -54,14 +54,14 @@ universal_allocation simple_allocator::allocate(size_type _size)
 	return { _ptr, _size };
 }
 
-universal_allocation simple_allocator::block_allocator<framework::max_member_size>::allocate_block()
+allocation<framework::member> simple_allocator::allocate_member()
 {
-	return allocate(framework::max_member_size);
+	return cast_allocation<framework::member>(allocate(member_allocation_size));
 }
 
-universal_allocation simple_allocator::block_allocator<sizeof(dependency::big_int)>::allocate_block()
+allocation<dependency::big_int> simple_allocator::allocate_big_int()
 {
-	return allocate(sizeof(dependency::big_int));
+	return cast_allocation<dependency::big_int>(allocate(big_int_allocation_size));
 }
 
 universal_allocation simple_allocator::prepare(size_type _size)
