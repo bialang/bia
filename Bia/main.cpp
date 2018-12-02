@@ -74,7 +74,7 @@ int main()
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		auto _exec_allocator = std::make_shared<machine::memory::simple_executable_allocator>();
-		bia::machine::machine_context _context(_allocator, _exec_allocator);
+		bia::machine::machine_context _context(_allocator, _allocator, _exec_allocator);
 
 		set_function(_context, u8"hello_w�rld", static_cast<int(*)(std::string*)>([](std::string *_s) {
 			puts(_s->c_str());
@@ -106,10 +106,12 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-global i = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff'ffff_ff
-print 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff'ffff_ff
+#global i = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff'ffff_ff
+#print 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff'ffff_ff
+var i = 34
 print i
 print "hi"
+
 
 )"";
 
