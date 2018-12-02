@@ -180,14 +180,14 @@
     <ClCompile Include="double_member.cpp">
       <Filter>Source Files\framework\native</Filter>
     </ClCompile>
-    <ClCompile Include="int_member.cpp">
-      <Filter>Source Files\framework\native</Filter>
-    </ClCompile>
     <ClCompile Include="big_int_allocator.cpp">
       <Filter>Source Files\machine\memory</Filter>
     </ClCompile>
     <ClCompile Include="big_int.cpp">
       <Filter>Source Files\dependency</Filter>
+    </ClCompile>
+    <ClCompile Include="big_int_member.cpp">
+      <Filter>Source Files\framework\native</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,9 +488,6 @@
     <ClInclude Include="cstring_member_def.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="int_member.hpp">
-      <Filter>Header Files\framework\native</Filter>
-    </ClInclude>
     <ClInclude Include="double_member.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
@@ -502,6 +499,9 @@
     </ClInclude>
     <ClInclude Include="member_allocator.hpp">
       <Filter>Header Files\machine\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="big_int_member.hpp">
+      <Filter>Header Files\framework\native</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

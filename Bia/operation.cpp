@@ -1,5 +1,5 @@
 #include "operation.hpp"
-#include "int_member.hpp"
+#include "big_int_member.hpp"
 #include "double_member.hpp"
 #include "native_operator.hpp"
 #include "native_test_operator.hpp"
@@ -17,7 +17,7 @@ void BIA_STATIC_CALLING_CONVETION operation_int32(framework::member * _destinati
 	auto _flags = _right->flags();
 
 	if (_flags & framework::member::F_INT) {
-		_destination->replace_this<framework::native::int_member>(framework::native::operation_chooser_l<int32_t>::operate_result(_left, _operator, _right->to_int()));
+		_destination->replace_this<framework::native::big_int_member>(framework::native::operation_chooser_l<int32_t>::operate_result(_left, _operator, _right->to_int()));
 	} else if (_flags & framework::member::F_DOUBLE) {
 		_destination->replace_this<framework::native::double_member>(framework::native::operation_chooser_l<int32_t>::operate_result(_left, _operator, _right->to_double()));
 	}

@@ -16,12 +16,12 @@ namespace framework
 namespace native
 {
 
-class int_member : public native_variable
+class big_int_member : public native_variable
 {
 public:
 	typedef utility::share<dependency::big_int> data_type;
 
-
+	
 	/**
 	 * Constructor.
 	 *
@@ -32,7 +32,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	int_member(int32_t _value);
+	big_int_member(int32_t _value);
 	/**
 	 * Constructor.
 	 *
@@ -43,7 +43,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	int_member(int64_t _value);
+	big_int_member(int64_t _value);
 	/**
 	 * Constructor.
 	 *
@@ -54,7 +54,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	int_member(const dependency::big_int & _value);
+	big_int_member(const dependency::big_int & _value);
 	/**
 	 * Refer-Constructor.
 	 *
@@ -63,14 +63,14 @@ public:
 	 *
 	 * @param _data The data.
 	*/
-	int_member(const data_type & _data) noexcept;
+	big_int_member(const data_type & _data) noexcept;
 	/**
 	 * Destructor.
 	 *
 	 * @since 3.68.140.790
 	 * @date 20-Oct-18
 	*/
-	~int_member();
+	~big_int_member();
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;

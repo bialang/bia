@@ -1,5 +1,5 @@
 #include "instantiate.hpp"
-#include "int_member.hpp"
+#include "big_int_member.hpp"
 #include "double_member.hpp"
 
 
@@ -12,32 +12,32 @@ namespace link
 
 void BIA_STATIC_CALLING_CONVETION instantiate_int32(framework::member *_destination, int32_t _value)
 {
-	_destination->replace_this<framework::native::int_member>(_value);
+	//_destination->replace_this<framework::native::int_member>(_value);
 }
 
 void BIA_STATIC_CALLING_CONVETION instantiate_int64(framework::member *_destination, int64_t _value)
 {
-	_destination->replace_this<framework::native::int_member>(_value);
+	//_destination->replace_this<framework::native::int_member>(_value);
 }
 
 void BIA_STATIC_CALLING_CONVETION instantiate_big_int(framework::member * _destination, dependency::big_int * _value)
 {
-	_destination->replace_this<framework::native::int_member>(*_value);
+	_destination->replace_this<framework::native::big_int_member>(*_value);
 }
 
 void BIA_STATIC_CALLING_CONVETION instantiate_int_0(framework::member *_destination)
 {
-	_destination->replace_this<framework::native::int_member>(0);
+	//_destination->replace_this<framework::native::int_member>(0);
 }
 
 void BIA_STATIC_CALLING_CONVETION instantiate_int_1(framework::member *_destination)
 {
-	_destination->replace_this<framework::native::int_member>(1);
+	//_destination->replace_this<framework::native::int_member>(1);
 }
 
 void BIA_STATIC_CALLING_CONVETION instantiate_int_n1(framework::member *_destination)
 {
-	_destination->replace_this<framework::native::int_member>(-1);
+	//_destination->replace_this<framework::native::int_member>(-1);
 }
 
 void BIA_STATIC_CALLING_CONVETION instantiate_double(framework::member *_destination, double _value)
