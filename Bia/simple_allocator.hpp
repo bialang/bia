@@ -1,9 +1,9 @@
 #pragma once
 
 #include "config.hpp"
-#include "block_allocator.hpp"
-#include "max_member_size.hpp"
-#include "big_int.hpp"
+#include "allocator.hpp"
+#include "member_allocator.hpp"
+#include "big_int_allocator.hpp"
 
 
 namespace bia
@@ -14,21 +14,21 @@ namespace memory
 {
 
 /**
- * @brief A simple implementation of @ref allocator.
+ * @brief A simple implementation of @ref allocator, @ref member_allocator and @red big_int_allocator.
  *
- * A simple allocator which allocates 'normal' memory without checking. All memory will be allocated using standard function without caching.
+ * A simple allocator which allocates memory for the machine context. All memory will be allocated using standard function without caching.
 */
-class simple_allocator : public block_allocator<framework::max_member_size>, public block_allocator<sizeof(dependency::big_int)>
+class simple_allocator : public allocator, public member_allocator, public big_int_allocator
 {
 public:
 	BIA_EXPORT virtual void deallocate(universal_allocation _allocation) override;
-	BIA_EXPORT virtual void block_allocator<framework::max_member_size>::deallocate_block(universal_allocation _block) override;
-	BIA_EXPORT virtual void block_allocator<sizeof(dependency::big_int)>::deallocate_block(universal_allocation _block) override;
+	BIA_EXPORT virtual void deallocate_member(allocation<framework::member> _allocation) override;
+	BIA_EXPORT virtual void deallocate_big_int(allocation<dependency::big_int> _allocation) override;
 	BIA_EXPORT virtual universal_allocation reallocate(universal_allocation _allocation, size_type _size) override;
 	BIA_EXPORT virtual universal_allocation commit(universal_allocation _allocation, size_type _size) override;
 	BIA_EXPORT virtual universal_allocation allocate(size_type _size) override;
-	BIA_EXPORT virtual universal_allocation block_allocator<framework::max_member_size>::allocate_block() override;
-	BIA_EXPORT virtual universal_allocation block_allocator<sizeof(dependency::big_int)>::allocate_block() override;
+	BIA_EXPORT virtual allocation<framework::member> allocate_member() override;
+	BIA_EXPORT virtual allocation<dependency::big_int> allocate_big_int() override;
 	BIA_EXPORT virtual universal_allocation prepare(size_type _size) override;
 };
 

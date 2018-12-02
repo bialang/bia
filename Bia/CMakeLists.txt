@@ -101,7 +101,7 @@ set(Bia_SOURCE_FILES_LINK "instantiate.cpp" "operation.cpp")
 source_group("Header Files\\machine\\link" FILES ${Bia_HEADER_FILES_LINK})
 source_group("Source Files\\machine\\link" FILES ${Bia_SOURCE_FILES_LINK})
 
-set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "big_int_allocator.hpp" "block_allocator.hpp" "executable_allocator.hpp" "simple_allocator.hpp" "simple_executable_allocator.hpp" "stl_allocator_wrapper.hpp")
+set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "big_int_allocator.hpp" "executable_allocator.hpp" "member_allocator.hpp" "simple_allocator.hpp" "simple_executable_allocator.hpp" "stl_allocator_wrapper.hpp")
 set(Bia_SOURCE_FILES_MEMORY "big_int_allocator.cpp" "simple_allocator.cpp" "simple_executable_allocator.cpp")
 
 source_group("Header Files\\machine\\memory" FILES ${Bia_HEADER_FILES_MEMORY})
@@ -146,7 +146,7 @@ else(BIA_BUILD_SHARED)
 endif(BIA_BUILD_SHARED)
 
 target_link_libraries(Bia ${MPIR_LIB})
-target_include_directories(Bia ${MPIR_INCLUDE})
+#target_include_directories(Bia ${MPIR_INCLUDE})
 
 # Install
 install(TARGETS Bia DESTINATION lib)

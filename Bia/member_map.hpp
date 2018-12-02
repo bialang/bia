@@ -21,7 +21,7 @@ inline member * member_map::emplace(name_type _name, _Args &&... _args)
 
 	// Create new
 	if (_result == _data.get().end()) {
-		auto _member = machine::machine_context::active_allocator()->template construct_block<member, _Ty>(std::forward<_Args>(_args)...);
+		auto _member = machine::machine_context::active_member_allocator()->template construct_member<_Ty>(std::forward<_Args>(_args)...);
 
 		_data.get().emplace(_name, _member);
 		
