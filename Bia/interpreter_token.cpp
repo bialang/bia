@@ -119,7 +119,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param & _p
 	_string.finish();
 
 	// Construct big integer
-	//auto _new_int = machine::memory::big_int_allocator::new_int();
+	//auto _new_int = _params.context->big_int_allocator()->construct_big_int();
 
 	//_params.schein.register_allocation(_new_int);
 	//_output.type = report::TYPE::BIG_INT_VALUE;

@@ -14,9 +14,10 @@ namespace machine
 thread_local machine_context * machine_context::_active_context = nullptr;
 thread_local memory::allocator * machine_context::_active_allocator = nullptr;
 thread_local memory::member_allocator * machine_context::_active_member_allocator = nullptr;
+thread_local memory::big_int_allocator * machine_context::_active_big_int_allocator = nullptr;
 
 
-machine_context::machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _member_allocator(_member_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
+machine_context::machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::big_int_allocator> & _big_int_allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _member_allocator(_member_allocator), _big_int_allocator(_big_int_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -28,6 +29,7 @@ void machine_context::activate_context() noexcept
 	_active_context = this;
 	_active_allocator = allocator();
 	_active_member_allocator = member_allocator();
+	_active_big_int_allocator = big_int_allocator();
 }
 
 machine_context * machine_context::active_context() noexcept
@@ -45,6 +47,11 @@ memory::member_allocator * machine_context::active_member_allocator() noexcept
 	return _active_member_allocator;
 }
 
+memory::big_int_allocator * machine_context::active_big_int_allocator() noexcept
+{
+	return _active_big_int_allocator;
+}
+
 memory::allocator * machine_context::allocator() noexcept
 {
 	return _allocator.get();
@@ -53,6 +60,11 @@ memory::allocator * machine_context::allocator() noexcept
 memory::member_allocator * machine_context::member_allocator() noexcept
 {
 	return _member_allocator.get();
+}
+
+memory::big_int_allocator * machine_context::big_int_allocator() noexcept
+{
+	return _big_int_allocator.get();
 }
 
 memory::executable_allocator * machine_context::executable_allocator() noexcept

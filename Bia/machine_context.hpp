@@ -4,6 +4,9 @@
 #include <utility>
 
 #include "config.hpp"
+#include "allocator.hpp"
+#include "member_allocator.hpp"
+#include "big_int_allocator.hpp"
 #include "executable_allocator.hpp"
 #include "input_stream.hpp"
 #include "machine_code.hpp"
@@ -13,7 +16,6 @@
 #include "variable_index.hpp"
 #include "machine_stack.hpp"
 #include "module_loader.hpp"
-#include "member_allocator.hpp"
 
 
 namespace bia
@@ -37,11 +39,12 @@ public:
 	 *
 	 * @param _allocator The allocator for normal memory.
 	 * @param _member_allocator The member allocator.
+	 * @param _big_int_allocator The big int allocator.
 	 * @param _executable_allocator The allocator for executable memory.
 	 *
 	 * @throws exception::argument_error If the allocator is invalid.
 	*/
-	BIA_EXPORT machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::executable_allocator> & _executable_allocator);
+	BIA_EXPORT machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::big_int_allocator> & _big_int_allocator, const std::shared_ptr<memory::executable_allocator> & _executable_allocator);
 	machine_context(const machine_context & _copy) = delete;
 	machine_context(machine_context && _move) = default;
 	/**
@@ -90,6 +93,15 @@ public:
 	 * @return The active member allocator or null if there is no active allocator.
 	*/
 	BIA_EXPORT static memory::member_allocator * active_member_allocator() noexcept;
+	/**
+	 * Returns the currently active big int allocator of the current thread.
+	 *
+	 * @since 3.68.141.793
+	 * @date 2-Dec-18
+	 *
+	 * @return The active member big int or null if there is no active allocator.
+	*/
+	BIA_EXPORT static memory::big_int_allocator * active_big_int_allocator() noexcept;
 	 /**
 	  * Returns the memory allocator.
 	  *
@@ -108,6 +120,15 @@ public:
 	 * @return The member allocator of this context.
 	*/
 	BIA_EXPORT memory::member_allocator * member_allocator() noexcept;
+	/**
+	 * Returns the big int allocator.
+	 *
+	 * @since 3.68.141.793
+	 * @date 2-Dec-18
+	 *
+	 * @return The big int allocator of this context.
+	*/
+	BIA_EXPORT memory::big_int_allocator * big_int_allocator() noexcept;
 	/**
 	 * Returns the memory allocator for executable memory.
 	 *
@@ -128,10 +149,14 @@ public:
 	static thread_local memory::allocator * _active_allocator;
 	/** The member allocator of the currently active context. */
 	static thread_local memory::member_allocator * _active_member_allocator;
+	/** The active big int allocator. */
+	static thread_local memory::big_int_allocator * _active_big_int_allocator;
 	/** The allocator for normal memory. */
 	const std::shared_ptr<memory::allocator> _allocator;
 	/** The member allocator of the context. */
 	const std::shared_ptr<memory::member_allocator> _member_allocator;
+	/** The big int allocator of the context. */
+	const std::shared_ptr<memory::big_int_allocator> _big_int_allocator;
 	/** The allocator for executable memory. */
 	const std::shared_ptr<memory::executable_allocator> _executable_allocator;
 	/** The string manager for string like resources. */

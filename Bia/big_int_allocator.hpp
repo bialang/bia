@@ -95,7 +95,7 @@ public:
 	 *
 	 * @return The constructed big int.
 	*/
-	template<typename Type>
+	template<typename Type = int>
 	allocation<dependency::big_int> construct_big_int(Type _value = 0)
 	{
 		static_assert(std::is_integral<Type>::value, "The initial value must be an integral.");
