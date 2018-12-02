@@ -222,7 +222,6 @@
     <ClInclude Include="ascii.hpp" />
     <ClInclude Include="bia.hpp" />
     <ClInclude Include="big_int.hpp" />
-    <ClInclude Include="block_allocator.hpp" />
     <ClInclude Include="class_template.hpp" />
     <ClInclude Include="class_template_def.hpp" />
     <ClInclude Include="cstring_member_def.hpp" />
@@ -232,6 +231,7 @@
     <ClInclude Include="int_member.hpp" />
     <ClInclude Include="lambda_function_def.hpp" />
     <ClInclude Include="max.hpp" />
+    <ClInclude Include="member_allocator.hpp" />
     <ClInclude Include="member_function_def.hpp" />
     <ClInclude Include="member_map.hpp" />
     <ClInclude Include="big_int_allocator.hpp" />
