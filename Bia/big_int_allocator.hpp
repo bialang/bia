@@ -2,9 +2,10 @@
 
 #include <cstddef>
 #include <memory>
+#include <type_traits>
 
 #include "config.hpp"
-#include "block_allocator.hpp"
+#include "allocator.hpp"
 #include "big_int.hpp"
 
 
@@ -18,14 +19,26 @@ namespace memory
 class big_int_allocator
 {
 public:
-	typedef allocation<dependency::big_int> int_type;
+	constexpr static auto big_int_allocation_size = sizeof(dependency::big_int);
 
-	BIA_EXPORT static void initialize(const std::shared_ptr<block_allocator<sizeof(dependency::big_int)>> & _allocator);
-	BIA_EXPORT static void free_int(int_type _int);
-	BIA_EXPORT static int_type new_int();
+	virtual ~big_int_allocator() = default;
+	BIA_EXPORT static void initialize(const std::shared_ptr<allocator> & _allocator);
+	virtual void deallocate_big_int(allocation<dependency::big_int> _allocation) = 0;
+	BIA_EXPORT void destroy_big_int(allocation<dependency::big_int> _big_int);
+	virtual allocation<dependency::big_int> allocate_big_int() = 0;
+	template<typename Type>
+	typename std::enable_if<std::is_integral<Type>::value, allocation<dependency::big_int>>::type construct_big_int(Type _value = 0)
+	{
+		auto _big_int = allocate_big_int();
+
+		new(_big_int) dependency::big_int(_value);
+
+		return _big_int;
+	}
+
 
 private:
-	static std::shared_ptr<block_allocator<sizeof(dependency::big_int)>> _allocator;
+	static std::shared_ptr<allocator> _allocator;
 
 	BIA_EXPORT static void free(void * _ptr, size_t _size);
 	BIA_EXPORT static void * allocate(size_t _size);
