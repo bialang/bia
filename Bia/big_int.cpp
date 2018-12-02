@@ -45,7 +45,11 @@ big_int::big_int(big_int && _move) noexcept
 
 big_int::~big_int()
 {
-	mpz_clear(reinterpret_cast<type*>(_buffer));
+	auto _ptr = reinterpret_cast<type*>(_buffer);
+
+	if (_ptr->_mp_alloc != reserved_space / sizeof(*type::_mp_d)) {
+		mpz_clear(reinterpret_cast<type*>(_buffer));
+	}
 }
 
 void big_int::reset() noexcept
