@@ -20,7 +20,6 @@ class big_int_member : public native_variable
 {
 public:
 	typedef utility::share<dependency::big_int> data_type;
-
 	
 	/**
 	 * Constructor.
@@ -32,7 +31,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	big_int_member(int32_t _value);
+	BIA_EXPORT big_int_member(int32_t _value);
 	/**
 	 * Constructor.
 	 *
@@ -43,7 +42,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	big_int_member(int64_t _value);
+	BIA_EXPORT big_int_member(int64_t _value);
 	/**
 	 * Constructor.
 	 *
@@ -54,7 +53,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	big_int_member(const dependency::big_int & _value);
+	BIA_EXPORT big_int_member(const dependency::big_int & _value);
 	/**
 	 * Refer-Constructor.
 	 *
@@ -63,35 +62,28 @@ public:
 	 *
 	 * @param _data The data.
 	*/
-	big_int_member(const data_type & _data) noexcept;
-	/**
-	 * Destructor.
-	 *
-	 * @since 3.68.140.790
-	 * @date 20-Oct-18
-	*/
-	~big_int_member();
-	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override;
-	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override;
-	virtual int flags() const override;
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const override;
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override;
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const override;
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const override;
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override;
+	BIA_EXPORT big_int_member(const data_type & _data) noexcept;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override;
+	BIA_EXPORT virtual int flags() const override;
+	BIA_EXPORT virtual int32_t BIA_MEMBER_CALLING_CONVENTION test() const override;
+	BIA_EXPORT virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override;
+	BIA_EXPORT virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const override;
+	BIA_EXPORT virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const override;
+	BIA_EXPORT virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override;
 	virtual int64_t to_int() const override;
-	virtual double to_double() const override;
+	BIA_EXPORT virtual double to_double() const override;
 
 protected:
-	virtual void * native_data(native::NATIVE_TYPE _type) override;
-	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override;
+	BIA_EXPORT virtual void * native_data(native::NATIVE_TYPE _type) override;
+	BIA_EXPORT virtual const void * const_native_data(native::NATIVE_TYPE _type) const override;
 
 private:
 	union tmp_value

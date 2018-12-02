@@ -27,10 +27,6 @@ big_int_member::big_int_member(const data_type & _data) noexcept : _data(_data)
 {
 }
 
-big_int_member::~big_int_member()
-{
-}
-
 void big_int_member::print() const
 {
 	//mpz_out_str(stdout, 10, &_data.get());
