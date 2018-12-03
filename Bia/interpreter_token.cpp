@@ -93,6 +93,14 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param & _p
 	auto _negative = parse_sign(_input, _params.encoder);
 	auto _base = parse_base(_input, _params.encoder);
 
+	// Zero
+	if (!_base) {
+		_output.type = report::TYPE::INT_VALUE;
+		_output.content.int_value = 0;
+
+		return success;
+	}
+
 	// Match
 	auto _buffer = _input.buffer();
 	auto _native_match = match_native_integer(_buffer, _params.encoder, _base, _negative);
