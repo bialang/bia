@@ -457,7 +457,7 @@ public:
 }
 	void write_test()
 	{
-		instruction<OP_CODE::XOR, eax, eax>(*_output);
+		instruction<OP_CODE::TEST, eax, eax>(*_output);
 	}
 	varg_member_passer create_varg_passer() noexcept
 	{

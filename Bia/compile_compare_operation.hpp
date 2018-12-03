@@ -95,7 +95,7 @@ private:
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See machine::platform::toolset::call() and machine::platform::toolset::write_test().
+	 * @throws See machine::platform::toolset::call().
 	*/
 	template<typename Member>
 	void left_member_operation(Member && _member, framework::operator_type _operator, compiler_value _right)
@@ -137,7 +137,6 @@ private:
 		}
 
 		_value.set_return_test();
-		_toolset.write_test();
 	}
 	/**
 	 * Executes the compare operator.
@@ -152,7 +151,7 @@ private:
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See machine::platform::toolset::call() and machine::platform::toolset::write_test().
+	 * @throws See machine::platform::toolset::call().
 	*/
 	template<typename Left, typename Right>
 	void left_constant_right_member_operation(Left && _left, framework::operator_type _operator, Right && _right)
@@ -169,7 +168,6 @@ private:
 		}
 
 		_value.set_return_test();
-		_toolset.write_test();
 	}
 	/**
 	 * Executes the compare operator.

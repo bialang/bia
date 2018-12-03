@@ -59,6 +59,7 @@ void compiler::test_compiler_value()
 
 		break;
 	case VT::TEST_VALUE_REGISTER:
+		_toolset.write_test();
 	case VT::TEST_VALUE_CONSTANT:
 		break;
 	default:
