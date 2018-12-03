@@ -109,6 +109,15 @@ int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test() const
 
 int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_member(operator_type _operator, member * _right) const
 {
+	auto _flags = _right->flags();
+
+	if (_flags & F_INT) {
+		return test_operation(_data.get(), _operator, static_cast<const int_member*>(_right)->_data.get());
+	} else if (_flags & F_BIG_INT) {
+	} else if (_flags & F_TO_INT) {
+		return test_operation(_data.get(), _operator, _right->to_int());
+	}
+	
 	BIA_NOT_IMPLEMENTED;
 }
 
