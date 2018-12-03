@@ -42,7 +42,9 @@ public:
 		/** The member can be displayed as an integer. */
 		F_TO_INT = 0x10,
 		/** The member can be displayed as a double. */
-		F_TO_DOUBLE = 0x20
+		F_TO_DOUBLE = 0x20,
+		/** The member is a big int. */
+		F_BIG_INT = 0x40,
 	};
 
 	/** The type of the parameter count. */
