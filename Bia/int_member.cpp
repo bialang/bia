@@ -3,6 +3,7 @@
 #include "print.hpp"
 #include "native_operator.hpp"
 #include "native_test_operator.hpp"
+#include "double_member.hpp"
 
 
 namespace bia
@@ -18,6 +19,7 @@ int_member::int_member(int32_t _value) : _data(_value)
 
 int_member::int_member(int64_t _value)
 {
+	_data.get() = _value;
 }
 
 int_member::int_member(const data_type & _data) noexcept : _data(_data)
@@ -46,22 +48,48 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::clone(member * _destination)
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call(member * _destination, operator_type _operator, const member * _right)
 {
-	BIA_NOT_IMPLEMENTED;
+	auto _flags = _right->flags();
+
+	if (_destination) {
+		BIA_NOT_IMPLEMENTED;
+	} else {
+		if (_flags & F_INT) {
+			native_operation<true>::operate_integral(_data.get(), _operator, static_cast<const int_member*>(_right)->_data.get());
+		} else if (_flags & F_BIG_INT) {
+			BIA_NOT_IMPLEMENTED;
+		} else if (_flags & F_TO_INT) {
+			native_operation<true>::operate_integral(_data.get(), _operator, _right->to_int());
+		} else {
+			BIA_NOT_IMPLEMENTED;
+		}
+	}
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
 {
-	_data.get() = integral_operation<true>(_data.get(), _operator, _right);
+	if (_destination) {
+		native_operation<true>::operate_integral(_destination, _data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_integral(_data.get(), _operator, _right);
+	}
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
 {
-	_data.get() = integral_operation<true>(_data.get(), _operator, _right);
+	if (_destination) {
+		native_operation<true>::operate_integral(_destination, _data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_integral(_data.get(), _operator, _right);
+	}
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_double(member * _destination, operator_type _operator, double _right)
 {
-	_data.get() = static_cast<int64_t>(arithmetic_operation<true>(_data.get(), _operator, _right));
+	if (_destination) {
+		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
+	}
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::object_member(member * _destination, machine::string_manager::name_type _name)
