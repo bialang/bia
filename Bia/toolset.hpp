@@ -464,35 +464,38 @@ public:
 	{
 		return varg_member_passer(_global_passer);
 	}
-	position jump(JUMP _type, position _destination = 0, position _start = -1)
+	position jump(JUMP _type, position _destination = 0, position _overwrite_pos = -1)
 	{
 		auto _old = _output->position();
+		auto _current = _old;
 
 		// Override
-		if (_start != -1) {
-			_output->set_position(_start);
+		if (_overwrite_pos != -1) {
+			_current = _overwrite_pos;
+
+			_output->set_position(_overwrite_pos);
 		}
 
 		switch (_type) {
 		case JUMP::JUMP:
-			instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _start);
+			instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _current);
 
 			break;
 		case JUMP::JUMP_IF_TRUE:
-			instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _start);
+			instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _current);
 
 			break;
 		case JUMP::JUMP_IF_FALSE:
-			instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _start);
+			instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _current);
 
 			break;
 		}
 
 		// Go back
-		if (_start != -1) {
+		if (_overwrite_pos != -1) {
 			_output->set_position(_old);
 
-			return _start;
+			return _overwrite_pos;
 		}
 
 		return _old;
