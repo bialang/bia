@@ -293,7 +293,7 @@ const grammar::report *  compiler::handle_number(const grammar::report * _report
 		break;
 	case TYPE::BIG_INT_VALUE:
 		_value.set_return(_report->content.big_int_value);
-		
+
 		break;
 	case TYPE::DOUBLE_VALUE:
 		_value.set_return(_report->content.double_value);
@@ -717,31 +717,23 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 	++_report;
 
-	// Loop type
-	toolset::position _pre_test_jump;
+	toolset::position _do_jump_update = -1;
 
-	// Post test
+	// Do loop
 	if (_report->content.keyword == grammar::IS_DO) {
-		_pre_test_jump = -1;
+		_do_jump_update = _toolset.jump(toolset::JUMP::JUMP);
+
 		++_report;
-	}  // Pre test
-	else {
-		_pre_test_jump = _toolset.jump(toolset::JUMP::JUMP);
 	}
 
-	// Loop jump type
-	auto _jump_type = _report++->content.keyword == grammar::IS_WHILE ? toolset::JUMP::JUMP_IF_TRUE : toolset::JUMP::JUMP_IF_FALSE;
+	// Loop type
+	auto _jump_type = _report++->content.keyword == grammar::IS_WHILE ? toolset::JUMP::JUMP_IF_FALSE : toolset::JUMP::JUMP_IF_TRUE;
 
-	// Handle loop condition
-	toolset::position _condition_jump = -1;
-	stream::buffer_output_stream _condition_buffer;
-	auto & _orig_buffer = _toolset.output_stream();
+	// Write loop condition
+	auto _condition_pos = _toolset.output_stream().position();
 	auto _compile = true;
+	toolset::position _condition_jump_update = -1;
 
-	// Redirect conditional code to a temporary buffer
-	_toolset.set_output(_condition_buffer);
-
-	// Loop condition
 	_report = handle_value<true>(_report, [&] {
 		// Constant condition
 		if (_value.type() == compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT) {
@@ -759,36 +751,25 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		_condition_jump = _toolset.jump(_jump_type);
+		_condition_jump_update = _toolset.jump(_jump_type);
 	});
 
-	// Reset output buffer
-	_toolset.set_output(_orig_buffer);
-
-	// Compile loop
+	// Compile loop body
 	if (_compile) {
-		auto _start_pos = _orig_buffer.position();
+		// Update first jump of do loops
+		if (_do_jump_update != -1) {
+			_toolset.jump(toolset::JUMP::JUMP, _toolset.output_stream().position(), _do_jump_update);
+		}
 
 		handle_root(_report);
 
-		// Update jump positions
-		auto _end_pos = _orig_buffer.position();
+		_toolset.jump(toolset::JUMP::JUMP, _condition_pos);
 
-		_condition_jump += _end_pos;
-
-		// Write loop condition
-		_orig_buffer.append_stream(_condition_buffer);
-
-		// Upate jump offset for loop jump
-		_toolset.jump(_jump_type, _start_pos, _condition_jump);
-
-		// Upate jump offset for pre test
-		if (_pre_test_jump != -1) {
-			_toolset.jump(toolset::JUMP::JUMP, _end_pos, _pre_test_jump);
-		}
-	} // Discard pre test jump
-	else if (_pre_test_jump != -1) {
-		_toolset.output_stream().set_position(_pre_test_jump);
+		// Update condition jump
+		_toolset.jump(_jump_type, _toolset.output_stream().position(), _condition_jump_update);
+	} // Discard do jump instruction since loop is not compiled
+	else if (_do_jump_update != -1) {
+		_toolset.output_stream().set_position(_do_jump_update);
 	}
 
 	return _end;
