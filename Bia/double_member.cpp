@@ -1,6 +1,9 @@
 #include "double_member.hpp"
 #include "share.hpp"
 #include "print.hpp"
+#include "native_operator.hpp"
+#include "native_test_operator.hpp"
+#include "create_member.hpp"
 
 
 namespace bia
@@ -48,17 +51,29 @@ void double_member::operator_call(member * _destination, operator_type _operator
 
 void double_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
 {
-	BIA_NOT_IMPLEMENTED;
+	if (_destination) {
+		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
+	}
 }
 
 void double_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
 {
-	BIA_NOT_IMPLEMENTED;
+	if (_destination) {
+		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
+	}
 }
 
 void double_member::operator_call_double(member * _destination, operator_type _operator, double _right)
 {
-	BIA_NOT_IMPLEMENTED;
+	if (_destination) {
+		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
+	}
 }
 
 void double_member::object_member(member * _destination, machine::string_manager::name_type _name)
@@ -73,7 +88,7 @@ int double_member::flags() const
 
 int32_t double_member::test() const
 {
-	return static_cast<bool>(_data.get());
+	return test_operation(_data.get());
 }
 
 int32_t double_member::test_member(operator_type _operator, member * _right) const
@@ -83,17 +98,17 @@ int32_t double_member::test_member(operator_type _operator, member * _right) con
 
 int32_t double_member::test_int32(operator_type _operator, int32_t _right) const
 {
-	BIA_NOT_IMPLEMENTED;
+	return test_operation(_data.get(), _operator, _right);
 }
 
 int32_t double_member::test_int64(operator_type _operator, int64_t _right) const
 {
-	BIA_NOT_IMPLEMENTED;
+	return test_operation(_data.get(), _operator, _right);
 }
 
 int32_t double_member::test_double(operator_type _operator, double _right) const
 {
-	BIA_NOT_IMPLEMENTED;
+	return test_operation(_data.get(), _operator, _right);
 }
 
 int64_t double_member::to_int() const
