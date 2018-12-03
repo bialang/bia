@@ -28,7 +28,7 @@ public:
 	/** The passer count type. */
 	typedef int32_t pass_count_type;
 
-	passer(stream::output_stream & _output) noexcept : _output(_output)
+	passer(stream::output_stream * _output) noexcept : _output(_output)
 	{
 		_stack_offset = 0;
 		_credit_entry = 0;
@@ -40,7 +40,7 @@ public:
 
 		// Write padding
 		if (_padding) {
-			instruction8<OP_CODE::SUB, stack_pointer>(_output, _padding);
+			instruction8<OP_CODE::SUB, stack_pointer>(*_output, _padding);
 			
 			// Add padding
 			if (_caller_pops_padding) {
@@ -60,11 +60,15 @@ public:
 	void pop()
 	{
 		if (_credit_entry) {
-			instruction8<OP_CODE::ADD, stack_pointer>(_output, _credit_entry * element_size);
+			instruction8<OP_CODE::ADD, stack_pointer>(*_output, _credit_entry * element_size);
 			
 			_stack_offset -= _credit_entry;
 			_credit_entry = 0;
 		}
+	}
+	void set_output(stream::output_stream * _output)
+	{
+		this->_output = _output;
 	}
 
 private:
@@ -80,7 +84,7 @@ private:
 
 	pass_count_type _credit_entry;
 	/** The destination of the machine code. */
-	stream::output_stream & _output;
+	stream::output_stream * _output;
 };
 
 }

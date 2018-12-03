@@ -58,7 +58,7 @@ public:
 	 *
 	 * @throws See architecture::instruction().
 	*/
-	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output), _global_passer(_output)
+	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output), _global_passer(&_output)
 	{
 		this->_context = _context;
 
@@ -147,6 +147,7 @@ public:
 	void set_output(stream::output_stream & _output) noexcept
 	{
 		this->_output = &_output;
+		_global_passer.set_output(&_output);
 	}
 	/**
 	 * Performs a static function call.
