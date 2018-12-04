@@ -15,6 +15,12 @@ namespace object
 {
 
 template<typename Type>
+inline class_template<Type>::data_pair::~data_pair()
+{
+	machine::machine_context::active_allocator()->destroy(second);
+}
+
+template<typename Type>
 inline class_template<Type>::class_template()
 {
 	_data.get().second = machine::machine_context::active_allocator()->template construct<force::initiator>();
@@ -23,14 +29,6 @@ inline class_template<Type>::class_template()
 template<typename Type>
 inline class_template<Type>::class_template(const data_type & _data) noexcept : _data(_data)
 {
-}
-
-template<typename Type>
-inline class_template<Type>::~class_template()
-{
-	if (_data.only_owner()) {
-		machine::machine_context::active_allocator()->destroy(_data.get().second);
-	}
 }
 
 template<typename Type>

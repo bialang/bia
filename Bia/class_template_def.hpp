@@ -20,7 +20,15 @@ template<typename Type>
 class class_template : public object_variable
 {
 public:
-	typedef utility::share<std::pair<member_map, machine::memory::allocation<force::initiator>>> data_type;
+	struct data_pair
+	{
+		member_map first;
+		machine::memory::allocation<force::initiator> second;
+
+		~data_pair();
+	};
+
+	typedef utility::share<data_pair> data_type;
 
 	class_template();
 	/**
@@ -38,9 +46,9 @@ public:
 	 * @since 3.67.135.752
 	 * @date 5-Aug-18
 	 *
-	 * @throws See machine::memory::allocator::destroy().
+	 * @throws See data_pair::~data_pair().
 	*/
-	~class_template();
+	~class_template() = default;
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;

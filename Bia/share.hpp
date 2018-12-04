@@ -28,7 +28,6 @@ inline share<Type>::share(const share & _copy) noexcept
 template<typename Type>
 inline share<Type>::~share()
 {
-	if (!_data->ref_counter.fetch_sub(1, std::memory_order_release)) {
 		atomic_thread_fence(std::memory_order_acquire);
 
 		machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_data, sizeof(data)));

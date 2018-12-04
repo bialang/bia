@@ -26,10 +26,9 @@ public:
 	 * @since 3.67.135.754
 	 * @date 8-Aug-18
 	 *
-	 * @throws See machine::memory::allocator::destroy_blocks().
+	 * @throws See data_map::~data_map().
 	*/
-	BIA_EXPORT ~member_map();
-	
+	~member_map() = default;
 	/**
 	 * Emplaces a new member.
 	 *
@@ -80,8 +79,17 @@ public:
 	BIA_EXPORT member * get_or_create(name_type _name);
 
 private:
+	struct data_map
+	{
+		typedef std::map<name_type, machine::memory::allocation<member>> type;
+
+		type data;
+
+		BIA_EXPORT ~data_map();
+	};
+
 	/** The map with all the members. */
-	utility::share<std::map<name_type, machine::memory::allocation<member>>> _data;
+	utility::share<data_map> _data;
 };
 
 }

@@ -53,15 +53,6 @@ public:
 	*/
 	~share();
 	/**
-	 * Checks this share has only one owner.
-	 *
-	 * @since 3.66.135.746
-	 * @date 5-Aug-18
-	 *
-	 * @return true if this share has only one owner, otherwise false.
-	*/
-	bool only_owner() const noexcept;
-	/**
 	 * Returns the referred object.
 	 *
 	 * @since 3.64.132.730
