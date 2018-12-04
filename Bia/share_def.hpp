@@ -1,6 +1,8 @@
 #pragma once
 
 #include <atomic>
+#include <cstdint>
+#include <utility>
 
 
 namespace bia
@@ -72,15 +74,9 @@ public:
 	const Type & get() const noexcept;
 
 private:
-	struct data
-	{
-		/** The referenced object. */
-		Type object;
-		/** The reference counter. */
-		std::atomic_size_t ref_counter;
+	typedef std::pair<int8_t[sizeof(Type)], std::atomic_size_t> data;
 
-		data(Type && _object);
-	} *_data;
+	data * _data;
 };
 
 }
