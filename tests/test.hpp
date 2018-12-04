@@ -7,46 +7,44 @@
 #include <cstdarg>
 #include <utility>
 #include <functional>
+#include <cstdio>
+#include <stdexcept>
+#include <string>
+
+
+#define BEGIN_DECLARE_TESTS bool _tests_initialized = [] () {
+#define END_DECLARE_TESTS return true; }();
 
 
 class test
 {
 public:
-	static void add_test(const char * _name, std::function<void()> && _test)
+	class assert_error : public std::runtime_error
 	{
-		_tests[_name] = std::move(_test);
+	public:
+		using std::runtime_error::runtime_error;
+	};
+
+	static void add(const char * _name, std::function<void()> && _test)
+	{
+		_tests.emplace(std::make_pair(_name, std::move(_test)));
 	}
 	template<typename Type>
-	static void assert_equals(Type _actual, Type _expected, const char * _message...)
+	static void assert_equals(Type _actual, Type _expected, const std::string & _message)
 	{
-		va_list _args;
-		va_start(_args, _message);
-
-		assert(_actual == _expected, _message, _args);
-
-		va_end(_args);
+		assert(_actual == _expected, _message);
 	}
-	static void assert_true(bool _condition, const char * _message...)
+	static void assert_true(bool _condition, const std::string & _message)
 	{
-		va_list _args;
-		va_start(_args, _message);
-
-		assert(_condition, _message, _args);
-
-		va_end(_args);
+		assert(_condition, _message);
 	}
-	static void assert_false(bool _condition, const char * _message...)
+	static void assert_false(bool _condition, const std::string & _message)
 	{
-		va_list _args;
-		va_start(_args, _message);
-
-		assert(!_condition, _message, _args);
-
-		va_end(_args);
+		assert(!_condition, _message);
 	}
-	static void fail(const char * _message...)
+	static void fail(const std::string & _message)
 	{
-
+		assert(false, _message);
 	}
 	static bool test_main(const char * _mode)
 	{
@@ -58,6 +56,8 @@ public:
 						_test.second();
 					} catch (...) {
 						_mode = _test.first;
+
+						throw;
 					}
 				}
 			} else {
@@ -74,6 +74,8 @@ public:
 			}
 
 			return true;
+		} catch (const assert_error & e) {
+			error("%s failed: %s", _mode, e.what());
 		} catch (const std::exception & e) {
 			error("%s threw %s: %s", _mode, typeid(e).name(), e.what());
 		} catch (...) {
@@ -86,7 +88,7 @@ public:
 private:
 	struct cstring_compare
 	{
-		constexpr bool operator()(const char * _left, const char * _right) const
+		bool operator()(const char * _left, const char * _right) const
 		{
 			return std::strcmp(_left, _right) < 0;
 		}
@@ -96,14 +98,21 @@ private:
 
 	static tests_type _tests;
 
-	static void assert(bool _condition, const char * _message, va_list _args)
+	static void assert(bool _condition, const std::string & _message)
 	{
 		if (!_condition) {
-			throw;
+			throw assert_error(_message);
 		}
 	}
 	static void error(const char * _message...)
 	{
+		va_list _args;
+		va_start(_args, _message);
 
+		fprintf(stderr, "[error]: ");
+		vfprintf(stderr, _message, _args);
+		putc('\n', stderr);
+
+		va_end(_args);
 	}
 };

@@ -133,6 +133,11 @@ else(BIA_BUILD_SHARED)
   add_library(Bia STATIC ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
 endif(BIA_BUILD_SHARED)
 
+# For dlopen and dlsym
+if(CMAKE_DL_LIBS)
+    target_link_libraries(Bia ${CMAKE_DL_LIBS})
+endif()
+
 # Install
 install(TARGETS Bia DESTINATION lib)
 install(FILES ${Bia_HEADER_FILES} DESTINATION "include/Bia")
