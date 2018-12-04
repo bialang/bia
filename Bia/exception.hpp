@@ -65,28 +65,7 @@ public:
 class logic_error : public bia_error, public std::logic_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit logic_error(const std::string & _message) : std::logic_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit logic_error(const char * _message) : std::logic_error(_message)
-	{
-	}
+	using std::logic_error::logic_error;
 };
 
 /**
@@ -128,28 +107,7 @@ private:
 class runtime_error : public bia_error, public std::runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit runtime_error(const std::string & _message) : std::runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit runtime_error(const char * _message) : std::runtime_error(_message)
-	{
-	}
+	using std::runtime_error::runtime_error;
 };
 
 /**
@@ -160,28 +118,7 @@ public:
 class type_error : public logic_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit type_error(const std::string & _message) : logic_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit type_error(const char * _message) : logic_error(_message)
-	{
-	}
+	using logic_error::logic_error;
 };
 
 /**
@@ -192,28 +129,7 @@ public:
 class encoding_error : public logic_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit encoding_error(const std::string & _message) : logic_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit encoding_error(const char * _message) : logic_error(_message)
-	{
-	}
+	using logic_error::logic_error;
 };
 
 /**
@@ -224,28 +140,7 @@ public:
 class argument_error : public logic_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit argument_error(const std::string & _message) : logic_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit argument_error(const char * _message) : logic_error(_message)
-	{
-	}
+	using logic_error::logic_error;
 };
 
 /**
@@ -256,28 +151,7 @@ public:
 class symbol_error final : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit symbol_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit symbol_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -288,28 +162,7 @@ public:
 class limitation_error final : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit limitation_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit limitation_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -320,28 +173,7 @@ public:
 class execution_error final : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit execution_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit execution_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -352,28 +184,7 @@ public:
 class operator_error final : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit operator_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit operator_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -384,28 +195,7 @@ public:
 class memory_error final : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit memory_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit memory_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -414,28 +204,7 @@ public:
 class access_violation final : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit access_violation(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit access_violation(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 }
