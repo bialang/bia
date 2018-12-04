@@ -97,7 +97,7 @@ public:
 	{
 		Type _converted = 0;
 		auto _value = reinterpret_cast<type*>(_buffer);
-		auto _needed = std::min<int64_t>((sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS, abs(_value->_mp_size));
+		auto _needed = std::min<int>((sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS, abs(_value->_mp_size));
 
 		while (_needed--) {
 			_converted = _converted << GMP_NUMB_BITS | _value->_mp_d[_needed] & GMP_NUMB_MASK;

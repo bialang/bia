@@ -12,77 +12,16 @@ namespace grammar
 
 bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
 {
-	auto _skipped = false;
-
-	while (_input.available() > 0) {
-		auto _buffer = _input.buffer();
-
-		// Has no next
-		if (!_encoder->has_next(_buffer.first, _buffer.second)) {
-			break;
-		}
-
-		// Ignore every character until a line break
-		do {
-			auto _prev = _buffer.first;
-
-			switch (_encoder->next(_buffer.first, _buffer.second)) {
-			case ' ':
-			case '\t':
-			case '\r':
-				_skipped = true;
-
-				break;
-			default:
-				_input.skip(_prev);
-
-				return _skipped;
-			}
-		} while (_encoder->has_next(_buffer.first, _buffer.second));
-
-		// Move cursor
-		_input.skip(_buffer.first);
-	}
-
-	return _skipped;
+	return whitespace_automaton(_input, _encoder, [](encoding::code_point _char) {
+		return _char == ' ' || _char == '\t';
+	});
 }
 
 bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
 {
-	auto _skipped = false;
-
-	while (_input.available() > 0) {
-		auto _buffer = _input.buffer();
-
-		// Has no next
-		if (!_encoder->has_next(_buffer.first, _buffer.second)) {
-			break;
-		}
-
-		// Ignore every character until a line break
-		do {
-			auto _prev = _buffer.first;
-
-			switch (_encoder->next(_buffer.first, _buffer.second)) {
-			case ' ':
-			case '\t':
-			case '\r':
-			case '\n':
-				_skipped = true;
-
-				break;
-			default:
-				_input.skip(_prev);
-
-				return _skipped;
-			}
-		} while (_encoder->has_next(_buffer.first, _buffer.second));
-
-		// Move cursor
-		_input.skip(_buffer.first);
-	}
-
-	return _skipped;
+	return whitespace_automaton(_input, _encoder, [](encoding::code_point _char) {
+		return _char == ' ' || _char == '\t' || _char == '\n' || _char == '\r';
+	});
 }
 
 ACTION interpreter_token::number(stream::input_stream & _input, token_param & _params, token_output & _output)
@@ -123,7 +62,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param & _p
 	_string.set_codec(stream::string_stream::CODEC::ASCII);
 
 	match_big_integer(_input, _string, _params.encoder, _base);
-	
+
 	_string.finish();
 
 	// Construct big integer
@@ -589,83 +528,132 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::comment(stream::input_stream & _input, token_param & _params, token_output & _output)
-{
-	constexpr auto success = ACTION::DONT_REPORT;
-	constexpr auto error = ACTION::ERROR;
-
-	auto _first_iter = true;
-
-	// Check if this is a comment
-	while (_input.available() > 0) {
-		auto _buffer = _input.buffer();
-
-		// Has no next character
-		if (!_params.encoder->has_next(_buffer.first, _buffer.second)) {
-			break;
-		}
-
-		// Check for comment character
-		if (_first_iter) {
-			if (_params.encoder->next(_buffer.first, _buffer.second) != '#') {
-				return error;
-			}
-
-			_first_iter = false;
-		}
-
-		// Ignore every character until a line break
-		while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
-			if (_params.encoder->next(_buffer.first, _buffer.second) == '\n') {
-				// Move cursor
-				_input.skip(_buffer.first);
-
-				return success;
-			}
-		}
-
-		// Move cursor
-		_input.skip(_buffer.first);
-	}
-
-	return _first_iter ? success : error;
-}
-
 ACTION interpreter_token::command_end(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
 
+	return whitespace_automaton(_input, _params.encoder, [](encoding::code_point _char) {
+		return _char == ' ' || _char == '\t';
+	}, [](encoding::code_point _char) {
+		return _char == '\n' || _char == ';';
+	}) == -1 || _input.available() == 0 ? success : error;
+}
+
+int interpreter_token::whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point))
+{
+	enum class STATE
+	{
+		START,
+		END,
+		COMMENT_START,
+		COMMENT_SINGLE_LINE,
+		COMMENT_MULTILINE_CONTENT,
+		COMMENT_MULTILINE_END,
+	};
+
+	STATE _state = STATE::START;
+	stream::input_stream::buffer_type::first_type _skipped = nullptr;
+
 	while (_input.available() > 0) {
 		auto _buffer = _input.buffer();
+		stream::input_stream::buffer_type::first_type _tmp = nullptr;
 
-		if (!_params.encoder->has_next(_buffer.first, _buffer.second)) {
+		_skipped = nullptr;
+
+		while (_buffer.first < _buffer.second) {
+			auto _char = _encoder->next(_buffer.first, _buffer.second);
+
+			// End predicate only if not in multiline comment
+			if (_state != STATE::COMMENT_MULTILINE_CONTENT && _state != STATE::COMMENT_MULTILINE_END && _end_predicate && _end_predicate(_char)) {
+				_input.skip(_buffer.first);
+
+				return -1;
+			}
+
+			switch (_state) {
+			case STATE::START:
+			{
+				if (_is_ws(_char)) {
+					_state = STATE::END;
+				} else if (_char == '#') {
+					_state = STATE::COMMENT_START;
+				} else {
+					goto gt_loop_break;
+				}
+
+				break;
+			}
+			case STATE::END:
+			{
+				_skipped = _tmp;
+
+				if (_char == '#') {
+					_state = STATE::COMMENT_START;
+				} else if (!_is_ws(_char)) {
+					goto gt_loop_break;
+				}
+
+				break;
+			}
+			case STATE::COMMENT_START:
+			{
+				if (_char == '>') {
+					_state = STATE::COMMENT_MULTILINE_CONTENT;
+				} else if (_char == '#' || _char == '\n') {
+					_state = STATE::END;
+				} else {
+					_state = STATE::COMMENT_SINGLE_LINE;
+				}
+
+				break;
+			}
+			case STATE::COMMENT_SINGLE_LINE:
+			{
+				if (_char == '\n' || _char == '#') {
+					_state = STATE::END;
+				}
+
+				break;
+			}
+			case STATE::COMMENT_MULTILINE_CONTENT:
+			{
+				if (_char == '<') {
+					_state = STATE::COMMENT_MULTILINE_END;
+				}
+
+				break;
+			}
+			case STATE::COMMENT_MULTILINE_END:
+			{
+				if (_char == '#') {
+					_skipped = _buffer.first;
+					_state = STATE::END;
+				} else if (_char != '<') {
+					_state = STATE::COMMENT_MULTILINE_CONTENT;
+				}
+
+				break;
+			}
+			}
+
+			_tmp = _buffer.first;
+		}
+
+		// Cleanup and terminate
+		if (false) {
+		gt_loop_break:;
+			if (_skipped) {
+				_input.skip(_skipped);
+			}
+
 			break;
 		}
 
-		do {
-			switch (_params.encoder->next(_buffer.first, _buffer.second)) {
-			case ' ':
-			case '\t':
-			case '\r':
-				break;
-			case '\n':
-			case ';':
-			case 0:
-				// Move cursor
-				_input.skip(_buffer.first);
-
-				return success;
-			default:
-				return error;
-			}
-		} while (_params.encoder->has_next(_buffer.first, _buffer.second));
-
-		// Move cursor
 		_input.skip(_buffer.first);
 	}
 
-	return success;
+	return _skipped || _state == STATE::END ? 1 : 0;
 }
 
 bool interpreter_token::parse_sign(stream::input_stream & _input, encoding::encoder * _encoder)
@@ -707,7 +695,7 @@ int interpreter_token::parse_base(stream::input_stream & _input, encoding::encod
 	if (_digit == '0') {
 		if (_buffer.first < _buffer.second) {
 			auto _prev = _buffer.first;
-			
+
 			_digit = _encoder->next(_buffer.first, _buffer.second);
 
 			// Hex
@@ -739,7 +727,7 @@ int interpreter_token::parse_base(stream::input_stream & _input, encoding::encod
 	else {
 		return -1;
 	}
-	
+
 	///TODO Remove possible leading zeros
 	_input.skip(_buffer.first);
 

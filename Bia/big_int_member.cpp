@@ -75,7 +75,7 @@ void big_int_member::object_member(member * _destination, machine::string_manage
 
 int big_int_member::flags() const
 {
-	return 0;
+	return F_BIG_INT | F_TO_INT | F_TO_DOUBLE;
 }
 
 int32_t big_int_member::test() const
@@ -106,11 +106,13 @@ int32_t big_int_member::test_double(operator_type _operator, double _right) cons
 int64_t big_int_member::to_int() const
 {
 	BIA_NOT_IMPLEMENTED;
+	//return _data.get().convert<int64_t>();
 }
 
 double big_int_member::to_double() const
 {
 	BIA_NOT_IMPLEMENTED;
+	//return static_cast<double>(_data.get().convert<int64_t>());
 }
 
 void * big_int_member::native_data(native::NATIVE_TYPE _type)

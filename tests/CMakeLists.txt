@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
-add_executable(SanityTest test.hpp testFunctions.hpp testSanity.cpp)
-target_link_libraries(SanityTest Bia)
+add_executable(architectureTest test_main.cpp architecture_test.cpp)
+target_link_libraries(architectureTest Bia)
 
-add_test(MathExpressionTestConstant SanityTest math_expression)
-add_test(ScriptExecutionTest SanityTest execute)
-add_test(PassingOrderTest SanityTest passing_order)
-add_test(StaticFunctionTest SanityTest static_function)
-add_test(TypeCastTest SanityTest type_cast)
+add_test(ArchitectureInstructionTest architectureTest instruction_test)
+add_test(ArchitectureTest architectureTest)

@@ -145,8 +145,15 @@ else(BIA_BUILD_SHARED)
   add_library(Bia STATIC ${Bia_SOURCE_FILES})
 endif(BIA_BUILD_SHARED)
 
+
 target_link_libraries(Bia ${MPIR_LIB})
 #target_include_directories(Bia ${MPIR_INCLUDE})
+
+# For dlopen and dlsym
+if(CMAKE_DL_LIBS)
+    target_link_libraries(Bia ${CMAKE_DL_LIBS})
+endif()
+
 
 # Install
 install(TARGETS Bia DESTINATION lib)
