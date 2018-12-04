@@ -118,7 +118,6 @@ inline size_t instruction(stream::output_stream & _output)
 {
 	static_assert(
 		Op_code == OP_CODE::MOVE
-		|| Op_code == OP_CODE::XOR
 		|| Op_code == OP_CODE::TEST
 #if defined(BIA_ARCHITECTURE_X86_64)
 		|| Op_code == OP_CODE::MOVE_QUADWORD
@@ -141,8 +140,6 @@ inline size_t instruction(stream::output_stream & _output)
 	switch (Op_code) {
 	case OP_CODE::MOVE:
 		return _written + _output.write_all(0x89_8, static_cast<uint8_t>(0300 | Source::value() << 3 | Destination::value()));
-	case OP_CODE::XOR:
-		return _written + _output.write_all(0x31_8, static_cast<uint8_t>(0300 | Source::value() << 3 | Destination::value()));
 	case OP_CODE::TEST:
 		return _written + _output.write_all(0x85_8, static_cast<uint8_t>(0300 | Source::value() << 3 | Destination::value()));
 #if defined(BIA_ARCHITECTURE_X86_64)

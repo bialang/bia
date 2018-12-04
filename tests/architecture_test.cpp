@@ -66,7 +66,6 @@ inline typename std::enable_if<!std::is_integral<Source>::value, bool>::type com
 void architecture_test::instruction_test()
 {
 	test_move();
-	test_xor();
 	test_jump();
 	test_push();
 	test_pop();
@@ -79,24 +78,6 @@ void architecture_test::test_move()
 	/*test::assert_true(compare32<OP_CODE::MOVE, eax>(0x6549752, { 0xB8, 0x52, 0x97, 0x54, 0x06 }), "mov eax, imm32");
 	test::assert_true(compare32<OP_CODE::MOVE, esp>(0x6549752, { 0xBC, 0x52, 0x97, 0x54, 0x06 }), "mov esp, imm32");*/
 #endif
-}
-
-void architecture_test::test_xor()
-{
-/*#if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
-	test::assert_true(compare<OP_CODE::XOR, eax, esp>({ 0x31, 0xE0 }), "xor eax, esp");
-	test::assert_true(compare<OP_CODE::XOR, esp, eax>({ 0x31, 0xC4 }), "xor esp, eax");
-	test::assert_true(compare<OP_CODE::XOR, eax, eax>({ 0x31, 0xC0 }), "xor eax, eax");
-	test::assert_true(compare<OP_CODE::XOR, esp, esp>({ 0x31, 0xE4 }), "xor esp, esp");
-#endif
-
-#if defined(BIA_ARCHITECTURE_X86_64)
-	test::assert_true(compare<OP_CODE::XOR, rax, rax>({ 0x48, 0x31, 0xC0 }), "xor rax, rax");
-	test::assert_true(compare<OP_CODE::XOR, r8, rax>({ 0x49, 0x31, 0xC0 }), "xor r8, rax");
-	test::assert_true(compare<OP_CODE::XOR, rax, r8>({ 0x4C, 0x31, 0xC0 }), "xor rax, r8");
-	test::assert_true(compare<OP_CODE::XOR, rsp, rsp>({ 0x48, 0x31, 0xE4 }), "xor rsp, rsp");
-	//test::assert_true(compare<OP_CODE::XOR, r12, r12>({ 0x4D, 0x31, 0xE4 }), "xor r12, r12");
-#endif*/
 }
 
 void architecture_test::test_jump()
