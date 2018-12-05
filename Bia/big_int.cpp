@@ -9,11 +9,18 @@ namespace bia
 namespace dependency
 {
 
-big_int::big_int(int64_t _value) noexcept : _buffer{}
+big_int::big_int() noexcept : _buffer{}
 {
 	reset();
+}
 
-	// Set big int
+big_int::big_int(int32_t _value) noexcept : big_int()
+{
+	set(_value);
+}
+
+big_int::big_int(int64_t _value) noexcept : big_int()
+{
 	set(_value);
 }
 

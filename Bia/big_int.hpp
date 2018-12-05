@@ -14,6 +14,13 @@ namespace bia
 namespace dependency
 {
 
+/**
+ * @brief A big integer.
+ *
+ * A big integer class. The default used underlying library is MPIR.
+ *
+ * @see @ref machine::memory::big_int_allocator
+*/
 class big_int
 {
 public:
@@ -23,7 +30,31 @@ public:
 	/** The additional reserved space. */
 	constexpr static auto reserved_space = sizeof(*type::_mp_d) * 2;
 
-	BIA_EXPORT big_int(int64_t _value = 0) noexcept;
+	/**
+	 * Constructor. Sets the big int to 0.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	*/
+	BIA_EXPORT big_int() noexcept;
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	 *
+	 * @param _value The initial value.
+	*/
+	BIA_EXPORT big_int(int32_t _value) noexcept;
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	 *
+	 * @param _value The initial value.
+	*/
+	BIA_EXPORT big_int(int64_t _value) noexcept;
 	/**
 	 * Copy-Constructor.
 	 *
@@ -68,18 +99,18 @@ public:
 	template<typename Type>
 	void set(Type _signed) noexcept
 	{
-		auto _int = reinterpret_cast<type*>(_buffer);
+		auto _value = reinterpret_cast<type*>(_buffer);
 		auto _unsigned = abs(_signed);
 		constexpr auto _needed = (sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
 
-		for (_int->_mp_size = 0; _int->_mp_size < _needed && _unsigned; ++_int->_mp_size) {
-			_int->_mp_d[_int->_mp_size] = _unsigned & GMP_NUMB_MASK;
+		for (_value->_mp_size = 0; _value->_mp_size < _needed && _unsigned; ++_value->_mp_size) {
+			_value->_mp_d[_value->_mp_size] = _unsigned & GMP_NUMB_MASK;
 			_unsigned >>= GMP_NUMB_BITS;
 		}
 
 		// Apply sign
 		if (_signed < 0) {
-			_int->_mp_size = -_int->_mp_size;
+			_value->_mp_size = -_value->_mp_size;
 		}
 	}
 	BIA_EXPORT void add(const big_int & _right);
@@ -123,6 +154,7 @@ public:
 	BIA_EXPORT double to_double() const;
 
 private:
+	/** Enough space for the underlying big int data. */
 	int8_t _buffer[sizeof(type) + reserved_space];
 
 	void reset() noexcept;
