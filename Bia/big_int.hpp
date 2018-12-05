@@ -17,13 +17,41 @@ namespace dependency
 class big_int
 {
 public:
+	/** The base data type of the big int of the underlying big int library. */
 	typedef typename std::remove_extent<mpz_t>::type type;
 
+	/** The additional reserved space. */
 	constexpr static auto reserved_space = sizeof(*type::_mp_d) * 2;
 
 	BIA_EXPORT big_int(int64_t _value = 0) noexcept;
+	/**
+	 * Copy-Constructor.
+	 *
+	 * @since 3.69.144.798
+	 * @date 5-Dec-18
+	 *
+	 * @param _copy The big int that should be copied.
+	 *
+	 * @throws See machine::memory::big_int_allocator::allocate().
+	*/
 	BIA_EXPORT big_int(const big_int & _copy);
+	/**
+	 * Move-Constructor.
+	 *
+	 * @since 3.69.144.798
+	 * @date 5-Dec-18
+	 *
+	 * @param [in,out] _move The big int that should be moved. This will be set to 0 after moving.
+	*/
 	BIA_EXPORT big_int(big_int && _move) noexcept;
+	/**
+	 * Destructor.
+	 *
+	 * @since 3.69.144.798
+	 * @date 5-Dec-18
+	 *
+	 * @throws See machine::memory::big_int_allocator::free().
+	*/
 	BIA_EXPORT ~big_int();
 	/**
 	 * Converts the signed C++ integral to a big integer.
