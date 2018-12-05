@@ -49,5 +49,17 @@ inline const Type & share<Type>::get() const noexcept
 	return *reinterpret_cast<const Type*>(_data->first);
 }
 
+template<typename Type>
+inline Type * share<Type>::operator->() noexcept
+{
+	return &get();
+}
+
+template<typename Type>
+inline const Type * share<Type>::operator->() const noexcept
+{
+	return &get();
+}
+
 }
 }

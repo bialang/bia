@@ -72,6 +72,24 @@ public:
 	 * @return The object.
 	*/
 	const Type & get() const noexcept;
+	/**
+	 * The arrow access operator.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	 *
+	 * @return The data of the share.
+	*/
+	Type * operator->() noexcept;
+	/**
+	 * The arrow access operator.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	 *
+	 * @return The data of the share.
+	*/
+	const Type * operator->() const noexcept;
 
 private:
 	typedef std::pair<int8_t[sizeof(Type)], std::atomic_size_t> data;
