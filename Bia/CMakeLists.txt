@@ -3,6 +3,16 @@ cmake_minimum_required(VERSION 3.1)
 set(Bia_HEADER_FILES "bia.hpp" "config.hpp" "config_cmake.hpp")
 set(Bia_SOURCE_FILES "")
 
+# common namespace
+set(Bia_HEADER_FILES_COMMON "member_names.hpp")
+set(Bia_SOURCE_FILES_COMMON "member_names.cpp")
+
+source_group("Header Files\\common" FILES ${Bia_HEADER_FILES_COMMON})
+source_group("Source Files\\common" FILES ${Bia_SOURCE_FILES_COMMON})
+
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMMON})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMMON})
+
 # compiler namespace
 set(Bia_HEADER_FILES_COMPILER "compile_compare_operation.hpp" "compile_normal_operation.hpp" "compiler.hpp" "compiler_value.hpp" "constant_operation.hpp" "scope_handler.hpp" "temp_counter.hpp")
 set(Bia_SOURCE_FILES_COMPILER "compiler.cpp")

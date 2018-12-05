@@ -192,6 +192,7 @@
     <ClCompile Include="int_member.cpp" />
     <ClCompile Include="machine_stack.cpp" />
     <ClCompile Include="member_map.cpp" />
+    <ClCompile Include="member_names.cpp" />
     <ClCompile Include="module_loader.cpp" />
     <ClCompile Include="namespace_member.cpp" />
     <ClCompile Include="simple_allocator.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="big_int.hpp" />
     <ClInclude Include="class_template.hpp" />
     <ClInclude Include="class_template_def.hpp" />
+    <ClInclude Include="member_names.hpp" />
     <ClInclude Include="cstring_member_def.hpp" />
     <ClInclude Include="custom_member.hpp" />
     <ClInclude Include="double_member.hpp" />

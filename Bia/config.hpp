@@ -49,10 +49,12 @@
 #endif
 
 // Export
-#if defined(BIA_BUILD_SHARED) && defined(BIA_BUILDING)
+#if defined(BIA_BUILD_SHARED)
+#if defined(BIA_BUILDING)
 #define BIA_EXPORT __declspec(dllexport)
-#elif defined(BIA_BUILD_SHARED)
+#else
 #define BIA_EXPORT __declspec(dllimport)
+#endif
 #else
 #define BIA_EXPORT
 #endif

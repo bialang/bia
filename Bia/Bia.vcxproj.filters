@@ -100,6 +100,12 @@
     <Filter Include="Source Files\dependency">
       <UniqueIdentifier>{dbdee223-1bca-42f3-b81e-08be42573bc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\common">
+      <UniqueIdentifier>{91f841e8-df12-4670-a284-baa71fcff7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{b62cd1b3-3f84-4d0c-af28-a80977c9c1cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -191,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="int_member.cpp">
       <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="member_names.cpp">
+      <Filter>Source Files\common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -508,6 +517,9 @@
     </ClInclude>
     <ClInclude Include="int_member.hpp">
       <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="member_names.hpp">
+      <Filter>Header Files\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
