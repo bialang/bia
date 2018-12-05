@@ -11,6 +11,10 @@ namespace native
 
 thread_local big_int_member::tmp_value big_int_member::_tmp_value;
 
+big_int_member::big_int_member()
+{
+}
+
 big_int_member::big_int_member(int32_t _value) : _data(_value)
 {
 }
@@ -29,7 +33,7 @@ big_int_member::big_int_member(const data_type & _data) noexcept : _data(_data)
 
 void big_int_member::print() const
 {
-	//mpz_out_str(stdout, 10, &_data.get());
+	_data->print(stdout);
 	puts("");
 }
 
@@ -80,7 +84,7 @@ int big_int_member::flags() const
 
 int32_t big_int_member::test() const
 {
-	BIA_NOT_IMPLEMENTED;
+	return static_cast<int32_t>(!_data->is_zero());
 }
 
 int32_t big_int_member::test_member(operator_type _operator, member * _right) const
@@ -105,14 +109,12 @@ int32_t big_int_member::test_double(operator_type _operator, double _right) cons
 
 int64_t big_int_member::to_int() const
 {
-	BIA_NOT_IMPLEMENTED;
-	//return _data.get().convert<int64_t>();
+	return _data->to_int();
 }
 
 double big_int_member::to_double() const
 {
-	BIA_NOT_IMPLEMENTED;
-	//return static_cast<double>(_data.get().convert<int64_t>());
+	return _data->to_double();
 }
 
 void * big_int_member::native_data(native::NATIVE_TYPE _type)
@@ -122,13 +124,12 @@ void * big_int_member::native_data(native::NATIVE_TYPE _type)
 
 const void * big_int_member::const_native_data(native::NATIVE_TYPE _type) const
 {
-	BIA_NOT_IMPLEMENTED;
-	/*switch (_type) {
+	switch (_type) {
 	case NATIVE_TYPE::BOOL:
-		_tmp_value.bool_value = static_cast<bool>(_data.get()._mp_size);
+		_tmp_value.bool_value = !_data->is_zero();
 
 		return &_tmp_value.bool_value;
-	case NATIVE_TYPE::INT_8:
+	/*case NATIVE_TYPE::INT_8:
 		_tmp_value.int8_value = convert<int8_t>();
 
 		return &_tmp_value.int8_value;
@@ -139,24 +140,24 @@ const void * big_int_member::const_native_data(native::NATIVE_TYPE _type) const
 	case NATIVE_TYPE::INT_32:
 		_tmp_value.int32_value = convert<int32_t>();
 
-		return &_tmp_value.int32_value;
+		return &_tmp_value.int32_value;*/
 	case NATIVE_TYPE::INT_64:
-		_tmp_value.int64_value = convert<int64_t>();
+		_tmp_value.int64_value = _data->to_int();
 
 		return &_tmp_value.int64_value;
 	case NATIVE_TYPE::FLOAT:
-		_tmp_value.float_value = static_cast<float>(mpz_get_d(&_data.get()));
+		_tmp_value.float_value = static_cast<float>(_data->to_double());
 
 		return &_tmp_value.float_value;
 	case NATIVE_TYPE::DOUBLE:
-		_tmp_value.double_value = mpz_get_d(&_data.get());
+		_tmp_value.double_value = _data->to_double();
 
 		return &_tmp_value.double_value;
 	default:
 		break;
 	}
 
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);*/
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
 
 }

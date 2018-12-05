@@ -109,12 +109,9 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = "34"
+var i = 34
 
-ta("hello")
-ta(i)
 print i
-hello_world("hi")
 
 
 

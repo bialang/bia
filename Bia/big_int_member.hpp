@@ -20,7 +20,16 @@ class big_int_member : public native_variable
 {
 public:
 	typedef utility::share<dependency::big_int> data_type;
-	
+
+	/**
+	 * Constructor. The default value is 0.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	 *
+	 * @throws See utility::share::share().
+	*/
+	BIA_EXPORT big_int_member();
 	/**
 	 * Constructor.
 	 *

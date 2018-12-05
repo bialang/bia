@@ -60,6 +60,13 @@ big_int::~big_int()
 	}
 }
 
+void big_int::print(FILE * _output, int _base) const
+{
+	if (!mpz_out_str(_output, _base, reinterpret_cast<const type*>(_buffer))) {
+		BIA_IMPLEMENTATION_ERROR;
+	}
+}
+
 void big_int::reset() noexcept
 {
 	auto _ptr = reinterpret_cast<type*>(_buffer);
@@ -196,6 +203,11 @@ void big_int::logical_right_shift(unsigned int _count)
 void big_int::logical_right_shift(unsigned int _count, big_int & _result) const
 {
 	BIA_NOT_IMPLEMENTED;
+}
+
+bool big_int::is_zero() const noexcept
+{
+	return !reinterpret_cast<const type*>(_buffer)->_mp_size;
 }
 
 double big_int::to_double() const

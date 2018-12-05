@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <cstdlib>
 #include <algorithm>
+#include <cstdio>
 
 #include "config.hpp"
 
@@ -85,6 +86,15 @@ public:
 	*/
 	BIA_EXPORT ~big_int();
 	/**
+	 * Prints the big integer to a file.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	 *
+	 * @todo Exception handling.
+	*/
+	BIA_EXPORT void print(FILE * _output, int _base = 10) const;
+	/**
 	 * Converts the signed C++ integral to a big integer.
 	 *
 	 * @warning The underlying big int buffer must be large enough to hold the data.
@@ -139,6 +149,7 @@ public:
 	BIA_EXPORT void arithmetic_right_shift(unsigned int _count, big_int & _result) const;
 	BIA_EXPORT void logical_right_shift(unsigned int _count);
 	BIA_EXPORT void logical_right_shift(unsigned int _count, big_int & _result) const;
+	BIA_EXPORT bool is_zero() const noexcept;
 	BIA_EXPORT bool fits_int() const noexcept;
 	BIA_EXPORT int64_t to_int() const noexcept;
 	/**
