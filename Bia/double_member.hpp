@@ -74,7 +74,6 @@ private:
 		int32_t int32_value;
 		int64_t int64_value;
 		float float_value;
-		double double_value;
 	};
 
 	/** Holds the float value. */

@@ -73,8 +73,16 @@ protected:
 	BIA_EXPORT virtual const void * const_native_data(native::NATIVE_TYPE _type) const override;
 
 private:
+	union tmp_value
+	{
+		float float_value;
+		double double_value;
+	};
+
 	/** Holds the native integer. */
 	data_type _data;
+	/** A temporary value used for convertion. */
+	static thread_local tmp_value _tmp_value;
 };
 
 }

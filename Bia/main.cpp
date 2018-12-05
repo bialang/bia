@@ -76,7 +76,7 @@ int main()
 		auto _exec_allocator = std::make_shared<machine::memory::simple_executable_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _exec_allocator);
 
-		set_function(_context, u8"hello_w�rld", static_cast<int(*)(std::string*)>([](std::string *_s) {
+		set_function(_context, u8"hello_world", static_cast<int(*)(std::string*)>([](std::string *_s) {
 			puts(_s->c_str());
 			*_s = "alksdalksd";
 			return 4;
@@ -99,6 +99,9 @@ int main()
 		set_lambda(_context, "o", [](double a) {
 			printf("%f\n", a);
 		});
+		set_lambda(_context, "ta", [](const char * _tmp) {
+			puts(_tmp);
+		});
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
 		
 		//SetConsoleOutputCP(65001);
@@ -106,8 +109,12 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
+var i = "34"
 
-o(10//3)
+ta("hello")
+ta(i)
+print i
+hello_world("hi")
 
 
 
