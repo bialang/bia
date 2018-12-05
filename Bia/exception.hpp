@@ -148,7 +148,7 @@ public:
  *
  * Symbol cannot be resolved or it is in an undefined state.
 */
-class symbol_error final : public runtime_error
+class symbol_error : public runtime_error
 {
 public:
 	using runtime_error::runtime_error;
@@ -159,7 +159,7 @@ public:
  *
  * A limitiation has been exceeded.
 */
-class limitation_error final : public runtime_error
+class limitation_error : public runtime_error
 {
 public:
 	using runtime_error::runtime_error;
@@ -170,7 +170,7 @@ public:
  *
  * The performed call is invalid.
 */
-class execution_error final : public runtime_error
+class execution_error : public runtime_error
 {
 public:
 	using runtime_error::runtime_error;
@@ -181,7 +181,7 @@ public:
  *
  * The operator is invalid or not supported.
 */
-class operator_error final : public runtime_error
+class operator_error : public runtime_error
 {
 public:
 	using runtime_error::runtime_error;
@@ -192,7 +192,7 @@ public:
  *
  * Corrupted memory or allocation error.
 */
-class memory_error final : public runtime_error
+class memory_error : public runtime_error
 {
 public:
 	using runtime_error::runtime_error;
@@ -201,10 +201,28 @@ public:
 /**
  * @brief An access violation.
 */
-class access_violation final : public runtime_error
+class access_violation : public runtime_error
 {
 public:
 	using runtime_error::runtime_error;
+};
+
+/**
+ * @brief The base class for arithmetic errors.
+*/
+class arithmetic_error : public runtime_error
+{
+public:
+	using runtime_error::runtime_error;
+};
+
+/**
+ * @brief An arithmetic operation overflowed.
+*/
+class overflow_error : public arithmetic_error
+{
+public:
+	using arithmetic_error::arithmetic_error;
 };
 
 }
