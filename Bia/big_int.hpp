@@ -1,8 +1,8 @@
 #pragma once
 
+#include <cstdint>
 #include <mpir/mpir.h>
 #include <type_traits>
-#include <cstdint>
 #include <cstdlib>
 #include <algorithm>
 
@@ -80,31 +80,19 @@ public:
 	BIA_EXPORT void arithmetic_right_shift(unsigned int _count, big_int & _result) const;
 	BIA_EXPORT void logical_right_shift(unsigned int _count);
 	BIA_EXPORT void logical_right_shift(unsigned int _count, big_int & _result) const;
+	BIA_EXPORT bool fits_int() const noexcept;
+	BIA_EXPORT int64_t to_int() const noexcept;
 	/**
-	 * Converts the big integer to a signed C++ integral.
+	 * Converts the big int to a double value.
 	 *
-	 * @remarks If the type can't hold all the data, only the least significant bits will be converted.
+	 * @since 3.69.144.798
+	 * @date 5-Dec-18
 	 *
-	 * @since 3.68.140.790
-	 * @date 20-Oct-18
+	 * @throws exception::overflow_error If the int value is too big. This depends on the hardware implementation.
 	 *
-	 * @tparam Type The signed C++ integral.
-	 *
-	 * @return The converted value.
+	 * @return The double value.
 	*/
-	template<typename Type>
-	Type convert() const noexcept
-	{
-		Type _converted = 0;
-		auto _value = reinterpret_cast<type*>(_buffer);
-		auto _needed = std::min<int>((sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS, abs(_value->_mp_size));
-
-		while (_needed--) {
-			_converted = _converted << GMP_NUMB_BITS | _value->_mp_d[_needed] & GMP_NUMB_MASK;
-		}
-
-		return _value->_mp_size < 0 ? -_converted : _converted;
-	}
+	BIA_EXPORT double to_double() const;
 
 private:
 	int8_t _buffer[sizeof(type) + reserved_space];
