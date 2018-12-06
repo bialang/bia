@@ -56,51 +56,61 @@ void big_int_member::operator_call(member * _destination, operator_type _operato
 {
 	BIA_NOT_IMPLEMENTED;
 }
-
+#define TE(dest, fun) if (dest) {\
+	_data->##fun(_right, dest->template replace_this<big_int_member>()->_data.get());\
+} else {\
+	_data->##fun(_right);\
+}
 void big_int_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
 {
-	if (!_destination) {
+/*	if (!_destination && _operator != O_DOUBLE_MULTIPLY) {
 		BIA_NOT_IMPLEMENTED;
 	}
-
+	*/
 	switch (_operator) {
+	case O_ASSIGN:
+		_data->set(_right);
+
+		return;
+	case O_ASSIGN_PLUS:
 	case O_PLUS:
 	{
-		auto _result = _destination->template replace_this<big_int_member>();
-
-		_data->add(dependency::big_int(_right), _result->_data.get());
+		TE(_destination, add);
 
 		return;
 	}
+	case O_ASSIGN_MINUS:
 	case O_MINUS:
 	{
-		auto _result = _destination->template replace_this<big_int_member>();
-
-		_data->subtract(dependency::big_int(_right), _result->_data.get());
+		TE(_destination, subtract);
 
 		return;
 	}
+	case O_ASSIGN_MULTIPLY:
 	case O_MULTIPLY:
 	{
-		auto _result = _destination->template replace_this<big_int_member>();
-
-		_data->multiply(dependency::big_int(_right), _result->_data.get());
+		TE(_destination, multiply);
 
 		return;
 	}
+	case O_ASSIGN_DOUBLE_DIVIDE:
+	case O_DOUBLE_DIVIDE:
+	{
+		TE(_destination, divide);
+
+		return;
+	}
+	case O_ASSIGN_MODULUS:
 	case O_MODULUS:
 	{
-		auto _result = _destination->template replace_this<big_int_member>();
-
-		_data->modulo(dependency::big_int(_right), _result->_data.get());
+		TE(_destination, modulo);
 
 		return;
 	}
+	case O_ASSIGN_DOUBLE_MULTIPLY:
 	case O_DOUBLE_MULTIPLY:
 	{
-		auto _result = _destination->template replace_this<big_int_member>();
-
-		_data->power(_right, _result->_data.get());
+		TE(_destination, power);
 
 		return;
 	}
@@ -108,7 +118,7 @@ void big_int_member::operator_call_int32(member * _destination, operator_type _o
 		break;
 	}
 
-	BIA_NOT_IMPLEMENTED;
+	throw exception::operator_error(BIA_EM_UNSUPPORTED_OPERATOR);
 }
 
 void big_int_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)

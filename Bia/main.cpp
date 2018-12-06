@@ -109,10 +109,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = 2
-var g = i ** 1024 ** 64
 
-print g
 
 
 )"";

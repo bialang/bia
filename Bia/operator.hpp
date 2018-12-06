@@ -35,10 +35,14 @@ enum OPERATOR : operator_type
 	O_ASSIGN_MINUS = 0x2d3d,
 	/** The `/=` operator. */
 	O_ASSIGN_DIVIDE = 0x2f3d,
+	/** The `//=` operator. */
+	O_ASSIGN_DOUBLE_DIVIDE = 0x2f2f3d,
 	/** The `%=` operator. */
 	O_ASSIGN_MODULUS = 0x253d,
 	/** The `*=` operator. */
 	O_ASSIGN_MULTIPLY = 0x2a3d,
+	/** The `**=` operator. */
+	O_ASSIGN_DOUBLE_MULTIPLY = 0x2a2a3d,
 
 	/** The `|` operator. */
 	O_BITWISE_OR = 0x7c,
