@@ -10,7 +10,7 @@ namespace bia
 namespace common
 {
 
-BIA_EXPORT extern class common_names
+class common_names
 {
 public:
 	// Built-in functions
