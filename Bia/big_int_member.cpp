@@ -59,6 +59,55 @@ void big_int_member::operator_call(member * _destination, operator_type _operato
 
 void big_int_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
 {
+	if (!_destination) {
+		BIA_NOT_IMPLEMENTED;
+	}
+
+	switch (_operator) {
+	case O_PLUS:
+	{
+		auto _result = _destination->template replace_this<big_int_member>();
+
+		_data->add(dependency::big_int(_right), _result->_data.get());
+
+		return;
+	}
+	case O_MINUS:
+	{
+		auto _result = _destination->template replace_this<big_int_member>();
+
+		_data->subtract(dependency::big_int(_right), _result->_data.get());
+
+		return;
+	}
+	case O_MULTIPLY:
+	{
+		auto _result = _destination->template replace_this<big_int_member>();
+
+		_data->multiply(dependency::big_int(_right), _result->_data.get());
+
+		return;
+	}
+	case O_MODULUS:
+	{
+		auto _result = _destination->template replace_this<big_int_member>();
+
+		_data->modulo(dependency::big_int(_right), _result->_data.get());
+
+		return;
+	}
+	case O_DOUBLE_MULTIPLY:
+	{
+		auto _result = _destination->template replace_this<big_int_member>();
+
+		_data->power(_right, _result->_data.get());
+
+		return;
+	}
+	default:
+		break;
+	}
+
 	BIA_NOT_IMPLEMENTED;
 }
 

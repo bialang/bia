@@ -165,11 +165,21 @@ private:
 	template<typename Function, typename Member, typename Right>
 	void function_caller_helper(Function && _function, Member && _member, machine::platform::toolset::temp_result * _destination, framework::operator_type _operator, Right && _right)
 	{
-		if (_destination) {
+		if (_destination && !same_members(_member, *_destination)) {
 			_toolset.call_virtual(std::forward<Function>(_function), std::forward<Member>(_member), *_destination, _operator, std::forward<Right>(_right));
 		} else {
 			_toolset.call_virtual(std::forward<Function>(_function), std::forward<Member>(_member), nullptr, _operator, std::forward<Right>(_right));
 		}
+	}
+	template<typename Left, typename Right>
+	static typename std::enable_if<std::is_same<Left, Right>::value, bool>::type same_members(Left && _left, Right && _right) noexcept
+	{
+		return _left == _right;
+	}
+	template<typename Left, typename Right>
+	static typename std::enable_if<!std::is_same<Left, Right>::value, bool>::type same_members(Left && _left, Right && _right) noexcept
+	{
+		return false;
 	}
 	/**
 	 * Executes the operator.

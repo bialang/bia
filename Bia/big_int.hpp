@@ -133,6 +133,8 @@ public:
 	BIA_EXPORT void divide(const big_int & _right, big_int & _result) const;
 	BIA_EXPORT void modulo(const big_int & _right);
 	BIA_EXPORT void modulo(const big_int & _right, big_int & _result) const;
+	BIA_EXPORT void power(int32_t _exponent);
+	BIA_EXPORT void power(int32_t _exponent, big_int & _result) const;
 	BIA_EXPORT void negate();
 	BIA_EXPORT void negate(big_int & _result) const;
 	BIA_EXPORT void bitwise_and(const big_int & _right);

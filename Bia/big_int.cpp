@@ -70,7 +70,7 @@ void big_int::print(FILE * _output, int _base) const
 void big_int::reset() noexcept
 {
 	auto _ptr = reinterpret_cast<type*>(_buffer);
-
+	
 	_ptr->_mp_alloc = reserved_space / sizeof(*type::_mp_d);
 	_ptr->_mp_d = reinterpret_cast<decltype(type::_mp_d)>(_ptr + 1);
 }
@@ -123,6 +123,26 @@ void big_int::modulo(const big_int & _right)
 void big_int::modulo(const big_int & _right, big_int & _result) const
 {
 	mpz_mod(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+}
+
+void big_int::power(int32_t _exponent)
+{
+	static_assert(sizeof(_exponent) <= sizeof(mpir_ui), "Exponent size mismatch.");
+
+	if (_exponent < 0) {
+		BIA_NOT_IMPLEMENTED;
+	}
+
+	mpz_pow_ui(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), _exponent);
+}
+
+void big_int::power(int32_t _exponent, big_int & _result) const
+{
+	if (_exponent < 0) {
+		BIA_NOT_IMPLEMENTED;
+	}
+
+	mpz_pow_ui(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), _exponent);
 }
 
 void big_int::negate()
