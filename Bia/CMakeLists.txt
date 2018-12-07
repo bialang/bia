@@ -24,7 +24,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMPILER})
 set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMPILER})
 
 # dependency namespace
-set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp")
+set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp" "big_int_operation.hpp")
 set(Bia_SOURCE_FILES_DEPENDENCY "big_int.cpp")
 
 source_group("Header Files\\dependency" FILES ${Bia_HEADER_FILES_DEPENDENCY})

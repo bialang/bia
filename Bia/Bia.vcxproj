@@ -224,6 +224,7 @@
     <ClInclude Include="ascii.hpp" />
     <ClInclude Include="bia.hpp" />
     <ClInclude Include="big_int.hpp" />
+    <ClInclude Include="big_int_operation.hpp" />
     <ClInclude Include="class_template.hpp" />
     <ClInclude Include="class_template_def.hpp" />
     <ClInclude Include="member_names.hpp" />
