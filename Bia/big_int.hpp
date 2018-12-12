@@ -8,6 +8,7 @@
 #include <cstdio>
 
 #include "config.hpp"
+#include "max.hpp"
 
 
 namespace bia
@@ -120,7 +121,7 @@ public:
 
 		for (_this->_mp_size = 0; _this->_mp_size < _needed && _unsigned; ++_this->_mp_size) {
 			_this->_mp_d[_this->_mp_size] = _unsigned & GMP_NUMB_MASK;
-			_unsigned >>= GMP_NUMB_BITS;
+			_unsigned >>= utility::max<int>(GMP_NUMB_BITS, sizeof(_unsigned));
 		}
 
 		// Apply sign
@@ -251,11 +252,15 @@ private:
 	static void big_int_sub(Destination _destination, Source _source, Right _right)
 	{
 		if (sizeof(_right) <= sizeof(mpir_ui)) {
+#if defined(BIA_OS_WINDOWS)
 			if (_right < 0) {
 				mpz_add_ui(_destination, _source, static_cast<mpir_ui>(-_right));
 			} else {
 				mpz_sub_ui(_destination, _source, static_cast<mpir_ui>(_right));
 			}
+#else
+			mpz_sub_ui(_destination, _source, static_cast<mpir_ui>(_right));
+#endif
 		} else {
 			big_int _tmp(static_cast<int64_t>(_right));
 

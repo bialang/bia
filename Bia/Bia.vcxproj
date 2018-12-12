@@ -226,6 +226,7 @@
     <ClInclude Include="big_int.hpp" />
     <ClInclude Include="class_template.hpp" />
     <ClInclude Include="class_template_def.hpp" />
+    <ClInclude Include="disguised_caller_source.hpp" />
     <ClInclude Include="member_names.hpp" />
     <ClInclude Include="cstring_member_def.hpp" />
     <ClInclude Include="custom_member.hpp" />

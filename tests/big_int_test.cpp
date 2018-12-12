@@ -37,7 +37,7 @@ void big_int_test::test_add()
 	_int.set(-695);
 	_int.add(std::numeric_limits<int32_t>::max());
 
-	test::template assert_equals<int64_t>(_int.to_int(), -695 + std::numeric_limits<int32_t>::max(), "695 + max(int32)");
+	test::template assert_equals<int64_t>(_int.to_int(), -695 + std::numeric_limits<int32_t>::max(), "-695 + max(int32)");
 
   _int.set(695);
   _int.add(std::numeric_limits<int32_t>::min());
@@ -48,15 +48,50 @@ void big_int_test::test_add()
 	_int.set(-695);
 	_int.add(std::numeric_limits<int64_t>::max());
 
-	test::template assert_equals<int64_t>(_int.to_int(), -695 + std::numeric_limits<int64_t>::max(), "695 + max(int64)");
+	test::template assert_equals<int64_t>(_int.to_int(), -695LL + std::numeric_limits<int64_t>::max(), "-695 + max(int64)");
 
   _int.set(695);
   _int.add(std::numeric_limits<int64_t>::min());
 
-  test::template assert_equals<int64_t>(_int.to_int(), 695 + std::numeric_limits<int64_t>::min(), "695 + min(int64)");
+  test::template assert_equals<int64_t>(_int.to_int(), 695LL + std::numeric_limits<int64_t>::min(), "695 + min(int64)");
 }
 
 void big_int_test::test_sub()
 {
+	_int.set(659);
+	_int.subtract(95565);
 
+	test::template assert_equals<int64_t>(_int.to_int(), 659 - 95565, "659 - 95565");
+
+	_int.set(695);
+	_int.subtract(-9965);
+
+	test::template assert_equals<int64_t>(_int.to_int(), 695 + 9965, "695 - (-9965)");
+
+	_int.set(-695);
+	_int.subtract(-9965);
+
+	test::template assert_equals<int64_t>(_int.to_int(), -695 + 9965, "-695 - (-9965)");
+
+	// Check limits of 32 bit
+	_int.set(-695);
+	_int.subtract(std::numeric_limits<int32_t>::max());
+
+	test::template assert_equals<int64_t>(_int.to_int(), -695LL - std::numeric_limits<int32_t>::max(), "-695 - max(int32)");
+
+	_int.set(695);
+	_int.subtract(std::numeric_limits<int32_t>::min());
+
+	test::template assert_equals<int64_t>(_int.to_int(), 695LL - std::numeric_limits<int32_t>::min(), "695 - min(int32)");
+
+	// Check limits of 64 bit
+	_int.set(695);
+	_int.subtract(std::numeric_limits<int64_t>::max());
+
+	test::template assert_equals<int64_t>(_int.to_int(), 695LL - std::numeric_limits<int64_t>::max(), "695 - max(int64)");
+
+	_int.set(-695);
+	_int.subtract(std::numeric_limits<int64_t>::min());
+
+	test::template assert_equals<int64_t>(_int.to_int(), -695LL - std::numeric_limits<int64_t>::min(), "-695 - min(int64)");
 }
