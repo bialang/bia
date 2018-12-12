@@ -110,6 +110,10 @@ int main()
 		char _script[] = u8R""(
 
 var i = 656
+
+i += -2147483648
+print i 
+
 i **= 55
 
 var o = 343

@@ -29,6 +29,13 @@ public:
 	{
 		_tests.emplace(std::make_pair(_name, std::move(_test)));
 	}
+	template<typename Class>
+	static void add(const char * _name, void(Class::*_test)())
+	{
+		_tests.emplace(std::make_pair(_name, [_test] {
+			(Class().*_test)();
+		}));
+	}
 	template<typename Type>
 	static void assert_equals(Type _actual, Type _expected, const std::string & _message)
 	{

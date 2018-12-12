@@ -9,7 +9,7 @@
 using namespace bia::machine::platform;
 
 BEGIN_DECLARE_TESTS
-	test::add("instruction_test", &architecture_test::instruction_test);
+	test::add("instruction", &architecture_test::instruction_test);
 END_DECLARE_TESTS
 
 template<typename Instruction_function, typename... Arguments>
