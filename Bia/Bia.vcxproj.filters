@@ -521,9 +521,6 @@
     <ClInclude Include="member_names.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="big_int_operation.hpp">
-      <Filter>Header Files\dependency</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

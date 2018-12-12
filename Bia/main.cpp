@@ -109,7 +109,19 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
+var i = 656
+i **= 55
 
+var o = 343
+o **= 66
+
+i -= o
+
+print i
+
+i = 61
+
+print i
 
 
 )"";
@@ -149,7 +161,9 @@ int main()
 			_context.activate_context();
 
 			try {
-				_machine_code.execute();
+				test_and_time(1, [&] {
+					_machine_code.execute();
+				});
 			} catch (const std::exception & e) {
 				printf("%s: %s\n", typeid(e).name(), e.what());
 			}

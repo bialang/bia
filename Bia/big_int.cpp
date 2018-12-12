@@ -9,6 +9,7 @@ namespace bia
 namespace dependency
 {
 
+
 big_int::big_int() noexcept : _buffer{}
 {
 	reset();
@@ -65,6 +66,11 @@ void big_int::print(FILE * _output, int _base) const
 	if (!mpz_out_str(_output, _base, reinterpret_cast<const type*>(_buffer))) {
 		BIA_IMPLEMENTATION_ERROR;
 	}
+}
+
+void big_int::set(const big_int & _value)
+{
+	mpz_set(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_value._buffer));
 }
 
 void big_int::reset() noexcept
@@ -136,13 +142,23 @@ void big_int::power(int32_t _exponent)
 	mpz_pow_ui(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), _exponent);
 }
 
+void big_int::power(const big_int & _exponent)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
 void big_int::power(int32_t _exponent, big_int & _result) const
 {
 	if (_exponent < 0) {
-		BIA_NOT_IMPLEMENTED;
+		_result.set(0);
+	} else {
+		mpz_pow_ui(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), _exponent);
 	}
+}
 
-	mpz_pow_ui(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), _exponent);
+void big_int::power(const big_int & _exponent, big_int & _result) const
+{
+	BIA_NOT_IMPLEMENTED;
 }
 
 void big_int::negate()
@@ -240,7 +256,7 @@ bool big_int::fits_int() const noexcept
 	auto _value = reinterpret_cast<const type*>(_buffer);
 	auto _size = abs(_value->_mp_size);
 	constexpr auto _int_size = (sizeof(int64_t) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
-
+	
 	// Fits or does not
 	if (_size != _int_size) {
 		return _size < _int_size;

@@ -31,7 +31,7 @@ inline void big_int_member_operation(dependency::big_int & _left, dependency::bi
 
 		return;
 	}
-	case O_ASSIGN_MULTIPLY:
+	/*case O_ASSIGN_MULTIPLY:
 	case O_MULTIPLY:
 	{
 		_left.multiply(_right, _destination);
@@ -58,7 +58,7 @@ inline void big_int_member_operation(dependency::big_int & _left, dependency::bi
 		_left.power(_right, _destination);
 
 		return;
-	}
+	}*/
 	default:
 		break;
 	}
@@ -169,6 +169,18 @@ void big_int_member::clone(member * _destination)
 
 void big_int_member::operator_call(member * _destination, operator_type _operator, const member * _right)
 {
+	auto _flags = _right->flags();
+
+	if (_flags & F_BIG_INT) {
+		if (_destination) {
+			big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, static_cast<const big_int_member*>(_right)->_data.get());
+		} else {
+			big_int_member_operation(_data.get(), _operator, static_cast<const big_int_member*>(_right)->_data.get());
+		}
+
+		return;
+	}
+
 	BIA_NOT_IMPLEMENTED;
 }
 

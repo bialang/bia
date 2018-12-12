@@ -94,6 +94,11 @@ public:
 	 * @todo Exception handling.
 	*/
 	BIA_EXPORT void print(FILE * _output, int _base = 10) const;
+	BIA_EXPORT void set(const big_int & _value);
+	void set(double _value) noexcept
+	{
+		set(static_cast<int64_t>(_value));
+	}
 	/**
 	 * Converts the signed C++ integral to a big integer.
 	 *
@@ -104,37 +109,89 @@ public:
 	 *
 	 * @tparam Type The signed C++ integral.
 	 *
-	 * @param _signed The signed value.
+	 * @param _value The signed value.
 	*/
 	template<typename Type>
-	void set(Type _signed) noexcept
+	typename std::enable_if<std::is_signed<Type>::value>::type set(Type _value) noexcept
 	{
-		auto _value = reinterpret_cast<type*>(_buffer);
-		auto _unsigned = abs(_signed);
+		auto _this = reinterpret_cast<type*>(_buffer);
+		auto _unsigned = abs(_value);
 		constexpr auto _needed = (sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
 
-		for (_value->_mp_size = 0; _value->_mp_size < _needed && _unsigned; ++_value->_mp_size) {
-			_value->_mp_d[_value->_mp_size] = _unsigned & GMP_NUMB_MASK;
+		for (_this->_mp_size = 0; _this->_mp_size < _needed && _unsigned; ++_this->_mp_size) {
+			_this->_mp_d[_this->_mp_size] = _unsigned & GMP_NUMB_MASK;
 			_unsigned >>= GMP_NUMB_BITS;
 		}
 
 		// Apply sign
-		if (_signed < 0) {
-			_value->_mp_size = -_value->_mp_size;
+		if (_value < 0) {
+			_this->_mp_size = -_this->_mp_size;
 		}
 	}
 	BIA_EXPORT void add(const big_int & _right);
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type add(Type _right)
+	{
+		big_int_add(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void add(const big_int & _right, big_int & _result) const;
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type add(Type _right, big_int & _result) const
+	{
+		big_int_add(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void subtract(const big_int & _right);
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type subtract(Type _right)
+	{
+		big_int_sub(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void subtract(const big_int & _right, big_int & _result) const;
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type subtract(Type _right, big_int & _result) const
+	{
+		big_int_sub(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void multiply(const big_int & _right);
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type multiply(Type _right)
+	{
+		big_int_mul(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void multiply(const big_int & _right, big_int & _result) const;
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type multiply(Type _right, big_int & _result) const
+	{
+		big_int_mul(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void divide(const big_int & _right);
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type divide(Type _right)
+	{
+		big_int_div(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void divide(const big_int & _right, big_int & _result) const;
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type divide(Type _right, big_int & _result) const
+	{
+		big_int_div(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void modulo(const big_int & _right);
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type modulo(Type _right)
+	{
+		big_int_mod(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void modulo(const big_int & _right, big_int & _result) const;
+	template<typename Type>
+	typename std::enable_if<std::is_arithmetic<Type>::value>::type modulo(Type _right, big_int & _result) const
+	{
+		big_int_mod(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), _right);
+	}
 	BIA_EXPORT void power(int32_t _exponent);
+	BIA_EXPORT void power(const big_int & _exponent);
 	BIA_EXPORT void power(int32_t _exponent, big_int & _result) const;
+	BIA_EXPORT void power(const big_int & _exponent, big_int & _result) const;
 	BIA_EXPORT void negate();
 	BIA_EXPORT void negate(big_int & _result) const;
 	BIA_EXPORT void bitwise_and(const big_int & _right);
@@ -171,6 +228,79 @@ private:
 	int8_t _buffer[sizeof(type) + reserved_space];
 
 	void reset() noexcept;
+	template<typename Destination, typename Source, typename Right>
+	static void big_int_add(Destination _destination, Source _source, Right _right)
+	{
+		if (sizeof(_right) <= sizeof(mpir_ui)) {
+			if (_right < 0) {
+				mpz_sub_ui(_destination, _source, static_cast<mpir_ui>(-_right));
+			} else {
+				mpz_add_ui(_destination, _source, -_right);
+			}
+		} else {
+			big_int _tmp(static_cast<int64_t>(_right));
+
+			mpz_add(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
+		}
+	}
+	template<typename Destination, typename Source, typename Right>
+	static void big_int_sub(Destination _destination, Source _source, Right _right)
+	{
+		if (sizeof(_right) <= sizeof(mpir_ui)) {
+			if (_right < 0) {
+				mpz_add_ui(_destination, _source, static_cast<mpir_ui>(-_right));
+			} else {
+				mpz_sub_ui(_destination, _source, -_right);
+			}
+		} else {
+			big_int _tmp(static_cast<int64_t>(_right));
+
+			mpz_sub(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
+		}
+	}
+	template<typename Destination, typename Source, typename Right>
+	static void big_int_mul(Destination _destination, Source _source, Right _right)
+	{
+		if (sizeof(_right) <= sizeof(mpir_si)) {
+			mpz_mul_si(_destination, _source, static_cast<mpir_si>(_right));
+		} else {
+			big_int _tmp(static_cast<int64_t>(_right));
+
+			mpz_mul(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
+		}
+	}
+	template<typename Destination, typename Source, typename Right>
+	static void big_int_div(Destination _destination, Source _source, Right _right)
+	{
+		if (sizeof(_right) <= sizeof(mpir_si)) {
+			if (_right < 0) {
+				mpz_div_ui(_destination, _source, static_cast<mpir_ui>(-_right));
+				mpz_neg(_destination, _destination);
+			} else {
+				mpz_div_ui(_destination, _source, static_cast<mpir_ui>(_right));
+			}
+		} else {
+			big_int _tmp(static_cast<int64_t>(_right));
+
+			mpz_div(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
+		}
+	}
+	template<typename Destination, typename Source, typename Right>
+	static void big_int_mod(Destination _destination, Source _source, Right _right)
+	{
+		if (sizeof(_right) <= sizeof(mpir_si)) {
+			if (_right < 0) {
+				mpz_mod_ui(_destination, _source, static_cast<mpir_ui>(-_right));
+				mpz_neg(_destination, _destination);
+			} else {
+				mpz_mod_ui(_destination, _source, static_cast<mpir_ui>(_right));
+			}
+		} else {
+			big_int _tmp(static_cast<int64_t>(_right));
+
+			mpz_mod(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
+		}
+	}
 };
 
 }
