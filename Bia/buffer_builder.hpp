@@ -19,6 +19,7 @@ public:
 	buffer_builder(machine::memory::allocator * _allocator) : _allocator(_allocator)
 	{
 		_buffer = _allocator->allocate(32);
+		_size = 0;
 	}
 	buffer_builder(const buffer_builder & _copy) = delete;
 	buffer_builder(buffer_builder && _copy) = default;

@@ -185,7 +185,7 @@ private:
 	 * @tparam Type The desired get type.
 	*/
 	template<typename Type>
-	constexpr static typename std::enable_if<std::is_same<Type, Default>::value>::type valid_get_type() noexcept
+	static typename std::enable_if<std::is_same<Type, Default>::value>::type valid_get_type() noexcept
 	{
 	}
 	/**
@@ -197,7 +197,7 @@ private:
 	 * @tparam Type The desired get type.
 	*/
 	template<typename Type>
-	constexpr static typename std::enable_if<!std::is_same<Type, Default>::value>::type valid_get_type() noexcept
+	static typename std::enable_if<!std::is_same<Type, Default>::value>::type valid_get_type() noexcept
 	{
 		object_id<Type, Types...>();
 	}
