@@ -33,6 +33,7 @@ public:
 	BIA_EXPORT virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override;
 	BIA_EXPORT virtual int64_t to_int() const override;
 	BIA_EXPORT virtual double to_double() const override;
+	BIA_EXPORT virtual const char * to_cstring(utility::buffer_builder * _builder) const override;
 
 protected:
 	BIA_EXPORT virtual void * native_data(native::NATIVE_TYPE _type) override;

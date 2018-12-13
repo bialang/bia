@@ -125,6 +125,15 @@ inline double cstring_member<Char_type>::to_double() const
 }
 
 template<typename Char_type>
+inline const char * cstring_member<Char_type>::to_cstring(utility::buffer_builder * _builder) const
+{
+	///TODO
+//	static_assert(std::is_same<Char_type, char>::value, "Unsupported char type");
+
+	return reinterpret_cast<const char*>(std::get<0>(_data.get()));
+}
+
+template<typename Char_type>
 inline void * cstring_member<Char_type>::native_data(native::NATIVE_TYPE _type)
 {
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);

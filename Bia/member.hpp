@@ -12,6 +12,7 @@
 #include "native_type.hpp"
 #include "type_traits.hpp"
 #include "string_manager.hpp"
+#include "buffer_builder.hpp"
 
 
 namespace bia
@@ -370,6 +371,7 @@ public:
 	 * @return The double representation.
 	*/
 	virtual double to_double() const = 0;
+	virtual const char * to_cstring(utility::buffer_builder * _builder) const = 0;
 	/**
 	 * Casts this member to the specified mutable type.
 	 *

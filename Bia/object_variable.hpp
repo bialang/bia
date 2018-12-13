@@ -89,6 +89,10 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
+	virtual const char * to_cstring(utility::buffer_builder * _builder) const override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+	}
 
 protected:
 	virtual void * native_data(native::NATIVE_TYPE _type) override

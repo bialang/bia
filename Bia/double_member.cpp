@@ -5,6 +5,8 @@
 #include "native_test_operator.hpp"
 #include "create_member.hpp"
 
+#include <cstdio>
+
 
 namespace bia
 {
@@ -119,6 +121,13 @@ int64_t double_member::to_int() const
 double double_member::to_double() const
 {
 	return _data.get();
+}
+
+const char * double_member::to_cstring(utility::buffer_builder * _builder) const
+{
+	std::snprintf(_builder->buffer<char>(), _builder->capacity(), "%f", _data.get());
+
+	return _builder->buffer<char>();
 }
 
 void * double_member::native_data(native::NATIVE_TYPE _type)

@@ -256,6 +256,13 @@ double big_int_member::to_double() const
 	return _data->to_double();
 }
 
+const char * big_int_member::to_cstring(utility::buffer_builder * _builder) const
+{
+	_data->to_string(*_builder);
+
+	return _builder->buffer<char>();
+}
+
 void * big_int_member::native_data(native::NATIVE_TYPE _type)
 {
 	return const_cast<void*>(native_data(_type));

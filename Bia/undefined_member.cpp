@@ -118,6 +118,11 @@ double undefined_member::to_double() const
 	BIA_UNDEFINED_ERROR;
 }
 
+const char * undefined_member::to_cstring(utility::buffer_builder * _builder) const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 void * undefined_member::native_data(native::NATIVE_TYPE _type)
 {
 	BIA_UNDEFINED_ERROR;

@@ -16,6 +16,7 @@
 #include "variable_index.hpp"
 #include "machine_stack.hpp"
 #include "module_loader.hpp"
+#include "buffer_builder.hpp"
 
 
 namespace bia
@@ -102,6 +103,7 @@ public:
 	 * @return The active member big int or null if there is no active allocator.
 	*/
 	BIA_EXPORT static memory::big_int_allocator * active_big_int_allocator() noexcept;
+	BIA_EXPORT static utility::buffer_builder * active_buffer_builder() noexcept;
 	 /**
 	  * Returns the memory allocator.
 	  *
@@ -138,6 +140,7 @@ public:
 	 * @return The memory allocator of this context.
 	*/
 	BIA_EXPORT memory::executable_allocator * executable_allocator() noexcept;
+	BIA_EXPORT utility::buffer_builder & buffer_builder() noexcept;
 	BIA_EXPORT machine::string_manager & string_manager() noexcept;
 
 //private:
@@ -151,6 +154,7 @@ public:
 	static thread_local memory::member_allocator * _active_member_allocator;
 	/** The active big int allocator. */
 	static thread_local memory::big_int_allocator * _active_big_int_allocator;
+	static thread_local utility::buffer_builder * _active_buffer_builder;
 	/** The allocator for normal memory. */
 	const std::shared_ptr<memory::allocator> _allocator;
 	/** The member allocator of the context. */
@@ -159,6 +163,7 @@ public:
 	const std::shared_ptr<memory::big_int_allocator> _big_int_allocator;
 	/** The allocator for executable memory. */
 	const std::shared_ptr<memory::executable_allocator> _executable_allocator;
+	utility::buffer_builder _buffer_builder;
 	/** The string manager for string like resources. */
 	machine::string_manager _string_manager;
 	/** Holds all known variables, function and other. */
