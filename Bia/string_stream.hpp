@@ -17,7 +17,9 @@ namespace stream
 /**
  * @brief A string stream.
  *
- * A string stream for creating string with the right encoding.
+ * A string stream for creating string with the right encoding and format for internal use.
+ *
+ * @see @ref machine::string_manager, @ref grammar::interpreter_token::string
 */
 class string_stream
 {
