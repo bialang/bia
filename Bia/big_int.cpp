@@ -68,6 +68,18 @@ void big_int::print(FILE * _output, int _base) const
 	}
 }
 
+void big_int::to_string(utility::buffer_builder & _destination, int _base) const
+{
+	_destination.resize(mpz_sizeinbase(reinterpret_cast<const type*>(_buffer), _base));
+	
+	mpz_get_str(_destination.buffer<char>(), _base, reinterpret_cast<const type*>(_buffer));
+
+	// Resize
+	if (!_destination.buffer<char>()[_destination.size() - 1]) {
+		_destination.resize(_destination.size() - 1);
+	}
+}
+
 void big_int::set(const big_int & _value)
 {
 	mpz_set(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_value._buffer));

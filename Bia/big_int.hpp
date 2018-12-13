@@ -9,6 +9,7 @@
 
 #include "config.hpp"
 #include "max.hpp"
+#include "buffer_builder.hpp"
 
 
 namespace bia
@@ -95,6 +96,7 @@ public:
 	 * @todo Exception handling.
 	*/
 	BIA_EXPORT void print(FILE * _output, int _base = 10) const;
+	BIA_EXPORT void to_string(utility::buffer_builder & _destination, int _base = 10) const;
 	BIA_EXPORT void set(const big_int & _value);
 	void set(double _value) noexcept
 	{

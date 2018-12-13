@@ -51,12 +51,12 @@ public:
 		return _size;
 	}
 	template<typename Type = void>
-	Type buffer() noexcept
+	Type * buffer() noexcept
 	{
 		return reinterpret_cast<Type*>(_buffer);
 	}
 	template<typename Type = void>
-	const Type buffer() const noexcept
+	const Type * buffer() const noexcept
 	{
 		return reinterpret_cast<const Type*>(_buffer);
 	}
