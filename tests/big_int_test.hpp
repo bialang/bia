@@ -1,10 +1,13 @@
 #pragma once
 
 #include <big_int.hpp>
+#include <buffer_builder.hpp>
+#include <simple_allocator.hpp>
 
 #include "test.hpp"
 
 using namespace bia::dependency;
+using namespace bia::machine::memory;
 
 
 class big_int_test
@@ -12,9 +15,13 @@ class big_int_test
 public:
   static void arithmetic_test();
 
+  big_int_test();
   void test_add();
   void test_sub();
+  void test_power();
 
 private:
+  simple_allocator _allocator;
+  bia::utility::buffer_builder _builder;
   big_int _int;
 };

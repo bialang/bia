@@ -1,3 +1,3 @@
 #pragma once
 
-/* #undef BIA_BUILD_SHARED */
+#define BIA_BUILD_SHARED

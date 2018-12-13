@@ -36,6 +36,10 @@ public:
 			(Class().*_test)();
 		}));
 	}
+	static void assert_equals(const char * _actual, const char * _expected, const std::string & _message)
+	{
+		assert(!std::strcmp(_actual, _expected), _message);
+	}
 	template<typename Type>
 	static void assert_equals(Type _actual, Type _expected, const std::string & _message)
 	{

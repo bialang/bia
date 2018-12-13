@@ -13,4 +13,5 @@ target_link_libraries(bigIntTest Bia)
 
 add_test(AddTest bigIntTest add)
 add_test(SubTest bigIntTest sub)
+add_test(PowerTest bigIntTest power)
 add_test(BigIntTest bigIntTest)

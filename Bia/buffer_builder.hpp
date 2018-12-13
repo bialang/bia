@@ -30,7 +30,7 @@ public:
 	}
 	void resize(size_type _new_size)
 	{
-		if (_new_size < capacity()) {
+		if (_new_size > capacity()) {
 			auto _new = _allocator->allocate(_new_size + 16);
 
 			std::memcpy(_new, _buffer, _size);
