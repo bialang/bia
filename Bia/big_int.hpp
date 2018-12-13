@@ -58,6 +58,7 @@ public:
 	 * @param _value The initial value.
 	*/
 	BIA_EXPORT big_int(int64_t _value) noexcept;
+	BIA_EXPORT big_int(const char * _value, int _base = 10);
 	/**
 	 * Copy-Constructor.
 	 *
@@ -102,6 +103,7 @@ public:
 	{
 		set(static_cast<int64_t>(_value));
 	}
+	BIA_EXPORT void set(const char * _value, int _base = 10);
 	/**
 	 * Converts the signed C++ integral to a big integer.
 	 *

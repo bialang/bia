@@ -9,7 +9,6 @@ namespace bia
 namespace dependency
 {
 
-
 big_int::big_int() noexcept : _buffer{}
 {
 	reset();
@@ -23,6 +22,11 @@ big_int::big_int(int32_t _value) noexcept : big_int()
 big_int::big_int(int64_t _value) noexcept : big_int()
 {
 	set(_value);
+}
+
+big_int::big_int(const char * _value, int _base) : big_int()
+{
+	set(_value, _base);
 }
 
 big_int::big_int(const big_int & _copy)
@@ -83,6 +87,13 @@ void big_int::to_string(utility::buffer_builder & _destination, int _base) const
 void big_int::set(const big_int & _value)
 {
 	mpz_set(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_value._buffer));
+}
+
+void big_int::set(const char * _value, int _base)
+{
+	if (mpz_set_str(reinterpret_cast<type*>(_buffer), _value, _base)) {
+		BIA_NOT_IMPLEMENTED;
+	}
 }
 
 void big_int::reset() noexcept
