@@ -422,39 +422,6 @@ private:
 	 * @return 1 if the automaton matched whitespaces/comments successfully. -1 if @a _end_predicate fired, otherwise 0.
 	*/
 	BIA_EXPORT static int whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point) = nullptr);
-	/**
-	 * Matches integral values with a base up to 16.
-	 *
-	 * @remarks The parameters are not checked.
-	 *
-	 * @since 3.64.128.720
-	 * @date 16-May-18
-	 *
-	 * @param [in,out] _buffer The buffer.
-	 * @param [in] _encoder The encoder.
-	 * @param _base The base.
-	 *
-	 * @throws See encoding::encoder::next().
-	 *
-	 * @return A pair with the success value as first and the parsed integral as second.
-	*/
-	BIA_EXPORT static  std::pair<bool, int64_t> match_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base);
-	/**
-	 * Matches integral values with a base up to 16.
-	 *
-	 * @remarks The parameters are not checked.
-	 *
-	 * @since 3.64.130.722
-	 * @date 16-May-18
-	 *
-	 * @param [in,out] _buffer The buffer.
-	 * @param [in] _encoder The encoder.
-	 *
-	 * @throws See encoding::encoder::next().
-	 *
-	 * @return A pair with the success value as first and the parsed integral as second.
-	*/
-	BIA_EXPORT static  std::tuple<bool, int64_t, double, bool> match_decimal(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
 };
 
 }
