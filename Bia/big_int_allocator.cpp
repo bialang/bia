@@ -26,7 +26,7 @@ void big_int_allocator::initialize(const std::shared_ptr<allocator>& _allocator)
 	mp_set_memory_functions(&big_int_allocator::allocate, &big_int_allocator::reallocate, &big_int_allocator::free);
 }
 
-void big_int_allocator::destroy_big_int(allocation<dependency::big_int> _big_int)
+void big_int_allocator::destroy_big_int(big_int_allocation _big_int)
 {
 	_big_int->~big_int();
 

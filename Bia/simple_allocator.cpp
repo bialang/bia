@@ -22,7 +22,7 @@ void simple_allocator::deallocate_member(allocation<framework::member> _allocati
 	deallocate(cast_allocation<void>(_allocation));
 }
 
-void simple_allocator::deallocate_big_int(allocation<dependency::big_int> _allocation)
+void simple_allocator::deallocate_big_int(big_int_allocation _allocation)
 {
 	deallocate(cast_allocation<void>(_allocation));
 }
@@ -59,7 +59,7 @@ allocation<framework::member> simple_allocator::allocate_member()
 	return cast_allocation<framework::member>(allocate(member_allocation_size));
 }
 
-allocation<dependency::big_int> simple_allocator::allocate_big_int()
+big_int_allocation simple_allocator::allocate_big_int()
 {
 	return cast_allocation<dependency::big_int>(allocate(big_int_allocation_size));
 }

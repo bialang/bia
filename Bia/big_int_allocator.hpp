@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <memory>
 #include <type_traits>
+#include <utility>
 
 #include "config.hpp"
 #include "allocator.hpp"
@@ -15,6 +16,8 @@ namespace machine
 {
 namespace memory
 {
+
+typedef allocation<dependency::big_int> big_int_allocation;
 
 /**
  * @brief Allocates memory for big ints.
@@ -57,7 +60,7 @@ public:
 	 *
 	 * @throws exception::memory_error If the specified allocation wasn't allocated by allocate_big_int().
 	*/
-	virtual void deallocate_big_int(allocation<dependency::big_int> _allocation) = 0;
+	virtual void deallocate_big_int(big_int_allocation _allocation) = 0;
 	/**
 	 * Destroys and deallocates the given big int.
 	 *
@@ -69,7 +72,7 @@ public:
 	 * @throws See deallocate_big_int().
 	 * @throws See dependency::big_int::~big_int().
 	*/
-	BIA_EXPORT void destroy_big_int(allocation<dependency::big_int> _big_int);
+	BIA_EXPORT void destroy_big_int(big_int_allocation _big_int);
 	/**
 	 * Allocates memory for one big int.
 	 *
@@ -80,29 +83,28 @@ public:
 	 *
 	 * @return The allocated, but uninitialized big int.
 	*/
-	virtual allocation<dependency::big_int> allocate_big_int() = 0;
+	virtual big_int_allocation allocate_big_int() = 0;
 	/**
 	 * Allocates and constructs a big int with a specified initial value.
 	 *
 	 * @since 3.68.141.793
 	 * @date 2-Dec-18
 	 *
-	 * @tparam Type The type of the initial value. Must be integral.
+	 * @tparam Arguments The types of the arguments passed to dependency::big_int::big_int().
 	 *
-	 * @param _value The arguments passed to the constructor of @a Type.
+	 * @param _value The arguments passed to the constructor of dependency::big_int::big_int().
 	 *
 	 * @throws See allocate_big_int().
+	 * @throws See dependency::big_int::big_int().
 	 *
 	 * @return The constructed big int.
 	*/
-	template<typename Type = int>
-	allocation<dependency::big_int> construct_big_int(Type _value = 0)
+	template<typename... Arguments>
+	big_int_allocation construct_big_int(Arguments &&... _arguments)
 	{
-		static_assert(std::is_integral<Type>::value, "The initial value must be an integral.");
-
 		auto _big_int = allocate_big_int();
 
-		new(_big_int) dependency::big_int(_value);
+		new(_big_int) dependency::big_int(std::forward<Arguments>(_arguments)...);
 
 		return _big_int;
 	}

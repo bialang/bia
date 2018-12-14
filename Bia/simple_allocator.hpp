@@ -23,12 +23,12 @@ class simple_allocator : public allocator, public member_allocator, public big_i
 public:
 	BIA_EXPORT virtual void deallocate(universal_allocation _allocation) override;
 	BIA_EXPORT virtual void deallocate_member(allocation<framework::member> _allocation) override;
-	BIA_EXPORT virtual void deallocate_big_int(allocation<dependency::big_int> _allocation) override;
+	BIA_EXPORT virtual void deallocate_big_int(big_int_allocation _allocation) override;
 	BIA_EXPORT virtual universal_allocation reallocate(universal_allocation _allocation, size_type _size) override;
 	BIA_EXPORT virtual universal_allocation commit(universal_allocation _allocation, size_type _size) override;
 	BIA_EXPORT virtual universal_allocation allocate(size_type _size) override;
 	BIA_EXPORT virtual allocation<framework::member> allocate_member() override;
-	BIA_EXPORT virtual allocation<dependency::big_int> allocate_big_int() override;
+	BIA_EXPORT virtual big_int_allocation allocate_big_int() override;
 	BIA_EXPORT virtual universal_allocation prepare(size_type _size) override;
 };
 

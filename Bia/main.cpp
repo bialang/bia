@@ -109,9 +109,11 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = 656
-
-i -= -2147483648
+var i = 23423423423423797276245286882582852852528524242342342342
+print i
+ser(i, "hi")
+ser(i, "hi")
+#>i -= -2147483648
 print i 
 
 i **= 55
@@ -125,7 +127,7 @@ print i
 
 i = 61
 
-print i
+print i<#
 
 
 )"";
@@ -164,9 +166,9 @@ print i
 			// Set active allocator
 			_context.activate_context();
 
+					_machine_code.execute();
 			try {
 				test_and_time(1, [&] {
-					_machine_code.execute();
 				});
 			} catch (const std::exception & e) {
 				printf("%s: %s\n", typeid(e).name(), e.what());

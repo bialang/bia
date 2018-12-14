@@ -54,7 +54,7 @@ public:
 		/** A constant 64 bit integer. */
 		int64_t rt_int;
 		/** A constant big integer. */
-		dependency::big_int::type * rt_big_int;
+		dependency::big_int * rt_big_int;
 		/** A constant floating point. */
 		double rt_double;
 		struct string
@@ -131,7 +131,7 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return(dependency::big_int::type * _value) noexcept
+	void set_return(dependency::big_int * _value) noexcept
 	{
 		_return_type = VALUE_TYPE::BIG_INT;
 		_return_value.rt_big_int = _value;

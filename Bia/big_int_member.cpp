@@ -265,7 +265,7 @@ const char * big_int_member::to_cstring(utility::buffer_builder * _builder) cons
 
 void * big_int_member::native_data(native::NATIVE_TYPE _type)
 {
-	return const_cast<void*>(native_data(_type));
+	return const_cast<void*>(const_native_data(_type));
 }
 
 const void * big_int_member::const_native_data(native::NATIVE_TYPE _type) const
@@ -275,18 +275,18 @@ const void * big_int_member::const_native_data(native::NATIVE_TYPE _type) const
 		_tmp_value.bool_value = !_data->is_zero();
 
 		return &_tmp_value.bool_value;
-	/*case NATIVE_TYPE::INT_8:
-		_tmp_value.int8_value = convert<int8_t>();
+	case NATIVE_TYPE::INT_8:
+		_tmp_value.int8_value = static_cast<int8_t>(_data->to_int());
 
 		return &_tmp_value.int8_value;
 	case NATIVE_TYPE::INT_16:
-		_tmp_value.int16_value = convert<int16_t>();
+		_tmp_value.int16_value = static_cast<int16_t>(_data->to_int());
 
 		return &_tmp_value.int16_value;
 	case NATIVE_TYPE::INT_32:
-		_tmp_value.int32_value = convert<int32_t>();
+		_tmp_value.int32_value = static_cast<int32_t>(_data->to_int());
 
-		return &_tmp_value.int32_value;*/
+		return &_tmp_value.int32_value;
 	case NATIVE_TYPE::INT_64:
 		_tmp_value.int64_value = _data->to_int();
 

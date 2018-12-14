@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "config.hpp"
+#include "big_int_allocator.hpp"
 #include "executable_allocator.hpp"
 
 
@@ -58,6 +59,10 @@ public:
 	 * @throws See std::vector::push_back().
 	*/
 	BIA_EXPORT void register_allocation(memory::universal_allocation _allocation, deleter_function_signature _deleter = nullptr);
+	void register_big_int(memory::big_int_allocation _allocation)
+	{
+		///TODO
+	}
 	/**
 	 * Deletes all registered allocations.
 	 *
