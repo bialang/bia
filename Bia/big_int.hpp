@@ -232,7 +232,7 @@ private:
 	/** Enough space for the underlying big int data. */
 	int8_t _buffer[sizeof(type) + reserved_space];
 
-	void reset() noexcept;
+	BIA_EXPORT void reset() noexcept;
 	template<typename Destination, typename Source, typename Right>
 	static void big_int_add(Destination _destination, Source _source, Right _right)
 	{

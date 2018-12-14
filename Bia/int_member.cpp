@@ -37,12 +37,12 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::print() const
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::copy(member * _destination)
 {
-	_destination->replace_this<int_member>(_data.get());
+	_destination->template replace_this<int_member>(_data.get());
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::refer(member * _destination)
 {
-	_destination->replace_this<int_member>(_data);
+	_destination->template replace_this<int_member>(_data);
 }
 
 void BIA_MEMBER_CALLING_CONVENTION int_member::clone(member * _destination)
