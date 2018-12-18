@@ -91,15 +91,15 @@ public:
 	/**
 	 * Matches a number token.
 	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
+	 * @since 3.64.127.716
+	 * @date 9-Apr-18
 	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	[in] _params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
+	 * @param _buffer Defines the buffer that should be matched.
+	 * @param _length Defines the length of the buffer.
+	 * @param [in] _params Defines additional interpreter information.
+	 * @param [out]	_output Defines the token result.
 	 *
-	 * @return	Defines the success code. See @ref ACTION.
+	 * @return Defines the success code. See @ref ACTION.
 	*/
 	BIA_EXPORT static ACTION number(stream::input_stream & _input, token_param & _params, token_output & _output);
 	BIA_EXPORT static ACTION string(stream::input_stream & _input, token_param & _params, token_output & _output);
@@ -387,13 +387,14 @@ public:
 	}
 
 private:
+	BIA_EXPORT static void match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base);
 	/**
 	 * Parses the sign before a number.
 	 *
 	 * @since 3.68.140.790
 	 * @date 10-Nov-18
 	 *
-	 * @param [in] _input The input buffer.
+	 * @param [in] _buffer The input buffer.
 	 * @param [in] _encoder The encoder.
 	 *
 	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
@@ -401,10 +402,9 @@ private:
 	 *
 	 * @return true if the sign is negative, otherwise false.
 	*/
-	BIA_EXPORT static bool parse_sign(stream::input_stream & _input, encoding::encoder * _encoder);
-	BIA_EXPORT static int parse_base(stream::input_stream & _input, encoding::encoder * _encoder);
-	BIA_EXPORT static std::tuple<bool, int64_t> match_native_integer(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative);
-	BIA_EXPORT static void match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base);
+	BIA_EXPORT static bool parse_sign(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
+	BIA_EXPORT static int match_native_number(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output);
+	BIA_EXPORT static int parse_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
 	/*
 	 * Matches single- and multiline comments and @a _is_ws.
 	 *

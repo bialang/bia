@@ -109,10 +109,10 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = 23423423423423797276245286882582852852528524242342342342
+var i = -0.
 print i
 ser(i, "hi")
-ser(i, "hi")
+#ser(i, "hi")
 #>i -= -2147483648
 print i 
 
