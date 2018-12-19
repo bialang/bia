@@ -103,13 +103,14 @@ int main()
 			puts(_tmp);
 		});
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
-		
-		//SetConsoleOutputCP(65001);
 
+		//SetConsoleOutputCP(65001);
+		std::cout << std::numeric_limits<double>::min() << "|" << std::numeric_limits<double>::max() << '\n';
 		// Script
 		char _script[] = u8R""(
-
-var i = -0.
+ta("hi")
+ta("bye")
+var i = 999999999999999999999999999999999999999999999999999999999999999.
 print i
 ser(i, "hi")
 #ser(i, "hi")
@@ -165,10 +166,11 @@ print i<#
 		if (_machine_code.is_executable()) {
 			// Set active allocator
 			_context.activate_context();
-
-					_machine_code.execute();
+			std::cout << 99999999999999999999999999999999999999999999999999999999999999.9 << std::endl;
+			std::cout << std::stod("99999999999999999999999999999999999999999999999999999999999999.9") << std::endl;
 			try {
 				test_and_time(1, [&] {
+					_machine_code.execute();
 				});
 			} catch (const std::exception & e) {
 				printf("%s: %s\n", typeid(e).name(), e.what());

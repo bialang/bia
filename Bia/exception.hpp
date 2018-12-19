@@ -31,6 +31,8 @@
 #define BIA_EM_ASSIGN_ON_CONST "Assigns on constant variable are disallowed."
 #define BIA_EM_SYMBOL_ALREADY_EXISTS "Symbol already exists."
 #define BIA_EM_MODULE_NOT_FOUND "Specified module not found."
+#define BIA_EM_DOUBLE_OVERFLOW "Double value overflow."
+#define BIA_EM_DOUBLE_UNDERFLOW "Double value underflow."
 
 
 namespace bia

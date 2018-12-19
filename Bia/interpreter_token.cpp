@@ -47,13 +47,16 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param & _p
 	}
 
 	// Match
+	auto _tmp = _buffer.first;
 	auto _result = match_native_number(_buffer, _params.encoder, _base, _negative, _output);
 
 	if (!_result) {
 		_input.skip(_buffer.first);
 
 		return success;
-	} else if (_result < 0) {
+	} else if (_result > 0) {
+		_input.skip(_tmp);
+	} else {
 		return error;
 	}
 
@@ -68,6 +71,10 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param & _p
 
 	// Construct big integer
 	auto _new_int = _params.context->big_int_allocator()->construct_big_int(stream::string_stream::string<char>(_string.buffer()), _base);
+
+	if (_negative) {
+		_new_int->negate();
+	}
 
 	_params.schein.register_big_int(_new_int);
 	_output.type = report::TYPE::BIG_INT_VALUE;
@@ -616,8 +623,8 @@ int interpreter_token::match_native_number(stream::input_stream::buffer_type & _
 		break;
 	}
 
-	_output.type = report::TYPE::INT_VALUE;
-	_output.content.int_value = 0;
+	_output.type = report::TYPE::DOUBLE_VALUE;
+	_output.content.double_value = 0;
 
 	while (_buffer.first < _buffer.second) {
 		auto _digit = _encoder->next(_buffer.first, _buffer.second);
@@ -669,32 +676,53 @@ int interpreter_token::match_native_number(stream::input_stream::buffer_type & _
 				if (_decimal_place) {
 					_output.content.double_value -= _digit_value / (_fraction *= 10);
 				} else {
+					// Double underflow
+					if ((std::numeric_limits<double>::lowest() + _digit_value) / _base > _output.content.double_value) {
+						if (_decimal_place) {
+							throw exception::overflow_error(BIA_EM_DOUBLE_UNDERFLOW);
+						}
+
+						return 1;
+					}
+
 					_output.content.double_value = _output.content.double_value * _base - _digit_value;
 				}
 			}
-		} else {
-			// Number is too large
-			if (_output.type == report::TYPE::INT_VALUE) {
-				// Switch to double, because it still could be a native double
-				if ((std::numeric_limits<int64_t>::max() - _digit_value) / _base < _output.content.int_value) {
-					_output.type = report::TYPE::DOUBLE_VALUE;
-					_output.content.double_value = static_cast<double>(_output.content.int_value) * _base + _digit_value;
-				} // Int
-				else {
-					_output.content.int_value = _output.content.int_value * _base + _digit_value;
-				}
-			} // Double
+		} // Int
+		else if (_output.type == report::TYPE::INT_VALUE) {
+			// Switch to double, because it still could be a native double
+			if ((std::numeric_limits<int64_t>::max() - _digit_value) / _base < _output.content.int_value) {
+				_output.type = report::TYPE::DOUBLE_VALUE;
+				_output.content.double_value = static_cast<double>(_output.content.int_value) * _base + _digit_value;
+			} // Int
 			else {
-				if (_decimal_place) {
-					_output.content.double_value += _digit_value / (_fraction *= 10);
-				} else {
-					_output.content.double_value = _output.content.double_value * _base + _digit_value;
+				_output.content.int_value = _output.content.int_value * _base + _digit_value;
+			}
+		} // Double
+		else {
+			if (_decimal_place) {
+				_output.content.double_value += _digit_value / (_fraction *= 10);
+			} else {
+				// Double underflow
+				if ((std::numeric_limits<double>::max() - _digit_value) / _base < _output.content.double_value) {
+					if (_decimal_place) {
+						throw exception::overflow_error(BIA_EM_DOUBLE_UNDERFLOW);
+					}
+
+					return 1;
 				}
+
+				_output.content.double_value = _output.content.double_value * _base + _digit_value;
 			}
 		}
 
 		_last_digit = _buffer.first;
 		_digit_matched = true;
+	}
+
+	// Big integer
+	if (_output.type == report::TYPE::DOUBLE_VALUE && !_decimal_place) {
+		return 1;
 	}
 
 	_buffer.first = _last_digit;
