@@ -32,13 +32,13 @@ test_script:
 - cmd: >-
     cd c:/project/source/build
     
-    copy "../dependencies/build-for-testing/mpir/x86-debug/mpir.dll" "tests/Debug/"
+    copy "c:/project/source/dependencies/build-for-testing/mpir/x86-debug/mpir.dll" "tests/Debug/"
     
     ctest
     
     cd c:/project/source/build64
     
-    copy "../dependencies/build-for-testing/mpir/x64-release/mpir.dll" "tests/Release/"
+    copy "c:/project/source/dependencies/build-for-testing/mpir/x64-release/mpir.dll" "tests/Release/"
     
     ctest
     
