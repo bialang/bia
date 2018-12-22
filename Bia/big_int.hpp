@@ -237,7 +237,7 @@ private:
 	static void big_int_add(Destination _destination, Source _source, Right _right)
 	{
 		if (sizeof(_right) <= sizeof(mpir_ui)) {
-#if defined(BIA_OS_WINDOWS) && defined(BIA_ARCHITECTURE_X86)
+#if defined(BIA_OS_WINDOWS) && defined(BIA_ARCHITECTURE_X86_32)
 			if (_right < 0) {
 				mpz_sub_ui(_destination, _source, static_cast<mpir_ui>(-_right));
 			} else {
@@ -256,7 +256,7 @@ private:
 	static void big_int_sub(Destination _destination, Source _source, Right _right)
 	{
 		if (sizeof(_right) <= sizeof(mpir_ui)) {
-#if defined(BIA_OS_WINDOWS) && defined(BIA_ARCHITECTURE_X86)
+#if defined(BIA_OS_WINDOWS) && defined(BIA_ARCHITECTURE_X86_32)
 			if (_right < 0) {
 				mpz_add_ui(_destination, _source, static_cast<mpir_ui>(-_right));
 			} else {
