@@ -23,6 +23,14 @@ void big_int_test::test_set_get()
 
 	test::template assert_equals<int64_t>(_int.to_int(), 0, "=0");
 
+	_int.set(1);
+
+	test::template assert_equals<int64_t>(_int.to_int(), 1, "=1");
+
+	_int.set(-1);
+
+	test::template assert_equals<int64_t>(_int.to_int(), -1, "=-1");
+
 	_int.set(std::numeric_limits<int64_t>::max());
 
 	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::max(), "=max(int64)");
