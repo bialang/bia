@@ -1,18 +1,29 @@
 version: 1.0.{build}
+
 image: Visual Studio 2017
+
 clone_folder: c:\project\source
+
 before_build:
 - cmd: >-
     mkdir build
-
+    mkdir build64
     cd build
-
-    cmake c:\project\source -G "Visual Studio 15"
-
-    cmake --build . --config "Release"
-    
+    cmake c:/project/source -G "Visual Studio 15" -DMPIR_INCLUDE="c:/project/source/dependencies/build-for-testing/mpir/include" -DMPIR_LIB="c:/project/source/dependencies/build-for-testing/mpir/x86-debug/mpir.lib"
+    cd ../build64
+    cmake c:/project/source -G "Visual Studio 15 Win64" -DMPIR_INCLUDE="c:/project/source/dependencies/build-for-testing/mpir/include" -DMPIR_LIB="c:/project/source/dependencies/build-for-testing/mpir/x64-release/mpir.lib"
+build_script:
+- cmd: >-
+    cd c:/project/source/build
     cmake --build . --config "Debug"
+    cd c:/project/source/build64
+    cmake --build . --config "Release"
+
 test_script:
-  - cd c:\project\source\build
-  - ctest -C "Debug"
-  - ctest -C "Release"
+- cmd: >-
+    cd c:/project/source/build
+    copy "../dependencies/build-for-testing/mpir/x86-debug/mpir.dll" "tests/Debug/"
+    ctest
+    cd c:/project/source/build64
+    copy "../dependencies/build-for-testing/mpir/x64-release/mpir.dll" "tests/Release/"
+    ctest
