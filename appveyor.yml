@@ -1,6 +1,9 @@
 version: 1.0.{build}
+
 image: Visual Studio 2017
+
 clone_folder: c:\project\source
+
 before_build:
 - cmd: >-
     mkdir build
@@ -9,10 +12,11 @@ before_build:
 
     cmake c:\project\source -G "Visual Studio 15"
 
+build_script:
     cmake --build . --config "Release"
     
     cmake --build . --config "Debug"
-build: off
+
 test_script:
   - cd c:\project\source\build
   - ctest -C "Debug"
