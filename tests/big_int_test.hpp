@@ -13,9 +13,8 @@ using namespace bia::machine::memory;
 class big_int_test
 {
 public:
-  static void arithmetic_test();
-
   big_int_test();
+  void test_set_get();
   void test_add();
   void test_sub();
   void test_power();

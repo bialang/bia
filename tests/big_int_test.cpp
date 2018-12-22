@@ -4,7 +4,9 @@
 #include <limits>
 #include <cstdint>
 
+
 BEGIN_DECLARE_TESTS
+test::add("set_get", &big_int_test::test_set_get);
 test::add("add", &big_int_test::test_add);
 test::add("sub", &big_int_test::test_sub);
 test::add("power", &big_int_test::test_power);
@@ -12,15 +14,41 @@ END_DECLARE_TESTS
 
 big_int_test::big_int_test() : _builder(&_allocator)
 {
-	bia::machine::memory::big_int_allocator::initialize(std::shared_ptr<simple_allocator>(&_allocator, [](simple_allocator*) {puts("deleting"); }));
+	bia::machine::memory::big_int_allocator::initialize(std::shared_ptr<simple_allocator>(&_allocator, [](simple_allocator*) {}));
 }
 
-void big_int_test::arithmetic_test()
+void big_int_test::test_set_get()
 {
-	big_int_test _tester;
+	_int.set(0);
 
-	_tester.test_add();
-	_tester.test_sub();
+	test::template assert_equals<int64_t>(_int.to_int(), 0, "=0");
+
+	_int.set(std::numeric_limits<int64_t>::max());
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::max(), "=max(int64)");
+
+	_int.set(std::numeric_limits<int64_t>::min());
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::min(), "=min(int64)");
+
+	// Out of range
+	_int.set("9223372036854775808");
+
+	try {
+		_int.to_int();
+
+		test::fail("Int should overflow.");
+	} catch (const bia::exception::overflow_error&) {
+	}
+
+	_int.set("-9223372036854775809");
+
+	try {
+		_int.to_int();
+
+		test::fail("Int should underflow.");
+	} catch (const bia::exception::overflow_error&) {
+	}
 }
 
 void big_int_test::test_add()

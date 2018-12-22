@@ -11,6 +11,7 @@ add_test(ArchitectureTest architectureTest)
 add_executable(bigIntTest test_main.cpp big_int_test.cpp)
 target_link_libraries(bigIntTest Bia)
 
+add_test(SetGetTest bigIntTest set_get)
 add_test(AddTest bigIntTest add)
 add_test(SubTest bigIntTest sub)
 add_test(PowerTest bigIntTest power)
