@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <vector>
 #include <cstring>
 #include <exception>
 #include <typeinfo>
@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <stdexcept>
 #include <string>
+#include <algorithm>
 
 
 #define BEGIN_DECLARE_TESTS bool _tests_initialized = [] () {
@@ -27,14 +28,14 @@ public:
 
 	static void add(const char * _name, void(*_test)())
 	{
-		_tests.emplace(std::make_pair(_name, [_test](void *& _object) {
+		_tests.emplace_back(std::make_pair(_name, [_test](void *& _object) {
 			_test();
 		}));
 	}
 	template<typename Class>
 	static void add(const char * _name, void(Class::*_test)())
 	{
-		_tests.emplace(std::make_pair(_name, [_test] (void *& _object) {
+		_tests.emplace_back(std::make_pair(_name, [_test] (void *& _object) {
 			if (!_object) {
 				_object = new Class();
 			}
@@ -83,7 +84,9 @@ public:
 					}
 				}
 			} else {
-				auto _test = _tests.find(_mode);
+				auto _test = std::find_if(_tests.begin(), _tests.end(), [_mode](const tests_type::value_type & _value) {
+					return !std::strcmp(_value.first, _mode);
+				});
 
 				// Test not found
 				if (_test == _tests.end()) {
@@ -95,7 +98,9 @@ public:
 				}
 			}
 
-			_destructor(_object);
+			if (_destructor) {
+				_destructor(_object);
+			}
 
 			return true;
 		} catch (const assert_error & e) {
@@ -112,15 +117,7 @@ public:
 	}
 
 private:
-	struct cstring_compare
-	{
-		bool operator()(const char * _left, const char * _right) const
-		{
-			return std::strcmp(_left, _right) < 0;
-		}
-	};
-
-	typedef std::map<const char*, std::function<void(void*&)>, cstring_compare> tests_type;
+	typedef std::vector<std::pair<const char*, std::function<void(void*&)>>> tests_type;
 
 	static tests_type _tests;
 	static void(*_destructor)(void*);
