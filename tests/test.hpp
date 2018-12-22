@@ -25,16 +25,25 @@ public:
 		using std::runtime_error::runtime_error;
 	};
 
-	static void add(const char * _name, std::function<void()> && _test)
+	static void add(const char * _name, void(*_test)())
 	{
-		_tests.emplace(std::make_pair(_name, std::move(_test)));
+		_tests.emplace(std::make_pair(_name, [_test](void *& _object) {
+			_test();
+		}));
 	}
 	template<typename Class>
 	static void add(const char * _name, void(Class::*_test)())
 	{
-		_tests.emplace(std::make_pair(_name, [_test] {
-			(Class().*_test)();
+		_tests.emplace(std::make_pair(_name, [_test] (void *& _object) {
+			if (!_object) {
+				_object = new Class();
+			}
+
+			(reinterpret_cast<Class*>(_object)->*_test)();
 		}));
+		_destructor = [](void * _object) {
+			delete reinterpret_cast<Class*>(_object);
+		};
 	}
 	static void assert_equals(const char * _actual, const char * _expected, const std::string & _message)
 	{
@@ -59,12 +68,14 @@ public:
 	}
 	static bool test_main(const char * _mode)
 	{
+		void * _object = nullptr;
+
 		try {
 			// Test all
 			if (!_mode) {
 				for (auto & _test : _tests) {
 					try {
-						_test.second();
+						_test.second(_object);
 					} catch (...) {
 						_mode = _test.first;
 
@@ -80,9 +91,11 @@ public:
 
 					return false;
 				} else {
-					_test->second();
+					_test->second(_object);
 				}
 			}
+
+			_destructor(_object);
 
 			return true;
 		} catch (const assert_error & e) {
@@ -92,6 +105,8 @@ public:
 		} catch (...) {
 			error("%s threw an exception", _mode);
 		}
+
+		_destructor(_object);
 
 		return false;
 	}
@@ -105,9 +120,10 @@ private:
 		}
 	};
 
-	typedef std::map<const char*, std::function<void()>, cstring_compare> tests_type;
+	typedef std::map<const char*, std::function<void(void*&)>, cstring_compare> tests_type;
 
 	static tests_type _tests;
+	static void(*_destructor)(void*);
 
 	static void assert(bool _condition, const std::string & _message)
 	{

@@ -1,6 +1,7 @@
 #include "test.hpp"
 
 test::tests_type test::_tests;
+void(*test::_destructor)(void*);
 
 
 int main(int _argc, char ** _argv)
