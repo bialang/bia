@@ -323,7 +323,7 @@ private:
 	 * @date 22-Dec-18
 	 *
 	 * @tparam To_type The desired type.
-	 * @tparam Type The actual type.
+	 * @tparam Type The actual type. Must meet: sizeof(Type) <= sizeof(To_type)
 	 *
 	 * @param _value The value that should be casted.
 	 *
@@ -332,8 +332,6 @@ private:
 	template<typename To_type, typename Type>
 	static typename std::enable_if<std::is_unsigned<To_type>::value || std::is_signed<Type>::value, To_type>::type expand_cast(Type _value) noexcept
 	{
-		static_assert(sizeof(Type) <= sizeof(To_type), "Possible loss.");
-
 		return static_cast<To_type>(_value);
 	}
 	/**
@@ -343,7 +341,7 @@ private:
 	 * @date 22-Dec-18
 	 *
 	 * @tparam To_type The desired type.
-	 * @tparam Type The actual type.
+	 * @tparam Type The actual type. Must meet: sizeof(Type) <= sizeof(To_type)
 	 *
 	 * @param _value The value that should be casted. Must be negative.
 	 *
@@ -352,8 +350,6 @@ private:
 	template<typename To_type, typename Type>
 	static typename std::enable_if<std::is_unsigned<To_type>::value && std::is_signed<Type>::value, To_type>::type negate_cast(Type _value) noexcept
 	{
-		static_assert(sizeof(Type) <= sizeof(To_type), "Possible loss.");
-
 		return static_cast<To_type>(-static_cast<typename std::make_signed<To_type>::type>(_value));
 	}
 };
