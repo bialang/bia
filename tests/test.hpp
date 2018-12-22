@@ -98,9 +98,7 @@ public:
 				}
 			}
 
-			if (_destructor) {
-				_destructor(_object);
-			}
+			_destructor(_object);
 
 			return true;
 		} catch (const assert_error & e) {
