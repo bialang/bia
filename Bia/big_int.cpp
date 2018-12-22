@@ -75,7 +75,7 @@ void big_int::print(FILE * _output, int _base) const
 void big_int::to_string(utility::buffer_builder & _destination, int _base) const
 {
 	_destination.resize(mpz_sizeinbase(reinterpret_cast<const type*>(_buffer), _base));
-	
+
 	mpz_get_str(_destination.buffer<char>(), _base, reinterpret_cast<const type*>(_buffer));
 
 	// Resize
@@ -99,7 +99,7 @@ void big_int::set(const char * _value, int _base)
 void big_int::reset() noexcept
 {
 	auto _ptr = reinterpret_cast<type*>(_buffer);
-	
+
 	_ptr->_mp_alloc = reserved_space / sizeof(*type::_mp_d);
 	_ptr->_mp_d = reinterpret_cast<decltype(type::_mp_d)>(_ptr + 1);
 }
@@ -269,17 +269,12 @@ bool big_int::is_zero() const noexcept
 	return !reinterpret_cast<const type*>(_buffer)->_mp_size;
 }
 
-double big_int::to_double() const
-{
-	return mpz_get_d(reinterpret_cast<const type*>(_buffer));
-}
-
 bool big_int::fits_int() const noexcept
 {
 	auto _value = reinterpret_cast<const type*>(_buffer);
 	auto _size = abs(_value->_mp_size);
 	constexpr auto _int_size = (sizeof(int64_t) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
-	
+
 	// Fits or does not
 	if (_size != _int_size) {
 		return _size < _int_size;
@@ -289,7 +284,7 @@ bool big_int::fits_int() const noexcept
 	BIA_NOT_IMPLEMENTED;
 }
 
-int64_t big_int::to_int() const noexcept
+int64_t big_int::cast_int() const noexcept
 {
 	int64_t _converted = 0;
 	auto _value = reinterpret_cast<const type*>(_buffer);
@@ -300,9 +295,63 @@ int64_t big_int::to_int() const noexcept
 	}
 
 	return _value->_mp_size < 0 ? -_converted : _converted;
-	/*static_assert(sizeof(int64_t) == sizeof(intmax_t), "Integer type mismatch.");
+}
 
-	return mpz_get_sx(reinterpret_cast<const type*>(_buffer));*/
+int64_t big_int::to_int() const
+{
+	uint64_t _converted = 0;
+	auto _value = reinterpret_cast<const type*>(_buffer);
+	constexpr auto _needed = (sizeof(int64_t) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
+	auto _size = _value->_mp_size;
+	
+	if (_size == 0) {
+		return 0;
+	} else if (_size > 0) {
+		if (_size > _needed) {
+			throw exception::overflow_error(BIA_EM_INT_OVERFLOW);
+		}
+
+		while (_size--) {
+			_converted = _converted << GMP_NUMB_BITS | _value->_mp_d[_size] & GMP_NUMB_MASK;
+		}
+
+		if (_converted > static_cast<uint64_t>(std::numeric_limits<int64_t>::max())) {
+			throw exception::overflow_error(BIA_EM_INT_OVERFLOW);
+		}
+
+		return static_cast<int64_t>(_converted);
+	} else {
+		_size = -_size;
+
+		if (_size > _needed) {
+			throw exception::overflow_error(BIA_EM_INT_UNDERFLOW);
+		}
+
+		while (_size--) {
+			_converted = _converted << GMP_NUMB_BITS | _value->_mp_d[_size] & GMP_NUMB_MASK;
+		}
+
+		if (_converted > static_cast<uint64_t>(std::numeric_limits<int64_t>::min())) {
+			throw exception::overflow_error(BIA_EM_INT_UNDERFLOW);
+		}
+
+		return -static_cast<int64_t>(_converted);
+	}
+}
+
+double big_int::cast_double() const noexcept
+{
+	try {
+		return mpz_get_d(reinterpret_cast<const type*>(_buffer));
+	} catch (...) {
+	}
+
+	return std::numeric_limits<double>::quiet_NaN();
+}
+
+double big_int::to_double() const
+{
+	return mpz_get_d(reinterpret_cast<const type*>(_buffer));
 }
 
 }

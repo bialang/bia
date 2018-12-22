@@ -215,7 +215,9 @@ public:
 	BIA_EXPORT void logical_right_shift(unsigned int _count, big_int & _result) const;
 	BIA_EXPORT bool is_zero() const noexcept;
 	BIA_EXPORT bool fits_int() const noexcept;
-	BIA_EXPORT int64_t to_int() const noexcept;
+	BIA_EXPORT int64_t cast_int() const noexcept;
+	BIA_EXPORT int64_t to_int() const;
+	BIA_EXPORT double cast_double() const noexcept;
 	/**
 	 * Converts the big int to a double value.
 	 *
@@ -237,14 +239,14 @@ private:
 	static void big_int_add(Destination _destination, Source _source, Right _right)
 	{
 		if (sizeof(_right) <= sizeof(mpir_ui)) {
-#if defined(BIA_OS_WINDOWS) && defined(BIA_ARCHITECTURE_X86_32)
+#if defined(BIA_OS_WINDOWS)
 			if (_right < 0) {
-				mpz_sub_ui(_destination, _source, static_cast<mpir_ui>(-_right));
+				mpz_sub_ui(_destination, _source, negate_cast<mpir_ui>(_right));
 			} else {
-				mpz_add_ui(_destination, _source, static_cast<mpir_ui>(_right));
+				mpz_add_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
 #else
-			mpz_add_ui(_destination, _source, static_cast<mpir_ui>(_right));
+			mpz_add_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 #endif
 		} else {
 			big_int _tmp(static_cast<int64_t>(_right));
@@ -256,14 +258,14 @@ private:
 	static void big_int_sub(Destination _destination, Source _source, Right _right)
 	{
 		if (sizeof(_right) <= sizeof(mpir_ui)) {
-#if defined(BIA_OS_WINDOWS) && defined(BIA_ARCHITECTURE_X86_32)
+#if defined(BIA_OS_WINDOWS)
 			if (_right < 0) {
-				mpz_add_ui(_destination, _source, static_cast<mpir_ui>(-_right));
+				mpz_add_ui(_destination, _source, negate_cast<mpir_ui>(_right));
 			} else {
-				mpz_sub_ui(_destination, _source, static_cast<mpir_ui>(_right));
+				mpz_sub_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
 #else
-			mpz_sub_ui(_destination, _source, static_cast<mpir_ui>(_right));
+			mpz_sub_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 #endif
 		} else {
 			big_int _tmp(static_cast<int64_t>(_right));
@@ -313,6 +315,46 @@ private:
 
 			mpz_mod(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
 		}
+	}
+	/**
+	 * Casts @a _value to @a To_type.
+	 *
+	 * @since 3.69.145.800
+	 * @date 22-Dec-18
+	 *
+	 * @tparam To_type The desired type.
+	 * @tparam Type The actual type.
+	 *
+	 * @param _value The value that should be casted.
+	 *
+	 * @return The casted value.
+	*/
+	template<typename To_type, typename Type>
+	static typename std::enable_if<std::is_unsigned<To_type>::value || std::is_signed<Type>::value, To_type>::type expand_cast(Type _value) noexcept
+	{
+		static_assert(sizeof(Type) <= sizeof(To_type), "Possible loss.");
+
+		return static_cast<To_type>(_value);
+	}
+	/**
+	 * Casts @a _value to @a To_type.
+	 *
+	 * @since 3.69.145.800
+	 * @date 22-Dec-18
+	 *
+	 * @tparam To_type The desired type.
+	 * @tparam Type The actual type.
+	 *
+	 * @param _value The value that should be casted. Must be negative.
+	 *
+	 * @return The casted positive value.
+	*/
+	template<typename To_type, typename Type>
+	static typename std::enable_if<std::is_unsigned<To_type>::value && std::is_signed<Type>::value, To_type>::type negate_cast(Type _value) noexcept
+	{
+		static_assert(sizeof(Type) <= sizeof(To_type), "Possible loss.");
+
+		return static_cast<To_type>(-static_cast<typename std::make_signed<To_type>::type>(_value));
 	}
 };
 

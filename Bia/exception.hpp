@@ -33,6 +33,8 @@
 #define BIA_EM_MODULE_NOT_FOUND "Specified module not found."
 #define BIA_EM_DOUBLE_OVERFLOW "Double value overflow."
 #define BIA_EM_DOUBLE_UNDERFLOW "Double value underflow."
+#define BIA_EM_INT_OVERFLOW "Integer value overflows as native int64."
+#define BIA_EM_INT_UNDERFLOW "Integer value underflows as native int64."
 
 
 namespace bia
