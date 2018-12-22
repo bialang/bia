@@ -32,11 +32,15 @@ test_script:
 - cmd: >-
     cd c:\project\source\build
     
+    copy "Bia\Debug\Bia.dll" "tests\Debug"
+    
     copy "..\dependencies\build-for-testing\mpir\x86-debug\mpir.dll" "tests\Debug"
     
     ctest
     
     cd c:\project\source\build64
+    
+    copy "Bia\Release\Bia.dll" "tests\Release"
     
     copy "..\dependencies\build-for-testing\mpir\x64-release\mpir.dll" "tests\Release"
     
