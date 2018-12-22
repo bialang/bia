@@ -12,6 +12,7 @@ before_build:
     cmake --build . --config "Release"
     
     cmake --build . --config "Debug"
+build: off
 test_script:
   - cd c:\project\source\build
   - ctest -C "Debug"
