@@ -12,37 +12,33 @@ before_build:
     
     cd build
     
-    cmake c:/project/source -G "Visual Studio 15" -DMPIR_INCLUDE="c:/project/source/dependencies/build-for-testing/mpir/include" -DMPIR_LIB="c:/project/source/dependencies/build-for-testing/mpir/x86-debug/mpir.lib"
+    cmake c:\project\source -G "Visual Studio 15" -DMPIR_INCLUDE="c:/project/source/dependencies/build-for-testing/mpir/include" -DMPIR_LIB="c:/project/source/dependencies/build-for-testing/mpir/x86-debug/mpir.lib"
     
-    cd ../build64
+    cd ..\build64
     
-    cmake c:/project/source -G "Visual Studio 15 Win64" -DMPIR_INCLUDE="c:/project/source/dependencies/build-for-testing/mpir/include" -DMPIR_LIB="c:/project/source/dependencies/build-for-testing/mpir/x64-release/mpir.lib"
+    cmake c:\project\source -G "Visual Studio 15 Win64" -DMPIR_INCLUDE="c:/project/source/dependencies/build-for-testing/mpir/include" -DMPIR_LIB="c:/project/source/dependencies/build-for-testing/mpir/x64-release/mpir.lib"
     
 build_script:
 - cmd: >-
-    cd c:/project/source/build
+    cd c:\project\source\build
     
     cmake --build . --config "Debug"
     
-    cd c:/project/source/build64
+    cd c:\project\source\build64
     
     cmake --build . --config "Release"
 
 test_script:
 - cmd: >-
-    cd c:/project/source/build
+    cd c:\project\source\build
     
-    dir c:/project/source/
-    
-    dir c:/project/source/dependencies/build-for-testing/mpir
-    
-    copy "c:/project/source/dependencies/build-for-testing/mpir/x86-debug/mpir.dll" "c:/project/source/build/tests/Debug/"
+    copy "..\dependencies\build-for-testing\mpir\x86-debug\mpir.dll" "tests\Debug"
     
     ctest
     
-    cd c:/project/source/build64
+    cd c:\project\source\build64
     
-    copy "c:/project/source/dependencies/build-for-testing/mpir/x64-release/mpir.dll" "c:/project/source/build64/tests/Release/"
+    copy "..\dependencies\build-for-testing\mpir\x64-release\mpir.dll" "tests\Release"
     
     ctest
     
