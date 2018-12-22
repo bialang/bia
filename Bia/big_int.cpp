@@ -269,21 +269,6 @@ bool big_int::is_zero() const noexcept
 	return !reinterpret_cast<const type*>(_buffer)->_mp_size;
 }
 
-bool big_int::fits_int() const noexcept
-{
-	auto _value = reinterpret_cast<const type*>(_buffer);
-	auto _size = abs(_value->_mp_size);
-	constexpr auto _int_size = (sizeof(int64_t) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
-
-	// Fits or does not
-	if (_size != _int_size) {
-		return _size < _int_size;
-	}
-
-	// Check limits
-	BIA_NOT_IMPLEMENTED;
-}
-
 int64_t big_int::cast_int() const noexcept
 {
 	int64_t _converted = 0;

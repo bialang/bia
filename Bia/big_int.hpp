@@ -214,9 +214,36 @@ public:
 	BIA_EXPORT void logical_right_shift(unsigned int _count);
 	BIA_EXPORT void logical_right_shift(unsigned int _count, big_int & _result) const;
 	BIA_EXPORT bool is_zero() const noexcept;
-	BIA_EXPORT bool fits_int() const noexcept;
+	/**
+	 * Casts the big int to a native int64.
+	 *
+	 * @remarks If the big int is too large, the result will be truncated.
+	 *
+	 * @since 3.69.145.800
+	 * @date 22-Dec-18
+	 *
+	 * @return The int value.
+	*/
 	BIA_EXPORT int64_t cast_int() const noexcept;
+	/**
+	 * Casts the big int to a native int64.
+	 *
+	 * @since 3.69.145.800
+	 * @date 22-Dec-18
+	 *
+	 * @param exception::overflow_error If the big int does not fit into a native int.
+	 *
+	 * @return The int value.
+	*/
 	BIA_EXPORT int64_t to_int() const;
+	/**
+	 * Converts the big int to a double value.
+	 *
+	 * @since 3.69.145.800
+	 * @date 22-Dec-18
+	 *
+	 * @return The double value.
+	*/
 	BIA_EXPORT double cast_double() const noexcept;
 	/**
 	 * Converts the big int to a double value.
