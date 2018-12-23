@@ -288,7 +288,7 @@ int64_t big_int::to_int() const
 	auto _value = reinterpret_cast<const type*>(_buffer);
 	constexpr auto _needed = (sizeof(int64_t) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
 	auto _size = _value->_mp_size;
-	
+
 	if (_size == 0) {
 		return 0;
 	} else if (_size > 0) {
@@ -299,7 +299,7 @@ int64_t big_int::to_int() const
 		while (_size--) {
 			_converted = _converted << GMP_NUMB_BITS | _value->_mp_d[_size] & GMP_NUMB_MASK;
 		}
-
+		
 		if (_converted > static_cast<uint64_t>(std::numeric_limits<int64_t>::max())) {
 			throw exception::overflow_error(BIA_EM_INT_OVERFLOW);
 		}

@@ -120,12 +120,12 @@ public:
 	typename std::enable_if<std::is_signed<Type>::value>::type set(Type _value) noexcept
 	{
 		auto _this = reinterpret_cast<type*>(_buffer);
-		auto _unsigned = abs(_value);
+		auto _unsigned = _value < 0 ? negate_cast<uint64_t>(_value) : expand_cast<uint64_t>(_value);
 		constexpr auto _needed = (sizeof(Type) * 8 + GMP_NUMB_BITS - 1) / GMP_NUMB_BITS;
 
 		for (_this->_mp_size = 0; _this->_mp_size < _needed && _unsigned; ++_this->_mp_size) {
 			_this->_mp_d[_this->_mp_size] = _unsigned & GMP_NUMB_MASK;
-			_unsigned >>= utility::max<int>(GMP_NUMB_BITS, sizeof(_unsigned));
+			_unsigned >>= GMP_NUMB_BITS;
 		}
 
 		// Apply sign
