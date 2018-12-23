@@ -266,15 +266,11 @@ private:
 	static void big_int_add(Destination _destination, Source _source, Right _right)
 	{
 		if (sizeof(_right) <= sizeof(mpir_ui)) {
-#if defined(BIA_OS_WINDOWS)
 			if (_right < 0) {
 				mpz_sub_ui(_destination, _source, negate_cast<mpir_ui>(_right));
 			} else {
 				mpz_add_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
-#else
-			mpz_add_ui(_destination, _source, expand_cast<mpir_ui>(_right));
-#endif
 		} else {
 			big_int _tmp(static_cast<int64_t>(_right));
 
@@ -285,15 +281,11 @@ private:
 	static void big_int_sub(Destination _destination, Source _source, Right _right)
 	{
 		if (sizeof(_right) <= sizeof(mpir_ui)) {
-#if defined(BIA_OS_WINDOWS)
 			if (_right < 0) {
 				mpz_add_ui(_destination, _source, negate_cast<mpir_ui>(_right));
 			} else {
 				mpz_sub_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
-#else
-			mpz_sub_ui(_destination, _source, expand_cast<mpir_ui>(_right));
-#endif
 		} else {
 			big_int _tmp(static_cast<int64_t>(_right));
 
