@@ -17,6 +17,7 @@ public:
   void test_set_get();
   void test_add();
   void test_sub();
+  void test_mul();
   void test_power();
 
 private:

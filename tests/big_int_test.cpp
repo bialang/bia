@@ -9,6 +9,7 @@ BEGIN_DECLARE_TESTS
 test::add("set_get", &big_int_test::test_set_get);
 test::add("add", &big_int_test::test_add);
 test::add("sub", &big_int_test::test_sub);
+test::add("mul", &big_int_test::test_mul);
 test::add("power", &big_int_test::test_power);
 END_DECLARE_TESTS
 
@@ -46,8 +47,7 @@ void big_int_test::test_set_get()
 		_int.to_int();
 
 		test::fail("Int should overflow.");
-	} catch (const bia::exception::overflow_error&) {
-	}
+	} catch (const bia::exception::overflow_error&) {}
 
 	_int.set("-9223372036854775809");
 
@@ -55,8 +55,7 @@ void big_int_test::test_set_get()
 		_int.to_int();
 
 		test::fail("Int should underflow.");
-	} catch (const bia::exception::overflow_error&) {
-	}
+	} catch (const bia::exception::overflow_error&) {}
 }
 
 void big_int_test::test_add()
@@ -76,7 +75,7 @@ void big_int_test::test_add()
 
 	test::template assert_equals<int64_t>(_int.to_int(), -695 - 9965, "-695 + (-9965)");
 
-	  // Check limits of 32 bit
+	// Check limits of 32 bit
 	_int.set(-695);
 	_int.add(std::numeric_limits<int32_t>::max());
 
@@ -163,6 +162,83 @@ void big_int_test::test_sub()
 	_int.to_string(_builder);
 
 	test::assert_equals(_builder.buffer<char>(), "649824434651873210319355360168188897887890908770837326", "88398457280934820934823923454263544625344402803- (-649824346253415929384534425344265443624346283426434523)");
+}
+
+void big_int_test::test_mul()
+{
+	_int.set(0);
+	_int.multiply(std::numeric_limits<int64_t>::max());
+
+	test::template assert_equals<int64_t>(_int.to_int(), 0, "0 * max(int64)");
+
+	_int.set(1);
+	_int.multiply(std::numeric_limits<int64_t>::max());
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::max(), "1 * max(int64)");
+
+	_int.set(0);
+	_int.multiply(std::numeric_limits<int64_t>::min());
+
+	test::template assert_equals<int64_t>(_int.to_int(), 0, "0 * min(int64)");
+
+	_int.set(1);
+	_int.multiply(std::numeric_limits<int64_t>::min());
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::min(), "1 * min(int64)");
+
+	// Sign checking
+	_int.set(153092023);
+	_int.multiply(60247241209);
+
+	test::template assert_equals<int64_t>(_int.to_int(), 153092023 * 60247241209, "153092023 * 60247241209");
+
+	_int.set(-536870912);
+	_int.multiply(17179869184);
+
+	test::template assert_equals<int64_t>(_int.to_int(), -536870912 * 17179869184, "-536870912 * 17179869184");
+
+	_int.set(536870912);
+	_int.multiply(-17179869184);
+
+	test::template assert_equals<int64_t>(_int.to_int(), 536870912 * -17179869184, "536870912 * (-17179869184)");
+
+	_int.set(-153092023);
+	_int.multiply(-60247241209);
+
+	test::template assert_equals<int64_t>(_int.to_int(), -153092023 * -60247241209, "-153092023 * (-60247241209)");
+
+	// Big integers
+	_int.set(153092024);
+	_int.multiply(60247241209);
+
+	try {
+		_int.to_int();
+
+		test::fail("Integer should overflow.");
+	} catch (const bia::exception::overflow_error&) {
+		_int.to_string(_builder);
+
+		test::assert_equals(_builder.buffer<char>(), "9223372097102017016", "153092024 * 60247241209");
+	}
+
+	_int.set(536870913);
+	_int.multiply(-17179869184);
+	
+	try {
+		_int.to_int();
+
+		test::fail("Integer should underflow.");
+	}catch (const bia::exception::overflow_error&) {
+		_int.to_string(_builder);
+
+		test::assert_equals(_builder.buffer<char>(), "-9223372054034644992", "536870913 * (-17179869184)");
+	}
+
+	_int.set("9223372097102017016");
+	_int.multiply("-9223372054034644992");
+	_int.to_string(_builder);
+
+	test::assert_equals(_builder.buffer<char>(), "-85070592444373661784923993466703183872", "9223372097102017016 * (-9223372054034644992)");
 }
 
 void big_int_test::test_power()
