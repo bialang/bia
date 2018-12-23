@@ -10,6 +10,7 @@ test::add("set_get", &big_int_test::test_set_get);
 test::add("add", &big_int_test::test_add);
 test::add("sub", &big_int_test::test_sub);
 test::add("mul", &big_int_test::test_mul);
+test::add("div", &big_int_test::test_div);
 test::add("power", &big_int_test::test_power);
 END_DECLARE_TESTS
 
@@ -223,12 +224,12 @@ void big_int_test::test_mul()
 
 	_int.set(536870913);
 	_int.multiply(-17179869184);
-	
+
 	try {
 		_int.to_int();
 
 		test::fail("Integer should underflow.");
-	}catch (const bia::exception::overflow_error&) {
+	} catch (const bia::exception::overflow_error&) {
 		_int.to_string(_builder);
 
 		test::assert_equals(_builder.buffer<char>(), "-9223372054034644992", "536870913 * (-17179869184)");
@@ -239,6 +240,75 @@ void big_int_test::test_mul()
 	_int.to_string(_builder);
 
 	test::assert_equals(_builder.buffer<char>(), "-85070592444373661784923993466703183872", "9223372097102017016 * (-9223372054034644992)");
+}
+
+void big_int_test::test_div()
+{
+	_int.set(1);
+
+	try {
+		_int.divide(0);
+
+		test::fail("Division by zero should fail.");
+	} catch (const bia::exception::zero_division_error&) {}
+
+	_int.set(std::numeric_limits<int64_t>::max());
+	_int.divide(1);
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::max(), "max(int64) / 1");
+
+	_int.set(std::numeric_limits<int64_t>::min());
+	_int.divide(1);
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::min(), "min(int64) / 1");
+
+	// Sign checking
+	_int.set(std::numeric_limits<int64_t>::max());
+	_int.divide(60247241209);
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::max() / 60247241209, "max(int64) / 60247241209");
+
+	_int.set(std::numeric_limits<int64_t>::min());
+	_int.divide(17179869184);
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::min() / 17179869184, "min(int64) / 17179869184");
+
+	_int.set(std::numeric_limits<int64_t>::min());
+	_int.divide(-17179869184);
+
+	test::template assert_equals<int64_t>(_int.to_int(), std::numeric_limits<int64_t>::min() / -17179869184, "min(int64) / (-17179869184)");
+
+	// Big integers
+	_int.set("555682719864735315808193871872");
+	_int.divide(60247241209);
+
+	try {
+		_int.to_int();
+
+		test::fail("Integer should overflow.");
+	} catch (const bia::exception::overflow_error&) {
+		_int.to_string(_builder);
+
+		test::assert_equals(_builder.buffer<char>(), "9223372036854775808", "555682719864735315808193871872 / 60247241209");
+	}
+
+	_int.set("158456325028528675204267769856");
+	_int.divide(-17179869184);
+
+	try {
+		_int.to_int();
+
+		test::fail("Integer should underflow.");
+	} catch (const bia::exception::overflow_error&) {
+		_int.to_string(_builder);
+
+		test::assert_equals(_builder.buffer<char>(), "-9223372036854775809", "158456325028528675204267769856 / (-17179869184)");
+	}
+
+	_int.set("-590295810358705651712");
+	_int.divide("9895665555555845132");
+
+	test::template assert_equals<int64_t>(_int.to_int(), -59, "-590295810358705651712 / 9895665555555845132");
 }
 
 void big_int_test::test_power()
