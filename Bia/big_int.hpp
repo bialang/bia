@@ -10,6 +10,7 @@
 #include "config.hpp"
 #include "max.hpp"
 #include "buffer_builder.hpp"
+#include "exception.hpp"
 
 
 namespace bia
@@ -306,22 +307,30 @@ private:
 	template<typename Destination, typename Source, typename Right>
 	static void big_int_div(Destination _destination, Source _source, Right _right)
 	{
+		if (_right == 0) {
+			throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
+		}
+
 		if (sizeof(_right) <= sizeof(mpir_si)) {
 			if (_right < 0) {
-				mpz_div_ui(_destination, _source, static_cast<mpir_ui>(-_right));
+				mpz_tdiv_q_ui(_destination, _source, negate_cast<mpir_ui>(_right));
 				mpz_neg(_destination, _destination);
 			} else {
-				mpz_div_ui(_destination, _source, static_cast<mpir_ui>(_right));
+				mpz_tdiv_q_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
 		} else {
 			big_int _tmp(static_cast<int64_t>(_right));
 
-			mpz_div(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
+			mpz_tdiv_q(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
 		}
 	}
 	template<typename Destination, typename Source, typename Right>
 	static void big_int_mod(Destination _destination, Source _source, Right _right)
 	{
+		if (_right == 0) {
+			throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
+		}
+
 		if (sizeof(_right) <= sizeof(mpir_si)) {
 			if (_right < 0) {
 				mpz_mod_ui(_destination, _source, static_cast<mpir_ui>(-_right));

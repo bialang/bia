@@ -1,5 +1,4 @@
 #include "big_int.hpp"
-#include "exception.hpp"
 
 #include <cstring>
 
@@ -136,21 +135,37 @@ void big_int::multiply(const big_int & _right, big_int & _result) const
 
 void big_int::divide(const big_int & _right)
 {
-	mpz_div(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	if (_right.is_zero()) {
+		throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
+	}
+
+	mpz_tdiv_q(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
 }
 
 void big_int::divide(const big_int & _right, big_int & _result) const
 {
-	mpz_div(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	if (_right.is_zero()) {
+		throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
+	}
+
+	mpz_tdiv_q(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
 }
 
 void big_int::modulo(const big_int & _right)
 {
+	if (_right.is_zero()) {
+		throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
+	}
+
 	mpz_mod(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
 }
 
 void big_int::modulo(const big_int & _right, big_int & _result) const
 {
+	if (_right.is_zero()) {
+		throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
+	}
+
 	mpz_mod(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
 }
 
