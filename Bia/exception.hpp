@@ -35,6 +35,7 @@
 #define BIA_EM_DOUBLE_UNDERFLOW "Double value underflow."
 #define BIA_EM_INT_OVERFLOW "Integer value overflows as native int64."
 #define BIA_EM_INT_UNDERFLOW "Integer value underflows as native int64."
+#define BIA_EM_DIVISION_BY_ZERO "Division or modulo by zero."
 
 
 namespace bia
@@ -218,6 +219,15 @@ class arithmetic_error : public runtime_error
 {
 public:
 	using runtime_error::runtime_error;
+};
+
+/**
+ * @brief An invalid division or modulo by zero.
+*/
+class zero_division_error : public arithmetic_error
+{
+public:
+	using arithmetic_error::arithmetic_error;
 };
 
 /**
