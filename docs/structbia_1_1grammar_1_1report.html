@@ -87,15 +87,17 @@ Public Types</h2></td></tr>
 <tr class="memitem:af835da9290b7ccefffbaac49b7460831"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831">TYPE</a> : uint32_t { <br />
 &#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a63b588d5559f64f89a416e656880b949">TYPE::STRING</a>, 
 <a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a7f12111b3f331d04dc056ee57986f3b3">TYPE::INT_VALUE</a>, 
+<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831ada766d15959ba2947723df6fe6d1f4e4">TYPE::BIG_INT_VALUE</a>, 
 <a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831abb40dd0bceb01de2c068fa18c2c033e3">TYPE::DOUBLE_VALUE</a>, 
+<br />
+&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831ad77b17837cfdf1b79bff1df1f6758022">TYPE::BIG_DOUBLE_VALUE</a>, 
 <a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a77e6cb59f088a2937324f798be141b4b">TYPE::MEMBER</a>, 
-<br />
-&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831adcd657bb4d59e301e74a824058118c8d">TYPE::OPERATOR_CODE</a>, 
+<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831adcd657bb4d59e301e74a824058118c8d">TYPE::OPERATOR_CODE</a>, 
 <a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a780bc0722dd01d4a8d9869f060734be6">TYPE::KEYWORD</a>, 
-<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a19aad9f2fe3ce0023298ab83f7e75775">TYPE::BEGIN</a>, 
-<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831ab1a326c06d88bf042f73d70f50197905">TYPE::END</a>, 
 <br />
-&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831aca829841d8ea8c90855413d2838fc411">TYPE::EMPTY_CHILD</a>
+&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831a19aad9f2fe3ce0023298ab83f7e75775">TYPE::BEGIN</a>, 
+<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831ab1a326c06d88bf042f73d70f50197905">TYPE::END</a>, 
+<a class="el" href="structbia_1_1grammar_1_1report.html#af835da9290b7ccefffbaac49b7460831aca829841d8ea8c90855413d2838fc411">TYPE::EMPTY_CHILD</a>
 <br />
  }</td></tr>
 <tr class="separator:af835da9290b7ccefffbaac49b7460831"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,10 +125,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a1255425f8310903dc121a00bb47474c1"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1grammar_1_1report.html#a1255425f8310903dc121a00bb47474c1">token_id</a>: <a class="el" href="structbia_1_1grammar_1_1report.html#aed90be869311558b01e52a13c6aa98b3">token_bits</a></td></tr>
 <tr class="separator:a1255425f8310903dc121a00bb47474c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9af7d9fed7e5997d83bf598cf212bbea"><td class="memItemLeft" >union {</td></tr>
-<tr class="memitem:a9460bf34b3e9d4021f9fac6333d9d684"><td class="memItemLeft" >&#160;&#160;&#160;int8_t *&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a49c287d0a5b0ba87e52de9e4f58441f1">string</a></td></tr>
-<tr class="separator:a9460bf34b3e9d4021f9fac6333d9d684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1020f63a3c957756663ad5c16788ed86"><td class="memItemLeft" >&#160;&#160;&#160;void *&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a9c85d874bc7cc7d908b761ae59b1bbab">string</a></td></tr>
+<tr class="separator:a1020f63a3c957756663ad5c16788ed86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60354c965a0911a769dfb4da6b89f797"><td class="memItemLeft" >&#160;&#160;&#160;int64_t&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a0718d31505b68f8328305b27eb89eae8">int_value</a></td></tr>
 <tr class="separator:a60354c965a0911a769dfb4da6b89f797"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9eef9d43295a2ecdf9d383d4780f8b5b"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> *&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a78d10476bb1f10c2d62f1858441a335a">big_int_value</a></td></tr>
+<tr class="separator:a9eef9d43295a2ecdf9d383d4780f8b5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b154ee0df90593f5a06e2d015743bca"><td class="memItemLeft" >&#160;&#160;&#160;double&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a89eb2408aee31cb4c1f93af872f44b2c">double_value</a></td></tr>
 <tr class="separator:a9b154ee0df90593f5a06e2d015743bca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8d7048133d0369d53c8338f0e770043"><td class="memItemLeft" >&#160;&#160;&#160;const <a class="el" href="structbia_1_1grammar_1_1report.html">report</a> *&#160;&#160;&#160;<a class="el" href="structbia_1_1grammar_1_1report.html#a612a8ee5515c3e08edc96091337a4fc1">end</a></td></tr>
@@ -239,7 +243,9 @@ Static Public Attributes</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af835da9290b7ccefffbaac49b7460831a63b588d5559f64f89a416e656880b949"></a>STRING&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="af835da9290b7ccefffbaac49b7460831a7f12111b3f331d04dc056ee57986f3b3"></a>INT_VALUE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af835da9290b7ccefffbaac49b7460831ada766d15959ba2947723df6fe6d1f4e4"></a>BIG_INT_VALUE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="af835da9290b7ccefffbaac49b7460831abb40dd0bceb01de2c068fa18c2c033e3"></a>DOUBLE_VALUE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af835da9290b7ccefffbaac49b7460831ad77b17837cfdf1b79bff1df1f6758022"></a>BIG_DOUBLE_VALUE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="af835da9290b7ccefffbaac49b7460831a77e6cb59f088a2937324f798be141b4b"></a>MEMBER&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="af835da9290b7ccefffbaac49b7460831adcd657bb4d59e301e74a824058118c8d"></a>OPERATOR_CODE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="af835da9290b7ccefffbaac49b7460831a780bc0722dd01d4a8d9869f060734be6"></a>KEYWORD&#160;</td><td class="fielddoc"></td></tr>
@@ -251,6 +257,20 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a78d10476bb1f10c2d62f1858441a335a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78d10476bb1f10c2d62f1858441a335a">&#9670;&nbsp;</a></span>big_int_value</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a>* bia::grammar::report::big_int_value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9af7d9fed7e5997d83bf598cf212bbea"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9af7d9fed7e5997d83bf598cf212bbea">&#9670;&nbsp;</a></span>content</h2>
 
@@ -421,17 +441,18 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a49c287d0a5b0ba87e52de9e4f58441f1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49c287d0a5b0ba87e52de9e4f58441f1">&#9670;&nbsp;</a></span>string</h2>
+<a id="a9c85d874bc7cc7d908b761ae59b1bbab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c85d874bc7cc7d908b761ae59b1bbab">&#9670;&nbsp;</a></span>string</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int8_t* bia::grammar::report::string</td>
+          <td class="memname">void* bia::grammar::report::string</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A string buffer with a specific format. See <a class="el" href="classbia_1_1stream_1_1string__stream.html">stream::string_stream</a> for more information. </p>
 
 </div>
 </div>

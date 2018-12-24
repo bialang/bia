@@ -70,6 +70,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classbia_1_1compiler_1_1compile__normal__operation-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -100,12 +101,35 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:afc923b8777dd0ec0521af803aea47f69"><td class="memTemplParams" colspan="2">template&lt;typename Left , typename Right &gt; </td></tr>
 <tr class="memitem:afc923b8777dd0ec0521af803aea47f69"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#afc923b8777dd0ec0521af803aea47f69">left_constant_right_member_operation</a> (Left &amp;&amp;_left, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a> _operator, Right &amp;&amp;_right)</td></tr>
 <tr class="separator:afc923b8777dd0ec0521af803aea47f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6de7bf5afe2764d46186e71173f05650"><td class="memTemplParams" colspan="2">template&lt;typename Right &gt; </td></tr>
+<tr class="memitem:a6de7bf5afe2764d46186e71173f05650"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#a6de7bf5afe2764d46186e71173f05650">left_constant_right_member_operation</a> (<a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> &amp;_left, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a> _operator, Right &amp;&amp;_right)</td></tr>
+<tr class="separator:a6de7bf5afe2764d46186e71173f05650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30db82c6e4fcef1cc1964bf5e4a9385a"><td class="memTemplParams" colspan="2">template&lt;typename Left &gt; </td></tr>
 <tr class="memitem:a30db82c6e4fcef1cc1964bf5e4a9385a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#a30db82c6e4fcef1cc1964bf5e4a9385a">left_constant_operation</a> (Left &amp;&amp;_left, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a> _operator, <a class="el" href="classbia_1_1compiler_1_1compiler__value.html">compiler_value</a> _right)</td></tr>
 <tr class="separator:a30db82c6e4fcef1cc1964bf5e4a9385a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a295d22d8b07842069cde86cbc892bf69"><td class="memTemplParams" colspan="2">template&lt;typename Left , typename Right &gt; </td></tr>
-<tr class="memitem:a295d22d8b07842069cde86cbc892bf69"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_floating_point&lt; Left &gt;::value||std::is_floating_point&lt; Right &gt;::value||true &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#a295d22d8b07842069cde86cbc892bf69">both_constant_operation</a> (Left &amp;&amp;_left, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a> _operator, Right &amp;&amp;_right)</td></tr>
-<tr class="separator:a295d22d8b07842069cde86cbc892bf69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad397975c8aa07dd7dd73fb43c9d0deb5"><td class="memTemplParams" colspan="2">template&lt;typename Left , typename Right &gt; </td></tr>
+<tr class="memitem:ad397975c8aa07dd7dd73fb43c9d0deb5"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_integral&lt; Left &gt;::value &amp;&amp;std::is_integral&lt; Right &gt;::value &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#ad397975c8aa07dd7dd73fb43c9d0deb5">both_constant_operation</a> (Left &amp;&amp;_left, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a> _operator, Right &amp;&amp;_right)</td></tr>
+<tr class="separator:ad397975c8aa07dd7dd73fb43c9d0deb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ee8dde63165a458dd2b5cee5f1911d3"><td class="memTemplParams" colspan="2">template&lt;typename Left , typename Right &gt; </td></tr>
+<tr class="memitem:a0ee8dde63165a458dd2b5cee5f1911d3"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt;!(std::is_integral&lt; Left &gt;::value &amp;&amp;std::is_integral&lt; Right &gt;::value)&gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#a0ee8dde63165a458dd2b5cee5f1911d3">both_constant_operation</a> (Left &amp;&amp;_left, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a> _operator, Right &amp;&amp;_right)</td></tr>
+<tr class="separator:a0ee8dde63165a458dd2b5cee5f1911d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3be7281d845388a2784594bd0de42c0e"><td class="memTemplParams" colspan="2">template&lt;typename Right &gt; </td></tr>
+<tr class="memitem:a3be7281d845388a2784594bd0de42c0e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#a3be7281d845388a2784594bd0de42c0e">both_constant_operation</a> (<a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> &amp;_left, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a> _operator, Right &amp;&amp;_right)</td></tr>
+<tr class="separator:a3be7281d845388a2784594bd0de42c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66ca69727bf710dd35d261407387ad2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#a66ca69727bf710dd35d261407387ad2e">free_big_int</a> (const <a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> &amp;_big_int)</td></tr>
+<tr class="separator:a66ca69727bf710dd35d261407387ad2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc7cc4e5d42e220f47c2e86a9cf33b20"><td class="memTemplParams" colspan="2">template&lt;typename Type &gt; </td></tr>
+<tr class="memitem:abc7cc4e5d42e220f47c2e86a9cf33b20"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#abc7cc4e5d42e220f47c2e86a9cf33b20">free_big_int</a> (Type _not_big_int)</td></tr>
+<tr class="separator:abc7cc4e5d42e220f47c2e86a9cf33b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a95a443e81961a16d4562ebd6dd7af54f"><td class="memTemplParams" colspan="2">template&lt;typename Left , typename Right &gt; </td></tr>
+<tr class="memitem:a95a443e81961a16d4562ebd6dd7af54f"><td class="memTemplItemLeft" align="right" valign="top">static std::enable_if&lt; std::is_same&lt; Left, Right &gt;::value, bool &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#a95a443e81961a16d4562ebd6dd7af54f">same_members</a> (Left &amp;&amp;_left, Right &amp;&amp;_right) noexcept</td></tr>
+<tr class="separator:a95a443e81961a16d4562ebd6dd7af54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77c44f3b823ac5033c229b2dd0b9f2b8"><td class="memTemplParams" colspan="2">template&lt;typename Left , typename Right &gt; </td></tr>
+<tr class="memitem:a77c44f3b823ac5033c229b2dd0b9f2b8"><td class="memTemplItemLeft" align="right" valign="top">static std::enable_if&lt;!std::is_same&lt; Left, Right &gt;::value, bool &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compile__normal__operation.html#a77c44f3b823ac5033c229b2dd0b9f2b8">same_members</a> (Left &amp;&amp;_left, Right &amp;&amp;_right) noexcept</td></tr>
+<tr class="separator:a77c44f3b823ac5033c229b2dd0b9f2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -166,8 +190,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a295d22d8b07842069cde86cbc892bf69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a295d22d8b07842069cde86cbc892bf69">&#9670;&nbsp;</a></span>both_constant_operation()</h2>
+<a id="ad397975c8aa07dd7dd73fb43c9d0deb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad397975c8aa07dd7dd73fb43c9d0deb5">&#9670;&nbsp;</a></span>both_constant_operation() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -178,7 +202,7 @@ template&lt;typename Left , typename Right &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::enable_if&lt;std::is_floating_point&lt;Left&gt;::value || std::is_floating_point&lt;Right&gt;::value || true&gt;::type bia::compiler::compile_normal_operation::both_constant_operation </td>
+          <td class="memname">std::enable_if&lt;std::is_integral&lt;Left&gt;::value &amp;&amp; std::is_integral&lt;Right&gt;::value&gt;::type bia::compiler::compile_normal_operation::both_constant_operation </td>
           <td>(</td>
           <td class="paramtype">Left &amp;&amp;&#160;</td>
           <td class="paramname"><em>_left</em>, </td>
@@ -221,10 +245,159 @@ template&lt;typename Left , typename Right &gt; </div>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_left</td><td>The left hand value. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">_operator</td><td>The operator. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">_right</td><td>The right hand value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_right</td><td>The right hand value.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1operator__error.html" title="Operator error. ">exception::operator_error</a></td><td>The operator is not supported. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0ee8dde63165a458dd2b5cee5f1911d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ee8dde63165a458dd2b5cee5f1911d3">&#9670;&nbsp;</a></span>both_constant_operation() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Left , typename Right &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt;!(std::is_integral&lt;Left&gt;::value &amp;&amp; std::is_integral&lt;Right&gt;::value)&gt;::type bia::compiler::compile_normal_operation::both_constant_operation </td>
+          <td>(</td>
+          <td class="paramtype">Left &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Right &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3be7281d845388a2784594bd0de42c0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3be7281d845388a2784594bd0de42c0e">&#9670;&nbsp;</a></span>both_constant_operation() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Right &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::compiler::compile_normal_operation::both_constant_operation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> &amp;&#160;</td>
+          <td class="paramname"><em>_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Right &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a66ca69727bf710dd35d261407387ad2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66ca69727bf710dd35d261407387ad2e">&#9670;&nbsp;</a></span>free_big_int() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::compiler::compile_normal_operation::free_big_int </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> &amp;&#160;</td>
+          <td class="paramname"><em>_big_int</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>TODO </p>
+
+</div>
+</div>
+<a id="abc7cc4e5d42e220f47c2e86a9cf33b20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc7cc4e5d42e220f47c2e86a9cf33b20">&#9670;&nbsp;</a></span>free_big_int() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Type &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::compiler::compile_normal_operation::free_big_int </td>
+          <td>(</td>
+          <td class="paramtype">Type&#160;</td>
+          <td class="paramname"><em>_not_big_int</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -304,7 +477,7 @@ template&lt;typename Function , typename Member , typename Right &gt; </div>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">See</td><td>machine::platform::toolset::call(). </td></tr>
+    <tr><td class="paramname">See</td><td>machine::platform::toolset::call_virtual(). </td></tr>
   </table>
   </dd>
 </dl>
@@ -379,7 +552,7 @@ template&lt;typename Left &gt; </div>
 </div>
 </div>
 <a id="afc923b8777dd0ec0521af803aea47f69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc923b8777dd0ec0521af803aea47f69">&#9670;&nbsp;</a></span>left_constant_right_member_operation()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afc923b8777dd0ec0521af803aea47f69">&#9670;&nbsp;</a></span>left_constant_right_member_operation() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -443,6 +616,50 @@ template&lt;typename Left , typename Right &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a6de7bf5afe2764d46186e71173f05650"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6de7bf5afe2764d46186e71173f05650">&#9670;&nbsp;</a></span>left_constant_right_member_operation() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Right &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::compiler::compile_normal_operation::left_constant_right_member_operation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> &amp;&#160;</td>
+          <td class="paramname"><em>_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">framework::operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Right &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -569,6 +786,82 @@ template&lt;typename Member &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a95a443e81961a16d4562ebd6dd7af54f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95a443e81961a16d4562ebd6dd7af54f">&#9670;&nbsp;</a></span>same_members() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Left , typename Right &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::enable_if&lt;std::is_same&lt;Left, Right&gt;::value, bool&gt;::type bia::compiler::compile_normal_operation::same_members </td>
+          <td>(</td>
+          <td class="paramtype">Left &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Right &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a77c44f3b823ac5033c229b2dd0b9f2b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77c44f3b823ac5033c229b2dd0b9f2b8">&#9670;&nbsp;</a></span>same_members() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Left , typename Right &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::enable_if&lt;!std::is_same&lt;Left, Right&gt;::value, bool&gt;::type bia::compiler::compile_normal_operation::same_members </td>
+          <td>(</td>
+          <td class="paramtype">Left &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Right &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

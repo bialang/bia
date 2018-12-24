@@ -92,16 +92,17 @@ Classes</h2></td></tr>
 Public Types</h2></td></tr>
 <tr class="memitem:a142ac3a20cbb703e40fb8ea2d4d412b5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5">VALUE_TYPE</a> { <br />
 &#160;&#160;<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a53f93baa3057821107c750323892fa92">VALUE_TYPE::INT</a>, 
+<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5ab9df7b1bca09b8eb8869aae31dcc4afc">VALUE_TYPE::BIG_INT</a>, 
 <a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5afd3e4ece78a7d422280d5ed379482229">VALUE_TYPE::DOUBLE</a>, 
 <a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a63b588d5559f64f89a416e656880b949">VALUE_TYPE::STRING</a>, 
-<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a91d3fbf178085af8fd47cf856f0d9bd9">VALUE_TYPE::STRING16</a>, 
 <br />
-&#160;&#160;<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a0e7b7ec7cc007497194be82192dbce23">VALUE_TYPE::STRING32</a>, 
+&#160;&#160;<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a91d3fbf178085af8fd47cf856f0d9bd9">VALUE_TYPE::STRING16</a>, 
+<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a0e7b7ec7cc007497194be82192dbce23">VALUE_TYPE::STRING32</a>, 
 <a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5ad002390d7727d576cef45267f1678ea3">VALUE_TYPE::WSTRING</a>, 
 <a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a77e6cb59f088a2937324f798be141b4b">VALUE_TYPE::MEMBER</a>, 
-<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5ad98c515fad845203f9be957515c51477">VALUE_TYPE::TEMPORARY_MEMBER</a>, 
 <br />
-&#160;&#160;<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a0ac564e179a5257c963f413ff37578d8">VALUE_TYPE::TEST_VALUE_REGISTER</a>, 
+&#160;&#160;<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5ad98c515fad845203f9be957515c51477">VALUE_TYPE::TEMPORARY_MEMBER</a>, 
+<a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a0ac564e179a5257c963f413ff37578d8">VALUE_TYPE::TEST_VALUE_REGISTER</a>, 
 <a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5a837d7b333aad466aed9e22f73156533f">VALUE_TYPE::TEST_VALUE_CONSTANT</a>, 
 <a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5ab50339a10e1de285ac99d4c3990b8693">VALUE_TYPE::NONE</a>
 <br />
@@ -120,6 +121,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aece5b3273a362953b72976e2f1132ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af390a8faa0a65ccb7754fa3ae41ff5c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compiler__value.html#af390a8faa0a65ccb7754fa3ae41ff5c1">set_return</a> (int64_t _value) noexcept</td></tr>
 <tr class="separator:af390a8faa0a65ccb7754fa3ae41ff5c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a030ffd79f88734858fbe6e211a704fa8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a030ffd79f88734858fbe6e211a704fa8">set_return</a> (<a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> *_value) noexcept</td></tr>
+<tr class="separator:a030ffd79f88734858fbe6e211a704fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac328682ba69b53451f06f424794e4c6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compiler__value.html#ac328682ba69b53451f06f424794e4c6b">set_return</a> (double _value) noexcept</td></tr>
 <tr class="separator:ac328682ba69b53451f06f424794e4c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f1405d691ac9c03b5c9aba6b3964c45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a6f1405d691ac9c03b5c9aba6b3964c45">set_return</a> (const char *_value, <a class="el" href="classbia_1_1stream_1_1string__stream.html#a9aa32fd230fe383bda76dd44efa7206a">stream::string_stream::size_type</a> _size, <a class="el" href="classbia_1_1stream_1_1string__stream.html#a877e3f8a9fc56c178cc5ab701df5c43c">stream::string_stream::length_type</a> _length) noexcept</td></tr>
@@ -176,6 +179,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a142ac3a20cbb703e40fb8ea2d4d412b5a53f93baa3057821107c750323892fa92"></a>INT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a142ac3a20cbb703e40fb8ea2d4d412b5ab9df7b1bca09b8eb8869aae31dcc4afc"></a>BIG_INT&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a142ac3a20cbb703e40fb8ea2d4d412b5afd3e4ece78a7d422280d5ed379482229"></a>DOUBLE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a142ac3a20cbb703e40fb8ea2d4d412b5a63b588d5559f64f89a416e656880b949"></a>STRING&#160;</td><td class="fielddoc"><p>ASCII or UTF-8 encoded string. </p>
 </td></tr>
@@ -285,7 +289,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a894d2d864b29b24e7c319c2bdcbf79ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a894d2d864b29b24e7c319c2bdcbf79ab">&#9670;&nbsp;</a></span>set_return() <span class="overload">[1/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a894d2d864b29b24e7c319c2bdcbf79ab">&#9670;&nbsp;</a></span>set_return() <span class="overload">[1/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -313,7 +317,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="aece5b3273a362953b72976e2f1132ade"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aece5b3273a362953b72976e2f1132ade">&#9670;&nbsp;</a></span>set_return() <span class="overload">[2/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aece5b3273a362953b72976e2f1132ade">&#9670;&nbsp;</a></span>set_return() <span class="overload">[2/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -348,7 +352,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="af390a8faa0a65ccb7754fa3ae41ff5c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af390a8faa0a65ccb7754fa3ae41ff5c1">&#9670;&nbsp;</a></span>set_return() <span class="overload">[3/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af390a8faa0a65ccb7754fa3ae41ff5c1">&#9670;&nbsp;</a></span>set_return() <span class="overload">[3/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -382,8 +386,43 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a030ffd79f88734858fbe6e211a704fa8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a030ffd79f88734858fbe6e211a704fa8">&#9670;&nbsp;</a></span>set_return() <span class="overload">[4/10]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bia::compiler::compiler_value::set_return </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> *&#160;</td>
+          <td class="paramname"><em>_value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the return _value and the type <a class="el" href="classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5ab9df7b1bca09b8eb8869aae31dcc4afc">VALUE_TYPE::BIG_INT</a>.</p>
+<dl class="section since"><dt>Since</dt><dd>3.68.140.792 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>13-Nov-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_value</td><td>Defines the _value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ac328682ba69b53451f06f424794e4c6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac328682ba69b53451f06f424794e4c6b">&#9670;&nbsp;</a></span>set_return() <span class="overload">[4/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac328682ba69b53451f06f424794e4c6b">&#9670;&nbsp;</a></span>set_return() <span class="overload">[5/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -418,7 +457,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a6f1405d691ac9c03b5c9aba6b3964c45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6f1405d691ac9c03b5c9aba6b3964c45">&#9670;&nbsp;</a></span>set_return() <span class="overload">[5/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f1405d691ac9c03b5c9aba6b3964c45">&#9670;&nbsp;</a></span>set_return() <span class="overload">[6/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -471,7 +510,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="ad6b19963480fa6b6ea7d1ba7f32f2ff4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6b19963480fa6b6ea7d1ba7f32f2ff4">&#9670;&nbsp;</a></span>set_return() <span class="overload">[6/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6b19963480fa6b6ea7d1ba7f32f2ff4">&#9670;&nbsp;</a></span>set_return() <span class="overload">[7/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -524,7 +563,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="ada53388726998a565c01b960ce8a3094"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada53388726998a565c01b960ce8a3094">&#9670;&nbsp;</a></span>set_return() <span class="overload">[7/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ada53388726998a565c01b960ce8a3094">&#9670;&nbsp;</a></span>set_return() <span class="overload">[8/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -577,7 +616,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a9b43dfbcc54d2fcec7a5ca6bfc04070c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b43dfbcc54d2fcec7a5ca6bfc04070c">&#9670;&nbsp;</a></span>set_return() <span class="overload">[8/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b43dfbcc54d2fcec7a5ca6bfc04070c">&#9670;&nbsp;</a></span>set_return() <span class="overload">[9/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -630,7 +669,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a5f5f042ca9c31c4b270a387a56726c38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f5f042ca9c31c4b270a387a56726c38">&#9670;&nbsp;</a></span>set_return() <span class="overload">[9/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f5f042ca9c31c4b270a387a56726c38">&#9670;&nbsp;</a></span>set_return() <span class="overload">[10/10]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

@@ -72,29 +72,48 @@ $(function() {
 <li>_active_allocator
 : <a class="el" href="classbia_1_1machine_1_1machine__context.html#a7d418e419064a7857a58cc562e1eafae">bia::machine::machine_context</a>
 </li>
+<li>_active_big_int_allocator
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#a159a8ee973438a506818bcc9f7dac072">bia::machine::machine_context</a>
+</li>
+<li>_active_buffer_builder
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#af59634b15cf10343250d1c5cc8a45964">bia::machine::machine_context</a>
+</li>
 <li>_active_context
 : <a class="el" href="classbia_1_1machine_1_1machine__context.html#ae524d3edf72c47c51f16dd6781af1420">bia::machine::machine_context</a>
 </li>
+<li>_active_member_allocator
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#a700dded5d00262b6aa2566ce956b7ec4">bia::machine::machine_context</a>
+</li>
 <li>_allocated
-: <a class="el" href="classbia_1_1machine_1_1machine__schein.html#a021eedc0d8dfa7056598383e4c18a83a">bia::machine::machine_schein</a>
+: <a class="el" href="classbia_1_1machine_1_1machine__schein.html#a495ec0d5346d24cede5e4cf99ece7f36">bia::machine::machine_schein</a>
 </li>
 <li>_allocator
 : <a class="el" href="classbia_1_1machine_1_1machine__context.html#afe262bbaaca36ff0441844d296819a68">bia::machine::machine_context</a>
 , <a class="el" href="classbia_1_1machine_1_1machine__schein.html#ae075fb35bbb7d91ac95917dac3a25a99">bia::machine::machine_schein</a>
 , <a class="el" href="classbia_1_1machine_1_1machine__stack.html#ab252188df87c38d313d9d9b8cb2e50c2">bia::machine::machine_stack</a>
+, <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#aabfb11915a096eaae1ca6929c3d978c0">bia::machine::memory::big_int_allocator</a>
 , <a class="el" href="classbia_1_1machine_1_1memory_1_1stl__allocator__wrapper.html#a2b0c273036d274a42d3c8d57e1b8ae02">bia::machine::memory::stl_allocator_wrapper&lt; Type &gt;</a>
 , <a class="el" href="classbia_1_1machine_1_1modular_1_1module__loader.html#a0132dc0d6a1bd55cd8ca58d7fae8ae10">bia::machine::modular::module_loader</a>
 , <a class="el" href="classbia_1_1machine_1_1string__manager.html#a097e959cffa1d626934354bc37fc22b4">bia::machine::string_manager</a>
 , <a class="el" href="classbia_1_1stream_1_1string__stream.html#a19a25b503f3dc62e5abcf8b9c60d23cc">bia::stream::string_stream</a>
+, <a class="el" href="classbia_1_1utility_1_1buffer__builder.html#a589938ed9779774e311d9be35813b435">bia::utility::buffer_builder</a>
 </li>
 <li>_beginning
 : <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#abb81704c3049e8883bb42e9c1d4cd311">bia::stream::buffer_output_stream</a>
 </li>
+<li>_big_int_allocator
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#acd9bd3ce5c977a49d07266994dde9b53">bia::machine::machine_context</a>
+</li>
 <li>_buffer
-: <a class="el" href="classbia_1_1machine_1_1machine__stack.html#a791213d67a6b3bcf5ae79cde77998750">bia::machine::machine_stack</a>
+: <a class="el" href="classbia_1_1dependency_1_1big__int.html#a336f4bc0ea4f158e626c93964aacf83a">bia::dependency::big_int</a>
+, <a class="el" href="classbia_1_1machine_1_1machine__stack.html#a791213d67a6b3bcf5ae79cde77998750">bia::machine::machine_stack</a>
 , <a class="el" href="classbia_1_1stream_1_1buffer__input__stream.html#a2142a11eb88519896c9c38567161ff2b">bia::stream::buffer_input_stream</a>
 , <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#a6b2fe746184087ecb0c159f56257c63c">bia::stream::buffer_output_stream</a>
 , <a class="el" href="classbia_1_1stream_1_1string__stream.html#a4c10f0157ea26043364509b97d458f3d">bia::stream::string_stream</a>
+, <a class="el" href="classbia_1_1utility_1_1buffer__builder.html#a555860953211194c248a324979172b88">bia::utility::buffer_builder</a>
+</li>
+<li>_buffer_builder
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#a919bedf32ac071d2030be3aec7d32239">bia::machine::machine_context</a>
 </li>
 <li>_context
 : <a class="el" href="classbia_1_1compiler_1_1compiler.html#a16d325ba2db23189d8f10f96f8f86da9">bia::compiler::compiler</a>
@@ -118,18 +137,20 @@ $(function() {
 : <a class="el" href="classbia_1_1framework_1_1custom__member.html#a9561d3c17baade02d47b0c38c49f33b1">bia::framework::custom_member&lt; Data &gt;</a>
 , <a class="el" href="classbia_1_1framework_1_1executable_1_1lambda__function.html#a1137ad2210f821965f0d97a40c0fe888">bia::framework::executable::lambda_function&lt; Lambda &gt;</a>
 , <a class="el" href="classbia_1_1framework_1_1executable_1_1member__function_3_01___return_07___class_1_1_5_08_07___args_8_8_8_08_4.html#adddda72536e17d8654d03965ec7363e4">bia::framework::executable::member_function&lt; _Return(_Class::*)(_Args...)&gt;</a>
+, <a class="el" href="classbia_1_1framework_1_1native_1_1big__int__member.html#a083fc121eb2fc5b89c0ec1f56d324900">bia::framework::native::big_int_member</a>
 , <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aa02887bb51392fb72f7ed2c942daccf9">bia::framework::native::cstring_member&lt; Char_type &gt;</a>
-, <a class="el" href="classbia_1_1framework_1_1native_1_1native__member.html#a5e950e8a1b774f959b0f12855bf4c598">bia::framework::native::native_member&lt; Type &gt;</a>
+, <a class="el" href="classbia_1_1framework_1_1native_1_1double__member.html#a5a0f6ad5c73c4dfb11e2c03defd7dd23">bia::framework::native::double_member</a>
+, <a class="el" href="classbia_1_1framework_1_1native_1_1int__member.html#a018dffbe9ff5647967186d3631287e98">bia::framework::native::int_member</a>
 , <a class="el" href="classbia_1_1framework_1_1object_1_1class__template.html#a5e9383bed58333e21878718aa8c0c294">bia::framework::object::class_template&lt; Type &gt;</a>
 , <a class="el" href="classbia_1_1framework_1_1object_1_1instance__holder.html#ab32ed916cd3350db4782f3c3d9487aff">bia::framework::object::instance_holder&lt; Type &gt;</a>
-, <a class="el" href="classbia_1_1framework_1_1object_1_1member__map.html#ad4c55d338e198d937f6550f32da3b792">bia::framework::object::member_map</a>
+, <a class="el" href="classbia_1_1framework_1_1object_1_1member__map.html#a9a86689f10f7cb31462f8951814607cb">bia::framework::object::member_map</a>
 , <a class="el" href="classbia_1_1framework_1_1object_1_1namespace__member.html#ad4a907d2469b143719379822132e174d">bia::framework::object::namespace_member</a>
 , <a class="el" href="classbia_1_1framework_1_1object_1_1object.html#a0956a42dcab5d3812f51e5418f99f394">bia::framework::object::object&lt; Type &gt;</a>
 , <a class="el" href="classbia_1_1framework_1_1object_1_1raw__object.html#a4b6c91492e490d7e51b37cc448536594">bia::framework::object::raw_object&lt; Type &gt;</a>
-, <a class="el" href="classbia_1_1utility_1_1share.html#a74972c8bbfa34c454b781e591e3f035b">bia::utility::share&lt; Type &gt;</a>
+, <a class="el" href="classbia_1_1utility_1_1share.html#af36b64472f8b9bfadc38c1d7f92c79a5">bia::utility::share&lt; Type &gt;</a>
 </li>
 <li>_encoder
-: <a class="el" href="classbia_1_1stream_1_1string__stream.html#a5c2d01a2fcd889df546851bd39651d1a">bia::stream::string_stream</a>
+: <a class="el" href="classbia_1_1stream_1_1string__stream.html#a1a5b299f44adc786e6ca6f3fe45a76a8">bia::stream::string_stream</a>
 </li>
 <li>_end
 : <a class="el" href="classbia_1_1stream_1_1string__stream.html#aafa2990777bc96bf1528511d3d3125d7">bia::stream::string_stream</a>
@@ -187,6 +208,9 @@ $(function() {
 : <a class="el" href="classbia_1_1grammar_1_1report__bundle.html#a4dc01b63408c73355bbfccf7ddc85e6a">bia::grammar::report_bundle</a>
 , <a class="el" href="classbia_1_1machine_1_1machine__stack.html#a9e41487941526b005813e97f67f33ce9">bia::machine::machine_stack</a>
 </li>
+<li>_member_allocator
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#a6dfd007170b6558e3e2c184f1ee4481e">bia::machine::machine_context</a>
+</li>
 <li>_message
 : <a class="el" href="classbia_1_1exception_1_1implementation__error.html#a5371a18f1762e999b4c4b2df414cee7e">bia::exception::implementation_error</a>
 </li>
@@ -196,8 +220,14 @@ $(function() {
 <li>_object
 : <a class="el" href="classbia_1_1utility_1_1guard.html#a1f02a5743ed7f9b1f1b37612ae561abf">bia::utility::guard&lt; Type, Action &gt;</a>
 </li>
+<li>_object_id
+: <a class="el" href="classbia_1_1utility_1_1virtual__object.html#af2373a89739dec9d90dd70c6a578ceef">bia::utility::virtual_object&lt; Default, Types &gt;</a>
+</li>
+<li>_object_space
+: <a class="el" href="classbia_1_1utility_1_1virtual__object.html#a6198cef37568d0d02e1dc24d3126b5f8">bia::utility::virtual_object&lt; Default, Types &gt;</a>
+</li>
 <li>_output
-: <a class="el" href="classbia_1_1machine_1_1platform_1_1passer.html#a57a03d7e51a3bb7338d2c4dc1a1879f0">bia::machine::platform::passer</a>
+: <a class="el" href="classbia_1_1machine_1_1platform_1_1passer.html#af594a3bef424293ed91a7f2ced9f149f">bia::machine::platform::passer</a>
 </li>
 <li>_position
 : <a class="el" href="classbia_1_1stream_1_1buffer__input__stream.html#aae4fd5714c7c8e5689bfe935dbd688b8">bia::stream::buffer_input_stream</a>
@@ -220,6 +250,7 @@ $(function() {
 <li>_size
 : <a class="el" href="classbia_1_1grammar_1_1report__bundle.html#a21662e9ae3ba4b6804d90645f60d1fb7">bia::grammar::report_bundle</a>
 , <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#a8632388abce4c330a456c11d338d6658">bia::stream::buffer_output_stream</a>
+, <a class="el" href="classbia_1_1utility_1_1buffer__builder.html#ad7555dcdae84b010d4b4c7aaf5a19436">bia::utility::buffer_builder</a>
 </li>
 <li>_stack
 : <a class="el" href="classbia_1_1machine_1_1machine__context.html#a793e31007754831194b0a19b84b942df">bia::machine::machine_context</a>
@@ -237,10 +268,15 @@ $(function() {
 : <a class="el" href="classbia_1_1utility_1_1string__key.html#acb20fd8e9a015c6452ed02ae542848f5">bia::utility::string_key</a>
 </li>
 <li>_string_resources
-: <a class="el" href="classbia_1_1machine_1_1string__manager.html#a03fe692d8d5faf8a6d603e700aa750d2">bia::machine::string_manager</a>
+: <a class="el" href="classbia_1_1machine_1_1string__manager.html#a08839c64b71ee00565acfb36eb4b82f7">bia::machine::string_manager</a>
 </li>
 <li>_template_member
 : <a class="el" href="classbia_1_1framework_1_1object_1_1template__wrapper.html#a310c20a411fbeecd0232eb9c1e8c1cc7">bia::framework::object::template_wrapper&lt; Type, Class &gt;</a>
+</li>
+<li>_tmp_value
+: <a class="el" href="classbia_1_1framework_1_1native_1_1big__int__member.html#a9d37e7302b1eb8cdfd2ba2b2042ee79e">bia::framework::native::big_int_member</a>
+, <a class="el" href="classbia_1_1framework_1_1native_1_1double__member.html#a1e02d7eda9aadc6b4f556254b6437715">bia::framework::native::double_member</a>
+, <a class="el" href="classbia_1_1framework_1_1native_1_1int__member.html#ae7a8c0ecb579b1ff5d2818133f064c5a">bia::framework::native::int_member</a>
 </li>
 <li>_tokens
 : <a class="el" href="classbia_1_1grammar_1_1interpreter__rule.html#a93def95f23b97fea85ca76466e9e527b">bia::grammar::interpreter_rule</a>
@@ -260,241 +296,6 @@ $(function() {
 </li>
 <li>_variable_index
 : <a class="el" href="classbia_1_1machine_1_1machine__context.html#af67448441a7104db9eda7d61544dcb1c">bia::machine::machine_context</a>
-</li>
-</ul>
-
-
-<h3><a id="index_a"></a>- a -</h3><ul>
-<li>args
-: <a class="el" href="structbia_1_1force_1_1va__list__wrapper.html#a08ca53464c5215e769fe4404d8ed178a">bia::force::va_list_wrapper</a>
-</li>
-</ul>
-
-
-<h3><a id="index_b"></a>- b -</h3><ul>
-<li>bundle
-: <a class="el" href="structbia_1_1grammar_1_1token__param.html#a52dbd5208d12df7cb1db67b9a3319388">bia::grammar::token_param</a>
-</li>
-</ul>
-
-
-<h3><a id="index_c"></a>- c -</h3><ul>
-<li>callback
-: <a class="el" href="structbia_1_1machine_1_1disassembler_1_1instruction.html#a1a4d83fbf19cbe48c43c19857463b4a2">bia::machine::disassembler::instruction</a>
-</li>
-<li>content
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a9af7d9fed7e5997d83bf598cf212bbea">bia::grammar::report</a>
-</li>
-<li>context
-: <a class="el" href="structbia_1_1grammar_1_1token__param.html#a6663115f7e983f35a2f79f8aa272069f">bia::grammar::token_param</a>
-</li>
-<li>custom_bits
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a845032676a08f3e05f598e6b135839ff">bia::grammar::report</a>
-</li>
-<li>custom_parameter
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a91f3664121ff8239b16624cfb0ecab24">bia::grammar::report</a>
-</li>
-</ul>
-
-
-<h3><a id="index_d"></a>- d -</h3><ul>
-<li>data
-: <a class="el" href="structbia_1_1compiler_1_1compiler__value_1_1return__value_1_1string.html#a17c4951d39e50f6bb69e0c783747d936">bia::compiler::compiler_value::return_value::string</a>
-</li>
-<li>double_value
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a89eb2408aee31cb4c1f93af872f44b2c">bia::grammar::report</a>
-</li>
-</ul>
-
-
-<h3><a id="index_e"></a>- e -</h3><ul>
-<li>encoder
-: <a class="el" href="structbia_1_1grammar_1_1token__param.html#a3831333ced77617b2ed7953a2a902d55">bia::grammar::token_param</a>
-</li>
-<li>end
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a612a8ee5515c3e08edc96091337a4fc1">bia::grammar::report</a>
-</li>
-<li>ending_ws_opt_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#a0d86a0d86a1cf9b46d7361c915d89f40">bia::grammar::flags</a>
-</li>
-<li>ending_ws_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#a3a201536d3909eda30618ec2d711c0b9">bia::grammar::flags</a>
-</li>
-<li>eos
-: <a class="el" href="classbia_1_1encoding_1_1encoder.html#ae1d6d85aa6e3068d3d0881f354752a92">bia::encoding::encoder</a>
-</li>
-</ul>
-
-
-<h3><a id="index_f"></a>- f -</h3><ul>
-<li>filler_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#a323f6454fd4a7c98fc2a454bfb1e3581">bia::grammar::flags</a>
-</li>
-<li>first
-: <a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html#adfa6d1a1bcb0caaf0df51a7abc2f8944">bia::machine::memory::allocation&lt; Type &gt;</a>
-</li>
-</ul>
-
-
-<h3><a id="index_i"></a>- i -</h3><ul>
-<li>int_value
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a0718d31505b68f8328305b27eb89eae8">bia::grammar::report</a>
-</li>
-</ul>
-
-
-<h3><a id="index_k"></a>- k -</h3><ul>
-<li>keyword
-: <a class="el" href="structbia_1_1grammar_1_1report.html#aa019a417aaf7e4329146962eca3e7df7">bia::grammar::report</a>
-</li>
-</ul>
-
-
-<h3><a id="index_l"></a>- l -</h3><ul>
-<li>length
-: <a class="el" href="structbia_1_1compiler_1_1compiler__value_1_1return__value_1_1string.html#ac75fedc0881d0a690dc085c202ddded4">bia::compiler::compiler_value::return_value::string</a>
-</li>
-<li>looping_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#acd832141b203faf3e6cb31d27f027ad0">bia::grammar::flags</a>
-</li>
-</ul>
-
-
-<h3><a id="index_m"></a>- m -</h3><ul>
-<li>mask
-: <a class="el" href="structbia_1_1machine_1_1disassembler_1_1instruction.html#a76d0886c9dee4d8ae0932b9735a9d9c1">bia::machine::disassembler::instruction</a>
-</li>
-<li>member
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a751d094adbfdd99a7e4c71781f6783d2">bia::grammar::report</a>
-</li>
-<li>member_passer
-: <a class="el" href="classbia_1_1machine_1_1platform_1_1passer.html#a67405dfccb0a9001c00c54d32d590b65">bia::machine::platform::passer</a>
-</li>
-<li>min_buffer_size
-: <a class="el" href="classbia_1_1stream_1_1input__stream.html#a14038583efa70bac68d74be321ae05a3">bia::stream::input_stream</a>
-</li>
-</ul>
-
-
-<h3><a id="index_n"></a>- n -</h3><ul>
-<li>none
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#a1dab8e076a765cd677f93116a229cd61">bia::grammar::flags</a>
-</li>
-</ul>
-
-
-<h3><a id="index_o"></a>- o -</h3><ul>
-<li>object
-: <a class="el" href="structbia_1_1utility_1_1share_1_1data.html#ad4083c6fcd65c0bb5b3b691624de4051">bia::utility::share&lt; Type &gt;::data</a>
-</li>
-<li>op_code
-: <a class="el" href="structbia_1_1machine_1_1disassembler_1_1instruction.html#a39c027c362413f4aeb9d6675cf80e3dc">bia::machine::disassembler::instruction</a>
-</li>
-<li>operator_code
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a002cd5e0ddb6cba8c81ae6e261aa7508">bia::grammar::report</a>
-</li>
-<li>opt_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#aed3733776f9fa06abe10623885ac3633">bia::grammar::flags</a>
-</li>
-</ul>
-
-
-<h3><a id="index_r"></a>- r -</h3><ul>
-<li>ref_counter
-: <a class="el" href="structbia_1_1utility_1_1share_1_1data.html#a81cd9b52c0a9b81326c5d4f219683012">bia::utility::share&lt; Type &gt;::data</a>
-</li>
-<li>rt_double
-: <a class="el" href="unionbia_1_1compiler_1_1compiler__value_1_1return__value.html#a916db19115d3cd4a0996612ee75bc7f8">bia::compiler::compiler_value::return_value</a>
-</li>
-<li>rt_int
-: <a class="el" href="unionbia_1_1compiler_1_1compiler__value_1_1return__value.html#afb3f9426e7abdfcd6cd000b771710de3">bia::compiler::compiler_value::return_value</a>
-</li>
-<li>rt_member
-: <a class="el" href="unionbia_1_1compiler_1_1compiler__value_1_1return__value.html#abcca7803d4b5b60ebed53dd406059f26">bia::compiler::compiler_value::return_value</a>
-</li>
-<li>rt_string
-: <a class="el" href="unionbia_1_1compiler_1_1compiler__value_1_1return__value.html#ac5bd1207cd7fb0a931cbf70870908b8a">bia::compiler::compiler_value::return_value</a>
-</li>
-<li>rt_temp_member
-: <a class="el" href="unionbia_1_1compiler_1_1compiler__value_1_1return__value.html#ada4d871c9059a88e94f1657cee425a8f">bia::compiler::compiler_value::return_value</a>
-</li>
-<li>rt_test_result
-: <a class="el" href="unionbia_1_1compiler_1_1compiler__value_1_1return__value.html#a092477c12c79bfa6deb408d4660d4844">bia::compiler::compiler_value::return_value</a>
-</li>
-<li>rule_bits
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a767a0d03c323556f6f30f0c57cd868bc">bia::grammar::report</a>
-</li>
-<li>rule_id
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a6b9079cd3ce233342e0d5c588fccb610">bia::grammar::report</a>
-</li>
-<li>rules
-: <a class="el" href="structbia_1_1grammar_1_1token__param.html#ad896b83972c016aa7062a78611e28684">bia::grammar::token_param</a>
-</li>
-</ul>
-
-
-<h3><a id="index_s"></a>- s -</h3><ul>
-<li>second
-: <a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html#ad821a9c3b20cc68152b830db38cfd654">bia::machine::memory::allocation&lt; Type &gt;</a>
-</li>
-<li>size
-: <a class="el" href="structbia_1_1compiler_1_1compiler__value_1_1return__value_1_1string.html#a73021bd41ba8bbe205ed648b9e24d518">bia::compiler::compiler_value::return_value::string</a>
-, <a class="el" href="structbia_1_1machine_1_1disassembler_1_1instruction.html#a25a164b79a3058ba08142a112b899c1f">bia::machine::disassembler::instruction</a>
-</li>
-<li>size_type
-: <a class="el" href="classbia_1_1stream_1_1string__stream.html#a9aa32fd230fe383bda76dd44efa7206a">bia::stream::string_stream</a>
-</li>
-<li>starting_padding_opt_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#a02bdd37bce144ab092936e56395b9343">bia::grammar::flags</a>
-</li>
-<li>starting_padding_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#a014e2ec8c73e0973627d5b5016eabcaa">bia::grammar::flags</a>
-</li>
-<li>starting_ws_opt_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#a3a9f36b7fe76405bba333d74edba4a30">bia::grammar::flags</a>
-</li>
-<li>starting_ws_token
-: <a class="el" href="structbia_1_1grammar_1_1flags.html#abbd34373fee9b21f9cac73d218c759fd">bia::grammar::flags</a>
-</li>
-<li>static_passer
-: <a class="el" href="classbia_1_1machine_1_1platform_1_1passer.html#ab7c4ff51769c3686dddc15f84415dc33">bia::machine::platform::passer</a>
-</li>
-<li>string
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a49c287d0a5b0ba87e52de9e4f58441f1">bia::grammar::report</a>
-</li>
-</ul>
-
-
-<h3><a id="index_t"></a>- t -</h3><ul>
-<li>token_bits
-: <a class="el" href="structbia_1_1grammar_1_1report.html#aed90be869311558b01e52a13c6aa98b3">bia::grammar::report</a>
-</li>
-<li>token_id
-: <a class="el" href="structbia_1_1grammar_1_1report.html#a1255425f8310903dc121a00bb47474c1">bia::grammar::report</a>
-, <a class="el" href="structbia_1_1grammar_1_1token__param.html#ae54aeaf0b4565720f48dfff27ab73845">bia::grammar::token_param</a>
-</li>
-<li>type
-: <a class="el" href="structbia_1_1framework_1_1native_1_1native__type.html#a777cdb76f7cdedea8fd1b13c60462968">bia::framework::native::native_type&lt; Type, Is_integral, Size_type &gt;</a>
-, <a class="el" href="structbia_1_1framework_1_1native_1_1native__type_3_01bool_00_01true_00_011_01_4.html#ab4e8906cc88f972650de90f4d3c3c56b">bia::framework::native::native_type&lt; bool, true, 1 &gt;</a>
-, <a class="el" href="structbia_1_1framework_1_1native_1_1native__type_3_01const_01char_01_5_00_01false_00_01sizeof_07const_01char_01_5_08_4.html#a7363c723d4d5cc0fee4b6d8eacf51a82">bia::framework::native::native_type&lt; const char *, false, sizeof(const char *)&gt;</a>
-, <a class="el" href="structbia_1_1framework_1_1native_1_1native__type_3_01double_00_01false_00_01sizeof_07double_08_4.html#adc5a900e80a2e676e96f7ef27ffba480">bia::framework::native::native_type&lt; double, false, sizeof(double)&gt;</a>
-, <a class="el" href="structbia_1_1framework_1_1native_1_1native__type_3_01float_00_01false_00_01sizeof_07float_08_4.html#ac306aae12e5039c95c2986720522c8f0">bia::framework::native::native_type&lt; float, false, sizeof(float)&gt;</a>
-, <a class="el" href="structbia_1_1framework_1_1native_1_1native__type_3_01_type_00_01true_00_011_01_4.html#a0082d685688504281b43828b25754f84">bia::framework::native::native_type&lt; Type, true, 1 &gt;</a>
-, <a class="el" href="structbia_1_1framework_1_1native_1_1native__type_3_01_type_00_01true_00_012_01_4.html#acca88b188c313703da43be667e6ad491">bia::framework::native::native_type&lt; Type, true, 2 &gt;</a>
-, <a class="el" href="structbia_1_1framework_1_1native_1_1native__type_3_01_type_00_01true_00_014_01_4.html#aff8eab7b3f116fc324175cf97c9432c0">bia::framework::native::native_type&lt; Type, true, 4 &gt;</a>
-, <a class="el" href="structbia_1_1framework_1_1native_1_1native__type_3_01_type_00_01true_00_018_01_4.html#a4dd200bc31c70b8231d4b890188152ba">bia::framework::native::native_type&lt; Type, true, 8 &gt;</a>
-, <a class="el" href="structbia_1_1grammar_1_1report.html#ac311c00620d3b71fddb7ec1bd17ef0a0">bia::grammar::report</a>
-</li>
-</ul>
-
-
-<h3><a id="index_v"></a>- v -</h3><ul>
-<li>value
-: <a class="el" href="structbia_1_1utility_1_1negation.html#a719f06d56d9d82c6dedf016e37af9b04">bia::utility::negation&lt; Value &gt;</a>
-, <a class="el" href="structbia_1_1utility_1_1negation_3_01false_01_4.html#a1d58e92e59b74811feabb3bf68cda6b8">bia::utility::negation&lt; false &gt;</a>
-</li>
-<li>varg_member_passer
-: <a class="el" href="classbia_1_1machine_1_1platform_1_1passer.html#a9d261813b69b6860450aef8e01c0801d">bia::machine::platform::passer</a>
 </li>
 </ul>
 </div><!-- contents -->

@@ -79,7 +79,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="cstring__member_8hpp_source.html">cstring_member.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="cstring__member__def_8hpp_source.html">cstring_member_def.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for bia::framework::native::cstring_member&lt; Char_type &gt;:</div>
 <div class="dyncontent">
@@ -108,7 +108,8 @@ Public Types</h2></td></tr>
 <br />
 &#160;&#160;<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a2a46887d1690429ba0e29bb9a364de91">F_CONST</a> = 0x8, 
 <a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a896e54cf3d5182ef529ed0b11e67b391">F_TO_INT</a> = 0x10, 
-<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a94038d2a4abca61aaa35daa2b9a96516">F_TO_DOUBLE</a> = 0x20
+<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a94038d2a4abca61aaa35daa2b9a96516">F_TO_DOUBLE</a> = 0x20, 
+<a class="el" href="classbia_1_1framework_1_1member.html#affbf39d40f37790692235926da094919a80baba9a79d3dc150f74d901874c3286">F_BIG_INT</a> = 0x40
 <br />
  }</td></tr>
 <tr class="separator:affbf39d40f37790692235926da094919 inherit pub_types_classbia_1_1framework_1_1member"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,40 +122,44 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acd37d9fbadb042f6004149c467d2573d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5eed3fc05c454d2c004c6f66a721e91"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ab5eed3fc05c454d2c004c6f66a721e91">cstring_member</a> (const <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ae9828a695d320e694545917b56d73be5">data_type</a> &amp;<a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aa02887bb51392fb72f7ed2c942daccf9">_data</a>) noexcept</td></tr>
 <tr class="separator:ab5eed3fc05c454d2c004c6f66a721e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0bf3daa6e1edbc260e297e37633d95e5"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a0bf3daa6e1edbc260e297e37633d95e5">print</a> () const override</td></tr>
-<tr class="separator:a0bf3daa6e1edbc260e297e37633d95e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a611783095316cb8a136f67a0786fcfa2"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a611783095316cb8a136f67a0786fcfa2">copy</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
-<tr class="separator:a611783095316cb8a136f67a0786fcfa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7a62c834707a2b871616019171a4d36"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aa7a62c834707a2b871616019171a4d36">refer</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
-<tr class="separator:aa7a62c834707a2b871616019171a4d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade1245a90f83325dc7f43d5e8719a95e"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ade1245a90f83325dc7f43d5e8719a95e">clone</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
-<tr class="separator:ade1245a90f83325dc7f43d5e8719a95e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1788e3c4573cd878cd3b5dae32504c37"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a1788e3c4573cd878cd3b5dae32504c37">operator_call</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, const <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_right) override</td></tr>
-<tr class="separator:a1788e3c4573cd878cd3b5dae32504c37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ee630014ad3b0709eff671a0346d033"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a2ee630014ad3b0709eff671a0346d033">operator_call_int32</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int32_t _right) override</td></tr>
-<tr class="separator:a2ee630014ad3b0709eff671a0346d033"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33c7d13b044321d727bb0e27598f0ff7"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a33c7d13b044321d727bb0e27598f0ff7">operator_call_int64</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int64_t _right) override</td></tr>
-<tr class="separator:a33c7d13b044321d727bb0e27598f0ff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adafc73ddaadf75cd7acea310291caf38"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#adafc73ddaadf75cd7acea310291caf38">operator_call_double</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, double _right) override</td></tr>
-<tr class="separator:adafc73ddaadf75cd7acea310291caf38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae19b4cbab5ea9e0cd3efd5dc5786e98d"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ae19b4cbab5ea9e0cd3efd5dc5786e98d">object_member</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="classbia_1_1machine_1_1string__manager.html#a29ef514eaadd7db19d63af77da5bb84d">machine::string_manager::name_type</a> _name) override</td></tr>
-<tr class="separator:ae19b4cbab5ea9e0cd3efd5dc5786e98d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52d5e8ea7582947156edbc40e8dbff08"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a52d5e8ea7582947156edbc40e8dbff08">flags</a> () const override</td></tr>
-<tr class="separator:a52d5e8ea7582947156edbc40e8dbff08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa570a2fe652f9042590a2407bdd7032f"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aa570a2fe652f9042590a2407bdd7032f">test</a> () const override</td></tr>
-<tr class="separator:aa570a2fe652f9042590a2407bdd7032f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1787f51c2d981a0b7be3535d3409ec3"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aa1787f51c2d981a0b7be3535d3409ec3">test_member</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_right) const override</td></tr>
-<tr class="separator:aa1787f51c2d981a0b7be3535d3409ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe9fdbf68a89990f599add9081e8b9ba"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#afe9fdbf68a89990f599add9081e8b9ba">test_int32</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int32_t _right) const override</td></tr>
-<tr class="separator:afe9fdbf68a89990f599add9081e8b9ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7259e2157dca7eedb0cc958f9be457d1"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a7259e2157dca7eedb0cc958f9be457d1">test_int64</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int64_t _right) const override</td></tr>
-<tr class="separator:a7259e2157dca7eedb0cc958f9be457d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a45ea6b17f271c452afe94f8d707058"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a9a45ea6b17f271c452afe94f8d707058">test_double</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, double _right) const override</td></tr>
-<tr class="separator:a9a45ea6b17f271c452afe94f8d707058"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48e6e6daf993178f591b745f01db60c5"><td class="memItemLeft" align="right" valign="top">virtual int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a48e6e6daf993178f591b745f01db60c5">to_int</a> () const override</td></tr>
-<tr class="separator:a48e6e6daf993178f591b745f01db60c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee4940647be80c851e23b8b043110754"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aee4940647be80c851e23b8b043110754">to_double</a> () const override</td></tr>
-<tr class="separator:aee4940647be80c851e23b8b043110754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a684157798b9d00c6627492bd600dbc6a"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a684157798b9d00c6627492bd600dbc6a">print</a> () const override</td></tr>
+<tr class="separator:a684157798b9d00c6627492bd600dbc6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac10bfa8d9a45ab50cf0b44bdfc372abc"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ac10bfa8d9a45ab50cf0b44bdfc372abc">copy</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
+<tr class="separator:ac10bfa8d9a45ab50cf0b44bdfc372abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff7a71e51cad2f905a59cb45a86e0041"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aff7a71e51cad2f905a59cb45a86e0041">refer</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
+<tr class="separator:aff7a71e51cad2f905a59cb45a86e0041"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac67cd591bbc5e0b458ef268e44e885b5"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ac67cd591bbc5e0b458ef268e44e885b5">clone</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination) override</td></tr>
+<tr class="separator:ac67cd591bbc5e0b458ef268e44e885b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51ddd38fc223289419e89336e08b687c"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a51ddd38fc223289419e89336e08b687c">operator_call</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, const <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_right) override</td></tr>
+<tr class="separator:a51ddd38fc223289419e89336e08b687c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75ad51a51a1bf1701039d86bb83fcbd3"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a75ad51a51a1bf1701039d86bb83fcbd3">operator_call_int32</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int32_t _right) override</td></tr>
+<tr class="separator:a75ad51a51a1bf1701039d86bb83fcbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af83c6147e2520bae2589ca1e59492a2f"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#af83c6147e2520bae2589ca1e59492a2f">operator_call_int64</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int64_t _right) override</td></tr>
+<tr class="separator:af83c6147e2520bae2589ca1e59492a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73d4940c24771395dff5fa83b4e012d9"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a73d4940c24771395dff5fa83b4e012d9">operator_call_big_int</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, const <a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> *_right) override</td></tr>
+<tr class="separator:a73d4940c24771395dff5fa83b4e012d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa629d449f2e577c7f0d2cb53bb344fd"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#afa629d449f2e577c7f0d2cb53bb344fd">operator_call_double</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, double _right) override</td></tr>
+<tr class="separator:afa629d449f2e577c7f0d2cb53bb344fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38e90b96dfd16c1ee8920ec6d586c8f3"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a38e90b96dfd16c1ee8920ec6d586c8f3">object_member</a> (<a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_destination, <a class="el" href="classbia_1_1machine_1_1string__manager.html#a29ef514eaadd7db19d63af77da5bb84d">machine::string_manager::name_type</a> _name) override</td></tr>
+<tr class="separator:a38e90b96dfd16c1ee8920ec6d586c8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff89984bbb31341d1b2468b78f4667d7"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#aff89984bbb31341d1b2468b78f4667d7">flags</a> () const override</td></tr>
+<tr class="separator:aff89984bbb31341d1b2468b78f4667d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0885917ce9f68c5c09a0d9c83a84cee"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ac0885917ce9f68c5c09a0d9c83a84cee">test</a> () const override</td></tr>
+<tr class="separator:ac0885917ce9f68c5c09a0d9c83a84cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cc74045f8eeca88e7fa036effc0862b"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a1cc74045f8eeca88e7fa036effc0862b">test_member</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, <a class="el" href="classbia_1_1framework_1_1member.html">member</a> *_right) const override</td></tr>
+<tr class="separator:a1cc74045f8eeca88e7fa036effc0862b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afecc8ec44183bdac45775a36f4e9a41d"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#afecc8ec44183bdac45775a36f4e9a41d">test_int32</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int32_t _right) const override</td></tr>
+<tr class="separator:afecc8ec44183bdac45775a36f4e9a41d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54ecc5f8c7a9ff75feb5e1def26349b4"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a54ecc5f8c7a9ff75feb5e1def26349b4">test_int64</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, int64_t _right) const override</td></tr>
+<tr class="separator:a54ecc5f8c7a9ff75feb5e1def26349b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4b1c177cea11d656370ed0b9b08a1a3"><td class="memItemLeft" align="right" valign="top">virtual int32_t BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ac4b1c177cea11d656370ed0b9b08a1a3">test_double</a> (<a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a> _operator, double _right) const override</td></tr>
+<tr class="separator:ac4b1c177cea11d656370ed0b9b08a1a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f2e1915aee481a3481d8d9fc02f0f5b"><td class="memItemLeft" align="right" valign="top">virtual int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a1f2e1915aee481a3481d8d9fc02f0f5b">to_int</a> () const override</td></tr>
+<tr class="separator:a1f2e1915aee481a3481d8d9fc02f0f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e06b3f571ab5e570a39289164d79677"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a1e06b3f571ab5e570a39289164d79677">to_double</a> () const override</td></tr>
+<tr class="separator:a1e06b3f571ab5e570a39289164d79677"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ae8ac4375e5a826d0a954ce8e0d5ff4"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a6ae8ac4375e5a826d0a954ce8e0d5ff4">to_cstring</a> (<a class="el" href="classbia_1_1utility_1_1buffer__builder.html">utility::buffer_builder</a> *_builder) const override</td></tr>
+<tr class="separator:a6ae8ac4375e5a826d0a954ce8e0d5ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classbia_1_1framework_1_1native_1_1native__variable')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html">bia::framework::native::native_variable</a></td></tr>
 <tr class="memitem:a10695a0f921e22a5fce74086906c4395 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void BIA_MEMBER_CALLING_CONVENTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a10695a0f921e22a5fce74086906c4395">undefine</a> () override</td></tr>
 <tr class="separator:a10695a0f921e22a5fce74086906c4395 inherit pub_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,10 +186,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ab49ad7997ed8e9bc3283f06999f7af27"><td class="memItemLeft" align="right" valign="top">virtual void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ab49ad7997ed8e9bc3283f06999f7af27">native_data</a> (<a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a> _type) override</td></tr>
-<tr class="separator:ab49ad7997ed8e9bc3283f06999f7af27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab176c15fe452be22449a3d632aa7c0a9"><td class="memItemLeft" align="right" valign="top">virtual const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ab176c15fe452be22449a3d632aa7c0a9">const_native_data</a> (<a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a> _type) const override</td></tr>
-<tr class="separator:ab176c15fe452be22449a3d632aa7c0a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a13a2ea083f4e261c27a98b82fda015"><td class="memItemLeft" align="right" valign="top">virtual void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a8a13a2ea083f4e261c27a98b82fda015">native_data</a> (<a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a> _type) override</td></tr>
+<tr class="separator:a8a13a2ea083f4e261c27a98b82fda015"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1bcbf384b40c9ca9d309ce1415234cb"><td class="memItemLeft" align="right" valign="top">virtual const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ae1bcbf384b40c9ca9d309ce1415234cb">const_native_data</a> (<a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a> _type) const override</td></tr>
+<tr class="separator:ae1bcbf384b40c9ca9d309ce1415234cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classbia_1_1framework_1_1native_1_1native__variable')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html">bia::framework::native::native_variable</a></td></tr>
 <tr class="memitem:a53b364e6b068c7ea9d1bb3327e5ad2b1 inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memItemLeft" align="right" valign="top">virtual void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1native__variable.html#a53b364e6b068c7ea9d1bb3327e5ad2b1">data</a> (const std::type_info &amp;_type) override</td></tr>
 <tr class="separator:a53b364e6b068c7ea9d1bb3327e5ad2b1 inherit pro_methods_classbia_1_1framework_1_1native_1_1native__variable"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,11 +198,11 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a035f95a3d64d5ef6e3eb7a9f102867d1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a035f95a3d64d5ef6e3eb7a9f102867d1">print</a> (const char *_string)</td></tr>
-<tr class="separator:a035f95a3d64d5ef6e3eb7a9f102867d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab19233848b8a3154895eb89f8e0e2e81"><td class="memTemplParams" colspan="2">template&lt;typename Type &gt; </td></tr>
-<tr class="memitem:ab19233848b8a3154895eb89f8e0e2e81"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#ab19233848b8a3154895eb89f8e0e2e81">print</a> (const Type *_string) noexcept</td></tr>
-<tr class="separator:ab19233848b8a3154895eb89f8e0e2e81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51b78abab00f3e1aefc46bef39133172"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#a51b78abab00f3e1aefc46bef39133172">print</a> (const char *_string)</td></tr>
+<tr class="separator:a51b78abab00f3e1aefc46bef39133172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af660363c5e9ec146ff2f631de39df237"><td class="memTemplParams" colspan="2">template&lt;typename Type &gt; </td></tr>
+<tr class="memitem:af660363c5e9ec146ff2f631de39df237"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html#af660363c5e9ec146ff2f631de39df237">print</a> (const Type *_string) noexcept</td></tr>
+<tr class="separator:af660363c5e9ec146ff2f631de39df237"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -260,7 +265,7 @@ template&lt;typename Char_type&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -321,7 +326,7 @@ template&lt;typename Char_type&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -353,19 +358,19 @@ template&lt;typename Char_type&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ade1245a90f83325dc7f43d5e8719a95e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade1245a90f83325dc7f43d5e8719a95e">&#9670;&nbsp;</a></span>clone()</h2>
+<a id="ac67cd591bbc5e0b458ef268e44e885b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac67cd591bbc5e0b458ef268e44e885b5">&#9670;&nbsp;</a></span>clone()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::clone </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::clone </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
           <td class="paramname"><em>_destination</em></td><td>)</td>
@@ -400,19 +405,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="ab176c15fe452be22449a3d632aa7c0a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab176c15fe452be22449a3d632aa7c0a9">&#9670;&nbsp;</a></span>const_native_data()</h2>
+<a id="ae1bcbf384b40c9ca9d309ce1415234cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1bcbf384b40c9ca9d309ce1415234cb">&#9670;&nbsp;</a></span>const_native_data()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const void* <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::const_native_data </td>
+          <td class="memname">const void * <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::const_native_data </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a>&#160;</td>
           <td class="paramname"><em>_type</em></td><td>)</td>
@@ -447,19 +452,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a611783095316cb8a136f67a0786fcfa2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a611783095316cb8a136f67a0786fcfa2">&#9670;&nbsp;</a></span>copy()</h2>
+<a id="ac10bfa8d9a45ab50cf0b44bdfc372abc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac10bfa8d9a45ab50cf0b44bdfc372abc">&#9670;&nbsp;</a></span>copy()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::copy </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::copy </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
           <td class="paramname"><em>_destination</em></td><td>)</td>
@@ -494,19 +499,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a52d5e8ea7582947156edbc40e8dbff08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a52d5e8ea7582947156edbc40e8dbff08">&#9670;&nbsp;</a></span>flags()</h2>
+<a id="aff89984bbb31341d1b2468b78f4667d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff89984bbb31341d1b2468b78f4667d7">&#9670;&nbsp;</a></span>flags()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::flags </td>
+          <td class="memname">int <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::flags </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -533,19 +538,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="ab49ad7997ed8e9bc3283f06999f7af27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab49ad7997ed8e9bc3283f06999f7af27">&#9670;&nbsp;</a></span>native_data()</h2>
+<a id="a8a13a2ea083f4e261c27a98b82fda015"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a13a2ea083f4e261c27a98b82fda015">&#9670;&nbsp;</a></span>native_data()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void* <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::native_data </td>
+          <td class="memname">void * <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::native_data </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1framework_1_1native.html#a7b6b5d13d0b3f2e5e663e215438f5a8d">native::NATIVE_TYPE</a>&#160;</td>
           <td class="paramname"><em>_type</em></td><td>)</td>
@@ -580,19 +585,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="ae19b4cbab5ea9e0cd3efd5dc5786e98d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae19b4cbab5ea9e0cd3efd5dc5786e98d">&#9670;&nbsp;</a></span>object_member()</h2>
+<a id="a38e90b96dfd16c1ee8920ec6d586c8f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38e90b96dfd16c1ee8920ec6d586c8f3">&#9670;&nbsp;</a></span>object_member()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::object_member </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::object_member </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
           <td class="paramname"><em>_destination</em>, </td>
@@ -637,19 +642,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a1788e3c4573cd878cd3b5dae32504c37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1788e3c4573cd878cd3b5dae32504c37">&#9670;&nbsp;</a></span>operator_call()</h2>
+<a id="a51ddd38fc223289419e89336e08b687c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51ddd38fc223289419e89336e08b687c">&#9670;&nbsp;</a></span>operator_call()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
           <td class="paramname"><em>_destination</em>, </td>
@@ -703,19 +708,65 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="adafc73ddaadf75cd7acea310291caf38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adafc73ddaadf75cd7acea310291caf38">&#9670;&nbsp;</a></span>operator_call_double()</h2>
+<a id="a73d4940c24771395dff5fa83b4e012d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73d4940c24771395dff5fa83b4e012d9">&#9670;&nbsp;</a></span>operator_call_big_int()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call_double </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call_big_int </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
+          <td class="paramname"><em>_destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
+          <td class="paramname"><em>_operator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> *&#160;</td>
+          <td class="paramname"><em>_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#a5952008cf417ec1f890b041e9acc39b5">bia::framework::member</a>.</p>
+
+</div>
+</div>
+<a id="afa629d449f2e577c7f0d2cb53bb344fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa629d449f2e577c7f0d2cb53bb344fd">&#9670;&nbsp;</a></span>operator_call_double()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Char_type &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call_double </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
           <td class="paramname"><em>_destination</em>, </td>
@@ -769,19 +820,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a2ee630014ad3b0709eff671a0346d033"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ee630014ad3b0709eff671a0346d033">&#9670;&nbsp;</a></span>operator_call_int32()</h2>
+<a id="a75ad51a51a1bf1701039d86bb83fcbd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75ad51a51a1bf1701039d86bb83fcbd3">&#9670;&nbsp;</a></span>operator_call_int32()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call_int32 </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call_int32 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
           <td class="paramname"><em>_destination</em>, </td>
@@ -835,19 +886,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a33c7d13b044321d727bb0e27598f0ff7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33c7d13b044321d727bb0e27598f0ff7">&#9670;&nbsp;</a></span>operator_call_int64()</h2>
+<a id="af83c6147e2520bae2589ca1e59492a2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af83c6147e2520bae2589ca1e59492a2f">&#9670;&nbsp;</a></span>operator_call_int64()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call_int64 </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::operator_call_int64 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
           <td class="paramname"><em>_destination</em>, </td>
@@ -901,19 +952,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a0bf3daa6e1edbc260e297e37633d95e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0bf3daa6e1edbc260e297e37633d95e5">&#9670;&nbsp;</a></span>print() <span class="overload">[1/3]</span></h2>
+<a id="a684157798b9d00c6627492bd600dbc6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a684157798b9d00c6627492bd600dbc6a">&#9670;&nbsp;</a></span>print() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::print </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::print </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -939,19 +990,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a035f95a3d64d5ef6e3eb7a9f102867d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a035f95a3d64d5ef6e3eb7a9f102867d1">&#9670;&nbsp;</a></span>print() <span class="overload">[2/3]</span></h2>
+<a id="a51b78abab00f3e1aefc46bef39133172"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51b78abab00f3e1aefc46bef39133172">&#9670;&nbsp;</a></span>print() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::print </td>
+          <td class="memname">void <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::print </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>_string</em></td><td>)</td>
@@ -967,13 +1018,13 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="ab19233848b8a3154895eb89f8e0e2e81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab19233848b8a3154895eb89f8e0e2e81">&#9670;&nbsp;</a></span>print() <span class="overload">[3/3]</span></h2>
+<a id="af660363c5e9ec146ff2f631de39df237"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af660363c5e9ec146ff2f631de39df237">&#9670;&nbsp;</a></span>print() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <div class="memtemplate">
 template&lt;typename Type &gt; </div>
 <table class="mlabels">
@@ -981,7 +1032,7 @@ template&lt;typename Type &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::print </td>
+          <td class="memname">void <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::print </td>
           <td>(</td>
           <td class="paramtype">const Type *&#160;</td>
           <td class="paramname"><em>_string</em></td><td>)</td>
@@ -997,19 +1048,19 @@ template&lt;typename Type &gt; </div>
 
 </div>
 </div>
-<a id="aa7a62c834707a2b871616019171a4d36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7a62c834707a2b871616019171a4d36">&#9670;&nbsp;</a></span>refer()</h2>
+<a id="aff7a71e51cad2f905a59cb45a86e0041"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff7a71e51cad2f905a59cb45a86e0041">&#9670;&nbsp;</a></span>refer()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::refer </td>
+          <td class="memname">void BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::refer </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classbia_1_1framework_1_1member.html">member</a> *&#160;</td>
           <td class="paramname"><em>_destination</em></td><td>)</td>
@@ -1044,19 +1095,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="aa570a2fe652f9042590a2407bdd7032f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa570a2fe652f9042590a2407bdd7032f">&#9670;&nbsp;</a></span>test()</h2>
+<a id="ac0885917ce9f68c5c09a0d9c83a84cee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0885917ce9f68c5c09a0d9c83a84cee">&#9670;&nbsp;</a></span>test()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test </td>
+          <td class="memname">int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1084,19 +1135,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a9a45ea6b17f271c452afe94f8d707058"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a45ea6b17f271c452afe94f8d707058">&#9670;&nbsp;</a></span>test_double()</h2>
+<a id="ac4b1c177cea11d656370ed0b9b08a1a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4b1c177cea11d656370ed0b9b08a1a3">&#9670;&nbsp;</a></span>test_double()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test_double </td>
+          <td class="memname">int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test_double </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
           <td class="paramname"><em>_operator</em>, </td>
@@ -1143,19 +1194,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="afe9fdbf68a89990f599add9081e8b9ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe9fdbf68a89990f599add9081e8b9ba">&#9670;&nbsp;</a></span>test_int32()</h2>
+<a id="afecc8ec44183bdac45775a36f4e9a41d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afecc8ec44183bdac45775a36f4e9a41d">&#9670;&nbsp;</a></span>test_int32()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test_int32 </td>
+          <td class="memname">int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test_int32 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
           <td class="paramname"><em>_operator</em>, </td>
@@ -1202,19 +1253,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a7259e2157dca7eedb0cc958f9be457d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7259e2157dca7eedb0cc958f9be457d1">&#9670;&nbsp;</a></span>test_int64()</h2>
+<a id="a54ecc5f8c7a9ff75feb5e1def26349b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54ecc5f8c7a9ff75feb5e1def26349b4">&#9670;&nbsp;</a></span>test_int64()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test_int64 </td>
+          <td class="memname">int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test_int64 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
           <td class="paramname"><em>_operator</em>, </td>
@@ -1261,19 +1312,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="aa1787f51c2d981a0b7be3535d3409ec3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1787f51c2d981a0b7be3535d3409ec3">&#9670;&nbsp;</a></span>test_member()</h2>
+<a id="a1cc74045f8eeca88e7fa036effc0862b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cc74045f8eeca88e7fa036effc0862b">&#9670;&nbsp;</a></span>test_member()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test_member </td>
+          <td class="memname">int32_t BIA_MEMBER_CALLING_CONVENTION <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::test_member </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1framework.html#afc22072b4c4f68bcb56d0ccde909039c">operator_type</a>&#160;</td>
           <td class="paramname"><em>_operator</em>, </td>
@@ -1320,19 +1371,50 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="aee4940647be80c851e23b8b043110754"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee4940647be80c851e23b8b043110754">&#9670;&nbsp;</a></span>to_double()</h2>
+<a id="a6ae8ac4375e5a826d0a954ce8e0d5ff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ae8ac4375e5a826d0a954ce8e0d5ff4">&#9670;&nbsp;</a></span>to_cstring()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual double <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::to_double </td>
+          <td class="memname">const char * <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::to_cstring </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1utility_1_1buffer__builder.html">utility::buffer_builder</a> *&#160;</td>
+          <td class="paramname"><em>_builder</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>TODO </p>
+
+<p>Implements <a class="el" href="classbia_1_1framework_1_1member.html#abcaf5744a7af6c9d78951418efae45a1">bia::framework::member</a>.</p>
+
+</div>
+</div>
+<a id="a1e06b3f571ab5e570a39289164d79677"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e06b3f571ab5e570a39289164d79677">&#9670;&nbsp;</a></span>to_double()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Char_type &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::to_double </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1360,19 +1442,19 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<a id="a48e6e6daf993178f591b745f01db60c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48e6e6daf993178f591b745f01db60c5">&#9670;&nbsp;</a></span>to_int()</h2>
+<a id="a1f2e1915aee481a3481d8d9fc02f0f5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f2e1915aee481a3481d8d9fc02f0f5b">&#9670;&nbsp;</a></span>to_int()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Char_type&gt; </div>
+template&lt;typename Char_type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int64_t <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::to_int </td>
+          <td class="memname">int64_t <a class="el" href="classbia_1_1framework_1_1native_1_1cstring__member.html">bia::framework::native::cstring_member</a>&lt; Char_type &gt;::to_int </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1426,7 +1508,8 @@ template&lt;typename Char_type&gt; </div>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>Bia/<a class="el" href="cstring__member__def_8hpp_source.html">cstring_member_def.hpp</a></li>
 <li>Bia/<a class="el" href="cstring__member_8hpp_source.html">cstring_member.hpp</a></li>
 </ul>
 </div><!-- contents -->

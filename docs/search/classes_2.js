@@ -4,6 +4,7 @@ var searchData=
   ['chooser_3c_20false_2c_20return_2c_20type_20_3e',['chooser&lt; false, Return, Type &gt;',['../structbia_1_1utility_1_1chooser_3_01false_00_01_return_00_01_type_01_4.html',1,'bia::utility']]],
   ['chooser_3c_20true_2c_20return_2c_20type_20_3e',['chooser&lt; true, Return, Type &gt;',['../structbia_1_1utility_1_1chooser_3_01true_00_01_return_00_01_type_01_4.html',1,'bia::utility']]],
   ['class_5ftemplate',['class_template',['../classbia_1_1framework_1_1object_1_1class__template.html',1,'bia::framework::object']]],
+  ['common_5fnames',['common_names',['../classbia_1_1common_1_1common__names.html',1,'bia::common']]],
   ['compile_5fcompare_5foperation',['compile_compare_operation',['../classbia_1_1compiler_1_1compile__compare__operation.html',1,'bia::compiler']]],
   ['compile_5fnormal_5foperation',['compile_normal_operation',['../classbia_1_1compiler_1_1compile__normal__operation.html',1,'bia::compiler']]],
   ['compiler',['compiler',['../classbia_1_1compiler_1_1compiler.html',1,'bia::compiler']]],

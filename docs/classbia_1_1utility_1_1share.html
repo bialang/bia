@@ -68,8 +68,8 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classbia_1_1utility_1_1share-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -80,13 +80,8 @@ $(function() {
 <p>A shared object.  
  <a href="classbia_1_1utility_1_1share.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="share_8hpp_source.html">share.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="share__def_8hpp_source.html">share_def.hpp</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1utility_1_1share_1_1data.html">data</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab72beebb018267161ee8724a4f50cb98"><td class="memTemplParams" colspan="2">template&lt;typename... Arguments&gt; </td></tr>
@@ -98,17 +93,24 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a25628ee6747d71493573d12cefb35d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ce7095297015b4187a1a0ef1676c378"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a6ce7095297015b4187a1a0ef1676c378">~share</a> ()</td></tr>
 <tr class="separator:a6ce7095297015b4187a1a0ef1676c378"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7042ca949f89edb0ee848776dbba31c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a7042ca949f89edb0ee848776dbba31c8">only_owner</a> () const noexcept</td></tr>
-<tr class="separator:a7042ca949f89edb0ee848776dbba31c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4dd6877d4d361dd1d3a91f88b353074b"><td class="memItemLeft" align="right" valign="top">Type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a4dd6877d4d361dd1d3a91f88b353074b">get</a> () noexcept</td></tr>
-<tr class="separator:a4dd6877d4d361dd1d3a91f88b353074b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3eb79132104a11de7eb9a06a9347b2e2"><td class="memItemLeft" align="right" valign="top">const Type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a3eb79132104a11de7eb9a06a9347b2e2">get</a> () const noexcept</td></tr>
-<tr class="separator:a3eb79132104a11de7eb9a06a9347b2e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ae7dcf5289cb1ce7c87198ea32f2df1"><td class="memItemLeft" align="right" valign="top">Type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a3ae7dcf5289cb1ce7c87198ea32f2df1">get</a> () noexcept</td></tr>
+<tr class="separator:a3ae7dcf5289cb1ce7c87198ea32f2df1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc422882c49aa7f5f22c6da7157cd05b"><td class="memItemLeft" align="right" valign="top">const Type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#acc422882c49aa7f5f22c6da7157cd05b">get</a> () const noexcept</td></tr>
+<tr class="separator:acc422882c49aa7f5f22c6da7157cd05b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ddcce32e49d2b663e71306390a1afcf"><td class="memItemLeft" align="right" valign="top">Type *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a8ddcce32e49d2b663e71306390a1afcf">operator-&gt;</a> () noexcept</td></tr>
+<tr class="separator:a8ddcce32e49d2b663e71306390a1afcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fc57cf42080ae8c4b3adccd239e15c8"><td class="memItemLeft" align="right" valign="top">const Type *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a0fc57cf42080ae8c4b3adccd239e15c8">operator-&gt;</a> () const noexcept</td></tr>
+<tr class="separator:a0fc57cf42080ae8c4b3adccd239e15c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a5cb3dedd65528fd59a48573b06cde57d"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; int8_t[sizeof(Type)], std::atomic_size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a5cb3dedd65528fd59a48573b06cde57d">data</a></td></tr>
+<tr class="separator:a5cb3dedd65528fd59a48573b06cde57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a74972c8bbfa34c454b781e591e3f035b"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structbia_1_1utility_1_1share_1_1data.html">bia::utility::share::data</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#a74972c8bbfa34c454b781e591e3f035b">_data</a></td></tr>
-<tr class="separator:a74972c8bbfa34c454b781e591e3f035b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af36b64472f8b9bfadc38c1d7f92c79a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1utility_1_1share.html#a5cb3dedd65528fd59a48573b06cde57d">data</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1utility_1_1share.html#af36b64472f8b9bfadc38c1d7f92c79a5">_data</a></td></tr>
+<tr class="separator:af36b64472f8b9bfadc38c1d7f92c79a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Type&gt;<br />
@@ -122,14 +124,39 @@ class bia::utility::share&lt; Type &gt;</h3>
   </table>
   </dd>
 </dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a5cb3dedd65528fd59a48573b06cde57d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cb3dedd65528fd59a48573b06cde57d">&#9670;&nbsp;</a></span>data</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Type&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::pair&lt;int8_t[sizeof(Type)], std::atomic_size_t&gt; <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::<a class="el" href="classbia_1_1utility_1_1share.html#a5cb3dedd65528fd59a48573b06cde57d">data</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab72beebb018267161ee8724a4f50cb98"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab72beebb018267161ee8724a4f50cb98">&#9670;&nbsp;</a></span>share() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Type&gt; </div>
+template&lt;typename Type &gt; </div>
 <div class="memtemplate">
 template&lt;typename... Arguments&gt; </div>
 <table class="mlabels">
@@ -180,7 +207,7 @@ template&lt;typename... Arguments&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Type&gt; </div>
+template&lt;typename Type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -245,7 +272,7 @@ template&lt;typename Type&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Type&gt; </div>
+template&lt;typename Type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -276,19 +303,19 @@ template&lt;typename Type&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4dd6877d4d361dd1d3a91f88b353074b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4dd6877d4d361dd1d3a91f88b353074b">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
+<a id="a3ae7dcf5289cb1ce7c87198ea32f2df1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ae7dcf5289cb1ce7c87198ea32f2df1">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Type&gt; </div>
+template&lt;typename Type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Type&amp; <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::get </td>
+          <td class="memname">Type &amp; <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::get </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -307,19 +334,19 @@ template&lt;typename Type&gt; </div>
 
 </div>
 </div>
-<a id="a3eb79132104a11de7eb9a06a9347b2e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3eb79132104a11de7eb9a06a9347b2e2">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
+<a id="acc422882c49aa7f5f22c6da7157cd05b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc422882c49aa7f5f22c6da7157cd05b">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Type&gt; </div>
+template&lt;typename Type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const Type&amp; <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::get </td>
+          <td class="memname">const Type &amp; <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::get </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -338,19 +365,50 @@ template&lt;typename Type&gt; </div>
 
 </div>
 </div>
-<a id="a7042ca949f89edb0ee848776dbba31c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7042ca949f89edb0ee848776dbba31c8">&#9670;&nbsp;</a></span>only_owner()</h2>
+<a id="a8ddcce32e49d2b663e71306390a1afcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ddcce32e49d2b663e71306390a1afcf">&#9670;&nbsp;</a></span>operator-&gt;() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Type&gt; </div>
+template&lt;typename Type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::only_owner </td>
+          <td class="memname">Type * <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::operator-&gt; </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The arrow access operator.</p>
+<dl class="section since"><dt>Since</dt><dd>3.69.144.799 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-Dec-18</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The data of the share. </dd></dl>
+
+</div>
+</div>
+<a id="a0fc57cf42080ae8c4b3adccd239e15c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fc57cf42080ae8c4b3adccd239e15c8">&#9670;&nbsp;</a></span>operator-&gt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Type &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const Type * <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::operator-&gt; </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -362,16 +420,16 @@ template&lt;typename Type&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Checks this share has only one owner.</p>
-<dl class="section since"><dt>Since</dt><dd>3.66.135.746 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>5-Aug-18</dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>true if this share has only one owner, otherwise false. </dd></dl>
+<p>The arrow access operator.</p>
+<dl class="section since"><dt>Since</dt><dd>3.69.144.799 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>5-Dec-18</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The data of the share. </dd></dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a74972c8bbfa34c454b781e591e3f035b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74972c8bbfa34c454b781e591e3f035b">&#9670;&nbsp;</a></span>_data</h2>
+<a id="af36b64472f8b9bfadc38c1d7f92c79a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af36b64472f8b9bfadc38c1d7f92c79a5">&#9670;&nbsp;</a></span>_data</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -382,7 +440,7 @@ template&lt;typename Type&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structbia_1_1utility_1_1share_1_1data.html">bia::utility::share::data</a> * <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::_data</td>
+          <td class="memname"><a class="el" href="classbia_1_1utility_1_1share.html#a5cb3dedd65528fd59a48573b06cde57d">data</a>* <a class="el" href="classbia_1_1utility_1_1share.html">bia::utility::share</a>&lt; Type &gt;::_data</td>
         </tr>
       </table>
   </td>
@@ -394,7 +452,8 @@ template&lt;typename Type&gt; </div>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>Bia/<a class="el" href="share__def_8hpp_source.html">share_def.hpp</a></li>
 <li>Bia/<a class="el" href="share_8hpp_source.html">share.hpp</a></li>
 </ul>
 </div><!-- contents -->

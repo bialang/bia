@@ -75,7 +75,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>A simple implementation of <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a>.  
+<p>A simple implementation of <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a>, <a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html">member_allocator</a> and  <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html" title="Allocates memory for big ints. ">big_int_allocator</a>.  
  <a href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="simple__allocator_8hpp_source.html">simple_allocator.hpp</a>&gt;</code></p>
@@ -85,7 +85,9 @@ Inheritance diagram for bia::machine::memory::simple_allocator:</div>
  <div class="center">
   <img src="classbia_1_1machine_1_1memory_1_1simple__allocator.png" usemap="#bia::machine::memory::simple_5Fallocator_map" alt=""/>
   <map id="bia::machine::memory::simple_5Fallocator_map" name="bia::machine::memory::simple_5Fallocator_map">
-<area href="classbia_1_1machine_1_1memory_1_1allocator.html" title="An allocator interface. " alt="bia::machine::memory::allocator" shape="rect" coords="0,0,229,24"/>
+<area href="classbia_1_1machine_1_1memory_1_1allocator.html" title="An allocator interface. " alt="bia::machine::memory::allocator" shape="rect" coords="0,0,238,24"/>
+<area href="classbia_1_1machine_1_1memory_1_1member__allocator.html" title="Allocates enough space for all members. " alt="bia::machine::memory::member_allocator" shape="rect" coords="248,0,486,24"/>
+<area href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html" title="Allocates memory for big ints. " alt="bia::machine::memory::big_int_allocator" shape="rect" coords="496,0,734,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -93,16 +95,20 @@ Inheritance diagram for bia::machine::memory::simple_allocator:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a35120437ae01aa26bb244c669455394a"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a35120437ae01aa26bb244c669455394a">deallocate</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a> _allocation) override</td></tr>
 <tr class="separator:a35120437ae01aa26bb244c669455394a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee6beb474696a72328b55cd90eb8116f"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#aee6beb474696a72328b55cd90eb8116f">deallocate_blocks</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a> _blocks) override</td></tr>
-<tr class="separator:aee6beb474696a72328b55cd90eb8116f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0d387f005f84876735afef936a38dc1"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#ab0d387f005f84876735afef936a38dc1">deallocate_member</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; <a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> &gt; _allocation) override</td></tr>
+<tr class="separator:ab0d387f005f84876735afef936a38dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac9f46e5cde2b2fde1910254b80caa50"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#aac9f46e5cde2b2fde1910254b80caa50">deallocate_big_int</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">big_int_allocation</a> _allocation) override</td></tr>
+<tr class="separator:aac9f46e5cde2b2fde1910254b80caa50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a6f3610031e57ce1fa537edcc24c04b"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT <a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a2a6f3610031e57ce1fa537edcc24c04b">reallocate</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a> _allocation, <a class="el" href="namespacebia_1_1machine_1_1memory.html#abc49ee5d87514e614fe49b49a433b9cd">size_type</a> _size) override</td></tr>
 <tr class="separator:a2a6f3610031e57ce1fa537edcc24c04b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37af66aee9651f6c8d79a1d43d055964"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT <a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a37af66aee9651f6c8d79a1d43d055964">commit</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a> _allocation, <a class="el" href="namespacebia_1_1machine_1_1memory.html#abc49ee5d87514e614fe49b49a433b9cd">size_type</a> _size) override</td></tr>
 <tr class="separator:a37af66aee9651f6c8d79a1d43d055964"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1734b183e9ea2ebd12fe55e813b03189"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT <a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a1734b183e9ea2ebd12fe55e813b03189">allocate</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#abc49ee5d87514e614fe49b49a433b9cd">size_type</a> _size) override</td></tr>
 <tr class="separator:a1734b183e9ea2ebd12fe55e813b03189"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0815632af32397d4f88d7298af90992f"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT <a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a0815632af32397d4f88d7298af90992f">allocate_blocks</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#abc49ee5d87514e614fe49b49a433b9cd">size_type</a> _count) override</td></tr>
-<tr class="separator:a0815632af32397d4f88d7298af90992f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab88b70689a86d55bae80b8a6f07d98a4"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT <a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; <a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#ab88b70689a86d55bae80b8a6f07d98a4">allocate_member</a> () override</td></tr>
+<tr class="separator:ab88b70689a86d55bae80b8a6f07d98a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa6d40ec262960d45ec56b059ee38331"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT <a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">big_int_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#afa6d40ec262960d45ec56b059ee38331">allocate_big_int</a> () override</td></tr>
+<tr class="separator:afa6d40ec262960d45ec56b059ee38331"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d79f85139036c810831b12aa8014241"><td class="memItemLeft" align="right" valign="top">virtual BIA_EXPORT <a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a3d79f85139036c810831b12aa8014241">prepare</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#abc49ee5d87514e614fe49b49a433b9cd">size_type</a> _size) override</td></tr>
 <tr class="separator:a3d79f85139036c810831b12aa8014241"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classbia_1_1machine_1_1memory_1_1allocator')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">bia::machine::memory::allocator</a></td></tr>
@@ -111,25 +117,41 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a289a5eecd3132130ef059096d3c6a4de inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memTemplParams" colspan="2">template&lt;typename Base , typename Deriviate  = Base&gt; </td></tr>
 <tr class="memitem:a289a5eecd3132130ef059096d3c6a4de inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a289a5eecd3132130ef059096d3c6a4de">destroy</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; Base &gt; _allocation)</td></tr>
 <tr class="separator:a289a5eecd3132130ef059096d3c6a4de inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75402c6193396934b34806db0260996e inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memTemplParams" colspan="2">template&lt;typename Type &gt; </td></tr>
-<tr class="memitem:a75402c6193396934b34806db0260996e inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a75402c6193396934b34806db0260996e">destroy_blocks</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; Type &gt; _allocation)</td></tr>
-<tr class="separator:a75402c6193396934b34806db0260996e inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5c9c4ccfdfb63d800d2954fd080c342 inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memTemplParams" colspan="2">template&lt;typename Base , typename Deriviate  = Base, typename... Arguments&gt; </td></tr>
 <tr class="memitem:ae5c9c4ccfdfb63d800d2954fd080c342 inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; Base &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ae5c9c4ccfdfb63d800d2954fd080c342">construct</a> (Arguments &amp;&amp;... _arguments)</td></tr>
 <tr class="separator:ae5c9c4ccfdfb63d800d2954fd080c342 inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a819f65b6c578a4385a39da8a3c151ffb inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memTemplParams" colspan="2">template&lt;typename Base , typename Deriviate  = Base, typename... Arguments&gt; </td></tr>
-<tr class="memitem:a819f65b6c578a4385a39da8a3c151ffb inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; Base &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a819f65b6c578a4385a39da8a3c151ffb">construct_blocks</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#abc49ee5d87514e614fe49b49a433b9cd">size_type</a> _count, Arguments &amp;&amp;... _arguments)</td></tr>
-<tr class="separator:a819f65b6c578a4385a39da8a3c151ffb inherit pub_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html">bia::machine::memory::member_allocator</a></td></tr>
+<tr class="memitem:a3a5d4bb9007a9f4e7c96e3064a402e2b inherit pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html#a3a5d4bb9007a9f4e7c96e3064a402e2b">~member_allocator</a> ()=default</td></tr>
+<tr class="separator:a3a5d4bb9007a9f4e7c96e3064a402e2b inherit pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd8a2fc5c310c5b0c77c87b4502b3d86 inherit pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html#abd8a2fc5c310c5b0c77c87b4502b3d86">destroy_member</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; <a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> &gt; _member)</td></tr>
+<tr class="separator:abd8a2fc5c310c5b0c77c87b4502b3d86 inherit pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98c48ebd5b2a5963e657e9342d6afe52 inherit pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memTemplParams" colspan="2">template&lt;typename Type , typename... Arguments&gt; </td></tr>
+<tr class="memitem:a98c48ebd5b2a5963e657e9342d6afe52 inherit pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; <a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html#a98c48ebd5b2a5963e657e9342d6afe52">construct_member</a> (Arguments &amp;&amp;... _arguments)</td></tr>
+<tr class="separator:a98c48ebd5b2a5963e657e9342d6afe52 inherit pub_methods_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html">bia::machine::memory::big_int_allocator</a></td></tr>
+<tr class="memitem:a11381a7c47a57481c102f40d195ea38c inherit pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#a11381a7c47a57481c102f40d195ea38c">~big_int_allocator</a> ()=default</td></tr>
+<tr class="separator:a11381a7c47a57481c102f40d195ea38c inherit pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abab7a091a1896aae4072c9c87aa755a1 inherit pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#abab7a091a1896aae4072c9c87aa755a1">destroy_big_int</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">big_int_allocation</a> _big_int)</td></tr>
+<tr class="separator:abab7a091a1896aae4072c9c87aa755a1 inherit pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2aa9e911313de8a3636bdb4cbb665cd inherit pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memTemplParams" colspan="2">template&lt;typename... Arguments&gt; </td></tr>
+<tr class="memitem:ae2aa9e911313de8a3636bdb4cbb665cd inherit pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">big_int_allocation</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#ae2aa9e911313de8a3636bdb4cbb665cd">construct_big_int</a> (Arguments &amp;&amp;... _arguments)</td></tr>
+<tr class="separator:ae2aa9e911313de8a3636bdb4cbb665cd inherit pub_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_static_methods_classbia_1_1machine_1_1memory_1_1allocator"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classbia_1_1machine_1_1memory_1_1allocator')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">bia::machine::memory::allocator</a></td></tr>
-<tr class="memitem:a5703241a3eceeb8da4358245105a37b4 inherit pub_static_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memItemLeft" align="right" valign="top">static BIA_EXPORT size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a5703241a3eceeb8da4358245105a37b4">block_size</a> () noexcept</td></tr>
-<tr class="separator:a5703241a3eceeb8da4358245105a37b4 inherit pub_static_methods_classbia_1_1machine_1_1memory_1_1allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html">bia::machine::memory::big_int_allocator</a></td></tr>
+<tr class="memitem:abdbc6190a8e8edf6aeadbe71286215be inherit pub_static_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memItemLeft" align="right" valign="top">static BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#abdbc6190a8e8edf6aeadbe71286215be">initialize</a> (const std::shared_ptr&lt; <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a> &gt; &amp;<a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#aabfb11915a096eaae1ca6929c3d978c0">_allocator</a>)</td></tr>
+<tr class="separator:abdbc6190a8e8edf6aeadbe71286215be inherit pub_static_methods_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_classbia_1_1machine_1_1memory_1_1member__allocator"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classbia_1_1machine_1_1memory_1_1member__allocator')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html">bia::machine::memory::member_allocator</a></td></tr>
+<tr class="memitem:aaf344072f7f0ff7cc5b9a8400ce6ff15 inherit pub_static_attribs_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html#aaf344072f7f0ff7cc5b9a8400ce6ff15">member_allocation_size</a> = <a class="el" href="namespacebia_1_1framework.html#ab3cef8c0dd632cd243d7f183212d8a5f">framework::max_member_size</a></td></tr>
+<tr class="separator:aaf344072f7f0ff7cc5b9a8400ce6ff15 inherit pub_static_attribs_classbia_1_1machine_1_1memory_1_1member__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classbia_1_1machine_1_1memory_1_1big__int__allocator')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html">bia::machine::memory::big_int_allocator</a></td></tr>
+<tr class="memitem:a9df9f138c6bbdf59dd261b973d58f745 inherit pub_static_attribs_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#a9df9f138c6bbdf59dd261b973d58f745">big_int_allocation_size</a> = sizeof(<a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a>)</td></tr>
+<tr class="separator:a9df9f138c6bbdf59dd261b973d58f745 inherit pub_static_attribs_classbia_1_1machine_1_1memory_1_1big__int__allocator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A simple implementation of <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a>. </p>
-<p>A simple allocator which allocates 'normal' memory without no checking. All memory will be allocated using standard function without caching. </p>
+<div class="textblock"><p>A simple implementation of <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a>, <a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html">member_allocator</a> and  <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html" title="Allocates memory for big ints. ">big_int_allocator</a>. </p>
+<p>A simple allocator which allocates memory for the machine context. All memory will be allocated using standard function without caching. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a1734b183e9ea2ebd12fe55e813b03189"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1734b183e9ea2ebd12fe55e813b03189">&#9670;&nbsp;</a></span>allocate()</h2>
@@ -175,8 +197,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a0815632af32397d4f88d7298af90992f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0815632af32397d4f88d7298af90992f">&#9670;&nbsp;</a></span>allocate_blocks()</h2>
+<a id="afa6d40ec262960d45ec56b059ee38331"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa6d40ec262960d45ec56b059ee38331">&#9670;&nbsp;</a></span>allocate_big_int()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,10 +207,9 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual BIA_EXPORT <a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a> bia::machine::memory::simple_allocator::allocate_blocks </td>
+          <td class="memname">virtual BIA_EXPORT <a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">big_int_allocation</a> bia::machine::memory::simple_allocator::allocate_big_int </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacebia_1_1machine_1_1memory.html#abc49ee5d87514e614fe49b49a433b9cd">size_type</a>&#160;</td>
-          <td class="paramname"><em>_count</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -198,24 +219,55 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Allocates the specified amount of blocks.</p>
-<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_count</td><td>The amount of the blocks.</td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Allocates memory for one big int.</p>
+<dl class="section since"><dt>Since</dt><dd>3.68.141.793 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2-Dec-18</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the memory could not be allocated.</td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If no memory could be allocated.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The blocks. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocated, but uninitialized big int. </dd></dl>
 
-<p>Implements <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a15c1380255154fccfe67527208ca6781">bia::machine::memory::allocator</a>.</p>
+<p>Implements <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#a807c2d35dddabc074e7e73233bc359e0">bia::machine::memory::big_int_allocator</a>.</p>
+
+</div>
+</div>
+<a id="ab88b70689a86d55bae80b8a6f07d98a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab88b70689a86d55bae80b8a6f07d98a4">&#9670;&nbsp;</a></span>allocate_member()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual BIA_EXPORT <a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt;<a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a>&gt; bia::machine::memory::simple_allocator::allocate_member </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allocates memory for one member.</p>
+<dl class="section since"><dt>Since</dt><dd>3.68.141.793 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2-Dec-18</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If no memory could be allocated.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocated, but uninitialized member. </dd></dl>
+
+<p>Implements <a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html#a7ea904520687ecfa3f738a216149640b">bia::machine::memory::member_allocator</a>.</p>
 
 </div>
 </div>
@@ -318,8 +370,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="aee6beb474696a72328b55cd90eb8116f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee6beb474696a72328b55cd90eb8116f">&#9670;&nbsp;</a></span>deallocate_blocks()</h2>
+<a id="aac9f46e5cde2b2fde1910254b80caa50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac9f46e5cde2b2fde1910254b80caa50">&#9670;&nbsp;</a></span>deallocate_big_int()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -328,10 +380,10 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual BIA_EXPORT void bia::machine::memory::simple_allocator::deallocate_blocks </td>
+          <td class="memname">virtual BIA_EXPORT void bia::machine::memory::simple_allocator::deallocate_big_int </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a>&#160;</td>
-          <td class="paramname"><em>_blocks</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">big_int_allocation</a>&#160;</td>
+          <td class="paramname"><em>_allocation</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -341,23 +393,66 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Deallocates the blocks allocated by <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a0815632af32397d4f88d7298af90992f">allocate_blocks()</a>.</p>
-<dl class="section since"><dt>Since</dt><dd>3.64.127.716 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>5-May-18</dd></dl>
+<p>Deallocates the big int allocation.</p>
+<dl class="section since"><dt>Since</dt><dd>3.68.141.793 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2-Dec-18</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">_blocks</td><td>The allocation.</td></tr>
+    <tr><td class="paramname">_allocation</td><td>The big int allocation.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the specified allocation is invalid. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the specified allocation wasn't allocated by <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#afa6d40ec262960d45ec56b059ee38331">allocate_big_int()</a>. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a2c83f69c2619fea57662a8e0f4b20003">bia::machine::memory::allocator</a>.</p>
+<p>Implements <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#a71c01dcc202dd750e83b4f56d9bac6e0">bia::machine::memory::big_int_allocator</a>.</p>
+
+</div>
+</div>
+<a id="ab0d387f005f84876735afef936a38dc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0d387f005f84876735afef936a38dc1">&#9670;&nbsp;</a></span>deallocate_member()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual BIA_EXPORT void bia::machine::memory::simple_allocator::deallocate_member </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; <a class="el" href="classbia_1_1framework_1_1member.html">framework::member</a> &gt;&#160;</td>
+          <td class="paramname"><em>_allocation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Deallocates the member allocation.</p>
+<dl class="section since"><dt>Since</dt><dd>3.68.141.793 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2-Dec-18</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_allocation</td><td>The member allocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classbia_1_1exception_1_1memory__error.html" title="Memory error. ">exception::memory_error</a></td><td>If the specified allocation wasn't allocated by <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#ab88b70689a86d55bae80b8a6f07d98a4">allocate_member()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html#a8ed9612ab196a95f70b9428ec4ad2ff5">bia::machine::memory::member_allocator</a>.</p>
 
 </div>
 </div>

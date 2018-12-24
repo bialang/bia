@@ -1,7 +1,8 @@
 var searchData=
 [
   ['namespace_5fmember',['namespace_member',['../classbia_1_1framework_1_1object_1_1namespace__member.html',1,'bia::framework::object']]],
-  ['native_5fmember',['native_member',['../classbia_1_1framework_1_1native_1_1native__member.html',1,'bia::framework::native']]],
+  ['native_5foperation',['native_operation',['../structbia_1_1framework_1_1native_1_1native__operation.html',1,'bia::framework::native']]],
+  ['native_5foperation_3c_20false_20_3e',['native_operation&lt; false &gt;',['../structbia_1_1framework_1_1native_1_1native__operation_3_01false_01_4.html',1,'bia::framework::native']]],
   ['native_5foperation_5fresult',['native_operation_result',['../structbia_1_1utility_1_1native__operation__result.html',1,'bia::utility']]],
   ['native_5foperation_5fresult_3c_20double_2c_20right_20_3e',['native_operation_result&lt; double, Right &gt;',['../structbia_1_1utility_1_1native__operation__result_3_01double_00_01_right_01_4.html',1,'bia::utility']]],
   ['native_5foperation_5fresult_3c_20float_2c_20right_20_3e',['native_operation_result&lt; float, Right &gt;',['../structbia_1_1utility_1_1native__operation__result_3_01float_00_01_right_01_4.html',1,'bia::utility']]],

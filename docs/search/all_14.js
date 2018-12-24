@@ -1,6 +1,7 @@
 var searchData=
 [
   ['va_5flist_5fwrapper',['va_list_wrapper',['../structbia_1_1force_1_1va__list__wrapper.html',1,'bia::force']]],
+  ['valid_5fget_5ftype',['valid_get_type',['../classbia_1_1utility_1_1virtual__object.html#a04fd79f230cb498ba3c94bce1978bd47',1,'bia::utility::virtual_object::valid_get_type() noexcept'],['../classbia_1_1utility_1_1virtual__object.html#a37b36595c390041b5a327e770042b1bb',1,'bia::utility::virtual_object::valid_get_type() noexcept']]],
   ['value',['value',['../structbia_1_1utility_1_1negation.html#a719f06d56d9d82c6dedf016e37af9b04',1,'bia::utility::negation::value()'],['../structbia_1_1utility_1_1negation_3_01false_01_4.html#a1d58e92e59b74811feabb3bf68cda6b8',1,'bia::utility::negation&lt; false &gt;::value()'],['../classbia_1_1compiler_1_1compiler__value.html#a856cc3cfacef59c33b40a847e768f860',1,'bia::compiler::compiler_value::value()']]],
   ['value_5ftype',['VALUE_TYPE',['../classbia_1_1compiler_1_1compiler__value.html#a142ac3a20cbb703e40fb8ea2d4d412b5',1,'bia::compiler::compiler_value::VALUE_TYPE()'],['../classbia_1_1machine_1_1memory_1_1stl__allocator__wrapper.html#a36f4db3880ffc7ae5f1178a86fdd34f3',1,'bia::machine::memory::stl_allocator_wrapper::value_type()'],['../classbia_1_1machine_1_1variable__index.html#a890ea74d05fcc9af4a055c6952bda70d',1,'bia::machine::variable_index::value_type()']]],
   ['varg_5fmember_5ffunction_5fsignature',['varg_member_function_signature',['../config_8hpp.html#a73d321d6793a82252dfc62bd97c9a9e2',1,'config.hpp']]],
@@ -8,5 +9,8 @@ var searchData=
   ['varg_5fmember_5fpasser_2ehpp',['varg_member_passer.hpp',['../varg__member__passer_8hpp.html',1,'']]],
   ['variable_5findex',['variable_index',['../classbia_1_1machine_1_1variable__index.html',1,'bia::machine::variable_index'],['../classbia_1_1machine_1_1variable__index.html#ade66c158003f81cfe50f2b03a359f9ff',1,'bia::machine::variable_index::variable_index()']]],
   ['variable_5findex_2ehpp',['variable_index.hpp',['../variable__index_8hpp.html',1,'']]],
-  ['version',['version',['../classbia_1_1machine_1_1modular_1_1module__library.html#a27c8430b0725683d101ee5c8741b7ef0',1,'bia::machine::modular::module_library']]]
+  ['version',['version',['../classbia_1_1machine_1_1modular_1_1module__library.html#a27c8430b0725683d101ee5c8741b7ef0',1,'bia::machine::modular::module_library']]],
+  ['virtual_5fobject',['virtual_object',['../classbia_1_1utility_1_1virtual__object.html',1,'bia::utility::virtual_object&lt; Default, Types &gt;'],['../classbia_1_1utility_1_1virtual__object.html#a18d82da24814bc775196865129f5f7ef',1,'bia::utility::virtual_object::virtual_object()']]],
+  ['virtual_5fobject_2ehpp',['virtual_object.hpp',['../virtual__object_8hpp.html',1,'']]],
+  ['virtual_5fobject_3c_20bia_3a_3aencoding_3a_3aencoder_2c_20bia_3a_3aencoding_3a_3aascii_2c_20bia_3a_3aencoding_3a_3autf8_20_3e',['virtual_object&lt; bia::encoding::encoder, bia::encoding::ascii, bia::encoding::utf8 &gt;',['../classbia_1_1utility_1_1virtual__object.html',1,'bia::utility']]]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
   ['filler_5ftoken',['filler_token',['../structbia_1_1grammar_1_1flags.html#a323f6454fd4a7c98fc2a454bfb1e3581',1,'bia::grammar::flags']]],
-  ['first',['first',['../classbia_1_1machine_1_1memory_1_1allocation.html#adfa6d1a1bcb0caaf0df51a7abc2f8944',1,'bia::machine::memory::allocation']]]
+  ['first',['first',['../classbia_1_1machine_1_1memory_1_1allocation.html#adfa6d1a1bcb0caaf0df51a7abc2f8944',1,'bia::machine::memory::allocation::first()'],['../structbia_1_1framework_1_1object_1_1class__template_1_1data__pair.html#aa67bdc2101e1647257751cfe152fce84',1,'bia::framework::object::class_template::data_pair::first()'],['../structbia_1_1framework_1_1object_1_1instance__holder_1_1data__pair.html#a8e8e47e0174525861c1b77d3c7102ce9',1,'bia::framework::object::instance_holder::data_pair::first()']]],
+  ['float_5fvalue',['float_value',['../unionbia_1_1framework_1_1native_1_1big__int__member_1_1tmp__value.html#a1a6a84fabef6d2ba77155cc5c8cf3100',1,'bia::framework::native::big_int_member::tmp_value::float_value()'],['../unionbia_1_1framework_1_1native_1_1double__member_1_1tmp__value.html#a6ab22945cac5c583d2841e08c365c7ac',1,'bia::framework::native::double_member::tmp_value::float_value()'],['../unionbia_1_1framework_1_1native_1_1int__member_1_1tmp__value.html#a338e39e268e986ab46c077d72ab612dc',1,'bia::framework::native::int_member::tmp_value::float_value()']]]
 ];

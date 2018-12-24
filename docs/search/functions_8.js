@@ -1,14 +1,17 @@
 var searchData=
 [
   ['id',['id',['../classbia_1_1grammar_1_1interpreter__rule.html#a3b9c47f3f9865c1538dc2009e4a20d1b',1,'bia::grammar::interpreter_rule']]],
-  ['identifier',['identifier',['../classbia_1_1grammar_1_1interpreter__token.html#a93eb672a40a0896be2ab9178ce6023b0',1,'bia::grammar::interpreter_token']]],
+  ['identifier',['identifier',['../classbia_1_1grammar_1_1interpreter__token.html#a5859cbd8d5dc24679fe7b639d024de5c',1,'bia::grammar::interpreter_token']]],
   ['implementation_5ferror',['implementation_error',['../classbia_1_1exception_1_1implementation__error.html#abb5f544b5b71f21fdf6619317a75d995',1,'bia::exception::implementation_error']]],
   ['import_5fmodule',['import_module',['../classbia_1_1machine_1_1machine__context.html#a2eefd9454af39f795bc30c2c95c17adf',1,'bia::machine::machine_context']]],
+  ['in_5flist',['in_list',['../classbia_1_1common_1_1common__names.html#a96cb4adfa296a6e54f436c1f0e4caeb9',1,'bia::common::common_names']]],
   ['init_5ffunction_5fmap',['init_function_map',['../classbia_1_1machine_1_1disassembler.html#a62d54030c416ba18573168061bb33ee3',1,'bia::machine::disassembler']]],
   ['init_5finstructions',['init_instructions',['../classbia_1_1machine_1_1disassembler.html#a1146252c934037fbcd1a050f006936ed',1,'bia::machine::disassembler']]],
   ['init_5frules',['init_rules',['../classbia_1_1grammar_1_1syntax.html#aaef7d4480ad70472347026147105afd0',1,'bia::grammar::syntax']]],
+  ['initialize',['initialize',['../classbia_1_1machine_1_1memory_1_1big__int__allocator.html#abdbc6190a8e8edf6aeadbe71286215be',1,'bia::machine::memory::big_int_allocator']]],
   ['instance_5fholder',['instance_holder',['../classbia_1_1framework_1_1object_1_1instance__holder.html#a951a02c57ace01cdb9a7d6a06db23aa9',1,'bia::framework::object::instance_holder']]],
   ['instantiate',['instantiate',['../classbia_1_1force_1_1initiator.html#ac997e600597e651c09f42e2644eed04e',1,'bia::force::initiator::instantiate()'],['../classbia_1_1force_1_1real__initiator.html#a999c95df8b8e45804aefba7edf1eab20',1,'bia::force::real_initiator::instantiate()']]],
+  ['instantiate_5fbig_5fint',['instantiate_big_int',['../namespacebia_1_1machine_1_1link.html#ac38e4c3760171cc5bcf47798dc2acdc1',1,'bia::machine::link']]],
   ['instantiate_5fcount',['instantiate_count',['../classbia_1_1force_1_1initiator.html#a360d9f378b27a2e9eeeab4e2954d8b70',1,'bia::force::initiator::instantiate_count()'],['../classbia_1_1force_1_1real__initiator.html#a6f972147058f66972556d51af5ad31e4',1,'bia::force::real_initiator::instantiate_count()']]],
   ['instantiate_5fdouble',['instantiate_double',['../namespacebia_1_1machine_1_1link.html#a17a581a25f91ce6776f2cda8d5b103d8',1,'bia::machine::link']]],
   ['instantiate_5fformat',['instantiate_format',['../classbia_1_1force_1_1initiator.html#a15d03e5334a7053d98dcaeac541d9df6',1,'bia::force::initiator::instantiate_format()'],['../classbia_1_1force_1_1real__initiator.html#a29c314675d2cbeefd8c12b166149392a',1,'bia::force::real_initiator::instantiate_format()']]],
@@ -21,6 +24,7 @@ var searchData=
   ['instantiate_5fstring16',['instantiate_string16',['../namespacebia_1_1machine_1_1link.html#af8d5e44376824cb3297a009afb3bb6e4',1,'bia::machine::link']]],
   ['instantiate_5fstring32',['instantiate_string32',['../namespacebia_1_1machine_1_1link.html#a68ee1ec1738bf99c0c9fde7d53dfbc07',1,'bia::machine::link']]],
   ['instantiate_5fwstring',['instantiate_wstring',['../namespacebia_1_1machine_1_1link.html#aefe326ac0041ac9d83d09652d9118a23',1,'bia::machine::link']]],
+  ['int_5fmember',['int_member',['../classbia_1_1framework_1_1native_1_1int__member.html#a098788a42ca6e993d49f42fd4c4c594b',1,'bia::framework::native::int_member::int_member(int32_t _value)'],['../classbia_1_1framework_1_1native_1_1int__member.html#ab47718b02454a163aa609b85cdb3094e',1,'bia::framework::native::int_member::int_member(int64_t _value)'],['../classbia_1_1framework_1_1native_1_1int__member.html#a6893e3ac8ce1ab5151442c09c79bae1e',1,'bia::framework::native::int_member::int_member(const data_type &amp;_data) noexcept']]],
   ['integral_5foperation',['integral_operation',['../namespacebia_1_1framework_1_1native.html#a9f3d11bed90327e7890ebbcfd64af611',1,'bia::framework::native']]],
   ['interpret',['interpret',['../classbia_1_1grammar_1_1interpreter.html#aa66118184a383859e07d81c32569f5ac',1,'bia::grammar::interpreter']]],
   ['interpreter',['interpreter',['../classbia_1_1grammar_1_1syntax.html#a94ff61e3a6aa8fea2518e8c68e88701c',1,'bia::grammar::syntax']]],
@@ -36,5 +40,6 @@ var searchData=
   ['is_5fint32',['is_int32',['../classbia_1_1compiler_1_1compiler__value.html#a196fa6e5d74b53a7c62c08b115648cbd',1,'bia::compiler::compiler_value']]],
   ['is_5fone_5fbyte_5fvalue',['is_one_byte_value',['../namespacebia_1_1machine_1_1platform.html#ad4453738eb2faa0514189f422cce368e',1,'bia::machine::platform::is_one_byte_value(Type _value) noexcept'],['../namespacebia_1_1machine_1_1platform.html#a6addea459f08da574631094a35a1b4fe',1,'bia::machine::platform::is_one_byte_value(int32_t _value) noexcept'],['../namespacebia_1_1machine_1_1platform.html#a9531248a4b9fb8afcbb888f7a7000f21',1,'bia::machine::platform::is_one_byte_value(uint32_t _value) noexcept']]],
   ['is_5freserved',['is_reserved',['../classbia_1_1encoding_1_1encoder.html#af1962b947d51dbd497a0389c462ebdc7',1,'bia::encoding::encoder']]],
-  ['is_5fvalid',['is_valid',['../classbia_1_1utility_1_1guard.html#a185968d4daef762d398dee2c2473e7e5',1,'bia::utility::guard']]]
+  ['is_5fvalid',['is_valid',['../classbia_1_1utility_1_1guard.html#a185968d4daef762d398dee2c2473e7e5',1,'bia::utility::guard']]],
+  ['is_5fzero',['is_zero',['../classbia_1_1dependency_1_1big__int.html#a50a30aafa890523e4c4a354732687331',1,'bia::dependency::big_int']]]
 ];
