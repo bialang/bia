@@ -11,6 +11,7 @@ test::add("add", &big_int_test::test_add);
 test::add("sub", &big_int_test::test_sub);
 test::add("mul", &big_int_test::test_mul);
 test::add("div", &big_int_test::test_div);
+test::add("mod", &big_int_test::test_mod);
 test::add("power", &big_int_test::test_power);
 END_DECLARE_TESTS
 
@@ -309,6 +310,140 @@ void big_int_test::test_div()
 	_int.divide("9895665555555845132");
 
 	test::template assert_equals<int64_t>(_int.to_int(), -59, "-590295810358705651712 / 9895665555555845132");
+}
+
+void big_int_test::test_mod()
+{
+	_int.set(1);
+
+	try {
+		_int.modulo(0);
+
+		test::fail("Division by zero should fail.");
+	} catch (const bia::exception::zero_division_error&) {}
+
+	_int.set(9566);
+	_int.modulo(std::numeric_limits<int64_t>::max());
+
+	test::template assert_equals<int64_t>(_int.to_int(), 9566, "9566 % max(int64)");
+
+	_int.set(-9566);
+	_int.modulo(std::numeric_limits<int64_t>::max());
+
+	test::template assert_equals<int64_t>(_int.to_int(), 9223372036854766241, "-9566 % max(int64)");
+
+	_int.set(9566);
+	_int.modulo(std::numeric_limits<int64_t>::min());
+
+	test::template assert_equals<int64_t>(_int.to_int(), -9223372036854766242, "9566 % min(int64)");
+
+	_int.set(-9566);
+	_int.modulo(std::numeric_limits<int64_t>::min());
+
+	test::template assert_equals<int64_t>(_int.to_int(), -9566, "-9566 % min(int64)");
+	
+	// Sign checking
+	_int.set(9566);
+	_int.modulo(3);
+
+	test::template assert_equals<int64_t>(_int.to_int(), 2, "9566 % 3");
+
+	_int.set(-9566);
+	_int.modulo(-3);
+	
+	test::template assert_equals<int64_t>(_int.to_int(), -2, "-9566 % (-3)");
+
+	_int.set(-9566);
+	_int.modulo(3);
+
+	test::template assert_equals<int64_t>(_int.to_int(), 1, "-9566 % 3");
+
+	_int.set(9566);
+	_int.modulo(-3);
+
+	test::template assert_equals<int64_t>(_int.to_int(), -1, "9566 % (-3)");
+
+	_int.set(9568);
+	_int.modulo(3);
+
+	test::template assert_equals<int64_t>(_int.to_int(), 1, "9568 % 3");
+
+	_int.set(-9568);
+	_int.modulo(-3);
+
+	test::template assert_equals<int64_t>(_int.to_int(), -1, "-9568 % (-3)");
+
+	_int.set(-9568);
+	_int.modulo(3);
+
+	test::template assert_equals<int64_t>(_int.to_int(), 2, "-9568 % 3");
+
+	_int.set(9568);
+	_int.modulo(-3);
+
+	test::template assert_equals<int64_t>(_int.to_int(), -2, "9568 % (-3)");
+
+	// Big integers
+	_int.set("2555682719864735315808193834271872");
+	_int.modulo("555682719864735315808193871872");
+
+	try {
+		_int.to_int();
+
+		test::fail("Integer should overflow.");
+	} catch (const bia::exception::overflow_error&) {
+		_int.to_string(_builder);
+
+		test::assert_equals(_builder.buffer<char>(), "97891206817598406310217532544", "2555682719864735315808193834271872 % 555682719864735315808193871872");
+	}
+
+	_int.set("-2555682719864735315808193834271872");
+	_int.modulo("-555682719864735315808193871872");
+
+	try {
+		_int.to_int();
+
+		test::fail("Integer should underflow.");
+	} catch (const bia::exception::overflow_error&) {
+		_int.to_string(_builder);
+
+		test::assert_equals(_builder.buffer<char>(), "-97891206817598406310217532544", "-2555682719864735315808193834271872 % (-555682719864735315808193871872)");
+	}
+
+	_int.set("-2555682719864735315808193834271872");
+	_int.modulo("555682719864735315808193871872");
+	_int.to_string(_builder);
+
+	test::assert_equals(_builder.buffer<char>(), "457791513047136909497976339328", "-2555682719864735315808193834271872 % 555682719864735315808193871872");
+
+	_int.set("2555682719864735315808193834271872");
+	_int.modulo("-555682719864735315808193871872");
+	_int.to_string(_builder);
+
+	test::assert_equals(_builder.buffer<char>(), "-457791513047136909497976339328", "2555682719864735315808193834271872 % (-555682719864735315808193871872)");
+
+	// Big integers
+	_int.set("555682719864735315808193834271872");
+	_int.modulo("555682719864735315808193871872");
+	_int.to_string(_builder);
+
+	test::assert_equals(_builder.buffer<char>(), "555682719864735315808156271744", "555682719864735315808193834271872 % 555682719864735315808193871872");
+
+	_int.set("-555682719864735315808193834271872");
+	_int.modulo("-555682719864735315808193871872");
+	_int.to_string(_builder);
+
+	test::assert_equals(_builder.buffer<char>(), "-555682719864735315808156271744", "-555682719864735315808193834271872 % (-555682719864735315808193871872)");
+
+	_int.set("-555682719864735315808193834271872");
+	_int.modulo("555682719864735315808193871872");
+
+	test::template assert_equals<int64_t>(_int.to_int(), 37600128, "-555682719864735315808193834271872 % 555682719864735315808193871872");
+
+	_int.set("555682719864735315808193834271872");
+	_int.modulo("-555682719864735315808193871872");
+
+	test::template assert_equals<int64_t>(_int.to_int(), -37600128, "555682719864735315808193834271872 % (-555682719864735315808193871872)");
 }
 
 void big_int_test::test_power()

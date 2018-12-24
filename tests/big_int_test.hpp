@@ -19,6 +19,7 @@ public:
   void test_sub();
   void test_mul();
   void test_div();
+  void test_mod();
   void test_power();
 
 private:
