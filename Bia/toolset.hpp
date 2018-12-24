@@ -58,7 +58,7 @@ public:
 	 *
 	 * @throws See architecture::instruction().
 	*/
-	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output), _global_passer(_output)
+	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output), _global_passer(&_output)
 	{
 		this->_context = _context;
 
@@ -147,6 +147,7 @@ public:
 	void set_output(stream::output_stream & _output) noexcept
 	{
 		this->_output = &_output;
+		_global_passer.set_output(&_output);
 	}
 	/**
 	 * Performs a static function call.
@@ -457,41 +458,44 @@ public:
 }
 	void write_test()
 	{
-		instruction<OP_CODE::XOR, eax, eax>(*_output);
+		instruction<OP_CODE::TEST, eax, eax>(*_output);
 	}
 	varg_member_passer create_varg_passer() noexcept
 	{
 		return varg_member_passer(_global_passer);
 	}
-	position jump(JUMP _type, position _destination = 0, position _start = -1)
+	position jump(JUMP _type, position _destination = 0, position _overwrite_pos = -1)
 	{
 		auto _old = _output->position();
+		auto _current = _old;
 
 		// Override
-		if (_start != -1) {
-			_output->set_position(_start);
+		if (_overwrite_pos != -1) {
+			_current = _overwrite_pos;
+
+			_output->set_position(_overwrite_pos);
 		}
 
 		switch (_type) {
 		case JUMP::JUMP:
-			instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _start);
+			instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _current);
 
 			break;
 		case JUMP::JUMP_IF_TRUE:
-			instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _start);
+			instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _current);
 
 			break;
 		case JUMP::JUMP_IF_FALSE:
-			instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _start);
+			instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _current);
 
 			break;
 		}
 
 		// Go back
-		if (_start != -1) {
+		if (_overwrite_pos != -1) {
 			_output->set_position(_old);
 
-			return _start;
+			return _overwrite_pos;
 		}
 
 		return _old;

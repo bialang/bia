@@ -6,6 +6,7 @@
 #include "encoder.hpp"
 #include "ascii.hpp"
 #include "utf8.hpp"
+#include "virtual_object.hpp"
 
 
 namespace bia
@@ -16,7 +17,9 @@ namespace stream
 /**
  * @brief A string stream.
  *
- * A string stream for creating string with the right encoding.
+ * A string stream for creating string with the right encoding and format for internal use.
+ *
+ * @see @ref machine::string_manager, @ref grammar::interpreter_token::string
 */
 class string_stream
 {
@@ -66,11 +69,10 @@ public:
 	 * @date 3-Aug-18
 	 *
 	 * @throws See machine::memory::allocator::destroy().
+	 * @throws See utility::virtual_object::~virtual_object().
 	*/
 	~string_stream()
 	{
-		_allocator->destroy(_encoder);
-
 		// Deallocate buffer
 		if (_buffer) {
 			_allocator->deallocate(_buffer);
@@ -84,19 +86,17 @@ public:
 	 *
 	 * @param _codec One of the supported string encodings.
 	 *
-	 * @throws See machine::memory::allocator::destroy() and machine::memory::allocator::construct().
+	 * @throws See utility::virtual_object::reconstruct().
 	*/
 	void set_codec(CODEC _codec)
 	{
-		_allocator->destroy(_encoder);
-
 		switch (_codec) {
 		case CODEC::ASCII:
-			_encoder = _allocator->construct<encoding::encoder, encoding::ascii>();
+			_encoder.template reconstruct<encoding::ascii>();
 
 			break;
 		case CODEC::UTF8:
-			_encoder = _allocator->construct<encoding::encoder, encoding::utf8>();
+			_encoder.template reconstruct<encoding::utf8>();
 
 			break;
 		case CODEC::UTF16:
@@ -114,12 +114,14 @@ public:
 	 * @param _code_point The character.
 	 *
 	 * @throws See machine::memory::allocator::reallocate().
+	 * @throws See encoding::encoder::append().
 	*/
 	void append(encoding::code_point _code_point)
 	{
 		while (true) {
 			try {
 				_encoder->append(_code_point, _cursor, _end);
+
 				++_length;
 
 				break;
@@ -176,22 +178,18 @@ public:
 		return _length;
 	}
 	/**
-	 * Returns the formatted string.
+	 * Returns the formatted string buffer.
 	 *
-	 * @remarks This function can only be called once and if finish() was not called, the behavior is undefined. The string must be deallocated with same @ref machine::memory::allocator. The string is formatted as follows: (size) + (length) + (zero-terminated string)
+	 * @remarks If the buffer is moved, ownership of the buffer will be transfered and the string buffer will be cleared. This string stream should not be used after a buffer ownership transfer. The string is formatted as follows: (size) + (length) + (zero-terminated string)
 	 *
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
 	 *
-	 * @return The formatted string.
+	 * @return The formatted string buffer.
 	*/
-	int8_t * buffer() noexcept
+	machine::memory::universal_allocation & buffer() noexcept
 	{
-		auto _string = static_cast<int8_t*>(_buffer.first);
-
-		_buffer.clear();
-
-		return _string;
+		return _buffer;
 	}
 	/**
 	 * The total offset until the start of the string.
@@ -231,55 +229,63 @@ public:
 	}
 	/**
 	 * Returns the size of the buffer.
-
+	 *
 	 * @remarks The @a _buffer must be from buffer(), otherwise the behavior is undefined.
 	 *
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
+	 *
+	 * @param _buffer The buffer retrieved by buffer().
 	 *
 	 * @return The size.
 	*/
-	static size_type size(const int8_t * _buffer) noexcept
+	static size_type size(const void * _buffer) noexcept
 	{
-		return *reinterpret_cast<const size_type*>(_buffer + size_offset());
+		return *reinterpret_cast<const size_type*>(static_cast<const int8_t*>(_buffer) + size_offset());
 	}
 	/**
 	 * Returns the length of the string.
-
+	 *
 	 * @remarks The @a _buffer must be from buffer(), otherwise the behavior is undefined.
 	 *
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
+	 *
+	 * @param _buffer The buffer retrieved by buffer().
 	 *
 	 * @return The length.
 	*/
-	static length_type length(const int8_t * _buffer) noexcept
+	static length_type length(const void * _buffer) noexcept
 	{
-		return *reinterpret_cast<const length_type*>(_buffer + length_offset());
+		return *reinterpret_cast<const length_type*>(static_cast<const int8_t*>(_buffer) + length_offset());
 	}
 	/**
 	 * Returns the string.
-
+	 *
 	 * @remarks The @a _buffer must be from buffer(), otherwise the behavior is undefined.
 	 *
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
 	 *
+	 * @tparam Char_type The desired char type.
+	 *
+	 * @param _buffer The buffer retrieved by buffer().
+	 *
 	 * @return The string.
 	*/
-	template<typename _Char>
-	static const _Char * string(const int8_t * _buffer) noexcept
+	template<typename Char_type>
+	static const Char_type * string(const void * _buffer) noexcept
 	{
-		return reinterpret_cast<const _Char*>(_buffer + offset());
+		return reinterpret_cast<const Char_type*>(static_cast<const int8_t*>(_buffer) + offset());
 	}
 
 private:
 	/** The memory allocator. */
 	machine::memory::allocator * _allocator;
-	/** The string encoder. */
-	machine::memory::allocation<encoding::encoder> _encoder;
 	/** The allocated space. */
 	machine::memory::universal_allocation _buffer;
+	/** The string encoder. */
+	utility::virtual_object<encoding::encoder, encoding::ascii, encoding::utf8> _encoder;
 	/** The current position. */
 	int8_t * _cursor;
 	/** The end of the buffer. */

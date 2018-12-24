@@ -17,13 +17,13 @@ namespace object
 template<typename _Ty, typename... _Args>
 inline member * member_map::emplace(name_type _name, _Args &&... _args)
 {
-	auto _result = _data.get().find(_name);
+	auto _result = _data.get().data.find(_name);
 
 	// Create new
-	if (_result == _data.get().end()) {
-		auto _member = machine::machine_context::active_allocator()->template construct_block0<member, _Ty>(std::forward<_Args>(_args)...);
+	if (_result == _data.get().data.end()) {
+		auto _member = machine::machine_context::active_member_allocator()->template construct_member<_Ty>(std::forward<_Args>(_args)...);
 
-		_data.get().emplace(_name, _member);
+		_data.get().data.emplace(_name, _member);
 		
 		return _member.first;
 	} else {

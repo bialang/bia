@@ -49,10 +49,12 @@
 #endif
 
 // Export
-#if defined(BIA_BUILD_SHARED) && defined(BIA_BUILDING)
+#if defined(BIA_BUILD_SHARED)
+#if defined(BIA_BUILDING)
 #define BIA_EXPORT __declspec(dllexport)
-#elif defined(BIA_BUILD_SHARED)
+#else
 #define BIA_EXPORT __declspec(dllimport)
+#endif
 #else
 #define BIA_EXPORT
 #endif
@@ -90,6 +92,7 @@ template<typename _Class, typename _Return, typename... _Args>
 using varg_member_function_signature = _Return(BIA_VARG_MEMBER_CALLING_CONVENTION _Class::*)(_Args..., ...);
 
 // Universal macros
+#define BIA_MIN_INT_SIZE 64
 #define BIA_MAX_KEYWORD_LENGTH 16
 #define BIA_MAX_OPERATOR_LENGTH 4
 /** The minimum buffer size of stream::input_stream::get_buffer(). */

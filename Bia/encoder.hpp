@@ -62,6 +62,7 @@ public:
 	}
 	//virtual int start(const int8_t * _begin, const int8_t * _end) = 0;
 	virtual code_point next(const int8_t *& _begin, const int8_t * _end) = 0;
+	virtual code_point peek(const int8_t * _begin, const int8_t * _end) = 0;
 };
 
 }

@@ -65,6 +65,12 @@ inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_ca
 }
 
 template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+}
+
+template<typename Char_type>
 inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_double(member * _destination, operator_type _operator, double _right)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
@@ -122,6 +128,15 @@ template<typename Char_type>
 inline double cstring_member<Char_type>::to_double() const
 {
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Char_type>
+inline const char * cstring_member<Char_type>::to_cstring(utility::buffer_builder * _builder) const
+{
+	///TODO
+//	static_assert(std::is_same<Char_type, char>::value, "Unsupported char type");
+
+	return reinterpret_cast<const char*>(std::get<0>(_data.get()));
 }
 
 template<typename Char_type>

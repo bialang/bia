@@ -66,20 +66,27 @@ $(function() {
 &#160;
 
 <h3><a id="index_a"></a>- a -</h3><ul>
-<li>access_violation()
-: <a class="el" href="classbia_1_1exception_1_1access__violation.html#ac418c373120c7b8f2abbdf3656c64b41">bia::exception::access_violation</a>
-</li>
 <li>activate_context()
 : <a class="el" href="classbia_1_1machine_1_1machine__context.html#a63cbb95265f6cd9f828ddc73340ef3db">bia::machine::machine_context</a>
 </li>
 <li>active_allocator()
 : <a class="el" href="classbia_1_1machine_1_1machine__context.html#a1a446a4ea19a021a644a892cd922364a">bia::machine::machine_context</a>
 </li>
+<li>active_big_int_allocator()
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#a4998835e7ccefc6eedee0a9f2bfecf83">bia::machine::machine_context</a>
+</li>
+<li>active_buffer_builder()
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#ae17fb1ec9fa0248f6e3f7606fb71d3a7">bia::machine::machine_context</a>
+</li>
 <li>active_context()
 : <a class="el" href="classbia_1_1machine_1_1machine__context.html#a2ec453dc133ec80960a60ee51e49e19f">bia::machine::machine_context</a>
 </li>
+<li>active_member_allocator()
+: <a class="el" href="classbia_1_1machine_1_1machine__context.html#aaf61ee7b93d630cef5cf6d40dbb0d752">bia::machine::machine_context</a>
+</li>
 <li>add()
-: <a class="el" href="classbia_1_1grammar_1_1report__bundle.html#a9d55a3041baf83f214c70983efc8ff7b">bia::grammar::report_bundle</a>
+: <a class="el" href="classbia_1_1dependency_1_1big__int.html#a205b9ae7590527e66bd4436a27cd2e1e">bia::dependency::big_int</a>
+, <a class="el" href="classbia_1_1grammar_1_1report__bundle.html#a9d55a3041baf83f214c70983efc8ff7b">bia::grammar::report_bundle</a>
 , <a class="el" href="classbia_1_1machine_1_1variable__index.html#a721ab697f9a1998855474d374f2026a4">bia::machine::variable_index</a>
 </li>
 <li>address_of_member()
@@ -87,14 +94,18 @@ $(function() {
 </li>
 <li>allocate()
 : <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#ab132a440dbeca705a7d6273d6f18672b">bia::machine::memory::allocator</a>
+, <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#a8f63bff2a1e29a2129c53e44cbc01c9f">bia::machine::memory::big_int_allocator</a>
 , <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a1734b183e9ea2ebd12fe55e813b03189">bia::machine::memory::simple_allocator</a>
 , <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#ad530f0b19d8fdc2d345e967c5bb1feb2">bia::machine::memory::simple_executable_allocator</a>
 , <a class="el" href="classbia_1_1machine_1_1memory_1_1stl__allocator__wrapper.html#a9adcd8e3c9e985ddaa4611a7c9dde8fa">bia::machine::memory::stl_allocator_wrapper&lt; Type &gt;</a>
 </li>
-<li>allocate_blocks()
-: <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html#a15c1380255154fccfe67527208ca6781">bia::machine::memory::allocator</a>
-, <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#a0815632af32397d4f88d7298af90992f">bia::machine::memory::simple_allocator</a>
-, <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#a4c7dabcbbc02fd1abc856b4a0d7aa87c">bia::machine::memory::simple_executable_allocator</a>
+<li>allocate_big_int()
+: <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#a807c2d35dddabc074e7e73233bc359e0">bia::machine::memory::big_int_allocator</a>
+, <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#afa6d40ec262960d45ec56b059ee38331">bia::machine::memory::simple_allocator</a>
+</li>
+<li>allocate_member()
+: <a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html#a7ea904520687ecfa3f738a216149640b">bia::machine::memory::member_allocator</a>
+, <a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#ab88b70689a86d55bae80b8a6f07d98a4">bia::machine::memory::simple_allocator</a>
 </li>
 <li>allocation()
 : <a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html#a2ebe620dd2b2a8c3a7a76148a9a38e21">bia::machine::memory::allocation&lt; Type &gt;</a>
@@ -115,11 +126,11 @@ $(function() {
 : <a class="el" href="classbia_1_1stream_1_1buffer__output__stream.html#add328e9e12918851b24e849717478e1d">bia::stream::buffer_output_stream</a>
 , <a class="el" href="classbia_1_1stream_1_1output__stream.html#afc9a4cf560b2f2d35d634fce7abb9387">bia::stream::output_stream</a>
 </li>
-<li>argument_error()
-: <a class="el" href="classbia_1_1exception_1_1argument__error.html#aeecc8c4d2a21cf238f7bd9d8c7c08864">bia::exception::argument_error</a>
+<li>arithmetic_right_shift()
+: <a class="el" href="classbia_1_1dependency_1_1big__int.html#ad39f352c3f65e1d1cc63a65b42806e7c">bia::dependency::big_int</a>
 </li>
 <li>assign_operator()
-: <a class="el" href="classbia_1_1grammar_1_1interpreter__token.html#a53341d01dd116a0ca885f3c8df8e5e64">bia::grammar::interpreter_token</a>
+: <a class="el" href="classbia_1_1grammar_1_1interpreter__token.html#a7a658d27731f3a8578ecb441bd7140ae">bia::grammar::interpreter_token</a>
 </li>
 <li>available()
 : <a class="el" href="classbia_1_1stream_1_1buffer__input__stream.html#a4a71244435262f6a42af48f9bb40c89b">bia::stream::buffer_input_stream</a>

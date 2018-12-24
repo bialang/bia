@@ -70,32 +70,24 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">native_operator.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;type_traits&gt;</code><br />
-<code>#include &quot;<a class="el" href="type__traits_8hpp_source.html">type_traits.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="type__traits_8hpp_source.html">type_traits.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="operator_8hpp_source.html">operator.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="exception_8hpp_source.html">exception.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="member_8hpp_source.html">member.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="create__member_8hpp_source.html">create_member.hpp</a>&quot;</code><br />
 </div>
 <p><a href="native__operator_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1framework_1_1native_1_1operation__type__chooser.html">bia::framework::native::operation_type_chooser&lt; _Both_integral &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1framework_1_1native_1_1native__operation.html">bia::framework::native::native_operation&lt; Allow_assign &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1framework_1_1native_1_1operation__type__chooser_3_01true_01_4.html">bia::framework::native::operation_type_chooser&lt; true &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1framework_1_1native_1_1operation__type__chooser_3_01false_01_4.html">bia::framework::native::operation_type_chooser&lt; false &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1framework_1_1native_1_1operation__chooser.html">bia::framework::native::operation_chooser&lt; Type, Allow_assign &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1framework_1_1native_1_1operation__chooser_3_01_type_00_01true_01_4.html">bia::framework::native::operation_chooser&lt; Type, true &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1framework_1_1native_1_1operation__chooser_3_01_type_00_01false_01_4.html">bia::framework::native::operation_chooser&lt; Type, false &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbia_1_1framework_1_1native_1_1native__operation_3_01false_01_4.html">bia::framework::native::native_operation&lt; false &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -106,15 +98,6 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacebia_1_1framework_1_1native"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework_1_1native.html">bia::framework::native</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a0c2d6cb6e90c9fa0376b82f2eb97eafa"><td class="memTemplParams" colspan="2">template&lt;typename Left , typename Right &gt; </td></tr>
-<tr class="memitem:a0c2d6cb6e90c9fa0376b82f2eb97eafa"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework_1_1native.html#a0c2d6cb6e90c9fa0376b82f2eb97eafa">bia::framework::native::operation_type_chooser_lr</a> = operation_type_chooser&lt;(std::is_integral&lt; Left &gt;::value &amp;&amp;std::is_integral&lt; Right &gt;::value)&gt;</td></tr>
-<tr class="separator:a0c2d6cb6e90c9fa0376b82f2eb97eafa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad25d42b4d80d5a1c60a2fc9ae85af9fa"><td class="memTemplParams" colspan="2">template&lt;typename Type , bool Allow_assign = utility::negation&lt;std::is_const&lt;Type&gt;::value&gt;::value&gt; </td></tr>
-<tr class="memitem:ad25d42b4d80d5a1c60a2fc9ae85af9fa"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacebia_1_1framework_1_1native.html#ad25d42b4d80d5a1c60a2fc9ae85af9fa">bia::framework::native::operation_chooser_l</a> = operation_chooser&lt; Type, Allow_assign &gt;</td></tr>
-<tr class="separator:ad25d42b4d80d5a1c60a2fc9ae85af9fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>

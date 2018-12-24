@@ -83,11 +83,17 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An allocator interface.  <a href="classbia_1_1machine_1_1memory_1_1allocator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html">big_int_allocator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory for big ints.  <a href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">executable_allocator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An extension to <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a>.  <a href="classbia_1_1machine_1_1memory_1_1executable__allocator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html">member_allocator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates enough space for all members.  <a href="classbia_1_1machine_1_1memory_1_1member__allocator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__allocator.html">simple_allocator</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple implementation of <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a>.  <a href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple implementation of <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">allocator</a>, <a class="el" href="classbia_1_1machine_1_1memory_1_1member__allocator.html">member_allocator</a> and  <a class="el" href="classbia_1_1machine_1_1memory_1_1big__int__allocator.html" title="Allocates memory for big ints. ">big_int_allocator</a>.  <a href="classbia_1_1machine_1_1memory_1_1simple__allocator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html">simple_executable_allocator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple implementation of <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">executable_allocator</a>.  <a href="classbia_1_1machine_1_1memory_1_1simple__executable__allocator.html#details">More...</a><br /></td></tr>
@@ -102,6 +108,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:abc49ee5d87514e614fe49b49a433b9cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58859a27b64a12d08407f17edfbed42f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; void &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">universal_allocation</a></td></tr>
 <tr class="separator:a58859a27b64a12d08407f17edfbed42f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a845fd3fd77fccce3a5b7511b8a8cf83c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt; <a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">big_int_allocation</a></td></tr>
+<tr class="separator:a845fd3fd77fccce3a5b7511b8a8cf83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -110,6 +118,20 @@ Functions</h2></td></tr>
 <tr class="separator:a53aa5e733cd701004f83a9500580840f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
+<a id="a845fd3fd77fccce3a5b7511b8a8cf83c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a845fd3fd77fccce3a5b7511b8a8cf83c">&#9670;&nbsp;</a></span>big_int_allocation</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classbia_1_1machine_1_1memory_1_1allocation.html">allocation</a>&lt;<a class="el" href="classbia_1_1dependency_1_1big__int.html">dependency::big_int</a>&gt; <a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">bia::machine::memory::big_int_allocation</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abc49ee5d87514e614fe49b49a433b9cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abc49ee5d87514e614fe49b49a433b9cd">&#9670;&nbsp;</a></span>size_type</h2>
 

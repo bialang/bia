@@ -7,6 +7,7 @@
 #include "report_bundle.hpp"
 #include "input_stream.hpp"
 #include "machine_context.hpp"
+#include "machine_schein.hpp"
 #include "encoder.hpp"
 
 
@@ -68,14 +69,21 @@ struct token_param
 	report::token_type token_id;
 	/** The corresponding machine context. */
 	machine::machine_context * context;
+	/** The machine schein of the resulting code. */
+	machine::machine_schein schein;
 	/** The decoder for the input stream. */
 	encoding::encoder * encoder;
+
+	token_param() : schein(nullptr, nullptr)
+	{
+
+	}
 };
 
 typedef report token_output;
 
 /** The interper token signature. */
-typedef ACTION(*bia_token_function)(stream::input_stream&, token_param, token_output&);
+typedef ACTION(*bia_token_function)(stream::input_stream&, token_param&, token_output&);
 
 /**
  * A rule for the grammar.
@@ -117,13 +125,13 @@ public:
 	 * @date 16-Sep-17
 	 *
 	 * @param [in] _input The input stream.
-	 * @param _token_param Token parameter for this rule.
+	 * @param [in] _token_param Token parameter for this rule.
 	 *
 	 * @return true if it succeeded, otherwise false.
 	 *
 	 * @throws
 	*/
-	BIA_EXPORT bool run_rule(stream::input_stream & _input, token_param _token_param) const;
+	BIA_EXPORT bool run_rule(stream::input_stream & _input, token_param & _token_param) const;
 	/**
 	 * Returns the id of this rule.
 	 *
@@ -149,9 +157,9 @@ private:
 	 * @since 3.64.127.716
 	 * @date 16-Apr-18
 	 *
-	 * @param _token_param The parameter.
+	 * @param [in] _token_param The parameter.
 	*/
-	BIA_EXPORT void begin_wrap_up(token_param _token_param) const;
+	BIA_EXPORT void begin_wrap_up(token_param & _token_param) const;
 };
 
 }

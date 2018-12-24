@@ -97,6 +97,15 @@
     <Filter Include="Header Files\dependency">
       <UniqueIdentifier>{f03efed1-96d9-4cec-9b65-31f7391608d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dependency">
+      <UniqueIdentifier>{dbdee223-1bca-42f3-b81e-08be42573bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common">
+      <UniqueIdentifier>{91f841e8-df12-4670-a284-baa71fcff7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{b62cd1b3-3f84-4d0c-af28-a80977c9c1cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -173,6 +182,24 @@
     </ClCompile>
     <ClCompile Include="module_loader.cpp">
       <Filter>Source Files\machine\modular</Filter>
+    </ClCompile>
+    <ClCompile Include="double_member.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="big_int_allocator.cpp">
+      <Filter>Source Files\machine\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="big_int.cpp">
+      <Filter>Source Files\dependency</Filter>
+    </ClCompile>
+    <ClCompile Include="big_int_member.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="int_member.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="member_names.cpp">
+      <Filter>Source Files\common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,9 +470,6 @@
     <ClInclude Include="virtual_object.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="block_allocator.hpp">
-      <Filter>Header Files\machine\memory</Filter>
-    </ClInclude>
     <ClInclude Include="class_template_def.hpp">
       <Filter>Header Files\framework\object</Filter>
     </ClInclude>
@@ -476,11 +500,32 @@
     <ClInclude Include="cstring_member_def.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="native_member_def.hpp">
+    <ClInclude Include="double_member.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="native_member.hpp">
+    <ClInclude Include="big_int.hpp">
+      <Filter>Header Files\dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="big_int_allocator.hpp">
+      <Filter>Header Files\machine\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="member_allocator.hpp">
+      <Filter>Header Files\machine\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="big_int_member.hpp">
       <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="int_member.hpp">
+      <Filter>Header Files\framework\native</Filter>
+    </ClInclude>
+    <ClInclude Include="member_names.hpp">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="disguised_caller_source.hpp">
+      <Filter>Header Files\force</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer_builder.hpp">
+      <Filter>Header Files\utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

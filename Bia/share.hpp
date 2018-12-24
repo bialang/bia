@@ -1,7 +1,5 @@
 #pragma once
 
-#include <utility>
-
 #include "share_def.hpp"
 #include "machine_context.hpp"
 
@@ -15,47 +13,52 @@ template<typename Type>
 template<typename... Arguments>
 inline share<Type>::share(Arguments &&... _arguments)
 {
-	_data = machine::machine_context::active_allocator()->construct<data>(Type(std::forward<Arguments>(_arguments)...)).first;
+	_data = machine::machine_context::active_allocator()->construct<data>();
+
+	// Create object inplace
+	new(_data->first) Type(std::forward<Arguments>(_arguments)...);
 }
 
 template<typename Type>
 inline share<Type>::share(const share & _copy) noexcept
 {
 	_data = _copy._data;
-	_data->ref_counter.fetch_add(1, std::memory_order_relaxed);
+	_data->second.fetch_add(1, std::memory_order_relaxed);
 }
 
 template<typename Type>
 inline share<Type>::~share()
 {
-	if (!_data->ref_counter.fetch_sub(1, std::memory_order_release)) {
-		atomic_thread_fence(std::memory_order_acquire);
+	if (!_data->second.fetch_sub(1, std::memory_order_acq_rel)) {
+		// Destroy object
+		reinterpret_cast<Type*>(_data->first)->~Type();
 
 		machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_data, sizeof(data)));
 	}
 }
 
 template<typename Type>
-inline bool share<Type>::only_owner() const noexcept
-{
-	return _data->ref_counter.load() == 1;
-}
-
-template<typename Type>
 inline Type & share<Type>::get() noexcept
 {
-	return _data->object;
+	return *reinterpret_cast<Type*>(_data->first);
 }
 
 template<typename Type>
 inline const Type & share<Type>::get() const noexcept
 {
-	return _data->object;
+	return *reinterpret_cast<const Type*>(_data->first);
 }
 
 template<typename Type>
-inline share<Type>::data::data(Type && _object) : object(std::forward<Type>(_object)), ref_counter{ 1 }
+inline Type * share<Type>::operator->() noexcept
 {
+	return &get();
+}
+
+template<typename Type>
+inline const Type * share<Type>::operator->() const noexcept
+{
+	return &get();
 }
 
 }

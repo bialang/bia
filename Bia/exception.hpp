@@ -31,6 +31,11 @@
 #define BIA_EM_ASSIGN_ON_CONST "Assigns on constant variable are disallowed."
 #define BIA_EM_SYMBOL_ALREADY_EXISTS "Symbol already exists."
 #define BIA_EM_MODULE_NOT_FOUND "Specified module not found."
+#define BIA_EM_DOUBLE_OVERFLOW "Double value overflow."
+#define BIA_EM_DOUBLE_UNDERFLOW "Double value underflow."
+#define BIA_EM_INT_OVERFLOW "Integer value overflows as native int64."
+#define BIA_EM_INT_UNDERFLOW "Integer value underflows as native int64."
+#define BIA_EM_DIVISION_BY_ZERO "Division or modulo by zero."
 
 
 namespace bia
@@ -65,28 +70,7 @@ public:
 class logic_error : public bia_error, public std::logic_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit logic_error(const std::string & _message) : std::logic_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit logic_error(const char * _message) : std::logic_error(_message)
-	{
-	}
+	using std::logic_error::logic_error;
 };
 
 /**
@@ -128,28 +112,7 @@ private:
 class runtime_error : public bia_error, public std::runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit runtime_error(const std::string & _message) : std::runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit runtime_error(const char * _message) : std::runtime_error(_message)
-	{
-	}
+	using std::runtime_error::runtime_error;
 };
 
 /**
@@ -160,28 +123,7 @@ public:
 class type_error : public logic_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit type_error(const std::string & _message) : logic_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit type_error(const char * _message) : logic_error(_message)
-	{
-	}
+	using logic_error::logic_error;
 };
 
 /**
@@ -192,28 +134,7 @@ public:
 class encoding_error : public logic_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit encoding_error(const std::string & _message) : logic_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit encoding_error(const char * _message) : logic_error(_message)
-	{
-	}
+	using logic_error::logic_error;
 };
 
 /**
@@ -224,28 +145,7 @@ public:
 class argument_error : public logic_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit argument_error(const std::string & _message) : logic_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit argument_error(const char * _message) : logic_error(_message)
-	{
-	}
+	using logic_error::logic_error;
 };
 
 /**
@@ -253,31 +153,10 @@ public:
  *
  * Symbol cannot be resolved or it is in an undefined state.
 */
-class symbol_error final : public runtime_error
+class symbol_error : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit symbol_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit symbol_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -285,31 +164,10 @@ public:
  *
  * A limitiation has been exceeded.
 */
-class limitation_error final : public runtime_error
+class limitation_error : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit limitation_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit limitation_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -317,31 +175,10 @@ public:
  *
  * The performed call is invalid.
 */
-class execution_error final : public runtime_error
+class execution_error : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit execution_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit execution_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -349,31 +186,10 @@ public:
  *
  * The operator is invalid or not supported.
 */
-class operator_error final : public runtime_error
+class operator_error : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit operator_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit operator_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
@@ -381,61 +197,46 @@ public:
  *
  * Corrupted memory or allocation error.
 */
-class memory_error final : public runtime_error
+class memory_error : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit memory_error(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit memory_error(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
 };
 
 /**
  * @brief An access violation.
 */
-class access_violation final : public runtime_error
+class access_violation : public runtime_error
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit access_violation(const std::string & _message) : runtime_error(_message)
-	{
-	}
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _message The message.
-	*/
-	explicit access_violation(const char * _message) : runtime_error(_message)
-	{
-	}
+	using runtime_error::runtime_error;
+};
+
+/**
+ * @brief The base class for arithmetic errors.
+*/
+class arithmetic_error : public runtime_error
+{
+public:
+	using runtime_error::runtime_error;
+};
+
+/**
+ * @brief An invalid division or modulo by zero.
+*/
+class zero_division_error : public arithmetic_error
+{
+public:
+	using arithmetic_error::arithmetic_error;
+};
+
+/**
+ * @brief An arithmetic operation overflowed.
+*/
+class overflow_error : public arithmetic_error
+{
+public:
+	using arithmetic_error::arithmetic_error;
 };
 
 }

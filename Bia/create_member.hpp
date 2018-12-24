@@ -6,7 +6,8 @@
 
 #include "type_traits.hpp"
 #include "member.hpp"
-#include "native_member.hpp"
+#include "big_int_member.hpp"
+#include "double_member.hpp"
 #include "cstring_member.hpp"
 #include "static_function.hpp"
 #include "member_function.hpp"
@@ -31,9 +32,7 @@ namespace framework
  */
 inline void create_member(member * _destination) noexcept
 {
-	if (_destination) {
-		_destination->undefine();
-	}
+	_destination->undefine();
 }
 
 /**
@@ -54,9 +53,7 @@ inline void create_member(member * _destination) noexcept
 template<typename Type>
 inline typename std::enable_if<std::is_integral<Type>::value>::type create_member(member * _destination, Type _value)
 {
-	if (_destination) {
-		_destination->replace_this<native::int_member>(static_cast<int64_t>(_value));
-	}
+	_destination->template replace_this<native::big_int_member>(_value);
 }
 
 /**
@@ -77,9 +74,7 @@ inline typename std::enable_if<std::is_integral<Type>::value>::type create_membe
 template<typename Type>
 inline typename std::enable_if<std::is_floating_point<Type>::value>::type create_member(member * _destination, Type _value)
 {
-	if (_destination) {
-		_destination->replace_this<native::double_member>(static_cast<double>(_value));
-	}
+	_destination->template replace_this<native::double_member>(static_cast<double>(_value));
 }
 
 /**
@@ -100,9 +95,7 @@ inline typename std::enable_if<std::is_floating_point<Type>::value>::type create
 template<typename Type>
 inline typename std::enable_if<std::is_same<Type, const char*>::value>::type create_member(member * _destination, Type _value)
 {
-	if (_destination) {
-		_destination->replace_this<native::cstring_member<char>>(_value);
-	}
+	_destination->template replace_this<native::cstring_member<char>>(_value);
 }
 
 /**
@@ -124,9 +117,7 @@ inline typename std::enable_if<std::is_same<Type, const char*>::value>::type cre
 template<typename Return, typename... Arguments>
 inline void create_member(member * _destination, Return(*_function)(Arguments...))
 {
-	if (_destination) {
-		_destination->replace_this<executable::static_function<Return, Arguments...>>(_function);
-	}
+	_destination->template replace_this<executable::static_function<Return, Arguments...>>(_function);
 }
 
 /**
@@ -149,9 +140,7 @@ inline void create_member(member * _destination, Return(*_function)(Arguments...
 template<typename Class, typename Return, typename... Arguments>
 inline void create_member(member * _destination, Return(Class::*_function)(Arguments...))
 {
-	if (_destination) {
-		_destination->replace_this<executable::member_function<Return(Class::*)(Arguments...)>>(_function);
-	}
+	_destination->template replace_this<executable::member_function<Return(Class::*)(Arguments...)>>(_function);
 }
 
 /**
@@ -174,25 +163,19 @@ inline void create_member(member * _destination, Return(Class::*_function)(Argum
 template<typename Class, typename Return, typename... Arguments>
 inline void create_member(member * _destination, Return(Class::*_function)(Arguments...) const)
 {
-	if (_destination) {
-		_destination->replace_this<executable::member_function<Return(Class::*)(Arguments...) const>>(_function);
-	}
+	_destination->template replace_this<executable::member_function<Return(Class::*)(Arguments...) const>>(_function);
 }
 
 template<typename Type>
 inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<Type>::type>::type>::value>::value>::type create_member(member * _destination, Type && _value)
 {
-	if (_destination) {
-		_destination->replace_this<object::raw_object<typename std::remove_reference<Type>::type>>(std::move(_value));
-	}
+	_destination->template replace_this<object::raw_object<typename std::remove_reference<Type>::type>>(std::move(_value));
 }
 
 template<typename Type>
 inline typename std::enable_if<utility::negation<std::is_arithmetic<typename std::remove_pointer<typename std::remove_reference<Type>::type>::type>::value>::value>::type create_member(member * _destination, const Type & _value)
 {
-	if (_destination) {
-		_destination->replace_this<object::raw_object<typename std::remove_reference<Type>::type>>(_value);
-	}
+	_destination->template replace_this<object::raw_object<typename std::remove_reference<Type>::type>>(_value);
 }
 
 }

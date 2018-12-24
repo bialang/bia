@@ -1,7 +1,7 @@
 # Bia
 Embedded C++11 Scripting Language
 
-[![Build status](https://ci.appveyor.com/api/projects/status/hgg15mmsrffx3dua/branch/master?svg=true)](https://ci.appveyor.com/project/terrakuh/bia/branch/master) [![Build Status](https://travis-ci.org/terrakuh/Bia.svg?branch=master)](https://travis-ci.org/terrakuh/Bia)
+[![Build status](https://ci.appveyor.com/api/projects/status/hgg15mmsrffx3dua/branch/master?svg=true)](https://ci.appveyor.com/project/terrakuh/bia/branch/master)
 
 # Embedded Example
 
@@ -30,7 +30,7 @@ _context.execute(_code.c_str(), _code.length());
 
 # Language Features
 ## Native types
-- Integrals with a range from -2^32 to 2^32-1
+- Integrals with arbitrary length (uses [MPIR](http://mpir.org/))
 - 64-Bit floating point numbers
 - Classic C-style string with C++11 string literal support
 
@@ -102,7 +102,9 @@ do until false {
 ```
 
 ## Conditional Statements
-- `if` statements. Conditions that can be evaluated at compile time will be optimized away:
+### `if`, `else if` and `else` statements
+
+Conditions that can be evaluated at compile time will be optimized away:
 
 ```
 if 1 == 0 {
@@ -162,4 +164,7 @@ bia::set_class<my_class>(_context, "my_class")
 Bia compiles the script directly to memory before the first run and executes it as a normal C++ function. This technique allows very fast run times since the code is directly executed on the CPU.
 
 # Supported Platforms
-Currently the MSVC , GNU (>=4.9) and Clang (>=3.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for the ARM architecture is planned.
+Currently the MSVC, GNU (>=4.9) and Clang (>=3.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for the ARM architecture is planned.
+
+# License
+Bia is distributed under the BSD-3-Clause.

@@ -36,6 +36,10 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right) override
+	{
+		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
@@ -73,6 +77,10 @@ public:
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
 	virtual double to_double() const override
+	{
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	}
+	const char * to_cstring(utility::buffer_builder * _builder) const override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}

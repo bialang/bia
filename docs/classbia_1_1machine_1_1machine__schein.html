@@ -68,6 +68,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classbia_1_1machine_1_1machine__schein-members.html">List of all members</a>  </div>
@@ -81,6 +82,11 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="machine__schein_8hpp_source.html">machine_schein.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a3e432bf062961fba6ac88e2e5bb992df"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a3e432bf062961fba6ac88e2e5bb992df">deleter_function_signature</a>) (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a>)</td></tr>
+<tr class="separator:a3e432bf062961fba6ac88e2e5bb992df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aaac91bfe1aa1ff83ff3bd3bfc9df7d0a"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#aaac91bfe1aa1ff83ff3bd3bfc9df7d0a">machine_schein</a> (<a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> *<a class="el" href="classbia_1_1machine_1_1machine__schein.html#ae075fb35bbb7d91ac95917dac3a25a99">_allocator</a>, <a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> *<a class="el" href="classbia_1_1machine_1_1machine__schein.html#a870472dd1eec5fb5c6013b69d478164c">_executable_allocator</a>) noexcept</td></tr>
@@ -91,8 +97,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a14458e4d4095737d2015e9f155c3bd06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2452c8e2ac7bf85e303714abaf72dd4c"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a2452c8e2ac7bf85e303714abaf72dd4c">~machine_schein</a> ()</td></tr>
 <tr class="separator:a2452c8e2ac7bf85e303714abaf72dd4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad68881cdc4fbac84ca62bacffd4e3dd1"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#ad68881cdc4fbac84ca62bacffd4e3dd1">register_allocation</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a> _allocation)</td></tr>
-<tr class="separator:ad68881cdc4fbac84ca62bacffd4e3dd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15a0517d9fc875395102429f66c1fad8"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a15a0517d9fc875395102429f66c1fad8">register_allocation</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a> _allocation, <a class="el" href="classbia_1_1machine_1_1machine__schein.html#a3e432bf062961fba6ac88e2e5bb992df">deleter_function_signature</a> _deleter=nullptr)</td></tr>
+<tr class="separator:a15a0517d9fc875395102429f66c1fad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26be3354d83451bec96bd3153c08eb3d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a26be3354d83451bec96bd3153c08eb3d">register_big_int</a> (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">memory::big_int_allocation</a> _allocation)</td></tr>
+<tr class="separator:a26be3354d83451bec96bd3153c08eb3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a711f63ae88f272fdc6fa6878e67c09bd"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a711f63ae88f272fdc6fa6878e67c09bd">delete_all_allocations</a> ()</td></tr>
 <tr class="separator:a711f63ae88f272fdc6fa6878e67c09bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d68f571a290a5a46b82207fe4f6f7c1"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT <a class="el" href="classbia_1_1machine_1_1memory_1_1allocator.html">memory::allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a4d68f571a290a5a46b82207fe4f6f7c1">allocator</a> () noexcept</td></tr>
@@ -108,14 +116,29 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae075fb35bbb7d91ac95917dac3a25a99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a870472dd1eec5fb5c6013b69d478164c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbia_1_1machine_1_1memory_1_1executable__allocator.html">memory::executable_allocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a870472dd1eec5fb5c6013b69d478164c">_executable_allocator</a></td></tr>
 <tr class="separator:a870472dd1eec5fb5c6013b69d478164c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a021eedc0d8dfa7056598383e4c18a83a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a021eedc0d8dfa7056598383e4c18a83a">_allocated</a></td></tr>
-<tr class="separator:a021eedc0d8dfa7056598383e4c18a83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a495ec0d5346d24cede5e4cf99ece7f36"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; <a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a>, <a class="el" href="classbia_1_1machine_1_1machine__schein.html#a3e432bf062961fba6ac88e2e5bb992df">deleter_function_signature</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a495ec0d5346d24cede5e4cf99ece7f36">_allocated</a></td></tr>
+<tr class="separator:a495ec0d5346d24cede5e4cf99ece7f36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains information about machine code. </p>
 <p>Keeps track of all allocations of one machine code instance.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classbia_1_1machine_1_1machine__code.html">machine_code</a> </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a3e432bf062961fba6ac88e2e5bb992df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e432bf062961fba6ac88e2e5bb992df">&#9670;&nbsp;</a></span>deleter_function_signature</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* bia::machine::machine_schein::deleter_function_signature) (<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aaac91bfe1aa1ff83ff3bd3bfc9df7d0a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaac91bfe1aa1ff83ff3bd3bfc9df7d0a">&#9670;&nbsp;</a></span>machine_schein() <span class="overload">[1/3]</span></h2>
 
@@ -360,8 +383,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad68881cdc4fbac84ca62bacffd4e3dd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad68881cdc4fbac84ca62bacffd4e3dd1">&#9670;&nbsp;</a></span>register_allocation()</h2>
+<a id="a15a0517d9fc875395102429f66c1fad8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15a0517d9fc875395102429f66c1fad8">&#9670;&nbsp;</a></span>register_allocation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -370,8 +393,18 @@ Private Attributes</h2></td></tr>
           <td class="memname">BIA_EXPORT void bia::machine::machine_schein::register_allocation </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a>&#160;</td>
-          <td class="paramname"><em>_allocation</em></td><td>)</td>
+          <td class="paramname"><em>_allocation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classbia_1_1machine_1_1machine__schein.html#a3e432bf062961fba6ac88e2e5bb992df">deleter_function_signature</a>&#160;</td>
+          <td class="paramname"><em>_deleter</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -380,7 +413,8 @@ Private Attributes</h2></td></tr>
 <dl class="section date"><dt>Date</dt><dd>7-Apr-18</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">_allocation</td><td>Defines the allocation.</td></tr>
+    <tr><td class="paramname">_allocation</td><td>Defines the allocation. </td></tr>
+    <tr><td class="paramname">_deleter</td><td>(Optional) The deleter function.</td></tr>
   </table>
   </dd>
 </dl>
@@ -393,9 +427,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a021eedc0d8dfa7056598383e4c18a83a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a021eedc0d8dfa7056598383e4c18a83a">&#9670;&nbsp;</a></span>_allocated</h2>
+<a id="a26be3354d83451bec96bd3153c08eb3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26be3354d83451bec96bd3153c08eb3d">&#9670;&nbsp;</a></span>register_big_int()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -404,7 +437,35 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a>&gt; bia::machine::machine_schein::_allocated</td>
+          <td class="memname">void bia::machine::machine_schein::register_big_int </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacebia_1_1machine_1_1memory.html#a845fd3fd77fccce3a5b7511b8a8cf83c">memory::big_int_allocation</a>&#160;</td>
+          <td class="paramname"><em>_allocation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>TODO </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a495ec0d5346d24cede5e4cf99ece7f36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a495ec0d5346d24cede5e4cf99ece7f36">&#9670;&nbsp;</a></span>_allocated</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::pair&lt;<a class="el" href="namespacebia_1_1machine_1_1memory.html#a58859a27b64a12d08407f17edfbed42f">memory::universal_allocation</a>, <a class="el" href="classbia_1_1machine_1_1machine__schein.html#a3e432bf062961fba6ac88e2e5bb992df">deleter_function_signature</a>&gt; &gt; bia::machine::machine_schein::_allocated</td>
         </tr>
       </table>
   </td>
@@ -413,7 +474,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Stores all the registered allocations. </p>
+<p>Stores all registered allocations with deleter. </p>
 
 </div>
 </div>

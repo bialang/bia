@@ -1,12 +1,6 @@
 var searchData=
 [
-  ['second',['second',['../classbia_1_1machine_1_1memory_1_1allocation.html#ad821a9c3b20cc68152b830db38cfd654',1,'bia::machine::memory::allocation']]],
-  ['size',['size',['../structbia_1_1compiler_1_1compiler__value_1_1return__value_1_1string.html#a73021bd41ba8bbe205ed648b9e24d518',1,'bia::compiler::compiler_value::return_value::string::size()'],['../structbia_1_1machine_1_1disassembler_1_1instruction.html#a25a164b79a3058ba08142a112b899c1f',1,'bia::machine::disassembler::instruction::size()']]],
-  ['size_5ftype',['size_type',['../classbia_1_1stream_1_1string__stream.html#a9aa32fd230fe383bda76dd44efa7206a',1,'bia::stream::string_stream']]],
-  ['starting_5fpadding_5fopt_5ftoken',['starting_padding_opt_token',['../structbia_1_1grammar_1_1flags.html#a02bdd37bce144ab092936e56395b9343',1,'bia::grammar::flags']]],
-  ['starting_5fpadding_5ftoken',['starting_padding_token',['../structbia_1_1grammar_1_1flags.html#a014e2ec8c73e0973627d5b5016eabcaa',1,'bia::grammar::flags']]],
-  ['starting_5fws_5fopt_5ftoken',['starting_ws_opt_token',['../structbia_1_1grammar_1_1flags.html#a3a9f36b7fe76405bba333d74edba4a30',1,'bia::grammar::flags']]],
-  ['starting_5fws_5ftoken',['starting_ws_token',['../structbia_1_1grammar_1_1flags.html#abbd34373fee9b21f9cac73d218c759fd',1,'bia::grammar::flags']]],
-  ['static_5fpasser',['static_passer',['../classbia_1_1machine_1_1platform_1_1passer.html#ab7c4ff51769c3686dddc15f84415dc33',1,'bia::machine::platform::passer']]],
-  ['string',['string',['../structbia_1_1grammar_1_1report.html#a49c287d0a5b0ba87e52de9e4f58441f1',1,'bia::grammar::report']]]
+  ['op_5fcode',['op_code',['../structbia_1_1machine_1_1disassembler_1_1instruction.html#a39c027c362413f4aeb9d6675cf80e3dc',1,'bia::machine::disassembler::instruction']]],
+  ['operator_5fcode',['operator_code',['../structbia_1_1grammar_1_1report.html#a002cd5e0ddb6cba8c81ae6e261aa7508',1,'bia::grammar::report']]],
+  ['opt_5ftoken',['opt_token',['../structbia_1_1grammar_1_1flags.html#aed3733776f9fa06abe10623885ac3633',1,'bia::grammar::flags']]]
 ];

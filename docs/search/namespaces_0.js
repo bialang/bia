@@ -1,7 +1,9 @@
 var searchData=
 [
   ['bia',['bia',['../namespacebia.html',1,'']]],
+  ['common',['common',['../namespacebia_1_1common.html',1,'bia']]],
   ['compiler',['compiler',['../namespacebia_1_1compiler.html',1,'bia']]],
+  ['dependency',['dependency',['../namespacebia_1_1dependency.html',1,'bia']]],
   ['encoding',['encoding',['../namespacebia_1_1encoding.html',1,'bia']]],
   ['exception',['exception',['../namespacebia_1_1exception.html',1,'bia']]],
   ['executable',['executable',['../namespacebia_1_1framework_1_1executable.html',1,'bia::framework']]],

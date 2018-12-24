@@ -1,9 +1,13 @@
 var searchData=
 [
-  ['bia_5fbuild_5fshared',['BIA_BUILD_SHARED',['../config__cmake_8hpp.html#a08650d873f85713e619b3dfc60140687',1,'config_cmake.hpp']]],
   ['bia_5fem_5fassign_5fon_5fconst',['BIA_EM_ASSIGN_ON_CONST',['../exception_8hpp.html#adc9eb72875672ba15bf45f206390609a',1,'exception.hpp']]],
+  ['bia_5fem_5fdivision_5fby_5fzero',['BIA_EM_DIVISION_BY_ZERO',['../exception_8hpp.html#a0d99b1bb2b74306746f700593731d158',1,'exception.hpp']]],
+  ['bia_5fem_5fdouble_5foverflow',['BIA_EM_DOUBLE_OVERFLOW',['../exception_8hpp.html#ac38a5b631937fe32461608bd84dc02cc',1,'exception.hpp']]],
+  ['bia_5fem_5fdouble_5funderflow',['BIA_EM_DOUBLE_UNDERFLOW',['../exception_8hpp.html#a78eb150ac47576e4375ab97732019d2a',1,'exception.hpp']]],
   ['bia_5fem_5ffailed_5fallocation',['BIA_EM_FAILED_ALLOCATION',['../exception_8hpp.html#a2e2aff65dc37eddff43f8b5bf23df6e2',1,'exception.hpp']]],
   ['bia_5fem_5ffailed_5fmemory_5fprotection',['BIA_EM_FAILED_MEMORY_PROTECTION',['../exception_8hpp.html#a8606995b60236bf995cfe6c2a40e6fb7',1,'exception.hpp']]],
+  ['bia_5fem_5fint_5foverflow',['BIA_EM_INT_OVERFLOW',['../exception_8hpp.html#a35e3fd9cd1035aefb474c0de01634cfe',1,'exception.hpp']]],
+  ['bia_5fem_5fint_5funderflow',['BIA_EM_INT_UNDERFLOW',['../exception_8hpp.html#acb8b66cf45f73f06952328b455d22980',1,'exception.hpp']]],
   ['bia_5fem_5finvalid_5fargument',['BIA_EM_INVALID_ARGUMENT',['../exception_8hpp.html#ac8c0645265903b67e10066d2ded861f4',1,'exception.hpp']]],
   ['bia_5fem_5finvalid_5fascii',['BIA_EM_INVALID_ASCII',['../exception_8hpp.html#a122e61c1f959f7777e88366c0e875191',1,'exception.hpp']]],
   ['bia_5fem_5finvalid_5fencoding',['BIA_EM_INVALID_ENCODING',['../exception_8hpp.html#aa438b056ffe8db4d652c1d9d1de20df3',1,'exception.hpp']]],
@@ -29,6 +33,7 @@ var searchData=
   ['bia_5fmax_5fkeyword_5flength',['BIA_MAX_KEYWORD_LENGTH',['../config_8hpp.html#a4ef735902fdd56f739b2cfe0dacc5e3a',1,'config.hpp']]],
   ['bia_5fmax_5foperator_5flength',['BIA_MAX_OPERATOR_LENGTH',['../config_8hpp.html#a62fa18e42d7df6701ba01d8bb8bc074e',1,'config.hpp']]],
   ['bia_5fmin_5finput_5fbuffer_5fsize',['BIA_MIN_INPUT_BUFFER_SIZE',['../config_8hpp.html#a4901fc71a976a765803fa022219da3ea',1,'config.hpp']]],
+  ['bia_5fmin_5fint_5fsize',['BIA_MIN_INT_SIZE',['../config_8hpp.html#af29ba30d0522dfb046ce867da87c6dd3',1,'config.hpp']]],
   ['bia_5fmodule_5fexport',['BIA_MODULE_EXPORT',['../module__library_8hpp.html#a9efc07697cbc4bf4d13e5a858eb7bd03',1,'module_library.hpp']]],
   ['bia_5fmodule_5fload_5fprefix',['BIA_MODULE_LOAD_PREFIX',['../module__library_8hpp.html#ab438deb718e9ae91aedb0014155fec41',1,'module_library.hpp']]],
   ['bia_5fmodule_5funload_5fprefix',['BIA_MODULE_UNLOAD_PREFIX',['../module__library_8hpp.html#af8793627e1a8da56174fd5d134833135',1,'module_library.hpp']]],

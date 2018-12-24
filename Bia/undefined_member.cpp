@@ -63,6 +63,11 @@ void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_int64(member 
 	BIA_UNDEFINED_ERROR;
 }
 
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+{
+	BIA_UNDEFINED_ERROR;
+}
+
 void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_double(member * _destination, operator_type _operator, double _right)
 {
 	BIA_UNDEFINED_ERROR;
@@ -114,6 +119,11 @@ int64_t undefined_member::to_int() const
 }
 
 double undefined_member::to_double() const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+const char * undefined_member::to_cstring(utility::buffer_builder * _builder) const
 {
 	BIA_UNDEFINED_ERROR;
 }

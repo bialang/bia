@@ -12,17 +12,13 @@ namespace machine
 {
 
 thread_local machine_context * machine_context::_active_context = nullptr;
-thread_local machine_context::member_allocator * machine_context::_active_allocator = nullptr;
+thread_local memory::allocator * machine_context::_active_allocator = nullptr;
+thread_local memory::member_allocator * machine_context::_active_member_allocator = nullptr;
+thread_local memory::big_int_allocator * machine_context::_active_big_int_allocator = nullptr;
+thread_local utility::buffer_builder * machine_context::_active_buffer_builder = nullptr;
 
 
-machine_context::machine_context(const std::shared_ptr<member_allocator>& _allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
-{
-	if (!this->_allocator || !this->_executable_allocator) {
-		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
-	}
-}
-
-machine_context::machine_context(std::shared_ptr<member_allocator>&& _allocator, std::shared_ptr<memory::executable_allocator>&& _executable_allocator) : _allocator(std::move(_allocator)), _executable_allocator(std::move(_executable_allocator)), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
+machine_context::machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::big_int_allocator> & _big_int_allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _member_allocator(_member_allocator), _big_int_allocator(_big_int_allocator), _executable_allocator(_executable_allocator), _buffer_builder(_allocator.get()), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -33,6 +29,9 @@ void machine_context::activate_context() noexcept
 {
 	_active_context = this;
 	_active_allocator = allocator();
+	_active_member_allocator = member_allocator();
+	_active_big_int_allocator = big_int_allocator();
+	_active_buffer_builder = &buffer_builder();
 }
 
 machine_context * machine_context::active_context() noexcept
@@ -40,19 +39,49 @@ machine_context * machine_context::active_context() noexcept
 	return _active_context;
 }
 
-machine_context::member_allocator * machine_context::active_allocator() noexcept
+memory::allocator * machine_context::active_allocator() noexcept
 {
 	return _active_allocator;
 }
 
-machine_context::member_allocator * machine_context::allocator() noexcept
+memory::member_allocator * machine_context::active_member_allocator() noexcept
+{
+	return _active_member_allocator;
+}
+
+memory::big_int_allocator * machine_context::active_big_int_allocator() noexcept
+{
+	return _active_big_int_allocator;
+}
+
+utility::buffer_builder * machine_context::active_buffer_builder() noexcept
+{
+	return _active_buffer_builder;
+}
+
+memory::allocator * machine_context::allocator() noexcept
 {
 	return _allocator.get();
+}
+
+memory::member_allocator * machine_context::member_allocator() noexcept
+{
+	return _member_allocator.get();
+}
+
+memory::big_int_allocator * machine_context::big_int_allocator() noexcept
+{
+	return _big_int_allocator.get();
 }
 
 memory::executable_allocator * machine_context::executable_allocator() noexcept
 {
 	return _executable_allocator.get();
+}
+
+utility::buffer_builder & machine_context::buffer_builder() noexcept
+{
+	return _buffer_builder;
 }
 
 string_manager & machine_context::string_manager() noexcept
@@ -104,7 +133,7 @@ framework::member * machine_context::address_of_member(const char * _name)
 	}
 
 	// Create
-	auto _allocation = _allocator->construct_block0<framework::member, framework::undefined_member>();
+	auto _allocation = _member_allocator->template construct_member<framework::undefined_member>();
 	auto a = _variable_index.add(_name, _allocation);
 	printf("created: %p\n", a);
 	return a;

@@ -36,6 +36,10 @@ public:
 
 		return *_begin++;
 	}
+	virtual code_point peek(const int8_t * _begin, const int8_t * _end) override
+	{
+		return next(_begin, _end);
+	}
 };
 
 }

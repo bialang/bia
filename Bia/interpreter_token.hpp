@@ -10,6 +10,7 @@
 #include "interpreter_rule.hpp"
 #include "interpreter_id.hpp"
 #include "input_stream.hpp"
+#include "string_stream.hpp"
 #include "encoder.hpp"
 
 
@@ -22,7 +23,7 @@ class interpreter_token final
 {
 public:
 	interpreter_token() = delete;
-	
+
 	/**
 	 * Matches all whitespace or padding characters it can.
 	 *
@@ -90,18 +91,18 @@ public:
 	/**
 	 * Matches a number token.
 	 *
-	 * @since	3.64.127.716
-	 * @date	9-Apr-18
+	 * @since 3.64.127.716
+	 * @date 9-Apr-18
 	 *
-	 * @param	_buffer	Defines the buffer that should be matched.
-	 * @param	_length	Defines the length of the buffer.
-	 * @param	_params	(Not used)	Defines additional interpreter information.
-	 * @param	[out]	_output	Defines the token result.
+	 * @param _buffer Defines the buffer that should be matched.
+	 * @param _length Defines the length of the buffer.
+	 * @param [in] _params Defines additional interpreter information.
+	 * @param [out]	_output Defines the token result.
 	 *
-	 * @return	Defines the success code. See @ref ACTION.
+	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION number(stream::input_stream & _input, token_param _params, token_output & _output);
-	BIA_EXPORT static ACTION string(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION number(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION string(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches an identifier. An identifier conists of alphanumeric characters and an underscore without a leading number.
 	 *
@@ -109,15 +110,15 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION identifier(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION identifier(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches the first member of a member chain.
 	 *
@@ -125,7 +126,7 @@ public:
 	 * @date 6-Aug-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter(), string(), keyword() and identifier().
@@ -133,7 +134,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION first_member(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION first_member(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches an assign operator.
 	 *
@@ -143,16 +144,16 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION assign_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a compare operator.
 	 *
@@ -162,16 +163,16 @@ public:
 	 * @date 6-May-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION compare_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION compare_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a dot operator like `*`, `/` and so on.
 	 *
@@ -181,16 +182,16 @@ public:
 	 * @date 15-Jun-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION dot_operator(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION dot_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a commend terminator.
 	 *
@@ -198,14 +199,14 @@ public:
 	 * @date 24-Apr-18
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_automaton().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION command_end(stream::input_stream & _input, token_param _params, token_output & _output);
+	BIA_EXPORT static ACTION command_end(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a custom operator.
 	 *
@@ -215,17 +216,17 @@ public:
 	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
 	template<flags::flag_type Flags>
-	static ACTION custom_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+	static ACTION custom_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
@@ -292,17 +293,17 @@ public:
 	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::get_buffer() and stream::input_stream::skip().
-	 * @throws See encoding::utf::next().
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
 	template<typename Type, flags::flag_type Flags = flags::none>
-	static ACTION keyword(stream::input_stream & _input, token_param _params, token_output & _output)
+	static ACTION keyword(stream::input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
@@ -354,7 +355,7 @@ public:
 	 * @tparam Flags Manipulating the behavior of this function. See @ref grammar::flags.
 	 *
 	 * @param [in] _input The input buffer.
-	 * @param _params Additional interpreter information.
+	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
@@ -363,11 +364,11 @@ public:
 	 * @return Defines the success code. See @ref ACTION.
 	*/
 	template<report::rule_type Rule, flags::flag_type Flags = flags::filler_token>
-	static ACTION rule_pointer(stream::input_stream & _input, token_param _params, token_output & _output)
+	static ACTION rule_pointer(stream::input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
-		
+
 		// Starting whitespaces
 		if (!whitespace_deleter<Flags, true>(_input, _params.encoder)) {
 			return error;
@@ -386,7 +387,25 @@ public:
 	}
 
 private:
+	BIA_EXPORT static void match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base);
 	/**
+	 * Parses the sign before a number.
+	 *
+	 * @since 3.68.140.790
+	 * @date 10-Nov-18
+	 *
+	 * @param [in] _buffer The input buffer.
+	 * @param [in] _encoder The encoder.
+	 *
+	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See encoding::encoder::next().
+	 *
+	 * @return true if the sign is negative, otherwise false.
+	*/
+	BIA_EXPORT static bool parse_sign(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
+	BIA_EXPORT static int match_native_number(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output);
+	BIA_EXPORT static int parse_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
+	/*
 	 * Matches single- and multiline comments and @a _is_ws.
 	 *
 	 * @since 3.68.141.794
@@ -403,39 +422,6 @@ private:
 	 * @return 1 if the automaton matched whitespaces/comments successfully. -1 if @a _end_predicate fired, otherwise 0.
 	*/
 	BIA_EXPORT static int whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point) = nullptr);
-	/**
-	 * Matches integral values with a base up to 16.
-	 *
-	 * @remarks The parameters are not checked.
-	 *
-	 * @since 3.64.128.720
-	 * @date 16-May-18
-	 *
-	 * @param [in,out] _buffer The buffer.
-	 * @param [in] _encoder The encoder.
-	 * @param _base The base.
-	 *
-	 * @throws See encoding::utf::next().
-	 *
-	 * @return A pair with the success value as first and the parsed integral as second.
-	*/
-	BIA_EXPORT static  std::pair<bool, int64_t> match_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base);
-	/**
-	 * Matches integral values with a base up to 16.
-	 *
-	 * @remarks The parameters are not checked.
-	 *
-	 * @since 3.64.130.722
-	 * @date 16-May-18
-	 *
-	 * @param [in,out] _buffer The buffer.
-	 * @param [in] _encoder The encoder.
-	 *
-	 * @throws See encoding::utf::next().
-	 *
-	 * @return A pair with the success value as first and the parsed integral as second.
-	*/
-	BIA_EXPORT static  std::tuple<bool, int64_t, double, bool> match_decimal(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
 };
 
 }

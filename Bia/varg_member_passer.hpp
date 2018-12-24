@@ -55,7 +55,7 @@ public:
 
 #if defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)
 		// All floating point values are pushed onto the stack (mov al, 0)
-		_passer._output.write_all(0xb0_8, 0x00_8);
+		_passer._output->write_all(0xb0_8, 0x00_8);
 #endif
 #endif
 	}

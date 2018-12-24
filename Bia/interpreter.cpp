@@ -51,7 +51,7 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 			// Reset
 			auto _buffer = _input.buffer();
 
-			fwrite(_buffer.first, 1, _buffer.second - _buffer.first, stdout);
+			fwrite(_buffer.first, 1, _buffer.second - _buffer.first, stderr);
 			_input.reset(_mark);
 
 			break;

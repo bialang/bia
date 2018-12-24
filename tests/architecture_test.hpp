@@ -12,7 +12,6 @@ public:
 	static void test_move();
 	static void test_add();
 	static void test_sub();
-	static void test_xor();
 	static void test_jump();
 	static void test_push();
 	static void test_pop();

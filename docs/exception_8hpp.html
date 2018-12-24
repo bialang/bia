@@ -124,6 +124,15 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1exception_1_1access__violation.html">bia::exception::access_violation</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An access violation.  <a href="classbia_1_1exception_1_1access__violation.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1exception_1_1arithmetic__error.html">bia::exception::arithmetic_error</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The base class for arithmetic errors.  <a href="classbia_1_1exception_1_1arithmetic__error.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1exception_1_1zero__division__error.html">bia::exception::zero_division_error</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An invalid division or modulo by zero.  <a href="classbia_1_1exception_1_1zero__division__error.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1exception_1_1overflow__error.html">bia::exception::overflow_error</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An arithmetic operation overflowed.  <a href="classbia_1_1exception_1_1overflow__error.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -184,6 +193,16 @@ Macros</h2></td></tr>
 <tr class="separator:a0cc288e8ba7198bd95f8911887ca4f0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a140a05146f561a256f4c704aea6d550a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#a140a05146f561a256f4c704aea6d550a">BIA_EM_MODULE_NOT_FOUND</a>&#160;&#160;&#160;&quot;Specified module not found.&quot;</td></tr>
 <tr class="separator:a140a05146f561a256f4c704aea6d550a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac38a5b631937fe32461608bd84dc02cc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#ac38a5b631937fe32461608bd84dc02cc">BIA_EM_DOUBLE_OVERFLOW</a>&#160;&#160;&#160;&quot;Double value overflow.&quot;</td></tr>
+<tr class="separator:ac38a5b631937fe32461608bd84dc02cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78eb150ac47576e4375ab97732019d2a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#a78eb150ac47576e4375ab97732019d2a">BIA_EM_DOUBLE_UNDERFLOW</a>&#160;&#160;&#160;&quot;Double value underflow.&quot;</td></tr>
+<tr class="separator:a78eb150ac47576e4375ab97732019d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35e3fd9cd1035aefb474c0de01634cfe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#a35e3fd9cd1035aefb474c0de01634cfe">BIA_EM_INT_OVERFLOW</a>&#160;&#160;&#160;&quot;Integer value overflows as native int64.&quot;</td></tr>
+<tr class="separator:a35e3fd9cd1035aefb474c0de01634cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb8b66cf45f73f06952328b455d22980"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#acb8b66cf45f73f06952328b455d22980">BIA_EM_INT_UNDERFLOW</a>&#160;&#160;&#160;&quot;Integer value underflows as native int64.&quot;</td></tr>
+<tr class="separator:acb8b66cf45f73f06952328b455d22980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d99b1bb2b74306746f700593731d158"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exception_8hpp.html#a0d99b1bb2b74306746f700593731d158">BIA_EM_DIVISION_BY_ZERO</a>&#160;&#160;&#160;&quot;Division or modulo by zero.&quot;</td></tr>
+<tr class="separator:a0d99b1bb2b74306746f700593731d158"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="adc9eb72875672ba15bf45f206390609a"></a>
@@ -194,6 +213,48 @@ Macros</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define BIA_EM_ASSIGN_ON_CONST&#160;&#160;&#160;&quot;Assigns on constant variable are disallowed.&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0d99b1bb2b74306746f700593731d158"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d99b1bb2b74306746f700593731d158">&#9670;&nbsp;</a></span>BIA_EM_DIVISION_BY_ZERO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BIA_EM_DIVISION_BY_ZERO&#160;&#160;&#160;&quot;Division or modulo by zero.&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac38a5b631937fe32461608bd84dc02cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac38a5b631937fe32461608bd84dc02cc">&#9670;&nbsp;</a></span>BIA_EM_DOUBLE_OVERFLOW</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BIA_EM_DOUBLE_OVERFLOW&#160;&#160;&#160;&quot;Double value overflow.&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a78eb150ac47576e4375ab97732019d2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78eb150ac47576e4375ab97732019d2a">&#9670;&nbsp;</a></span>BIA_EM_DOUBLE_UNDERFLOW</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BIA_EM_DOUBLE_UNDERFLOW&#160;&#160;&#160;&quot;Double value underflow.&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -222,6 +283,34 @@ Macros</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define BIA_EM_FAILED_MEMORY_PROTECTION&#160;&#160;&#160;&quot;Cannot change protection of the memory address.&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a35e3fd9cd1035aefb474c0de01634cfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35e3fd9cd1035aefb474c0de01634cfe">&#9670;&nbsp;</a></span>BIA_EM_INT_OVERFLOW</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BIA_EM_INT_OVERFLOW&#160;&#160;&#160;&quot;Integer value overflows as native int64.&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acb8b66cf45f73f06952328b455d22980"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb8b66cf45f73f06952328b455d22980">&#9670;&nbsp;</a></span>BIA_EM_INT_UNDERFLOW</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BIA_EM_INT_UNDERFLOW&#160;&#160;&#160;&quot;Integer value underflows as native int64.&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">

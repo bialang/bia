@@ -1,5 +1,5 @@
 #include "interpreter_token.hpp"
-#include "string_stream.hpp"
+#include "big_int_allocator.hpp"
 
 #include <cctype>
 #include <limits>
@@ -24,141 +24,66 @@ bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding:
 	});
 }
 
-ACTION interpreter_token::number(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::number(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
 
-	// No input
-	if (_input.available() <= 0) {
-		return error;
-	}
-
 	auto _buffer = _input.buffer();
-	int64_t _int = 0;
-	auto _double = 0.;
-	auto _negative = false;
-	auto _is_double = false;
-	auto _tmp = _buffer.first;
-	auto _digit = _params.encoder->next(_buffer.first, _buffer.second);
+	auto _negative = parse_sign(_buffer, _params.encoder);
+	auto _base = parse_base(_buffer, _params.encoder);
 
-	// Optional sign
-	switch (_digit) {
-	case 0:
-		return error;
-	case '-':
-		_negative = true;
-	case '+':
-	{
-		// No more input
-		if (_buffer.first >= _buffer.second) {
-			return error;
-		}
-
-		_tmp = _buffer.first;
-		_digit = _params.encoder->next(_buffer.first, _buffer.second);
-	}
-	default:
-		break;
-	}
-
-	// First character
-	switch (_digit) {
-	case 0:
-	case '\'':
-	case 'f':
-	case 'F':
-		return error;
-	case '0':
-	{
-		// Could be other base
-		if (_buffer.first < _buffer.second) {
-			_tmp = _buffer.first;
-			_digit = _params.encoder->next(_buffer.first, _buffer.second);
-
-			int _base;
-
-			switch (_digit) {
-			case 'b':
-			case 'B':
-				_base = 2;
-
-				break;
-			case 'x':
-			case 'X':
-				_base = 16;
-
-				break;
-			case 'f':
-			case 'F':
-				_is_double = true;
-
-				goto gt_set_value;
-			case '.':
-				_buffer.first = _tmp;
-
-				goto gt_match_decimal;
-			default:
-				_buffer.first = _tmp;
-				_base = 8;
-
-				break;
-			}
-
-			// Match
-			auto _result = match_base(_buffer, _params.encoder, _base);
-
-			if (!_result.first) {
-				// Result is 0
-				if (_base == 8) {
-					_int = 0;
-					_buffer.first = _tmp;
-
-					goto gt_set_value;
-				}
-
-				return error;
-			}
-
-			_int = _result.second;
-		}
-
-		break;
-	}
-	default:
-	{
-	gt_match_decimal:;
-		bool _success;
-
-		_buffer.first = _tmp;
-
-		std::tie(_success, _int, _double, _is_double) = match_decimal(_buffer, _params.encoder);
-
-		if (!_success) {
-			return error;
-		}
-
-		break;
-	}
-	}
-
-gt_set_value:;
-	// Set value
-	if (_is_double) {
-		_output.type = report::TYPE::DOUBLE_VALUE;
-		_output.content.double_value = _negative ? -_double : _double;
-	} else {
+	// Zero
+	if (!_base) {
 		_output.type = report::TYPE::INT_VALUE;
-		_output.content.int_value = _negative ? -_int : _int;
+		_output.content.int_value = 0;
+
+		_input.skip(_buffer.first);
+
+		return success;
+	} // Error
+	else if (_base < 0) {
+		return error;
 	}
 
-	// Move input cursor
-	_input.skip(_buffer.first);
+	// Match
+	auto _tmp = _buffer.first;
+	auto _result = match_native_number(_buffer, _params.encoder, _base, _negative, _output);
+
+	if (!_result) {
+		_input.skip(_buffer.first);
+
+		return success;
+	} else if (_result > 0) {
+		_input.skip(_tmp);
+	} else {
+		return error;
+	}
+
+	// Big integer
+	stream::string_stream _string(_params.context->allocator());
+
+	_string.set_codec(stream::string_stream::CODEC::ASCII);
+
+	match_big_integer(_input, _string, _params.encoder, _base);
+
+	_string.finish();
+
+	// Construct big integer
+	auto _new_int = _params.context->big_int_allocator()->construct_big_int(stream::string_stream::string<char>(_string.buffer()), _base);
+
+	if (_negative) {
+		_new_int->negate();
+	}
+
+	_params.schein.register_big_int(_new_int);
+	_output.type = report::TYPE::BIG_INT_VALUE;
+	_output.content.big_int_value = _new_int;
 
 	return success;
 }
 
-ACTION interpreter_token::string(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::string(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -337,15 +262,18 @@ gt_end:;
 	_input.skip(_buffer.first);
 	_string.finish();
 
-	// Get buffer and register
+	// Transfer ownership
+	machine::memory::universal_allocation _string_buffer(std::move(_string.buffer()));
+
+	// Register the buffer
 	_output.type = report::TYPE::STRING;
-	_output.content.string = _string.buffer();
-	_params.context->string_manager().register_string(_output.content.string);
+	_output.content.string = _string_buffer;
+	_params.context->string_manager().register_string(_string_buffer);
 
 	return success;
 }
 
-ACTION interpreter_token::identifier(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::identifier(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -400,7 +328,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	return success;
 }
 
-ACTION interpreter_token::first_member(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::first_member(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -437,7 +365,7 @@ ACTION interpreter_token::first_member(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -487,7 +415,7 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 	return error;
 }
 
-ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -549,7 +477,7 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 	return error;
 }
 
-ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -606,7 +534,7 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::command_end(stream::input_stream & _input, token_param _params, token_output & _output)
+ACTION interpreter_token::command_end(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -616,6 +544,243 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 	}, [](encoding::code_point _char) {
 		return _char == '\n' || _char == ';';
 	}) == -1 || _input.available() == 0 ? success : error;
+}
+
+void interpreter_token::match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base)
+{
+	while (_input.available() > 0) {
+		auto _buffer = _input.buffer();
+		auto _last_digit = _buffer.first;
+
+		while (_buffer.first < _buffer.second) {
+			auto _digit = _encoder->next(_buffer.first, _buffer.second);
+
+			// Skip ' and _
+			if (_digit == '\'' || _digit == '_') {
+				if (_buffer.first >= _buffer.second) {
+					break;
+				}
+
+				_digit = _encoder->next(_buffer.first, _buffer.second);
+			}
+
+			// Valid digit
+			if (encoding::encoder::hex_value(_digit) < _base) {
+				_output.append(_digit);
+			} else {
+				_input.skip(_last_digit);
+
+				return;
+			}
+
+			_last_digit = _buffer.first;
+		}
+
+		_input.skip(_last_digit);
+	}
+}
+
+bool interpreter_token::parse_sign(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
+{
+	auto _negative = false;
+
+	// As long as input is available
+	if (_buffer.first < _buffer.second) {
+		auto _tmp = _buffer.first;
+
+		switch (_encoder->next(_buffer.first, _buffer.second)) {
+		case '-':
+			_negative = true;
+		case '+':
+			break;
+		default:
+			_buffer.first = _tmp;
+
+			break;
+		}
+	}
+
+	return _negative;
+}
+
+int interpreter_token::match_native_number(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output)
+{
+	auto _last_digit = _buffer.first;
+	auto _digit_matched = false;
+	auto _decimal_place = false;
+	auto _fraction = 1.0;
+
+	if (_buffer.first >= _buffer.second) {
+		return -1;
+	}
+
+	// First digit cannot be a seperator
+	switch (_encoder->peek(_buffer.first, _buffer.second)) {
+	case '\'':
+	case '_':
+		return -1;
+	default:
+		break;
+	}
+
+	_output.type = report::TYPE::INT_VALUE;
+	_output.content.double_value = 0;
+
+	while (_buffer.first < _buffer.second) {
+		auto _digit = _encoder->next(_buffer.first, _buffer.second);
+
+		// Skip ' and _
+		if (_digit == '\'' || _digit == '_' || (!_decimal_place && _digit == '.')) {
+			// Switch to double
+			if (_digit == '.') {
+				if (_output.type == report::TYPE::INT_VALUE) {
+					_output.type = report::TYPE::DOUBLE_VALUE;
+					_output.content.double_value = static_cast<double>(_output.content.int_value);
+				}
+
+				_last_digit = _buffer.first;
+				_digit_matched = true;
+				_decimal_place = true;
+			}
+
+			if (_buffer.first >= _buffer.second) {
+				break;
+			}
+
+			_digit = _encoder->next(_buffer.first, _buffer.second);
+		}
+
+		auto _digit_value = encoding::encoder::hex_value(_digit);
+
+		// Not a digit
+		if (_digit_value >= _base) {
+			// Not a single digit matched
+			if (!_digit_matched) {
+				return -1;
+			}
+
+			break;
+		} else if (_negative) {
+			// Number is too small
+			if (_output.type == report::TYPE::INT_VALUE) {
+				// Switch to double, because it still could be a native double
+				if ((std::numeric_limits<int64_t>::min() + _digit_value) / _base > _output.content.int_value) {
+					_output.type = report::TYPE::DOUBLE_VALUE;
+					_output.content.double_value = static_cast<double>(_output.content.int_value) * _base - _digit_value;
+				} // Int
+				else {
+					_output.content.int_value = _output.content.int_value * _base - _digit_value;
+				}
+			} // Double
+			else {
+				if (_decimal_place) {
+					_output.content.double_value -= _digit_value / (_fraction *= 10);
+				} else {
+					// Double underflow
+					if ((std::numeric_limits<double>::lowest() + _digit_value) / _base > _output.content.double_value) {
+						if (_decimal_place) {
+							throw exception::overflow_error(BIA_EM_DOUBLE_UNDERFLOW);
+						}
+
+						return 1;
+					}
+
+					_output.content.double_value = _output.content.double_value * _base - _digit_value;
+				}
+			}
+		} // Int
+		else if (_output.type == report::TYPE::INT_VALUE) {
+			// Switch to double, because it still could be a native double
+			if ((std::numeric_limits<int64_t>::max() - _digit_value) / _base < _output.content.int_value) {
+				_output.type = report::TYPE::DOUBLE_VALUE;
+				_output.content.double_value = static_cast<double>(_output.content.int_value) * _base + _digit_value;
+			} // Int
+			else {
+				_output.content.int_value = _output.content.int_value * _base + _digit_value;
+			}
+		} // Double
+		else {
+			if (_decimal_place) {
+				_output.content.double_value += _digit_value / (_fraction *= 10);
+			} else {
+				// Double underflow
+				if ((std::numeric_limits<double>::max() - _digit_value) / _base < _output.content.double_value) {
+					if (_decimal_place) {
+						throw exception::overflow_error(BIA_EM_DOUBLE_UNDERFLOW);
+					}
+
+					return 1;
+				}
+
+				_output.content.double_value = _output.content.double_value * _base + _digit_value;
+			}
+		}
+
+		_last_digit = _buffer.first;
+		_digit_matched = true;
+	}
+
+	// Big integer
+	if (_output.type == report::TYPE::DOUBLE_VALUE && !_decimal_place) {
+		return 1;
+	}
+
+	_buffer.first = _last_digit;
+
+	return 0;
+}
+
+int interpreter_token::parse_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
+{
+	if (_buffer.first >= _buffer.second) {
+		return -1;
+	}
+
+	auto _base = 10;
+	auto _tmp = _buffer.first;
+	auto _digit = _encoder->next(_buffer.first, _buffer.second);
+
+	// Can be zero, hex, octal or binary
+	if (_digit == '0') {
+		if (_buffer.first < _buffer.second) {
+			_tmp = _buffer.first;
+			_digit = _encoder->next(_buffer.first, _buffer.second);
+
+			// Hex
+			if (_digit == 'x' || _digit == 'X') {
+				_base = 16;
+			} // Binary
+			else if (_digit == 'b' || _digit == 'B') {
+				_base = 2;
+			} // Octal
+			else if (_digit >= '0' && _digit <= '7') {
+				_base = 8;
+				_buffer.first = _tmp;
+			} // Decimal
+			else if (_digit == '.') {
+				_buffer.first = _tmp;
+			}
+			// Matched only a zero
+			else {
+				_buffer.first = _tmp;
+
+				return 0;
+			}
+		} // Is zero
+		else {
+			return 0;
+		}
+	} // Decimal
+	else if (_digit >= '1' && _digit <= '9') {
+		_buffer.first = _tmp;
+
+		return 10;
+	} // Error
+	else {
+		return -1;
+	}
+
+	return _base;
 }
 
 int interpreter_token::whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point))
@@ -732,117 +897,6 @@ int interpreter_token::whitespace_automaton(stream::input_stream & _input, encod
 	}
 
 	return _skipped || _state == STATE::END ? 1 : 0;
-}
-
-std::pair<bool, int64_t> interpreter_token::match_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base)
-{
-	const auto _begin = _buffer.first;
-	int64_t _result = 0;
-
-	// No input available
-	if (_buffer.first >= _buffer.second) {
-		return { false, 0 };
-	}
-
-	do {
-		auto _tmp = _buffer.first;
-		auto _code_point = _encoder->next(_buffer.first, _buffer.second);
-
-		if (_code_point != '\'') {
-			auto _value = encoding::encoder::hex_value(_code_point);
-
-			if (_value < _base) {
-				_result = _result * _base + _value;
-			} else {
-				_buffer.first = _tmp;
-
-				// Failed
-				if (_tmp == _begin) {
-
-					return { false, 0 };
-				}
-
-				break;
-			}
-		}
-	} while (_buffer.first < _buffer.second);
-
-	return { true, _result };
-}
-
-std::tuple<bool, int64_t, double, bool> interpreter_token::match_decimal(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
-{
-	const auto _begin = _buffer.first;
-	auto _result = std::make_tuple<bool, int64_t, double, bool>(true, 0, 0, false);
-
-	// Parse numbers
-	while (_buffer.first < _buffer.second) {
-		auto _tmp = _buffer.first;
-		auto _code_point = _encoder->next(_buffer.first, _buffer.second);
-
-		// Is floating point
-		if (_code_point == '.') {
-			std::get<3>(_result) = true;
-			std::get<2>(_result) = static_cast<double>(std::get<1>(_result));
-
-			goto gt_after_dot;
-		} else if (_code_point != '\'') {
-			// Floating point
-			if (_code_point == 'f' || _code_point == 'F') {
-				std::get<3>(_result) = true;
-				std::get<2>(_result) = static_cast<double>(std::get<1>(_result));
-
-				return _result;
-			}
-
-			auto _value = _code_point - '0';
-
-			// Invalid code point
-			if (_value < 0 || _value > 9) {
-				if (_tmp == _begin) {
-					std::get<0>(_result) = false;
-				}
-
-				_buffer.first = _tmp;
-
-				return _result;
-			}
-
-			std::get<1>(_result) = std::get<1>(_result) * 10 + _value;
-		}
-	}
-
-	// Only for floating point after the point
-	if (false) {
-	gt_after_dot:;
-		auto _factor = 1.;
-
-		while (_buffer.first < _buffer.second) {
-			auto _tmp = _buffer.first;
-			auto _code_point = _encoder->next(_buffer.first, _buffer.second);
-
-			if (_code_point != '\'') {
-				// Floating point end
-				if (_code_point == 'f' || _code_point == 'F') {
-					break;
-				}
-
-				auto _value = _code_point - '0';
-
-				// Invalid code point
-				if (_value < 0 || _value > 9) {
-					_buffer.first = _tmp;
-
-					return _result;
-				}
-
-				_factor /= 10.;
-				std::get<2>(_result) = std::get<2>(_result) + _value * _factor;
-			}
-		}
-	}
-
-	return _result;
 }
 
 }

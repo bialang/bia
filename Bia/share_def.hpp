@@ -1,6 +1,8 @@
 #pragma once
 
 #include <atomic>
+#include <cstdint>
+#include <utility>
 
 
 namespace bia
@@ -53,15 +55,6 @@ public:
 	*/
 	~share();
 	/**
-	 * Checks this share has only one owner.
-	 *
-	 * @since 3.66.135.746
-	 * @date 5-Aug-18
-	 *
-	 * @return true if this share has only one owner, otherwise false.
-	*/
-	bool only_owner() const noexcept;
-	/**
 	 * Returns the referred object.
 	 *
 	 * @since 3.64.132.730
@@ -79,17 +72,29 @@ public:
 	 * @return The object.
 	*/
 	const Type & get() const noexcept;
+	/**
+	 * The arrow access operator.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	 *
+	 * @return The data of the share.
+	*/
+	Type * operator->() noexcept;
+	/**
+	 * The arrow access operator.
+	 *
+	 * @since 3.69.144.799
+	 * @date 5-Dec-18
+	 *
+	 * @return The data of the share.
+	*/
+	const Type * operator->() const noexcept;
 
 private:
-	struct data
-	{
-		/** The referenced object. */
-		Type object;
-		/** The reference counter. */
-		std::atomic_size_t ref_counter;
+	typedef std::pair<int8_t[sizeof(Type)], std::atomic_size_t> data;
 
-		data(Type && _object);
-	} *_data;
+	data * _data;
 };
 
 }

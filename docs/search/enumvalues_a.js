@@ -2,6 +2,8 @@ var searchData=
 [
   ['o_5fassign',['O_ASSIGN',['../namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a7e57842f034b3cb8b07feebd318bf3cc',1,'bia::framework']]],
   ['o_5fassign_5fdivide',['O_ASSIGN_DIVIDE',['../namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a2a19222c235e6764ceb4756b1f3cc7de',1,'bia::framework']]],
+  ['o_5fassign_5fdouble_5fdivide',['O_ASSIGN_DOUBLE_DIVIDE',['../namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0ad8cb6cf575cfa01e98471449e42c9e6d',1,'bia::framework']]],
+  ['o_5fassign_5fdouble_5fmultiply',['O_ASSIGN_DOUBLE_MULTIPLY',['../namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a8677d1980136512eacc7db8aff9f0ff6',1,'bia::framework']]],
   ['o_5fassign_5fminus',['O_ASSIGN_MINUS',['../namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a512d371760ac05421d500e840a32d180',1,'bia::framework']]],
   ['o_5fassign_5fmodulus',['O_ASSIGN_MODULUS',['../namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0aafcc3c51667ad146b595bda488bbb294',1,'bia::framework']]],
   ['o_5fassign_5fmultiply',['O_ASSIGN_MULTIPLY',['../namespacebia_1_1framework.html#ac4192d5c3767f4d8720dc4dff0e215a0a80e25403fb8c663c2b8dcce94e836d22',1,'bia::framework']]],

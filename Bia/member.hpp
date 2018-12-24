@@ -12,6 +12,8 @@
 #include "native_type.hpp"
 #include "type_traits.hpp"
 #include "string_manager.hpp"
+#include "buffer_builder.hpp"
+#include "big_int.hpp"
 
 
 namespace bia
@@ -42,7 +44,9 @@ public:
 		/** The member can be displayed as an integer. */
 		F_TO_INT = 0x10,
 		/** The member can be displayed as a double. */
-		F_TO_DOUBLE = 0x20
+		F_TO_DOUBLE = 0x20,
+		/** The member is a big int. */
+		F_BIG_INT = 0x40,
 	};
 
 	/** The type of the parameter count. */
@@ -214,6 +218,7 @@ public:
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right) = 0;
 	/**
 	 * An operator call with a double as right value.
 	 *
@@ -368,6 +373,7 @@ public:
 	 * @return The double representation.
 	*/
 	virtual double to_double() const = 0;
+	virtual const char * to_cstring(utility::buffer_builder * _builder) const = 0;
 	/**
 	 * Casts this member to the specified mutable type.
 	 *

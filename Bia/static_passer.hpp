@@ -65,7 +65,7 @@ public:
 #if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 		// Allocate shadow space
 		if (_pushed) {
-			instruction8<OP_CODE::SUB, stack_pointer>(_passer._output, 4 * element_size);
+			instruction8<OP_CODE::SUB, stack_pointer>(*_passer._output, 4 * element_size);
 		}
 #endif
 	}
@@ -389,10 +389,10 @@ protected:
 	{
 		// Push onto stack
 		if (is_one_byte_value(_value)) {
-			instruction8<OP_CODE::PUSH>(_passer._output, static_cast<int8_t>(_value));
+			instruction8<OP_CODE::PUSH>(*_passer._output, static_cast<int8_t>(_value));
 		} // Push all 4 bytes
 		else {
-			instruction32<OP_CODE::PUSH>(_passer._output, *reinterpret_cast<int32_t*>(&_value));
+			instruction32<OP_CODE::PUSH>(*_passer._output, *reinterpret_cast<int32_t*>(&_value));
 		}
 	}
 	template<typename Type>
@@ -405,8 +405,8 @@ protected:
 		if (is_four_byte_value(_value)) {
 			push(static_cast<int32_t>(_value));
 		} else {
-			instruction64<OP_CODE::MOVE, accumulator>(_passer._output, *reinterpret_cast<int64_t*>(&_value));
-			instruction<OP_CODE::PUSH, accumulator>(_passer._output);
+			instruction64<OP_CODE::MOVE, accumulator>(*_passer._output, *reinterpret_cast<int64_t*>(&_value));
+			instruction<OP_CODE::PUSH, accumulator>(*_passer._output);
 		}
 #endif
 	}
@@ -415,29 +415,29 @@ protected:
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_offset.offset)) {
-			instruction<OP_CODE::LEA, accumulator, Register>(_passer._output, static_cast<int8_t>(_offset.offset));
+			instruction<OP_CODE::LEA, accumulator, Register>(*_passer._output, static_cast<int8_t>(_offset.offset));
 		} else {
-			instruction<OP_CODE::LEA, accumulator, Register>(_passer._output, _offset.offset);
+			instruction<OP_CODE::LEA, accumulator, Register>(*_passer._output, _offset.offset);
 		}
 
 		// Push address
-		instruction<OP_CODE::PUSH, accumulator>(_passer._output);
+		instruction<OP_CODE::PUSH, accumulator>(*_passer._output);
 	}
 	template<typename Register, typename Offset_type>
 	typename std::enable_if<utility::negation<std::is_void<Offset_type>::value>::value>::type push(register_offset<Register, Offset_type, false> _offset)
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_offset.offset)) {
-			instruction<OP_CODE::PUSH, Register>(_passer._output, static_cast<int8_t>(_offset.offset));
+			instruction<OP_CODE::PUSH, Register>(*_passer._output, static_cast<int8_t>(_offset.offset));
 		} else {
 			// Push address
-			instruction<OP_CODE::PUSH, Register>(_passer._output, _offset.offset);
+			instruction<OP_CODE::PUSH, Register>(*_passer._output, _offset.offset);
 		}
 	}
 	template<typename Register, bool Effective_address>
 	void push(register_offset<Register, void, Effective_address> _offset)
 	{
-		instruction<OP_CODE::PUSH, Register>(_passer._output);
+		instruction<OP_CODE::PUSH, Register>(*_passer._output);
 	}
 	template<typename Register>
 	void register_pass(reserved_parameter _value)
@@ -458,9 +458,9 @@ protected:
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_offset.offset)) {
-			instruction<OP_CODE::LEA, Destination, Source>(_passer._output, static_cast<int8_t>(_offset.offset));
+			instruction<OP_CODE::LEA, Destination, Source>(*_passer._output, static_cast<int8_t>(_offset.offset));
 		} else {
-			instruction<OP_CODE::LEA, Destination, Source>(_passer._output, _offset.offset);
+			instruction<OP_CODE::LEA, Destination, Source>(*_passer._output, _offset.offset);
 		}
 	}
 	template<typename Destination, typename Source, typename Offset_type>
@@ -468,15 +468,15 @@ protected:
 	{
 		// Save 3 bytes
 		if (is_one_byte_value(_offset.offset)) {
-			instruction<OP_CODE::MOVE, Destination, Source>(_passer._output, static_cast<int8_t>(_offset.offset));
+			instruction<OP_CODE::MOVE, Destination, Source>(*_passer._output, static_cast<int8_t>(_offset.offset));
 		} else {
-			instruction<OP_CODE::MOVE, Destination, Source>(_passer._output, _offset.offset);
+			instruction<OP_CODE::MOVE, Destination, Source>(*_passer._output, _offset.offset);
 		}
 	}
 	template<typename Destination, typename Source>
 	void register_pass(register_offset<Source, void, false> _offset)
 	{
-		instruction<OP_CODE::MOVE, Destination, Source>(_passer._output);
+		instruction<OP_CODE::MOVE, Destination, Source>(*_passer._output);
 	}
 	template<typename Register>
 	void register_pass(double _value)
@@ -484,14 +484,14 @@ protected:
 #if defined(BIA_ARCHITECTURE_X86_32)
 		BIA_IMPLEMENTATION_ERROR;
 #elif defined(BIA_ARCHITECTURE_X86_64)
-		instruction64<OP_CODE::MOVE, accumulator>(_passer._output, *reinterpret_cast<int64_t*>(&_value));
-		instruction<OP_CODE::MOVE_QUADWORD, Register, accumulator>(_passer._output);
+		instruction64<OP_CODE::MOVE, accumulator>(*_passer._output, *reinterpret_cast<int64_t*>(&_value));
+		instruction<OP_CODE::MOVE_QUADWORD, Register, accumulator>(*_passer._output);
 #endif
 	}
 	template<typename Register, typename Type>
 	typename std::enable_if<std::is_integral<Type>::value && sizeof(Type) == 4>::type register_pass(Type _value)
 	{
-		instruction32<OP_CODE::MOVE, Register>(_passer._output, *reinterpret_cast<int32_t*>(&_value));
+		instruction32<OP_CODE::MOVE, Register>(*_passer._output, *reinterpret_cast<int32_t*>(&_value));
 	}
 	template<typename Register, typename Type>
 	typename std::enable_if<std::is_integral<Type>::value && sizeof(Type) == 8>::type register_pass(Type _value)
@@ -499,7 +499,7 @@ protected:
 #if defined(BIA_ARCHITECTURE_X86_32)
 		BIA_IMPLEMENTATION_ERROR;
 #else
-		instruction64<OP_CODE::MOVE, Register>(_passer._output, *reinterpret_cast<int64_t*>(&_value));
+		instruction64<OP_CODE::MOVE, Register>(*_passer._output, *reinterpret_cast<int64_t*>(&_value));
 #endif
 	}
 	template<typename... Arguments>

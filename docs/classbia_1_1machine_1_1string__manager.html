@@ -102,8 +102,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3198b9eda61c12ae1665dfb335503702"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67eef03a25cae8408cc55f8a8bcfa153"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#a67eef03a25cae8408cc55f8a8bcfa153">~string_manager</a> () noexcept</td></tr>
 <tr class="separator:a67eef03a25cae8408cc55f8a8bcfa153"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae04cebb19a281632cbba395f0c4e63c4"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#ae04cebb19a281632cbba395f0c4e63c4">register_string</a> (int8_t *_resource)</td></tr>
-<tr class="separator:ae04cebb19a281632cbba395f0c4e63c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82b78ab2bfd1747be289f556ba367979"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#a82b78ab2bfd1747be289f556ba367979">register_string</a> (void *_resource)</td></tr>
+<tr class="separator:a82b78ab2bfd1747be289f556ba367979"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d8d8d5ea724bd4879f6a2527cbd5dc2"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT <a class="el" href="classbia_1_1machine_1_1string__manager.html#a29ef514eaadd7db19d63af77da5bb84d">name_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#a0d8d8d5ea724bd4879f6a2527cbd5dc2">name_address</a> (const char *_name, size_t _length)</td></tr>
 <tr class="separator:a0d8d8d5ea724bd4879f6a2527cbd5dc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34bcb7cbaec2fe4a953dd3634ec54fcb"><td class="memItemLeft" align="right" valign="top">BIA_EXPORT const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#a34bcb7cbaec2fe4a953dd3634ec54fcb">format_address</a> (const char *_format, size_t _length)</td></tr>
@@ -115,8 +115,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a097e959cffa1d626934354bc37fc22b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac68cb77e7eaacd8024fbdd34b66fb700"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="structbia_1_1machine_1_1string__manager_1_1string__entry.html">string_entry</a>, <a class="el" href="structbia_1_1machine_1_1string__manager_1_1string__hasher.html">string_hasher</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#ac68cb77e7eaacd8024fbdd34b66fb700">_index</a></td></tr>
 <tr class="separator:ac68cb77e7eaacd8024fbdd34b66fb700"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03fe692d8d5faf8a6d603e700aa750d2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int8_t * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#a03fe692d8d5faf8a6d603e700aa750d2">_string_resources</a></td></tr>
-<tr class="separator:a03fe692d8d5faf8a6d603e700aa750d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08839c64b71ee00565acfb36eb4b82f7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; void * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbia_1_1machine_1_1string__manager.html#a08839c64b71ee00565acfb36eb4b82f7">_string_resources</a></td></tr>
+<tr class="separator:a08839c64b71ee00565acfb36eb4b82f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a29ef514eaadd7db19d63af77da5bb84d"></a>
@@ -350,8 +350,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae04cebb19a281632cbba395f0c4e63c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae04cebb19a281632cbba395f0c4e63c4">&#9670;&nbsp;</a></span>register_string()</h2>
+<a id="a82b78ab2bfd1747be289f556ba367979"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82b78ab2bfd1747be289f556ba367979">&#9670;&nbsp;</a></span>register_string()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -359,7 +359,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">BIA_EXPORT void bia::machine::string_manager::register_string </td>
           <td>(</td>
-          <td class="paramtype">int8_t *&#160;</td>
+          <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>_resource</em></td><td>)</td>
           <td></td>
         </tr>
@@ -415,8 +415,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a03fe692d8d5faf8a6d603e700aa750d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03fe692d8d5faf8a6d603e700aa750d2">&#9670;&nbsp;</a></span>_string_resources</h2>
+<a id="a08839c64b71ee00565acfb36eb4b82f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08839c64b71ee00565acfb36eb4b82f7">&#9670;&nbsp;</a></span>_string_resources</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -425,7 +425,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;int8_t*&gt; bia::machine::string_manager::_string_resources</td>
+          <td class="memname">std::vector&lt;void*&gt; bia::machine::string_manager::_string_resources</td>
         </tr>
       </table>
   </td>

@@ -3,6 +3,16 @@ cmake_minimum_required(VERSION 3.1)
 set(Bia_HEADER_FILES "bia.hpp" "config.hpp" "config_cmake.hpp")
 set(Bia_SOURCE_FILES "")
 
+# common namespace
+set(Bia_HEADER_FILES_COMMON "member_names.hpp")
+set(Bia_SOURCE_FILES_COMMON "member_names.cpp")
+
+source_group("Header Files\\common" FILES ${Bia_HEADER_FILES_COMMON})
+source_group("Source Files\\common" FILES ${Bia_SOURCE_FILES_COMMON})
+
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMMON})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMMON})
+
 # compiler namespace
 set(Bia_HEADER_FILES_COMPILER "compile_compare_operation.hpp" "compile_normal_operation.hpp" "compiler.hpp" "compiler_value.hpp" "constant_operation.hpp" "scope_handler.hpp" "temp_counter.hpp")
 set(Bia_SOURCE_FILES_COMPILER "compiler.cpp")
@@ -12,6 +22,16 @@ source_group("Source Files\\compiler" FILES ${Bia_SOURCE_FILES_COMPILER})
 
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMPILER})
 set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMPILER})
+
+# dependency namespace
+set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp")
+set(Bia_SOURCE_FILES_DEPENDENCY "big_int.cpp")
+
+source_group("Header Files\\dependency" FILES ${Bia_HEADER_FILES_DEPENDENCY})
+source_group("Source Files\\dependency" FILES ${Bia_SOURCE_FILES_DEPENDENCY})
+
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_DEPENDENCY})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_DEPENDENCY})
 
 # encoding namespace
 set(Bia_HEADER_FILES_ENCODING "ascii.hpp" "encoder.hpp" "utf8.hpp" "utf32.hpp")
@@ -51,9 +71,11 @@ set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "lambda_fun
 
 source_group("Header Files\\framework\\executable" FILES ${Bia_HEADER_FILES_EXECUTABLE})
 
-set(Bia_HEADER_FILES_NATIVE "cstring_member.hpp" "cstring_member_def.hpp" "native_member.hpp" "native_member_def.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
+set(Bia_HEADER_FILES_NATIVE "big_int_member.hpp" "cstring_member.hpp" "double_member.hpp" "int_member.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
+set(Bia_SOURCE_FILES_NATIVE "big_int_member.cpp" 	"double_member.cpp" "int_member.cpp")
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
+source_group("Source Files\\framework\\native" FILES ${Bia_SOURCE_FILES_NATIVE})
 
 set(Bia_HEADER_FILES_OBJECT "class_template.hpp" "class_template_def.hpp" "constructor_chain.hpp" "instance_holder.hpp" "instance_holder_def.hpp" "member_map.hpp" "member_map_def.hpp" "namespace_member.hpp" "object.hpp" "object_def.hpp" "object_variable.hpp" "raw_object.hpp" "raw_object_def.hpp" "template_wrapper.hpp")
 set(Bia_SOURCE_FILES_OBJECT "member_map.cpp" "namespace_member.cpp")
@@ -62,7 +84,7 @@ source_group("Header Files\\framework\\object" FILES ${Bia_HEADER_FILES_OBJECT})
 source_group("Source Files\\framework\\object" FILES ${Bia_SOURCE_FILES_OBJECT})
 
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_FRAMEWORK} ${Bia_HEADER_FILES_EXECUTABLE} ${Bia_HEADER_FILES_NATIVE} ${Bia_HEADER_FILES_OBJECT})
-set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_FRAMEWORK} ${Bia_SOURCE_FILES_OBJECT})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_FRAMEWORK} ${Bia_SOURCE_FILES_NATIVE} ${Bia_SOURCE_FILES_OBJECT})
 
 
 # grammar namespace
@@ -89,8 +111,8 @@ set(Bia_SOURCE_FILES_LINK "instantiate.cpp" "operation.cpp")
 source_group("Header Files\\machine\\link" FILES ${Bia_HEADER_FILES_LINK})
 source_group("Source Files\\machine\\link" FILES ${Bia_SOURCE_FILES_LINK})
 
-set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "executable_allocator.hpp" "simple_allocator.hpp" "simple_executable_allocator.hpp" "stl_allocator_wrapper.hpp")
-set(Bia_SOURCE_FILES_MEMORY "simple_allocator.cpp" "simple_executable_allocator.cpp")
+set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "big_int_allocator.hpp" "executable_allocator.hpp" "member_allocator.hpp" "simple_allocator.hpp" "simple_executable_allocator.hpp" "stl_allocator_wrapper.hpp")
+set(Bia_SOURCE_FILES_MEMORY "big_int_allocator.cpp" "simple_allocator.cpp" "simple_executable_allocator.cpp")
 
 source_group("Header Files\\machine\\memory" FILES ${Bia_HEADER_FILES_MEMORY})
 source_group("Source Files\\machine\\memory" FILES ${Bia_SOURCE_FILES_MEMORY})
@@ -120,7 +142,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_STREAM})
 
 
 # utility namespace
-set(Bia_HEADER_FILES_UTILITY "guard.hpp" "hasher.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp")
+set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "max.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp" "virtual_object.hpp")
 
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 
@@ -128,15 +150,20 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
 
 # Adding the library
 if(BIA_BUILD_SHARED)
-  add_library(Bia SHARED ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+  add_library(Bia SHARED ${Bia_SOURCE_FILES})
 else(BIA_BUILD_SHARED)
-  add_library(Bia STATIC ${Bia_HEADER_FILES} ${Bia_SOURCE_FILES})
+  add_library(Bia STATIC ${Bia_SOURCE_FILES})
 endif(BIA_BUILD_SHARED)
+
+
+target_link_libraries(Bia ${MPIR_LIB})
+#target_include_directories(Bia ${MPIR_INCLUDE})
 
 # For dlopen and dlsym
 if(CMAKE_DL_LIBS)
     target_link_libraries(Bia ${CMAKE_DL_LIBS})
 endif()
+
 
 # Install
 install(TARGETS Bia DESTINATION lib)

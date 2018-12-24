@@ -13,16 +13,21 @@ namespace object
 {
 
 template<typename Type>
-inline instance_holder<Type>::instance_holder(machine::memory::allocation<Type> _instance, bool _owner) noexcept : _data(_instance, _owner)
+inline instance_holder<Type>::data_pair::data_pair(machine::memory::allocation<Type> _first, bool _second) : first(_first), second(_second)
 {
 }
 
 template<typename Type>
-inline instance_holder<Type>::~instance_holder()
+inline instance_holder<Type>::data_pair::~data_pair()
 {
-	if (_data.only_owner() && _data.get().second) {
-		machine::machine_context::active_allocator()->destroy(_data.get().first);
+	if (second) {
+		machine::machine_context::active_allocator()->destroy(first);
 	}
+}
+
+template<typename Type>
+inline instance_holder<Type>::instance_holder(machine::memory::allocation<Type> _instance, bool _owner) noexcept : _data(_instance, _owner)
+{
 }
 
 template<typename Type>

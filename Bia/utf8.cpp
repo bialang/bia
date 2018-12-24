@@ -156,5 +156,10 @@ code_point utf8::next(const int8_t *& _begin, const int8_t * _end)
 	return _char;
 }
 
+code_point utf8::peek(const int8_t * _begin, const int8_t * _end)
+{
+	return next(_begin, _end);
+}
+
 }
 }

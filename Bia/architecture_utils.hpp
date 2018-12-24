@@ -277,7 +277,7 @@ enum class OP_CODE
 	SUB,
 	LEA,
 	RETURN_NEAR,
-	XOR,
+	TEST,
 	JUMP_RELATIVE,
 	JUMP_EQUAL,
 	JUMP_NOT_EQUAL,
@@ -351,12 +351,21 @@ struct register_offset
 	{
 		offset = _offset;
 	}
+	bool operator==(const register_offset & _right) const noexcept
+	{
+		return offset == _right.offset;
+	}
 };
 
 template<typename Register, bool Effective_address>
 struct register_offset<Register, void, Effective_address>
 {
 	typedef Register register_type;
+
+	bool operator==(const register_offset & _right) const noexcept
+	{
+		return true;
+	}
 };
 #endif
 

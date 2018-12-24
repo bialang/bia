@@ -107,7 +107,7 @@ private:
 	 *
 	 * @throws
 	*/
-	void test_compiler_value();
+	BIA_EXPORT void test_compiler_value();
 	/**
 	 * Passes one parameter item.
 	 *
@@ -120,7 +120,7 @@ private:
 	 *
 	 * @return The char of the item type.
 	*/
-	char handle_parameter_item(machine::platform::varg_member_passer & _passer);
+	BIA_EXPORT char handle_parameter_item(machine::platform::varg_member_passer & _passer);
 	/**
 	 * Handles a math expression or a math term token.
 	 *
@@ -246,8 +246,8 @@ private:
 
 		return _report->content.end;
 	}
-	const grammar::report * handle_value_expression(const grammar::report * _report);
-	const grammar::report * handle_root(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_value_expression(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_root(const grammar::report * _report);
 	/**
 	 * Handle the root without compiling it. This is only used to get the last report.
 	 *
@@ -258,7 +258,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_root_ignore(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_root_ignore(const grammar::report * _report);
 	/**
 	 * Handles a math expression or a math term token.
 	 *
@@ -274,7 +274,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next);
+	BIA_EXPORT const grammar::report * handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next);
 	/**
 	 * Handles a condition expression token.
 	 *
@@ -287,7 +287,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_condition_expression(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_condition_expression(const grammar::report * _report);
 	/**
 	 * Handles a number token.
 	 *
@@ -298,7 +298,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_number(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_number(const grammar::report * _report);
 	/**
 	 * Handles a raw value token.
 	 *
@@ -311,7 +311,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_raw_value(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_raw_value(const grammar::report * _report);
 	/**
 	 * Handles a single identifier.
 	 *
@@ -324,7 +324,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_identifier(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_identifier(const grammar::report * _report);
 	/**
 	 * Handles a math factor token.
 	 *
@@ -337,7 +337,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_math_factor(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_math_factor(const grammar::report * _report);
 	/**
 	 * Handles the member token.
 	 *
@@ -351,7 +351,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_member(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_member(const grammar::report * _report);
 	/**
 	 * Handles the parameter token.
 	 *
@@ -366,8 +366,8 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_parameter(const grammar::report * _report);
-	const grammar::report * handle_string(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_parameter(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_string(const grammar::report * _report);
 	/**
 	 * Handles a variable declaration token.
 	 *
@@ -381,7 +381,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_variable_declaration(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_variable_declaration(const grammar::report * _report);
 	/**
 	 * Handles an if statement.
 	 *
@@ -395,7 +395,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_if(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_if(const grammar::report * _report);
 	/**
 	 * Handles a print token.
 	 *
@@ -409,9 +409,9 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	const grammar::report * handle_print(const grammar::report * _report);
-	const grammar::report * handle_test_loop(const grammar::report * _report);
-	const grammar::report * handle_import(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_print(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_test_loop(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_import(const grammar::report * _report);
 };
 
 }
