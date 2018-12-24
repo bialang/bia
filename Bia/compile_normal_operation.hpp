@@ -10,6 +10,7 @@
 #include "operator.hpp"
 #include "operation.hpp"
 #include "member.hpp"
+#include "big_int.hpp"
 
 
 namespace bia
@@ -58,6 +59,10 @@ public:
 		switch (_left.type()) {
 		case VT::INT:
 			left_constant_operation(_left.value().rt_int, _operator, _right);
+
+			break;
+		case VT::BIG_INT:
+			left_constant_operation(*_left.value().rt_big_int, _operator, _right);
 
 			break;
 		case VT::DOUBLE:
@@ -119,11 +124,15 @@ private:
 			if (_right.is_int32()) {
 				function_caller_helper(&framework::member::operator_call_int32, _member, _destination, _operator, static_cast<int32_t>(_right.value().rt_int));
 			} else {
-				function_caller_helper(&framework::member::operator_call_int32, _member, _destination, _operator, _right.value().rt_int);
+				function_caller_helper(&framework::member::operator_call_int64, _member, _destination, _operator, _right.value().rt_int);
 			}
 
 			break;
 		}
+		case VT::BIG_INT:
+			function_caller_helper(&framework::member::operator_call_big_int, _member, _destination, _operator, _right.value().rt_big_int);
+
+			break;
 		case VT::DOUBLE:
 			function_caller_helper(&framework::member::operator_call_double, _member, _destination, _operator, _right.value().rt_double);
 
@@ -160,7 +169,7 @@ private:
 	 * @param _operator The operator.
 	 * @param [in] _right The right hand value.
 	 *
-	 * @throws See machine::platform::toolset::call().
+	 * @throws See machine::platform::toolset::call_virtual().
 	*/
 	template<typename Function, typename Member, typename Right>
 	void function_caller_helper(Function && _function, Member && _member, machine::platform::toolset::temp_result * _destination, framework::operator_type _operator, Right && _right)
@@ -216,6 +225,11 @@ private:
 			_toolset.call_static(&machine::link::operation_double, _destination, _operator, _right, _left);
 		}
 	}
+	template<typename Right>
+	void left_constant_right_member_operation(dependency::big_int & _left, framework::operator_type _operator, Right && _right)
+	{
+		BIA_NOT_IMPLEMENTED;
+	}
 	/**
 	 * Executes the operator.
 	 *
@@ -238,6 +252,10 @@ private:
 		switch (_right.type()) {
 		case VT::INT:
 			both_constant_operation(_left, _operator, _right.value().rt_int);
+
+			break;
+		case VT::BIG_INT:
+			both_constant_operation(_left, _operator, *_right.value().rt_big_int);
 
 			break;
 		case VT::DOUBLE:
@@ -268,9 +286,11 @@ private:
 	 * @param [in] _left The left hand value.
 	 * @param _operator The operator.
 	 * @param [in] _right The right hand value.
+	 *
+	 * @throws exception::operator_error The operator is not supported.
 	*/
 	template<typename Left, typename Right>
-	typename std::enable_if<std::is_floating_point<Left>::value || std::is_floating_point<Right>::value || true>::type both_constant_operation(Left && _left, framework::operator_type _operator, Right && _right)
+	typename std::enable_if<std::is_integral<Left>::value && std::is_integral<Right>::value>::type both_constant_operation(Left && _left, framework::operator_type _operator, Right && _right)
 	{
 		using namespace framework;
 
@@ -292,16 +312,66 @@ private:
 
 			break;
 		case O_DIVIDE:
-			_value.set_return(static_cast<double>(_left) / static_cast<double>(_right));
-
-			break;
-		case O_DOUBLE_DIVIDE:
 			_value.set_return(static_cast<int64_t>(_left / _right));
 
 			break;
+		case O_DOUBLE_DIVIDE:
+			_value.set_return(static_cast<double>(_left) / static_cast<double>(_right));
+
+			break;
 		default:
-			BIA_IMPLEMENTATION_ERROR;
+			throw exception::operator_error(BIA_EM_UNSUPPORTED_OPERATOR);
 		}
+	}
+	template<typename Left, typename Right>
+	typename std::enable_if<!(std::is_integral<Left>::value && std::is_integral<Right>::value)>::type both_constant_operation(Left && _left, framework::operator_type _operator, Right && _right)
+	{
+		BIA_IMPLEMENTATION_ERROR;
+	}
+	template<typename Right>
+	void both_constant_operation(dependency::big_int & _left, framework::operator_type _operator, Right && _right)
+	{
+		using namespace framework;
+
+		switch (_operator) {
+		case O_PLUS:
+			_left.add(_right);
+
+			break;
+		case O_MINUS:
+			_left.subtract(_right);
+
+			break;
+		case O_MULTIPLY:
+			_left.multiply(_right);
+
+			break;
+		case O_DOUBLE_MULTIPLY:
+			_left.power(_right);
+
+			break;
+		case O_DIVIDE:
+			_left.divide(_right);
+
+			break;
+		case O_MODULUS:
+			_left.modulo(_right);
+
+			break;
+		default:
+			throw exception::operator_error(BIA_EM_UNSUPPORTED_OPERATOR);
+		}
+
+		_value.set_return(&_left);
+		free_big_int(_right);
+	}
+	void free_big_int(const dependency::big_int & _big_int)
+	{
+		///TODO
+	}
+	template<typename Type>
+	void free_big_int(Type _not_big_int)
+	{
 	}
 };
 
