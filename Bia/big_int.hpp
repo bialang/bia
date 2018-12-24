@@ -273,7 +273,7 @@ private:
 				mpz_add_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
 		} else {
-			big_int _tmp(static_cast<int64_t>(_right));
+			big_int _tmp(expand_cast<int64_t>(_right));
 
 			mpz_add(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
 		}
@@ -288,7 +288,7 @@ private:
 				mpz_sub_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
 		} else {
-			big_int _tmp(static_cast<int64_t>(_right));
+			big_int _tmp(expand_cast<int64_t>(_right));
 
 			mpz_sub(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
 		}
@@ -297,9 +297,9 @@ private:
 	static void big_int_mul(Destination _destination, Source _source, Right _right)
 	{
 		if (sizeof(_right) <= sizeof(mpir_si)) {
-			mpz_mul_si(_destination, _source, static_cast<mpir_si>(_right));
+			mpz_mul_si(_destination, _source, expand_cast<mpir_si>(_right));
 		} else {
-			big_int _tmp(static_cast<int64_t>(_right));
+			big_int _tmp(expand_cast<int64_t>(_right));
 
 			mpz_mul(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
 		}
@@ -311,7 +311,7 @@ private:
 			throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
 		}
 
-		if (sizeof(_right) <= sizeof(mpir_si)) {
+		if (sizeof(_right) <= sizeof(mpir_ui)) {
 			if (_right < 0) {
 				mpz_tdiv_q_ui(_destination, _source, negate_cast<mpir_ui>(_right));
 				mpz_neg(_destination, _destination);
@@ -319,7 +319,7 @@ private:
 				mpz_tdiv_q_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
 		} else {
-			big_int _tmp(static_cast<int64_t>(_right));
+			big_int _tmp(expand_cast<int64_t>(_right));
 
 			mpz_tdiv_q(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
 		}
@@ -331,17 +331,18 @@ private:
 			throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
 		}
 
-		if (sizeof(_right) <= sizeof(mpir_si)) {
+		if (sizeof(_right) <= sizeof(mpir_ui)) {
 			if (_right < 0) {
-				mpz_mod_ui(_destination, _source, static_cast<mpir_ui>(-_right));
-				mpz_neg(_destination, _destination);
+				auto _result = _right + mpz_fdiv_r_ui(_destination, _source, negate_cast<mpir_ui>(_right));
+
+				mpz_set_si(_destination, _result);
 			} else {
-				mpz_mod_ui(_destination, _source, static_cast<mpir_ui>(_right));
+				mpz_fdiv_r_ui(_destination, _source, expand_cast<mpir_ui>(_right));
 			}
 		} else {
-			big_int _tmp(static_cast<int64_t>(_right));
+			big_int _tmp(expand_cast<int64_t>(_right));
 
-			mpz_mod(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
+			mpz_fdiv_r(_destination, _source, reinterpret_cast<const type*>(_tmp._buffer));
 		}
 	}
 	/**

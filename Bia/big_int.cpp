@@ -105,7 +105,7 @@ void big_int::reset() noexcept
 
 void big_int::add(const big_int & _right)
 {
-	mpz_add(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	add(_right, *this);
 }
 
 void big_int::add(const big_int & _right, big_int & _result) const
@@ -115,7 +115,7 @@ void big_int::add(const big_int & _right, big_int & _result) const
 
 void big_int::subtract(const big_int & _right)
 {
-	mpz_sub(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	subtract(_right, *this);
 }
 
 void big_int::subtract(const big_int & _right, big_int & _result) const
@@ -125,7 +125,7 @@ void big_int::subtract(const big_int & _right, big_int & _result) const
 
 void big_int::multiply(const big_int & _right)
 {
-	mpz_mul(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	multiply(_right, *this);
 }
 
 void big_int::multiply(const big_int & _right, big_int & _result) const
@@ -135,11 +135,7 @@ void big_int::multiply(const big_int & _right, big_int & _result) const
 
 void big_int::divide(const big_int & _right)
 {
-	if (_right.is_zero()) {
-		throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
-	}
-
-	mpz_tdiv_q(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	divide(_right, *this);
 }
 
 void big_int::divide(const big_int & _right, big_int & _result) const
@@ -153,11 +149,7 @@ void big_int::divide(const big_int & _right, big_int & _result) const
 
 void big_int::modulo(const big_int & _right)
 {
-	if (_right.is_zero()) {
-		throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
-	}
-
-	mpz_mod(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	modulo(_right, *this);
 }
 
 void big_int::modulo(const big_int & _right, big_int & _result) const
@@ -166,7 +158,7 @@ void big_int::modulo(const big_int & _right, big_int & _result) const
 		throw exception::zero_division_error(BIA_EM_DIVISION_BY_ZERO);
 	}
 
-	mpz_mod(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	mpz_fdiv_r(reinterpret_cast<type*>(_result._buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
 }
 
 void big_int::power(int32_t _exponent)
@@ -201,7 +193,7 @@ void big_int::power(const big_int & _exponent, big_int & _result) const
 
 void big_int::negate()
 {
-	mpz_neg(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer));
+	negate(*this);
 }
 
 void big_int::negate(big_int & _result) const
@@ -211,7 +203,7 @@ void big_int::negate(big_int & _result) const
 
 void big_int::bitwise_and(const big_int & _right)
 {
-	mpz_and(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	bitwise_and(_right, *this);
 }
 
 void big_int::bitwise_and(const big_int & _right, big_int & _result) const
@@ -221,7 +213,7 @@ void big_int::bitwise_and(const big_int & _right, big_int & _result) const
 
 void big_int::bitwise_or(const big_int & _right)
 {
-	mpz_ior(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	bitwise_or(_right, *this);
 }
 
 void big_int::bitwise_or(const big_int & _right, big_int & _result) const
@@ -231,7 +223,7 @@ void big_int::bitwise_or(const big_int & _right, big_int & _result) const
 
 void big_int::bitwise_xor(const big_int & _right)
 {
-	mpz_xor(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+	bitwise_xor(_right, *this);
 }
 
 void big_int::bitwise_xor(const big_int & _right, big_int & _result) const
@@ -241,7 +233,7 @@ void big_int::bitwise_xor(const big_int & _right, big_int & _result) const
 
 void big_int::complement()
 {
-	mpz_com(reinterpret_cast<type*>(_buffer), reinterpret_cast<const type*>(_buffer));
+	complement(*this);
 }
 
 void big_int::complement(big_int & _result) const
@@ -251,7 +243,7 @@ void big_int::complement(big_int & _result) const
 
 void big_int::left_shift(unsigned int _count)
 {
-	BIA_NOT_IMPLEMENTED;
+	left_shift(_count, *this);
 }
 
 void big_int::left_shift(unsigned int _count, big_int & _result) const
@@ -261,7 +253,7 @@ void big_int::left_shift(unsigned int _count, big_int & _result) const
 
 void big_int::arithmetic_right_shift(unsigned int _count)
 {
-	BIA_NOT_IMPLEMENTED;
+	arithmetic_right_shift(_count, *this);
 }
 
 void big_int::arithmetic_right_shift(unsigned int _count, big_int & _result) const
@@ -271,7 +263,7 @@ void big_int::arithmetic_right_shift(unsigned int _count, big_int & _result) con
 
 void big_int::logical_right_shift(unsigned int _count)
 {
-	BIA_NOT_IMPLEMENTED;
+	logical_right_shift(_count, *this);
 }
 
 void big_int::logical_right_shift(unsigned int _count, big_int & _result) const
