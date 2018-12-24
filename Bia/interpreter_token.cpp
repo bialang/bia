@@ -623,7 +623,7 @@ int interpreter_token::match_native_number(stream::input_stream::buffer_type & _
 		break;
 	}
 
-	_output.type = report::TYPE::DOUBLE_VALUE;
+	_output.type = report::TYPE::INT_VALUE;
 	_output.content.double_value = 0;
 
 	while (_buffer.first < _buffer.second) {

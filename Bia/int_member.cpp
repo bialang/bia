@@ -87,6 +87,11 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int64(member * _des
 	}
 }
 
+void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
 void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_double(member * _destination, operator_type _operator, double _right)
 {
 	if (_destination) {

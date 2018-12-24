@@ -13,6 +13,7 @@
 #include "type_traits.hpp"
 #include "string_manager.hpp"
 #include "buffer_builder.hpp"
+#include "big_int.hpp"
 
 
 namespace bia
@@ -217,6 +218,7 @@ public:
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
 	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right) = 0;
 	/**
 	 * An operator call with a double as right value.
 	 *

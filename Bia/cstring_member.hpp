@@ -65,6 +65,12 @@ inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_ca
 }
 
 template<typename Char_type>
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+{
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
+}
+
+template<typename Char_type>
 inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_double(member * _destination, operator_type _operator, double _right)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);

@@ -108,9 +108,8 @@ int main()
 		std::cout << std::numeric_limits<double>::min() << "|" << std::numeric_limits<double>::max() << '\n';
 		// Script
 		char _script[] = u8R""(
-ta("hi")
-ta("bye")
-var i = 999999999999999999999999999999999999999999999999999999999999999.
+
+var i = 999999999999999999999999999999999999999999999999999999999999999 ** 655
 print i
 ser(i, "hi")
 #ser(i, "hi")

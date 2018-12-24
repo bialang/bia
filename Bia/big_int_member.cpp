@@ -10,7 +10,7 @@ namespace native
 {
 
 template<typename Right>
-inline void big_int_member_operation(dependency::big_int & _left, dependency::big_int & _destination, operator_type _operator, Right _right)
+inline void big_int_member_operation(dependency::big_int & _left, dependency::big_int & _destination, operator_type _operator, Right && _right)
 {
 	switch (_operator) {
 	case O_ASSIGN:
@@ -67,7 +67,7 @@ inline void big_int_member_operation(dependency::big_int & _left, dependency::bi
 }
 
 template<typename Right>
-inline void big_int_member_operation(dependency::big_int & _left, operator_type _operator, Right _right)
+inline void big_int_member_operation(dependency::big_int & _left, operator_type _operator, Right && _right)
 {
 	switch (_operator) {
 	case O_ASSIGN:
@@ -199,6 +199,15 @@ void big_int_member::operator_call_int64(member * _destination, operator_type _o
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, _right);
 	} else {
 		big_int_member_operation(_data.get(), _operator, _right);
+	}
+}
+
+void BIA_MEMBER_CALLING_CONVENTION big_int_member::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+{
+	if (_destination) {
+		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, *_right);
+	} else {
+		big_int_member_operation(_data.get(), _operator, *_right);
 	}
 }
 
