@@ -414,6 +414,7 @@ private:
 	*/
 	BIA_EXPORT const grammar::report * handle_print(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_test_loop(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_loop_control(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_import(const grammar::report * _report);
 };
 

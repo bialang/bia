@@ -170,6 +170,8 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_print(_report);
 	case BGR_TEST_LOOP:
 		return handle_test_loop(_report);
+	case BGR_LOOP_CONTROL:
+		return handle_loop_control(_report);
 	case BGR_IMPORT:
 		return handle_import(_report);
 	case BGR_VALUE:
@@ -730,9 +732,10 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 	auto _jump_type = _report++->content.keyword == grammar::IS_WHILE ? toolset::JUMP::JUMP_IF_FALSE : toolset::JUMP::JUMP_IF_TRUE;
 
 	// Write loop condition
-	auto _condition_pos = _toolset.output_stream().position();
 	auto _compile = true;
 	toolset::position _condition_jump_update = -1;
+
+	_loop_tracker.open_loop(_toolset.output_stream().position());
 
 	_report = handle_value<true>(_report, [&] {
 		// Constant condition
@@ -763,16 +766,38 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 		handle_root(_report);
 
-		_toolset.jump(toolset::JUMP::JUMP, _condition_pos);
+		_toolset.jump(toolset::JUMP::JUMP, _loop_tracker.loop_start());
 
 		// Update condition jump
-		_toolset.jump(_jump_type, _toolset.output_stream().position(), _condition_jump_update);
+		auto _destination = _toolset.output_stream().position();
+
+			_toolset.jump(_jump_type, _destination, _condition_jump_update);
+
+		// Update all end jump that occurred within the loop
+		for (auto _jump_update : _loop_tracker.end_jump_updates()) {
+			_toolset.jump(toolset::JUMP::JUMP, _destination, _jump_update);
+		}
+
+		_loop_tracker.close_loop();
 	} // Discard do jump instruction since loop is not compiled
 	else if (_do_jump_update != -1) {
 		_toolset.output_stream().set_position(_do_jump_update);
 	}
 
 	return _end;
+}
+
+const grammar::report * compiler::handle_loop_control(const grammar::report * _report)
+{
+	if (_loop_tracker.open_loops()) {
+		if (_report->content.keyword == grammar::IS_BREAK) {
+			_loop_tracker.add_end_update(_toolset.jump(machine::platform::toolset::JUMP::JUMP, 0));
+		} else {
+			_toolset.jump(machine::platform::toolset::JUMP::JUMP, _loop_tracker.loop_start());
+		}
+	}
+
+	return _report + 1;
 }
 
 const grammar::report * compiler::handle_import(const grammar::report * _report)
