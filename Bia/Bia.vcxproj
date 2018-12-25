@@ -236,6 +236,7 @@
     <ClInclude Include="compiler_loop_tracker.hpp" />
     <ClInclude Include="disguised_caller_source.hpp" />
     <ClInclude Include="buffer_builder.hpp" />
+    <ClInclude Include="local_object.hpp" />
     <ClInclude Include="member_names.hpp" />
     <ClInclude Include="cstring_member_def.hpp" />
     <ClInclude Include="custom_member.hpp" />

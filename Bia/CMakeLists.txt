@@ -142,7 +142,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_STREAM})
 
 
 # utility namespace
-set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "max.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp" "virtual_object.hpp")
+set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "local_object.hpp" "max.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp" "virtual_object.hpp")
 
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 

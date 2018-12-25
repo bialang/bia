@@ -533,6 +533,9 @@
     <ClInclude Include="compiler_loop_tracker.hpp">
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
+    <ClInclude Include="local_object.hpp">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

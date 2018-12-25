@@ -20,6 +20,8 @@ namespace utility
  *
  * @tparam Default The default return type.
  * @tparam Types The valid types.
+ *
+ * @see @ref local_object
 */
 template<typename Default, typename... Types>
 class virtual_object
@@ -38,6 +40,8 @@ public:
 
 		_object_id = 0;
 	}
+	virtual_object(const virtual_object & _copy) = delete;
+	virtual_object(virtual_object && _move) = delete;
 	/**
 	 * Destructor.
 	 *
