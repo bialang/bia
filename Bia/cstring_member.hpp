@@ -85,7 +85,7 @@ inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::object_memb
 template<typename Char_type>
 inline int cstring_member<Char_type>::flags() const
 {
-	return F_CONST;
+	return F_CSTRING;
 }
 
 template<typename Char_type>

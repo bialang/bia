@@ -290,7 +290,7 @@ private:
 	 * @throws exception::operator_error The operator is not supported.
 	*/
 	template<typename Left, typename Right>
-	typename std::enable_if<std::is_integral<Left>::value && std::is_integral<Right>::value>::type both_constant_operation(Left && _left, framework::operator_type _operator, Right && _right)
+	typename std::enable_if<std::is_arithmetic<Left>::value && std::is_arithmetic<Right>::value>::type both_constant_operation(Left _left, framework::operator_type _operator, Right _right)
 	{
 		using namespace framework;
 
@@ -324,7 +324,7 @@ private:
 		}
 	}
 	template<typename Left, typename Right>
-	typename std::enable_if<!(std::is_integral<Left>::value && std::is_integral<Right>::value)>::type both_constant_operation(Left && _left, framework::operator_type _operator, Right && _right)
+	typename std::enable_if<!(std::is_arithmetic<Left>::value && std::is_arithmetic<Right>::value)>::type both_constant_operation(Left _left, framework::operator_type _operator, Right _right)
 	{
 		BIA_IMPLEMENTATION_ERROR;
 	}

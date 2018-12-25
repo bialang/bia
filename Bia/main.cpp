@@ -14,6 +14,7 @@
 #include <iostream>
 #include <regex>
 #include "big_int_allocator.hpp"
+#include "cstring_member_def.hpp"
 
 
 struct printer
@@ -47,8 +48,7 @@ inline void test_and_time(int _count, Lambda && _lambda)
 {
 	auto _time_taken = 0ll;
 
-	for (auto k = 0; k < _count; ++k)
-	{
+	for (auto k = 0; k < _count; ++k) {
 		auto _start = std::chrono::high_resolution_clock::now();
 
 		_lambda();
@@ -68,68 +68,74 @@ void test()
 
 int main()
 {
-	//constructor_chain<const printer>(printer());
 	bia::machine::memory::big_int_allocator::initialize(std::make_shared<bia::machine::memory::simple_allocator>());
+
 	{
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		auto _exec_allocator = std::make_shared<machine::memory::simple_executable_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _exec_allocator);
 
-		set_function(_context, u8"hello_world", static_cast<int(*)(std::string*)>([](std::string *_s) {
-			puts(_s->c_str());
-			*_s = "alksdalksd";
-			return 4;
-		}));
 		set_lambda(_context, "ser", [&](int & a, const char * b) -> const printer& {
-			printf("s%d,%p---%s\n", a, &a, b);
+			printf("First parameter: %i at %p\n", a, &a);
+			printf("Second parameter: %s\n", b);
+
 			set_lambda(_context, "ser", []() {
 				puts("bye");
 			});
+
 			a = 3434.453;
+
 			static printer _p(3);
+
 			return _p;
 		});
-
-		set_lambda(_context, "hey", [](double a, double b) {
-			puts("hey world");
-			printf("%f, %f\n", a, b);
+		set_lambda(_context, "print", [](bia::framework::member * _member) {
+			_member->print();
 		});
+		set_lambda(_context, "int", [](bia::framework::member * _member) {
+			if (_member->flags() & bia::framework::member::F_CSTRING) {
+				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
+			}
 
-		set_lambda(_context, "o", [](double a) {
-			printf("%f\n", a);
+			return _member->to_int();
 		});
-		set_lambda(_context, "ta", [](const char * _tmp) {
-			puts(_tmp);
-		});
-		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
+		set_lambda(_context, "float", [](bia::framework::member * _member) {
+			if (_member->flags() & bia::framework::member::F_CSTRING) {
+				return std::stod(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
+			}
 
-		//SetConsoleOutputCP(65001);
-		std::cout << std::numeric_limits<double>::min() << "|" << std::numeric_limits<double>::max() << '\n';
+			return _member->to_double();
+		});
+		set_lambda(_context, "destroy", [](bia::framework::member * _member) {
+			_member->undefine();
+		});
+		set_lambda(_context, "defined", [](const bia::framework::member * _member) {
+			try {
+				_member->flags();
+			} catch (const bia::exception::symbol_error&) {
+				return false;
+			}
+
+			return true;
+		});
+		set_class<printer>(_context, "printer")
+			.set_constructor<int>()
+			.set_function("hey", &test)
+			.set_function("hi", &printer::hi);
+
 		// Script
 		char _script[] = u8R""(
 
-var i = 999999999999999999999999999999999999999999999999999999999999999 ** 655
-print i
-ser(i, "hi")
-#ser(i, "hi")
-#>i -= -2147483648
-print i 
+#var i = printer(4)
 
-i **= 55
+if defined(i) print "i is defined"; else print "i is not defined"
+#>
+destroy(i)
 
-var o = 343
-o **= 66
-
-i -= o
-
-print i
-
-i = 61
-
-print i<#
-
-
+if defined(i) print "i is defined" 
+else print "i is not defined"
+<#
 )"";
 
 		// Compile
@@ -144,7 +150,6 @@ print i<#
 		_compiler.finalize();
 
 		// Disassemble
-
 		for (auto i = 0; i < _output.size(); ++i) {
 			printf("%02x ", static_cast<uint8_t>(_output.buffer()[i]));
 
@@ -152,11 +157,8 @@ print i<#
 				puts("");
 			}
 		}
-		puts("");
-	/*	bia::machine::disassembler _disassembler(&_context);
 
-		_disassembler.disassemble(_output.buffer(), _output.size());
-		*/
+		puts("");
 		system("pause");
 
 		// Run
@@ -165,8 +167,7 @@ print i<#
 		if (_machine_code.is_executable()) {
 			// Set active allocator
 			_context.activate_context();
-			std::cout << 99999999999999999999999999999999999999999999999999999999999999.9 << std::endl;
-			std::cout << std::stod("99999999999999999999999999999999999999999999999999999999999999.9") << std::endl;
+
 			try {
 				test_and_time(1, [&] {
 					_machine_code.execute();
@@ -176,6 +177,4 @@ print i<#
 			}
 		}
 	}
-
-	system("pause");
 }
