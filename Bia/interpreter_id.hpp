@@ -61,7 +61,10 @@ enum BIA_GRAMMAR_RULE : report::rule_type
 	BGR_MEMBER_HELPER_0,
 	BGR_MEMBER_HELPER_1,
 
-	BGR_RULE_COUNT
+	BGR_RULE_COUNT,
+
+	// Rules not in the rule set
+	BGR_LOOP_CONTROL
 };
 
 enum BIA_VALUE

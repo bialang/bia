@@ -365,6 +365,21 @@ ACTION interpreter_token::first_member(stream::input_stream & _input, token_para
 	return success;
 }
 
+ACTION interpreter_token::loop_control(stream::input_stream & _input, token_param & _params, token_output & _output)
+{
+	constexpr auto success = ACTION::REPORT;
+	constexpr auto error = ACTION::ERROR;
+	
+	if (keyword<keyword_break>(_input, _params, _output) != success && keyword<keyword_continue>(_input, _params, _output) != success) {
+		return error;
+	}
+
+	_output.rule_id = BGR_LOOP_CONTROL;
+
+	// Match end
+	return command_end(_input, _params, _output) == ACTION::DONT_REPORT ? success : error;
+}
+
 ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;

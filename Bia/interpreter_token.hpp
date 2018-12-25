@@ -136,6 +136,21 @@ public:
 	*/
 	BIA_EXPORT static ACTION first_member(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
+	 * Matches loop control keywords like 'break' or 'continue'.
+	 *
+	 * @since 3.70.148.805
+	 * @date 25-Dec-18
+	 *
+	 * @param [in] _input The input buffer.
+	 * @param [in] _params Additional interpreter information.
+	 * @param [out] _output The token result.
+	 *
+	 * @throws See command_end() and keyword().
+	 *
+	 * @return Defines the success code. See @ref ACTION.
+	*/
+	BIA_EXPORT static ACTION loop_control(stream::input_stream & _input, token_param & _params, token_output & _output);
+	/**
 	 * Matches an assign operator.
 	 *
 	 * @remarks	A leading whitespace is optional and will be consumed, if present.

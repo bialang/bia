@@ -40,6 +40,7 @@ interpreter syntax::init_rules()
 		interpreter_token::rule_pointer<BGR_IF>,
 		interpreter_token::rule_pointer<BGR_PRINT>,
 		interpreter_token::rule_pointer<BGR_TEST_LOOP>,
+		interpreter_token::loop_control,
 		interpreter_token::rule_pointer<BGR_IMPORT>,
 		interpreter_token::rule_pointer<BGR_ROOT_HELPER_2>
 		}));
