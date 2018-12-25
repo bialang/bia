@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <cstddef>
 
+#include "exception.hpp"
+
 
 namespace bia
 {
@@ -57,7 +59,18 @@ struct chooser<true, Return, Type>
 {
 	static Return choose(Type _value) noexcept
 	{
-		return static_cast<Return>(_value);
+		return checked_cast(_value);
+	}
+
+private:
+	static Return checked_cast(Return _value) noexcept
+	{
+		return _value;
+	}
+	template<typename Ty>
+	static Return checked_cast(Ty _value) noexcept
+	{
+		BIA_IMPLEMENTATION_ERROR;
 	}
 };
 
@@ -66,7 +79,7 @@ struct chooser<false, Return, Type>
 {
 	static Return choose(Type _value)
 	{
-		throw;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 };
 
