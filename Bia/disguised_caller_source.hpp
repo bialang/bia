@@ -22,6 +22,7 @@ template<typename Return>
 inline Return format_cast(va_list_wrapper & _args, const char *& _format)
 {
 	using namespace utility;
+	using Real_return = typename std::remove_reference<Return>::type;
 
 gt_redo:;
 
@@ -29,44 +30,44 @@ gt_redo:;
 	{
 	case 'i':
 	{
-		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
+		constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
 
 		if (is_number) {
 			return chooser<is_number, Return, int32_t>::choose(va_arg(_args.args, int32_t));
 		} else {
-			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
+			break;
 		}
 	}
 	case 'I':
 	{
-		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
+		constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
 
 		if (is_number) {
 			return chooser<is_number, Return, int64_t>().choose(va_arg(_args.args, int64_t));
 		} else {
-			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
+			break;
 		}
 	}
 	case 'd':
 	{
-		constexpr auto is_number = std::is_integral<Return>::value || std::is_floating_point<Return>::value;
+		constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
 
 		if (is_number) {
 			auto _value = va_arg(_args.args, int64_t);
 
 			return chooser<is_number, Return, double>().choose(*reinterpret_cast<double*>(&_value));
 		} else {
-			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
+			break;
 		}
 	}
 	case 'a':
 	{
-		constexpr auto is_string = std::is_same<Return, const char*>::value;
+		constexpr auto is_string = std::is_same<Real_return, const char*>::value;
 
 		if (is_string) {
 			return chooser<is_string, Return, const char*>().choose(va_arg(_args.args, const char*));
 		} else {
-			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
+			break;
 		}
 	}
 	case 'M':
@@ -74,7 +75,7 @@ gt_redo:;
 		if (auto _ptr = va_arg(_args.args, framework::member*)->cast<Return>()) {
 			return *_ptr;
 		} else {
-			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
+			break;
 		}
 	}
 	case 'r':
@@ -84,6 +85,8 @@ gt_redo:;
 	default:
 		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
 	}
+
+	throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 }
 
 inline void disguised_caller(void(*_function)(), framework::member * _destination)
