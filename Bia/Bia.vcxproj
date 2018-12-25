@@ -192,6 +192,7 @@
   <ItemGroup>
     <ClCompile Include="big_int.cpp" />
     <ClCompile Include="big_int_allocator.cpp" />
+    <ClCompile Include="compiler_loop_tracker.cpp" />
     <ClCompile Include="disassembler.cpp" />
     <ClCompile Include="double_member.cpp" />
     <ClCompile Include="big_int_member.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="big_int.hpp" />
     <ClInclude Include="class_template.hpp" />
     <ClInclude Include="class_template_def.hpp" />
+    <ClInclude Include="compiler_loop_tracker.hpp" />
     <ClInclude Include="disguised_caller_source.hpp" />
     <ClInclude Include="buffer_builder.hpp" />
     <ClInclude Include="member_names.hpp" />

@@ -201,6 +201,9 @@
     <ClCompile Include="member_names.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
+    <ClCompile Include="compiler_loop_tracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -526,6 +529,9 @@
     </ClInclude>
     <ClInclude Include="buffer_builder.hpp">
       <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="compiler_loop_tracker.hpp">
+      <Filter>Header Files\compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

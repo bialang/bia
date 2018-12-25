@@ -13,6 +13,7 @@
 #include "operator.hpp"
 #include "machine_context.hpp"
 #include "compile_normal_operation.hpp"
+#include "compiler_loop_tracker.hpp"
 
 #include "interpreter.hpp"
 #include "interpreter_rule.hpp"
@@ -57,6 +58,8 @@ private:
 	compiler_value _value;
 	/** A counter for the needed temporary variables. */
 	temp_counter _counter;
+	/** Tracks all open loops. */
+	compiler_loop_tracker _loop_tracker;
 	/** The compilers toolset for writing the machine code. */
 	machine::platform::toolset _toolset;
 	/** The context. */
