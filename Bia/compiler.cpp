@@ -743,12 +743,12 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 			// Don't compile this loop
 			if (!_value.value().rt_test_result) {
 				_compile = false;
-
-				return;
+			} // Change to unconditional jump
+			else {			
+				_jump_type = toolset::JUMP::JUMP;
 			}
 
-			// Change to unconditional jump
-			_jump_type = toolset::JUMP::JUMP;
+			return;
 		} // Not a test register
 		else if (_value.type() != compiler_value::VALUE_TYPE::TEST_VALUE_REGISTER) {
 			BIA_IMPLEMENTATION_ERROR;
@@ -771,7 +771,9 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 		// Update condition jump
 		auto _destination = _toolset.output_stream().position();
 
+		if (_condition_jump_update != -1) {
 			_toolset.jump(_jump_type, _destination, _condition_jump_update);
+		}
 
 		// Update all end jump that occurred within the loop
 		for (auto _jump_update : _loop_tracker.end_jump_updates()) {

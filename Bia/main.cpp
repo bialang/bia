@@ -128,26 +128,36 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var start = time()
+var i = 0
+
+while true {
+if i == 10 break
+print i
+i += 1
+
+}
+
+#>var start = time()
 var sum = 0
 var i = 0
 
-until i == 100000 {
+until i == 10000 {
 	if i % 3 == 0 {
 		sum += i * 5
 	}
 	else sum *= i + 1
 
 	i += 1
+	break
 }
 
 var end = time()
 
 print end - start
-print sum
+print sum<#
 
 )"";
-		test_and_time(1, []() {
+		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
 
 			for (auto i = 0; i <= 100000; ++i) {
@@ -157,7 +167,7 @@ print sum
 					_sum.multiply(i + 1);
 				}
 			}
-		});
+		});*/
 
 		// Compile
 		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
