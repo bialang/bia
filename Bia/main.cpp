@@ -119,6 +119,7 @@ int main()
 
 			return true;
 		});
+		set_lambda(_context, "time", []() { return std::time(nullptr); });
 		set_class<printer>(_context, "printer")
 			.set_constructor<int>()
 			.set_function("hey", &test)
@@ -127,16 +128,36 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-#var i = printer(4)
+var start = time()
+var sum = 0
+var i = 0
 
-if defined(i) print "i is defined"; else print "i is not defined"
-#>
-destroy(i)
+until i == 100000 {
+	if i % 3 == 0 {
+		sum += i * 5
+	}
+	else sum *= i + 1
 
-if defined(i) print "i is defined" 
-else print "i is not defined"
-<#
+	i += 1
+}
+
+var end = time()
+
+print end - start
+print sum
+
 )"";
+		test_and_time(1, []() {
+			bia::dependency::big_int _sum;
+
+			for (auto i = 0; i <= 100000; ++i) {
+				if (i % 3 == 0) {
+					_sum.add(i * 5);
+				} else {
+					_sum.multiply(i + 1);
+				}
+			}
+		});
 
 		// Compile
 		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
@@ -177,4 +198,6 @@ else print "i is not defined"
 			}
 		}
 	}
+
+	system("pause");
 }

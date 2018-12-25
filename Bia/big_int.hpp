@@ -215,6 +215,7 @@ public:
 	BIA_EXPORT void logical_right_shift(unsigned int _count);
 	BIA_EXPORT void logical_right_shift(unsigned int _count, big_int & _result) const;
 	BIA_EXPORT bool is_zero() const noexcept;
+	BIA_EXPORT int compare(const big_int & _right) const;
 	/**
 	 * Casts the big int to a native int64.
 	 *

@@ -276,6 +276,11 @@ bool big_int::is_zero() const noexcept
 	return !reinterpret_cast<const type*>(_buffer)->_mp_size;
 }
 
+int big_int::compare(const big_int & _right) const
+{
+	return mpz_cmp(reinterpret_cast<const type*>(_buffer), reinterpret_cast<const type*>(_right._buffer));
+}
+
 int64_t big_int::cast_int() const noexcept
 {
 	int64_t _converted = 0;

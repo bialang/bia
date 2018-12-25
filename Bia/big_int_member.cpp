@@ -31,7 +31,7 @@ inline void big_int_member_operation(dependency::big_int & _left, dependency::bi
 
 		return;
 	}
-	/*case O_ASSIGN_MULTIPLY:
+	case O_ASSIGN_MULTIPLY:
 	case O_MULTIPLY:
 	{
 		_left.multiply(_right, _destination);
@@ -58,7 +58,7 @@ inline void big_int_member_operation(dependency::big_int & _left, dependency::bi
 		_left.power(_right, _destination);
 
 		return;
-	}*/
+	}
 	default:
 		break;
 	}
@@ -237,11 +237,19 @@ int32_t big_int_member::test() const
 
 int32_t big_int_member::test_member(operator_type _operator, member * _right) const
 {
+	if (_operator == O_EQUALS && _right->flags() & F_BIG_INT) {
+		return _data->compare(static_cast<big_int_member*>(_right)->_data.get()) == 0;
+	}
+
 	BIA_NOT_IMPLEMENTED;
 }
 
 int32_t big_int_member::test_int32(operator_type _operator, int32_t _right) const
 {
+	if (_operator == O_EQUALS) {
+		return _data->compare(_right) == 0;
+	}
+
 	BIA_NOT_IMPLEMENTED;
 }
 
