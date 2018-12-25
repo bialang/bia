@@ -37,8 +37,8 @@ public:
 		F_INT = 0x1,
 		/** The member is a double. */
 		F_DOUBLE = 0x2,
-		/** The member is a string. */
-		F_STRING = 0x4,
+		/** The member is a C-string. */
+		F_CSTRING = 0x4,
 		/** The member cannot be modified. */
 		F_CONST = 0x8,
 		/** The member can be displayed as an integer. */
@@ -374,6 +374,45 @@ public:
 	*/
 	virtual double to_double() const = 0;
 	virtual const char * to_cstring(utility::buffer_builder * _builder) const = 0;
+	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
+	typename std::enable_if<
+		std::is_same<member*, Real_type>::value,
+		Real_type*>::type cast()
+	{
+		thread_local member * _ptr;
+
+		_ptr = this;
+
+		return &_ptr;
+	}
+	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
+	typename std::enable_if<
+		std::is_same<const member*, Real_type>::value,
+		Real_type*>::type cast() const
+	{
+		thread_local const member * _ptr;
+
+		_ptr = this;
+
+		return &_ptr;
+	}
+	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
+	typename std::enable_if<
+		!std::is_same<member*, Real_type>::value &&
+		!std::is_same<const member*, Real_type>::value &&
+		std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
+		Real_type*>::type cast()
+	{
+		thread_local Real_type _ptr;
+
+		_ptr = dynamic_cast<Real_type>(this);
+
+		if (!_ptr) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return &_ptr;
+	}
 	/**
 	 * Casts this member to the specified mutable type.
 	 *
@@ -389,7 +428,10 @@ public:
 	 * @return A point containing the casted type.
 	*/
 	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<utility::negation<std::is_const<typename std::remove_pointer<Real_type>::type>::value>::value, Real_type*>::type cast()
+	typename std::enable_if<
+		!std::is_const<typename std::remove_pointer<Real_type>::type>::value && 
+		!std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
+		Real_type*>::type cast()
 	{
 		// Native type
 		if (native::determine_native_type<Real_type>() != native::NATIVE_TYPE::CUSTOM) {
@@ -414,7 +456,10 @@ public:
 	 * @return A point containing the casted type.
 	*/
 	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<std::is_const<typename std::remove_pointer<Real_type>::type>::value, Real_type const*>::type cast() const
+	typename std::enable_if<
+		std::is_const<typename std::remove_pointer<Real_type>::type>::value &&
+		!std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
+		Real_type const*>::type cast() const
 	{
 		// Native type
 		if (native::determine_native_type<Real_type>() != native::NATIVE_TYPE::CUSTOM) {
