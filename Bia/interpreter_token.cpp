@@ -521,7 +521,7 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 		break;
 	}
 	case '%':
-		_output.content.operator_code = '*';
+		_output.content.operator_code = '%';
 
 		break;
 	default:
