@@ -63,11 +63,12 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param & _to
 			// Mark position in case of an error
 			auto _mark = _input.mark();
 
+			_output.rule_id = _id;
+
 			// Match token
 			switch (_tokens[i](_input, _token_param, _output)) {
 			case ACTION::REPORT:
 			{
-				_output.rule_id = _id;
 				_output.token_id = _token_param.token_id;
 
 				_token_param.bundle->add(_output);
@@ -84,7 +85,6 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param & _to
 			}
 			case ACTION::REPORT_AND_LOOP:
 			{
-				_output.rule_id = _id;
 				_output.token_id = _token_param.token_id;
 
 				_token_param.bundle->add(_output);
