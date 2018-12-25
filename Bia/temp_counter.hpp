@@ -22,6 +22,7 @@ namespace compiler
 class temp_counter
 {
 public:
+	/** The counter type. */
 	typedef machine::platform::toolset::temp_index_type counter_type;
 
 	/**

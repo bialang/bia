@@ -13,6 +13,7 @@ namespace machine
 namespace memory
 {
 
+/** The size type of an allocation. */
 typedef size_t size_type;
 
 /** An allocation with type. */
@@ -20,19 +21,46 @@ template<typename Type>
 class allocation
 {
 public:
+	/** The pointer to the buffer. */
 	Type * first;
+	/** The size of the buffer in bytes. */
 	size_type second;
 
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	*/
 	allocation() noexcept
 	{
 		clear();
 	}
+	/**
+	 * Constructor.
+	 *
+	 * @remarks An allocation object does not take ownership of the memory.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @param [in] _first The buffer.
+	 * @param _second The size of the buffer.
+	*/
 	allocation(Type * _first, size_type _second) noexcept
 	{
 		first = _first;
 		second = _second;
 	}
 	allocation(const allocation & _copy) noexcept = default;
+	/**
+	 * Move-Constructor.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @param [in,out] _move The object that should be moved. @a _move will be cleared after this operation.
+	*/
 	allocation(allocation && _move) noexcept
 	{
 		first = _move.first;
@@ -40,40 +68,122 @@ public:
 
 		_move.clear();
 	}
+	/**
+	 * Sets the buffer and the size to 0.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	*/
 	void clear() noexcept
 	{
 		first = nullptr;
 		second = 0;
 	}
+	/**
+	 * Checks whether this allocation is valid (not cleared).
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @return true if the buffer pointer is not 0.
+	*/
 	operator bool() const noexcept
 	{
 		return first != nullptr;
 	}
+	/**
+	 * Returns the buffer pointer.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @return The buffer pointer.
+	*/
 	operator Type*() noexcept
 	{
 		return first;
 	}
+	/**
+	 * Returns the buffer pointer.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @return The buffer pointer.
+	*/
 	operator const Type*() const noexcept
 	{
 		return first;
 	}
+	/**
+	 * Dereferences the buffer.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @return The buffer pointer.
+	*/
 	Type * operator->() noexcept
 	{
 		return first;
 	}
+	/**
+	 * Dereferences the buffer.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @return The buffer pointer.
+	*/
 	const Type * operator->() const noexcept
 	{
 		return first;
 	}
+	/**
+	 * References the buffer pointer.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @return The reference to the buffer pointer.
+	*/
 	Type ** operator&() noexcept
 	{
 		return &first;
 	}
+	/**
+	 * References the buffer pointer.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @return The reference to the buffer pointer.
+	*/
 	Type * const* operator&() const noexcept
 	{
 		return &first;
 	}
+	/**
+	 * Assign operator.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @param _copy Copies the allocation.
+	 *
+	 * @return Retruns @a *this.
+	*/
 	allocation & operator=(const allocation & _copy) noexcept = default;
+	/**
+	 * Assign operator.
+	 *
+	 * @since 3.68.140.789
+	 * @date 26-Oct-18
+	 *
+	 * @param [in,out] _move Moves the allocation. @_move will be cleared.
+	 *
+	 * @return Returns @a *this.
+	*/
 	allocation & operator=(allocation && _move) noexcept
 	{
 		first = _move.first;
