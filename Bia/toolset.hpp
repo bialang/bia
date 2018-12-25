@@ -478,15 +478,15 @@ public:
 
 		switch (_type) {
 		case JUMP::JUMP:
-			instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - 5 - _current);
+			instruction32<OP_CODE::JUMP_RELATIVE>(*_output, _destination - _current);
 
 			break;
 		case JUMP::JUMP_IF_TRUE:
-			instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - 6 - _current);
+			instruction32<OP_CODE::JUMP_NOT_EQUAL>(*_output, _destination - _current);
 
 			break;
 		case JUMP::JUMP_IF_FALSE:
-			instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - 6 - _current);
+			instruction32<OP_CODE::JUMP_EQUAL>(*_output, _destination - _current);
 
 			break;
 		}
