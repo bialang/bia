@@ -20,7 +20,7 @@ inline bool compare_impl(std::initializer_list<uint8_t> _expected, Instruction_f
 	_instruction(_tmp, _arguments...);
 
 	for (int i = 0; i < _tmp.size(); ++i) {
-		printf("%x", (uint8_t)_tmp.buffer()[i]);
+		printf("%02x", (uint8_t)_tmp.buffer()[i]);
 	}
 	puts("");
 
@@ -44,7 +44,7 @@ inline bool compare(std::initializer_list<uint8_t> _expected)
 	return compare_impl(_expected, &instruction<Op_code, Register>);
 }
 
-template<OP_CODE Op_code, typename Register, typename Offset_type>
+template<OP_CODE Op_code, typename Offset_type, typename Register>
 inline bool compare(Offset_type _offset, std::initializer_list<uint8_t> _expected)
 {
 	return compare_impl(_expected, [_offset](bia::stream::output_stream & _output) {
@@ -58,11 +58,11 @@ inline bool compare(std::initializer_list<uint8_t> _expected)
 	return compare_impl(_expected, static_cast<size_t(*)(bia::stream::output_stream&)>(&instruction<Op_code, Destination, Source>));
 }
 
-/*template<OP_CODE Op_code, typename Destination, typename Source, typename Offset_type>
-inline bool compare(Offset_type _offset, std::initializer_list<uint8_t> _expected)
+template<OP_CODE Op_code, typename Source_offset_type, typename Destination, typename Source>
+inline bool compare(Source_offset_type _offset, std::initializer_list<uint8_t> _expected)
 {
-	return compare_impl(_expected, static_cast<size_t(*)(bia::stream::output_stream&, Offset_type)>(&instruction<Op_code, Destination, Source, Offset_type>), _offset);
-}*/
+	return compare_impl(_expected, static_cast<size_t(*)(bia::stream::output_stream&, Source_offset_type)>(&instruction<Op_code, Destination, Source, Source_offset_type>), _offset);
+}
 
 template<OP_CODE Op_code>
 inline bool compare8(int8_t _immediate, std::initializer_list<uint8_t> _expected)
@@ -88,17 +88,26 @@ inline bool compare32(int32_t _immediate, std::initializer_list<uint8_t> _expect
 	return compare_impl(_expected, &instruction32<Op_code, Register>, _immediate);
 }
 
+#if defined(BIA_ARCHITECTURE_X86_64)
+template<OP_CODE Op_code, typename Register>
+inline bool compare64(int64_t _immediate, std::initializer_list<uint8_t> _expected)
+{
+	return compare_impl(_expected, &instruction64<Op_code, Register>, _immediate);
+}
+#endif
+
 
 void architecture_test::instruction_test()
 {
 	test_move();
+	test_lea();
 	test_add();
 	test_sub();
-	//test_jump();
+	test_jump();
 	test_push();
 	test_pop();
 	test_function_call();
-	test_other();
+	test_test();
 }
 
 void architecture_test::test_move()
@@ -112,8 +121,41 @@ void architecture_test::test_move()
 	test::assert_true(compare<OP_CODE::MOVE, esp, esp>({ 0x89, 0xe4 }), "mov esp, esp");
 #endif
 
-#if defined(BIA_ARCHITECTURE_X86_64)
+#if defined(BIA_ARCHITECTURE_X86_32)
+	test::assert_true(compare<OP_CODE::MOVE, int8_t, eax, eax>(0x56, { 0x8b, 0x40, 0x56 }), "mov eax, [eax+0x56]");
+	test::assert_true(compare<OP_CODE::MOVE, int8_t, eax, esp>(0x56, { 0x8b, 0x44, 0x24, 0x56 }), "mov eax, [esp+0x56]");
+	test::assert_true(compare<OP_CODE::MOVE, int8_t, esp, eax>(0x56, { 0x8b, 0x60, 0x56 }), "mov esp, [eax+0x56]");
+	test::assert_true(compare<OP_CODE::MOVE, int8_t, esp, esp>(0x56, { 0x8b, 0x64, 0x24, 0x56 }), "mov esp, [esp+0x56]");
+	test::assert_true(compare<OP_CODE::MOVE, int32_t, eax, eax>(-0x59fe76b6, { 0x8b, 0x80, 0x4a, 0x89, 0x01, 0xa6 }), "mov eax, [eax-0x59fe76b6]");
+	test::assert_true(compare<OP_CODE::MOVE, int32_t, eax, esp>(-0x59fe76b6, { 0x8b, 0x84, 0x24, 0x4a, 0x89, 0x01, 0xa6 }), "mov eax, [esp-0x59fe76b6]");
+	test::assert_true(compare<OP_CODE::MOVE, int32_t, esp, eax>(-0x59fe76b6, { 0x8b, 0xa0, 0x4a, 0x89, 0x01, 0xa6 }), "mov esp, [eax-0x59fe76b6]");
+	test::assert_true(compare<OP_CODE::MOVE, int32_t, esp, esp>(-0x59fe76b6, { 0x8b, 0xa4, 0x24, 0x4a, 0x89, 0x01, 0xa6 }), "mov esp, [esp-0x59fe76b6]");
+#elif defined(BIA_ARCHITECTURE_X86_64)
+	test::assert_true(compare32<OP_CODE::MOVE, rax>(0x695732d8, { 0x48, 0xc7, 0xc0, 0xd8, 0x32, 0x57, 0x69 }), "mov rax, 0x695732d8");
+	test::assert_true(compare32<OP_CODE::MOVE, rsp>(0x695732d8, { 0x48, 0xc7, 0xc4, 0xd8, 0x32, 0x57, 0x69 }), "mov rsp, 0x695732d8");
+	test::assert_true(compare32<OP_CODE::MOVE, r8>(0x695732d8, { 0x49, 0xc7, 0xc0, 0xd8, 0x32, 0x57, 0x69 }), "mov r8, 0x695732d8");
+	test::assert_true(compare64<OP_CODE::MOVE, rax>(0x112233445566eeff, { 0x48, 0xb8, 0xff, 0xee, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11 }), "mov rax, 0x112233445566eeff");
+	test::assert_true(compare64<OP_CODE::MOVE, rsp>(0x112233445566eeff, { 0x48, 0xbc, 0xff, 0xee, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11 }), "mov rsp, 0x112233445566eeff");
+	test::assert_true(compare64<OP_CODE::MOVE, r8>(0x112233445566eeff, { 0x49, 0xb8, 0xff, 0xee, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11 }), "mov r8, 0x112233445566eeff");
 
+	test::assert_true(compare<OP_CODE::MOVE, rax, r8>({ 0x4c, 0x89, 0xc0 }), "mov rax, r8");
+#endif
+}
+
+void architecture_test::test_lea()
+{
+#if defined(BIA_ARCHITECTURE_X86_32)
+	test::assert_true(compare<OP_CODE::LEA, int8_t, eax, eax>(0x78, { 0x8d, 0x40, 0x78 }), "lea eax, [eax+0x78]");
+	test::assert_true(compare<OP_CODE::LEA, int8_t, eax, esp>(0x78, { 0x8d, 0x44, 0x24, 0x78 }), "lea eax, [esp+0x78]");
+	test::assert_true(compare<OP_CODE::LEA, int8_t, esp, eax>(0x78, { 0x8d, 0x60, 0x78 }), "lea esp, [eax+0x78]");
+	test::assert_true(compare<OP_CODE::LEA, int8_t, esp, esp>(0x78, { 0x8d, 0x64, 0x24, 0x78 }), "lea esp, [esp+0x78]");
+	test::assert_true(compare<OP_CODE::LEA, int32_t, eax, eax>(-0x71928378, { 0x8d, 0x80, 0x88, 0x7c, 0x6d, 0x8e }), "lea eax, [eax-0x71928378]");
+	test::assert_true(compare<OP_CODE::LEA, int32_t, eax, esp>(-0x71928378, { 0x8d, 0x84, 0x24, 0x88, 0x7c, 0x6d, 0x8e }), "lea eax, [esp-0x71928378]");
+	test::assert_true(compare<OP_CODE::LEA, int32_t, esp, eax>(-0x71928378, { 0x8d, 0xa0, 0x88, 0x7c, 0x6d, 0x8e }), "lea esp, [eax-0x71928378]");
+	test::assert_true(compare<OP_CODE::LEA, int32_t, esp, esp>(-0x71928378, { 0x8d, 0xa4, 0x24, 0x88, 0x7c, 0x6d, 0x8e }), "lea esp, [esp-0x71928378]");
+#elif defined(BIA_ARCHITECTURE_X86_64)
+
+	test::assert_true(compare<OP_CODE::LEA, int8_t, rax, r8>(0x01, { 0x49, 0x8d, 0x40, 0x01 }), "lea rax, [r8+0x01]");
 #endif
 }
 
@@ -158,12 +200,13 @@ void architecture_test::test_sub()
 void architecture_test::test_jump()
 {
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
-	test::assert_true(compare32<OP_CODE::JUMP_RELATIVE>(0x426464, { 0xE9, 0x60, 0x64, 0x42, 0x00 }), "jmp 0x426464");
-	test::assert_true(compare32<OP_CODE::JUMP_RELATIVE>(-0x426464, { 0xE9, 0x98, 0x9B, 0xBD, 0xFF }), "jmp -0x426464");
-	test::assert_true(compare32<OP_CODE::JUMP_EQUAL>(0x426464, { 0x0F, 0x84, 0x60, 0x64, 0x42, 0x00 }), "je 0x426464");
-	test::assert_true(compare32<OP_CODE::JUMP_EQUAL>(-0x426464, { 0x0F, 0x84, 0x98, 0x9B, 0xBD, 0xFF }), "je -0x426464");
-	test::assert_true(compare32<OP_CODE::JUMP_NOT_EQUAL>(0x426464, { 0x0F, 0x85, 0x60, 0x64, 0x42, 0x00 }), "jne 0x426464");
-	test::assert_true(compare32<OP_CODE::JUMP_NOT_EQUAL>(-0x426464, { 0x0F, 0x85, 0x98, 0x9B, 0xBD, 0xFF }), "jne -0x426464");
+	// + x because Bia uses the position before the jump instruction as start
+	test::assert_true(compare32<OP_CODE::JUMP_RELATIVE>(0x00426464 + 1, { 0xe9, 0x60, 0x64, 0x42, 0x00 }), "jmp 0x00426464");
+	test::assert_true(compare32<OP_CODE::JUMP_RELATIVE>(-0x00426464 + 1, { 0xe9, 0x98, 0x9b, 0xbd, 0xff }), "jmp -0x00426464");
+	test::assert_true(compare32<OP_CODE::JUMP_EQUAL>(0x00426464 + 2, { 0x0f, 0x84, 0x60, 0x64, 0x42, 0x00 }), "je 0x00426464");
+	test::assert_true(compare32<OP_CODE::JUMP_EQUAL>(-0x00426464 + 2, { 0x0f, 0x84, 0x98, 0x9b, 0xbd, 0xff }), "je -0x00426464");
+	test::assert_true(compare32<OP_CODE::JUMP_NOT_EQUAL>(0x00426464 + 2, { 0x0f, 0x85, 0x60, 0x64, 0x42, 0x00 }), "jne 0x00426464");
+	test::assert_true(compare32<OP_CODE::JUMP_NOT_EQUAL>(-0x00426464 + 2, { 0x0f, 0x85, 0x98, 0x9b, 0xbd, 0xff }), "jne -0x00426464");
 #endif
 }
 
@@ -177,22 +220,20 @@ void architecture_test::test_push()
 #if defined(BIA_ARCHITECTURE_X86_32)
 	test::assert_true(compare<OP_CODE::PUSH, eax>({ 0x50 }), "push eax");
 	test::assert_true(compare<OP_CODE::PUSH, esp>({ 0x54 }), "push esp");
-	/*test::assert_true(compare<OP_CODE::PUSH, eax, int8_t>(0x35, { 0xFF, 0x70, 0x35 }), "push [eax+0x35]");
-	test::assert_true(compare<OP_CODE::PUSH, esp, int8_t>(-0x35, { 0xFF, 0x74, 0x24, 0xCB }), "push [esp-0x35]");
-	test::assert_true(compare<OP_CODE::PUSH, eax, int32_t>(-0x398655, { 0xFF, 0xB0, 0xAB, 0x79, 0xC6, 0xFF }), "push [eax-0x398655]");
-	test::assert_true(compare<OP_CODE::PUSH, esp, int32_t>(0x398655, { 0xFF, 0xB4, 0x24, 0x55, 0x86, 0x39, 0x00 }), "push [esp+0x398655]");*/
-#endif
-
-#if defined(BIA_ARCHITECTURE_X86_64)
+	test::assert_true(compare<OP_CODE::PUSH, int8_t, eax>(0x35, { 0xFF, 0x70, 0x35 }), "push [eax+0x35]");
+	test::assert_true(compare<OP_CODE::PUSH, int8_t, esp>(-0x35, { 0xFF, 0x74, 0x24, 0xCB }), "push [esp-0x35]");
+	test::assert_true(compare<OP_CODE::PUSH, int32_t, eax>(-0x398655, { 0xFF, 0xB0, 0xAB, 0x79, 0xC6, 0xFF }), "push [eax-0x398655]");
+	test::assert_true(compare<OP_CODE::PUSH, int32_t, esp>(0x398655, { 0xFF, 0xB4, 0x24, 0x55, 0x86, 0x39, 0x00 }), "push [esp+0x398655]");
+#elif defined(BIA_ARCHITECTURE_X86_64)
 	test::assert_true(compare<OP_CODE::PUSH, rax>({ 0x50 }), "push rax");
 	test::assert_true(compare<OP_CODE::PUSH, rsp>({ 0x54 }), "push rsp");
 	test::assert_true(compare<OP_CODE::PUSH, r8>({ 0x41, 0x50 }), "push r8");
-	test::assert_true(compare<OP_CODE::PUSH, rax, int8_t>(0x35, { 0xff, 0x70, 0x35 }), "push [rax+0x35]");
-	test::assert_true(compare<OP_CODE::PUSH, rsp, int8_t>(-0x35, { 0xff, 0x74, 0x24, 0xcb }), "push [rsp-0x35]");
-	test::assert_true(compare<OP_CODE::PUSH, r8, int8_t>(-0x35, { 0x41, 0xff, 0x70, 0xcb }), "push [r8-0x35]");
-	test::assert_true(compare<OP_CODE::PUSH, rax, int32_t>(-0x398655, { 0xff, 0xb0, 0xab, 0x79, 0xc6, 0xff }), "push [rax-0x398655]");
-	test::assert_true(compare<OP_CODE::PUSH, rsp, int32_t>(0x398655, { 0xff, 0xb4, 0x24, 0x55, 0x86, 0x39, 0x00 }), "push [rsp+0x398655]");
-	test::assert_true(compare<OP_CODE::PUSH, r8, int32_t>(0x398655, { 0x41, 0xff, 0xb0, 0x55, 0x86, 0x39, 0x00 }), "push [r8+0x398655]");
+	test::assert_true(compare<OP_CODE::PUSH, int8_t, rax>(0x35, { 0xff, 0x70, 0x35 }), "push [rax+0x35]");
+	test::assert_true(compare<OP_CODE::PUSH, int8_t, rsp>(-0x35, { 0xff, 0x74, 0x24, 0xcb }), "push [rsp-0x35]");
+	test::assert_true(compare<OP_CODE::PUSH, int8_t, r8>(-0x35, { 0x41, 0xff, 0x70, 0xcb }), "push [r8-0x35]");
+	test::assert_true(compare<OP_CODE::PUSH, int32_t, rax>(-0x398655, { 0xff, 0xb0, 0xab, 0x79, 0xc6, 0xff }), "push [rax-0x398655]");
+	test::assert_true(compare<OP_CODE::PUSH, int32_t, rsp>(0x398655, { 0xff, 0xb4, 0x24, 0x55, 0x86, 0x39, 0x00 }), "push [rsp+0x398655]");
+	test::assert_true(compare<OP_CODE::PUSH, int32_t, r8>(0x398655, { 0x41, 0xff, 0xb0, 0x55, 0x86, 0x39, 0x00 }), "push [r8+0x398655]");
 #endif
 }
 
@@ -201,9 +242,7 @@ void architecture_test::test_pop()
 #if defined(BIA_ARCHITECTURE_X86_32)
 	test::assert_true(compare<OP_CODE::POP, eax>({ 0x58 }), "pop eax");
 	test::assert_true(compare<OP_CODE::POP, esp>({ 0x5C }), "pop esp");
-#endif
-
-#if defined(BIA_ARCHITECTURE_X86_64)
+#elif defined(BIA_ARCHITECTURE_X86_64)
 	test::assert_true(compare<OP_CODE::POP, rax>({ 0x58 }), "pop rax");
 	test::assert_true(compare<OP_CODE::POP, rsp>({ 0x5C }), "pop rsp");
 	test::assert_true(compare<OP_CODE::POP, r8>({ 0x41, 0x58 }), "pop r8");
@@ -213,33 +252,30 @@ void architecture_test::test_pop()
 void architecture_test::test_function_call()
 {
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
-	test::assert_true(compare<OP_CODE::RETURN_NEAR>({ 0xC3 }), "ret");
+	test::assert_true(compare<OP_CODE::RETURN_NEAR>({ 0xc3 }), "ret");
 #endif
 
 #if defined(BIA_ARCHITECTURE_X86_32)
-	test::assert_true(compare<OP_CODE::CALL, eax>({ 0xFF, 0xD0 }), "call eax");
-	test::assert_true(compare<OP_CODE::CALL, esp>({ 0xFF, 0xD4 }), "call esp");
-	/*test::assert_true(compare<OP_CODE::CALL, eax, int8_t>(0x66, { 0xFF, 0x50, 0x66 }), "call [eax+0x66]");
-	test::assert_true(compare<OP_CODE::CALL, esp, int8_t>(-0x18, { 0xFF, 0x54, 0x24, 0xE8 }), "call [esp-0x18]");
-	test::assert_true(compare<OP_CODE::CALL, eax, int32_t>(-0x65381, { 0xFF, 0x90, 0x7F, 0xAC, 0xF9, 0xFF }), "call [eax-0x65381]");
-	test::assert_true(compare<OP_CODE::CALL, esp, int32_t>(0x481235, { 0xFF, 0x94, 0x24, 0x35, 0x12, 0x48, 0x00 }), "call [esp+0x481235]");*/
+	test::assert_true(compare<OP_CODE::CALL, eax>({ 0xff, 0xd0 }), "call eax");
+	test::assert_true(compare<OP_CODE::CALL, esp>({ 0xff, 0xd4 }), "call esp");
+	test::assert_true(compare<OP_CODE::CALL, int8_t, eax>(0x66, { 0xff, 0x50, 0x66 }), "call [eax+0x66]");
+	test::assert_true(compare<OP_CODE::CALL, int8_t, esp>(-0x18, { 0xff, 0x54, 0x24, 0xe8 }), "call [esp-0x18]");
+	test::assert_true(compare<OP_CODE::CALL, int32_t, eax>(-0x00065381, { 0xff, 0x90, 0x7f, 0xac, 0xf9, 0xff }), "call [eax-0x00065381]");
+	test::assert_true(compare<OP_CODE::CALL, int32_t, esp>(0x00481235, { 0xff, 0x94, 0x24, 0x35, 0x12, 0x48, 0x00 }), "call [esp+0x00481235]");
 #elif defined(BIA_ARCHITECTURE_X86_64)
-	test::assert_true(compare<OP_CODE::CALL, rax>({ 0xFF, 0xD0 }), "call rax");
-	test::assert_true(compare<OP_CODE::CALL, rsp>({ 0xFF, 0xD4 }), "call rsp");
-	test::assert_true(compare<OP_CODE::CALL, r8>({ 0x41, 0xFF, 0xD0 }), "call r8");
-	//test::assert_true(compare<OP_CODE::CALL, r12>({ 0x41, 0xFF, 0xD4 }), "call r12");
-	/*test::assert_true(compare<OP_CODE::CALL, rax, int8_t>(0x65, { 0xFF, 0x50, 0x65 }), "call [rax+0x65]");
-	test::assert_true(compare<OP_CODE::CALL, rsp, int8_t>(0x65, { 0xFF, 0x54, 0x24, 0x65 }), "call [rsp+0x65]");
-	test::assert_true(compare<OP_CODE::CALL, r8, int8_t>(0x65, { 0x41, 0xFF, 0x50, 0x65 }), "call [r8+0x65]");
-	//test::assert_true(compare<OP_CODE::CALL, r12, int8_t>(0x65, { 0x41, 0xFF, 0x54, 0x24, 0x65 }), "call [r12+0x65]");
-	test::assert_true(compare<OP_CODE::CALL, rax, int32_t>(-0x653215, { 0xFF, 0x90, 0xEB, 0xCD, 0x9A, 0xFF }), "call [rax-0x653215]");
-	test::assert_true(compare<OP_CODE::CALL, rsp, int32_t>(-0x653215, { 0xFF, 0x94, 0x24, 0xEB, 0xCD, 0x9A, 0xFF }), "call [rsp-0x653215]");
-	test::assert_true(compare<OP_CODE::CALL, r8, int32_t>(-0x653215, { 0x41, 0xFF, 0x90, 0xEB, 0xCD, 0x9A, 0xFF }), "call [r8-0x653215]");
-	//test::assert_true(compare<OP_CODE::CALL, r12, int32_t>(-0x653215, { 0x41, 0xFF, 0x94, 0x24, 0xEB, 0xCD, 0x9A, 0xFF }), "call [r12-0x653215]");*/
+	test::assert_true(compare<OP_CODE::CALL, rax>({ 0xff, 0xd0 }), "call rax");
+	test::assert_true(compare<OP_CODE::CALL, rsp>({ 0xff, 0xd4 }), "call rsp");
+	test::assert_true(compare<OP_CODE::CALL, r8>({ 0x41, 0xff, 0xd0 }), "call r8");
+	test::assert_true(compare<OP_CODE::CALL, int8_t, rax>(0x65, { 0xff, 0x50, 0x65 }), "call [rax+0x65]");
+	test::assert_true(compare<OP_CODE::CALL, int8_t, rsp>(0x65, { 0xff, 0x54, 0x24, 0x65 }), "call [rsp+0x65]");
+	test::assert_true(compare<OP_CODE::CALL, int8_t, r8>(0x65, { 0x41, 0xff, 0x50, 0x65 }), "call [r8+0x65]");
+	test::assert_true(compare<OP_CODE::CALL, int32_t, rax>(-0x00653215, { 0xff, 0x90, 0xeb, 0xcd, 0x9a, 0xff }), "call [rax-0x00653215]");
+	test::assert_true(compare<OP_CODE::CALL, int32_t, rsp>(-0x00653215, { 0xff, 0x94, 0x24, 0xeb, 0xcd, 0x9a, 0xff }), "call [rsp-0x00653215]");
+	test::assert_true(compare<OP_CODE::CALL, int32_t, r8>(-0x00653215, { 0x41, 0xff, 0x90, 0xeb, 0xcd, 0x9a, 0xff }), "call [r8-0x00653215]");
 #endif
 }
 
-void architecture_test::test_other()
+void architecture_test::test_test()
 {
 #if defined(BIA_ARCHITECTURE_X86_32) || defined(BIA_ARCHITECTURE_X86_64)
 	test::assert_true(compare<OP_CODE::TEST, eax, eax>({ 0x85, 0xc0 }), "test eax, eax");
