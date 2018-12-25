@@ -83,9 +83,14 @@ inline size_t instruction(stream::output_stream & _output, Offset_type _offset)
 
 #if defined(BIA_ARCHITECTURE_X86_32)
 	static_assert(Register::size() == 32, "Register is not supported.");
+
+	constexpr auto _special_register = std::is_same<Register, esp>::value;
 #elif defined(BIA_ARCHITECTURE_X86_64)
 	static_assert(Register::size() == 64, "Register is not supported.");
 
+	constexpr auto _special_register = std::is_same<Register, rsp>::value;
+
+	// Prefix
 	if (register_prefix<Register>()) {
 		_written = _output.write_all(register_prefix<Register>());
 	}
@@ -94,20 +99,20 @@ inline size_t instruction(stream::output_stream & _output, Offset_type _offset)
 	switch (Op_code) {
 	case OP_CODE::PUSH:
 	{
-#if defined(BIA_ARCHITECTURE_X86_32)
-		constexpr auto _special_register = std::is_same<Register, esp>::value;
-#elif defined(BIA_ARCHITECTURE_X86_64)
-		constexpr auto _special_register = std::is_same<Register, rsp>::value;
-#endif
-
 		if (_special_register) {
-			return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 060 | Register::value()), 0x24_8, _offset);
+			return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 0060 | Register::value()), 0x24_8, _offset);
 		}
 
-		return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 060 | Register::value()), _offset);
+		return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 0060 | Register::value()), _offset);
 	}
 	case OP_CODE::CALL:
-		return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 020 | Register::value()), _offset);
+	{
+		if (_special_register) {
+			return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 0020 | Register::value()), 0x24_8, _offset);
+		}
+
+		return _written + _output.write_all(0xff_8, static_cast<uint8_t>(_mode | 0020 | Register::value()), _offset);
+	}
 	}
 
 	BIA_IMPLEMENTATION_ERROR;
@@ -133,7 +138,8 @@ inline size_t instruction(stream::output_stream & _output)
 
 	// Write prefix for 64 bit register
 	if (Op_code != OP_CODE::MOVE_QUADWORD && Destination::size() == 64) {
-		_written = _output.write_all(static_cast<uint8_t>(0x48 | register_prefix<Destination, Source>()));
+		// Swap source and destination!
+		_written = _output.write_all(static_cast<uint8_t>(0x48 | register_prefix<Source, Destination>()));
 	}
 #endif
 
@@ -367,11 +373,11 @@ inline size_t instruction32(stream::output_stream & _output, int32_t _value)
 	case OP_CODE::PUSH:
 		return _output.write_all(0x68_8, _value);
 	case OP_CODE::JUMP_RELATIVE:
-		return _output.write_all(0xe9_8, _value);
+		return _output.write_all(0xe9_8, _value - 5);
 	case OP_CODE::JUMP_EQUAL:
-		return _output.write_all(0x0f_8, 0x84_8, _value);
+		return _output.write_all(0x0f_8, 0x84_8, _value - 6);
 	case OP_CODE::JUMP_NOT_EQUAL:
-		return _output.write_all(0x0f_8, 0x85_8, _value);
+		return _output.write_all(0x0f_8, 0x85_8, _value - 6);
 	}
 
 	BIA_IMPLEMENTATION_ERROR;
