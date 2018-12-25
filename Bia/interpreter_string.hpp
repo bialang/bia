@@ -18,6 +18,8 @@ enum INTERPRETER_STRING : int32_t
 	IS_WHILE,
 	IS_UNTIL,
 	IS_DO,
+	IS_BREAK,
+	IS_CONTINUE,
 	IS_IF,
 	IS_ELSE,
 	IS_TRUE,
@@ -154,6 +156,38 @@ struct keyword_do
 	constexpr static INTERPRETER_STRING string_id() noexcept
 	{
 		return IS_DO;
+	}
+};
+
+struct keyword_break
+{
+	constexpr static const char * token() noexcept
+	{
+		return "break";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 5;
+	}
+	constexpr static INTERPRETER_STRING string_id() noexcept
+	{
+		return IS_BREAK;
+	}
+};
+
+struct keyword_continue
+{
+	constexpr static const char * token() noexcept
+	{
+		return "continue";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 8;
+	}
+	constexpr static INTERPRETER_STRING string_id() noexcept
+	{
+		return IS_CONTINUE;
 	}
 };
 
