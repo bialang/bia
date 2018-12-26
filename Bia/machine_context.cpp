@@ -99,6 +99,11 @@ void BIA_MEMBER_CALLING_CONVENTION machine_context::recreate_on_stack(uint32_t _
 	_stack.recreate(_member_count);
 }
 
+void BIA_MEMBER_CALLING_CONVENTION machine_context::recreate_range_on_stack(framework::member * _begin, uint32_t _member_count)
+{
+	_stack.recreate_range(_begin, _member_count);
+}
+
 void BIA_MEMBER_CALLING_CONVENTION machine_context::create_on_stack(framework::member ** _destination, uint32_t _member_count)
 {
 	_stack.push(_destination, _member_count);

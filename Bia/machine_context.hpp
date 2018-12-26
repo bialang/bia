@@ -196,6 +196,18 @@ public:
 	*/
 	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION recreate_on_stack(uint32_t _member_count);
 	/**
+	 * Recreates a range of variables of the stack.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	 *
+	 * @param _begin The beginning of the range.
+	 * @param _member_count The amount of member variables.
+	 *
+	 * @throws See machine_stack::recreate_range().
+	*/
+	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION recreate_range_on_stack(framework::member * _begin, uint32_t _member_count);
+	/**
 	 * Pushes the variables to the stack.
 	 *
 	 * @since 3.65.132.734
