@@ -132,9 +132,11 @@ global i = 5
 
 {
 
-var i = 0
+var i = printer(343)
 print i
 
+# clear all temp members
+delete
 }
 
 print i

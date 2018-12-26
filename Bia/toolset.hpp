@@ -82,7 +82,9 @@ public:
 	}
 	void close_scope(local_index_type _variable_count)
 	{
-		call_member(&machine_context::recreate_on_stack, _context, uint32_t(_variable_count));
+		if (_variable_count) {
+			call_member(&machine_context::recreate_on_stack, _context, uint32_t(_variable_count));
+		}
 	}
 	void destroy_local_variables(position_type _start_position, local_index_type _variable_count)
 	{
@@ -106,7 +108,9 @@ public:
 		_output->set_position(_pos);
 
 		// Append end
-		call_member(&machine_context::destroy_from_stack, _context, uint32_t(_variable_count));
+		if (_variable_count) {
+			call_member(&machine_context::destroy_from_stack, _context, uint32_t(_variable_count));
+		}
 
 		// Free stack
 		instruction<OP_CODE::MOVE, stack_pointer, local_variable_pointer>(*_output);

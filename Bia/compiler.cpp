@@ -26,6 +26,16 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 void compiler::finalize()
 {
 	_toolset.finalize(_counter.max());
+
+	auto _end = _toolset.output_stream().position();
+
+	// Finish tasks
+	for (auto & _task : _finish_tasks) {
+		_toolset.output_stream().set_position(_task.first);
+		_task.second();
+	}
+
+	_toolset.output_stream().set_position(_end);
 }
 
 void compiler::test_compiler_value()
@@ -579,7 +589,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 		} else {
 			handle_variable_declaration_helper(_expression, _value.value().rt_member);
 		}
-		
+
 	});
 
 	return _report->content.end;
@@ -740,7 +750,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 			if (!_value.value().rt_test_result) {
 				_compile = false;
 			} // Change to unconditional jump
-			else {			
+			else {
 				_jump_type = toolset::JUMP::JUMP;
 			}
 
@@ -787,7 +797,13 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 const grammar::report * compiler::handle_loop_control(const grammar::report * _report)
 {
-	if (_loop_tracker.open_loops()) {
+	if (_report->content.keyword == grammar::IS_DELETE) {
+		// Reset temp member
+		_finish_tasks.emplace_back(std::make_pair(_toolset.output_stream().position(), [this]() {
+			_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(_counter.max()));
+		}));
+		_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(0));
+	} else if (_loop_tracker.open_loops()) {
 		if (_report->content.keyword == grammar::IS_BREAK) {
 			_loop_tracker.add_end_update(_toolset.jump(machine::platform::toolset::JUMP::JUMP, 0));
 		} else {

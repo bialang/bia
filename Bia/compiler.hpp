@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <functional>
+#include <vector>
 
 #include "config.hpp"
 #include "exception.hpp"
@@ -74,6 +76,8 @@ private:
 	machine::machine_context & _context;
 	/** Manages all scopes and their local variables. */
 	scope_handler _scope_handler;
+	/** A list of task that need to be executed before the script is finished. */
+	std::vector<std::pair<machine::platform::toolset::position_type, std::function<void()>>> _finish_tasks;
 
 	/**
 	 * Executes the given member.

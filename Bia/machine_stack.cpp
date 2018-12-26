@@ -65,6 +65,10 @@ void machine_stack::recreate(uint32_t _member_count)
 
 void machine_stack::recreate_range(framework::member * _begin, uint32_t _member_count)
 {
+	if (!_member_count) {
+		return;
+	}
+
 	auto _ptr = reinterpret_cast<int8_t*>(_begin);
 	auto _check = _ptr - _buffer.first;
 

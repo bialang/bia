@@ -22,6 +22,7 @@ enum INTERPRETER_STRING : int32_t
 	IS_CONTINUE,
 	IS_GOTO,
 	IS_EXIT_SCOPE,
+	IS_DELETE,
 	IS_IF,
 	IS_ELSE,
 	IS_TRUE,
@@ -222,6 +223,22 @@ struct keyword_exit_scope
 	constexpr static INTERPRETER_STRING string_id() noexcept
 	{
 		return IS_EXIT_SCOPE;
+	}
+};
+
+struct keyword_delete
+{
+	constexpr static const char * token() noexcept
+	{
+		return "delete";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 6;
+	}
+	constexpr static INTERPRETER_STRING string_id() noexcept
+	{
+		return IS_DELETE;
 	}
 };
 

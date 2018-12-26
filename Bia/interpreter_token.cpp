@@ -373,7 +373,8 @@ ACTION interpreter_token::control_statement(stream::input_stream & _input, token
 	if (keyword<keyword_break>(_input, _params, _output) != success && 
 		keyword<keyword_continue>(_input, _params, _output) != success &&
 		keyword<keyword_goto>(_input, _params, _output) != success &&
-		keyword<keyword_exit_scope>(_input, _params, _output) != success) {
+		keyword<keyword_exit_scope>(_input, _params, _output) != success &&
+		keyword<keyword_delete>(_input, _params, _output) != success) {
 		return error;
 	}
 
