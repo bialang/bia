@@ -149,7 +149,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION loop_control(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION control_statement(stream::input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches an assign operator.
 	 *
@@ -378,15 +378,22 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	template<report::rule_type Rule, flags::flag_type Flags = flags::filler_token>
+	template<report::rule_type Rule, flags::flag_type Flags = flags::filler_token, report::custom_type Custom_parameter = 0>
 	static ACTION rule_pointer(stream::input_stream & _input, token_param & _params, token_output & _output)
 	{
-		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
+		constexpr auto success = Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT;
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
 
 		// Starting whitespaces
 		if (!whitespace_deleter<Flags, true>(_input, _params.encoder)) {
 			return error;
+		} // Report this token
+		else if (!(Flags & flags::filler_token)) {
+			_output.type = report::TYPE::RULE_TOKEN;
+			_output.custom_parameter = Custom_parameter;
+			_output.token_id = _params.token_id;
+
+			_params.bundle->add(_output);
 		}
 
 		if (_params.rules[Rule].run_rule(_input, _params)) {

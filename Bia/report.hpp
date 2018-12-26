@@ -44,6 +44,7 @@ struct report
 		KEYWORD,
 		BEGIN,
 		END,
+		RULE_TOKEN,
 		EMPTY_CHILD
 	};
 

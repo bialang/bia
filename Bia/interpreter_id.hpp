@@ -64,7 +64,13 @@ enum BIA_GRAMMAR_RULE : report::rule_type
 	BGR_RULE_COUNT,
 
 	// Rules not in the rule set
-	BGR_LOOP_CONTROL
+	BGR_CONTROL_STATEMENT
+};
+
+enum BIA_SCOPE
+{
+	BS_NO_SCOPE = 0,
+	BS_SCOPE
 };
 
 enum BIA_VALUE

@@ -24,13 +24,13 @@ interpreter syntax::init_rules()
 	// Root
 	_interpreter.set_rule(interpreter_rule(BGR_ROOT, interpreter_rule::F_OR, {
 		interpreter_token::rule_pointer<BGR_ROOT_HELPER_1>,
-		interpreter_token::rule_pointer<BGR_ROOT_HELPER_0>
+		interpreter_token::rule_pointer<BGR_ROOT_HELPER_0, flags::none, BS_SCOPE>
 		}));
 
 	// Root helper 0
 	_interpreter.set_rule(interpreter_rule(BGR_ROOT_HELPER_0, interpreter_rule::F_WRAP_UP, {
 		interpreter_token::keyword<operator_scope_open, flags::filler_token>,
-		interpreter_token::rule_pointer<BGR_ROOT_HELPER_1, flags::filler_token | flags::looping_token | flags::starting_padding_opt_token>,
+		interpreter_token::rule_pointer<BGR_ROOT, flags::filler_token | flags::looping_token | flags::starting_padding_opt_token>,
 		interpreter_token::keyword<operator_scope_close, flags::filler_token>
 		}));
 
@@ -40,7 +40,7 @@ interpreter syntax::init_rules()
 		interpreter_token::rule_pointer<BGR_IF>,
 		interpreter_token::rule_pointer<BGR_PRINT>,
 		interpreter_token::rule_pointer<BGR_TEST_LOOP>,
-		interpreter_token::loop_control,
+		interpreter_token::control_statement,
 		interpreter_token::rule_pointer<BGR_IMPORT>,
 		interpreter_token::rule_pointer<BGR_ROOT_HELPER_2>
 		}));

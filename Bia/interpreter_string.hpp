@@ -20,6 +20,8 @@ enum INTERPRETER_STRING : int32_t
 	IS_DO,
 	IS_BREAK,
 	IS_CONTINUE,
+	IS_GOTO,
+	IS_EXIT_SCOPE,
 	IS_IF,
 	IS_ELSE,
 	IS_TRUE,
@@ -188,6 +190,38 @@ struct keyword_continue
 	constexpr static INTERPRETER_STRING string_id() noexcept
 	{
 		return IS_CONTINUE;
+	}
+};
+
+struct keyword_goto
+{
+	constexpr static const char * token() noexcept
+	{
+		return "goto";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 4;
+	}
+	constexpr static INTERPRETER_STRING string_id() noexcept
+	{
+		return IS_GOTO;
+	}
+};
+
+struct keyword_exit_scope
+{
+	constexpr static const char * token() noexcept
+	{
+		return "exit_scope";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 10;
+	}
+	constexpr static INTERPRETER_STRING string_id() noexcept
+	{
+		return IS_EXIT_SCOPE;
 	}
 };
 

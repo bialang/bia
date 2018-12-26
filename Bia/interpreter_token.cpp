@@ -365,16 +365,26 @@ ACTION interpreter_token::first_member(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::loop_control(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION interpreter_token::control_statement(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
 	
-	if (keyword<keyword_break>(_input, _params, _output) != success && keyword<keyword_continue>(_input, _params, _output) != success) {
+	if (keyword<keyword_break>(_input, _params, _output) != success && 
+		keyword<keyword_continue>(_input, _params, _output) != success &&
+		keyword<keyword_goto>(_input, _params, _output) != success &&
+		keyword<keyword_exit_scope>(_input, _params, _output) != success) {
 		return error;
 	}
 
-	_output.rule_id = BGR_LOOP_CONTROL;
+	// Additional identifier
+	if (_output.content.keyword == keyword_goto::string_id()) {
+		identifier(_input, _params, _output);
+
+		return error;
+	}
+
+	_output.rule_id = BGR_CONTROL_STATEMENT;
 
 	// Match end
 	return command_end(_input, _params, _output) == ACTION::DONT_REPORT ? success : error;
