@@ -76,6 +76,18 @@ public:
 	*/
 	BIA_EXPORT void recreate(uint32_t _member_count);
 	/**
+	 * Recreates a range of variables of the stack.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	 *
+	 * @param [in] _begin The beginning of the range. See push().
+	 * @param _member_count The amount of the member variables.
+	 *
+	 * @throws
+	*/
+	BIA_EXPORT void recreate_range(framework::member * _begin, uint32_t _member_count);
+	/**
 	 * Pushes the variables to the stack.
 	 *
 	 * @since 3.65.132.734
@@ -92,9 +104,7 @@ private:
 	/** The used memory allocator. */
 	memory::allocator * _allocator;
 	/** The base pointer of the stack. */
-	int8_t * _buffer;
-	/** The max size of the stack. */
-	size_t _max_size;
+	memory::allocation<int8_t> _buffer;
 	/** The current position of the stack pointer. */
 	size_t _cursor;
 };
