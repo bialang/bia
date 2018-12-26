@@ -94,6 +94,11 @@ void BIA_MEMBER_CALLING_CONVENTION machine_context::destroy_from_stack(uint32_t 
 	_stack.pop(_member_count);
 }
 
+void BIA_MEMBER_CALLING_CONVENTION machine_context::recreate_on_stack(uint32_t _member_count)
+{
+	_stack.recreate(_member_count);
+}
+
 void BIA_MEMBER_CALLING_CONVENTION machine_context::create_on_stack(framework::member ** _destination, uint32_t _member_count)
 {
 	_stack.push(_destination, _member_count);

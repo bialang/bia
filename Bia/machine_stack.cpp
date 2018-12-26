@@ -54,6 +54,21 @@ void machine_stack::pop(uint32_t _member_count)
 	}
 }
 
+void machine_stack::recreate(uint32_t _member_count)
+{
+	if (_cursor < _member_count * framework::max_member_size) {
+		throw 1;
+	}
+
+	auto _ptr = _buffer + _cursor - _member_count * framework::max_member_size;
+
+	// Recreate members
+	while (_member_count--) {
+		reinterpret_cast<framework::member*>(_ptr)->undefine();
+		_ptr += framework::max_member_size;
+	}
+}
+
 void machine_stack::push(framework::member ** _destination, uint32_t _member_count)
 {
 	auto _ptr = _buffer + _cursor;
