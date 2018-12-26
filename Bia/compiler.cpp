@@ -455,25 +455,21 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 			_report = handle_parameter(_report, _destination);
 		} // Get member
 		else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
-			expand_value_to_member(_value, nullptr, [&](auto _member) {
+			_value.expand_to_member(nullptr, [&](auto _member) {
 				if (std::is_same<decltype(_member), std::nullptr_t>::value) {
 					BIA_IMPLEMENTATION_ERROR;
 				}
 
-				expand_value_to_member(_destination, _member, [&](auto _dest) {
+				_destination.expand_to_member(_member, [&](auto _dest) {
 					if (std::is_same<decltype(_member), decltype(compiler_value::return_value::rt_member)>::value && std::is_same<decltype(_dest), std::nullptr_t>::value) {
 						_value.set_return_temp(_counter.next());
 						_toolset.call_virtual(&framework::member::object_member, _member, machine::platform::toolset::to_temp_member(_counter.current()), _report->content.member);
+					} else {
+						_value = _destination;
 
-						return false;
+						_toolset.call_virtual(&framework::member::object_member, _member, _dest, _report->content.member);
 					}
-
-					_toolset.call_virtual(&framework::member::object_member, _member, _dest, _report->content.member);
-
-					return true;
 				});
-
-				return false;
 			});
 
 			++_report;
@@ -521,12 +517,12 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	}
 
 	// Call function
-	expand_value_to_member(_caller, nullptr, [&](auto _member) {
+	_caller.expand_to_member(nullptr, [&](auto _member) {
 		if (std::is_same<decltype(_member), std::nullptr_t>::value) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		expand_value_to_member(_destination, nullptr, [&](auto _dest) {
+		_destination.expand_to_member(nullptr, [&](auto _dest) {
 			if (std::is_same<decltype(_dest), std::nullptr_t>::value) {
 				_destination.set_return_temp(_counter.next());
 
@@ -535,10 +531,8 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 				handle_parameter_execute(_member, _dest, _format, _mixed, _count, _passer);
 			}
 
-			return true;
+			_value = _destination;
 		});
-
-		return false;
 	});
 
 	return _report->content.end;

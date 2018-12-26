@@ -6,9 +6,9 @@
 #include <cstring>
 
 #include "member.hpp"
-#include "temp_counter.hpp"
 #include "string_stream.hpp"
 #include "big_int.hpp"
+#include "toolset.hpp"
 
 
 namespace bia
@@ -73,8 +73,8 @@ public:
 			stream::string_stream::length_type length;
 		} rt_string;
 		framework::member * rt_member;
-		temp_counter::counter_type rt_temp_member;
-		temp_counter::counter_type rt_local_member;
+		machine::platform::toolset::temp_index_type rt_temp_member;
+		machine::platform::toolset::local_index_type rt_local_member;
 	};
 
 	/**
@@ -270,7 +270,7 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return_temp(temp_counter::counter_type _value) noexcept
+	void set_return_temp(machine::platform::toolset::temp_index_type _value) noexcept
 	{
 		clean();
 
@@ -285,12 +285,28 @@ public:
 	 *
 	 * @param _value The value.
 	*/
-	void set_return_local(temp_counter::counter_type _value) noexcept
+	void set_return_local(machine::platform::toolset::local_index_type _value) noexcept
 	{
 		clean();
 
 		_return_type = VALUE_TYPE::LOCAL_MEMBER;
 		_return_value.rt_local_member = _value;
+	}
+	template<typename Lambda, typename Default>
+	void expand_to_member(Default _default, Lambda && _lambda)
+	{
+		// Save to member variable
+		if (type() == compiler_value::VALUE_TYPE::MEMBER) {
+			_lambda(value().rt_member);
+		} // Save to temp member
+		else if (type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_lambda(machine::platform::toolset::to_temp_member(value().rt_temp_member));
+		} // Save to local member
+		else if (type() == compiler_value::VALUE_TYPE::LOCAL_MEMBER) {
+			_lambda(machine::platform::toolset::to_local_member(value().rt_local_member));
+		} else {
+			_lambda(_default);
+		}
 	}
 	/**
 	 * Checks whether the int value can be stored in a int32 type.

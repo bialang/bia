@@ -116,28 +116,6 @@ private:
 			_toolset.call_virtual(&framework::member::execute_count, _member, _passer, _destination, machine::platform::reserved_parameter(), _count);
 		}
 	}
-	template<typename Lambda, typename Default_destination>
-	void expand_value_to_member(compiler_value _destination, Default_destination _default_destination, Lambda && _lambda)
-	{
-		bool _set_value;
-
-		// Save to member variable
-		if (_destination.type() == compiler_value::VALUE_TYPE::MEMBER) {
-			_set_value = _lambda(_destination.value().rt_member);
-		} // Save to temp member
-		else if (_destination.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_set_value = _lambda(machine::platform::toolset::to_temp_member(_destination.value().rt_temp_member));
-		} // Save to local member
-		else if (_destination.type() == compiler_value::VALUE_TYPE::LOCAL_MEMBER) {
-			_set_value = _lambda(machine::platform::toolset::to_local_member(_destination.value().rt_local_member));
-		} else {
-			_set_value = _lambda(_default_destination);
-		}
-
-		if (_set_value) {
-			_value = _destination;
-		}
-	}
 	template<typename Destination>
 	void handle_variable_declaration_helper(compiler_value _expression, Destination _destination)
 	{
