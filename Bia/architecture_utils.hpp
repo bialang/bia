@@ -81,6 +81,14 @@ struct edx : register32
 	}
 };
 
+struct ebx : register32
+{
+	constexpr static size_t value()
+	{
+		return 3;
+	}
+};
+
 struct esp : register32
 {
 	constexpr static size_t value()
@@ -143,6 +151,14 @@ struct rdx : register64_basic
 	constexpr static size_t value()
 	{
 		return 2;
+	}
+};
+
+struct rbx : register64_basic
+{
+	constexpr static size_t value()
+	{
+		return 3;
 	}
 };
 
@@ -299,6 +315,7 @@ constexpr auto stack_alignment = 16;
 typedef eax accumulator;
 typedef esp stack_pointer;
 typedef ebp base_pointer;
+typedef ebx local_variable_pointer;
 #elif defined(BIA_ARCHITECTURE_X86_64)
 constexpr auto element_size = 8;
 constexpr auto stack_alignment = 16;
@@ -306,6 +323,7 @@ constexpr auto stack_alignment = 16;
 typedef rax accumulator;
 typedef rsp stack_pointer;
 typedef rbp base_pointer;
+typedef rbx local_variable_pointer;
 #endif
 
 static_assert(element_size == sizeof(void*), "Invalid element size.");
