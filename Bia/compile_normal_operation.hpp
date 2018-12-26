@@ -77,6 +77,10 @@ public:
 			left_member_operation(machine::platform::toolset::to_temp_member(_left.value().rt_temp_member), _operator, _right);
 
 			break;
+		case VT::LOCAL_MEMBER:
+			left_member_operation(machine::platform::toolset::to_local_member(_left.value().rt_local_member), _operator, _right);
+
+			break;
 		default:
 			BIA_IMPLEMENTATION_ERROR;
 		}
@@ -143,6 +147,10 @@ private:
 			break;
 		case VT::TEMPORARY_MEMBER:
 			function_caller_helper(&framework::member::operator_call, _member, _destination, _operator, T::to_temp_member(_right.value().rt_temp_member));
+
+			break;
+		case VT::LOCAL_MEMBER:
+			function_caller_helper(&framework::member::operator_call, _member, _destination, _operator, T::to_local_member(_right.value().rt_local_member));
 
 			break;
 		case VT::TEST_VALUE_REGISTER:
@@ -268,6 +276,10 @@ private:
 			break;
 		case VT::TEMPORARY_MEMBER:
 			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
+
+			break;
+		case VT::LOCAL_MEMBER:
+			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_local_member(_right.value().rt_local_member));
 
 			break;
 		default:

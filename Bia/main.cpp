@@ -128,12 +128,13 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-global i = "hi"
+global i = 5
+global oa = 0
 
 {
 
-var i = 0
-
+var i = printer(3)
+var o = oa*5
 print i
 
 }

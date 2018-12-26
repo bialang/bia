@@ -57,6 +57,12 @@ void compiler::test_compiler_value()
 		_toolset.write_test();
 
 		break;
+	case VT::LOCAL_MEMBER:
+		_toolset.call_virtual(&framework::member::test, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
+		_value.set_return_test();
+		_toolset.write_test();
+
+		break;
 	case VT::TEST_VALUE_REGISTER:
 		_toolset.write_test();
 	case VT::TEST_VALUE_CONSTANT:
@@ -111,6 +117,10 @@ char compiler::handle_parameter_item(machine::platform::varg_member_passer & _pa
 		return 'M';
 	case VT::TEMPORARY_MEMBER:
 		_passer.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+
+		return 'M';
+	case VT::LOCAL_MEMBER:
+		_passer.pass_varg(machine::platform::toolset::to_local_member(_value.value().rt_local_member));
 
 		return 'M';
 	case VT::TEST_VALUE_REGISTER:
@@ -448,6 +458,14 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 				break;
 			}
+			case compiler_value::VALUE_TYPE::LOCAL_MEMBER:
+			{
+				auto _member = T::to_local_member(_value.value().rt_local_member);
+
+				_toolset.call_virtual(&framework::member::object_member, _member, _member, _report->content.member);
+
+				break;
+			}
 			default:
 				BIA_IMPLEMENTATION_ERROR;
 			}
@@ -511,6 +529,11 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	case VT::TEMPORARY_MEMBER:
 		_value = _caller;
 		handle_parameter_execute(machine::platform::toolset::to_temp_member(_caller.value().rt_temp_member), _format, _mixed, _count, _passer);
+
+		break;
+	case VT::LOCAL_MEMBER:
+		_value = _caller;
+		handle_parameter_execute(machine::platform::toolset::to_local_member(_caller.value().rt_local_member), _format, _mixed, _count, _passer);
 
 		break;
 	default:
