@@ -128,33 +128,17 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
+global i = "hi"
+
+{
+
 var i = 0
 
-while true {
-if i == 10 break
 print i
-i += 1
 
 }
 
-#>var start = time()
-var sum = 0
-var i = 0
-
-until i == 10000 {
-	if i % 3 == 0 {
-		sum += i * 5
-	}
-	else sum *= i + 1
-
-	i += 1
-	break
-}
-
-var end = time()
-
-print end - start
-print sum<#
+print i
 
 )"";
 		/*test_and_time(1, []() {

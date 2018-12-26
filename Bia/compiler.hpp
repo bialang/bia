@@ -14,6 +14,7 @@
 #include "machine_context.hpp"
 #include "compile_normal_operation.hpp"
 #include "compiler_loop_tracker.hpp"
+#include "scope_handler.hpp"
 
 #include "interpreter.hpp"
 #include "interpreter_rule.hpp"
@@ -52,6 +53,13 @@ public:
 	//machine::machine_schein get_machine_schein();
 
 private:
+	enum class VARIABLE_TYPE
+	{
+		UNKNOWN,
+		DEFINITELY_LOCAL,
+		DEFINITELY_GLOBAL
+	};
+
 	typedef const grammar::report*(compiler::*handle_function)(const grammar::report*);
 
 	/** The result value for calculating and compiling. */
@@ -64,6 +72,8 @@ private:
 	machine::platform::toolset _toolset;
 	/** The context. */
 	machine::machine_context & _context;
+	/** Manages all scopes and their local variables. */
+	scope_handler _scope_handler;
 
 	/**
 	 * Executes the given member.
@@ -100,6 +110,78 @@ private:
 		} // Only members as parameters
 		else {
 			_toolset.call_virtual(&framework::member::execute_count, _member, _passer, _destination, machine::platform::reserved_parameter(), _count);
+		}
+	}
+	template<typename Destination>
+	void handle_variable_declaration_helper(compiler_value _expression, Destination _destination)
+	{
+		using T = machine::platform::toolset;
+		using VT = compiler_value::VALUE_TYPE;
+
+		switch (_expression.type()) {
+		case VT::TEST_VALUE_CONSTANT:
+			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
+		case VT::INT:
+		{
+			// Optimize common used constant values
+			switch (_expression.value().rt_int) {
+			case 0:
+				_toolset.call_static(&machine::link::instantiate_int_0, _destination);
+
+				break;
+			case 1:
+				_toolset.call_static(&machine::link::instantiate_int_1, _destination);
+
+				break;
+			case -1:
+				_toolset.call_static(&machine::link::instantiate_int_n1, _destination);
+
+				break;
+			default:
+			{
+				// Can be int32
+				if (_expression.is_int32()) {
+					_toolset.call_static(&machine::link::instantiate_int32, _destination, static_cast<int32_t>(_expression.value().rt_int));
+				} else {
+					_toolset.call_static(&machine::link::instantiate_int64, _destination, _expression.value().rt_int);
+				}
+
+				break;
+			}
+			}
+
+			break;
+		}
+		case VT::BIG_INT:
+			_toolset.call_static(&machine::link::instantiate_big_int, _destination, _expression.value().rt_big_int);
+
+			break;
+		case VT::DOUBLE:
+			_toolset.call_static(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
+
+			break;
+		case VT::STRING:
+			_toolset.call_static(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
+
+			break;
+		case VT::MEMBER:
+			_toolset.call_virtual(&framework::member::clone, _expression.value().rt_member, _destination);
+
+			break;
+		case VT::TEMPORARY_MEMBER:
+			_toolset.call_virtual(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
+
+			break;
+		case VT::LOCAL_MEMBER:
+			_toolset.call_virtual(&framework::member::clone, T::to_local_member(_expression.value().rt_local_member), _destination);
+
+			break;
+		case VT::TEST_VALUE_REGISTER:
+			_toolset.call_static(&machine::link::instantiate_int32, _destination, T::test_result_value());
+
+			break;
+		default:
+			BIA_IMPLEMENTATION_ERROR;
 		}
 	}
 	/**
@@ -322,12 +404,13 @@ private:
 	 * @date 17-Jun-18
 	 *
 	 * @param _report The identifier.
+	 * @param _type (Optional) The type of the variable.
 	 *
 	 * @throws See machine::machine_context::get_address_of_member().
 	 *
 	 * @return The end of the report.
 	*/
-	BIA_EXPORT const grammar::report * handle_identifier(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_identifier(const grammar::report * _report, VARIABLE_TYPE _type = VARIABLE_TYPE::UNKNOWN);
 	/**
 	 * Handles a math factor token.
 	 *

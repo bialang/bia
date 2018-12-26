@@ -14,13 +14,12 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _toolset(_output, &_context), _context(_context)
+compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _toolset(_output, &_context), _context(_context), _scope_handler(_toolset)
 {
 }
 
 void compiler::report(const grammar::report * _begin, const grammar::report * _end)
 {
-	puts("global scope");
 	handle_root(_begin);
 }
 
@@ -147,10 +146,18 @@ const grammar::report * compiler::handle_value_expression(const grammar::report 
 
 const grammar::report * compiler::handle_root(const grammar::report * _report)
 {
+	auto _scope_opened = false;
+
 	switch (_report->rule_id) {
+	case BGR_ROOT:
+	{
+		_scope_handler.open_scope();
+
+		_scope_opened = true;
+		++_report;
+	}
 	case BGR_ROOT_HELPER_0:
 	{
-		puts("open scope");
 		auto _end = _report->content.end;
 
 		++_report;
@@ -158,6 +165,10 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		// Handle all reports
 		while (_report < _end) {
 			_report = handle_root(_report);
+		}
+
+		if (_scope_opened) {
+			_scope_handler.close_scope();
 		}
 
 		return _end;
@@ -170,7 +181,7 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_print(_report);
 	case BGR_TEST_LOOP:
 		return handle_test_loop(_report);
-	case BGR_LOOP_CONTROL:
+	case BGR_CONTROL_STATEMENT:
 		return handle_loop_control(_report);
 	case BGR_IMPORT:
 		return handle_import(_report);
@@ -334,8 +345,25 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 	return _report->content.end;
 }
 
-const grammar::report * compiler::handle_identifier(const grammar::report * _report)
+const grammar::report * compiler::handle_identifier(const grammar::report * _report, VARIABLE_TYPE _type)
 {
+	// 100% local
+	if (_type == VARIABLE_TYPE::DEFINITELY_LOCAL) {
+		_value.set_return_local(_scope_handler.declare(_report->content.member));
+
+		return _report + 1;
+	} // Unkown
+	else if (!_scope_handler.no_open_scopes() && _type != VARIABLE_TYPE::DEFINITELY_GLOBAL) {
+		auto _index = _scope_handler.variable_index(_report->content.member);
+
+		// Local variable
+		if (_index != scope_handler::not_found) {
+			_value.set_return_local(_index);
+
+			return _report + 1;
+		}
+	}
+
 	// Global member
 	_value.set_return(_context.address_of_member(_report->content.member));
 
@@ -515,79 +543,20 @@ const grammar::report * compiler::handle_string(const grammar::report * _report)
 
 const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)
 {
-	using T = machine::platform::toolset;
-	using VT = compiler_value::VALUE_TYPE;
-
 	// Handle value and prepare the result for a function call
 	handle_value<false>(_report + 3, [&] {
 		auto _expression = _value;
+		auto _local_variable = _report[1].content.keyword == grammar::keyword_var::string_id() && !_scope_handler.no_open_scopes();
 
-		handle_identifier(_report + 2);
+		handle_identifier(_report + 2, _local_variable ? VARIABLE_TYPE::DEFINITELY_LOCAL : VARIABLE_TYPE::DEFINITELY_GLOBAL);
 
-		auto _destination = _value.value().rt_member;
-
-		// Make call
-		switch (_expression.type()) {
-		case VT::TEST_VALUE_CONSTANT:
-			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
-		case VT::INT:
-		{
-			// Optimize common used constant values
-			switch (_expression.value().rt_int) {
-			case 0:
-				_toolset.call_static(&machine::link::instantiate_int_0, _destination);
-
-				break;
-			case 1:
-				_toolset.call_static(&machine::link::instantiate_int_1, _destination);
-
-				break;
-			case -1:
-				_toolset.call_static(&machine::link::instantiate_int_n1, _destination);
-
-				break;
-			default:
-			{
-				// Can be int32
-				if (_expression.is_int32()) {
-					_toolset.call_static(&machine::link::instantiate_int32, _destination, static_cast<int32_t>(_expression.value().rt_int));
-				} else {
-					_toolset.call_static(&machine::link::instantiate_int64, _destination, _expression.value().rt_int);
-				}
-
-				break;
-			}
-			}
-
-			break;
+		// Local variable
+		if (_local_variable) {
+			handle_variable_declaration_helper(_expression, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
+		} else {
+			handle_variable_declaration_helper(_expression, _value.value().rt_member);
 		}
-		case VT::BIG_INT:
-			_toolset.call_static(&machine::link::instantiate_big_int, _destination, _expression.value().rt_big_int);
-
-			break;
-		case VT::DOUBLE:
-			_toolset.call_static(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
-
-			break;
-		case VT::STRING:
-			_toolset.call_static(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
-
-			break;
-		case VT::MEMBER:
-			_toolset.call_virtual(&framework::member::clone, _expression.value().rt_member, _destination);
-
-			break;
-		case VT::TEMPORARY_MEMBER:
-			_toolset.call_virtual(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
-
-			break;
-		case VT::TEST_VALUE_REGISTER:
-			_toolset.call_static(&machine::link::instantiate_int32, _destination, T::test_result_value());
-
-			break;
-		default:
-			BIA_IMPLEMENTATION_ERROR;
-		}
+		
 	});
 
 	return _report->content.end;
@@ -595,7 +564,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 const grammar::report * compiler::handle_if(const grammar::report * _report)
 {
-	std::vector<machine::platform::toolset::position> _end_jumps;
+	std::vector<machine::platform::toolset::position_type> _end_jumps;
 
 	for (auto i = _report + 1; i < _report->content.end;) {
 		// Else statement
@@ -689,6 +658,10 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 			_toolset.call_virtual(&framework::member::print, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 
 			break;
+		case VT::LOCAL_MEMBER:
+			_toolset.call_virtual(&framework::member::print, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
+
+			break;
 		case VT::TEST_VALUE_REGISTER:
 			_toolset.call_static(&machine::link::print_bool, machine::platform::toolset::test_result_value());
 
@@ -719,7 +692,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 	++_report;
 
-	toolset::position _do_jump_update = -1;
+	toolset::position_type _do_jump_update = -1;
 
 	// Do loop
 	if (_report->content.keyword == grammar::IS_DO) {
@@ -733,7 +706,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 	// Write loop condition
 	auto _compile = true;
-	toolset::position _condition_jump_update = -1;
+	toolset::position_type _condition_jump_update = -1;
 
 	_loop_tracker.open_loop(_toolset.output_stream().position());
 
