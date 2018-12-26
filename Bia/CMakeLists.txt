@@ -15,7 +15,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMMON})
 
 # compiler namespace
 set(Bia_HEADER_FILES_COMPILER "compile_compare_operation.hpp" "compile_normal_operation.hpp" "compiler.hpp" "compiler_loop_tracker.hpp" "compiler_value.hpp" "constant_operation.hpp" "scope_handler.hpp" "temp_counter.hpp")
-set(Bia_SOURCE_FILES_COMPILER "compiler.cpp" "compiler_loop_tracker.cpp")
+set(Bia_SOURCE_FILES_COMPILER "compiler.cpp" "compiler_loop_tracker.cpp" "scope_handler.cpp")
 
 source_group("Header Files\\compiler" FILES ${Bia_HEADER_FILES_COMPILER})
 source_group("Source Files\\compiler" FILES ${Bia_SOURCE_FILES_COMPILER})

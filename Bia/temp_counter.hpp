@@ -33,7 +33,8 @@ public:
 	*/
 	temp_counter() noexcept
 	{
-		_counter = _max = 0;
+		_counter = 0;
+		_max = 0;
 	}
 	/**
 	 * Pops counts until the counter equals the old counter.

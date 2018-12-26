@@ -202,6 +202,7 @@
     <ClCompile Include="member_names.cpp" />
     <ClCompile Include="module_loader.cpp" />
     <ClCompile Include="namespace_member.cpp" />
+    <ClCompile Include="scope_handler.cpp" />
     <ClCompile Include="simple_allocator.cpp" />
     <ClCompile Include="buffer_input_stream.cpp" />
     <ClCompile Include="compiler.cpp" />
