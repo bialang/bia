@@ -92,16 +92,16 @@ public:
 		_output->set_position(_start_position);
 
 #if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
-		// Allocate temp members + shadow space + align stack
-		auto _memory_allocated = align_stack((_variable_count + 4) * element_size);
+		// Allocate temp members + shadow space + align stack + the pushed bx register
+		auto _memory_allocated = align_stack((_variable_count + 4 + 1) * element_size);
 #else
-		// Allocate temp members + align stack
-		auto _memory_allocated = align_stack(_variable_count * element_size);
+		// Allocate temp members + align stack + the pushed bx register
+		auto _memory_allocated = align_stack((_variable_count + 1) * element_size);
 #endif
 
 		instruction32<OP_CODE::SUB, stack_pointer>(*_output, _memory_allocated);
 
-		call_member(&machine_context::create_on_stack, _context, register_offset<stack_pointer, int8_t, true>(_memory_allocated - _variable_count * element_size), uint32_t(_variable_count));
+		call_member(&machine_context::create_on_stack, _context, register_offset<local_variable_pointer, int32_t, true>(_variable_count * -element_size), uint32_t(_variable_count));
 
 		_output->set_position(_pos);
 
@@ -140,10 +140,10 @@ public:
 			_output->set_position(_temp_member_pos);
 
 #if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
-			// Allocate temp members + shadow space + align stack
+			// Allocate temp members + shadow space + align stack + the pushed bp register
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((_temp_count + 4 + 1) * element_size) - element_size);
 #else
-			// Allocate temp members + align stack
+			// Allocate temp members + align stack + the pushed bp register
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((_temp_count + 1) * element_size) - element_size);
 #endif
 
@@ -502,7 +502,7 @@ public:
 
 		instruction32<OP_CODE::SUB, stack_pointer>(*_output, 0);
 
-		call_member(&machine_context::create_on_stack, _context, register_offset<stack_pointer, int8_t, true>(0), uint32_t(0));
+		call_member(&machine_context::create_on_stack, _context, register_offset<local_variable_pointer, int32_t, true>(0), uint32_t(0));
 
 		return _update_position;
 	}
