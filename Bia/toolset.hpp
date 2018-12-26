@@ -37,13 +37,15 @@ public:
 		JUMP_IF_FALSE
 	};
 
-	typedef long long position;
-	typedef std::tuple<position, position, position> temp_members;
+	typedef stream::output_stream::cursor_type position_type;
+	typedef std::tuple<position_type, position_type, position_type> temp_members;
 	typedef int32_t pass_count;
 	typedef int32_t index_type;
 	typedef int32_t temp_index_type;
+	typedef int32_t local_index_type;
 	typedef register_offset<accumulator, void, false> test_result_register;
 	typedef register_offset<base_pointer, int32_t, false> temp_result;
+	typedef register_offset<local_variable_pointer, int32_t, false> local_result;
 	typedef register_offset<accumulator, void, false> result_register;
 	typedef register_offset<stack_pointer, int32_t, false> saved_result_register;
 
@@ -75,6 +77,41 @@ public:
 
 		_setup_end_pos = _output.position();
 	}
+	void open_scope()
+	{
+	}
+	void close_scope(local_index_type _variable_count)
+	{
+		call_member(&machine_context::recreate_on_stack, _context, uint32_t(_variable_count));
+	}
+	void destroy_local_variables(position_type _start_position, local_index_type _variable_count)
+	{
+		// Update start
+		auto _pos = _output->position();
+
+		_output->set_position(_start_position);
+
+#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
+		// Allocate temp members + shadow space + align stack
+		auto _memory_allocated = align_stack((_variable_count + 4) * element_size);
+#else
+		// Allocate temp members + align stack
+		auto _memory_allocated = align_stack(_variable_count * element_size);
+#endif
+
+		instruction32<OP_CODE::SUB, stack_pointer>(*_output, _memory_allocated);
+
+		call_member(&machine_context::create_on_stack, _context, register_offset<stack_pointer, int8_t, true>(_memory_allocated - _variable_count * element_size), uint32_t(_variable_count));
+
+		_output->set_position(_pos);
+
+		// Append end
+		call_member(&machine_context::destroy_from_stack, _context, uint32_t(_variable_count));
+
+		// Free stack
+		instruction<OP_CODE::MOVE, stack_pointer, local_variable_pointer>(*_output);
+		instruction<OP_CODE::POP, local_variable_pointer>(*_output);
+	}
 	/**
 	 * Adds some necessary cleanup instruction to the output stream.
 	 *
@@ -104,7 +141,7 @@ public:
 
 #if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
 			// Allocate temp members + shadow space + align stack
-			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((4 + _temp_count + 1) * element_size) - element_size);
+			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((_temp_count + 4 + 1) * element_size) - element_size);
 #else
 			// Allocate temp members + align stack
 			instruction32<OP_CODE::SUB, stack_pointer>(*_output, align_stack((_temp_count + 1) * element_size) - element_size);
@@ -116,14 +153,6 @@ public:
 
 			// Member deletion
 			call_member(&machine_context::destroy_from_stack, _context, static_cast<uint32_t>(_temp_count));
-
-/*#if defined(BIA_ARCHITECTURE_X86_64) && defined(BIA_COMPILER_MSVC)
-			// Deallocate temp members + shadow space
-			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack((4 + _temp_count + 1) * element_size) - element_size);
-#else
-			// Deallocate temp members
-			instruction32<OP_CODE::ADD, stack_pointer>(*_output, align_stack((_temp_count + 1) * element_size) - element_size);
-#endif*/
 
 			// Clean up stack
 			instruction<OP_CODE::MOVE, stack_pointer, base_pointer>(*_output);
@@ -455,7 +484,7 @@ public:
 #endif
 
 		_passer.pop_all();
-}
+	}
 	void write_test()
 	{
 		instruction<OP_CODE::TEST, eax, eax>(*_output);
@@ -464,7 +493,20 @@ public:
 	{
 		return varg_member_passer(_global_passer);
 	}
-	position jump(JUMP _type, position _destination = 0, position _overwrite_pos = -1)
+	position_type create_local_variables()
+	{
+		instruction<OP_CODE::PUSH, local_variable_pointer>(*_output);
+		instruction<OP_CODE::MOVE, local_variable_pointer, stack_pointer>(*_output);
+
+		auto _update_position = _output->position();
+
+		instruction32<OP_CODE::SUB, stack_pointer>(*_output, 0);
+
+		call_member(&machine_context::create_on_stack, _context, register_offset<stack_pointer, int8_t, true>(0), uint32_t(0));
+
+		return _update_position;
+	}
+	position_type jump(JUMP _type, position_type _destination = 0, position_type _overwrite_pos = -1)
 	{
 		auto _old = _output->position();
 		auto _current = _old;
@@ -502,7 +544,11 @@ public:
 	}
 	static temp_result to_temp_member(temp_index_type _index) noexcept
 	{
-		return temp_result((0 + _index) * -element_size);
+		return temp_result(_index * -element_size);
+	}
+	static local_result to_local_member(local_index_type _index) noexcept
+	{
+		return local_result(_index * -element_size);
 	}
 	stream::output_stream & output_stream() noexcept
 	{
