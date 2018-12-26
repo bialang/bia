@@ -45,6 +45,8 @@ public:
 		MEMBER,
 		/** An index of a temp member. */
 		TEMPORARY_MEMBER,
+		/** A local member. */
+		LOCAL_MEMBER,
 		/** Defines that the test value is stored in the test register. */
 		TEST_VALUE_REGISTER,
 		/** Defines that the test value is known at compile time. */
@@ -71,6 +73,7 @@ public:
 		} rt_string;
 		framework::member * rt_member;
 		temp_counter::counter_type rt_temp_member;
+		temp_counter::counter_type rt_local_member;
 	};
 
 	/**
@@ -248,6 +251,19 @@ public:
 	{
 		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
 		_return_value.rt_temp_member = _value;
+	}
+	/**
+	 * Sets the return _value and the type VALUE_TYPE::LOCAL_MEMBER.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	 *
+	 * @param _value The value.
+	*/
+	void set_return_local(temp_counter::counter_type _value) noexcept
+	{
+		_return_type = VALUE_TYPE::LOCAL_MEMBER;
+		_return_value.rt_local_member = _value;
 	}
 	/**
 	 * Checks whether the int value can be stored in a int32 type.
