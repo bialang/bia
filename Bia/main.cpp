@@ -61,9 +61,11 @@ inline void test_and_time(int _count, Lambda && _lambda)
 
 using namespace bia;
 
-void test()
+auto test()
 {
 	puts("hello world");
+
+	return 61;
 }
 
 int main()
@@ -128,17 +130,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-global i = 5
-
-{
-
-var i = printer(343)
-print i
-
-# clear all temp members
-delete
-}
-
+var i = printer.hey() + 5
 print i
 
 )"";

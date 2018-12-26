@@ -414,14 +414,10 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
-	using T = machine::platform::toolset;
-	using CV = compiler_value::VALUE_TYPE;
-
 	const auto _end = _report->content.end;
 	auto _destination = _value;
-	auto _destination_defined = _value.type() == CV::MEMBER || _value.type() == CV::LOCAL_MEMBER;
 
-	if (!_destination_defined) {
+	if (_value.type() != compiler_value::VALUE_TYPE::MEMBER && _value.type() != compiler_value::VALUE_TYPE::LOCAL_MEMBER) {
 		_destination.set_return();
 	}
 
@@ -445,13 +441,13 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 		// Get refof/copyof
 		if (_function) {
-			_toolset.call_virtual(_function, _value.value().rt_member, T::to_temp_member(_counter.next()));
+			_toolset.call_virtual(_function, _value.value().rt_member, machine::platform::toolset::to_temp_member(_counter.next()));
 			_value.set_return_temp(_counter.current());
 		}
 	} else {
 		BIA_IMPLEMENTATION_ERROR;
 	}
-	///TODO: refactor
+
 	// Handle rest
 	while (_report < _end) {
 		// Handle parameter
@@ -459,71 +455,26 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 			_report = handle_parameter(_report, _destination);
 		} // Get member
 		else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
-			switch (_value.type()) {
-			case CV::MEMBER:
-			{
-				auto _member = _value.value().rt_member;
-
-				// Save to destination
-				if (_destination_defined) {
-					_value = _destination;
-
-					if (_destination.type() == CV::MEMBER) {
-						_toolset.call_virtual(&framework::member::object_member, _member, _destination.value().rt_member, _report->content.member);
-					} else {
-						_toolset.call_virtual(&framework::member::object_member, _member, T::to_local_member(_destination.value().rt_local_member), _report->content.member);
-					}
-				} // Create temporary member destination
-				else {
-					_value.set_return_temp(_counter.next());
-					_toolset.call_virtual(&framework::member::object_member, _member, T::to_temp_member(_counter.current()), _report->content.member);
+			expand_value_to_member(_value, nullptr, [&](auto _member) {
+				if (std::is_same<decltype(_member), std::nullptr_t>::value) {
+					BIA_IMPLEMENTATION_ERROR;
 				}
 
-				break;
-			}
-			case compiler_value::VALUE_TYPE::TEMPORARY_MEMBER:
-			{
-				auto _member = T::to_temp_member(_value.value().rt_temp_member);
+				expand_value_to_member(_destination, _member, [&](auto _dest) {
+					if (std::is_same<decltype(_member), decltype(compiler_value::return_value::rt_member)>::value && std::is_same<decltype(_dest), std::nullptr_t>::value) {
+						_value.set_return_temp(_counter.next());
+						_toolset.call_virtual(&framework::member::object_member, _member, machine::platform::toolset::to_temp_member(_counter.current()), _report->content.member);
 
-				// Save to destination
-				if (_destination_defined) {
-					_value = _destination;
-
-					if (_destination.type() == CV::MEMBER) {
-						_toolset.call_virtual(&framework::member::object_member, _member, _destination.value().rt_member, _report->content.member);
-					} else {
-						_toolset.call_virtual(&framework::member::object_member, _member, T::to_local_member(_destination.value().rt_local_member), _report->content.member);
+						return false;
 					}
-				} // Overwrite temp member
-				else {
-					_toolset.call_virtual(&framework::member::object_member, _member, _member, _report->content.member);
-				}
 
-				break;
-			}
-			case compiler_value::VALUE_TYPE::LOCAL_MEMBER:
-			{
-				auto _member = T::to_local_member(_value.value().rt_local_member);
+					_toolset.call_virtual(&framework::member::object_member, _member, _dest, _report->content.member);
 
-				// Save to destination
-				if (_destination_defined) {
-					_value = _destination;
+					return true;
+				});
 
-					if (_destination.type() == CV::MEMBER) {
-						_toolset.call_virtual(&framework::member::object_member, _member, _destination.value().rt_member, _report->content.member);
-					} else {
-						_toolset.call_virtual(&framework::member::object_member, _member, T::to_local_member(_destination.value().rt_local_member), _report->content.member);
-					}
-				} // Overwrite temp member
-				else {
-					_toolset.call_virtual(&framework::member::object_member, _member, _member, _report->content.member);
-				}
-
-				break;
-			}
-			default:
-				BIA_IMPLEMENTATION_ERROR;
-			}
+				return false;
+			});
 
 			++_report;
 		}
@@ -570,30 +521,25 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	}
 
 	// Call function
-	switch (_caller.type()) {
-	case VT::MEMBER:
-	{
-		// Create temporary member destination
-		_counter.next();
-		_value.set_return_temp(_counter.current());
+	expand_value_to_member(_caller, nullptr, [&](auto _member) {
+		if (std::is_same<decltype(_member), std::nullptr_t>::value) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
 
-		handle_parameter_execute(_caller.value().rt_member, _format, _mixed, _count, _passer);
+		expand_value_to_member(_destination, nullptr, [&](auto _dest) {
+			if (std::is_same<decltype(_dest), std::nullptr_t>::value) {
+				_destination.set_return_temp(_counter.next());
 
-		break;
-	}
-	case VT::TEMPORARY_MEMBER:
-		_value = _caller;
-		handle_parameter_execute(machine::platform::toolset::to_temp_member(_caller.value().rt_temp_member), _format, _mixed, _count, _passer);
+				handle_parameter_execute(_member, machine::platform::toolset::to_temp_member(_counter.current()), _format, _mixed, _count, _passer);
+			} else {
+				handle_parameter_execute(_member, _dest, _format, _mixed, _count, _passer);
+			}
 
-		break;
-	case VT::LOCAL_MEMBER:
-		_value = _caller;
-		handle_parameter_execute(machine::platform::toolset::to_local_member(_caller.value().rt_local_member), _format, _mixed, _count, _passer);
+			return true;
+		});
 
-		break;
-	default:
-		BIA_IMPLEMENTATION_ERROR;
-	}
+		return false;
+	});
 
 	return _report->content.end;
 }
@@ -630,7 +576,12 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 	// Handle value and prepare the result for a function call
 	handle_value<false>(_report + 3, [&] {
 		auto _expression = _value;
-		
+
+		// The result was already save to the identifier. See handle_value()
+		if (_value == _identifier) {
+			return;
+		}
+
 		_value = _identifier;
 
 		// Local variable

@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <limits>
+#include <cstring>
 
 #include "member.hpp"
 #include "temp_counter.hpp"
@@ -84,7 +85,7 @@ public:
 	*/
 	compiler_value() noexcept
 	{
-		_return_type = VALUE_TYPE::NONE;
+		set_return();
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::NONE.
@@ -94,6 +95,8 @@ public:
 	*/
 	void set_return() noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::NONE;
 	}
 	/**
@@ -104,6 +107,8 @@ public:
 	*/
 	void set_return_test() noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::TEST_VALUE_REGISTER;
 	}
 	/**
@@ -116,6 +121,8 @@ public:
 	*/
 	void set_return(bool _value) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::TEST_VALUE_CONSTANT;
 		_return_value.rt_test_result = _value;
 	}
@@ -129,6 +136,8 @@ public:
 	*/
 	void set_return(int64_t _value) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::INT;
 		_return_value.rt_int = _value;
 	}
@@ -142,6 +151,8 @@ public:
 	*/
 	void set_return(dependency::big_int * _value) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::BIG_INT;
 		_return_value.rt_big_int = _value;
 	}
@@ -155,6 +166,8 @@ public:
 	*/
 	void set_return(double _value) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::DOUBLE;
 		_return_value.rt_double = _value;
 	}
@@ -170,6 +183,8 @@ public:
 	*/
 	void set_return(const char * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::STRING;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
@@ -187,6 +202,8 @@ public:
 	*/
 	void set_return(const char16_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::STRING16;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
@@ -204,6 +221,8 @@ public:
 	*/
 	void set_return(const char32_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::STRING32;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
@@ -221,6 +240,8 @@ public:
 	*/
 	void set_return(const wchar_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::WSTRING;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
@@ -236,6 +257,8 @@ public:
 	*/
 	void set_return(framework::member * _value) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::MEMBER;
 		_return_value.rt_member = _value;
 	}
@@ -249,6 +272,8 @@ public:
 	*/
 	void set_return_temp(temp_counter::counter_type _value) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
 		_return_value.rt_temp_member = _value;
 	}
@@ -262,6 +287,8 @@ public:
 	*/
 	void set_return_local(temp_counter::counter_type _value) noexcept
 	{
+		clean();
+
 		_return_type = VALUE_TYPE::LOCAL_MEMBER;
 		_return_value.rt_local_member = _value;
 	}
@@ -323,12 +350,37 @@ public:
 	{
 		return _return_value;
 	}
+	/**
+	 * Compares this compiler value to another one.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	 *
+	 * @param _right The other compiler value.
+	 *
+	 * @return true if they are the same, otherwise false.
+	*/
+	bool operator==(const compiler_value & _right) const noexcept
+	{
+		return _return_type == _right._return_type && !std::memcmp(&_return_value, &_right._return_value, sizeof(_return_value));
+	}
 
 private:
 	/** Defines the type of the last operation result. */
 	VALUE_TYPE _return_type;
 	/** Defines the _value of the last operation result. */
 	return_value _return_value;
+
+	/**
+	 * Clears the return value completely.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	*/
+	void clean() noexcept
+	{
+		std::memset(&_return_value, 0, sizeof(_return_value));
+	}
 };
 
 }
