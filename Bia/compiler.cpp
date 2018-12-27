@@ -1,5 +1,4 @@
 #include "compiler.hpp"
-#include "link.hpp"
 #include "compile_compare_operation.hpp"
 #include "buffer_output_stream.hpp"
 #include "string_stream.hpp"
@@ -504,9 +503,9 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 			if (std::is_same<decltype(_dest), std::nullptr_t>::value) {
 				_destination.set_return_temp(_counter.next());
 
-				handle_parameter_execute(_member, machine::platform::toolset::to_temp_member(_counter.current()), _format, _mixed, _count, _passer);
+				this->handle_parameter_execute(_member, machine::platform::toolset::to_temp_member(_counter.current()), _format, _mixed, _count, _passer);
 			} else {
-				handle_parameter_execute(_member, _dest, _format, _mixed, _count, _passer);
+				this->handle_parameter_execute(_member, _dest, _format, _mixed, _count, _passer);
 			}
 
 			_value = _destination;

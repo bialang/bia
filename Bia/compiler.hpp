@@ -18,6 +18,7 @@
 #include "compile_normal_operation.hpp"
 #include "compiler_loop_tracker.hpp"
 #include "scope_handler.hpp"
+#include "link.hpp"
 
 #include "interpreter.hpp"
 #include "interpreter_rule.hpp"

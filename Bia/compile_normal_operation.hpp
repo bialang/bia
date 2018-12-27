@@ -75,7 +75,7 @@ public:
 					BIA_IMPLEMENTATION_ERROR;
 				}
 
-				left_member_operation(_expanded, _operator, _right);
+				this->left_member_operation(_expanded, _operator, _right);
 			});
 		}
 	}
@@ -101,7 +101,7 @@ private:
 	 * @throws See machine::platform::toolset::call_virtual().
 	*/
 	template<typename Member>
-	void left_member_operation(Member && _member, framework::operator_type _operator, compiler_value _right)
+	void left_member_operation(Member _member, framework::operator_type _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
