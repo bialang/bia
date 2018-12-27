@@ -48,7 +48,7 @@ namespace exception
  *
  * Every thrown exception of Bia will inherit this.
 */
-class bia_error
+class bia_error : public std::exception
 {
 public:
 	/**
@@ -76,7 +76,7 @@ public:
 /**
  * @brief A implementation error.
 */
-class implementation_error : public bia_error, public std::exception
+class implementation_error : public bia_error
 {
 public:
 	/**
