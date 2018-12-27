@@ -292,21 +292,47 @@ public:
 		_return_type = VALUE_TYPE::LOCAL_MEMBER;
 		_return_value.rt_local_member = _value;
 	}
-	template<typename Lambda, typename Default>
-	void expand_to_member(Default _default, Lambda && _lambda)
+	/**
+	 * Expands this value to the member types (VALUE_TYPE::MEMBER, VALUE_TYPE::TEMPORARY_MEMBER and VALUE_TYPE::LOCAL_MEMBER)
+	 *
+	 * @since 3.72.149.809
+	 * @date 27-Dec-18
+	 *
+	 * @tparam Default The default value type.
+	 * @tparam Lambda The lamdba type.
+	 *
+	 * @param _default The default value if this is not a member.
+	 * @param _lambda The callback function that is called. The callback gets the - as only parameter - the expaneded value.
+	 *
+	 * @throws See @a _lambda.
+	*/
+	template<typename Default, typename Lambda>
+	void expand_to_member(Default _default, Lambda && _lambda) const
 	{
 		// Save to member variable
-		if (type() == compiler_value::VALUE_TYPE::MEMBER) {
-			_lambda(value().rt_member);
+		if (_return_type == VALUE_TYPE::MEMBER) {
+			_lambda(_return_value.rt_member);
 		} // Save to temp member
-		else if (type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_lambda(machine::platform::toolset::to_temp_member(value().rt_temp_member));
+		else if (_return_type == VALUE_TYPE::TEMPORARY_MEMBER) {
+			_lambda(machine::platform::toolset::to_temp_member(_return_value.rt_temp_member));
 		} // Save to local member
-		else if (type() == compiler_value::VALUE_TYPE::LOCAL_MEMBER) {
-			_lambda(machine::platform::toolset::to_local_member(value().rt_local_member));
+		else if (_return_type  == VALUE_TYPE::LOCAL_MEMBER) {
+			_lambda(machine::platform::toolset::to_local_member(_return_value.rt_local_member));
 		} else {
 			_lambda(_default);
 		}
+	}
+	/**
+	 * Checks whether this value is a member or not.
+	 *
+	 * @since 3.72.149.809
+	 * @date 27-Dec-18
+	 *
+	 * @return true if this type is one of the following: VALUE_TYPE::MEMBER, VALUE_TYPE::TEMPORARY_MEMBER or VALUE_TYPE::LOCAL_MEMBER
+	*/
+	bool is_member() const noexcept
+	{
+		return _return_type == VALUE_TYPE::MEMBER || _return_type == VALUE_TYPE::TEMPORARY_MEMBER || _return_type == VALUE_TYPE::LOCAL_MEMBER;
 	}
 	/**
 	 * Checks whether the int value can be stored in a int32 type.
@@ -379,6 +405,20 @@ public:
 	bool operator==(const compiler_value & _right) const noexcept
 	{
 		return _return_type == _right._return_type && !std::memcmp(&_return_value, &_right._return_value, sizeof(_return_value));
+	}
+	/**
+	 * Compares this compiler value to another one.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	 *
+	 * @param _right The other compiler value.
+	 *
+	 * @return true if they are different, otherwise false.
+	*/
+	bool operator!=(const compiler_value & _right) const noexcept
+	{
+		return !operator==(_right);
 	}
 
 private:
