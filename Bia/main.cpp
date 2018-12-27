@@ -1,6 +1,5 @@
 #include "machine_context.hpp"
 #include "simple_allocator.hpp"
-#include "simple_executable_allocator.hpp"
 #include "compiler.hpp"
 #include "buffer_output_stream.hpp"
 #include "buffer_input_stream.hpp"
@@ -73,8 +72,7 @@ int main()
 	{
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
-		auto _exec_allocator = std::make_shared<machine::memory::simple_executable_allocator>();
-		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _exec_allocator);
+		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
 
 		set_lambda(_context, "ser", [&](int & a, const char * b) -> const printer& {
 			printf("First parameter: %i at %p\n", a, &a);

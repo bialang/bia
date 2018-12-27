@@ -208,7 +208,6 @@
     <ClCompile Include="compiler.cpp" />
     <ClCompile Include="interpreter.cpp" />
     <ClCompile Include="interpreter_token.cpp" />
-    <ClCompile Include="simple_executable_allocator.cpp" />
     <ClCompile Include="syntax.cpp" />
     <ClCompile Include="instantiate.cpp" />
     <ClCompile Include="interpreter_rule.cpp" />
@@ -293,7 +292,6 @@
     <ClInclude Include="scope_handler.hpp" />
     <ClInclude Include="share.hpp" />
     <ClInclude Include="simple_allocator.hpp" />
-    <ClInclude Include="simple_executable_allocator.hpp" />
     <ClInclude Include="static_passer.hpp" />
     <ClInclude Include="stl_allocator_wrapper.hpp" />
     <ClInclude Include="string_key.hpp" />
