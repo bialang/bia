@@ -214,33 +214,10 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 	}
 }
 
-const grammar::report * compiler::handle_root_ignore(const grammar::report * _report)
+const grammar::report * compiler::handle_root_ignore(const grammar::report * _report) const noexcept
 {
-	switch (_report->rule_id) {
-	case BGR_ROOT:
+	if (_report->rule_id == BGR_ROOT) {
 		++_report;
-	case BGR_ROOT_HELPER_0:
-	/*{
-		auto _end = _report->content.end;
-
-		++_report;
-
-		// Handle all reports
-		while (_report < _end) {
-			_report = handle_root_ignore(_report);
-		}
-
-		return _end;
-	}*/
-	case BGR_VARIABLE_DECLARATION:
-	case BGR_IF:
-	case BGR_PRINT:
-	case BGR_TEST_LOOP:
-	case BGR_IMPORT:
-	case BGR_VALUE:
-		break;
-	default:
-		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	return _report->content.end;
@@ -251,6 +228,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 	// Handle leftmost math term
 	auto _old_counter = _counter.peek();
 	auto i = (this->*_next)(_report + 1);
+	const auto _destiantion = _value;
 	auto _left = _value;
 
 	// Pop if not used
@@ -268,16 +246,20 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		// Pop if not used and set destination
 		auto _right = _value;
 
-		// Get the lower one
-		if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER && _right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_value.set_return_temp(_left.value().rt_temp_member < _right.value().rt_temp_member ? _left.value().rt_temp_member : _right.value().rt_temp_member);
-		} else if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_value.set_return_temp(_left.value().rt_temp_member);
-		} else if (_right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			_value.set_return_temp(_right.value().rt_temp_member);
+		if (_destiantion.is_member() && _destiantion == _left) {
+			_value = _destiantion;
 		} else {
-			//_counter.pop(_old_counter);
-			_value.set_return_temp(_counter.next());
+			// Get the lower one
+			if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER && _right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+				_value.set_return_temp(_left.value().rt_temp_member < _right.value().rt_temp_member ? _left.value().rt_temp_member : _right.value().rt_temp_member);
+			} else if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+				_value.set_return_temp(_left.value().rt_temp_member);
+			} else if (_right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+				_value.set_return_temp(_right.value().rt_temp_member);
+			} else {
+				//_counter.pop(_old_counter);
+				_value.set_return_temp(_counter.next());
+			}
 		}
 
 		// Call operator
@@ -415,11 +397,7 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
 	const auto _end = _report->content.end;
-	auto _destination = _value;
-
-	if (_value.type() != compiler_value::VALUE_TYPE::MEMBER && _value.type() != compiler_value::VALUE_TYPE::LOCAL_MEMBER) {
-		_destination.set_return();
-	}
+	auto _destination = _value.is_member() ? _value : compiler_value();
 
 	++_report;
 
@@ -460,15 +438,15 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 					BIA_IMPLEMENTATION_ERROR;
 				}
 
-				_destination.expand_to_member(_member, [&](auto _dest) {
-					if (std::is_same<decltype(_member), decltype(compiler_value::return_value::rt_member)>::value && std::is_same<decltype(_dest), std::nullptr_t>::value) {
-						_value.set_return_temp(_counter.next());
+				_destination.expand_to_member(nullptr, [&](auto _dest) {
+					if (/*std::is_same<decltype(_member), decltype(compiler_value::return_value::rt_member)>::value && */std::is_same<decltype(_dest), std::nullptr_t>::value) {
+						_destination.set_return_temp(_counter.next());
 						_toolset.call_virtual(&framework::member::object_member, _member, machine::platform::toolset::to_temp_member(_counter.current()), _report->content.member);
 					} else {
-						_value = _destination;
-
 						_toolset.call_virtual(&framework::member::object_member, _member, _dest, _report->content.member);
 					}
+
+					_value = _destination;
 				});
 			});
 
@@ -516,7 +494,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		_counter.pop(_old);
 	}
 
-	// Call function
+// Call function
 	_caller.expand_to_member(nullptr, [&](auto _member) {
 		if (std::is_same<decltype(_member), std::nullptr_t>::value) {
 			BIA_IMPLEMENTATION_ERROR;

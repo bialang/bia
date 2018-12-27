@@ -130,8 +130,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = printer.hey() + 5
-print i
+print printer.hey() + 5
 
 )"";
 		/*test_and_time(1, []() {

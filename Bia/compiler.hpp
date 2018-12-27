@@ -349,7 +349,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	BIA_EXPORT const grammar::report * handle_root_ignore(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_root_ignore(const grammar::report * _report) const noexcept;
 	/**
 	 * Handles a math expression or a math term token.
 	 *
