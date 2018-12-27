@@ -1,31 +1,30 @@
 #pragma once
 
-#include <big_int_allocator.hpp>
-#include <member_allocator.hpp>
-#include <executable_allocator.hpp>
+#include <simple_allocator.hpp>
 
 using namespace bia::machine;
 
 class test;
 
-class test_allocator
-{ 
+
+class test_allocator : public memory::simple_allocator
+{
 public:
 	static memory::allocator * allocator()
 	{
-		return nullptr;
+		return _test_allocator;
 	}
 	static memory::executable_allocator * executable_allocator()
 	{
-		return nullptr;
+		return _test_allocator;
 	}
 	static memory::member_allocator * member_allocator()
 	{
-		return nullptr;
+		return _test_allocator;
 	}
 	static memory::big_int_allocator * big_int_allocator()
 	{
-		return nullptr;
+		return _test_allocator;
 	}
 	static std::shared_ptr<memory::allocator> shared_allocator()
 	{
@@ -47,18 +46,18 @@ public:
 private:
 	friend test;
 
-	static void init()
-	{
-		memory::big_int_allocator::initialize(shared_big_int_allocator());
-	}
-	static void deinit()
-	{
-	}
+	static test_allocator * _test_allocator;
+
 	static void start_monitoring()
 	{
+		_test_allocator = new test_allocator();
+
+		memory::big_int_allocator::initialize(shared_allocator());
 	}
 	static void end_monitoring()
 	{
 
+		delete _test_allocator;
+		_test_allocator = nullptr;
 	}
 };
