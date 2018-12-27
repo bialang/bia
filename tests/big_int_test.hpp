@@ -23,7 +23,6 @@ public:
   void test_power();
 
 private:
-  simple_allocator _allocator;
   bia::utility::buffer_builder _builder;
   big_int _int;
 };

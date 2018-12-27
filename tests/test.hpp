@@ -12,6 +12,7 @@
 #include <string>
 #include <algorithm>
 
+#include "test_allocator.hpp"
 
 #define BEGIN_DECLARE_TESTS bool _tests_initialized = [] () {
 #define END_DECLARE_TESTS return true; }();
@@ -69,6 +70,8 @@ public:
 	}
 	static bool test_main(const char * _mode)
 	{
+		test_allocator::start_monitoring();
+
 		void * _object = nullptr;
 
 		try {
@@ -100,6 +103,8 @@ public:
 
 			_destructor(_object);
 
+			test_allocator::end_monitoring();
+
 			return true;
 		} catch (const assert_error & e) {
 			error("%s failed: %s", _mode, e.what());
@@ -110,6 +115,8 @@ public:
 		}
 
 		_destructor(_object);
+
+		test_allocator::end_monitoring();
 
 		return false;
 	}
