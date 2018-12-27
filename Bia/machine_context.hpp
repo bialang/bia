@@ -57,6 +57,15 @@ public:
 	BIA_EXPORT void activate_context() noexcept;
 	void execute(stream::input_stream & _script)
 	{
+		BIA_NOT_IMPLEMENTED;
+	}
+	void add_script(const char * _name, stream::input_stream & _script)
+	{
+		BIA_NOT_IMPLEMENTED;
+	}
+	const machine_code & get_script(const char * _name)
+	{
+		BIA_NOT_IMPLEMENTED;
 	}
 	template<typename Member, typename... Arguments>
 	Member * emplace_member(const char * _name, Arguments &&... _arguments)

@@ -278,7 +278,7 @@ public:
 	 * @since 3.65.134.742
 	 * @date 2-Aug-18
 	 *
-	 * @param _allocation The allocation that should be expanded or shrinken.
+	 * @param _allocation The allocation that should be expanded or shrinked.
 	 * @param _size The new size.
 	 *
 	 * @throws exception::memory_error If the memory could not be allocated.
