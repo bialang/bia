@@ -58,10 +58,18 @@ public:
 	 * @date 15-Sep-18
 	*/
 	BIA_EXPORT void activate_context() noexcept;
-	void execute(stream::input_stream & _script)
-	{
-		BIA_NOT_IMPLEMENTED;
-	}
+	/**
+	 * Compiles and executes the given script.
+	 *
+	 * @since 3.71.149.809
+	 * @date 28-Dec-18
+	 *
+	 * @param [in] _script The script.
+	 *
+	 * @throws See compile_script().
+	 * @throws See machine_code::execute().
+	*/
+	BIA_EXPORT void execute(stream::input_stream & _script);
 	void add_script(const char * _name, stream::input_stream & _script)
 	{
 		BIA_NOT_IMPLEMENTED;

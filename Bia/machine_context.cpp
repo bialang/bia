@@ -34,6 +34,13 @@ void machine_context::activate_context() noexcept
 	_active_buffer_builder = &buffer_builder();
 }
 
+void machine_context::execute(stream::input_stream & _script)
+{
+	activate_context();
+
+	compile_script(_script).execute();
+}
+
 framework::member * machine_context::get_member(const char * _name, framework::member * _default)
 {
 	_name = _string_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
@@ -186,7 +193,7 @@ machine_code machine_context::compile_script(stream::input_stream & _script)
 
 	_compiler.finalize();
 
-	return _compiler.code();
+	return machine_code(std::make_pair(_output.buffer(), _output.size()), machine_schein(_allocator.get(), _executable_allocator.get()));
 }
 
 

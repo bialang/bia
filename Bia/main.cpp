@@ -122,7 +122,7 @@ int main()
 			.set_constructor<int>()
 			.set_function("hey", &test)
 			.set_function("hi", &printer::hi);
-
+		
 		// Script
 		char _script[] = u8R""(
 
@@ -177,7 +177,7 @@ print i
 		system("pause");
 
 		// Run
-		bia::machine::machine_code _machine_code({ reinterpret_cast<const uint8_t*>(_output.buffer()), _output.size() }, bia::machine::machine_schein(_context.allocator(), _context.executable_allocator()));
+		bia::machine::machine_code _machine_code({ _output.buffer(), _output.size() }, bia::machine::machine_schein(_context.allocator(), _context.executable_allocator()));
 
 		if (_machine_code.is_executable()) {
 			// Set active allocator

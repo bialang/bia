@@ -48,10 +48,6 @@ public:
 	 * @throws See machine::platform::toolset::finalize().
 	*/
 	BIA_EXPORT void finalize();
-	machine::machine_code code()
-	{
-		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(_context.allocator(), _context.executable_allocator()));
-	}
 	//machine::machine_schein get_machine_schein();
 
 private:

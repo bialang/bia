@@ -104,7 +104,7 @@ public:
 };
 
 /**
- * @brief A implementation error.
+ * @brief An implementation error.
 */
 class implementation_error : public bia_error
 {
