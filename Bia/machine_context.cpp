@@ -34,6 +34,32 @@ void machine_context::activate_context() noexcept
 	_active_buffer_builder = &buffer_builder();
 }
 
+framework::member * machine_context::get_member(const char * _name, framework::member * _default)
+{
+	_name = _string_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
+
+	if (auto _result = _variable_index.find(_name)) {
+		return _result;
+	} else if (_default == none) {
+		throw exception::symbol_error(BIA_EM_UNKNOWN_MEMBER);
+	}
+
+	return _default;
+}
+
+const framework::member * machine_context::get_member(const char * _name, framework::member * _default) const
+{
+	_name = _string_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
+
+	if (auto _result = _variable_index.find(_name)) {
+		return _result;
+	} else if (_default == none) {
+		throw exception::symbol_error(BIA_EM_UNKNOWN_MEMBER);
+	}
+
+	return _default;
+}
+
 machine_context * machine_context::active_context() noexcept
 {
 	return _active_context;

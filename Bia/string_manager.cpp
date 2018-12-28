@@ -58,7 +58,14 @@ string_manager::name_type string_manager::name_address(const char * _name, size_
 		_result = _index.emplace(string_entry(_allocation)).first;
 	}
 
-	return _result->_string;
+	return _result->string;
+}
+
+string_manager::name_type string_manager::name_address_or_null(const char * _name, size_t _length) const noexcept
+{
+	auto _result = _index.find({ _name, _length + 1 });
+
+	return _result == _index.end() ? nullptr : _result->string;
 }
 
 const char * string_manager::format_address(const char * _format, size_t _length)
@@ -78,7 +85,7 @@ const char * string_manager::format_address(const char * _format, size_t _length
 		_result = _index.insert(string_entry(_allocation)).first;
 	}
 
-	return _result->_string;
+	return _result->string;
 }
 
 }

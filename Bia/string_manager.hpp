@@ -63,6 +63,18 @@ public:
 	*/
 	BIA_EXPORT name_type name_address(const char * _name, size_t _length);
 	/**
+	 * Returns the name address.
+	 *
+	 * @since 3.71.149.809
+	 * @date 28-Dec-18
+	 *
+	 * @param _name Defines the UTF-8 formatted name.
+	 * @param _length Deifnes the length of the name.
+	 *
+	 * @return The name address if it exists, otherwise null.
+	*/
+	BIA_EXPORT name_type name_address_or_null(const char * _name, size_t _length) const noexcept;
+	/**
 	 * Returns the format address. This address will be the same for the same format value.
 	 *
 	 * @since 3.64.127.716
@@ -80,26 +92,26 @@ public:
 private:
 	struct string_entry
 	{
-		const char * _string;
-		size_t _length;
+		const char * string;
+		size_t length;
 
 		string_entry(const char * _string, size_t _length) noexcept
 		{
-			this->_string = _string;
-			this->_length = _length;
+			this->string = _string;
+			this->length = _length;
 		}
 		string_entry(memory::universal_allocation _allocation) noexcept
 		{
-			_string = static_cast<const char*>(_allocation.first);
-			_length = _allocation.second;
+			string = static_cast<const char*>(_allocation.first);
+			length = _allocation.second;
 		}
 		bool operator==(const string_entry & _right) const noexcept
 		{
-			return _length == _right._length ? memcmp(_string, _right._string, _length) == 0 : false;
+			return length == _right.length ? memcmp(string, _right.string, length) == 0 : false;
 		}
 		memory::universal_allocation allocation() const noexcept
 		{
-			return { const_cast<char*>(_string), _length };
+			return { const_cast<char*>(string), length };
 		}
 	};
 
@@ -107,7 +119,7 @@ private:
 	{
 		size_t operator()(const string_entry & _string) const noexcept
 		{
-			return utility::hasher<size_t>::hash(static_cast<const char*>(_string._string), _string._length);
+			return utility::hasher<size_t>::hash(static_cast<const char*>(_string.string), _string.length);
 		}
 	};
 

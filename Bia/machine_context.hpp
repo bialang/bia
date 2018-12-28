@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <utility>
+#include <cstdint>
 
 #include "config.hpp"
 #include "allocator.hpp"
@@ -32,6 +33,8 @@ namespace machine
 class machine_context final
 {
 public:
+	constexpr static framework::member * none = reinterpret_cast<framework::member*>(intptr_t(-1));
+
 	/**
 	 * Constructor.
 	 *
@@ -67,8 +70,36 @@ public:
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
+	/**
+	 * Returns the member.
+	 *
+	 * @since 3.71.149.809
+	 * @date 28-Dec-18
+	 *
+	 * @param _name The name of the member.
+	 * @param _default The default return value if the member was not found. If set to @a none, an exception will be thrown instead.
+	 *
+	 * @throws exception::symbol_error If the value is not found and the @a _default value is set to @a none.
+	 *
+	 * @return The member if it exists, otherwise the @a _default value.
+	*/
+	BIA_EXPORT framework::member * get_member(const char * _name, framework::member * _default = none);
+	/**
+	 * Returns the member.
+	 *
+	 * @since 3.71.149.809
+	 * @date 28-Dec-18
+	 *
+	 * @param _name The name of the member.
+	 * @param _default The default return value if the member was not found. If set to @a none, an exception will be thrown instead.
+	 *
+	 * @throws exception::symbol_error If the value is not found and the @a _default value is set to @a none.
+	 *
+	 * @return The member if it exists, otherwise the @a _default value.
+	*/
+	BIA_EXPORT const framework::member * get_member(const char * _name, framework::member * _default = none) const;
 	template<typename Member, typename... Arguments>
-	Member * emplace_member(const char * _name, Arguments &&... _arguments)
+	typename std::enable_if<std::is_base_of<framework::member, Member>::value, Member*>::type emplace_member(const char * _name, Arguments &&... _arguments)
 	{
 		auto _object = address_of_member(name_address(_name));
 
