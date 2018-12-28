@@ -126,7 +126,8 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-global i = 5
+global i = 2
+i **= 128
 
 {
 
@@ -186,8 +187,12 @@ print i
 				test_and_time(1, [&] {
 					_machine_code.execute();
 				});
+
+				printf("val: %lli\n", _context.get_member("i")->to_int());
 			} catch (const std::exception & e) {
 				printf("%s: %s\n", typeid(e).name(), e.what());
+			} catch (const exception::bia_error & e) {
+				printf("!!%s: %s\n", typeid(e).name(), e.what());
 			}
 		}
 	}

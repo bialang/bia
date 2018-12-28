@@ -357,6 +357,7 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::type_error If no representation is available.
+	 * @throws exception::overflow_error If the value doesn't fit into a signed 64 bit integer.
 	 *
 	 * @return The int representation.
 	*/
@@ -369,6 +370,7 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::type_error If no representation is available.
+	 * @throws exception::overflow_error If the value doesn't fit into a double value.
 	 *
 	 * @return The double representation.
 	*/
