@@ -99,3 +99,46 @@ using varg_member_function_signature = _Return(BIA_VARG_MEMBER_CALLING_CONVENTIO
 #define BIA_MIN_INPUT_BUFFER_SIZE 1024
 /** The maximum identifier length. Can be at most as high as @ref BIA_MIN_INPUT_BUFFER / 4. */
 #define BIA_MAX_IDENTIFIER_LENGTH (BIA_MIN_INPUT_BUFFER_SIZE / 4)
+
+// Declarations
+namespace bia
+{
+namespace compiler
+{
+
+class compiler;
+
+}
+
+namespace framework
+{
+namespace object
+{
+
+template<typename Type, typename Class>
+class template_wrapper;
+
+}
+}
+
+namespace grammar
+{
+
+class interpreter_token;
+
+}
+
+namespace machine
+{
+
+class disassembler;
+
+namespace platform
+{
+
+class toolset;
+
+}
+}
+}
+

@@ -183,8 +183,13 @@ public:
 	BIA_EXPORT utility::buffer_builder & buffer_builder() noexcept;
 	BIA_EXPORT machine::string_manager & string_manager() noexcept;
 
-//private:
-
+private:
+	friend compiler::compiler;
+	template<typename Type, typename Class>
+	friend class framework::object::template_wrapper;
+	friend grammar::interpreter_token;
+	friend disassembler;
+	friend platform::toolset;
 
 	/** The active context in the current thread. */
 	static thread_local machine_context * _active_context;
