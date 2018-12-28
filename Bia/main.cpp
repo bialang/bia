@@ -191,8 +191,6 @@ print i
 				printf("val: %lli\n", _context.get_member("i")->to_int());
 			} catch (const std::exception & e) {
 				printf("%s: %s\n", typeid(e).name(), e.what());
-			} catch (const exception::bia_error & e) {
-				printf("!!%s: %s\n", typeid(e).name(), e.what());
 			}
 		}
 	}
