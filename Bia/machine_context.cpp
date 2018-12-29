@@ -11,6 +11,7 @@ namespace bia
 namespace machine
 {
 
+framework::member * const machine_context::none = reinterpret_cast<framework::member*>(intptr_t(-1));
 thread_local machine_context * machine_context::_active_context = nullptr;
 thread_local memory::allocator * machine_context::_active_allocator = nullptr;
 thread_local memory::member_allocator * machine_context::_active_member_allocator = nullptr;
@@ -25,6 +26,12 @@ machine_context::machine_context(const std::shared_ptr<memory::allocator> & _all
 	}
 }
 
+machine_context::~machine_context()
+{
+	// For all member that are going to be destroyed
+	activate_context();
+}
+
 void machine_context::activate_context() noexcept
 {
 	_active_context = this;
@@ -32,6 +39,15 @@ void machine_context::activate_context() noexcept
 	_active_member_allocator = member_allocator();
 	_active_big_int_allocator = big_int_allocator();
 	_active_buffer_builder = &buffer_builder();
+}
+
+void machine_context::unset_active_context() noexcept
+{
+	_active_context = nullptr;
+	_active_allocator = nullptr;
+	_active_member_allocator = nullptr;
+	_active_big_int_allocator = nullptr;
+	_active_buffer_builder = nullptr;
 }
 
 void machine_context::execute(stream::input_stream & _script)

@@ -34,7 +34,7 @@ namespace machine
 class machine_context final
 {
 public:
-	constexpr static framework::member * none = reinterpret_cast<framework::member*>(intptr_t(-1));
+	static framework::member * const none;
 
 	/**
 	 * Constructor.
@@ -53,12 +53,28 @@ public:
 	machine_context(const machine_context & _copy) = delete;
 	machine_context(machine_context && _move) = default;
 	/**
+	 * Destructor.
+	 *
+	 * @since 3.71.149.809
+	 * @date 29-Dec-18
+	 *
+	 * @throws
+	*/
+	BIA_EXPORT ~machine_context();
+	/**
 	 * Activates the current context.
 	 *
 	 * @since 3.68.138.786
 	 * @date 15-Sep-18
 	*/
 	BIA_EXPORT void activate_context() noexcept;
+	/**
+	 * Sets all active components to null.
+	 *
+	 * @since 3.71.149.809
+	 * @date 29-Dec-18
+	*/
+	BIA_EXPORT static void unset_active_context() noexcept;
 	/**
 	 * Compiles and executes the given script.
 	 *
@@ -128,9 +144,11 @@ public:
 	template<typename Member, typename... Arguments>
 	typename std::enable_if<std::is_base_of<framework::member, Member>::value, Member*>::type emplace_member(const char * _name, Arguments &&... _arguments)
 	{
+		activate_context();
+
 		auto _object = address_of_member(name_address(_name));
 
-		_object->replace_this<Member>(std::forward<Arguments>(_arguments)...);
+		_object->template replace_this<Member>(std::forward<Arguments>(_arguments)...);
 
 		return static_cast<Member*>(_object);
 	}
