@@ -33,8 +33,6 @@ namespace machine
 class machine_context final
 {
 public:
-	BIA_EXPORT static framework::member * const none;
-
 	/**
 	 * Constructor.
 	 *
@@ -113,19 +111,17 @@ public:
 	*/
 	BIA_EXPORT const machine_code & get_script(const char * _name) const;
 	/**
-	 * Returns the member.
+	 * Returns the none pointer.
 	 *
 	 * @since 3.71.149.809
-	 * @date 28-Dec-18
+	 * @date 29-Dec-18
 	 *
-	 * @param _name The name of the member.
-	 * @param _default The default return value if the member was not found. If set to @a none, an exception will be thrown instead.
-	 *
-	 * @throws exception::symbol_error If the value is not found and the @a _default value is set to @a none.
-	 *
-	 * @return The member if it exists, otherwise the @a _default value.
+	 * @return The none pointer. See get_member().
 	*/
-	BIA_EXPORT framework::member * get_member(const char * _name, framework::member * _default = none);
+	static framework::member * none() noexcept
+	{
+		return reinterpret_cast<framework::member*>(-1);
+	}
 	/**
 	 * Returns the member.
 	 *
@@ -135,11 +131,25 @@ public:
 	 * @param _name The name of the member.
 	 * @param _default The default return value if the member was not found. If set to @a none, an exception will be thrown instead.
 	 *
-	 * @throws exception::symbol_error If the value is not found and the @a _default value is set to @a none.
+	 * @throws exception::symbol_error If the value is not found and the @a _default value is set to none().
 	 *
 	 * @return The member if it exists, otherwise the @a _default value.
 	*/
-	BIA_EXPORT const framework::member * get_member(const char * _name, framework::member * _default = none) const;
+	BIA_EXPORT framework::member * get_member(const char * _name, framework::member * _default = none());
+	/**
+	 * Returns the member.
+	 *
+	 * @since 3.71.149.809
+	 * @date 28-Dec-18
+	 *
+	 * @param _name The name of the member.
+	 * @param _default The default return value if the member was not found. If set to @a none, an exception will be thrown instead.
+	 *
+	 * @throws exception::symbol_error If the value is not found and the @a _default value is set to none().
+	 *
+	 * @return The member if it exists, otherwise the @a _default value.
+	*/
+	BIA_EXPORT const framework::member * get_member(const char * _name, framework::member * _default = none()) const;
 	template<typename Member, typename... Arguments>
 	typename std::enable_if<std::is_base_of<framework::member, Member>::value, Member*>::type emplace_member(const char * _name, Arguments &&... _arguments)
 	{

@@ -5,15 +5,12 @@
 #include "buffer_output_stream.hpp"
 #include "undefined_member.hpp"
 
-#include <cstdint>
-
 
 namespace bia
 {
 namespace machine
 {
 
-framework::member * const machine_context::none = reinterpret_cast<framework::member*>(intptr_t(-1));
 thread_local machine_context * machine_context::_active_context = nullptr;
 thread_local memory::allocator * machine_context::_active_allocator = nullptr;
 thread_local memory::member_allocator * machine_context::_active_member_allocator = nullptr;
@@ -77,7 +74,7 @@ framework::member * machine_context::get_member(const char * _name, framework::m
 
 	if (auto _result = _variable_index.find(_name)) {
 		return _result;
-	} else if (_default == none) {
+	} else if (_default == none()) {
 		throw exception::symbol_error(BIA_EM_UNKNOWN_MEMBER);
 	}
 
@@ -90,7 +87,7 @@ const framework::member * machine_context::get_member(const char * _name, framew
 
 	if (auto _result = _variable_index.find(_name)) {
 		return _result;
-	} else if (_default == none) {
+	} else if (_default == none()) {
 		throw exception::symbol_error(BIA_EM_UNKNOWN_MEMBER);
 	}
 
