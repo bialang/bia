@@ -33,7 +33,7 @@ namespace machine
 class machine_context final
 {
 public:
-	static framework::member * const none;
+	BIA_EXPORT static framework::member * const none;
 
 	/**
 	 * Constructor.
