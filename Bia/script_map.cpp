@@ -18,7 +18,7 @@ void script_map::set(const char * _name, machine_code && _code)
 	_scripts.emplace(std::make_pair(_name, std::move(_code)));
 }
 
-machine_code & script_map::get(const char * _name)
+const machine_code & script_map::get(const char * _name) const
 {
 	auto _result = _scripts.find(_name);
 

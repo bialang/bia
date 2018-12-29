@@ -198,11 +198,14 @@
     <ClCompile Include="member_names.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
+    <ClCompile Include="script_map.cpp">
+      <Filter>Source Files\machine</Filter>
+    </ClCompile>
     <ClCompile Include="compiler_loop_tracker.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\compiler</Filter>
     </ClCompile>
     <ClCompile Include="scope_handler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\compiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -532,6 +535,9 @@
     </ClInclude>
     <ClInclude Include="local_object.hpp">
       <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="script_map.hpp">
+      <Filter>Header Files\machine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

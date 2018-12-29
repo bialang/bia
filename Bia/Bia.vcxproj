@@ -203,6 +203,7 @@
     <ClCompile Include="module_loader.cpp" />
     <ClCompile Include="namespace_member.cpp" />
     <ClCompile Include="scope_handler.cpp" />
+    <ClCompile Include="script_map.cpp" />
     <ClCompile Include="simple_allocator.cpp" />
     <ClCompile Include="buffer_input_stream.cpp" />
     <ClCompile Include="compiler.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="object_def.hpp" />
     <ClInclude Include="object_variable.hpp" />
     <ClInclude Include="raw_object_def.hpp" />
+    <ClInclude Include="script_map.hpp" />
     <ClInclude Include="share_def.hpp" />
     <ClInclude Include="template_wrapper.hpp" />
     <ClInclude Include="compiler_value.hpp" />

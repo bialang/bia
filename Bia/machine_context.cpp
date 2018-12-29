@@ -41,6 +41,18 @@ void machine_context::execute(stream::input_stream & _script)
 	compile_script(_script).execute();
 }
 
+void machine_context::add_script(const char * _name, stream::input_stream & _script)
+{
+	activate_context();
+
+	_script_map.set(_name, compile_script(_script));
+}
+
+const machine_code & machine_context::get_script(const char * _name) const
+{
+	return _script_map.get(_name);
+}
+
 framework::member * machine_context::get_member(const char * _name, framework::member * _default)
 {
 	_name = _string_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));

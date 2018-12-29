@@ -56,7 +56,7 @@ public:
 	 *
 	 * @return The script.
 	*/
-	BIA_EXPORT machine_code & get(const char * _name);
+	BIA_EXPORT const machine_code & get(const char * _name) const;
 
 private:
 	std::map<std::string, machine_code> _scripts;

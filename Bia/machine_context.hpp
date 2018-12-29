@@ -18,6 +18,7 @@
 #include "machine_stack.hpp"
 #include "module_loader.hpp"
 #include "buffer_builder.hpp"
+#include "script_map.hpp"
 
 
 namespace bia
@@ -70,14 +71,32 @@ public:
 	 * @throws See machine_code::execute().
 	*/
 	BIA_EXPORT void execute(stream::input_stream & _script);
-	void add_script(const char * _name, stream::input_stream & _script)
-	{
-		BIA_NOT_IMPLEMENTED;
-	}
-	const machine_code & get_script(const char * _name)
-	{
-		BIA_NOT_IMPLEMENTED;
-	}
+	/**
+	 * Compiles and adds a script to the context.
+	 *
+	 * @since 3.71.149.809
+	 * @date 29-Dec-18
+	 *
+	 * @param _name The name of the script.
+	 * @param [in] _script The script.
+	 *
+	 * @throws See compile_script().
+	 * @throws See script_map::set().
+	*/
+	BIA_EXPORT void add_script(const char * _name, stream::input_stream & _script);
+	/**
+	 * Returns the script associated with the name.
+	 *
+	 * @since 3.71.149.809
+	 * @date 29-Dec-18
+	 *
+	 * @param _name The name of the script.
+	 *
+	 * @throws See script_map::get().
+	 *
+	 * @return A reference to the script.
+	*/
+	BIA_EXPORT const machine_code & get_script(const char * _name) const;
 	/**
 	 * Returns the member.
 	 *
@@ -223,6 +242,8 @@ private:
 	variable_index _variable_index;
 	/** The virtual machine stack. */
 	machine_stack _stack;
+	/** The script map. */
+	script_map _script_map;
 	/** The module loader. */
 	modular::module_loader _module_loader;
 
