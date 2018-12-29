@@ -8,6 +8,10 @@ namespace bia
 namespace machine
 {
 
+script_map::script_map() noexcept
+{
+}
+
 script_map::script_map(script_map && _move)
 {
 	_scripts.swap(_move._scripts);

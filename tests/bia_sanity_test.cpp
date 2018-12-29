@@ -1,5 +1,6 @@
 #include "test.hpp"
 
+#include <bia.hpp>
 #include <machine_context.hpp>
 #include <buffer_input_stream.hpp>
 #include <string>
@@ -20,7 +21,7 @@ public:
 	{
 		std::unique_ptr<stream::buffer_input_stream> _script;
 
-		_script.reset(new stream::buffer_input_stream(to_input_stream(R"(var i = 0)")));
+		_script.reset(new stream::buffer_input_stream(to_input_stream(R"(var ci = 0)")));
 
 		try {
 			_context.execute(*_script);
@@ -28,7 +29,7 @@ public:
 			test::fail("execute() failed: "s + e.what());
 		}
 
-		_script.reset(new stream::buffer_input_stream(to_input_stream(R"(var i = 0)")));
+		_script.reset(new stream::buffer_input_stream(to_input_stream(R"(var ci = 0)")));
 
 		try {
 			_context.add_script("test", *_script);
@@ -44,7 +45,15 @@ public:
 	}
 	void test_member_interface()
 	{
+		_context.template emplace_member< bia::framework::native::big_int_member>("mi0", 7852);
 
+		test::template assert_equals<int64_t>(*_context.get_member("mi0")->template cast<int64_t>(), 7852, "mi0 == 7852");
+
+		_context.execute(to_input_stream(R"(var mi1 = 61; var mi2 = mi0)"));
+
+		test::template assert_equals<int64_t>(*_context.get_member("mi1")->template cast<int64_t>(), 61, "mi1 == 61");
+
+		test::template assert_equals<int64_t>(*_context.get_member("mi2")->template cast<int64_t>(), 7852, "mi2 == mi0 == 7852");
 	}
 
 private:
@@ -58,4 +67,5 @@ private:
 
 BEGIN_DECLARE_TESTS
 test::add("compile", &bia_sanity_test::test_compile);
+test::add("member_interface", &bia_sanity_test::test_member_interface);
 END_DECLARE_TESTS

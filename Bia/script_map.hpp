@@ -22,6 +22,13 @@ namespace machine
 class script_map
 {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.71.149.809
+	 * @date 29-Dec-18
+	*/
+	BIA_EXPORT script_map() noexcept;
 	script_map(const script_map & _copy) = delete;
 	/**
 	 * Move-Constructor.
