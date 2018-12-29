@@ -2,7 +2,6 @@
 
 #include <memory>
 #include <utility>
-#include <cstdint>
 
 #include "config.hpp"
 #include "allocator.hpp"

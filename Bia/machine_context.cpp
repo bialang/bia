@@ -5,6 +5,8 @@
 #include "buffer_output_stream.hpp"
 #include "undefined_member.hpp"
 
+#include <cstdint>
+
 
 namespace bia
 {

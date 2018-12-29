@@ -1,5 +1,4 @@
 #include "compiler.hpp"
-#include "link.hpp"
 #include "compile_compare_operation.hpp"
 #include "buffer_output_stream.hpp"
 #include "string_stream.hpp"
