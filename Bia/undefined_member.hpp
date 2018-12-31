@@ -37,8 +37,9 @@ public:
 	BIA_EXPORT virtual const char * to_cstring(utility::buffer_builder * _builder) const override;
 
 protected:
-	BIA_EXPORT virtual void * native_data(native::NATIVE_TYPE _type) override;
-	BIA_EXPORT virtual const void * const_native_data(native::NATIVE_TYPE _type) const override;
+	BIA_EXPORT virtual int32_t int32_data() const override;
+	BIA_EXPORT virtual int64_t int64_data() const override;
+	BIA_EXPORT virtual double double_data() const override;
 	BIA_EXPORT virtual void * data(const std::type_info & _type) override;
 	BIA_EXPORT virtual const void * const_data(const std::type_info & _type) const override;
 };

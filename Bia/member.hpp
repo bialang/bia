@@ -14,6 +14,7 @@
 #include "string_manager.hpp"
 #include "buffer_builder.hpp"
 #include "big_int.hpp"
+#include "member_cast_type.hpp"
 
 
 namespace bia
@@ -376,101 +377,33 @@ public:
 	*/
 	virtual double to_double() const = 0;
 	virtual const char * to_cstring(utility::buffer_builder * _builder) const = 0;
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		std::is_same<member*, Real_type>::value,
-		Real_type*>::type cast()
+
+	template<typename Type>
+	typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) <= sizeof(int32_t)), Type>::type cast()
 	{
-		thread_local member * _ptr;
-
-		_ptr = this;
-
-		return &_ptr;
+		return static_cast<Type>(int32_data());
 	}
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		std::is_same<const member*, Real_type>::value,
-		Real_type*>::type cast() const
+	template<typename Type>
+	typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) > sizeof(int32_t)), Type>::type cast()
 	{
-		thread_local const member * _ptr;
-
-		_ptr = this;
-
-		return &_ptr;
+		return static_cast<Type>(int64_data());
 	}
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		!std::is_same<member*, Real_type>::value &&
-		!std::is_same<const member*, Real_type>::value &&
-		std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
-		Real_type*>::type cast()
+	template<typename Type>
+	typename std::enable_if<std::is_floating_point<Type>::value, Type>::type cast()
 	{
-		thread_local Real_type _ptr;
-
-		_ptr = dynamic_cast<Real_type>(this);
-
-		if (!_ptr) {
-			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-		}
-
-		return &_ptr;
+		return static_cast<Type>(double_data());
 	}
-	/**
-	 * Casts this member to the specified mutable type.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @tparam Type The required type. References will be converted to pointers.
-	 * @tparam Real_type The actual type without references.
-	 *
-	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If this member cannot be casted to @a Type.
-	 *
-	 * @return A point containing the casted type.
-	*/
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		!std::is_const<typename std::remove_pointer<Real_type>::type>::value && 
-		!std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
-		Real_type*>::type cast()
+	template<typename Type>
+	typename std::enable_if<!std::is_arithmetic<Type>::value && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
 	{
-		// Native type
-		if (native::determine_native_type<Real_type>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<Real_type*>(native_data(native::determine_native_type<Real_type>()));
-		} // Custom type
-		else {
-			return static_cast<Real_type*>(data(typeid(Real_type)));
-		}
+		return converter<Type>::convert(data(converter<Type>::info()));
 	}
-	/**
-	 * Casts this member to the specified immutable type.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @tparam Type The required type. References will be converted to pointers.
-	 * @tparam Real_type The actual type without references.
-	 *
-	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If this member cannot be casted to @a Type.
-	 *
-	 * @return A point containing the casted type.
-	*/
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		std::is_const<typename std::remove_pointer<Real_type>::type>::value &&
-		!std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
-		Real_type const*>::type cast() const
+	template<typename Type>
+	typename std::enable_if<!std::is_arithmetic<Type>::value && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
 	{
-		// Native type
-		if (native::determine_native_type<Real_type>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<Real_type const*>(const_native_data(native::determine_native_type<Real_type>()));
-		} // Custom type
-		else {
-			return static_cast<Real_type const*>(const_data(typeid(Real_type)));
-		}
+		return converter<Type>::convert(const_data(converter<Type>::info()));
 	}
+
 	/**
 	 * Replaces this obejct with the new defined one.
 	 *
@@ -499,34 +432,9 @@ public:
 	}
 
 protected:
-	/**
-	 * Returns a pointer to mutable native data.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _type The type.
-	 *
-	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If the type is not supported.
-	 *
-	 * @return A pointer to the data.
-	*/
-	virtual void * native_data(native::NATIVE_TYPE _type) = 0;
-	/**
-	 * Returns a pointer to immutable native data.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _type The type.
-	 *
-	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If the type is not supported.
-	 *
-	 * @return A pointer to the data.
-	*/
-	virtual const void * const_native_data(native::NATIVE_TYPE _type) const = 0;
+	virtual int32_t int32_data() const = 0;
+	virtual int64_t int64_data() const = 0;
+	virtual double double_data() const = 0;
 	/**
 	 * Returns a pointer to mutable custom data.
 	 *

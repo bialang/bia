@@ -64,24 +64,13 @@ public:
 	BIA_EXPORT virtual const char * to_cstring(utility::buffer_builder * _builder) const override;
 
 protected:
-	BIA_EXPORT virtual void * native_data(native::NATIVE_TYPE _type) override;
-	BIA_EXPORT virtual const void * const_native_data(native::NATIVE_TYPE _type) const override;
+	BIA_EXPORT virtual int32_t int32_data() const override;
+	BIA_EXPORT virtual int64_t int64_data() const override;
+	BIA_EXPORT virtual double double_data() const override;
 
 private:
-	union tmp_value
-	{
-		bool bool_value;
-		int8_t int8_value;
-		int16_t int16_value;
-		int32_t int32_value;
-		int64_t int64_value;
-		float float_value;
-	};
-
 	/** Holds the float value. */
 	data_type _data;
-	/** A temporary value used for convertion. */
-	static thread_local tmp_value _tmp_value;
 };
 
 }

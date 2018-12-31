@@ -140,19 +140,34 @@ inline const char * cstring_member<Char_type>::to_cstring(utility::buffer_builde
 }
 
 template<typename Char_type>
-inline void * cstring_member<Char_type>::native_data(native::NATIVE_TYPE _type)
+inline int32_t cstring_member<Char_type>::int32_data() const
 {
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
 
 template<typename Char_type>
-inline const void * cstring_member<Char_type>::const_native_data(native::NATIVE_TYPE _type) const
+inline int64_t cstring_member<Char_type>::int64_data() const
 {
-	switch (_type) {
-	case NATIVE_TYPE::CONST_STRING:
-		return &std::get<0>(_data.get());
-	default:
-		break;
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Char_type>
+inline double cstring_member<Char_type>::double_data() const
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Char_type>
+inline void * cstring_member<Char_type>::data(const std::type_info & _type)
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Char_type>
+inline const void * cstring_member<Char_type>::const_data(const std::type_info & _type) const
+{
+	if (std::is_same<Char_type, char>::value && _type == typeid(char)) {
+		return std::get<0>(_data.get());
 	}
 
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);

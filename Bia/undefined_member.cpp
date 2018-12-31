@@ -128,12 +128,17 @@ const char * undefined_member::to_cstring(utility::buffer_builder * _builder) co
 	BIA_UNDEFINED_ERROR;
 }
 
-void * undefined_member::native_data(native::NATIVE_TYPE _type)
+int32_t undefined_member::int32_data() const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-const void * undefined_member::const_native_data(native::NATIVE_TYPE _type) const
+int64_t undefined_member::int64_data() const
+{
+	BIA_UNDEFINED_ERROR;
+}
+
+double undefined_member::double_data() const
 {
 	BIA_UNDEFINED_ERROR;
 }

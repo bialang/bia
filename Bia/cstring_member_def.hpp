@@ -66,8 +66,11 @@ public:
 	const char * to_cstring(utility::buffer_builder * _builder) const override;
 
 protected:
-	virtual void * native_data(native::NATIVE_TYPE _type) override;
-	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override;
+	virtual int32_t int32_data() const override;
+	virtual int64_t int64_data() const override;
+	virtual double double_data() const override;
+	virtual void * data(const std::type_info & _type) override;
+	virtual const void * const_data(const std::type_info & _type) const override;
 
 private:
 	/** The zero-terminated C style string, its size and its length. */

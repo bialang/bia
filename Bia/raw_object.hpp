@@ -163,7 +163,7 @@ inline double raw_object<Type>::to_double() const
 template<typename Type>
 inline member * raw_object<Type>::promote() const
 {
-	return nullptr;
+	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
@@ -171,9 +171,7 @@ inline void * raw_object<Type>::data(const std::type_info & _type)
 {
 	if (!std::is_const<Type>::value) {
 		if (typeid(Type) == _type) {
-			return const_cast<typename std::remove_cv<Type>::type*>(static_cast<Type*>(_data.get()));
-		} else if (typeid(Type*) == _type) {
-			return &_data.get();
+			return _data.get().first;
 		}
 	}
 
@@ -184,9 +182,7 @@ template<typename Type>
 inline const void * raw_object<Type>::const_data(const std::type_info & _type) const
 {
 	if (typeid(Type) == _type) {
-		return _data.get();
-	} else if (typeid(Type*) == _type) {
-		return &_data.get();
+		return _data.get().first;
 	}
 
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);

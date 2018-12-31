@@ -15,8 +15,6 @@ namespace framework
 namespace native
 {
 
-thread_local int_member::tmp_value int_member::_tmp_value;
-
 int_member::int_member(int32_t _value) : _data(_value)
 {
 }
@@ -162,33 +160,19 @@ const char * int_member::to_cstring(utility::buffer_builder * _builder) const
 	return _builder->buffer<char>();
 }
 
-void * int_member::native_data(native::NATIVE_TYPE _type)
+int32_t int_member::int32_data() const
 {
-	return const_cast<void*>(const_native_data(_type));
+	return static_cast<int32_t>(_data.get());
 }
 
-const void * int_member::const_native_data(native::NATIVE_TYPE _type) const
+int64_t int_member::int64_data() const
 {
-	switch (_type) {
-	case NATIVE_TYPE::BOOL:
-	case NATIVE_TYPE::INT_8:
-	case NATIVE_TYPE::INT_16:
-	case NATIVE_TYPE::INT_32:
-	case NATIVE_TYPE::INT_64:
-		return &_data.get();
-	case NATIVE_TYPE::FLOAT:
-		_tmp_value.float_value = static_cast<float>(_data.get());
+	return _data.get();
+}
 
-		return &_tmp_value.float_value;
-	case NATIVE_TYPE::DOUBLE:
-		_tmp_value.double_value = static_cast<double>(_data.get());
-
-		return &_tmp_value.double_value;
-	default:
-		break;
-	}
-
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+double int_member::double_data() const
+{
+	return static_cast<double>(_data.get());
 }
 
 }

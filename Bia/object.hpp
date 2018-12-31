@@ -149,15 +149,20 @@ inline double object<Type>::to_double() const
 	BIA_NOT_IMPLEMENTED;
 }
 
-
 template<typename Type>
-inline void * object<Type>::native_data(native::NATIVE_TYPE _type)
+inline int32_t object<Type>::int32_data() const
 {
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
 
 template<typename Type>
-inline const void * object<Type>::const_native_data(native::NATIVE_TYPE _type) const
+inline int64_t object<Type>::int64_data() const
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Type>
+inline double object<Type>::double_data() const
 {
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
@@ -167,9 +172,7 @@ inline void * object<Type>::data(const std::type_info & _type)
 {
 	if (!std::is_const<Type>::value) {
 		if (typeid(Type) == _type) {
-			return const_cast<typename std::remove_cv<Type>::type*>(static_cast<Type*>(_data.get().first.get()));
-		} else if (typeid(Type*) == _type) {
-			return &_data.get().first.get();
+			return _data.get().first.get().first;
 		}
 	}
 
@@ -180,9 +183,7 @@ template<typename Type>
 inline const void * object<Type>::const_data(const std::type_info & _type) const
 {
 	if (typeid(Type) == _type) {
-		return _data.get().first.get();
-	} else if (typeid(Type*) == _type) {
-		return &_data.get().first.get();
+		return _data.get().first.get().first;
 	}
 
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);

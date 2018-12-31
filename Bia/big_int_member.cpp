@@ -124,8 +124,6 @@ inline void big_int_member_operation(dependency::big_int & _left, operator_type 
 }
 
 
-thread_local big_int_member::tmp_value big_int_member::_tmp_value;
-
 big_int_member::big_int_member()
 {
 }
@@ -280,47 +278,19 @@ const char * big_int_member::to_cstring(utility::buffer_builder * _builder) cons
 	return _builder->buffer<char>();
 }
 
-void * big_int_member::native_data(native::NATIVE_TYPE _type)
+int32_t big_int_member::int32_data() const
 {
-	return const_cast<void*>(const_native_data(_type));
+	return static_cast<int32_t>(_data->cast_int());
 }
 
-const void * big_int_member::const_native_data(native::NATIVE_TYPE _type) const
+int64_t big_int_member::int64_data() const
 {
-	switch (_type) {
-	case NATIVE_TYPE::BOOL:
-		_tmp_value.bool_value = !_data->is_zero();
+	return _data->cast_int();
+}
 
-		return &_tmp_value.bool_value;
-	case NATIVE_TYPE::INT_8:
-		_tmp_value.int8_value = static_cast<int8_t>(_data->cast_int());
-
-		return &_tmp_value.int8_value;
-	case NATIVE_TYPE::INT_16:
-		_tmp_value.int16_value = static_cast<int16_t>(_data->cast_int());
-
-		return &_tmp_value.int16_value;
-	case NATIVE_TYPE::INT_32:
-		_tmp_value.int32_value = static_cast<int32_t>(_data->cast_int());
-
-		return &_tmp_value.int32_value;
-	case NATIVE_TYPE::INT_64:
-		_tmp_value.int64_value = _data->cast_int();
-
-		return &_tmp_value.int64_value;
-	case NATIVE_TYPE::FLOAT:
-		_tmp_value.float_value = static_cast<float>(_data->cast_double());
-
-		return &_tmp_value.float_value;
-	case NATIVE_TYPE::DOUBLE:
-		_tmp_value.double_value = _data->cast_double();
-
-		return &_tmp_value.double_value;
-	default:
-		break;
-	}
-
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+double big_int_member::double_data() const
+{
+	return _data->cast_double();
 }
 
 }

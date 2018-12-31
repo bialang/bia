@@ -23,12 +23,15 @@ struct printer
 		a = i;
 		printf("default constructor%i\n", i);
 	}
-	printer(const printer&)
+	printer(const printer & c)
 	{
+		a = c.a;
 		puts("copy constructor");
 	}
-	printer(printer&&)
+	printer(printer&& c)
 	{
+		a = c.a;
+		c.a = 0;
 		puts("move constructor");
 	}
 	~printer()
@@ -68,47 +71,43 @@ void test()
 int main()
 {
 	bia::machine::memory::big_int_allocator::initialize(std::make_shared<bia::machine::memory::simple_allocator>());
-
+	
 	{
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
-
-		set_lambda(_context, "ser", [&](int & a, const char * b) -> const printer& {
-			printf("First parameter: %i at %p\n", a, &a);
-			printf("Second parameter: %s\n", b);
-
-			set_lambda(_context, "ser", []() {
-				puts("bye");
-			});
-
-			a = 3434.453;
-
-			static printer _p(3);
-
-			return _p;
+		
+		_context.set_lambda("ser", [](int i, int j) {
+			printf("%i bye %i\n", i, j);
 		});
-		set_lambda(_context, "print", [](bia::framework::member * _member) {
+		_context.set_lambda("set", [](const char * i, const char * j) {
+			printf("%s bye %s\n", i, j);
+		});
+		_context.set_lambda("test", [](const printer * p) {
+			printf("w: %i\n", p->a);
+			//p.a = 34343434;
+		});
+		/*_context.set_lambda("print", [](bia::framework::member * _member) {
 			_member->print();
 		});
-		set_lambda(_context, "int", [](bia::framework::member * _member) {
+		_context.set_lambda("int", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
 			}
 
 			return _member->to_int();
 		});
-		set_lambda(_context, "float", [](bia::framework::member * _member) {
+		_context.set_lambda("float", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stod(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
 			}
 
 			return _member->to_double();
 		});
-		set_lambda(_context, "destroy", [](bia::framework::member * _member) {
+		_context.set_lambda("destroy", [](bia::framework::member * _member) {
 			_member->undefine();
 		});
-		set_lambda(_context, "defined", [](const bia::framework::member * _member) {
+		_context.set_lambda("defined", [](const bia::framework::member * _member) {
 			try {
 				_member->flags();
 			} catch (const bia::exception::symbol_error&) {
@@ -117,15 +116,23 @@ int main()
 
 			return true;
 		});
-		set_lambda(_context, "time", []() { return std::time(nullptr); });
+		_context.set_lambda("time", []() { return std::time(nullptr); });
 		set_class<printer>(_context, "printer")
 			.set_constructor<int>()
 			.set_function("hey", &test)
 			.set_function("hi", &printer::hi);
-		
+		*/
+		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
+
 		// Script
 		char _script[] = u8R""(
 
+var i = printer(43)
+i.hi()
+test(i)
+i.hi()
+
+#>
 global i = 2
 i **= 128
 
@@ -138,7 +145,7 @@ print i
 delete
 }
 
-print i
+print i<#
 
 )"";
 		/*test_and_time(1, []() {
@@ -187,8 +194,6 @@ print i
 				test_and_time(1, [&] {
 					_machine_code.execute();
 				});
-
-				printf("val: %lli\n", _context.get_member("i")->to_int());
 			} catch (const std::exception & e) {
 				printf("%s: %s\n", typeid(e).name(), e.what());
 			}

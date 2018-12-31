@@ -99,11 +99,15 @@ public:
 	}
 
 protected:
-	virtual void * native_data(native::NATIVE_TYPE _type) override
+	virtual int32_t int32_data() const override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
-	virtual const void * const_native_data(native::NATIVE_TYPE _type) const override
+	virtual int64_t int64_data() const override
+	{
+		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	}
+	virtual double double_data() const override
 	{
 		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 	}
