@@ -23,7 +23,7 @@ public:
 #elif defined(BIA_COMPILER_MSVC)
 		_integral_passed = 4;
 #else
-		_integral_passed = 6;
+		_integral_passed = 4;
 		_floating_point_passed = 8;
 #endif
 	}

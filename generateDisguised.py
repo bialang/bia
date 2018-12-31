@@ -239,12 +239,14 @@ for type in ["count", "format"]:
 
 	if type == "count":
 		upper["function_name"] = "disguised_caller_count"
-		upper["preparations"] = ""
 		upper["format_param"] = ""
 	else:
 		upper["function_name"] = "disguised_caller_format"
-		upper["preparations"] = ""
 		upper["format_param"] = "const char * _format, "
+		
+	upper["pre_preparations"] = ""
+	upper["preparations"] = ""	
+	upper["post_preparations"] = ""
 
 	for template in ["static", "static_void", "member", "member_void", "member_const", "member_void_const", "initiator"]:
 		filler = upper.copy()
@@ -345,7 +347,12 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 {{
 	if (_count != {arg_count}) {{
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
-	}}{preparations}
+	}}
+#if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)){pre_preparations}
+#endif
+	{preparations}
+#if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))){post_preparations}
+#endif
 
 	{body1}{body2}{body3}
 }}
@@ -359,13 +366,19 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 
 			if type == "count":
 				filler["body2"] += (", " if i != 0 else "") + "_v{0}".format(i)
-				filler["preparations"] = """
-	typename framework::converter<_{0}>::type _v{0} = va_arg(_args.args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
+				preptmp = """
+	typename framework::converter<_{0}>::type _v{0} = va_arg(_args.args, framework::member*)->cast<_{0}>();""".format(i)
 			else:
-				filler["preparations"] = """
-	_{0} _v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]
+				preptmp = """
+	_{0} _v{0} = format_cast<_{0}>(_args, _format);""".format(i)
 				filler["body2"] += (", " if i != 0 else "") + "std::forward<_{0}>(_v{0})".format(i)
 
+			if i < 2:
+				filler["pre_preparations"] += preptmp
+				filler["post_preparations"] = preptmp + filler["post_preparations"]
+			else:
+				filler["preparations"] = preptmp + filler["preparations"]
+				
 			if template == "static_void":
 				filler["template_begin"] = "template<"
 				filler["template_end"] = ">"

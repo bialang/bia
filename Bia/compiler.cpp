@@ -513,11 +513,6 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 			}
 		}
 
-#if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
-		// Reserve the last two integral registers
-		_format.append("rr");
-#endif
-
 		_format.append(_passer.compensatory_pushes(), 'r');
 
 		_counter.pop(_old);
