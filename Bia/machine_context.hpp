@@ -18,6 +18,8 @@
 #include "module_loader.hpp"
 #include "buffer_builder.hpp"
 #include "script_map.hpp"
+#include "static_function.hpp"
+#include "lambda_function_def.hpp"
 
 
 namespace bia
@@ -135,7 +137,7 @@ public:
 	 *
 	 * @return The member if it exists, otherwise the @a _default value.
 	*/
-	BIA_EXPORT framework::member * get_member(const char * _name, framework::member * _default = none());
+	BIA_EXPORT framework::member * get_member(string_manager::name_type, framework::member * _default = none());
 	/**
 	 * Returns the member.
 	 *
@@ -149,7 +151,7 @@ public:
 	 *
 	 * @return The member if it exists, otherwise the @a _default value.
 	*/
-	BIA_EXPORT const framework::member * get_member(const char * _name, framework::member * _default = none()) const;
+	BIA_EXPORT const framework::member * get_member(string_manager::name_type, framework::member * _default = none()) const;
 	template<typename Member, typename... Arguments>
 	typename std::enable_if<std::is_base_of<framework::member, Member>::value, Member*>::type emplace_member(const char * _name, Arguments &&... _arguments)
 	{
@@ -160,6 +162,16 @@ public:
 		_object->template replace_this<Member>(std::forward<Arguments>(_arguments)...);
 
 		return static_cast<Member*>(_object);
+	}
+	template<typename Return, typename... Arguments>
+	framework::executable::static_function<Return, Arguments...> * set_function(string_manager::name_type _name, Return(*_function)(Arguments...))
+	{
+		return emplace_member<framework::executable::static_function<Return, Arguments...>>(_name, _function);
+	}
+	template<typename _Lambda>
+	framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type> * set_lambda(string_manager::name_type _name, _Lambda && _lambda)
+	{
+		return emplace_member<framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_name, std::forward<_Lambda>(_lambda));
 	}
 	/**
 	 * Returns the currently active machine context in the current thread.
