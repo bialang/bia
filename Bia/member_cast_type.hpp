@@ -40,44 +40,48 @@ struct base_convert
 template<typename Type>
 struct converter : base_convert<Type>
 {
+	using base = base_convert<Type>;
 	typedef typename std::conditional<std::is_arithmetic<Type>::value, Type, Type&>::type type;
 
-	static type convert(abstract_data_type _ptr)
+	static type convert(typename base::abstract_data_type _ptr)
 	{
-		return *selected_convert<data_type>(_ptr);
+		return *selected_convert<base::data_type>(_ptr);
 	}
 };
 
 template<typename Type>
 struct converter<Type*> : base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>
 {
+	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type* type;
 
-	static Type * convert(abstract_data_type _ptr)
+	static Type * convert(typename base::abstract_data_type _ptr)
 	{
-		return selected_convert<data_type>(_ptr);
+		return selected_convert<base::data_type>(_ptr);
 	}
 };
 
 template<typename Type>
 struct converter<Type&> : base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>
 {
+	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type& type;
 
-	static Type & convert(abstract_data_type _ptr)
+	static Type & convert(typename base::abstract_data_type _ptr)
 	{
-		return *selected_convert<data_type>(_ptr);
+		return *selected_convert<base::data_type>(_ptr);
 	}
 };
 
 template<typename Type>
 struct converter<Type&&> : base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>
 {
+	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type&& type;
 
-	static Type && convert(abstract_data_type _ptr)
+	static Type && convert(typename base::abstract_data_type _ptr)
 	{
-		return std::move(*selected_convert<data_type>(_ptr));
+		return std::move(*selected_convert<base::data_type>(_ptr));
 	}
 };
 
