@@ -57,10 +57,6 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 			break;
 		}
 
-		auto _buffer = _input.buffer();
-
-		fwrite(_buffer.first, 1, _buffer.second - _buffer.first, stdout);
-
 		// Report
 		if (_bundle.size() > 0) {
 			_receiver.report(_bundle.begin(), _bundle.end());

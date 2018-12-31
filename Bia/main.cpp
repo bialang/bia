@@ -164,7 +164,7 @@ print i<#
 		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
 		bia::stream::buffer_output_stream _output;
 		bia::compiler::compiler _compiler(_output, _context);
-
+		
 		test_and_time(1, [&]() {
 			bia::grammar::syntax::interpreter().interpret(_input, _compiler, _context);
 		});

@@ -26,5 +26,5 @@ target_link_libraries(biaSanityTest Bia)
 
 add_test(CompileBiaTest biaSanityTest compile)
 add_test(MemberInterfaceTest biaSanityTest member_interface)
-add_test(FunctionTest biaSanityTest function_order)
+add_test(FunctionOrderTest biaSanityTest function_order)
 add_test(BiaSanityTest biaSanityTest)
