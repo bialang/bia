@@ -59,7 +59,7 @@ public:
 
 		machine_context::unset_active_context();
 
-		test::template assert_equals<int64_t>(*_member->template cast<int64_t>(), 7852, "mi0 == 7852");
+		test::template assert_equals<int64_t>(_member->template cast<int64_t>(), 7852, "mi0 == 7852");
 
 		// Test script
 		auto _script = to_input_stream(R"(var mi1 = 61; var mi2 = mi0)");
@@ -72,7 +72,7 @@ public:
 
 		machine_context::unset_active_context();
 
-		test::template assert_equals<int64_t>(*_member->template cast<int64_t>(), 61, "mi1 == 61");
+		test::template assert_equals<int64_t>(_member->template cast<int64_t>(), 61, "mi1 == 61");
 
 		machine_context::unset_active_context();
 
@@ -80,12 +80,49 @@ public:
 
 		machine_context::unset_active_context();
 
-		test::template assert_equals<int64_t>(*_member->template cast<int64_t>(), 7852, "mi2 == mi0 == 7852");
+		test::template assert_equals<int64_t>(_member->template cast<int64_t>(), 7852, "mi2 == mi0 == 7852");
 
 		machine_context::unset_active_context();
 		_context.reset();
 	}
+	static void test_function_order()
+	{
+		auto _context = create_context();
 
+		machine_context::unset_active_context();
+		_context->set_function("static_order", static_cast<void(*)(int, int, int)>([](int _first, int _second, int _third) {
+			test::assert_equals(_first, 1, "_first == 1");
+			test::assert_equals(_second, 2, "_second == 2");
+			test::assert_equals(_third, 3, "_third == 3");
+		}));
+
+		machine_context::unset_active_context();
+		_context->set_lambda("lambda_order", [](int _first, int _second, int _third) {
+			test::assert_equals(_first, 1, "_first == 1");
+			test::assert_equals(_second, 2, "_second == 2");
+			test::assert_equals(_third, 3, "_third == 3");
+		});
+
+		// Test script
+		auto _script = to_input_stream(R"(
+var one = 1
+var two = 2
+var three = 3
+
+static_order(1, 2, 3)
+static_order(one, 2, three)
+static_order(one, two, three)
+lambda_order(1, 2, 3)
+lambda_order(one, 2, three)
+lambda_order(one, two, three)
+)");
+
+		machine_context::unset_active_context();
+		_context->execute(_script);
+
+		machine_context::unset_active_context();
+		_context.reset();
+	}
 private:
 	static std::unique_ptr<machine_context> create_context()
 	{
@@ -103,4 +140,5 @@ private:
 BEGIN_DECLARE_TESTS
 test::add("compile", &bia_sanity_test::test_compile);
 test::add("member_interface", &bia_sanity_test::test_member_interface);
+test::add("function_order", &bia_sanity_test::test_function_order);
 END_DECLARE_TESTS
