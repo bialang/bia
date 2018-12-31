@@ -539,6 +539,9 @@
     <ClInclude Include="script_map.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
+    <ClInclude Include="member_cast_type.hpp">
+      <Filter>Header Files\framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

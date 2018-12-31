@@ -149,13 +149,7 @@ gt_redo:;
 		}
 	}
 	case 'M':
-	{
-		if (auto _ptr = va_arg(_args.args, framework::member*)->cast<Return>()) {
-			return *_ptr;
-		} else {
-			break;
-		}
-	}
+		return va_arg(_args.args, framework::member*)->cast<Return>();
 	case 'r':
 		va_arg(_args.args, void*);
 
@@ -364,9 +358,9 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 				filler["param2"] += (", " if i != 0 else "") + "_" + str(i)
 
 			if type == "count":
-				filler["body2"] += (", " if i != 0 else "") + "*_v{0}".format(i)
+				filler["body2"] += (", " if i != 0 else "") + "_v{0}".format(i)
 				filler["preparations"] = """
-	auto _v{0} = va_arg(_args.args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
+	framework::converter<_{0}>::type _v{0} = va_arg(_args.args, framework::member*)->cast<_{0}>();""".format(i) + move_position(filler["preparations"])
 			else:
 				filler["preparations"] = """
 	_{0} _v{0} = format_cast<_{0}>(_args, _format);""".format(i) + filler["preparations"]

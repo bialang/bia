@@ -83,6 +83,20 @@ struct chooser<false, Return, Type>
 	}
 };
 
+template<typename T>
+struct pointer_rank
+{
+	constexpr static size_t value = 0;
+	constexpr static bool odd = false;
+};
+
+template<typename T>
+struct pointer_rank<T*>
+{
+	constexpr static size_t value = pointer_rank<T>::value + 1;
+	constexpr static bool odd = value % 2 != 0;
+};
+
 template<typename Type, bool Is_integral, size_t Size>
 struct native_type_adapter
 {
