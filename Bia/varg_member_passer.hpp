@@ -59,10 +59,23 @@ public:
 #endif
 #endif
 	}
+	constexpr static pass_count_type varg_register_passes()
+	{
+#if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
+		return 2;
+#else
+		return 0;
+#endif
+	}
 	pass_count_type compensatory_pushes()
 	{
-		// +1 because of call return address
-		return (align_stack((_passer._stack_offset + 1) * element_size) - _passer._stack_offset * element_size - element_size) / element_size;
+		pass_count_type _count = (align_stack(_passer._stack_offset * element_size) - _passer._stack_offset * element_size) / element_size;
+
+		for (pass_count_type i = 0; i < _count; ++i) {
+			pass_varg(reserved_parameter());
+		}
+
+		return _count;
 	}
 };
 
