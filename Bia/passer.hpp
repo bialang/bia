@@ -35,8 +35,7 @@ public:
 	}
 	void prepare_pushing(pass_count_type _already_pushed, pass_count_type _to_be_pushed, bool _caller_pops_parameters, bool _caller_pops_padding)
 	{
-		// +1 because of call return address
-		auto _padding = align_stack((_stack_offset + _to_be_pushed + 1) * element_size) - (_stack_offset + _to_be_pushed) * element_size - element_size;
+		auto _padding = align_stack((_stack_offset + _to_be_pushed) * element_size) - (_stack_offset + _to_be_pushed) * element_size;
 
 		// Write padding
 		if (_padding) {
