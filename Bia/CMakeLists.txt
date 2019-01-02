@@ -148,6 +148,19 @@ source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
 
+
+# virtual_machine namespace
+set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp")
+set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "")
+
+source_group("Header Files\\virtual_machine" FILES ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
+source_group("Source Files\\virtual_machine" FILES ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
+
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
+
+
+
 # Adding the library
 if(BIA_BUILD_SHARED)
   add_library(Bia SHARED ${Bia_SOURCE_FILES})
