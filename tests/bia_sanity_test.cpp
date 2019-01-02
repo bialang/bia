@@ -90,7 +90,13 @@ public:
 		auto _context = create_context();
 
 		machine_context::unset_active_context();
-		_context->set_function("static_order", static_cast<void(*)(int, int, int)>([](int _first, int _second, int _third) {
+		_context->set_function("static_order", static_cast<void(*)(int, int)>([](int _first, int _second) {
+			test::assert_equals(_first, 1, "_first == 1");
+			test::assert_equals(_second, 2, "_second == 2");
+		}));
+
+		machine_context::unset_active_context();
+		_context->set_function("static_order2", static_cast<void(*)(int, int, int)>([](int _first, int _second, int _third) {
 			test::assert_equals(_first, 1, "_first == 1");
 			test::assert_equals(_second, 2, "_second == 2");
 			test::assert_equals(_third, 3, "_third == 3");
@@ -109,12 +115,15 @@ var one = 1
 var two = 2
 var three = 3
 
-static_order(1, 2, 3)
-static_order(one, 2, three)
-static_order(one, two, three)
-lambda_order(1, 2, 3)
-lambda_order(one, 2, three)
-lambda_order(one, two, three)
+#static_order(1, 2)
+#static_order(one, 2)
+#static_order(one, two)
+#static_order2(1, 2, 3)
+#static_order2(one, 2, three)
+static_order2(one, two, three)
+#lambda_order(1, 2, 3)
+#lambda_order(one, 2, three)
+#lambda_order(one, two, three)
 )");
 
 		machine_context::unset_active_context();

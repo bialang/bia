@@ -106,7 +106,8 @@ private:
 		} // Formatted execute
 		else if (_mixed) {
 			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
-
+			printf("format: %s\n", std::string(_format_ptr, _format.length()).c_str()); 
+			printf("format: %s\n", _format.c_str());
 			_toolset.call_virtual(&framework::member::execute_format, _member, _passer, _destination, _format_ptr, _count);
 		} // Only members as parameters
 		else {

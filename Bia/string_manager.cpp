@@ -1,5 +1,6 @@
 #include "string_manager.hpp"
 #include "string_stream.hpp"
+#include "varg_member_passer.hpp"
 
 #include <cstring>
 #include <utility>
@@ -76,10 +77,15 @@ const char * string_manager::format_address(const char * _format, size_t _length
 	if (_result == _index.end()) {
 		auto _allocation = _allocator->allocate(_length);
 		auto _string = static_cast<char*>(_allocation.first);
+		size_t i = 0;
 
-		// Copy in reverse order
-		for (size_t i = 0; _length--; ++i) {
-			_string[i] = _format[_length];
+		for (; i < machine::platform::varg_member_passer::varg_register_passes(); ++i) {
+			_string[i] = _format[i];
+		}
+
+		// Copy rest in reverse order
+		for (; i < _length; ++i) {
+			_string[i] = _format[_length - 1 - (i - machine::platform::varg_member_passer::varg_register_passes())];
 		}
 
 		_result = _index.insert(string_entry(_allocation)).first;

@@ -162,7 +162,6 @@ inline void disguised_caller_count(Return(*_function)(), framework::member * _de
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -178,7 +177,6 @@ inline void disguised_caller_count(Return(*_function)(_0), framework::member * _
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
@@ -196,7 +194,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1), framework::member
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
@@ -215,7 +212,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2), framework::me
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
@@ -235,7 +231,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3), framework
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -256,7 +251,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4), frame
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
@@ -278,7 +272,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5), f
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
@@ -301,7 +294,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
@@ -325,7 +317,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
@@ -350,7 +341,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
@@ -376,7 +366,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
@@ -403,7 +392,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
@@ -431,7 +419,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
@@ -460,7 +447,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
@@ -490,7 +476,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
@@ -521,7 +506,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
@@ -553,7 +537,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
@@ -586,7 +569,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
@@ -620,7 +602,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
@@ -655,7 +636,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
@@ -691,7 +671,6 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_19>::type _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
@@ -726,7 +705,6 @@ inline void disguised_caller_count(void(*_function)(), framework::member * _dest
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -744,7 +722,6 @@ inline void disguised_caller_count(void(*_function)(_0), framework::member * _de
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
@@ -764,7 +741,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1), framework::member *
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
@@ -785,7 +761,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2), framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
@@ -807,7 +782,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3), framework::
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -830,7 +804,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4), framewo
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
@@ -854,7 +827,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5), fra
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
@@ -879,7 +851,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6),
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
@@ -905,7 +876,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
@@ -932,7 +902,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
@@ -960,7 +929,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
@@ -989,7 +957,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
@@ -1019,7 +986,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
@@ -1050,7 +1016,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
@@ -1082,7 +1047,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
@@ -1115,7 +1079,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
@@ -1149,7 +1112,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
@@ -1184,7 +1146,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
@@ -1220,7 +1181,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
@@ -1257,7 +1217,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
@@ -1295,7 +1254,6 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_19>::type _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
@@ -1332,7 +1290,6 @@ inline void disguised_caller_count(Return(Class::*_function)(), Class * _instanc
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -1348,7 +1305,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0), Class * _insta
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
@@ -1366,7 +1322,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1), Class * _i
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
@@ -1385,7 +1340,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2), Class 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
@@ -1405,7 +1359,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3), Cl
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -1426,7 +1379,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4)
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
@@ -1448,7 +1400,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
@@ -1471,7 +1422,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
@@ -1495,7 +1445,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
@@ -1520,7 +1469,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
@@ -1546,7 +1494,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
@@ -1573,7 +1520,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
@@ -1601,7 +1547,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
@@ -1630,7 +1575,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
@@ -1660,7 +1604,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
@@ -1691,7 +1634,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
@@ -1723,7 +1665,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
@@ -1756,7 +1697,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
@@ -1790,7 +1730,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
@@ -1825,7 +1764,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
@@ -1861,7 +1799,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_19>::type _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
@@ -1896,7 +1833,6 @@ inline void disguised_caller_count(void(Class::*_function)(), Class * _instance,
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -1914,7 +1850,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0), Class * _instanc
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
@@ -1934,7 +1869,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1), Class * _ins
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
@@ -1955,7 +1889,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2), Class * 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
@@ -1977,7 +1910,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3), Clas
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -2000,7 +1932,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4), 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
@@ -2024,7 +1955,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
@@ -2049,7 +1979,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
@@ -2075,7 +2004,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
@@ -2102,7 +2030,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
@@ -2130,7 +2057,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
@@ -2159,7 +2085,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
@@ -2189,7 +2114,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
@@ -2220,7 +2144,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
@@ -2252,7 +2175,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
@@ -2285,7 +2207,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
@@ -2319,7 +2240,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
@@ -2354,7 +2274,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
@@ -2390,7 +2309,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
@@ -2427,7 +2345,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
@@ -2465,7 +2382,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_19>::type _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
@@ -2502,7 +2418,6 @@ inline void disguised_caller_count(Return(Class::*_function)() const, const Clas
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -2518,7 +2433,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0) const, const Cl
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
@@ -2536,7 +2450,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1) const, cons
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
@@ -2555,7 +2468,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2) const, 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
@@ -2575,7 +2487,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3) con
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -2596,7 +2507,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4)
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
@@ -2618,7 +2528,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
@@ -2641,7 +2550,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
@@ -2665,7 +2573,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
@@ -2690,7 +2597,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
@@ -2716,7 +2622,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
@@ -2743,7 +2648,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
@@ -2771,7 +2675,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
@@ -2800,7 +2703,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
@@ -2830,7 +2732,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
@@ -2861,7 +2762,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
@@ -2893,7 +2793,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
@@ -2926,7 +2825,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
@@ -2960,7 +2858,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
@@ -2995,7 +2892,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
@@ -3031,7 +2927,6 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_19>::type _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
@@ -3066,7 +2961,6 @@ inline void disguised_caller_count(void(Class::*_function)() const, const Class 
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -3084,7 +2978,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0) const, const Clas
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
@@ -3104,7 +2997,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1) const, const 
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
@@ -3125,7 +3017,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2) const, co
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
@@ -3147,7 +3038,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3) const
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -3170,7 +3060,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4) c
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
@@ -3194,7 +3083,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
@@ -3219,7 +3107,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
@@ -3245,7 +3132,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
@@ -3272,7 +3158,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
@@ -3300,7 +3185,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
@@ -3329,7 +3213,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
@@ -3359,7 +3242,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
@@ -3390,7 +3272,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
@@ -3422,7 +3303,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
@@ -3455,7 +3335,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
@@ -3489,7 +3368,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
@@ -3524,7 +3402,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
@@ -3560,7 +3437,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
@@ -3597,7 +3473,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
@@ -3635,7 +3510,6 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_19>::type _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
@@ -3672,7 +3546,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -3688,7 +3561,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 #endif
@@ -3706,7 +3578,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
@@ -3725,7 +3596,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
@@ -3745,7 +3615,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -3766,7 +3635,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
 	typename framework::converter<_2>::type _v2 = va_arg(_args.args, framework::member*)->cast<_2>();
@@ -3788,7 +3656,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
 	typename framework::converter<_3>::type _v3 = va_arg(_args.args, framework::member*)->cast<_3>();
@@ -3811,7 +3678,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
 	typename framework::converter<_4>::type _v4 = va_arg(_args.args, framework::member*)->cast<_4>();
@@ -3835,7 +3701,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
 	typename framework::converter<_5>::type _v5 = va_arg(_args.args, framework::member*)->cast<_5>();
@@ -3860,7 +3725,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
 	typename framework::converter<_6>::type _v6 = va_arg(_args.args, framework::member*)->cast<_6>();
@@ -3886,7 +3750,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
 	typename framework::converter<_7>::type _v7 = va_arg(_args.args, framework::member*)->cast<_7>();
@@ -3913,7 +3776,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
 	typename framework::converter<_8>::type _v8 = va_arg(_args.args, framework::member*)->cast<_8>();
@@ -3941,7 +3803,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
 	typename framework::converter<_9>::type _v9 = va_arg(_args.args, framework::member*)->cast<_9>();
@@ -3970,7 +3831,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
 	typename framework::converter<_10>::type _v10 = va_arg(_args.args, framework::member*)->cast<_10>();
@@ -4000,7 +3860,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
 	typename framework::converter<_11>::type _v11 = va_arg(_args.args, framework::member*)->cast<_11>();
@@ -4031,7 +3890,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
 	typename framework::converter<_12>::type _v12 = va_arg(_args.args, framework::member*)->cast<_12>();
@@ -4063,7 +3921,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
 	typename framework::converter<_13>::type _v13 = va_arg(_args.args, framework::member*)->cast<_13>();
@@ -4096,7 +3953,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
 	typename framework::converter<_14>::type _v14 = va_arg(_args.args, framework::member*)->cast<_14>();
@@ -4130,7 +3986,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
 	typename framework::converter<_15>::type _v15 = va_arg(_args.args, framework::member*)->cast<_15>();
@@ -4165,7 +4020,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
 	typename framework::converter<_16>::type _v16 = va_arg(_args.args, framework::member*)->cast<_16>();
@@ -4201,7 +4055,6 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 	typename framework::converter<_0>::type _v0 = va_arg(_args.args, framework::member*)->cast<_0>();
 	typename framework::converter<_1>::type _v1 = va_arg(_args.args, framework::member*)->cast<_1>();
 #endif
-	
 	typename framework::converter<_19>::type _v19 = va_arg(_args.args, framework::member*)->cast<_19>();
 	typename framework::converter<_18>::type _v18 = va_arg(_args.args, framework::member*)->cast<_18>();
 	typename framework::converter<_17>::type _v17 = va_arg(_args.args, framework::member*)->cast<_17>();
@@ -4236,7 +4089,6 @@ inline void disguised_caller_format(Return(*_function)(), framework::member * _d
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -4252,7 +4104,6 @@ inline void disguised_caller_format(Return(*_function)(_0), framework::member * 
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
@@ -4270,7 +4121,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1), framework::membe
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
@@ -4289,7 +4139,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2), framework::m
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
@@ -4309,7 +4158,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3), framewor
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -4330,7 +4178,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4), fram
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
@@ -4352,7 +4199,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5), 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
@@ -4375,7 +4221,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
@@ -4399,7 +4244,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
@@ -4424,7 +4268,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
@@ -4450,7 +4293,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
@@ -4477,7 +4319,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
@@ -4505,7 +4346,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
@@ -4534,7 +4374,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
@@ -4564,7 +4403,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
@@ -4595,7 +4433,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
@@ -4627,7 +4464,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
@@ -4660,7 +4496,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
@@ -4694,7 +4529,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
@@ -4729,7 +4563,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
@@ -4765,7 +4598,6 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_19 _v19 = format_cast<_19>(_args, _format);
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
@@ -4800,7 +4632,6 @@ inline void disguised_caller_format(void(*_function)(), framework::member * _des
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -4818,7 +4649,6 @@ inline void disguised_caller_format(void(*_function)(_0), framework::member * _d
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
@@ -4838,7 +4668,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1), framework::member 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
@@ -4859,7 +4688,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::mem
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
@@ -4881,7 +4709,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3), framework:
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -4904,7 +4731,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4), framew
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
@@ -4928,7 +4754,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5), fr
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
@@ -4953,7 +4778,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6)
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
@@ -4979,7 +4803,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
@@ -5006,7 +4829,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
@@ -5034,7 +4856,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
@@ -5063,7 +4884,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
@@ -5093,7 +4913,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
@@ -5124,7 +4943,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
@@ -5156,7 +4974,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
@@ -5189,7 +5006,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
@@ -5223,7 +5039,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
@@ -5258,7 +5073,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
@@ -5294,7 +5108,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
@@ -5331,7 +5144,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
@@ -5369,7 +5181,6 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_19 _v19 = format_cast<_19>(_args, _format);
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
@@ -5406,7 +5217,6 @@ inline void disguised_caller_format(Return(Class::*_function)(), Class * _instan
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -5422,7 +5232,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0), Class * _inst
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
@@ -5440,7 +5249,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1), Class * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
@@ -5459,7 +5267,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2), Class
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
@@ -5479,7 +5286,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3), C
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -5500,7 +5306,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
@@ -5522,7 +5327,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
@@ -5545,7 +5349,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
@@ -5569,7 +5372,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
@@ -5594,7 +5396,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
@@ -5620,7 +5421,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
@@ -5647,7 +5447,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
@@ -5675,7 +5474,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
@@ -5704,7 +5502,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
@@ -5734,7 +5531,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
@@ -5765,7 +5561,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
@@ -5797,7 +5592,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
@@ -5830,7 +5624,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
@@ -5864,7 +5657,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
@@ -5899,7 +5691,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
@@ -5935,7 +5726,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_19 _v19 = format_cast<_19>(_args, _format);
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
@@ -5970,7 +5760,6 @@ inline void disguised_caller_format(void(Class::*_function)(), Class * _instance
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -5988,7 +5777,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0), Class * _instan
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
@@ -6008,7 +5796,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1), Class * _in
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
@@ -6029,7 +5816,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2), Class *
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
@@ -6051,7 +5837,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3), Cla
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -6074,7 +5859,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4),
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
@@ -6098,7 +5882,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
@@ -6123,7 +5906,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
@@ -6149,7 +5931,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
@@ -6176,7 +5957,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
@@ -6204,7 +5984,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
@@ -6233,7 +6012,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
@@ -6263,7 +6041,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
@@ -6294,7 +6071,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
@@ -6326,7 +6102,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
@@ -6359,7 +6134,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
@@ -6393,7 +6167,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
@@ -6428,7 +6201,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
@@ -6464,7 +6236,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
@@ -6501,7 +6272,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
@@ -6539,7 +6309,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_19 _v19 = format_cast<_19>(_args, _format);
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
@@ -6576,7 +6345,6 @@ inline void disguised_caller_format(Return(Class::*_function)() const, const Cla
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -6592,7 +6360,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0) const, const C
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
@@ -6610,7 +6377,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1) const, con
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
@@ -6629,7 +6395,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2) const,
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
@@ -6649,7 +6414,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3) co
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -6670,7 +6434,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
@@ -6692,7 +6455,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
@@ -6715,7 +6477,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
@@ -6739,7 +6500,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
@@ -6764,7 +6524,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
@@ -6790,7 +6549,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
@@ -6817,7 +6575,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
@@ -6845,7 +6602,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
@@ -6874,7 +6630,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
@@ -6904,7 +6659,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
@@ -6935,7 +6689,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
@@ -6967,7 +6720,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
@@ -7000,7 +6752,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
@@ -7034,7 +6785,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
@@ -7069,7 +6819,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
@@ -7105,7 +6854,6 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_19 _v19 = format_cast<_19>(_args, _format);
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
@@ -7140,7 +6888,6 @@ inline void disguised_caller_format(void(Class::*_function)() const, const Class
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -7158,7 +6905,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0) const, const Cla
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
@@ -7178,7 +6924,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1) const, const
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
@@ -7199,7 +6944,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2) const, c
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
@@ -7221,7 +6965,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3) cons
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -7244,7 +6987,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4) 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
@@ -7268,7 +7010,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
@@ -7293,7 +7034,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
@@ -7319,7 +7059,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
@@ -7346,7 +7085,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
@@ -7374,7 +7112,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
@@ -7403,7 +7140,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
@@ -7433,7 +7169,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
@@ -7464,7 +7199,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
@@ -7496,7 +7230,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
@@ -7529,7 +7262,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
@@ -7563,7 +7295,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
@@ -7598,7 +7329,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
@@ -7634,7 +7364,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
@@ -7671,7 +7400,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
@@ -7709,7 +7437,6 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_19 _v19 = format_cast<_19>(_args, _format);
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
@@ -7746,7 +7473,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 #endif
 
@@ -7762,7 +7488,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_0 _v0 = format_cast<_0>(_args, _format);
 #endif
@@ -7780,7 +7505,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
 	_0 _v0 = format_cast<_0>(_args, _format);
@@ -7799,7 +7523,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
 	_1 _v1 = format_cast<_1>(_args, _format);
@@ -7819,7 +7542,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)))
@@ -7840,7 +7562,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
 	_2 _v2 = format_cast<_2>(_args, _format);
@@ -7862,7 +7583,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
 	_3 _v3 = format_cast<_3>(_args, _format);
@@ -7885,7 +7605,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
 	_4 _v4 = format_cast<_4>(_args, _format);
@@ -7909,7 +7628,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
 	_5 _v5 = format_cast<_5>(_args, _format);
@@ -7934,7 +7652,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
 	_6 _v6 = format_cast<_6>(_args, _format);
@@ -7960,7 +7677,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
 	_7 _v7 = format_cast<_7>(_args, _format);
@@ -7987,7 +7703,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
 	_8 _v8 = format_cast<_8>(_args, _format);
@@ -8015,7 +7730,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
 	_9 _v9 = format_cast<_9>(_args, _format);
@@ -8044,7 +7758,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
 	_10 _v10 = format_cast<_10>(_args, _format);
@@ -8074,7 +7787,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
 	_11 _v11 = format_cast<_11>(_args, _format);
@@ -8105,7 +7817,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
 	_12 _v12 = format_cast<_12>(_args, _format);
@@ -8137,7 +7848,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
 	_13 _v13 = format_cast<_13>(_args, _format);
@@ -8170,7 +7880,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
 	_14 _v14 = format_cast<_14>(_args, _format);
@@ -8204,7 +7913,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
 	_15 _v15 = format_cast<_15>(_args, _format);
@@ -8239,7 +7947,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);
 	_16 _v16 = format_cast<_16>(_args, _format);
@@ -8275,7 +7982,6 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 	_0 _v0 = format_cast<_0>(_args, _format);
 	_1 _v1 = format_cast<_1>(_args, _format);
 #endif
-	
 	_19 _v19 = format_cast<_19>(_args, _format);
 	_18 _v18 = format_cast<_18>(_args, _format);
 	_17 _v17 = format_cast<_17>(_args, _format);

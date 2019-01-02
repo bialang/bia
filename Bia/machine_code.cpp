@@ -13,6 +13,16 @@ machine_code::machine_code(std::pair<const void*, size_t> _machine_code, machine
 	// Allocate
 	_entry_point = this->_machine_schein.executable_allocator()->allocate_executable(_machine_code.second);
 
+	for (auto i = 0; i < _machine_code.second; ++i) {
+		printf("%02x ", static_cast<const uint8_t*>(_machine_code.first)[i]);
+
+		if ((i + 1) % 20 == 0) {
+			puts("");
+		}
+	}
+
+	puts("");
+
 	// Copy code
 	memcpy(_entry_point.first, _machine_code.first, _machine_code.second);
 	this->_machine_schein.executable_allocator()->protect_executable(_entry_point, memory::executable_allocator::PF_EXECUTE);

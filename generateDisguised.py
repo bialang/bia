@@ -349,8 +349,7 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}}
 #if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)){pre_preparations}
-#endif
-	{preparations}
+#endif{preparations}
 #if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))){post_preparations}
 #endif
 
