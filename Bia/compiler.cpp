@@ -513,7 +513,11 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 			}
 		}
 
-		_format.append(_passer.compensatory_pushes(), 'r');
+		if (_count && _count <= machine::platform::varg_member_passer::varg_register_passes()) {
+			_format.insert(_format.begin(), _passer.compensatory_pushes(), 'r');
+		} else {
+			_format.append(_passer.compensatory_pushes(), 'r');
+		}
 
 		_counter.pop(_old);
 	}
