@@ -63,20 +63,22 @@ inline void test_and_time(int _count, Lambda && _lambda)
 
 using namespace bia;
 
-void test()
+auto test()
 {
 	puts("hello world");
+
+	return 61;
 }
 
 int main()
 {
 	bia::machine::memory::big_int_allocator::initialize(std::make_shared<bia::machine::memory::simple_allocator>());
-	
+
 	{
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
-		
+
 		_context.set_lambda("ser", [](int i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
@@ -164,7 +166,7 @@ print i<#
 		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
 		bia::stream::buffer_output_stream _output;
 		bia::compiler::compiler _compiler(_output, _context);
-		
+
 		test_and_time(1, [&]() {
 			bia::grammar::syntax::interpreter().interpret(_input, _compiler, _context);
 		});

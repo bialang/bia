@@ -1,5 +1,5 @@
 # Bia
-Embedded C++11 Scripting Language
+Embedded C++14 Scripting Language
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hgg15mmsrffx3dua/branch/master?svg=true)](https://ci.appveyor.com/project/terrakuh/bia/branch/master)
 

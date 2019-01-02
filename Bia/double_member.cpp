@@ -51,19 +51,19 @@ void double_member::operator_call(member * _destination, operator_type _operator
 
 void double_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
 {
-	if (_destination) {
-		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
-	} else {
+	if (_destination == this) {
 		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
 	}
 }
 
 void double_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
 {
-	if (_destination) {
-		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
-	} else {
+	if (_destination == this) {
 		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
 	}
 }
 
@@ -74,10 +74,10 @@ void BIA_MEMBER_CALLING_CONVENTION double_member::operator_call_big_int(member *
 
 void double_member::operator_call_double(member * _destination, operator_type _operator, double _right)
 {
-	if (_destination) {
-		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
-	} else {
+	if (_destination == this) {
 		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
+	} else {
+		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
 	}
 }
 
