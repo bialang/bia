@@ -127,8 +127,14 @@ set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "membe
 
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
 
-set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_MACHINE} ${Bia_HEADER_FILES_LINK} ${Bia_HEADER_FILES_MEMORY} ${Bia_HEADER_FILES_MODULAR} ${Bia_HEADER_FILES_PLATFORM})
-set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_MACHINE} ${Bia_SOURCE_FILES_LINK} ${Bia_SOURCE_FILES_MEMORY} ${Bia_SOURCE_FILES_MODULAR})
+set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "virtual_machine_code.hpp" "virtual_translator.hpp")
+set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "virtual_machine_code.cpp")
+
+source_group("Header Files\\machine\\virtual_machine" FILES ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
+source_group("Source Files\\machine\\virtual_machine" FILES ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
+
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_MACHINE} ${Bia_HEADER_FILES_LINK} ${Bia_HEADER_FILES_MEMORY} ${Bia_HEADER_FILES_MODULAR} ${Bia_HEADER_FILES_PLATFORM} ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_MACHINE} ${Bia_SOURCE_FILES_LINK} ${Bia_SOURCE_FILES_MEMORY} ${Bia_SOURCE_FILES_MODULAR} ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
 
 # stream namespace
 set(Bia_HEADER_FILES_STREAM "buffer_input_stream.hpp" "buffer_output_stream.hpp" "file_input_stream.hpp" "file_output_stream.hpp" "input_stream.hpp" "output_stream.hpp" "string_stream.hpp")
@@ -147,18 +153,6 @@ set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "loca
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
-
-
-# virtual_machine namespace
-set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp")
-set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "")
-
-source_group("Header Files\\virtual_machine" FILES ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
-source_group("Source Files\\virtual_machine" FILES ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
-
-set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
-set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
-
 
 
 # Adding the library

@@ -225,6 +225,7 @@
     <ClCompile Include="utf32.cpp" />
     <ClCompile Include="utf8.cpp" />
     <ClCompile Include="variable_index.cpp" />
+    <ClCompile Include="virtual_machine_code.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allocator.hpp" />
@@ -254,6 +255,7 @@
     <ClInclude Include="big_int_allocator.hpp" />
     <ClInclude Include="object_def.hpp" />
     <ClInclude Include="object_variable.hpp" />
+    <ClInclude Include="op_code.hpp" />
     <ClInclude Include="raw_object_def.hpp" />
     <ClInclude Include="script_map.hpp" />
     <ClInclude Include="share_def.hpp" />
@@ -327,7 +329,7 @@
     <ClInclude Include="static_function.hpp" />
     <ClInclude Include="string_manager.hpp" />
     <ClInclude Include="temp_counter.hpp" />
-    <ClInclude Include="toolset.hpp" />
+    <ClInclude Include="x86_translator.hpp" />
     <ClInclude Include="architecture.hpp" />
     <ClInclude Include="type_traits.hpp" />
     <ClInclude Include="undefined_member.hpp" />
@@ -337,7 +339,9 @@
     <ClInclude Include="utf8.hpp" />
     <ClInclude Include="varg_member_passer.hpp" />
     <ClInclude Include="variable_index.hpp" />
+    <ClInclude Include="virtual_machine_code.hpp" />
     <ClInclude Include="virtual_object.hpp" />
+    <ClInclude Include="virtual_translator.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
