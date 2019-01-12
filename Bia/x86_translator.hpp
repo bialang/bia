@@ -27,7 +27,7 @@ namespace platform
 {
 
 #if defined(BIA_COMPILER_MSVC) || defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)
-class toolset
+class x86_translator
 {
 public:
 	enum class JUMP
@@ -60,7 +60,7 @@ public:
 	 *
 	 * @throws See architecture::instruction().
 	*/
-	toolset(stream::output_stream & _output, machine_context * _context) : _output(&_output), _global_passer(&_output)
+	x86_translator(stream::output_stream & _output, machine_context * _context) : _output(&_output), _global_passer(&_output)
 	{
 		this->_context = _context;
 
