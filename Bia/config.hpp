@@ -13,7 +13,7 @@
 //#elif defined(__IBMC__) || defined(__IBMCPP__)
 //#elif defined(__SUNPRO_C)  || defined(__SUNPRO_CC)
 #else
-#error "Unsupported compiler."
+#define BIA_COMPILER_UNKNOWN
 #endif
 
 //Operating System
@@ -22,7 +22,7 @@
 #elif defined(__linux__)
 #define BIA_OS_LINUX 1
 #else
-#error "Unsupported operating system."
+#define BIA_OS_UNKNOWN
 #endif
 
 // Architecture
@@ -31,7 +31,7 @@
 #elif defined(__x86_64__) || defined(_M_X64)
 #define BIA_ARCHITECTURE_X86_64 1
 #else
-#error "Unsupported architecture."
+#define BIA_ARCHITECTURE_UNKNOWN
 #endif
 
 // Microsoft
@@ -72,6 +72,17 @@
 #define BIA_MEMBER_CALLING_CONVENTION
 #define BIA_VARG_MEMBER_CALLING_CONVENTION
 #endif
+
+// Export
+#define BIA_EXPORT
+
+// Unknown compiler
+#else
+
+// Calling conventions
+#define BIA_STATIC_CALLING_CONVETION
+#define BIA_MEMBER_CALLING_CONVENTION
+#define BIA_VARG_MEMBER_CALLING_CONVENTION
 
 // Export
 #define BIA_EXPORT
@@ -136,7 +147,7 @@ class disassembler;
 namespace platform
 {
 
-class toolset;
+class x86_toolset;
 
 }
 }
