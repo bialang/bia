@@ -14,7 +14,7 @@ namespace machine
 namespace virtual_machine
 {
 
-virtual_machine_code::virtual_machine_code()
+virtual_machine_code::virtual_machine_code(memory::const_universal_allocation _code) : _code(memory::cast_allocation<const uint8_t>(_code))
 {
 }
 

@@ -197,6 +197,8 @@ public:
 
 /** An universal allocation. */
 typedef allocation<void> universal_allocation;
+/** An universal allocation. */
+typedef allocation<const void> const_universal_allocation;
 
 
 /**
