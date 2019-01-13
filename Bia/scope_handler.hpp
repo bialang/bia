@@ -37,7 +37,7 @@ private:
 	std::vector<variable_index_type> _variables_in_scopes;
 	machine::virtual_machine::virtual_translator & _translator;
 	/** Holds the position of the local variable creation. */
-	machine::virtual_machine::virtual_translator::position_type _start_position;
+	machine::virtual_machine::virtual_translator::position_t _start_position;
 };
 
 }

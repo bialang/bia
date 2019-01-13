@@ -73,8 +73,8 @@ public:
 			stream::string_stream::length_type length;
 		} rt_string;
 		framework::member * rt_member;
-		machine::virtual_machine::virtual_translator::temp_index_type rt_temp_member;
-		machine::virtual_machine::virtual_translator::local_index_type rt_local_member;
+		machine::virtual_machine::member_index_t rt_temp_member;
+		machine::virtual_machine::member_index_t rt_local_member;
 	};
 
 	/**
@@ -270,7 +270,7 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return_temp(machine::virtual_machine::virtual_translator::temp_index_type _value) noexcept
+	void set_return_temp(machine::virtual_machine::member_index_t _value) noexcept
 	{
 		clean();
 
@@ -285,7 +285,7 @@ public:
 	 *
 	 * @param _value The value.
 	*/
-	void set_return_local(machine::virtual_machine::virtual_translator::local_index_type _value) noexcept
+	void set_return_local(machine::virtual_machine::member_index_t _value) noexcept
 	{
 		clean();
 

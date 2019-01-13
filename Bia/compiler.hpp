@@ -71,7 +71,7 @@ private:
 	/** Manages all scopes and their local variables. */
 	scope_handler _scope_handler;
 	/** A list of task that need to be executed before the script is finished. */
-	std::vector<std::pair<machine::virtual_machine::virtual_translator::position_type, std::function<void()>>> _finish_tasks;
+	std::vector<std::pair<machine::virtual_machine::virtual_translator::position_t, std::function<void()>>> _finish_tasks;
 
 	/**
 	 * Executes the given member.

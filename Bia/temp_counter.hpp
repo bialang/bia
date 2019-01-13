@@ -23,7 +23,7 @@ class temp_counter
 {
 public:
 	/** The counter type. */
-	typedef machine::virtual_machine::virtual_translator::temp_index_type counter_type;
+	typedef machine::virtual_machine::member_index_t counter_type;
 
 	/**
 	 * Constructor.

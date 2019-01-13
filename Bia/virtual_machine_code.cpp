@@ -36,6 +36,10 @@ void virtual_machine_code::execute()
 
 		break;
 	}
+	case OC_INSTANTIATE_I32:
+	{
+		break;
+	}
 	default:
 		break;
 	}

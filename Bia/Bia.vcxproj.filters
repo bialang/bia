@@ -109,6 +109,9 @@
     <Filter Include="Header Files\machine\virtual_machine">
       <UniqueIdentifier>{9dbedc63-6566-4c0d-8633-bff1e8d534a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\machine\virtual_machine">
+      <UniqueIdentifier>{a46065d0-f799-448f-8e9b-2c2eb7318795}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -211,7 +214,10 @@
       <Filter>Source Files\compiler</Filter>
     </ClCompile>
     <ClCompile Include="virtual_machine_code.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\machine\virtual_machine</Filter>
+    </ClCompile>
+    <ClCompile Include="virtual_translator.cpp">
+      <Filter>Source Files\machine\virtual_machine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

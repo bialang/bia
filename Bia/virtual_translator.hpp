@@ -16,6 +16,19 @@ namespace virtual_machine
 class virtual_translator
 {
 public:
+	struct index
+	{
+		member_index_t value;
+		virtual ~index() = default;
+
+	protected:
+		index() = default;
+	};
+
+	struct member_index : index
+	{
+	};
+
 	enum class JUMP
 	{
 		JUMP,
@@ -23,25 +36,12 @@ public:
 		JUMP_IF_FALSE
 	};
 
-	typedef stream::output_stream::cursor_type position_type;
-	typedef int32_t temp_index_type;
-	typedef int32_t local_index_type;
+	typedef stream::output_stream::cursor_type position_t;
 
 
 
-	virtual_translator(stream::output_stream & _output)
-	{
-		this->_output = &_output;
-
-		_temp_member_pos = _output.position();
-
-		_output.write_all(OC_CREATE_TEMP_MEMBERS, temp_index_type(0));
-
-		_setup_end_pos = _output.position();
-	}
-	void open_scope()
-	{
-	}
+	virtual_translator(stream::output_stream & _output);
+	void open_scope();
 	/**
 	 * Finalizes the ouput result.
 	 *
@@ -54,27 +54,9 @@ public:
 	 *
 	 * @throws See stream::output_stream::position(), stream::output_stream::write_all(), stream::output_stream::set_position() and stream::output_stream::set_beginning().
 	*/
-	void finalize(temp_index_type _temp_count)
-	{
-		// Update first instruction
-		if (_temp_count) {
-			// Update
-			auto _current_pos = _output->position();
-
-			_output->set_position(_temp_member_pos);
-			_output->write_all(OC_CREATE_TEMP_MEMBERS, _temp_count);
-			_output->set_position(_current_pos);
-		} // Skip temp member creation
-		else {
-			_output->set_beginning(_setup_end_pos);
-		}
-
-		_output->write_all(OC_RETURN);
-	}
-	position_type jump(JUMP _type, position_type _destination = 0, position_type _overwrite_pos = -1)
-	{
-		BIA_NOT_IMPLEMENTED;
-	}
+	void finalize(member_index_t _temp_count);
+	void pass_parameter(const index & _index);
+	position_t jump(JUMP _type, position_t _destination = 0, position_t _overwrite_pos = -1);
 	/**
 	 * Retruns the output stream of the translator.
 	 *
@@ -83,18 +65,16 @@ public:
 	 *
 	 * @return A reference to the output stream.
 	*/
-	stream::output_stream & output_stream() noexcept
-	{
-		return *_output;
-	}
+	stream::output_stream & output_stream() noexcept;
+	member_index member(void * _address);
 
 private:
 	/** The current output stream. */
 	stream::output_stream * _output;
 	/** The end position of the setup. */
-	position_type _setup_end_pos;
+	position_t _setup_end_pos;
 	/** The position before the temp member creation. */
-	position_type _temp_member_pos;
+	position_t _temp_member_pos;
 	std::map<void*, int> _member_index;
 };
 

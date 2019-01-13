@@ -571,7 +571,7 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 	using namespace machine::virtual_machine;
 	using JUMP = virtual_translator::JUMP;
 
-	std::vector<virtual_translator::position_type> _end_jumps;
+	std::vector<virtual_translator::position_t> _end_jumps;
 
 	for (auto i = _report + 1; i < _report->content.end;) {
 		// Else statement
@@ -637,7 +637,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 	++_report;
 
-	virtual_translator::position_type _do_jump_update = -1;
+	virtual_translator::position_t _do_jump_update = -1;
 
 	// Do loop
 	if (_report->content.keyword == grammar::IS_DO) {
@@ -651,7 +651,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 	// Write loop condition
 	auto _compile = true;
-	virtual_translator::position_type _condition_jump_update = -1;
+	virtual_translator::position_t _condition_jump_update = -1;
 
 	_loop_tracker.open_loop(_translator.output_stream().position());
 	_value.set_return();

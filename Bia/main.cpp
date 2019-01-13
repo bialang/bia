@@ -90,10 +90,10 @@ int main()
 			printf("w: %i\n", p->a);
 			//p.a = 34343434;
 		});
-		/*_context.set_lambda("print", [](bia::framework::member * _member) {
+		_context.set_lambda("print", [](bia::framework::member * _member) {
 			_member->print();
 		});
-		_context.set_lambda("int", [](bia::framework::member * _member) {
+		/*_context.set_lambda("int", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
 			}
