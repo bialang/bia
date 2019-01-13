@@ -17,7 +17,12 @@ enum OP_CODE : op_code_type
 	/** Returns from the current function. */
 	OC_RETURN,
 	OC_CREATE_TEMP_MEMBERS,
-	PUSH,
+	OC_PARAM_M,
+	OC_PARAM_T,
+	OC_PARAM_L,
+	OC_PARAM_I32,
+	OC_PARAM_I64,
+	OC_PARAM_D,
 	/** Calls the print function of an member. */
 	OC_OCALL_PRINT,
 	/** Calls the copy function of an member. */

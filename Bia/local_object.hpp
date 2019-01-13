@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <utility>
+#include <array>
 
 
 namespace bia
@@ -63,7 +64,7 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Object does not fit.");
 
-		return new(_object_space) Ty(std::forward<Arguments>(_arguements)...);
+		return new(_object_space.begin()) Ty(std::forward<Arguments>(_arguements)...);
 	}
 	/**
 	 * Returns the address of the local object as @a Ty.
@@ -80,7 +81,7 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Wrong object type.");
 
-		return reinterpret_cast<Ty*>(_object_space);
+		return reinterpret_cast<Ty*>(_object_space.begin());
 	}
 	/**
 	 * Returns the address of the local object as @a Ty.
@@ -97,12 +98,12 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Wrong object type.");
 
-		return reinterpret_cast<const Ty*>(_object_space);
+		return reinterpret_cast<const Ty*>(_object_space.begin());
 	}
 
 private:
 	/** The space which stores the local object. */
-	int8_t _object_space[Size];
+	std::array<int8_t, Size> _object_space;
 };
 
 }

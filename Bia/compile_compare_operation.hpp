@@ -5,7 +5,7 @@
 #include <utility>
 
 #include "exception.hpp"
-#include "toolset.hpp"
+#include "virtual_translator.hpp"
 #include "compiler_value.hpp"
 #include "operator.hpp"
 #include "operation.hpp"
@@ -33,10 +33,10 @@ public:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @param [in] _toolset The toolset.
+	 * @param [in] _translator The translator.
 	 * @param [in] _value The compiler value.
 	*/
-	compile_compare_operation(machine::platform::toolset & _toolset, compiler_value & _value) noexcept : _toolset(_toolset), _value(_value)
+	compile_compare_operation(machine::virtual_machine::virtual_translator & _translator, compiler_value & _value) noexcept : _translator(_translator), _value(_value)
 	{
 	}
 	/**
@@ -68,18 +68,18 @@ public:
 			left_member_operation(_left.value().rt_member, _operator, _right);
 
 			break;
-		case VT::TEMPORARY_MEMBER:
+		/*case VT::TEMPORARY_MEMBER:
 			left_member_operation(machine::platform::toolset::to_temp_member(_left.value().rt_temp_member), _operator, _right);
 
-			break;
+			break;*/
 		default:
 			BIA_IMPLEMENTATION_ERROR;
 		}
 	}
 
 private:
-	/** The toolset. */
-	machine::platform::toolset & _toolset;
+	/** The translator. */
+	machine::virtual_machine::virtual_translator & _translator;
 	/** The compiler value. */
 	compiler_value & _value;
 
@@ -100,6 +100,8 @@ private:
 	template<typename Member>
 	void left_member_operation(Member && _member, framework::operator_type _operator, compiler_value _right)
 	{
+		BIA_NOT_IMPLEMENTED;
+		/*
 		using VT = compiler_value::VALUE_TYPE;
 		using T = machine::platform::toolset;
 
@@ -136,7 +138,7 @@ private:
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		_value.set_return_test();
+		_value.set_return_test();*/
 	}
 	/**
 	 * Executes the compare operator.
@@ -156,7 +158,8 @@ private:
 	template<typename Left, typename Right>
 	void left_constant_right_member_operation(Left && _left, framework::operator_type _operator, Right && _right)
 	{
-		if (std::is_same<typename std::remove_reference<Left>::type, int64_t>::value) {
+		BIA_NOT_IMPLEMENTED;
+		/*if (std::is_same<typename std::remove_reference<Left>::type, int64_t>::value) {
 			// Is int32
 			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
 				_toolset.call_static(&machine::link::compare_operation_int32, _operator, _right, static_cast<int32_t>(_left));
@@ -167,7 +170,7 @@ private:
 			_toolset.call_static(&machine::link::compare_operation_double, _operator, _right, _left);
 		}
 
-		_value.set_return_test();
+		_value.set_return_test();*/
 	}
 	/**
 	 * Executes the compare operator.
@@ -201,10 +204,10 @@ private:
 			left_constant_right_member_operation(std::forward<Left>(_left), _operator, _right.value().rt_member);
 
 			break;
-		case VT::TEMPORARY_MEMBER:
+		/*case VT::TEMPORARY_MEMBER:
 			left_constant_right_member_operation(std::forward<Left>(_left), _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
 
-			break;
+			break;*/
 		default:
 			BIA_IMPLEMENTATION_ERROR;
 		}

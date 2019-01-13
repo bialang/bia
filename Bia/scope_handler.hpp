@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "member.hpp"
-#include "toolset.hpp"
+#include "virtual_translator.hpp"
 #include "temp_counter.hpp"
 
 
@@ -18,11 +18,11 @@ class scope_handler
 public:
 	typedef size_t scope_id_type;
 	typedef const char* key_type;
-	typedef machine::platform::toolset::local_index_type variable_index_type;
+	typedef machine::virtual_machine::virtual_translator::local_index_type variable_index_type;
 
 	constexpr static variable_index_type not_found = -1;
 
-	scope_handler(machine::platform::toolset & _toolset);
+	scope_handler(machine::virtual_machine::virtual_translator & _translator);
 	void open_scope();
 	void close_scope();
 	bool no_open_scopes() const noexcept;
@@ -35,9 +35,9 @@ private:
 	/** Holds all local variables associated with their name. */
 	std::map<key_type, std::pair<variable_index_type, scope_id_type>> _variables;
 	std::vector<variable_index_type> _variables_in_scopes;
-	machine::platform::toolset & _toolset;
+	machine::virtual_machine::virtual_translator & _translator;
 	/** Holds the position of the local variable creation. */
-	machine::platform::toolset::position_type _start_position;
+	machine::virtual_machine::virtual_translator::position_type _start_position;
 };
 
 }

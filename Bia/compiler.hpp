@@ -8,7 +8,6 @@
 #include "config.hpp"
 #include "exception.hpp"
 #include "output_stream.hpp"
-#include "toolset.hpp"
 #include "report.hpp"
 #include "interpreter_id.hpp"
 #include "compiler_value.hpp"
@@ -19,10 +18,7 @@
 #include "compiler_loop_tracker.hpp"
 #include "scope_handler.hpp"
 #include "link.hpp"
-
-#include "interpreter.hpp"
-#include "interpreter_rule.hpp"
-#include "machine_code.hpp"
+#include "virtual_translator.hpp"
 
 
 
@@ -47,7 +43,7 @@ public:
 	 * @since 3.64.127.719
 	 * @date 16-May-18
 	 *
-	 * @throws See machine::platform::toolset::finalize().
+	 * @throws See machine::virtual_machine::virtual_translator::finalize().
 	*/
 	BIA_EXPORT void finalize();
 	//machine::machine_schein get_machine_schein();
@@ -68,14 +64,14 @@ private:
 	temp_counter _counter;
 	/** Tracks all open loops. */
 	compiler_loop_tracker _loop_tracker;
-	/** The compilers toolset for writing the machine code. */
-	machine::platform::toolset _toolset;
+	/** The compilers translator for writing the virtual machine code. */
+	machine::virtual_machine::virtual_translator _translator;
 	/** The context. */
 	machine::machine_context & _context;
 	/** Manages all scopes and their local variables. */
 	scope_handler _scope_handler;
 	/** A list of task that need to be executed before the script is finished. */
-	std::vector<std::pair<machine::platform::toolset::position_type, std::function<void()>>> _finish_tasks;
+	std::vector<std::pair<machine::virtual_machine::virtual_translator::position_type, std::function<void()>>> _finish_tasks;
 
 	/**
 	 * Executes the given member.
@@ -98,10 +94,11 @@ private:
 	 * @throws See machine::platform::toolset::call().
 	*/
 	template<typename Member, typename Destination>
-	void handle_parameter_execute(Member _member, Destination _destination, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::varg_member_passer & _passer)
+	void handle_parameter_execute(Member _member, Destination _destination, const std::string & _format, bool _mixed, uint32_t _count)
 	{
+		BIA_IMPLEMENTATION_ERROR;
 		// Execute without parameters
-		if (!_count) {
+		/*if (!_count) {
 			_toolset.call_virtual(&framework::member::execute, _member, _destination);
 		} // Formatted execute
 		else if (_mixed) {
@@ -112,12 +109,13 @@ private:
 		} // Only members as parameters
 		else {
 			_toolset.call_virtual(&framework::member::execute_count, _member, _passer, _destination, machine::platform::reserved_parameter(), _count);
-		}
+		}*/
 	}
 	template<typename Destination>
 	void handle_variable_declaration_helper(compiler_value _expression, Destination _destination)
 	{
-		using T = machine::platform::toolset;
+		BIA_NOT_IMPLEMENTED;
+		/*using T = machine::platform::toolset;
 		using VT = compiler_value::VALUE_TYPE;
 
 		switch (_expression.type()) {
@@ -184,7 +182,7 @@ private:
 			break;
 		default:
 			BIA_IMPLEMENTATION_ERROR;
-		}
+		}*/
 	}
 	/**
 	 * Tests the compiler value and returns a test value.
@@ -201,13 +199,9 @@ private:
 	 * @since 3.67.135.751
 	 * @date 6-Aug-18
 	 *
-	 * @param [in,out] _passer The varg parameter passer.
-	 *
-	 * @throws See machine::platform::varg_member_passer::pass().
-	 *
 	 * @return The char of the item type.
 	*/
-	BIA_EXPORT char handle_parameter_item(machine::platform::varg_member_passer & _passer);
+	BIA_EXPORT char handle_parameter_item();
 	/**
 	 * Handles a math expression or a math term token.
 	 *
@@ -317,7 +311,7 @@ private:
 			_value.set_return();
 
 			// Call assign operator
-			compile_normal_operation(_toolset, _value).operate(_left, _report[2].content.operator_code, _right);
+			compile_normal_operation(_translator, _value).operate(_left, _report[2].content.operator_code, _right);
 
 			// Set left as return
 			_value = _left;

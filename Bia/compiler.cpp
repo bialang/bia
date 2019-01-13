@@ -13,7 +13,7 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _toolset(_output, &_context), _context(_context), _scope_handler(_toolset)
+compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _translator(_output), _context(_context), _scope_handler(_translator)
 {
 }
 
@@ -24,17 +24,17 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 
 void compiler::finalize()
 {
-	_toolset.finalize(_counter.max());
+	_translator.finalize(_counter.max());
 
-	auto _end = _toolset.output_stream().position();
+	auto _end = _translator.output_stream().position();
 
 	// Finish tasks
 	for (auto & _task : _finish_tasks) {
-		_toolset.output_stream().set_position(_task.first);
+		_translator.output_stream().set_position(_task.first);
 		_task.second();
 	}
 
-	_toolset.output_stream().set_position(_end);
+	_translator.output_stream().set_position(_end);
 }
 
 void compiler::test_compiler_value()
@@ -54,7 +54,7 @@ void compiler::test_compiler_value()
 		_value.set_return(_value.value().rt_string.length != 0);
 
 		break;
-	case VT::MEMBER:
+	/*case VT::MEMBER:
 		_toolset.call_virtual(&framework::member::test, _value.value().rt_member);
 		_value.set_return_test();
 		_toolset.write_test();
@@ -73,7 +73,7 @@ void compiler::test_compiler_value()
 
 		break;
 	case VT::TEST_VALUE_REGISTER:
-		_toolset.write_test();
+		_toolset.write_test();*/
 	case VT::TEST_VALUE_CONSTANT:
 		break;
 	default:
@@ -81,12 +81,12 @@ void compiler::test_compiler_value()
 	}
 }
 
-char compiler::handle_parameter_item(machine::platform::varg_member_passer & _passer)
+char compiler::handle_parameter_item()
 {
 	using VT = compiler_value::VALUE_TYPE;
 
 	switch (_value.type()) {
-	case VT::TEST_VALUE_CONSTANT:
+	/*case VT::TEST_VALUE_CONSTANT:
 		_value.set_return(static_cast<int64_t>(_value.value().rt_test_result));
 	case VT::INT:
 	{
@@ -135,7 +135,7 @@ char compiler::handle_parameter_item(machine::platform::varg_member_passer & _pa
 	case VT::TEST_VALUE_REGISTER:
 		_passer.pass_varg(machine::platform::toolset::test_result_value());
 
-		return 'i';
+		return 'i';*/
 	default:
 		BIA_IMPLEMENTATION_ERROR;
 	}
@@ -143,8 +143,6 @@ char compiler::handle_parameter_item(machine::platform::varg_member_passer & _pa
 
 const grammar::report * compiler::handle_value_expression(const grammar::report * _report)
 {
-	using JUMP = machine::platform::toolset::JUMP;
-
 	const auto _end = _report->content.end;
 	auto _test = false;
 	///TODO
@@ -262,7 +260,7 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		}
 
 		// Call operator
-		compile_normal_operation(_toolset, _value).operate(_left, _operator, _right);
+		compile_normal_operation(_translator, _value).operate(_left, _operator, _right);
 
 		// Update if used
 		if (_value.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
@@ -294,7 +292,7 @@ const grammar::report * compiler::handle_condition_expression(const grammar::rep
 
 		// Call operator
 		///TODO: destination?
-		compile_compare_operation(_toolset, _value).operate(_left, _operator->content.operator_code, _value);
+		compile_compare_operation(_translator, _value).operate(_left, _operator->content.operator_code, _value);
 	}
 
 	return _report->content.end;
@@ -418,7 +416,8 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 		// Get refof/copyof
 		if (_function) {
-			_toolset.call_virtual(_function, _value.value().rt_member, machine::platform::toolset::to_temp_member(_counter.next()));
+			BIA_NOT_IMPLEMENTED;
+			//_toolset.call_virtual(_function, _value.value().rt_member, machine::platform::toolset::to_temp_member(_counter.next()));
 			_value.set_return_temp(_counter.current());
 		}
 	} else {
@@ -438,12 +437,13 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 				}
 
 				_destination.expand_to_member(nullptr, [&](auto _dest) {
-					if (/*std::is_same<decltype(_member), decltype(compiler_value::return_value::rt_member)>::value && */std::is_same<decltype(_dest), std::nullptr_t>::value) {
+					/*if (std::is_same<decltype(_dest), std::nullptr_t>::value) {
 						_destination.set_return_temp(_counter.next());
 						_toolset.call_virtual(&framework::member::object_member, _member, machine::platform::toolset::to_temp_member(_counter.current()), _report->content.member);
 					} else {
 						_toolset.call_virtual(&framework::member::object_member, _member, _dest, _report->content.member);
-					}
+					}*/
+					BIA_NOT_IMPLEMENTED;
 
 					_value = _destination;
 				});
@@ -458,7 +458,8 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 const grammar::report * compiler::handle_parameter(const grammar::report * _report, compiler_value _destination)
 {
-	using VT = compiler_value::VALUE_TYPE;
+	BIA_NOT_IMPLEMENTED;
+	/*using VT = compiler_value::VALUE_TYPE;
 
 	auto _caller = _value;
 	auto _passer = _toolset.create_varg_passer();
@@ -511,7 +512,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		});
 	});
 
-	return _report->content.end;
+	return _report->content.end;*/
 }
 
 const grammar::report * compiler::handle_string(const grammar::report * _report)
@@ -556,7 +557,8 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 		// Local variable
 		if (_local_variable) {
-			handle_variable_declaration_helper(_expression, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
+			BIA_NOT_IMPLEMENTED;
+			//handle_variable_declaration_helper(_expression, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
 		} else {
 			handle_variable_declaration_helper(_expression, _value.value().rt_member);
 		}
@@ -568,7 +570,10 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 const grammar::report * compiler::handle_if(const grammar::report * _report)
 {
-	std::vector<machine::platform::toolset::position_type> _end_jumps;
+	using namespace machine::virtual_machine;
+	using JUMP = virtual_translator::JUMP;
+
+	std::vector<virtual_translator::position_type> _end_jumps;
 
 	for (auto i = _report + 1; i < _report->content.end;) {
 		// Else statement
@@ -589,22 +594,22 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 		if (_value.type() != compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT || _value.value().rt_test_result) {
 			// Write jump
 			auto _constant = _value.type() == compiler_value::VALUE_TYPE::TEST_VALUE_CONSTANT;
-			auto _jump = _constant ? 0 : _toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE);
+			auto _jump = _constant ? 0 : _translator.jump(JUMP::JUMP_IF_FALSE);
 
 			// Compile statement
 			i = handle_root(i);
 
 			// Jump to end if it has not been reached
 			if (i < _report->content.end && !_constant) {
-				_end_jumps.push_back(_toolset.jump(machine::platform::toolset::JUMP::JUMP));
+				_end_jumps.push_back(_translator.jump(JUMP::JUMP));
 
 				// Update test jump to next statement
-				_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.output_stream().position(), _jump);
+				_translator.jump(JUMP::JUMP_IF_FALSE, _translator.output_stream().position(), _jump);
 			} // End of ifs or condition is at compile time true
 			else {
 				// Update test jump to ent
 				if (!_constant) {
-					_toolset.jump(machine::platform::toolset::JUMP::JUMP_IF_FALSE, _toolset.output_stream().position(), _jump);
+					_translator.jump(JUMP::JUMP_IF_FALSE, _translator.output_stream().position(), _jump);
 				}
 
 				break;
@@ -616,10 +621,10 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 	}
 
 	// Update end jump locations
-	auto _end = _toolset.output_stream().position();
+	auto _end = _translator.output_stream().position();
 
 	for (auto & _jump : _end_jumps) {
-		_toolset.jump(machine::platform::toolset::JUMP::JUMP, _end, _jump);
+		_translator.jump(JUMP::JUMP, _end, _jump);
 	}
 
 	return _report->content.end;
@@ -635,7 +640,7 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 	handle_value<false>(_report + 1, [this] {
 		// Call print function
 		switch (_value.type()) {
-		case VT::INT:
+		/*case VT::INT:
 		{
 			// Can be int32
 			if (_value.is_int32()) {
@@ -683,7 +688,7 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 			}
 
 			break;
-		}
+		}*/
 		default:
 			BIA_IMPLEMENTATION_ERROR;
 		}
@@ -694,29 +699,30 @@ const grammar::report * compiler::handle_print(const grammar::report * _report)
 
 const grammar::report * compiler::handle_test_loop(const grammar::report * _report)
 {
-	using namespace machine::platform;
+	using namespace machine::virtual_machine;
+	using JUMP = virtual_translator::JUMP;
 
 	const auto _end = _report->content.end;
 
 	++_report;
 
-	toolset::position_type _do_jump_update = -1;
+	virtual_translator::position_type _do_jump_update = -1;
 
 	// Do loop
 	if (_report->content.keyword == grammar::IS_DO) {
-		_do_jump_update = _toolset.jump(toolset::JUMP::JUMP);
+		_do_jump_update = _translator.jump(JUMP::JUMP);
 
 		++_report;
 	}
 
 	// Loop type
-	auto _jump_type = _report++->content.keyword == grammar::IS_WHILE ? toolset::JUMP::JUMP_IF_FALSE : toolset::JUMP::JUMP_IF_TRUE;
+	auto _jump_type = _report++->content.keyword == grammar::IS_WHILE ? JUMP::JUMP_IF_FALSE : JUMP::JUMP_IF_TRUE;
 
 	// Write loop condition
 	auto _compile = true;
-	toolset::position_type _condition_jump_update = -1;
+	virtual_translator::position_type _condition_jump_update = -1;
 
-	_loop_tracker.open_loop(_toolset.output_stream().position());
+	_loop_tracker.open_loop(_translator.output_stream().position());
 	_value.set_return();
 
 	_report = handle_value<true>(_report, [&] {
@@ -727,7 +733,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 				_compile = false;
 			} // Change to unconditional jump
 			else {
-				_jump_type = toolset::JUMP::JUMP;
+				_jump_type = JUMP::JUMP;
 			}
 
 			return;
@@ -736,36 +742,36 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		_condition_jump_update = _toolset.jump(_jump_type);
+		_condition_jump_update = _translator.jump(_jump_type);
 	});
 
 	// Compile loop body
 	if (_compile) {
 		// Update first jump of do loops
 		if (_do_jump_update != -1) {
-			_toolset.jump(toolset::JUMP::JUMP, _toolset.output_stream().position(), _do_jump_update);
+			_translator.jump(JUMP::JUMP, _translator.output_stream().position(), _do_jump_update);
 		}
 
 		handle_root(_report);
 
-		_toolset.jump(toolset::JUMP::JUMP, _loop_tracker.loop_start());
+		_translator.jump(JUMP::JUMP, _loop_tracker.loop_start());
 
 		// Update condition jump
-		auto _destination = _toolset.output_stream().position();
+		auto _destination = _translator.output_stream().position();
 
 		if (_condition_jump_update != -1) {
-			_toolset.jump(_jump_type, _destination, _condition_jump_update);
+			_translator.jump(_jump_type, _destination, _condition_jump_update);
 		}
 
 		// Update all end jump that occurred within the loop
 		for (auto _jump_update : _loop_tracker.end_jump_updates()) {
-			_toolset.jump(toolset::JUMP::JUMP, _destination, _jump_update);
+			_translator.jump(JUMP::JUMP, _destination, _jump_update);
 		}
 
 		_loop_tracker.close_loop();
 	} // Discard do jump instruction since loop is not compiled
 	else if (_do_jump_update != -1) {
-		_toolset.output_stream().set_position(_do_jump_update);
+		_translator.output_stream().set_position(_do_jump_update);
 	}
 
 	return _end;
@@ -775,15 +781,17 @@ const grammar::report * compiler::handle_loop_control(const grammar::report * _r
 {
 	if (_report->content.keyword == grammar::IS_DELETE) {
 		// Reset temp member
-		_finish_tasks.emplace_back(std::make_pair(_toolset.output_stream().position(), [this]() {
-			_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(_counter.max()));
+		_finish_tasks.emplace_back(std::make_pair(_translator.output_stream().position(), [this]() {
+			BIA_NOT_IMPLEMENTED;
+			//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(_counter.max()));
 		}));
-		_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(0));
+		BIA_NOT_IMPLEMENTED;
+		//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(0));
 	} else if (_loop_tracker.open_loops()) {
 		if (_report->content.keyword == grammar::IS_BREAK) {
-			_loop_tracker.add_end_update(_toolset.jump(machine::platform::toolset::JUMP::JUMP, 0));
+			_loop_tracker.add_end_update(_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, 0));
 		} else {
-			_toolset.jump(machine::platform::toolset::JUMP::JUMP, _loop_tracker.loop_start());
+			_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, _loop_tracker.loop_start());
 		}
 	}
 
@@ -793,7 +801,8 @@ const grammar::report * compiler::handle_loop_control(const grammar::report * _r
 const grammar::report * compiler::handle_import(const grammar::report * _report)
 {
 	// Call import
-	_toolset.call_member(&machine::machine_context::import_module, &_context, _report[1].content.member);
+	//_toolset.call_member(&machine::machine_context::import_module, &_context, _report[1].content.member);
+	BIA_NOT_IMPLEMENTED;
 
 	return _report->content.end;
 }

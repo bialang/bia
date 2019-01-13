@@ -129,25 +129,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = printer(43)
-i.hi()
-test(i)
-i.hi()
 
-#>
-global i = 2
-i **= 128
-
-{
-
-var i = printer(343)
-print i
-
-# clear all temp members
-delete
-}
-
-print i<#
 
 )"";
 		/*test_and_time(1, []() {

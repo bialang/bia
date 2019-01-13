@@ -255,7 +255,7 @@ private:
 	friend class framework::object::template_wrapper;
 	friend grammar::interpreter_token;
 	friend disassembler;
-	friend platform::toolset;
+	friend platform::x86_toolset;
 
 	/** The active context in the current thread. */
 	static thread_local machine_context * _active_context;

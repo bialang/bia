@@ -4,7 +4,7 @@
 #include <limits>
 
 #include "exception.hpp"
-#include "toolset.hpp"
+#include "virtual_translator.hpp"
 
 
 namespace bia
@@ -23,7 +23,7 @@ class temp_counter
 {
 public:
 	/** The counter type. */
-	typedef machine::platform::toolset::temp_index_type counter_type;
+	typedef machine::virtual_machine::virtual_translator::temp_index_type counter_type;
 
 	/**
 	 * Constructor.

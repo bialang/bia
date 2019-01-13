@@ -16,6 +16,7 @@ namespace virtual_machine
 class virtual_machine_code
 {
 public:
+	virtual_machine_code();
 	void execute();
 
 private:

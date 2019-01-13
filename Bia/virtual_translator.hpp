@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "output_stream.hpp"
 #include "op_code.hpp"
 
@@ -23,6 +25,8 @@ public:
 
 	typedef stream::output_stream::cursor_type position_type;
 	typedef int32_t temp_index_type;
+	typedef int32_t local_index_type;
+
 
 
 	virtual_translator(stream::output_stream & _output)
@@ -91,6 +95,7 @@ private:
 	position_type _setup_end_pos;
 	/** The position before the temp member creation. */
 	position_type _temp_member_pos;
+	std::map<void*, int> _member_index;
 };
 
 }

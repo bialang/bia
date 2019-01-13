@@ -5,7 +5,7 @@
 #include <cmath>
 
 #include "exception.hpp"
-#include "toolset.hpp"
+#include "virtual_translator.hpp"
 #include "compiler_value.hpp"
 #include "operator.hpp"
 #include "operation.hpp"
@@ -34,10 +34,10 @@ public:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @param [in] _toolset The toolset.
+	 * @param [in] _translator The translator.
 	 * @param [in] _value The compiler value.
 	*/
-	compile_normal_operation(machine::platform::toolset & _toolset, compiler_value & _value) noexcept : _toolset(_toolset), _value(_value)
+	compile_normal_operation(machine::virtual_machine::virtual_translator & _translator, compiler_value & _value) noexcept : _translator(_translator), _value(_value)
 	{
 	}
 	/**
@@ -81,8 +81,8 @@ public:
 	}
 
 private:
-	/** The toolset. */
-	machine::platform::toolset & _toolset;
+	/** The translator. */
+	machine::virtual_machine::virtual_translator & _translator;
 	/** The compiler value. */
 	compiler_value & _value;
 
@@ -103,9 +103,10 @@ private:
 	template<typename Member>
 	void left_member_operation(Member _member, framework::operator_type _operator, compiler_value _right)
 	{
+		BIA_NOT_IMPLEMENTED;
 		using VT = compiler_value::VALUE_TYPE;
 
-		_value.expand_to_member(nullptr, [&](auto _destination) {
+		/*_value.expand_to_member(nullptr, [&](auto _destination) {
 			if (std::is_same<decltype(_destination), std::nullptr_t>::value) {
 				BIA_IMPLEMENTATION_ERROR;
 			}
@@ -144,7 +145,7 @@ private:
 					_toolset.call_virtual(&framework::member::operator_call, _member, _destination, _operator, _expanded);
 				});
 			}
-		});
+		});*/
 	}
 	/**
 	 * Executes the operator.
@@ -166,7 +167,7 @@ private:
 	{
 		BIA_NOT_IMPLEMENTED;
 
-		if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+		/*if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
 			throw;
 		}
 
@@ -181,7 +182,7 @@ private:
 			}
 		} else {
 			_toolset.call_static(&machine::link::operation_double, _destination, _operator, _right, _left);
-		}
+		}*/
 	}
 	template<typename Right>
 	void left_constant_right_member_operation(dependency::big_int & _left, framework::operator_type _operator, Right && _right)
@@ -224,14 +225,14 @@ private:
 			left_constant_right_member_operation(_left, _operator, _right.value().rt_member);
 
 			break;
-		case VT::TEMPORARY_MEMBER:
+		/*case VT::TEMPORARY_MEMBER:
 			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
 
 			break;
 		case VT::LOCAL_MEMBER:
 			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_local_member(_right.value().rt_local_member));
 
-			break;
+			break;*/
 		default:
 			BIA_IMPLEMENTATION_ERROR;
 		}

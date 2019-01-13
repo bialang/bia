@@ -7,24 +7,25 @@ namespace bia
 namespace compiler
 {
 
-scope_handler::scope_handler(machine::platform::toolset & _toolset) : _toolset(_toolset)
+scope_handler::scope_handler(machine::virtual_machine::virtual_translator & _translator) : _translator(_translator)
 {	 
 }
 
 void scope_handler::open_scope()
 {
+	BIA_NOT_IMPLEMENTED;
 	// First local scope
 	if (no_open_scopes()) {
 		if (!_variables_in_scopes.empty() || !_variables.empty()) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		_start_position = _toolset.create_local_variables();
+		//_start_position = _toolset.create_local_variables();
 		_counter = temp_counter();
 
 		_variables_in_scopes.push_back(0);
 	} else {
-		_toolset.open_scope();
+		//_toolset.open_scope();
 		_variables_in_scopes.push_back(_counter.peek());
 	}
 }
@@ -53,11 +54,11 @@ void scope_handler::close_scope()
 	// Scope cleanup
 	_counter.pop(_variables_in_scopes.back());
 	_variables_in_scopes.pop_back();
-
+	BIA_NOT_IMPLEMENTED;
 	if (no_open_scopes()) {
-		_toolset.destroy_local_variables(_start_position, _counter.max());
+		//_toolset.destroy_local_variables(_start_position, _counter.max());
 	} else {
-		_toolset.close_scope(_count);
+		//_toolset.close_scope(_count);
 	}
 }
 
