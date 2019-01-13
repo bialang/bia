@@ -31,8 +31,6 @@ enum INTERPRETER_STRING : int32_t
 	IS_INCLUDE,
 	IS_FROM,
 	IS_AS,
-	IS_PRINT,
-	IS_PRINTLN,
 	IS_COPYOF,
 	IS_REFOF,
 	IS_EQUALS,
@@ -367,22 +365,6 @@ struct keyword_as
 	constexpr static INTERPRETER_STRING string_id() noexcept
 	{
 		return IS_AS;
-	}
-};
-
-struct keyword_print
-{
-	constexpr static const char * token() noexcept
-	{
-		return "print";
-	}
-	constexpr static size_t length() noexcept
-	{
-		return 5;
-	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
-	{
-		return IS_PRINT;
 	}
 };
 

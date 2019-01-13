@@ -130,7 +130,7 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-
+global i = 0
 
 )"";
 		/*test_and_time(1, []() {

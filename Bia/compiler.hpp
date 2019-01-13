@@ -481,20 +481,6 @@ private:
 	 * @return The end of the report.
 	*/
 	BIA_EXPORT const grammar::report * handle_if(const grammar::report * _report);
-	/**
-	 * Handles a print token.
-	 *
-	 * @since 3.64.127.716
-	 * @date 29-Apr-18
-	 *
-	 * @param _report The print token.
-	 *
-	 * @throws See handle_value().
-	 * @throws See machine::platform::toolset::call().
-	 *
-	 * @return The end of the report.
-	*/
-	BIA_EXPORT const grammar::report * handle_print(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_test_loop(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_loop_control(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_import(const grammar::report * _report);

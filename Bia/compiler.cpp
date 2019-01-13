@@ -194,8 +194,6 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_variable_declaration(_report);
 	case BGR_IF:
 		return handle_if(_report);
-	case BGR_PRINT:
-		return handle_print(_report);
 	case BGR_TEST_LOOP:
 		return handle_test_loop(_report);
 	case BGR_CONTROL_STATEMENT:
@@ -626,73 +624,6 @@ const grammar::report * compiler::handle_if(const grammar::report * _report)
 	for (auto & _jump : _end_jumps) {
 		_translator.jump(JUMP::JUMP, _end, _jump);
 	}
-
-	return _report->content.end;
-}
-
-const grammar::report * compiler::handle_print(const grammar::report * _report)
-{
-	using VT = compiler_value::VALUE_TYPE;
-
-	_value.set_return();
-
-	// Handle value to print
-	handle_value<false>(_report + 1, [this] {
-		// Call print function
-		switch (_value.type()) {
-		/*case VT::INT:
-		{
-			// Can be int32
-			if (_value.is_int32()) {
-				_toolset.call_static(&machine::link::print_int32, static_cast<int32_t>(_value.value().rt_int));
-			} else {
-				_toolset.call_static(&machine::link::print_int64, _value.value().rt_int);
-			}
-
-			break;
-		}
-		case VT::BIG_INT:
-			_toolset.call_static(&machine::link::print_big_int, _value.value().rt_big_int);
-
-			break;
-		case VT::DOUBLE:
-			_toolset.call_static(&machine::link::print_double, _value.value().rt_double);
-
-			break;
-		case VT::STRING:
-			_toolset.call_static(&machine::link::print_string, _value.value().rt_string.data);
-
-			break;
-		case VT::MEMBER:
-			_toolset.call_virtual(&framework::member::print, _value.value().rt_member);
-
-			break;
-		case VT::TEMPORARY_MEMBER:
-			_toolset.call_virtual(&framework::member::print, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
-
-			break;
-		case VT::LOCAL_MEMBER:
-			_toolset.call_virtual(&framework::member::print, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
-
-			break;
-		case VT::TEST_VALUE_REGISTER:
-			_toolset.call_static(&machine::link::print_bool, machine::platform::toolset::test_result_value());
-
-			break;
-		case VT::TEST_VALUE_CONSTANT:
-		{
-			if (_value.value().rt_test_result) {
-				_toolset.call_static(&machine::link::print_true);
-			} else {
-				_toolset.call_static(&machine::link::print_false);
-			}
-
-			break;
-		}*/
-		default:
-			BIA_IMPLEMENTATION_ERROR;
-		}
-	});
 
 	return _report->content.end;
 }

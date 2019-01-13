@@ -23,8 +23,6 @@ enum OP_CODE : op_code_type
 	OC_PARAM_I32,
 	OC_PARAM_I64,
 	OC_PARAM_D,
-	/** Calls the print function of an member. */
-	OC_OCALL_PRINT,
 	/** Calls the copy function of an member. */
 	OC_OCALL_COPY,
 	/** Calls the refer function of an member. */

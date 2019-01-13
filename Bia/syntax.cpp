@@ -38,7 +38,6 @@ interpreter syntax::init_rules()
 	_interpreter.set_rule(interpreter_rule(BGR_ROOT_HELPER_1, interpreter_rule::F_OR, {
 		interpreter_token::rule_pointer<BGR_VARIABLE_DECLARATION>,
 		interpreter_token::rule_pointer<BGR_IF>,
-		interpreter_token::rule_pointer<BGR_PRINT>,
 		interpreter_token::rule_pointer<BGR_TEST_LOOP>,
 		interpreter_token::control_statement,
 		interpreter_token::rule_pointer<BGR_IMPORT>,
@@ -100,13 +99,6 @@ interpreter syntax::init_rules()
 	_interpreter.set_rule(interpreter_rule(BGR_IF_HELPER_1, interpreter_rule::F_WRAP_UP, {
 		interpreter_token::keyword<keyword_else, flags::filler_token | flags::starting_padding_opt_token>,
 		interpreter_token::rule_pointer<BGR_NORMAL_STATEMENT>
-		}));
-
-	// Print
-	_interpreter.set_rule(interpreter_rule(BGR_PRINT, interpreter_rule::F_WRAP_UP, {
-		interpreter_token::keyword<keyword_print, flags::filler_token>,
-		interpreter_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_token>,
-		interpreter_token::command_end
 		}));
 
 	// Test loop
