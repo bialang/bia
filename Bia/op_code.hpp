@@ -34,6 +34,9 @@ enum OP_CODE : op_code_t
 	OC_PARAM_I32,
 	OC_PARAM_I64,
 	OC_PARAM_D,
+	OC_INSTANTIATE_0,
+	OC_INSTANTIATE_N1,
+	OC_INSTANTIATE_1,
 	OC_INSTANTIATE_I32,
 	/** Calls the copy function of an member. */
 	OC_OCALL_COPY,

@@ -366,7 +366,7 @@ const grammar::report * compiler::handle_identifier(const grammar::report * _rep
 	}
 
 	// Global member
-	_value.set_return(_context.address_of_member(_report->content.member));
+	_value.set_return(_report->content.member);
 
 	return _report + 1;
 }
@@ -558,7 +558,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 			BIA_NOT_IMPLEMENTED;
 			//handle_variable_declaration_helper(_expression, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
 		} else {
-			handle_variable_declaration_helper(_expression, _value.value().rt_member);
+			handle_variable_declaration_helper(_expression, _translator.to_member(_value.value().rt_member));
 		}
 
 	});

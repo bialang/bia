@@ -9,6 +9,7 @@
 #include "string_stream.hpp"
 #include "big_int.hpp"
 #include "virtual_translator.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -72,7 +73,7 @@ public:
 			stream::string_stream::size_type size;
 			stream::string_stream::length_type length;
 		} rt_string;
-		framework::member * rt_member;
+		machine::string_manager::name_t rt_member;
 		machine::virtual_machine::member_index_t rt_temp_member;
 		machine::virtual_machine::member_index_t rt_local_member;
 	};
@@ -95,7 +96,7 @@ public:
 	*/
 	void set_return() noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::NONE;
 	}
@@ -107,7 +108,7 @@ public:
 	*/
 	void set_return_test() noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::TEST_VALUE_REGISTER;
 	}
@@ -121,7 +122,7 @@ public:
 	*/
 	void set_return(bool _value) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::TEST_VALUE_CONSTANT;
 		_return_value.rt_test_result = _value;
@@ -136,7 +137,7 @@ public:
 	*/
 	void set_return(int64_t _value) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::INT;
 		_return_value.rt_int = _value;
@@ -151,7 +152,7 @@ public:
 	*/
 	void set_return(dependency::big_int * _value) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::BIG_INT;
 		_return_value.rt_big_int = _value;
@@ -166,7 +167,7 @@ public:
 	*/
 	void set_return(double _value) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::DOUBLE;
 		_return_value.rt_double = _value;
@@ -183,7 +184,7 @@ public:
 	*/
 	void set_return(const char * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::STRING;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
@@ -202,7 +203,7 @@ public:
 	*/
 	void set_return(const char16_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::STRING16;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
@@ -221,7 +222,7 @@ public:
 	*/
 	void set_return(const char32_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::STRING32;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
@@ -240,7 +241,7 @@ public:
 	*/
 	void set_return(const wchar_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::WSTRING;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
@@ -255,9 +256,9 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return(framework::member * _value) noexcept
+	void set_return(machine::string_manager::name_t _value) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::MEMBER;
 		_return_value.rt_member = _value;
@@ -272,7 +273,7 @@ public:
 	*/
 	void set_return_temp(machine::virtual_machine::member_index_t _value) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
 		_return_value.rt_temp_member = _value;
@@ -287,7 +288,7 @@ public:
 	*/
 	void set_return_local(machine::virtual_machine::member_index_t _value) noexcept
 	{
-		clean();
+		clear();
 
 		_return_type = VALUE_TYPE::LOCAL_MEMBER;
 		_return_value.rt_local_member = _value;
@@ -435,7 +436,7 @@ private:
 	 * @since 3.71.149.808
 	 * @date 26-Dec-18
 	*/
-	void clean() noexcept
+	void clear() noexcept
 	{
 		std::memset(&_return_value, 0, sizeof(_return_value));
 	}

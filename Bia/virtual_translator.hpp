@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <map>
 
 #include "output_stream.hpp"
@@ -81,6 +82,7 @@ public:
 	 * @throws See stream::output_stream::position(), stream::output_stream::write_all(), stream::output_stream::set_position() and stream::output_stream::set_beginning().
 	*/
 	void finalize(member_index_t _temp_count);
+	void write_instantiate_int(const index & _destination, int64_t _value);
 	void pass_parameter(const index & _index);
 	position_t jump(JUMP _type, position_t _destination = 0, position_t _overwrite_pos = -1);
 	/**
@@ -92,9 +94,41 @@ public:
 	 * @return A reference to the output stream.
 	*/
 	stream::output_stream & output_stream() noexcept;
-	member_index to_member(string_manager::name_t _address);
-	temp_index to_temp(member_index_t _index);
-	local_index to_local(member_index_t _index);
+	/**
+	 * Converts the member name to an index.
+	 *
+	 * @since 3.72.149.810
+	 * @date 14-Jan-19
+	 *
+	 * @param _name The name of the member.
+	 *
+	 * @throws See std::map::insert() and std::map::find().
+	 *
+	 * @return Its index.
+	*/
+	member_index to_member(string_manager::name_t _name);
+	/**
+	 * Converts the index to a temp member index.
+	 *
+	 * @since 3.72.149.810
+	 * @date 14-Jan-19
+	 *
+	 * @param _index The index value.
+	 *
+	 * @return The temp member index.
+	*/
+	temp_index to_temp(member_index_t _index) noexcept;
+	/**
+	 * Converts the index to a local member index.
+	 *
+	 * @since 3.72.149.810
+	 * @date 14-Jan-19
+	 *
+	 * @param _index The index value.
+	 *
+	 * @return The local member index.
+	*/
+	local_index to_local(member_index_t _index) noexcept;
 
 private:
 	/** The current output stream. */

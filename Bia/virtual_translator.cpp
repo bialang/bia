@@ -44,6 +44,27 @@ void virtual_translator::finalize(member_index_t _temp_count)
 	_output->write_all(OC_RETURN);
 }
 
+void virtual_translator::write_instantiate_int(const index & _destination, int64_t _value)
+{
+	if (!dynamic_cast<const member_index*>(&_destination)) {
+		BIA_NOT_IMPLEMENTED;
+	}
+
+	// Fits into an int32
+	if (_value <= std::numeric_limits<int32_t>::max() && _value >= std::numeric_limits<int32_t>::min()) {
+		switch (_value) {
+		case 0:
+			_output->write_all(OC_INSTANTIATE_0, _destination.value);
+
+			break;
+		default:
+			BIA_NOT_IMPLEMENTED;
+		}
+	} else {
+		BIA_NOT_IMPLEMENTED;
+	}
+}
+
 void virtual_translator::pass_parameter(const index & _index)
 {
 	auto _write = [&](OP_CODE _op_code) {
@@ -76,14 +97,14 @@ stream::output_stream & virtual_translator::output_stream() noexcept
 	return *_output;
 }
 
-virtual_translator::member_index virtual_translator::to_member(string_manager::name_t _address)
+virtual_translator::member_index virtual_translator::to_member(string_manager::name_t _name)
 {
-	auto _result = _member_index.find(_address);
+	auto _result = _member_index.find(_name);
 
 	if (_result == _member_index.end()) {
 		auto _index = _member_index.size();
 
-		_member_index.insert({ _address, _index });
+		_member_index.insert({ _name, _index });
 
 		return _index;
 	}
@@ -91,12 +112,12 @@ virtual_translator::member_index virtual_translator::to_member(string_manager::n
 	return _result->second;
 }
 
-virtual_translator::temp_index virtual_translator::to_temp(member_index_t _index)
+virtual_translator::temp_index virtual_translator::to_temp(member_index_t _index) noexcept
 {
 	return _index;
 }
 
-virtual_translator::local_index virtual_translator::to_local(member_index_t _index)
+virtual_translator::local_index virtual_translator::to_local(member_index_t _index) noexcept
 {
 	return _index;
 }

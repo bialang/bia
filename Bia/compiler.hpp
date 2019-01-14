@@ -117,40 +117,15 @@ private:
 		using VT = compiler_value::VALUE_TYPE;
 
 		switch (_expression.type()) {
-		/*case VT::TEST_VALUE_CONSTANT:
+		case VT::TEST_VALUE_CONSTANT:
 			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
 		case VT::INT:
 		{
-			// Optimize common used constant values
-			switch (_expression.value().rt_int) {
-			case 0:
-				_toolset.call_static(&machine::link::instantiate_int_0, _destination);
-
-				break;
-			case 1:
-				_toolset.call_static(&machine::link::instantiate_int_1, _destination);
-
-				break;
-			case -1:
-				_toolset.call_static(&machine::link::instantiate_int_n1, _destination);
-
-				break;
-			default:
-			{
-				// Can be int32
-				if (_expression.is_int32()) {
-					_toolset.call_static(&machine::link::instantiate_int32, _destination, static_cast<int32_t>(_expression.value().rt_int));
-				} else {
-					_toolset.call_static(&machine::link::instantiate_int64, _destination, _expression.value().rt_int);
-				}
-
-				break;
-			}
-			}
+			_translator.write_instantiate_int(_destination, _expression.value().rt_int);
 
 			break;
 		}
-		case VT::BIG_INT:
+		/*case VT::BIG_INT:
 			_toolset.call_static(&machine::link::instantiate_big_int, _destination, _expression.value().rt_big_int);
 
 			break;
