@@ -57,6 +57,10 @@ void virtual_translator::pass_parameter(const index & _index)
 	// Pass member
 	if (dynamic_cast<const member_index*>(&_index)) {
 		_write(OC_PARAM_M);
+	} else if (dynamic_cast<const temp_index*>(&_index)) {
+		_write(OC_PARAM_T);
+	} else if (dynamic_cast<const local_index*>(&_index)) {
+		_write(OC_PARAM_L);
 	} else {
 		BIA_IMPLEMENTATION_ERROR;
 	}
@@ -70,6 +74,31 @@ virtual_translator::position_t virtual_translator::jump(JUMP _type, position_t _
 stream::output_stream & virtual_translator::output_stream() noexcept
 {
 	return *_output;
+}
+
+virtual_translator::member_index virtual_translator::to_member(string_manager::name_t _address)
+{
+	auto _result = _member_index.find(_address);
+
+	if (_result == _member_index.end()) {
+		auto _index = _member_index.size();
+
+		_member_index.insert({ _address, _index });
+
+		return _index;
+	}
+
+	return _result->second;
+}
+
+virtual_translator::temp_index virtual_translator::to_temp(member_index_t _index)
+{
+	return _index;
+}
+
+virtual_translator::local_index virtual_translator::to_local(member_index_t _index)
+{
+	return _index;
 }
 
 }

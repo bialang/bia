@@ -4,6 +4,7 @@
 
 #include "output_stream.hpp"
 #include "op_code.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -22,11 +23,36 @@ public:
 		virtual ~index() = default;
 
 	protected:
-		index() = default;
+		friend virtual_translator;
+
+		index(member_index_t _value)
+		{
+			value = _value;
+		}
 	};
 
 	struct member_index : index
 	{
+	private:
+		friend virtual_translator;
+		
+		using index::index;
+	};
+
+	struct temp_index : index
+	{
+	private:
+		friend virtual_translator;
+		
+		using index::index;
+	};
+
+	struct local_index : index
+	{
+	private:
+		friend virtual_translator;
+
+		using index::index;
 	};
 
 	enum class JUMP
@@ -66,7 +92,9 @@ public:
 	 * @return A reference to the output stream.
 	*/
 	stream::output_stream & output_stream() noexcept;
-	member_index member(void * _address);
+	member_index to_member(string_manager::name_t _address);
+	temp_index to_temp(member_index_t _index);
+	local_index to_local(member_index_t _index);
 
 private:
 	/** The current output stream. */
@@ -75,7 +103,7 @@ private:
 	position_t _setup_end_pos;
 	/** The position before the temp member creation. */
 	position_t _temp_member_pos;
-	std::map<void*, int> _member_index;
+	std::map<string_manager::name_t, member_index_t> _member_index;
 };
 
 }

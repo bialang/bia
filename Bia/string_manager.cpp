@@ -45,7 +45,7 @@ void string_manager::register_string(void * _resource)
 	_string_resources.push_back(_resource);
 }
 
-string_manager::name_type string_manager::name_address(const char * _name, size_t _length)
+string_manager::name_t string_manager::name_address(const char * _name, size_t _length)
 {
 	auto _result = _index.find({ _name, _length + 1 });
 
@@ -62,7 +62,7 @@ string_manager::name_type string_manager::name_address(const char * _name, size_
 	return _result->string;
 }
 
-string_manager::name_type string_manager::name_address_or_null(const char * _name, size_t _length) const noexcept
+string_manager::name_t string_manager::name_address_or_null(const char * _name, size_t _length) const noexcept
 {
 	auto _result = _index.find({ _name, _length + 1 });
 

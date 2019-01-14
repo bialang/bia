@@ -68,7 +68,7 @@ const machine_code & machine_context::get_script(const char * _name) const
 	return _script_map.get(_name);
 }
 
-framework::member * machine_context::get_member(string_manager::name_type _name, framework::member * _default)
+framework::member * machine_context::get_member(string_manager::name_t _name, framework::member * _default)
 {
 	_name = _string_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
 
@@ -81,7 +81,7 @@ framework::member * machine_context::get_member(string_manager::name_type _name,
 	return _default;
 }
 
-const framework::member * machine_context::get_member(string_manager::name_type _name, framework::member * _default) const
+const framework::member * machine_context::get_member(string_manager::name_t _name, framework::member * _default) const
 {
 	_name = _string_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
 

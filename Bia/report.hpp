@@ -27,6 +27,7 @@ struct report
 	typedef uint32_t custom_type;
 	typedef uint32_t rule_type;
 	typedef uint16_t token_type;
+	typedef const char* member_t;
 
 	constexpr static int custom_bits = 27;
 	constexpr static int rule_bits = 22;
@@ -68,7 +69,7 @@ struct report
 		dependency::big_int * big_int_value;
 		double double_value;
 		const report *  end;
-		const char * member;
+		member_t member;
 		framework::operator_type operator_code;
 		INTERPRETER_STRING keyword;
 	} content;

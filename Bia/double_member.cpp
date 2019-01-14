@@ -81,7 +81,7 @@ void double_member::operator_call_double(member * _destination, operator_type _o
 	}
 }
 
-void double_member::object_member(member * _destination, machine::string_manager::name_type _name)
+void double_member::object_member(member * _destination, machine::string_manager::name_t _name)
 {
 	BIA_NOT_IMPLEMENTED;
 }

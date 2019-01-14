@@ -16,8 +16,8 @@ namespace machine
 class string_manager
 {
 public:
-	typedef const char* name_type;
-
+	/** The type of the member name. */
+	typedef const char* name_t;
 
 	/**
 	 * Constructor.
@@ -61,7 +61,7 @@ public:
 	 *
 	 * @return The name address. It's valid until destruction of this name manager. This address is zero-terminated.
 	*/
-	BIA_EXPORT name_type name_address(const char * _name, size_t _length);
+	BIA_EXPORT name_t name_address(const char * _name, size_t _length);
 	/**
 	 * Returns the name address.
 	 *
@@ -73,7 +73,7 @@ public:
 	 *
 	 * @return The name address if it exists, otherwise null.
 	*/
-	BIA_EXPORT name_type name_address_or_null(const char * _name, size_t _length) const noexcept;
+	BIA_EXPORT name_t name_address_or_null(const char * _name, size_t _length) const noexcept;
 	/**
 	 * Returns the format address. This address will be the same for the same format value.
 	 *

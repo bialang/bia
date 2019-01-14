@@ -18,7 +18,7 @@ namespace object
 class member_map
 {
 public:
-	typedef machine::string_manager::name_type name_type;
+	typedef machine::string_manager::name_t name_type;
 
 	/**
 	 * Destructor.

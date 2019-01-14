@@ -114,12 +114,10 @@ private:
 	template<typename Destination>
 	void handle_variable_declaration_helper(compiler_value _expression, Destination _destination)
 	{
-		BIA_NOT_IMPLEMENTED;
-		/*using T = machine::platform::toolset;
 		using VT = compiler_value::VALUE_TYPE;
 
 		switch (_expression.type()) {
-		case VT::TEST_VALUE_CONSTANT:
+		/*case VT::TEST_VALUE_CONSTANT:
 			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
 		case VT::INT:
 		{
@@ -179,10 +177,10 @@ private:
 		case VT::TEST_VALUE_REGISTER:
 			_toolset.call_static(&machine::link::instantiate_int32, _destination, T::test_result_value());
 
-			break;
+			break;*/
 		default:
 			BIA_IMPLEMENTATION_ERROR;
-		}*/
+		}
 	}
 	/**
 	 * Tests the compiler value and returns a test value.

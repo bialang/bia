@@ -37,7 +37,7 @@ void scope_handler::close_scope()
 		BIA_IMPLEMENTATION_ERROR;
 	}
 
-	variable_index_type _count = 0;
+	variable_index_t _count = 0;
 	auto _current_scope = _variables_in_scopes.size();
 
 	// Remove variables from map
@@ -67,7 +67,7 @@ bool scope_handler::no_open_scopes() const noexcept
 	return _variables_in_scopes.empty();
 }
 
-scope_handler::variable_index_type scope_handler::declare(const char * _name)
+scope_handler::variable_index_t scope_handler::declare(const char * _name)
 {
 	if (no_open_scopes()) {
 		BIA_IMPLEMENTATION_ERROR;
@@ -85,7 +85,7 @@ scope_handler::variable_index_type scope_handler::declare(const char * _name)
 	return _result->second.first;
 }
 
-scope_handler::variable_index_type scope_handler::variable_index(const char * _name)
+scope_handler::variable_index_t scope_handler::variable_index(const char * _name)
 {
 	auto _result = _variables.find(_name);
 
