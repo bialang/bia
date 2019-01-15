@@ -1,5 +1,5 @@
-#include "interpreter.hpp"
-#include "interpreter_token.hpp"
+#include "lexer.hpp"
+#include "lexer_token.hpp"
 #include "exception.hpp"
 
 #include "utf8.hpp"
@@ -9,7 +9,7 @@ namespace bia
 namespace grammar
 {
 
-void interpreter::set_rule(interpreter_rule && _rule)
+void lexer::set_rule(grammar_rule && _rule)
 {
 	auto _rule_id = _rule.id();
 
@@ -20,7 +20,7 @@ void interpreter::set_rule(interpreter_rule && _rule)
 	}
 }
 
-void interpreter::interpret(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const
+void lexer::lex(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const
 {
 	report_bundle _bundle;
 	encoding::utf8 encoder;
@@ -31,7 +31,7 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 		_bundle.reset();
 
 		// Remove all leading whitespaces
-		interpreter_token::whitespace_deleter<flags::starting_padding_opt_token, true>(_input, &encoder);
+		lexer_token::whitespace_deleter<flags::starting_padding_opt_token, true>(_input, &encoder);
 
 		// Mark input buffer start
 		auto _mark = _input.mark();
@@ -46,7 +46,7 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 		_param.encoder = &encoder;
 
 		try {
-			_rules[BGR_ROOT].run_rule(_input, _param);
+			_rules[BGR_ROOT].run(_input, _param);
 		} catch (const exception::limitation_error&) {
 			// Reset
 			auto _buffer = _input.buffer();

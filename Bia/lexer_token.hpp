@@ -7,8 +7,8 @@
 #include <utility>
 
 #include "config.hpp"
-#include "interpreter_rule.hpp"
-#include "interpreter_id.hpp"
+#include "grammar_rule.hpp"
+#include "grammar_id.hpp"
 #include "input_stream.hpp"
 #include "string_stream.hpp"
 #include "encoder.hpp"
@@ -19,10 +19,10 @@ namespace bia
 namespace grammar
 {
 
-class interpreter_token final
+class lexer_token final
 {
 public:
-	interpreter_token() = delete;
+	lexer_token() = delete;
 
 	/**
 	 * Matches all whitespace or padding characters it can.
@@ -396,7 +396,7 @@ public:
 			_params.bundle->add(_output);
 		}
 
-		if (_params.rules[Rule].run_rule(_input, _params)) {
+		if (_params.rules[Rule].run(_input, _params)) {
 			// Ending whitespaces
 			if (!whitespace_deleter<Flags, false>(_input, _params.encoder)) {
 				return error;

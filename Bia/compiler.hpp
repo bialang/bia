@@ -6,10 +6,11 @@
 #include <type_traits>
 
 #include "config.hpp"
+#include "report_bundle.hpp"
 #include "exception.hpp"
 #include "output_stream.hpp"
 #include "report.hpp"
-#include "interpreter_id.hpp"
+#include "keyword.hpp"
 #include "compiler_value.hpp"
 #include "temp_counter.hpp"
 #include "operator.hpp"

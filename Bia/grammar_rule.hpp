@@ -54,7 +54,7 @@ enum class ACTION
 	ERROR
 };
 
-class interpreter_rule;
+class grammar_rule;
 
 /**
  * @brief Additional token parameters.
@@ -64,7 +64,7 @@ struct token_param
 	/** The output report bundle. */
 	report_bundle * bundle;
 	/** The available rules. */
-	const interpreter_rule * rules;
+	const grammar_rule * rules;
 	/** The current token id. */
 	report::token_type token_id;
 	/** The corresponding machine context. */
@@ -88,7 +88,7 @@ typedef ACTION(*bia_token_function)(stream::input_stream&, token_param&, token_o
 /**
  * A rule for the grammar.
 */
-class interpreter_rule
+class grammar_rule
 {
 public:
 	enum FLAGS : uint32_t
@@ -106,7 +106,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	*/
-	BIA_EXPORT interpreter_rule() noexcept;
+	BIA_EXPORT grammar_rule() noexcept;
 	/**
 	 * Constructor.
 	 *
@@ -117,7 +117,7 @@ public:
 	 * @param _flags The flags.
 	 * @param [in] _tokens The tokens for this rule.
 	*/
-	BIA_EXPORT interpreter_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
+	BIA_EXPORT grammar_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
 	/**
 	 * Runs this rule. If this function fails, the input stream will be resetted to its original position.
 	 *
@@ -131,7 +131,7 @@ public:
 	 *
 	 * @throws
 	*/
-	BIA_EXPORT bool run_rule(stream::input_stream & _input, token_param & _token_param) const;
+	BIA_EXPORT bool run(stream::input_stream & _input, token_param & _token_param) const;
 	/**
 	 * Returns the id of this rule.
 	 *
@@ -149,7 +149,6 @@ private:
 	uint32_t _flags;
 	/** Holds all tokens for this rule. */
 	std::vector<bia_token_function> _tokens;
-
 
 	/**
 	 * Adds the beginning of a wrap up if required.

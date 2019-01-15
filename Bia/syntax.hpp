@@ -1,7 +1,7 @@
 #pragma once
 
 #include "config.hpp"
-#include "interpreter.hpp"
+#include "lexer.hpp"
 
 
 namespace bia
@@ -12,36 +12,36 @@ namespace grammar
 /**
  * @brief The syntax of Bia.
  *
- * Creates and initializes the interpreter with all grammar rules for Bia.
+ * Creates and initializes the lexer with all grammar rules for Bia.
 */
 class syntax
 {
 public:
 	/**
-	 * Returns the interpreter with the Bia syntax.
+	 * Returns the lexer with the Bia syntax.
 	 *
 	 * @since 3.64.127.716
 	 * @date 7-Apr-18
 	 *
-	 * @return The interpreter.
+	 * @return The lexer.
 	*/
-	BIA_EXPORT static const grammar::interpreter & interpreter() noexcept;
+	BIA_EXPORT static const grammar::lexer & lexer() noexcept;
 
 private:
-	/**	Defines the interpreter for the Bia grammar.	*/
-	static grammar::interpreter _interpreter;
+	/**	The lexer for the Bia grammar. */
+	static grammar::lexer _lexer;
 
 	/**
-	 * Creates an interpreter with the Bia rules.
+	 * Creates a lexer with the Bia rules.
 	 *
 	 * @since 3.64.127.716
 	 * @date 21-Apr-18
 	 *
-	 * @throws See interpreter::set_rule().
+	 * @throws See lexer::set_rule().
 	 *
-	 * @return The newly created interpreter.
+	 * @return The newly created lexer.
 	*/
-	BIA_EXPORT static grammar::interpreter init_rules();
+	BIA_EXPORT static grammar::lexer init_rules();
 };
 
 }

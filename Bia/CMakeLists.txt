@@ -88,8 +88,8 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_FRAMEWORK} ${Bia_SOU
 
 
 # grammar namespace
-set(Bia_HEADER_FILES_GRAMMAR "interpreter.hpp" "interpreter_id.hpp" "interpreter_rule.hpp" "interpreter_string.hpp" "interpreter_token.hpp" "report.hpp" "report_bundle.hpp" "syntax.hpp")
-set(Bia_SOURCE_FILES_GRAMMAR "interpreter.cpp" "interpreter_rule.cpp" "interpreter_token.cpp" "syntax.cpp")
+set(Bia_HEADER_FILES_GRAMMAR "grammar_id.hpp" "grammar_rule.hpp" "keyword.hpp" "lexer.hpp" "lexer_token.hpp" "report.hpp" "report_bundle.hpp" "syntax.hpp")
+set(Bia_SOURCE_FILES_GRAMMAR "grammar_rule.cpp" "lexer.cpp" "lexer_token.cpp" "syntax.cpp")
 
 source_group("Header Files\\grammar" FILES ${Bia_HEADER_FILES_GRAMMAR})
 source_group("Source Files\\grammar" FILES ${Bia_SOURCE_FILES_GRAMMAR})

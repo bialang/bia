@@ -216,7 +216,7 @@ machine_code machine_context::compile_script(stream::input_stream & _script)
 	compiler::compiler _compiler(_output, *this);
 
 	// Interpret
-	grammar::syntax::interpreter().interpret(_script, _compiler, *this);
+	grammar::syntax::lexer().lex(_script, _compiler, *this);
 
 	_compiler.finalize();
 

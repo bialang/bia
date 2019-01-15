@@ -253,7 +253,7 @@ private:
 	friend compiler::compiler;
 	template<typename Type, typename Class>
 	friend class framework::object::template_wrapper;
-	friend grammar::interpreter_token;
+	friend grammar::lexer_token;
 	friend disassembler;
 	friend platform::x86_toolset;
 

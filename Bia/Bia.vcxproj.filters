@@ -126,20 +126,11 @@
     <ClCompile Include="syntax.cpp">
       <Filter>Source Files\grammar</Filter>
     </ClCompile>
-    <ClCompile Include="interpreter_rule.cpp">
-      <Filter>Source Files\grammar</Filter>
-    </ClCompile>
-    <ClCompile Include="interpreter.cpp">
-      <Filter>Source Files\grammar</Filter>
-    </ClCompile>
     <ClCompile Include="undefined_member.cpp">
       <Filter>Source Files\framework</Filter>
     </ClCompile>
     <ClCompile Include="compiler.cpp">
       <Filter>Source Files\compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="interpreter_token.cpp">
-      <Filter>Source Files\grammar</Filter>
     </ClCompile>
     <ClCompile Include="simple_allocator.cpp">
       <Filter>Source Files\machine\memory</Filter>
@@ -219,6 +210,15 @@
     <ClCompile Include="virtual_translator.cpp">
       <Filter>Source Files\machine\virtual_machine</Filter>
     </ClCompile>
+    <ClCompile Include="lexer.cpp">
+      <Filter>Source Files\grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="grammar_rule.cpp">
+      <Filter>Source Files\grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="lexer_token.cpp">
+      <Filter>Source Files\grammar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -252,12 +252,6 @@
       <Filter>Header Files\grammar</Filter>
     </ClInclude>
     <ClInclude Include="report_bundle.hpp">
-      <Filter>Header Files\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="interpreter_rule.hpp">
-      <Filter>Header Files\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="interpreter.hpp">
       <Filter>Header Files\grammar</Filter>
     </ClInclude>
     <ClInclude Include="exception.hpp">
@@ -295,9 +289,6 @@
     </ClInclude>
     <ClInclude Include="temp_counter.hpp">
       <Filter>Header Files\compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="interpreter_token.hpp">
-      <Filter>Header Files\grammar</Filter>
     </ClInclude>
     <ClInclude Include="input_stream.hpp">
       <Filter>Header Files\stream</Filter>
@@ -349,12 +340,6 @@
     </ClInclude>
     <ClInclude Include="utf32.hpp">
       <Filter>Header Files\encoding</Filter>
-    </ClInclude>
-    <ClInclude Include="interpreter_string.hpp">
-      <Filter>Header Files\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="interpreter_id.hpp">
-      <Filter>Header Files\grammar</Filter>
     </ClInclude>
     <ClInclude Include="string_key.hpp">
       <Filter>Header Files\utility</Filter>
@@ -562,6 +547,21 @@
     </ClInclude>
     <ClInclude Include="virtual_machine_code.hpp">
       <Filter>Header Files\machine\virtual_machine</Filter>
+    </ClInclude>
+    <ClInclude Include="lexer.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="grammar_id.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="grammar_rule.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="keyword.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="lexer_token.hpp">
+      <Filter>Header Files\grammar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

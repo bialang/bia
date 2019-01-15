@@ -2,6 +2,7 @@
 #include "compile_compare_operation.hpp"
 #include "buffer_output_stream.hpp"
 #include "string_stream.hpp"
+#include "grammar_id.hpp"
 
 #include <vector>
 
@@ -640,14 +641,14 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 	virtual_translator::position_t _do_jump_update = -1;
 
 	// Do loop
-	if (_report->content.keyword == grammar::IS_DO) {
+	if (_report->content.keyword == grammar::KI_DO) {
 		_do_jump_update = _translator.jump(JUMP::JUMP);
 
 		++_report;
 	}
 
 	// Loop type
-	auto _jump_type = _report++->content.keyword == grammar::IS_WHILE ? JUMP::JUMP_IF_FALSE : JUMP::JUMP_IF_TRUE;
+	auto _jump_type = _report++->content.keyword == grammar::KI_WHILE ? JUMP::JUMP_IF_FALSE : JUMP::JUMP_IF_TRUE;
 
 	// Write loop condition
 	auto _compile = true;
@@ -710,7 +711,7 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 const grammar::report * compiler::handle_loop_control(const grammar::report * _report)
 {
-	if (_report->content.keyword == grammar::IS_DELETE) {
+	if (_report->content.keyword == grammar::KI_DELETE) {
 		// Reset temp member
 		_finish_tasks.emplace_back(std::make_pair(_translator.output_stream().position(), [this]() {
 			BIA_NOT_IMPLEMENTED;
@@ -719,7 +720,7 @@ const grammar::report * compiler::handle_loop_control(const grammar::report * _r
 		BIA_NOT_IMPLEMENTED;
 		//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(0));
 	} else if (_loop_tracker.open_loops()) {
-		if (_report->content.keyword == grammar::IS_BREAK) {
+		if (_report->content.keyword == grammar::KI_BREAK) {
 			_loop_tracker.add_end_update(_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, 0));
 		} else {
 			_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, _loop_tracker.loop_start());

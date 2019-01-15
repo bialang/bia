@@ -1,4 +1,4 @@
-#include "interpreter_token.hpp"
+#include "lexer_token.hpp"
 #include "big_int_allocator.hpp"
 
 #include <cctype>
@@ -10,21 +10,21 @@ namespace bia
 namespace grammar
 {
 
-bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
+bool lexer_token::whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
 {
 	return whitespace_automaton(_input, _encoder, [](encoding::code_point _char) {
 		return _char == ' ' || _char == '\t';
 	});
 }
 
-bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
+bool lexer_token::padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
 {
 	return whitespace_automaton(_input, _encoder, [](encoding::code_point _char) {
 		return _char == ' ' || _char == '\t' || _char == '\n' || _char == '\r';
 	});
 }
 
-ACTION interpreter_token::number(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::number(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -83,7 +83,7 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param & _p
 	return success;
 }
 
-ACTION interpreter_token::string(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::string(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -273,7 +273,7 @@ gt_end:;
 	return success;
 }
 
-ACTION interpreter_token::identifier(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::identifier(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -328,7 +328,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	return success;
 }
 
-ACTION interpreter_token::first_member(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::first_member(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -365,7 +365,7 @@ ACTION interpreter_token::first_member(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::control_statement(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::control_statement(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -391,7 +391,7 @@ ACTION interpreter_token::control_statement(stream::input_stream & _input, token
 	return command_end(_input, _params, _output) == ACTION::DONT_REPORT ? success : error;
 }
 
-ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -441,7 +441,7 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 	return error;
 }
 
-ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::compare_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -503,7 +503,7 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 	return error;
 }
 
-ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::dot_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -560,7 +560,7 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::command_end(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::command_end(stream::input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -572,7 +572,7 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 	}) == -1 || _input.available() == 0 ? success : error;
 }
 
-void interpreter_token::match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base)
+void lexer_token::match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base)
 {
 	while (_input.available() > 0) {
 		auto _buffer = _input.buffer();
@@ -606,7 +606,7 @@ void interpreter_token::match_big_integer(stream::input_stream & _input, stream:
 	}
 }
 
-bool interpreter_token::parse_sign(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
+bool lexer_token::parse_sign(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
 {
 	auto _negative = false;
 
@@ -629,7 +629,7 @@ bool interpreter_token::parse_sign(stream::input_stream::buffer_type & _buffer, 
 	return _negative;
 }
 
-int interpreter_token::match_native_number(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output)
+int lexer_token::match_native_number(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output)
 {
 	auto _last_digit = _buffer.first;
 	auto _digit_matched = false;
@@ -756,7 +756,7 @@ int interpreter_token::match_native_number(stream::input_stream::buffer_type & _
 	return 0;
 }
 
-int interpreter_token::parse_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
+int lexer_token::parse_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
 {
 	if (_buffer.first >= _buffer.second) {
 		return -1;
@@ -809,7 +809,7 @@ int interpreter_token::parse_base(stream::input_stream::buffer_type & _buffer, e
 	return _base;
 }
 
-int interpreter_token::whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point))
+int lexer_token::whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point))
 {
 	enum class STATE
 	{

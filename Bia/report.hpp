@@ -4,7 +4,7 @@
 #include <type_traits>
 
 #include "operator.hpp"
-#include "interpreter_string.hpp"
+#include "keyword.hpp"
 #include "output_stream.hpp"
 #include "input_stream.hpp"
 #include "big_int.hpp"
@@ -71,7 +71,7 @@ struct report
 		const report *  end;
 		member_t member;
 		framework::operator_type operator_code;
-		INTERPRETER_STRING keyword;
+		KEYWORD_ID keyword;
 	} content;
 	
 	/*void serialize(stream::output_stream & _output)

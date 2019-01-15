@@ -151,7 +151,7 @@ global i = 0
 		bia::compiler::compiler _compiler(_output, _context);
 
 		test_and_time(1, [&]() {
-			bia::grammar::syntax::interpreter().interpret(_input, _compiler, _context);
+			bia::grammar::syntax::lexer().lex(_input, _compiler, _context);
 		});
 
 		_compiler.finalize();
@@ -169,7 +169,7 @@ global i = 0
 		system("pause");
 
 		// Run
-		bia::machine::virtual_machine::virtual_machine_code _machine_code({ _output.buffer(), static_cast<size_t>(_output.size()) });
+		bia::machine::virtual_machine::virtual_machine_code _machine_code({ _output.buffer(), static_cast<size_t>(_output.size()) }, _context);
 
 		try {
 			test_and_time(1, [&] {

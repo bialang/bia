@@ -135,7 +135,7 @@ class template_wrapper;
 namespace grammar
 {
 
-class interpreter_token;
+class lexer_token;
 
 }
 

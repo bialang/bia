@@ -1,10 +1,7 @@
 #include "virtual_machine_code.hpp"
 #include "local_object.hpp"
-#include "member.hpp"
 #include "max_member_size.hpp"
 #include "undefined_member.hpp"
-
-#include <vector>
 
 
 namespace bia
@@ -14,7 +11,7 @@ namespace machine
 namespace virtual_machine
 {
 
-virtual_machine_code::virtual_machine_code(memory::const_universal_allocation _code) : _code(memory::cast_allocation<const uint8_t>(_code))
+virtual_machine_code::virtual_machine_code(memory::const_universal_allocation _code, machine_context & _context) : _code(memory::cast_allocation<const uint8_t>(_code))
 {
 }
 
@@ -36,12 +33,12 @@ void virtual_machine_code::execute()
 
 		break;
 	}
-	case OC_INSTANTIATE_I32:
+	case OC_INSTANTIATE_0:
 	{
 		break;
 	}
 	default:
-		break;
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
 	/*for (auto & _tmp : _tmp_members) {
