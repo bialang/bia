@@ -351,23 +351,23 @@ const grammar::report * compiler::handle_identifier(const grammar::report * _rep
 {
 	// 100% local
 	if (_type == VARIABLE_TYPE::DEFINITELY_LOCAL) {
-		_value.set_return_local(_scope_handler.declare(_report->content.member));
-
+		//_value.set_return_local(_scope_handler.declare(_report->content.member));
+		BIA_NOT_IMPLEMENTED;
 		return _report + 1;
 	} // Unkown
 	else if (!_scope_handler.no_open_scopes() && _type != VARIABLE_TYPE::DEFINITELY_GLOBAL) {
-		auto _index = _scope_handler.variable_index(_report->content.member);
+		/*auto _index = _scope_handler.variable_index(_report->content.member);
 
 		// Local variable
 		if (_index != scope_handler::not_found) {
 			_value.set_return_local(_index);
 
 			return _report + 1;
-		}
+		}*/
 	}
 
 	// Global member
-	_value.set_return(_report->content.member);
+	_value.set_return_member({ _report->content.member_name, _report->size });
 
 	return _report + 1;
 }

@@ -9,7 +9,7 @@
 #include "config.hpp"
 #include "grammar_rule.hpp"
 #include "grammar_id.hpp"
-#include "input_stream.hpp"
+#include "buffer_input_stream.hpp"
 #include "string_stream.hpp"
 #include "encoder.hpp"
 
@@ -40,8 +40,8 @@ public:
 	 *
 	 * @return true if succeded according to the @a _Flags, otherwise false.
 	*/
-	template<flags::flag_type Flags, bool Called_at_beginning>
-	static bool whitespace_deleter(stream::input_stream & _input, encoding::encoder * _encoder) noexcept
+	template<flags::flag_t Flags, bool Called_at_beginning>
+	static bool whitespace_deleter(stream::buffer_input_stream & _input, encoding::encoder * _encoder) noexcept
 	{
 		constexpr auto match_begin = Called_at_beginning && (Flags & (flags::starting_ws_token | flags::starting_ws_opt_token | flags::starting_padding_token | flags::starting_padding_opt_token));
 		constexpr auto match_end = !Called_at_beginning && (Flags & (flags::ending_ws_token | flags::ending_ws_opt_token));
@@ -73,7 +73,7 @@ public:
 	 *
 	 * @return true if any whitespace was matched, otherwise false.
 	*/
-	BIA_EXPORT static bool whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder);
+	BIA_EXPORT static bool whitespace_skipper(stream::buffer_input_stream & _input, encoding::encoder * _encoder);
 	/**
 	 * Matches all padding characters it can.
 	 *
@@ -87,7 +87,7 @@ public:
 	 *
 	 * @return true if any padding character was matched, otherwise false.
 	*/
-	BIA_EXPORT static bool padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder);
+	BIA_EXPORT static bool padding_skipper(stream::buffer_input_stream & _input, encoding::encoder * _encoder);
 	/**
 	 * Matches a number token.
 	 *
@@ -101,8 +101,8 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION number(stream::input_stream & _input, token_param & _params, token_output & _output);
-	BIA_EXPORT static ACTION string(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION number(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION string(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches an identifier. An identifier conists of alphanumeric characters and an underscore without a leading number.
 	 *
@@ -113,12 +113,12 @@ public:
 	 * @param [in] _params Additional interpreter information.
 	 * @param [out] _output The token result.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See stream::buffer_input_stream::available(), stream::buffer_input_stream::buffer() and stream::buffer_input_stream::skip().
 	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION identifier(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION identifier(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches the first member of a member chain.
 	 *
@@ -130,11 +130,11 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter(), string(), keyword() and identifier().
-	 * @throws See stream::input_stream::mark() and stream::input_stream::reset().
+	 * @throws See stream::buffer_input_stream::mark() and stream::buffer_input_stream::reset().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION first_member(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION first_member(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches loop control keywords like 'break' or 'continue'.
 	 *
@@ -149,7 +149,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION control_statement(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION control_statement(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches an assign operator.
 	 *
@@ -163,12 +163,12 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See stream::buffer_input_stream::available(), stream::buffer_input_stream::buffer() and stream::buffer_input_stream::skip().
 	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION assign_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a compare operator.
 	 *
@@ -182,12 +182,12 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See stream::buffer_input_stream::available(), stream::buffer_input_stream::buffer() and stream::buffer_input_stream::skip().
 	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION compare_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION compare_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a dot operator like `*`, `/` and so on.
 	 *
@@ -201,12 +201,12 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See stream::buffer_input_stream::buffer() and stream::buffer_input_stream::skip().
 	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION dot_operator(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION dot_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a commend terminator.
 	 *
@@ -221,7 +221,7 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	BIA_EXPORT static ACTION command_end(stream::input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION command_end(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches a custom operator.
 	 *
@@ -235,13 +235,13 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See stream::buffer_input_stream::available(), stream::buffer_input_stream::buffer() and stream::buffer_input_stream::skip().
 	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	template<flags::flag_type Flags>
-	static ACTION custom_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
+	template<flags::flag_t Flags>
+	static ACTION custom_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
@@ -312,13 +312,13 @@ public:
 	 * @param [out] _output The token result.
 	 *
 	 * @throws See whitespace_deleter().
-	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See stream::buffer_input_stream::available(), stream::buffer_input_stream::buffer() and stream::buffer_input_stream::skip().
 	 * @throws See encoding::encoder::next().
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	template<typename Type, flags::flag_type Flags = flags::none>
-	static ACTION keyword(stream::input_stream & _input, token_param & _params, token_output & _output)
+	template<typename Type, flags::flag_t Flags = flags::none>
+	static ACTION keyword(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::filler_token ? (Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT) : (Flags & flags::looping_token ? ACTION::REPORT_AND_LOOP : ACTION::REPORT);
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
@@ -378,8 +378,8 @@ public:
 	 *
 	 * @return Defines the success code. See @ref ACTION.
 	*/
-	template<report::rule_type Rule, flags::flag_type Flags = flags::filler_token, report::custom_type Custom_parameter = 0>
-	static ACTION rule_pointer(stream::input_stream & _input, token_param & _params, token_output & _output)
+	template<report::rule_t Rule, flags::flag_t Flags = flags::filler_token, report::custom_t Custom_parameter = 0>
+	static ACTION rule_pointer(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 	{
 		constexpr auto success = Flags & flags::looping_token ? ACTION::DONT_REPORT_AND_LOOP : ACTION::DONT_REPORT;
 		constexpr auto error = Flags & (flags::opt_token | flags::looping_token) ? ACTION::DONT_REPORT : ACTION::ERROR;
@@ -409,7 +409,7 @@ public:
 	}
 
 private:
-	BIA_EXPORT static void match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base);
+	BIA_EXPORT static void match_big_integer(stream::buffer_input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base);
 	/**
 	 * Parses the sign before a number.
 	 *
@@ -419,14 +419,14 @@ private:
 	 * @param [in] _buffer The input buffer.
 	 * @param [in] _encoder The encoder.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See stream::buffer_input_stream::available(), stream::buffer_input_stream::buffer() and stream::buffer_input_stream::skip().
 	 * @throws See encoding::encoder::next().
 	 *
 	 * @return true if the sign is negative, otherwise false.
 	*/
-	BIA_EXPORT static bool parse_sign(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
-	BIA_EXPORT static int match_native_number(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output);
-	BIA_EXPORT static int parse_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
+	BIA_EXPORT static bool parse_sign(stream::buffer_input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
+	BIA_EXPORT static int match_native_number(stream::buffer_input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output);
+	BIA_EXPORT static int parse_base(stream::buffer_input_stream::buffer_type & _buffer, encoding::encoder * _encoder);
 	/*
 	 * Matches single- and multiline comments and @a _is_ws.
 	 *
@@ -438,12 +438,12 @@ private:
 	 * @param _is_ws The whitespace checker.
 	 * @param _end_predicate (Optional) If specified the automaton ends prematurely and returns -1. Multiline comments are not affected by this predicate.
 	 *
-	 * @throws See stream::input_stream::available(), stream::input_stream::buffer() and stream::input_stream::skip().
+	 * @throws See stream::buffer_input_stream::available(), stream::buffer_input_stream::buffer() and stream::buffer_input_stream::skip().
 	 * @throws See encoding::encoder::next().
 	 *
 	 * @return 1 if the automaton matched whitespaces/comments successfully. -1 if @a _end_predicate fired, otherwise 0.
 	*/
-	BIA_EXPORT static int whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point) = nullptr);
+	BIA_EXPORT static int whitespace_automaton(stream::buffer_input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point) = nullptr);
 };
 
 }

@@ -97,7 +97,7 @@ stream::output_stream & virtual_translator::output_stream() noexcept
 	return *_output;
 }
 
-virtual_translator::member_index virtual_translator::to_member(string_manager::name_t _name)
+virtual_translator::member_index virtual_translator::to_member(grammar::report::member_t _name)
 {
 	auto _result = _member_index.find(_name);
 

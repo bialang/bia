@@ -5,7 +5,7 @@
 #include "keyword.hpp"
 #include "grammar_id.hpp"
 #include "grammar_rule.hpp"
-#include "input_stream.hpp"
+#include "buffer_input_stream.hpp"
 #include "machine_context.hpp"
 
 
@@ -16,7 +16,6 @@ namespace grammar
 
 /**
  * @brief The lexographical analyzer for the syntax.
- *
  *
  * @see @ref grammar_rule, @ref syntax
 */
@@ -32,7 +31,7 @@ public:
 	 * @param _rule Defines the rule.
 	*/
 	BIA_EXPORT void set_rule(grammar_rule && _rule);
-	BIA_EXPORT void lex(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const;
+	BIA_EXPORT void lex(stream::buffer_input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const;
 
 private:
 	/** All available rules. */

@@ -15,13 +15,13 @@ grammar_rule::grammar_rule() noexcept
 	_flags = F_NONE;
 }
 
-grammar_rule::grammar_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept : _tokens(std::move(_tokens))
+grammar_rule::grammar_rule(report::rule_t _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept : _tokens(std::move(_tokens))
 {
 	this->_id = _id;
 	this->_flags = _flags;
 }
 
-bool grammar_rule::run(stream::input_stream & _input, token_param & _token_param) const
+bool grammar_rule::run(stream::buffer_input_stream & _input, token_param & _token_param) const
 {
 	const auto _begin_size = _token_param.bundle->size();
 	const auto _begin_mark = _input.mark();
@@ -119,7 +119,7 @@ bool grammar_rule::run(stream::input_stream & _input, token_param & _token_param
 	return (_flags & F_OR) == 0;
 }
 
-report::rule_type grammar_rule::id() const noexcept
+report::rule_t grammar_rule::id() const noexcept
 {
 	return _id;
 }

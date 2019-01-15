@@ -1,8 +1,8 @@
 #include "lexer.hpp"
 #include "lexer_token.hpp"
 #include "exception.hpp"
-
 #include "utf8.hpp"
+
 
 namespace bia
 {
@@ -20,11 +20,11 @@ void lexer::set_rule(grammar_rule && _rule)
 	}
 }
 
-void lexer::lex(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const
+void lexer::lex(stream::buffer_input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const
 {
 	report_bundle _bundle;
 	encoding::utf8 encoder;
-	stream::input_stream::cursor_type _last_available = 0;
+	stream::buffer_input_stream::cursor_type _last_available = 0;
 
 	while (_input.available() != _last_available) {
 		_last_available = _input.available();

@@ -5,11 +5,10 @@
 #include <limits>
 #include <cstring>
 
-#include "member.hpp"
 #include "string_stream.hpp"
 #include "big_int.hpp"
 #include "virtual_translator.hpp"
-#include "string_manager.hpp"
+#include "report.hpp"
 
 
 namespace bia
@@ -73,7 +72,7 @@ public:
 			stream::string_stream::size_type size;
 			stream::string_stream::length_type length;
 		} rt_string;
-		machine::string_manager::name_t rt_member;
+		grammar::report::member_t rt_member;
 		machine::virtual_machine::member_index_t rt_temp_member;
 		machine::virtual_machine::member_index_t rt_local_member;
 	};
@@ -256,7 +255,7 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return(machine::string_manager::name_t _value) noexcept
+	void set_return_member(grammar::report::member_t _value) noexcept
 	{
 		clear();
 

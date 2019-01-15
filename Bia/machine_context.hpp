@@ -8,7 +8,7 @@
 #include "member_allocator.hpp"
 #include "big_int_allocator.hpp"
 #include "executable_allocator.hpp"
-#include "input_stream.hpp"
+#include "buffer_input_stream.hpp"
 #include "machine_code.hpp"
 #include "string_key.hpp"
 #include "member.hpp"
@@ -85,7 +85,7 @@ public:
 	 * @throws See compile_script().
 	 * @throws See machine_code::execute().
 	*/
-	BIA_EXPORT void execute(stream::input_stream & _script);
+	BIA_EXPORT void execute(stream::buffer_input_stream & _script);
 	/**
 	 * Compiles and adds a script to the context.
 	 *
@@ -98,7 +98,7 @@ public:
 	 * @throws See compile_script().
 	 * @throws See script_map::set().
 	*/
-	BIA_EXPORT void add_script(const char * _name, stream::input_stream & _script);
+	BIA_EXPORT void add_script(const char * _name, stream::buffer_input_stream & _script);
 	/**
 	 * Returns the script associated with the name.
 	 *
@@ -137,7 +137,7 @@ public:
 	 *
 	 * @return The member if it exists, otherwise the @a _default value.
 	*/
-	BIA_EXPORT framework::member * get_member(string_manager::name_t, framework::member * _default = none());
+	BIA_EXPORT framework::member * get_member(string_manager::name_t _namer, framework::member * _default = none());
 	/**
 	 * Returns the member.
 	 *
@@ -151,7 +151,7 @@ public:
 	 *
 	 * @return The member if it exists, otherwise the @a _default value.
 	*/
-	BIA_EXPORT const framework::member * get_member(string_manager::name_t, framework::member * _default = none()) const;
+	BIA_EXPORT const framework::member * get_member(string_manager::name_t _name, framework::member * _default = none()) const;
 	template<typename Member, typename... Arguments>
 	typename std::enable_if<std::is_base_of<framework::member, Member>::value, Member*>::type emplace_member(const char * _name, Arguments &&... _arguments)
 	{
@@ -349,7 +349,7 @@ private:
 	 * @return The member address.
 	*/
 	BIA_EXPORT framework::member * address_of_member(const char * _name);
-	BIA_EXPORT machine_code compile_script(stream::input_stream & _script);
+	BIA_EXPORT machine_code compile_script(stream::buffer_input_stream & _script);
 };
 
 }

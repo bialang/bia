@@ -5,7 +5,7 @@
 
 #include "output_stream.hpp"
 #include "op_code.hpp"
-#include "string_manager.hpp"
+#include "report.hpp"
 
 
 namespace bia
@@ -108,7 +108,7 @@ public:
 	 *
 	 * @return Its index.
 	*/
-	member_index to_member(string_manager::name_t _name);
+	member_index to_member(grammar::report::member_t _name);
 	/**
 	 * Converts the index to a temp member index.
 	 *
@@ -139,7 +139,7 @@ private:
 	position_t _setup_end_pos;
 	/** The position before the temp member creation. */
 	position_t _temp_member_pos;
-	std::map<string_manager::name_t, member_index_t> _member_index;
+	std::map<grammar::report::member_t, member_index_t> _member_index;
 };
 
 }

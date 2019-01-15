@@ -49,14 +49,14 @@ void machine_context::unset_active_context() noexcept
 	_active_buffer_builder = nullptr;
 }
 
-void machine_context::execute(stream::input_stream & _script)
+void machine_context::execute(stream::buffer_input_stream & _script)
 {
 	activate_context();
 
 	compile_script(_script).execute();
 }
 
-void machine_context::add_script(const char * _name, stream::input_stream & _script)
+void machine_context::add_script(const char * _name, stream::buffer_input_stream & _script)
 {
 	activate_context();
 
@@ -209,7 +209,7 @@ framework::member * machine_context::address_of_member(const char * _name)
 	return a;
 }
 
-machine_code machine_context::compile_script(stream::input_stream & _script)
+machine_code machine_context::compile_script(stream::buffer_input_stream & _script)
 {
 	// Create compiler
 	stream::buffer_output_stream _output;

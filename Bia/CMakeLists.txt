@@ -137,7 +137,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_MACHINE} ${Bia_HEADE
 set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_MACHINE} ${Bia_SOURCE_FILES_LINK} ${Bia_SOURCE_FILES_MEMORY} ${Bia_SOURCE_FILES_MODULAR} ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
 
 # stream namespace
-set(Bia_HEADER_FILES_STREAM "buffer_input_stream.hpp" "buffer_output_stream.hpp" "file_input_stream.hpp" "file_output_stream.hpp" "input_stream.hpp" "output_stream.hpp" "string_stream.hpp")
+set(Bia_HEADER_FILES_STREAM "buffer_input_stream.hpp" "buffer_output_stream.hpp" "input_stream.hpp" "output_stream.hpp" "string_stream.hpp")
 set(Bia_SOURCE_FILES_STREAM "buffer_input_stream.cpp" "buffer_output_stream.cpp")
 
 source_group("Header Files\\stream" FILES ${Bia_HEADER_FILES_STREAM})

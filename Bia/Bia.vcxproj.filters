@@ -219,6 +219,9 @@
     <ClCompile Include="lexer_token.cpp">
       <Filter>Source Files\grammar</Filter>
     </ClCompile>
+    <ClCompile Include="scope_exit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -291,12 +294,6 @@
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
     <ClInclude Include="input_stream.hpp">
-      <Filter>Header Files\stream</Filter>
-    </ClInclude>
-    <ClInclude Include="file_output_stream.hpp">
-      <Filter>Header Files\stream</Filter>
-    </ClInclude>
-    <ClInclude Include="file_input_stream.hpp">
       <Filter>Header Files\stream</Filter>
     </ClInclude>
     <ClInclude Include="buffer_output_stream.hpp">
@@ -562,6 +559,9 @@
     </ClInclude>
     <ClInclude Include="lexer_token.hpp">
       <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="scope_exit.hpp">
+      <Filter>Header Files\utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

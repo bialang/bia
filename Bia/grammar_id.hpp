@@ -8,7 +8,7 @@ namespace bia
 namespace grammar
 {
 
-enum BIA_GRAMMAR_RULE : report::rule_type
+enum BIA_GRAMMAR_RULE : report::rule_t
 {
 	BGR_ROOT,
 	BGR_ROOT_HELPER_0,

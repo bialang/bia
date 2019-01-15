@@ -202,6 +202,7 @@
     <ClCompile Include="member_names.cpp" />
     <ClCompile Include="module_loader.cpp" />
     <ClCompile Include="namespace_member.cpp" />
+    <ClCompile Include="scope_exit.cpp" />
     <ClCompile Include="scope_handler.cpp" />
     <ClCompile Include="script_map.cpp" />
     <ClCompile Include="simple_allocator.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="object_variable.hpp" />
     <ClInclude Include="op_code.hpp" />
     <ClInclude Include="raw_object_def.hpp" />
+    <ClInclude Include="scope_exit.hpp" />
     <ClInclude Include="script_map.hpp" />
     <ClInclude Include="share_def.hpp" />
     <ClInclude Include="template_wrapper.hpp" />
@@ -272,8 +274,6 @@
     <ClInclude Include="initiator.hpp" />
     <ClInclude Include="buffer_input_stream.hpp" />
     <ClInclude Include="disguised_caller.hpp" />
-    <ClInclude Include="file_input_stream.hpp" />
-    <ClInclude Include="file_output_stream.hpp" />
     <ClInclude Include="input_stream.hpp" />
     <ClInclude Include="instance_holder.hpp" />
     <ClInclude Include="machine_stack.hpp" />

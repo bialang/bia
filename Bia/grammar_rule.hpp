@@ -5,7 +5,7 @@
 
 #include "config.hpp"
 #include "report_bundle.hpp"
-#include "input_stream.hpp"
+#include "buffer_input_stream.hpp"
 #include "machine_context.hpp"
 #include "machine_schein.hpp"
 #include "encoder.hpp"
@@ -22,26 +22,26 @@ namespace grammar
 struct flags
 {
 	/** The flag type. */
-	typedef uint64_t flag_type;
+	typedef uint64_t flag_t;
 
 	/** No flag. */
-	constexpr static flag_type none = 0;
+	constexpr static flag_t none = 0;
 	/** The token will not be reported. */
-	constexpr static flag_type filler_token = 0x1;
+	constexpr static flag_t filler_token = 0x1;
 	/** The token is optional. */
-	constexpr static flag_type opt_token = 0x2;
+	constexpr static flag_t opt_token = 0x2;
 	/** The token will be looped and is optional. */
-	constexpr static flag_type looping_token = 0x4;
+	constexpr static flag_t looping_token = 0x4;
 	/** At least one whitespace character at the beginning is required. */
-	constexpr static flag_type starting_ws_token = 0x8;
+	constexpr static flag_t starting_ws_token = 0x8;
 	/** Whitespace at the beginning is optional. */
-	constexpr static flag_type starting_ws_opt_token = 0x10;
+	constexpr static flag_t starting_ws_opt_token = 0x10;
 	/** At least one whitespace character at the end is required. */
-	constexpr static flag_type ending_ws_token = 0x20;
+	constexpr static flag_t ending_ws_token = 0x20;
 	/** Whitespace at the end is optional. */
-	constexpr static flag_type ending_ws_opt_token = 0x40;
-	constexpr static flag_type starting_padding_token = 0x80;
-	constexpr static flag_type starting_padding_opt_token = 0x100;
+	constexpr static flag_t ending_ws_opt_token = 0x40;
+	constexpr static flag_t starting_padding_token = 0x80;
+	constexpr static flag_t starting_padding_opt_token = 0x100;
 };
 
 /** The result of a token. */
@@ -66,7 +66,7 @@ struct token_param
 	/** The available rules. */
 	const grammar_rule * rules;
 	/** The current token id. */
-	report::token_type token_id;
+	report::token_t token_id;
 	/** The corresponding machine context. */
 	machine::machine_context * context;
 	/** The machine schein of the resulting code. */
@@ -83,7 +83,7 @@ struct token_param
 typedef report token_output;
 
 /** The interper token signature. */
-typedef ACTION(*bia_token_function)(stream::input_stream&, token_param&, token_output&);
+typedef ACTION(*bia_token_function)(stream::buffer_input_stream&, token_param&, token_output&);
 
 /**
  * A rule for the grammar.
@@ -98,7 +98,6 @@ public:
 		F_WRAP_UP = 0x2,
 		F_DONT_REPORT_EMPTY = 0x4
 	};
-
 
 	/**
 	 * Constructor.
@@ -117,7 +116,7 @@ public:
 	 * @param _flags The flags.
 	 * @param [in] _tokens The tokens for this rule.
 	*/
-	BIA_EXPORT grammar_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
+	BIA_EXPORT grammar_rule(report::rule_t _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept;
 	/**
 	 * Runs this rule. If this function fails, the input stream will be resetted to its original position.
 	 *
@@ -131,7 +130,7 @@ public:
 	 *
 	 * @throws
 	*/
-	BIA_EXPORT bool run(stream::input_stream & _input, token_param & _token_param) const;
+	BIA_EXPORT bool run(stream::buffer_input_stream & _input, token_param & _token_param) const;
 	/**
 	 * Returns the id of this rule.
 	 *
@@ -140,11 +139,11 @@ public:
 	 *
 	 * @return The id.
 	*/
-	BIA_EXPORT report::rule_type id() const noexcept;
+	BIA_EXPORT report::rule_t id() const noexcept;
 
 private:
 	/** The id of this rule. */
-	report::rule_type _id;
+	report::rule_t _id;
 	/** Specialization flags. */
 	uint32_t _flags;
 	/** Holds all tokens for this rule. */
