@@ -20,7 +20,7 @@
 #include "scope_handler.hpp"
 #include "link.hpp"
 #include "virtual_translator.hpp"
-
+#include "grammar_id.hpp"
 
 
 namespace bia
@@ -122,7 +122,7 @@ private:
 			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
 		case VT::INT:
 		{
-			_translator.write_instantiate_int(_destination, _expression.value().rt_int);
+			_translator.instantiate_int(_destination, _expression.value().rt_int);
 
 			break;
 		}

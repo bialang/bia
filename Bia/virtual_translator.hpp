@@ -83,7 +83,8 @@ public:
 	 * @throws See stream::output_stream::position(), stream::output_stream::write_all(), stream::output_stream::set_position() and stream::output_stream::set_beginning().
 	*/
 	void finalize(member_index_t _temp_count);
-	void write_instantiate_int(const index & _destination, int64_t _value);
+	void instantiate_int(const index & _destination, int64_t _value);
+	void test(const index & _member);
 	void pass_parameter(const index & _index);
 	position_t create_local_variables();
 	position_t jump(JUMP _type, position_t _destination = 0, position_t _overwrite_pos = -1);

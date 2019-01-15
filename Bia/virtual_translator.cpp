@@ -44,7 +44,7 @@ void virtual_translator::finalize(member_index_t _temp_count)
 	_output->write_all(OC_RETURN);
 }
 
-void virtual_translator::write_instantiate_int(const index & _destination, int64_t _value)
+void virtual_translator::instantiate_int(const index & _destination, int64_t _value)
 {
 	if (!dynamic_cast<const member_index*>(&_destination)) {
 		BIA_NOT_IMPLEMENTED;
@@ -62,6 +62,28 @@ void virtual_translator::write_instantiate_int(const index & _destination, int64
 		}
 	} else {
 		BIA_NOT_IMPLEMENTED;
+	}
+}
+
+void virtual_translator::test(const index & _member)
+{
+	auto _write = [&](OP_CODE _op_code) {
+		if (_member.value <= std::numeric_limits<tiny_member_index_t>::max()) {
+			_output->write_all(static_cast<OP_CODE>(_op_code | OCF_TINY), static_cast<tiny_member_index_t>(_member.value));
+		} else {
+			_output->write_all(_op_code, _member.value);
+		}
+	};
+
+	// Pass member
+	if (dynamic_cast<const member_index*>(&_member)) {
+		_write(OC_TEST_M);
+	} else if (dynamic_cast<const temp_index*>(&_member)) {
+		_write(OC_TEST_T);
+	} else if (dynamic_cast<const local_index*>(&_member)) {
+		_write(OC_TEST_L);
+	} else {
+		BIA_IMPLEMENTATION_ERROR;
 	}
 }
 

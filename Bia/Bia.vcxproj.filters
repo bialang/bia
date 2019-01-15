@@ -112,6 +112,9 @@
     <Filter Include="Source Files\machine\virtual_machine">
       <UniqueIdentifier>{a46065d0-f799-448f-8e9b-2c2eb7318795}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utility">
+      <UniqueIdentifier>{f1d4d637-d7bf-42d0-a860-68c8e09e9355}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -220,7 +223,7 @@
       <Filter>Source Files\grammar</Filter>
     </ClCompile>
     <ClCompile Include="scope_exit.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

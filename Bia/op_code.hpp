@@ -38,7 +38,13 @@ enum OP_CODE : op_code_t
 	OC_INSTANTIATE_N1,
 	OC_INSTANTIATE_1,
 	OC_INSTANTIATE_I32,
-	/** Calls the copy function of an member. */
+	OC_TEST_M,
+	OC_TEST_T,
+	OC_TEST_L,
+	OC_TEST_tM = OC_TEST_M | OCF_TINY,
+	OC_TEST_tT = OC_TEST_T | OCF_TINY,
+	OC_TEST_tL = OC_TEST_L | OCF_TINY,
+	/** Calls  = OC_TEST_M | OCF_TINYthe copy function of an member. */
 	OC_OCALL_COPY,
 	/** Calls the refer function of an member. */
 	OC_OCALL_REFER,
