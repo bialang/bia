@@ -256,6 +256,7 @@ private:
 	friend grammar::lexer_token;
 	friend disassembler;
 	friend platform::x86_toolset;
+	friend virtual_machine::virtual_member_map;
 
 	/** The active context in the current thread. */
 	static thread_local machine_context * _active_context;

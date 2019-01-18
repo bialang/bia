@@ -30,7 +30,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{C7138506-BCD2-430A-9EDC-94F5D982CE19}</ProjectGuid>
     <RootNamespace>Bia</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -227,6 +227,7 @@
     <ClCompile Include="utf8.cpp" />
     <ClCompile Include="variable_index.cpp" />
     <ClCompile Include="virtual_machine_code.cpp" />
+    <ClCompile Include="virtual_member_map.cpp" />
     <ClCompile Include="virtual_translator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -330,6 +331,7 @@
     <ClInclude Include="static_function.hpp" />
     <ClInclude Include="string_manager.hpp" />
     <ClInclude Include="temp_counter.hpp" />
+    <ClInclude Include="virtual_member_map.hpp" />
     <ClInclude Include="x86_translator.hpp" />
     <ClInclude Include="architecture.hpp" />
     <ClInclude Include="type_traits.hpp" />

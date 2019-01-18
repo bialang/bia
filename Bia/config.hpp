@@ -150,6 +150,13 @@ namespace platform
 class x86_toolset;
 
 }
+
+namespace virtual_machine
+{
+
+class virtual_member_map;
+
+}
 }
 }
 
