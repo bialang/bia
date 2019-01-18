@@ -27,18 +27,7 @@ struct report
 	typedef uint16_t custom_t;
 	typedef uint8_t rule_t;
 	typedef uint8_t token_t;
-	typedef uint32_t size_t;
-	typedef const char* member_name_t;
-	typedef struct member_name
-	{
-		member_name_t name;
-		size_t length;
-
-		bool operator<(const member_name & _right) const noexcept
-		{
-			return name < _right.name;
-		}
-	} member_t;
+	typedef const char* member_t;
 
 	constexpr static auto type_bits = 4;
 	constexpr static auto custom_bits = 12;
@@ -73,7 +62,7 @@ struct report
 	uint32_t custom_parameter : custom_bits;
 	uint32_t rule_id : rule_bits;
 	uint32_t token_id : token_bits;
-	size_t size;
+	//uint32_t size;
 	union
 	{
 		/** A string buffer with a specific format. See @ref stream::string_stream for more information. */
@@ -83,7 +72,7 @@ struct report
 		double double_value;
 		const report * end;
 		/** The non-zero terminated name of the member. See @a size for the length. */
-		member_name_t member_name;
+		member_t member;
 		framework::operator_type operator_code;
 		KEYWORD_ID keyword;
 	} content;

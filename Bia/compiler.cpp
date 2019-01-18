@@ -367,7 +367,7 @@ const grammar::report * compiler::handle_identifier(const grammar::report * _rep
 	}
 
 	// Global member
-	_value.set_return_member({ _report->content.member_name, _report->size });
+	_value.set_return_member(_report->content.member);
 
 	return _report + 1;
 }

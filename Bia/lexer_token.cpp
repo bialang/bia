@@ -297,7 +297,7 @@ ACTION lexer_token::identifier(stream::buffer_input_stream & _input, token_param
 		return error;
 	}
 
-	report::size_t _length = _buffer.first - _begin;
+	size_t _length = _buffer.first - _begin;
 
 	// Rest
 	while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
@@ -320,8 +320,7 @@ ACTION lexer_token::identifier(stream::buffer_input_stream & _input, token_param
 
 	// Get address
 	_output.type = report::TYPE::MEMBER;
-	_output.size = _length;
-	_output.content.member_name = reinterpret_cast<report::member_name_t>(_begin);
+	_output.content.member = _params.context->name_address(utility::string_key(reinterpret_cast<const char*>(_begin), _length));
 
 	// Move cursor
 	_input.skip(_buffer.first);
