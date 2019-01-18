@@ -17,12 +17,12 @@ script_map::script_map(script_map && _move)
 	_scripts.swap(_move._scripts);
 }
 
-void script_map::set(const char * _name, machine_code && _code)
+void script_map::set(const char * _name, platform::machine_code && _code)
 {
 	_scripts.emplace(std::make_pair(_name, std::move(_code)));
 }
 
-const machine_code & script_map::get(const char * _name) const
+const platform::machine_code & script_map::get(const char * _name) const
 {
 	auto _result = _scripts.find(_name);
 

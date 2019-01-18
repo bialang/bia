@@ -63,7 +63,7 @@ void machine_context::add_script(const char * _name, stream::buffer_input_stream
 	_script_map.set(_name, compile_script(_script));
 }
 
-const machine_code & machine_context::get_script(const char * _name) const
+const platform::machine_code & machine_context::get_script(const char * _name) const
 {
 	return _script_map.get(_name);
 }
@@ -209,7 +209,7 @@ framework::member * machine_context::address_of_member(const char * _name)
 	return a;
 }
 
-machine_code machine_context::compile_script(stream::buffer_input_stream & _script)
+platform::machine_code machine_context::compile_script(stream::buffer_input_stream & _script)
 {
 	// Create compiler
 	stream::buffer_output_stream _output;
@@ -220,7 +220,7 @@ machine_code machine_context::compile_script(stream::buffer_input_stream & _scri
 
 	_compiler.finalize();
 
-	return machine_code(std::make_pair(_output.buffer(), _output.size()), machine_schein(_allocator.get(), _executable_allocator.get()));
+	return platform::machine_code(std::make_pair(_output.buffer(), _output.size()), machine_schein(_allocator.get(), _executable_allocator.get()));
 }
 
 

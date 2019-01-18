@@ -115,15 +115,15 @@
     <Filter Include="Source Files\utility">
       <UniqueIdentifier>{f1d4d637-d7bf-42d0-a860-68c8e09e9355}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\machine\platform">
+      <UniqueIdentifier>{d85be8c1-d6a8-4291-aab6-41beae7b2033}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="machine_schein.cpp">
-      <Filter>Source Files\machine</Filter>
-    </ClCompile>
-    <ClCompile Include="machine_code.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
     <ClCompile Include="syntax.cpp">
@@ -226,7 +226,10 @@
       <Filter>Source Files\utility</Filter>
     </ClCompile>
     <ClCompile Include="virtual_member_map.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\machine\virtual_machine</Filter>
+    </ClCompile>
+    <ClCompile Include="machine_code.cpp">
+      <Filter>Source Files\machine\platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="output_stream.hpp">
       <Filter>Header Files\stream</Filter>
-    </ClInclude>
-    <ClInclude Include="machine_code.hpp">
-      <Filter>Header Files\machine</Filter>
     </ClInclude>
     <ClInclude Include="machine_schein.hpp">
       <Filter>Header Files\machine</Filter>
@@ -574,6 +574,9 @@
     </ClInclude>
     <ClInclude Include="code.hpp">
       <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="machine_code.hpp">
+      <Filter>Header Files\machine\platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

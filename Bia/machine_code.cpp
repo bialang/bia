@@ -7,6 +7,8 @@ namespace bia
 {
 namespace machine
 {
+namespace platform
+{
 
 machine_code::machine_code(std::pair<const void*, size_t> _machine_code, machine_schein _machine_schein) : _machine_schein(std::move(_machine_schein))
 {
@@ -39,7 +41,7 @@ machine_code::~machine_code()
 	clear();
 }
 
-void machine_code::execute() const
+void machine_code::execute()
 {
 	if (is_executable()) {
 		reinterpret_cast<entry_point>(_entry_point.first)();
@@ -71,5 +73,6 @@ machine_code & machine_code::operator=(machine_code && _rvalue)
 	return *this;
 }
 
+}
 }
 }
