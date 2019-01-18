@@ -158,11 +158,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
 
 
 # Adding the library
-if(BIA_BUILD_SHARED)
-  add_library(Bia SHARED ${Bia_SOURCE_FILES})
-else(BIA_BUILD_SHARED)
-  add_library(Bia STATIC ${Bia_SOURCE_FILES})
-endif(BIA_BUILD_SHARED)
+add_library(Bia ${Bia_SOURCE_FILES})
 
 
 target_link_libraries(Bia ${MPIR_LIB})
