@@ -572,6 +572,9 @@
     <ClInclude Include="virtual_member_map.hpp">
       <Filter>Header Files\machine\virtual_machine</Filter>
     </ClInclude>
+    <ClInclude Include="code.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
