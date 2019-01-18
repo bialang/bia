@@ -3,10 +3,13 @@
 #include <cstdint>
 #include <vector>
 
+#include "config.hpp"
 #include "allocator.hpp"
-#include "op_code.hpp"
 #include "member.hpp"
+#include "share.hpp"
 #include "machine_context.hpp"
+#include "virtual_member_map.hpp"
+#include "code.hpp"
 
 
 namespace bia
@@ -16,17 +19,33 @@ namespace machine
 namespace virtual_machine
 {
 
-class virtual_machine_code
+class virtual_machine_code : public code
 {
 public:
-	virtual_machine_code(memory::const_universal_allocation _code, machine_context & _context);
-	void execute();
+	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, machine_context & _context, const virtual_member_map & _member_map, bool _take_ownership = false);
+	virtual_machine_code(const virtual_machine_code & _copy) = delete;
+	BIA_EXPORT virtual_machine_code(virtual_machine_code && _move);
+	/**
+	 * Destructor.
+	 *
+	 * @since 3.72.149.810
+	 * @date 18-Jan-19
+	 *
+	 * @throws See clear().
+	*/
+	BIA_EXPORT ~virtual_machine_code();
+
+	BIA_EXPORT virtual void execute() override;
+	BIA_EXPORT virtual void clear() override;
+	BIA_EXPORT virtual bool is_executable() const noexcept override;
 
 private:
-	memory::allocation<const uint8_t> _code;
-	std::vector<framework::member*> _globals;
-
-	OP_CODE next_op_code(int & _cursor);
+	/** Contains the instructions for the virtual machine code. */
+	memory::allocation<uint8_t> _code;
+	/** The memory allocator. */
+	memory::allocator * _allocator;
+	/** The global member list. */
+	virtual_member_map::member_list_t _globals;
 };
 
 }
