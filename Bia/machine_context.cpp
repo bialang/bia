@@ -18,7 +18,7 @@ thread_local memory::big_int_allocator * machine_context::_active_big_int_alloca
 thread_local utility::buffer_builder * machine_context::_active_buffer_builder = nullptr;
 
 
-machine_context::machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::big_int_allocator> & _big_int_allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _member_allocator(_member_allocator), _big_int_allocator(_big_int_allocator), _executable_allocator(_executable_allocator), _buffer_builder(_allocator.get()), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _stack(this->_allocator.get(), 1024), _module_loader(allocator())
+machine_context::machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::big_int_allocator> & _big_int_allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _member_allocator(_member_allocator), _big_int_allocator(_big_int_allocator), _executable_allocator(_executable_allocator), _buffer_builder(_allocator.get()), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _module_loader(allocator())
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -149,26 +149,6 @@ string_manager & machine_context::string_manager() noexcept
 	return _string_manager;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION machine_context::destroy_from_stack(uint32_t _member_count)
-{
-	_stack.pop(_member_count);
-}
-
-void BIA_MEMBER_CALLING_CONVENTION machine_context::recreate_on_stack(uint32_t _member_count)
-{
-	_stack.recreate(_member_count);
-}
-
-void BIA_MEMBER_CALLING_CONVENTION machine_context::recreate_range_on_stack(framework::member * _begin, uint32_t _member_count)
-{
-	_stack.recreate_range(_begin, _member_count);
-}
-
-void BIA_MEMBER_CALLING_CONVENTION machine_context::create_on_stack(framework::member ** _destination, uint32_t _member_count)
-{
-	_stack.push(_destination, _member_count);
-}
-
 void BIA_MEMBER_CALLING_CONVENTION machine_context::import_module(const char * _name)
 {
 	printf("import: %s\n", _name);
@@ -215,12 +195,12 @@ platform::machine_code machine_context::compile_script(stream::buffer_input_stre
 	stream::buffer_output_stream _output;
 	compiler::compiler _compiler(_output, *this);
 
-	// Interpret
+	// Lex and compile
 	grammar::syntax::lexer().lex(_script, _compiler, *this);
 
 	_compiler.finalize();
-
-	return platform::machine_code(std::make_pair(_output.buffer(), _output.size()), machine_schein(_allocator.get(), _executable_allocator.get()));
+	BIA_NOT_IMPLEMENTED;
+	//return platform::machine_code(std::make_pair(_output.buffer(), _output.size()), machine_schein(_allocator.get(), _executable_allocator.get()));
 }
 
 

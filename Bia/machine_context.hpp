@@ -14,7 +14,7 @@
 #include "member.hpp"
 #include "string_manager.hpp"
 #include "variable_index.hpp"
-#include "machine_stack.hpp"
+#include "stack.hpp"
 #include "module_loader.hpp"
 #include "buffer_builder.hpp"
 #include "script_map.hpp"
@@ -280,61 +280,11 @@ private:
 	machine::string_manager _string_manager;
 	/** Holds all known variables, function and other. */
 	variable_index _variable_index;
-	/** The virtual machine stack. */
-	machine_stack _stack;
 	/** The script map. */
 	script_map _script_map;
 	/** The module loader. */
 	modular::module_loader _module_loader;
 
-	/**
-	 * Pops the variables from the stack.
-	 *
-	 * @since 3.65.132.734
-	 * @date 30-Jun-18
-	 *
-	 * @param _member_count The amount of member variables.
-	 *
-	 * @throws See machine_stack::pop().
-	*/
-	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION destroy_from_stack(uint32_t _member_count);
-	/**
-	 * Recreates the last variables of the stack.
-	 *
-	 * @since 3.71.149.808
-	 * @date 26-Dec-18
-	 *
-	 * @param _member_count The amount of member variables.
-	 *
-	 * @throws See machine_stack::recreate().
-	*/
-	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION recreate_on_stack(uint32_t _member_count);
-	/**
-	 * Recreates a range of variables of the stack.
-	 *
-	 * @since 3.71.149.808
-	 * @date 26-Dec-18
-	 *
-	 * @param _begin The beginning of the range.
-	 * @param _member_count The amount of member variables.
-	 *
-	 * @throws See machine_stack::recreate_range().
-	*/
-	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION recreate_range_on_stack(framework::member * _begin, uint32_t _member_count);
-	/**
-	 * Pushes the variables to the stack.
-	 *
-	 * @since 3.65.132.734
-	 * @date 30-Jun-18
-	 *
-	 * @param [in,out] _destination The destination of the created addresses.
-	 * @param _member_count The amount of member variables.
-	 *
-	 * @throws See machine_stack::push().
-	 *
-	 * @return The address of the allocated space.
-	*/
-	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION create_on_stack(framework::member ** _destination, uint32_t _member_count);
 	BIA_EXPORT void BIA_MEMBER_CALLING_CONVENTION import_module(const char * _name);
 	BIA_EXPORT const char * name_address(utility::string_key _name);
 	/**
