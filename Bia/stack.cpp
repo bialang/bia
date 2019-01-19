@@ -1,4 +1,4 @@
-#include "machine_stack.hpp"
+#include "stack.hpp"
 #include "undefined_member.hpp"
 #include "max_member_size.hpp"
 
@@ -8,14 +8,14 @@ namespace bia
 namespace machine
 {
 
-machine_stack::machine_stack(memory::allocator * _allocator, size_t _size)
+stack::stack(memory::allocator * _allocator, size_t _size)
 {
 	_buffer = memory::cast_allocation<int8_t>(_allocator->allocate(_size));
 	this->_allocator = _allocator;
 	_cursor = 0;
 }
 
-machine_stack::machine_stack(machine_stack && _move) noexcept
+stack::stack(stack && _move) noexcept
 {
 	_allocator = _move._allocator;
 	_buffer = std::move(_move._buffer);
@@ -24,14 +24,14 @@ machine_stack::machine_stack(machine_stack && _move) noexcept
 	_move._cursor = 0;
 }
 
-machine_stack::~machine_stack()
+stack::~stack()
 {
 	if (_buffer) {
 		_allocator->deallocate(memory::cast_allocation<void>(_buffer));
 	}
 }
 
-void machine_stack::pop(uint32_t _member_count)
+void stack::pop(uint32_t _member_count)
 {
 	if (_cursor < _member_count * framework::max_member_size) {
 		throw 1;
@@ -48,7 +48,7 @@ void machine_stack::pop(uint32_t _member_count)
 	}
 }
 
-void machine_stack::recreate(uint32_t _member_count)
+void stack::recreate(uint32_t _member_count)
 {
 	if (_cursor < _member_count * framework::max_member_size) {
 		throw 1;
@@ -63,7 +63,7 @@ void machine_stack::recreate(uint32_t _member_count)
 	}
 }
 
-void machine_stack::recreate_range(framework::member * _begin, uint32_t _member_count)
+void stack::recreate_range(framework::member * _begin, uint32_t _member_count)
 {
 	if (!_member_count) {
 		return;
@@ -83,7 +83,7 @@ void machine_stack::recreate_range(framework::member * _begin, uint32_t _member_
 	}
 }
 
-void machine_stack::push(framework::member ** _destination, uint32_t _member_count)
+void stack::push(framework::member ** _destination, uint32_t _member_count)
 {
 	auto _ptr = _buffer.first + _cursor;
 

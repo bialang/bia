@@ -19,7 +19,7 @@ namespace machine
  *
  * @see @ref machine_context
 */
-class machine_stack
+class stack
 {
 public:
 	/**
@@ -33,8 +33,8 @@ public:
 	 *
 	 * @throws See memory::allocator::allocate().
 	*/
-	BIA_EXPORT machine_stack(memory::allocator * _allocator, size_t _size);
-	machine_stack(const machine_stack & _copy) = delete;
+	BIA_EXPORT stack(memory::allocator * _allocator, size_t _size);
+	stack(const stack & _copy) = delete;
 	/**
 	 * Move-Constructor.
 	 *
@@ -43,7 +43,7 @@ public:
 	 *
 	 * @param [in,out] _move The instance that should be moved.
 	*/
-	BIA_EXPORT machine_stack(machine_stack && _move) noexcept;
+	BIA_EXPORT stack(stack && _move) noexcept;
 	/**
 	 * Destructor.
 	 *
@@ -52,7 +52,7 @@ public:
 	 *
 	 * @throws See memory::allocator::deallocate().
 	*/
-	BIA_EXPORT ~machine_stack();
+	BIA_EXPORT ~stack();
 	/**
 	 * Pops the variables from the stack.
 	 *

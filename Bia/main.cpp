@@ -132,6 +132,8 @@ int main()
 
 global i = 0
 
+print(i)
+
 )"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
@@ -178,20 +180,6 @@ global i = 0
 		} catch (const std::exception & e) {
 			printf("%s: %s\n", typeid(e).name(), e.what());
 		}
-		/*bia::machine::machine_code _machine_code({ _output.buffer(), _output.size() }, bia::machine::machine_schein(_context.allocator(), _context.executable_allocator()));
-
-		if (_machine_code.is_executable()) {
-			// Set active allocator
-			_context.activate_context();
-
-			try {
-				test_and_time(1, [&] {
-					_machine_code.execute();
-				});
-			} catch (const std::exception & e) {
-				printf("%s: %s\n", typeid(e).name(), e.what());
-			}
-		}*/
 	}
 
 	system("pause");
