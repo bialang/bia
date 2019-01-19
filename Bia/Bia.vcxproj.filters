@@ -231,6 +231,9 @@
     <ClCompile Include="machine_code.cpp">
       <Filter>Source Files\machine\platform</Filter>
     </ClCompile>
+    <ClCompile Include="schein.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -577,6 +580,9 @@
     </ClInclude>
     <ClInclude Include="machine_code.hpp">
       <Filter>Header Files\machine\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="schein.hpp">
+      <Filter>Header Files\machine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
