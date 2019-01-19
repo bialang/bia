@@ -14,7 +14,7 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _translator(_output), _context(_context), _schein(_context.allocator(), _context.executable_allocator(), _context.big_int_allocator()), _scope_handler(_translator)
+compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _translator(_output), _context(_context), _schein(_context), _scope_handler(_translator)
 {
 }
 
@@ -36,6 +36,7 @@ void compiler::finalize()
 	}
 
 	_translator.output_stream().set_position(_end);
+	_schein.set_member_map(_translator.virtual_member_map());
 }
 
 machine::virtual_machine::virtual_machine_schein & compiler::virtual_machine_schein() noexcept

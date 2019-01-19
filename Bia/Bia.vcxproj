@@ -228,6 +228,7 @@
     <ClCompile Include="utf8.cpp" />
     <ClCompile Include="variable_index.cpp" />
     <ClCompile Include="virtual_machine_code.cpp" />
+    <ClCompile Include="virtual_machine_schein.cpp" />
     <ClCompile Include="virtual_member_map.cpp" />
     <ClCompile Include="virtual_translator.cpp" />
   </ItemGroup>
