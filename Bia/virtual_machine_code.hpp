@@ -8,7 +8,7 @@
 #include "member.hpp"
 #include "share.hpp"
 #include "machine_context.hpp"
-#include "virtual_member_map.hpp"
+#include "virtual_machine_schein.hpp"
 #include "code.hpp"
 
 
@@ -22,7 +22,7 @@ namespace virtual_machine
 class virtual_machine_code : public code
 {
 public:
-	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, machine_context & _context, const virtual_member_map & _member_map, bool _take_ownership = false);
+	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, virtual_machine_schein && _schein, bool _take_ownership = false);
 	virtual_machine_code(const virtual_machine_code & _copy) = delete;
 	BIA_EXPORT virtual_machine_code(virtual_machine_code && _move);
 	/**
@@ -42,10 +42,8 @@ public:
 private:
 	/** Contains the instructions for the virtual machine code. */
 	memory::allocation<uint8_t> _code;
-	/** The memory allocator. */
-	memory::allocator * _allocator;
-	/** The global member list. */
-	virtual_member_map::member_list_t _globals;
+	/** The machine schein.  */
+	virtual_machine_schein _schein;
 };
 
 }
