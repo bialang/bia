@@ -197,6 +197,7 @@
     <ClCompile Include="double_member.cpp" />
     <ClCompile Include="big_int_member.cpp" />
     <ClCompile Include="int_member.cpp" />
+    <ClCompile Include="machine_schein.cpp" />
     <ClCompile Include="machine_stack.cpp" />
     <ClCompile Include="member_map.cpp" />
     <ClCompile Include="member_names.cpp" />

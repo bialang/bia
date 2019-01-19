@@ -231,6 +231,9 @@
     <ClCompile Include="schein.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
+    <ClCompile Include="machine_schein.cpp">
+      <Filter>Source Files\machine\platform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">

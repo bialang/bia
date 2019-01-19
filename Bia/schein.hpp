@@ -119,11 +119,11 @@ public:
 
 protected:
 	/** The memory allocator for normal memory. */
-	memory::allocator * const _allocator;
+	memory::allocator * _allocator;
 	/** The memory allocator for executable memory. */
-	memory::executable_allocator * const _executable_allocator;
+	memory::executable_allocator * _executable_allocator;
 	/** The memory allocator for big ints. */
-	memory::big_int_allocator * const _big_int_allocator;
+	memory::big_int_allocator * _big_int_allocator;
 	/** Stores all registered allocations with deleter. */
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
 };

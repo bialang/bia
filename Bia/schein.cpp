@@ -6,8 +6,11 @@ namespace bia
 namespace machine
 {
 
-schein::schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator, memory::big_int_allocator * _big_int_allocator) : _allocator(_allocator), _executable_allocator(_executable_allocator), _big_int_allocator(_big_int_allocator)
+schein::schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator, memory::big_int_allocator * _big_int_allocator)
 {
+	this->_allocator = _allocator;
+	this->_executable_allocator = _executable_allocator;
+	this->_big_int_allocator = _big_int_allocator;
 }
 
 schein::~schein()
