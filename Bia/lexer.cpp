@@ -37,12 +37,11 @@ void lexer::lex(stream::buffer_input_stream & _input, report_receiver & _receive
 		auto _mark = _input.mark();
 
 		// Run root
-		token_param _param;
+		token_param _param(_context);
 
 		_param.bundle = &_bundle;
 		_param.rules = _rules;
 		_param.token_id = 0;
-		_param.context = &_context;
 		_param.encoder = &encoder;
 
 		try {

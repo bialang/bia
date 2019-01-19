@@ -334,6 +334,7 @@
     <ClInclude Include="static_function.hpp" />
     <ClInclude Include="string_manager.hpp" />
     <ClInclude Include="temp_counter.hpp" />
+    <ClInclude Include="virtual_machine_schein.hpp" />
     <ClInclude Include="virtual_member_map.hpp" />
     <ClInclude Include="x86_translator.hpp" />
     <ClInclude Include="architecture.hpp" />

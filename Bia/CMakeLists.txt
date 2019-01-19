@@ -129,7 +129,7 @@ set(Bia_SOURCE_FILES_PLATFORM "machine_code.cpp" "machine_schein.cpp")
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
 source_group("Source Files\\machine\\platform" FILES ${Bia_SOURCE_FILES_PLATFORM})
 
-set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "virtual_machine_code.hpp" "virtual_member_map.hpp" "virtual_translator.hpp")
+set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "virtual_machine_code.hpp" "virtual_machine_schein.hpp" "virtual_member_map.hpp" "virtual_translator.hpp")
 set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "virtual_machine_code.cpp" "virtual_member_map.cpp" "virtual_translator.cpp")
 
 source_group("Header Files\\machine\\virtual_machine" FILES ${Bia_HEADER_FILES_VIRTUAL_MACHINE})

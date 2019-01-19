@@ -7,7 +7,7 @@
 #include "report_bundle.hpp"
 #include "buffer_input_stream.hpp"
 #include "machine_context.hpp"
-#include "machine_schein.hpp"
+#include "virtual_machine_schein.hpp"
 #include "encoder.hpp"
 
 
@@ -69,14 +69,14 @@ struct token_param
 	report::token_t token_id;
 	/** The corresponding machine context. */
 	machine::machine_context * context;
-	/** The machine schein of the resulting code. */
-	machine::machine_schein schein;
+	/** The schein of the resulting code. */
+	machine::virtual_machine::virtual_machine_schein schein;
 	/** The decoder for the input stream. */
 	encoding::encoder * encoder;
 
-	token_param() : schein(nullptr, nullptr)
+	explicit token_param(machine::machine_context & _context) : schein(_context.allocator(), _context.executable_allocator(), _context.big_int_allocator())
 	{
-
+		context = &_context;
 	}
 };
 
