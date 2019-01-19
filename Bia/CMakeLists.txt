@@ -99,8 +99,8 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_GRAMMAR})
 
 
 # machine namespace
-set(Bia_HEADER_FILES_MACHINE "code.hpp" "disassembler.hpp" "machine_code.hpp" "machine_context.hpp" "machine_schein.hpp" "machine_stack.hpp" "schein.hpp" "script_map.hpp" "string_manager.hpp" "variable_index.hpp")
-set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_code.cpp" "machine_context.cpp" "machine_schein.cpp" "machine_stack.cpp" "schein.cpp" "script_map.cpp" "string_manager.cpp" "variable_index.cpp")
+set(Bia_HEADER_FILES_MACHINE "code.hpp" "disassembler.hpp" "machine_context.hpp" "machine_stack.hpp" "schein.hpp" "script_map.hpp" "string_manager.hpp" "variable_index.hpp")
+set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_context.cpp" "machine_stack.cpp" "schein.cpp" "script_map.cpp" "string_manager.cpp" "variable_index.cpp")
 
 source_group("Header Files\\machine" FILES ${Bia_HEADER_FILES_MACHINE})
 source_group("Source Files\\machine" FILES ${Bia_SOURCE_FILES_MACHINE})
@@ -123,9 +123,11 @@ set(Bia_SOURCE_FILES_MODULAR "module_loader.cpp")
 source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})
 source_group("Source Files\\machine\\modular" FILES ${Bia_SOURCE_FILES_MODULAR})
 
-set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "member_passer.hpp" "passer.hpp" "static_passer.hpp" "varg_member_passer.hpp" "x86_translator.hpp")
+set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "machine_code.hpp" "machine_schein.hpp" "member_passer.hpp" "passer.hpp" "static_passer.hpp" "varg_member_passer.hpp" "x86_translator.hpp")
+set(Bia_SOURCE_FILES_PLATFORM "machine_code.cpp")
 
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
+source_group("Source Files\\machine\\platform" FILES ${Bia_SOURCE_FILES_PLATFORM})
 
 set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "virtual_machine_code.hpp" "virtual_member_map.hpp" "virtual_translator.hpp")
 set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "virtual_machine_code.cpp" "virtual_member_map.cpp" "virtual_translator.cpp")

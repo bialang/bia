@@ -123,9 +123,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="machine_schein.cpp">
-      <Filter>Source Files\machine</Filter>
-    </ClCompile>
     <ClCompile Include="syntax.cpp">
       <Filter>Source Files\grammar</Filter>
     </ClCompile>
@@ -232,7 +229,7 @@
       <Filter>Source Files\machine\platform</Filter>
     </ClCompile>
     <ClCompile Include="schein.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\machine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="output_stream.hpp">
       <Filter>Header Files\stream</Filter>
-    </ClInclude>
-    <ClInclude Include="machine_schein.hpp">
-      <Filter>Header Files\machine</Filter>
     </ClInclude>
     <ClInclude Include="config.hpp">
       <Filter>Header Files</Filter>
@@ -583,6 +577,9 @@
     </ClInclude>
     <ClInclude Include="schein.hpp">
       <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="machine_schein.hpp">
+      <Filter>Header Files\machine\platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

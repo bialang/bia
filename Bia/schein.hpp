@@ -39,6 +39,8 @@ public:
 	 * @throws See std::vector::vector().
 	*/
 	BIA_EXPORT schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator, memory::big_int_allocator * _big_int_allocator);
+	schein(const schein & _copy) = delete;
+	schein(schein && _move) = default;
 	/**
 	 * Destructor.
 	 *
