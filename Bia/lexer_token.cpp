@@ -76,7 +76,7 @@ ACTION lexer_token::number(stream::buffer_input_stream & _input, token_param & _
 		_new_int->negate();
 	}
 
-	_params.schein.register_big_int(_new_int);
+	_params.schein->register_big_int(_new_int);
 	_output.type = report::TYPE::BIG_INT_VALUE;
 	_output.content.big_int_value = _new_int;
 

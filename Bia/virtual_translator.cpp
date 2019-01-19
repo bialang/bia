@@ -119,19 +119,14 @@ stream::output_stream & virtual_translator::output_stream() noexcept
 	return *_output;
 }
 
+const virtual_member_map & virtual_translator::virtual_member_map() noexcept
+{
+	return _member_map;
+}
+
 virtual_translator::member_index virtual_translator::to_member(grammar::report::member_t _name)
 {
-	auto _result = _member_index.find(_name);
-
-	if (_result == _member_index.end()) {
-		auto _index = _member_index.size();
-
-		_member_index.insert({ _name, _index });
-
-		return _index;
-	}
-
-	return _result->second;
+	return _member_map.get_or_insert(_name);
 }
 
 virtual_translator::temp_index virtual_translator::to_temp(member_index_t _index) noexcept

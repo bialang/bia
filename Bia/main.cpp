@@ -169,7 +169,7 @@ global i = 0
 		system("pause");
 
 		// Run
-		bia::machine::virtual_machine::virtual_machine_code _machine_code({ _output.buffer(), static_cast<size_t>(_output.size()) }, _context);
+		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.virtual_machine_schein()));
 
 		try {
 			test_and_time(1, [&] {

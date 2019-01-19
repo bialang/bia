@@ -70,14 +70,9 @@ struct token_param
 	/** The corresponding machine context. */
 	machine::machine_context * context;
 	/** The schein of the resulting code. */
-	machine::virtual_machine::virtual_machine_schein schein;
+	machine::virtual_machine::virtual_machine_schein * schein;
 	/** The decoder for the input stream. */
 	encoding::encoder * encoder;
-
-	explicit token_param(machine::machine_context & _context) : schein(_context.allocator(), _context.executable_allocator(), _context.big_int_allocator())
-	{
-		context = &_context;
-	}
 };
 
 typedef report token_output;

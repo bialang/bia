@@ -65,6 +65,11 @@ buffer_output_stream::cursor_type buffer_output_stream::size() const
 	return _size - _beginning;
 }
 
+int8_t * buffer_output_stream::buffer()
+{
+	return _buffer.get() + _beginning;
+}
+
 const int8_t * buffer_output_stream::buffer() const
 {
 	return _buffer.get() + _beginning;
