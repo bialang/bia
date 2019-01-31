@@ -55,13 +55,13 @@ inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::execute(member * _destin
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_format(member * _destination, const char * _format, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack)
 {
 	BIA_NOT_IMPLEMENTED;
 }

@@ -55,25 +55,15 @@ inline void BIA_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Ar
 }
 
 template<typename _Class, typename _Return, typename ..._Args>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute_count(member * _destination, void * _reserved, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack)
 {
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-
-	force::disguised_caller_count(_data.get().first, cast_instance(), _destination, _count, _args);
-
-	va_end(_args.args);
+	force::disguised_caller_count(_data.get().first, cast_instance(), _destination, _count, _stack);
 }
 
 template<typename _Class, typename _Return, typename ..._Args>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute_format(member * _destination, const char * _format, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack)
 {
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-
-	force::disguised_caller_format(_data.get().first, cast_instance(), _destination, _format, _count, _args);
-
-	va_end(_args.args);
+	force::disguised_caller_format(_data.get().first, cast_instance(), _destination, _format, _count, _stack);
 }
 
 template<typename _Class, typename _Return, typename ..._Args>

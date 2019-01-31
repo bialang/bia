@@ -56,23 +56,13 @@ public:
 	{
 		force::disguised_caller(_function, _destination);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack) override
 	{
-		force::va_list_wrapper _args;
-		va_start(_args.args, _count);
-
-		force::disguised_caller_count(_function, _destination, _count, _args);
-
-		va_end(_args.args);
+		force::disguised_caller_count(_function, _destination, _count, _stack);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack) override
 	{
-		force::va_list_wrapper _args;
-		va_start(_args.args, _count);
-
-		force::disguised_caller_format(_function, _destination, _format, _count, _args);
-
-		va_end(_args.args);
+		force::disguised_caller_format(_function, _destination, _format, _count, _stack);
 	}
 	virtual void set_instance(const void * _instance, const std::type_info & _type) override
 	{

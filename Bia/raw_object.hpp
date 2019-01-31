@@ -57,29 +57,15 @@ inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::execute(member * _de
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION raw_object<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION raw_object<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack)
 {
 	BIA_NOT_IMPLEMENTED;
-	auto _this = promote();
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-
-	_this->execute_count(_destination, _reserved, _count, _args.args);
-
-	va_end(_args.args);
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION raw_object<Type>::execute_format(member * _destination, const char * _format, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION raw_object<Type>::execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack)
 {
 	BIA_NOT_IMPLEMENTED;
-	auto _this = promote();
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-
-	_this->execute_format(_destination, _format, _count, _args.args);
-
-	va_end(_args.args);
 }
 
 template<typename Type>

@@ -61,25 +61,15 @@ inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute(membe
 }
 
 template<typename Lambda>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_count(member * _destination, void * _reserved, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack)
 {
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-
-	force::disguised_caller_count(&Lambda::operator(), &_data.get(), _destination, _count, _args);
-
-	va_end(_args.args);
+	force::disguised_caller_count(&Lambda::operator(), &_data.get(), _destination, _count, _stack);
 }
 
 template<typename Lambda>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_format(member * _destination, const char * _format, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack)
 {
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-
-	force::disguised_caller_format(&Lambda::operator(), &_data.get(), _destination, _format, _count, _args);
-
-	va_end(_args.args);
+	force::disguised_caller_format(&Lambda::operator(), &_data.get(), _destination, _format, _count, _stack);
 }
 
 template<typename Lambda>

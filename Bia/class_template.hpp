@@ -58,33 +58,19 @@ inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::execute(member *
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack)
 {
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-	auto _instance_created = false;
+	BIA_NOT_IMPLEMENTED;
+	instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_count(_count, _stack)), true);
 
-	try {
-		instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_count(_count, _args)), true);
-		_destination->replace_this<object<Type>>(_instance, _data.get().first);
-
-		_instance_created = true;
-		va_end(_args.args);
-
-		_destination->replace_this<object<Type>>(_instance, _data.get().first);
-	} catch (...) {
-		if (!_instance_created) {
-			va_end(_args.args);
-		}
-
-		throw;
-	}
+	_destination->replace_this<object<Type>>(_instance, _data.get().first);
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_format(member * _destination, const char * _format, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack)
 {
-	force::va_list_wrapper _args;
+	BIA_NOT_IMPLEMENTED;
+	/*force::va_list_wrapper _args;
 	va_start(_args.args, _count);
 	auto _instance_created = false;
 
@@ -101,7 +87,7 @@ inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_for
 		}
 
 		throw;
-	}
+	}*/
 }
 
 template<typename Type>

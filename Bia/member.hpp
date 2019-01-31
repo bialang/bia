@@ -2,7 +2,6 @@
 
 #include <cstdio>
 #include <cstdint>
-#include <cstdarg>
 #include <typeinfo>
 #include <type_traits>
 #include <utility>
@@ -15,6 +14,7 @@
 #include "buffer_builder.hpp"
 #include "big_int.hpp"
 #include "member_cast_type.hpp"
+#include "stack.hpp"
 
 
 namespace bia
@@ -142,7 +142,7 @@ public:
 	 * @param [out] _destination The destination of the return result.
 	 * @param _reserved Reserved parameter. Do not use this.
 	 * @param _count The amount of the passed arguments.
-	 * @param ... The arguments.
+	 * @param [in] _stack The stack where the parameters are.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
@@ -151,7 +151,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_count().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack) = 0;
 	/**
 	 * Executes this object as function with mixed parameters.
 	 *
@@ -161,7 +161,7 @@ public:
 	 * @param [out] _destination The destination of the return result.
 	 * @param _format The types of the arguments.
 	 * @param _count The amount of the passed arguments.
-	 * @param ... The arguments.
+	 * @param [in] _stack The stack where the parameters are.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
@@ -170,7 +170,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_format().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack) = 0;
 	/**
 	 * An operator call with another member as right value.
 	 *
