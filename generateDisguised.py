@@ -21,11 +21,11 @@ f = open("Bia/disguised_caller_source.hpp", "wb")
 
 h.write(b"""#pragma once
 
-#include <cstdarg>
 #include <cstdint>
 #include <type_traits>
 
 #include "member.hpp"
+#include "stack.hpp"
 #include "allocator.hpp"
 #include "type_traits.hpp"
 
@@ -34,14 +34,6 @@ namespace bia
 {
 namespace force
 {
-
-struct va_list_wrapper
-{
-	std::va_list args;
-};
-
-template<typename Return>
-Return format_cast(va_list_wrapper & _args, const char *& _format);
 
 void disguised_caller(void(*_function)(), framework::member * _destination);
 
@@ -78,16 +70,12 @@ typename std::enable_if<(sizeof...(Arguments) > 0), machine::memory::allocation<
 """)
 f.write(b"""#pragma once
 
-#include <cstdarg>
 #include <cstdint>
 #include <type_traits>
 
 #include "disguised_caller.hpp"
-#include "member.hpp"
-#include "allocator.hpp"
 #include "exception.hpp"
 #include "create_member.hpp"
-#include "type_traits.hpp"
 #include "machine_context.hpp"
 
 
@@ -95,71 +83,6 @@ namespace bia
 {
 namespace force
 {
-
-template<typename Return>
-inline Return format_cast(va_list_wrapper & _args, const char *& _format)
-{
-	using namespace utility;
-	using Real_return = typename std::remove_reference<Return>::type;
-
-gt_redo:;
-
-	switch (*_format++)
-	{
-	case 'i':
-	{
-		constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
-
-		if (is_number) {
-			return chooser<is_number, Return, int32_t>::choose(va_arg(_args.args, int32_t));
-		} else {
-			break;
-		}
-	}
-	case 'I':
-	{
-		constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
-
-		if (is_number) {
-			return chooser<is_number, Return, int64_t>().choose(va_arg(_args.args, int64_t));
-		} else {
-			break;
-		}
-	}
-	case 'd':
-	{
-		constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
-
-		if (is_number) {
-			auto _value = va_arg(_args.args, int64_t);
-
-			return chooser<is_number, Return, double>().choose(*reinterpret_cast<double*>(&_value));
-		} else {
-			break;
-		}
-	}
-	case 'a':
-	{
-		constexpr auto is_string = std::is_same<Real_return, const char*>::value;
-
-		if (is_string) {
-			return chooser<is_string, Return, const char*>().choose(va_arg(_args.args, const char*));
-		} else {
-			break;
-		}
-	}
-	case 'M':
-		return va_arg(_args.args, framework::member*)->cast<Return>();
-	case 'r':
-		va_arg(_args.args, void*);
-
-		goto gt_redo;
-	default:
-		throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
-	}
-
-	throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
-}
 
 inline void disguised_caller(void(*_function)(), framework::member * _destination)
 {
@@ -244,9 +167,7 @@ for type in ["count", "format"]:
 		upper["function_name"] = "disguised_caller_format"
 		upper["format_param"] = "const char * _format, "
 		
-	upper["pre_preparations"] = ""
-	upper["preparations"] = ""	
-	upper["post_preparations"] = ""
+	upper["preparations"] = ""
 
 	for template in ["static", "static_void", "member", "member_void", "member_const", "member_void_const", "initiator"]:
 		filler = upper.copy()
@@ -339,19 +260,20 @@ for type in ["count", "format"]:
 			filler["arg_count"] = i
 
 			h.write("""{template_begin}{template_middle}{template_end}
-{function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list_wrapper & _args);
+{function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, machine::stack * _stack);
 
 """.format(**filler).encode())
 			f.write("""{template_begin}{template_middle}{template_end}
-inline {function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, va_list_wrapper & _args)
+inline {function_return} {function_name}({param1}{param2}{param3}{format_param}framework::member::parameter_count _count, machine::stack * _stack)
 {{
-	if (_count != {arg_count}) {{
+	constexpr auto _arg_count = {arg_count};
+
+	if (_count != _arg_count) {{
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 	}}
-#if defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG)){pre_preparations}
-#endif{preparations}
-#if !(defined(BIA_ARCHITECTURE_X86_64) && (defined(BIA_COMPILER_GNU) || defined(BIA_COMPILER_CLANG))){post_preparations}
-#endif
+{preparations}
+
+	_stack->pop_count(_arg_count);
 
 	{body1}{body2}{body3}
 }}
@@ -366,17 +288,13 @@ inline {function_return} {function_name}({param1}{param2}{param3}{format_param}f
 			if type == "count":
 				filler["body2"] += (", " if i != 0 else "") + "_v{0}".format(i)
 				preptmp = """
-	typename framework::converter<_{0}>::type _v{0} = va_arg(_args.args, framework::member*)->cast<_{0}>();""".format(i)
+	typename framework::converter<_{0}>::type _v{0} = _stack->cast<framework::member*>({0} - _arg_count)->cast<_{0}>();""".format(i)
 			else:
 				preptmp = """
-	_{0} _v{0} = format_cast<_{0}>(_args, _format);""".format(i)
+	_{0} _v{0} = _stack->format_cast<_{0}>({0} - _arg_count, *_format++);""".format(i)
 				filler["body2"] += (", " if i != 0 else "") + "std::forward<_{0}>(_v{0})".format(i)
 
-			if i < 2:
-				filler["pre_preparations"] += preptmp
-				filler["post_preparations"] = preptmp + filler["post_preparations"]
-			else:
-				filler["preparations"] = preptmp + filler["preparations"]
+			filler["preparations"] = filler["preparations"] + preptmp
 				
 			if template == "static_void":
 				filler["template_begin"] = "template<"
