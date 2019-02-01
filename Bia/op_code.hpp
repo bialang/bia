@@ -34,6 +34,8 @@ enum OP_CODE : op_code_t
 	OC_PARAM_I32,
 	OC_PARAM_I64,
 	OC_PARAM_D,
+	/** Pushes a 0 onto the stack. */
+	OC_PARAM_0,
 	OC_INSTANTIATE_0,
 	OC_INSTANTIATE_N1,
 	OC_INSTANTIATE_1,

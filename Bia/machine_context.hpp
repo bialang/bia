@@ -14,7 +14,6 @@
 #include "member.hpp"
 #include "string_manager.hpp"
 #include "variable_index.hpp"
-#include "stack.hpp"
 #include "module_loader.hpp"
 #include "buffer_builder.hpp"
 #include "script_map.hpp"

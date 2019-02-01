@@ -32,7 +32,7 @@ public:
 		_stack_pointer = _base_pointer;
 	}
 	stack(const stack & _copy) = delete;
-	stack(stack && _move)
+	stack(stack && _move) noexcept
 	{
 		_allocator = _move._allocator;
 		_buffer = std::move(_move._buffer);

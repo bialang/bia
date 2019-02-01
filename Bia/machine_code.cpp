@@ -10,7 +10,7 @@ namespace machine
 namespace platform
 {
 
-machine_code::machine_code(std::pair<const void*, size_t> _machine_code, machine_schein _machine_schein) : _machine_schein(std::move(_machine_schein))
+machine_code::machine_code(std::pair<const void*, size_t> _machine_code, machine_schein && _machine_schein) : _machine_schein(std::move(_machine_schein))
 {
 	// Allocate
 	_entry_point = this->_machine_schein.executable_allocator()->allocate_executable(_machine_code.second);

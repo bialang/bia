@@ -6,7 +6,7 @@ namespace bia
 namespace machine
 {
 
-schein::schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator, memory::big_int_allocator * _big_int_allocator)
+schein::schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator, memory::big_int_allocator * _big_int_allocator) : _stack(_allocator, 64/*TODO*/)
 {
 	this->_allocator = _allocator;
 	this->_executable_allocator = _executable_allocator;
@@ -56,6 +56,11 @@ memory::allocator * schein::allocator() noexcept
 memory::executable_allocator * schein::executable_allocator() noexcept
 {
 	return _executable_allocator;
+}
+
+machine::stack & schein::stack() noexcept
+{
+	return _stack;
 }
 
 }

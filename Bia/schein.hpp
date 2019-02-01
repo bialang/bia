@@ -8,6 +8,7 @@
 #include "allocator.hpp"
 #include "executable_allocator.hpp"
 #include "big_int_allocator.hpp"
+#include "stack.hpp"
 
 
 namespace bia
@@ -116,6 +117,15 @@ public:
 	 * @return The executable memory allocator.
 	*/
 	BIA_EXPORT memory::executable_allocator * executable_allocator() noexcept;
+	/**
+	 * Returns the stack.
+	 *
+	 * @since 3.72.149.812
+	 * @date 1-Feb-19
+	 *
+	 * @return A reference to the stack.
+	*/
+	BIA_EXPORT machine::stack & stack() noexcept;
 
 protected:
 	/** The memory allocator for normal memory. */
@@ -126,6 +136,8 @@ protected:
 	memory::big_int_allocator * _big_int_allocator;
 	/** Stores all registered allocations with deleter. */
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
+	/** The machine stack. */
+	machine::stack _stack;
 };
 
 }

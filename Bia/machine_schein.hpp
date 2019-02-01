@@ -19,7 +19,7 @@ class machine_schein : public schein
 {
 public:
 	using schein::schein;
-	machine_schein(const machine_schein & _copy) = default;
+	machine_schein(const machine_schein & _copy) = delete;
 	machine_schein(machine_schein && _move) = default;
 	/**
 	 * Move operator.

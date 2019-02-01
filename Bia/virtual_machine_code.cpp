@@ -1,4 +1,6 @@
 #include "virtual_machine_code.hpp"
+#include "op_code.hpp"
+#include "create_member.hpp"
 
 #include <cstring>
 
@@ -38,7 +40,30 @@ virtual_machine_code::~virtual_machine_code()
 
 void virtual_machine_code::execute()
 {
-	BIA_NOT_IMPLEMENTED;
+	size_t _cursor = 0;
+	auto & _globals = _schein.globals();
+	auto & _stack = _schein.stack();
+
+	switch (_code.first[_cursor++]) {
+	case OC_RETURN:
+		break;
+	case OC_PARAM_0:
+		_stack.push(stack::element_t(0));
+
+		break;
+	case OC_INSTANTIATE_0:
+	{
+		uint32_t _index = *reinterpret_cast<const uint32_t*>(_code.first + _cursor);
+
+		_cursor += 4;
+
+		framework::create_member(_globals[_index], 0);
+
+		break;
+	}
+	default:
+		BIA_IMPLEMENTATION_ERROR;
+	}
 }
 
 void virtual_machine_code::clear()
