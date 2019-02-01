@@ -70,7 +70,7 @@ public:
 
 			break;
 		default:
-			_left.expand_to_member(nullptr, [&](auto _expanded) {
+			_left.expand_to_member(_translator, nullptr, [&](auto _expanded) {
 				if (std::is_same<decltype(_expanded), std::nullptr_t>::value) {
 					BIA_IMPLEMENTATION_ERROR;
 				}

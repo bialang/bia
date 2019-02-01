@@ -26,6 +26,9 @@ namespace compiler
 class compiler_value
 {
 public:
+	/** The fallback type if the member cannot be expanded. See expand_to_member(). */
+	typedef machine::virtual_machine::virtual_translator::invalid_index invalid_index_t;
+
 	enum class VALUE_TYPE
 	{
 		/** The native 64 Bit signed integer type. */
@@ -298,30 +301,28 @@ public:
 	 * @since 3.72.149.809
 	 * @date 27-Dec-18
 	 *
-	 * @tparam Default The default value type.
 	 * @tparam Lambda The lamdba type.
 	 *
-	 * @param _default The default value if this is not a member.
-	 * @param _lambda The callback function that is called. The callback gets the - as only parameter - the expaneded value.
+	 * @param [in] _translator The virtual translator.
+	 * @param _lambda The callback function that is called. The callback gets the expaneded value or @a invalid_index_t.
 	 *
 	 * @throws See @a _lambda.
+	 * @throws See machine::virtual_translator::to_member().
 	*/
-	template<typename Default, typename Lambda>
-	void expand_to_member(Default _default, Lambda && _lambda) const
+	template<typename Lambda>
+	void expand_to_member(machine::virtual_machine::virtual_translator & _translator, Lambda && _lambda) const
 	{
 		// Save to member variable
 		if (_return_type == VALUE_TYPE::MEMBER) {
-			_lambda(_return_value.rt_member);
+			_lambda(_translator.to_member(_return_value.rt_member));
 		} // Save to temp member
 		else if (_return_type == VALUE_TYPE::TEMPORARY_MEMBER) {
-			BIA_NOT_IMPLEMENTED;
-			//_lambda(machine::platform::toolset::to_temp_member(_return_value.rt_temp_member));
+			_lambda(_translator.to_temp(_return_value.rt_temp_member));
 		} // Save to local member
 		else if (_return_type  == VALUE_TYPE::LOCAL_MEMBER) {
-			BIA_NOT_IMPLEMENTED;
-			//_lambda(machine::platform::toolset::to_local_member(_return_value.rt_local_member));
+			_lambda(_translator.to_local(_return_value.rt_local_member));
 		} else {
-			_lambda(_default);
+			_lambda(invalid_index_t());
 		}
 	}
 	/**
