@@ -58,6 +58,11 @@ public:
 
 		*reinterpret_cast<Type*>(_stack_pointer++) = _value;
 	}
+	template<typename Type>
+	void push(Type * _value)
+	{
+		push(reinterpret_cast<intptr_t>(_value));
+	}
 	void push_count(size_t _count)
 	{
 		if (_stack_pointer + _count > _buffer.first + _buffer.second) {
