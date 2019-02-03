@@ -52,7 +52,7 @@ public:
 
 	/** The type of the parameter count. */
 	typedef uint32_t parameter_count;
-
+	typedef uint32_t test_result_t;
 
 	/**
 	 * Destructor.

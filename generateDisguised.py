@@ -2,20 +2,6 @@ import re
 
 max_args = 20
 
-def move_position(s):
-	def c(x):
-		return " * " + str(next(c.counter)) + ")"
-
-	is_numbers = []
-
-	for n in range(1, max_args + 1):
-		is_numbers.append(n)
-
-	c.counter = iter(is_numbers)
-
-	return re.sub(""" \* \d+\)""", c, s)
-
-
 h = open("Bia/disguised_caller.hpp", "wb")
 f = open("Bia/disguised_caller_source.hpp", "wb")
 

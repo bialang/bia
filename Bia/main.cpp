@@ -79,7 +79,10 @@ int main()
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
-
+		
+		_context.set_lambda("hello_world", []() {
+			puts("Hello, World!");
+		});
 		_context.set_lambda("ser", [](int i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
@@ -132,7 +135,8 @@ int main()
 
 global i = 0
 
-print(i)
+hello_world()
+#print(i)
 
 )"";
 		/*test_and_time(1, []() {

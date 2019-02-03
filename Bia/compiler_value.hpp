@@ -27,7 +27,7 @@ class compiler_value
 {
 public:
 	/** The fallback type if the member cannot be expanded. See expand_to_member(). */
-	typedef machine::virtual_machine::virtual_translator::invalid_index invalid_index_t;
+	typedef machine::virtual_machine::invalid_index invalid_index_t;
 
 	enum class VALUE_TYPE
 	{
