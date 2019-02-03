@@ -17,7 +17,7 @@ virtual_translator::virtual_translator(stream::output_stream & _output)
 
 	_temp_member_pos = _output.position();
 
-	_output.write_all(OC_CREATE_TEMP_MEMBERS, member_index_t(0));
+	op_code::write_setup(_output, 0);
 
 	_setup_end_pos = _output.position();
 }
@@ -34,7 +34,7 @@ void virtual_translator::finalize(member_index_t _temp_count)
 		auto _current_pos = _output->position();
 
 		_output->set_position(_temp_member_pos);
-		_output->write_all(OC_CREATE_TEMP_MEMBERS, _temp_count);
+		op_code::write_setup(*_output, _temp_count);
 		_output->set_position(_current_pos);
 	} // Skip temp member creation
 	else {
@@ -50,63 +50,21 @@ void virtual_translator::instantiate_int(const index & _destination, int64_t _va
 		BIA_NOT_IMPLEMENTED;
 	}
 
-	// Fits into an int32
-	if (_value <= std::numeric_limits<int32_t>::max() && _value >= std::numeric_limits<int32_t>::min()) {
-		switch (_value) {
-		case 0:
-			_output->write_all(OC_INSTANTIATE_0, _destination.value);
-
-			break;
-		default:
-			BIA_NOT_IMPLEMENTED;
-		}
-	} else {
-		BIA_NOT_IMPLEMENTED;
-	}
 }
 
 void virtual_translator::test(const index & _member)
 {
-	auto _write = [&](OP_CODE _op_code) {
-		if (_member.value <= std::numeric_limits<tiny_member_index_t>::max()) {
-			_output->write_all(static_cast<OP_CODE>(_op_code | OCF_TINY), static_cast<tiny_member_index_t>(_member.value));
-		} else {
-			_output->write_all(_op_code, _member.value);
-		}
-	};
-
-	// Pass member
-	if (dynamic_cast<const member_index*>(&_member)) {
-		_write(OC_TEST_M);
-	} else if (dynamic_cast<const temp_index*>(&_member)) {
-		_write(OC_TEST_T);
-	} else if (dynamic_cast<const local_index*>(&_member)) {
-		_write(OC_TEST_L);
-	} else {
-		BIA_IMPLEMENTATION_ERROR;
-	}
+	BIA_NOT_IMPLEMENTED;
 }
 
-void virtual_translator::pass_parameter(const index & _index)
+void virtual_translator::execute(const index & _member)
 {
-	auto _write = [&](OP_CODE _op_code) {
-		if (_index.value <= std::numeric_limits<tiny_member_index_t>::max()) {
-			_output->write_all(static_cast<OP_CODE>(_op_code | OCF_TINY), static_cast<tiny_member_index_t>(_index.value));
-		} else {
-			_output->write_all(_op_code, _index.value);
-		}
-	};
+	op_code::write_m_type(*_output, OC_EXECUTE_VOID, _member);
+}
 
-	// Pass member
-	if (dynamic_cast<const member_index*>(&_index)) {
-		_write(OC_PARAM_M);
-	} else if (dynamic_cast<const temp_index*>(&_index)) {
-		_write(OC_PARAM_T);
-	} else if (dynamic_cast<const local_index*>(&_index)) {
-		_write(OC_PARAM_L);
-	} else {
-		BIA_IMPLEMENTATION_ERROR;
-	}
+void virtual_translator::pass_parameter(const index & _member)
+{
+	op_code::write_m_type(*_output, OC_PUSH, _member);
 }
 
 virtual_translator::position_t virtual_translator::jump(JUMP _type, position_t _destination, position_t _overwrite_pos)
@@ -124,17 +82,17 @@ const virtual_member_map & virtual_translator::virtual_member_map() noexcept
 	return _member_map;
 }
 
-virtual_translator::member_index virtual_translator::to_member(grammar::report::member_t _name)
+member_index virtual_translator::to_member(grammar::report::member_t _name)
 {
 	return _member_map.get_or_insert(_name);
 }
 
-virtual_translator::temp_index virtual_translator::to_temp(member_index_t _index) noexcept
+temp_index virtual_translator::to_temp(member_index_t _index) noexcept
 {
 	return _index;
 }
 
-virtual_translator::local_index virtual_translator::to_local(member_index_t _index) noexcept
+local_index virtual_translator::to_local(member_index_t _index) noexcept
 {
 	return _index;
 }

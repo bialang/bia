@@ -19,44 +19,6 @@ namespace virtual_machine
 class virtual_translator
 {
 public:
-	struct index
-	{
-		member_index_t value;
-		virtual ~index() = default;
-
-	protected:
-		friend virtual_translator;
-
-		index(member_index_t _value)
-		{
-			value = _value;
-		}
-	};
-
-	struct member_index : index
-	{
-	private:
-		friend virtual_translator;
-		
-		using index::index;
-	};
-
-	struct temp_index : index
-	{
-	private:
-		friend virtual_translator;
-		
-		using index::index;
-	};
-
-	struct local_index : index
-	{
-	private:
-		friend virtual_translator;
-
-		using index::index;
-	};
-
 	enum class JUMP
 	{
 		JUMP,
@@ -70,7 +32,7 @@ public:
 
 	virtual_translator(stream::output_stream & _output);
 	void open_scope();
-	void close_scope(member_index_t _variable_count);
+	//void close_scope(member_index_t _variable_count);
 	/**
 	 * Finalizes the ouput result.
 	 *
@@ -86,8 +48,9 @@ public:
 	void finalize(member_index_t _temp_count);
 	void instantiate_int(const index & _destination, int64_t _value);
 	void test(const index & _member);
-	void pass_parameter(const index & _index);
-	position_t create_local_variables();
+	void execute(const index & _member);
+	void pass_parameter(const index & _member);
+	//position_t create_local_variables();
 	position_t jump(JUMP _type, position_t _destination = 0, position_t _overwrite_pos = -1);
 	/**
 	 * Retruns the output stream of the translator.
