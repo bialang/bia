@@ -44,6 +44,16 @@ private:
 	memory::allocation<uint8_t> _code;
 	/** The machine schein.  */
 	virtual_machine_schein _schein;
+
+	template<typename Type>
+	static Type read(const uint8_t *& _cursor)
+	{
+		auto _tmp = *reinterpret_cast<const Type*>(_cursor);
+
+		_cursor += sizeof(Type);
+
+		return _tmp;
+	}
 };
 
 }
