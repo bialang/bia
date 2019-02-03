@@ -99,12 +99,13 @@ private:
 	template<typename Member, typename Destination>
 	void handle_parameter_execute(Member _member, Destination _destination, const std::string & _format, bool _mixed, uint32_t _count)
 	{
-		BIA_IMPLEMENTATION_ERROR;
 		// Execute without parameters
-		/*if (!_count) {
-			_toolset.call_virtual(&framework::member::execute, _member, _destination);
+		if (!_count) {
+			_translator.execute(_member);
 		} // Formatted execute
-		else if (_mixed) {
+		else
+			BIA_IMPLEMENTATION_ERROR;
+		/*else if (_mixed) {
 			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
 			printf("format: %s\n", std::string(_format_ptr, _format.length()).c_str()); 
 			printf("format: %s\n", _format.c_str());

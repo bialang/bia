@@ -126,12 +126,12 @@ char compiler::handle_parameter_item()
 	case VT::WSTRING:
 		_passer.pass_varg(_value.value().rt_string.data);
 
-		return 'w';
+		return 'w';*/
 	case VT::MEMBER:
-		_passer.pass_varg(_value.value().rt_member);
+		_translator.pass_parameter(_translator.to_member(_value.value().rt_member));
 
 		return 'M';
-	case VT::TEMPORARY_MEMBER:
+	/*case VT::TEMPORARY_MEMBER:
 		_passer.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
 
 		return 'M';
@@ -436,12 +436,12 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 			_report = handle_parameter(_report, _destination);
 		} // Get member
 		else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
-			_value.expand_to_member(nullptr, [&](auto _member) {
-				if (std::is_same<decltype(_member), std::nullptr_t>::value) {
+			_value.expand_to_member(_translator, [&](auto _member) {
+				if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
 					BIA_IMPLEMENTATION_ERROR;
 				}
 
-				_destination.expand_to_member(nullptr, [&](auto _dest) {
+				_destination.expand_to_member(_translator, [&](auto _dest) {
 					/*if (std::is_same<decltype(_dest), std::nullptr_t>::value) {
 						_destination.set_return_temp(_counter.next());
 						_toolset.call_virtual(&framework::member::object_member, _member, machine::platform::toolset::to_temp_member(_counter.current()), _report->content.member);
@@ -463,11 +463,9 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 const grammar::report * compiler::handle_parameter(const grammar::report * _report, compiler_value _destination)
 {
-	BIA_NOT_IMPLEMENTED;
-	/*using VT = compiler_value::VALUE_TYPE;
+	using VT = compiler_value::VALUE_TYPE;
 
 	auto _caller = _value;
-	auto _passer = _toolset.create_varg_passer();
 	uint32_t _count = 0;
 	std::string _format;
 	auto _mixed = false;
@@ -480,7 +478,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 			i = handle_value_insecure<false>(i);
 
 			// Add type to format
-			auto _type = handle_parameter_item(_passer);
+			auto _type = handle_parameter_item();
 
 			_format += _type;
 
@@ -489,35 +487,29 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 			}
 		}
 
-		if (_count && _count <= machine::platform::varg_member_passer::varg_register_passes()) {
-			_format.insert(_format.begin(), _passer.compensatory_pushes(), 'r');
-		} else {
-			_format.append(_passer.compensatory_pushes(), 'r');
-		}
-
 		_counter.pop(_old);
 	}
 
-// Call function
-	_caller.expand_to_member(nullptr, [&](auto _member) {
-		if (std::is_same<decltype(_member), std::nullptr_t>::value) {
+	// Call function
+	_caller.expand_to_member(_translator, [&](auto _member) {
+		if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		_destination.expand_to_member(nullptr, [&](auto _dest) {
-			if (std::is_same<decltype(_dest), std::nullptr_t>::value) {
+		_destination.expand_to_member(_translator, [&](auto _dest) {
+			if (std::is_same<decltype(_dest), compiler_value::invalid_index_t>::value) {
 				_destination.set_return_temp(_counter.next());
 
-				this->handle_parameter_execute(_member, machine::platform::toolset::to_temp_member(_counter.current()), _format, _mixed, _count, _passer);
+				this->handle_parameter_execute(_member, _translator.to_temp(_counter.current()), _format, _mixed, _count);
 			} else {
-				this->handle_parameter_execute(_member, _dest, _format, _mixed, _count, _passer);
+				this->handle_parameter_execute(_member, _dest, _format, _mixed, _count);
 			}
 
 			_value = _destination;
 		});
 	});
 
-	return _report->content.end;*/
+	return _report->content.end;
 }
 
 const grammar::report * compiler::handle_string(const grammar::report * _report)
