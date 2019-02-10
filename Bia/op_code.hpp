@@ -138,7 +138,7 @@ public:
 	{
 		static_assert(std::is_integral<Type>::value && (sizeof(Type) == 4 || sizeof(Type) == 1), "Unsupported int type.");
 
-		_output.write_all(static_cast<op_code_t>(_operation - (sizeof(Type) == 4 ? IIOCO_INT32 : IIOCO_INT8), _int);
+		_output.write_all(static_cast<op_code_t>(_operation - (sizeof(Type) == 4 ? IIOCO_INT32 : IIOCO_INT8)), _int);
 	}
 	template<typename Type>
 	static void write_i_type(stream::output_stream & _output, OP_CODE _operation, Type _immediate)
@@ -169,7 +169,7 @@ public:
 		auto _option0 = member_option(_member);
 		auto _option1 = immediate_option<Type>();
 
-		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * IOCO_COUNT + _option1));
+		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * IOCO_COUNT + _option1)));
 
 		write_member(_output, _member);
 

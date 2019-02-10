@@ -181,6 +181,8 @@ hello_world()
 			test_and_time(1, [&] {
 				_machine_code.execute();
 			});
+
+			printf("Value of i: %lli\n", _context.get_member("i")->cast<long long>());
 		} catch (const std::exception & e) {
 			printf("%s: %s\n", typeid(e).name(), e.what());
 		}

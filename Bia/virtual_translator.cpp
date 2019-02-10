@@ -46,7 +46,14 @@ void virtual_translator::finalize(member_index_t _temp_count)
 
 void virtual_translator::instantiate_int(const index & _member, int64_t _value)
 {
-	op_code::write_mm_type(*_output, OC_INSTANTIATE, _member, _value);
+	// 8 bit
+	if (_value >= std::numeric_limits<int8_t>::min() && _value <= std::numeric_limits<int8_t>::max()) {
+		op_code::write_mi_type(*_output, OC_INSTANTIATE, _member, static_cast<int8_t>(_value));
+	} else if (_value >= std::numeric_limits<int32_t>::min() && _value <= std::numeric_limits<int32_t>::max()) {
+		op_code::write_mi_type(*_output, OC_INSTANTIATE, _member, static_cast<int32_t>(_value));
+	} else {
+		op_code::write_mi_type(*_output, OC_INSTANTIATE, _member, _value);
+	}
 }
 
 void virtual_translator::test(const index & _member)
