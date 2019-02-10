@@ -73,7 +73,7 @@ struct report
 		const report * end;
 		/** The non-zero terminated name of the member. See @a size for the length. */
 		member_t member;
-		framework::operator_type operator_code;
+		framework::operator_t operator_code;
 		KEYWORD_ID keyword;
 	} content;
 };

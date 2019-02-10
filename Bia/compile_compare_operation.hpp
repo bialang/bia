@@ -51,7 +51,7 @@ public:
 	 *
 	 * @throws See left_constant_operation() and left_member_operation().
 	*/
-	void operate(compiler_value _left, framework::operator_type _operator, compiler_value _right)
+	void operate(compiler_value _left, framework::operator_t _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
@@ -98,7 +98,7 @@ private:
 	 * @throws See machine::platform::toolset::call().
 	*/
 	template<typename Member>
-	void left_member_operation(Member && _member, framework::operator_type _operator, compiler_value _right)
+	void left_member_operation(Member && _member, framework::operator_t _operator, compiler_value _right)
 	{
 		BIA_NOT_IMPLEMENTED;
 		/*
@@ -156,7 +156,7 @@ private:
 	 * @throws See machine::platform::toolset::call().
 	*/
 	template<typename Left, typename Right>
-	void left_constant_right_member_operation(Left && _left, framework::operator_type _operator, Right && _right)
+	void left_constant_right_member_operation(Left && _left, framework::operator_t _operator, Right && _right)
 	{
 		BIA_NOT_IMPLEMENTED;
 		/*if (std::is_same<typename std::remove_reference<Left>::type, int64_t>::value) {
@@ -187,7 +187,7 @@ private:
 	 * @throws See left_constant_right_member_operation().
 	*/
 	template<typename Left>
-	void left_constant_operation(Left && _left, framework::operator_type _operator, compiler_value _right)
+	void left_constant_operation(Left && _left, framework::operator_t _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
@@ -226,7 +226,7 @@ private:
 	 * @param [in] _right The right hand value.
 	*/
 	template<typename Left, typename Right>
-	void both_constant_operation(Left && _left, framework::operator_type _operator, Right && _right)
+	void both_constant_operation(Left && _left, framework::operator_t _operator, Right && _right)
 	{
 		using namespace framework;
 

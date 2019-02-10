@@ -44,12 +44,12 @@ void double_member::clone(member * _destination)
 	copy(_destination);
 }
 
-void double_member::operator_call(member * _destination, operator_type _operator, const member * _right)
+void double_member::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
-void double_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+void double_member::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
 	if (_destination == this) {
 		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
@@ -58,7 +58,7 @@ void double_member::operator_call_int32(member * _destination, operator_type _op
 	}
 }
 
-void double_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+void double_member::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
 	if (_destination == this) {
 		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
@@ -67,12 +67,12 @@ void double_member::operator_call_int64(member * _destination, operator_type _op
 	}
 }
 
-void BIA_MEMBER_CALLING_CONVENTION double_member::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+void BIA_MEMBER_CALLING_CONVENTION double_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
-void double_member::operator_call_double(member * _destination, operator_type _operator, double _right)
+void double_member::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
 	if (_destination == this) {
 		native_operation<true>::operate_arithmetic(_data.get(), _operator, _right);
@@ -96,22 +96,22 @@ int32_t double_member::test() const
 	return test_operation(_data.get());
 }
 
-int32_t double_member::test_member(operator_type _operator, member * _right) const
+int32_t double_member::test_member(operator_t _operator, member * _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t double_member::test_int32(operator_type _operator, int32_t _right) const
+int32_t double_member::test_int32(operator_t _operator, int32_t _right) const
 {
 	return test_operation(_data.get(), _operator, _right);
 }
 
-int32_t double_member::test_int64(operator_type _operator, int64_t _right) const
+int32_t double_member::test_int64(operator_t _operator, int64_t _right) const
 {
 	return test_operation(_data.get(), _operator, _right);
 }
 
-int32_t double_member::test_double(operator_type _operator, double _right) const
+int32_t double_member::test_double(operator_t _operator, double _right) const
 {
 	return test_operation(_data.get(), _operator, _right);
 }

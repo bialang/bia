@@ -69,25 +69,25 @@ inline void BIA_VARG_MEMBER_CALLING_CONVENTION raw_object<Type>::execute_format(
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call(member * _destination, operator_type _operator, const member * _right)
+inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	return promote()->operator_call(_destination, _operator, _right);
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
 	return promote()->operator_call_int32(_destination, _operator, _right);
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
 	return promote()->operator_call_int64(_destination, _operator, _right);
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call_double(member * _destination, operator_type _operator, double _right)
+inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
 	return promote()->operator_call_double(_destination, _operator, _right);
 }
@@ -111,25 +111,25 @@ inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test() const
 }
 
 template<typename Type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test_member(operator_type _operator, member * _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test_member(operator_t _operator, member * _right) const
 {
 	return promote()->test_member(_operator, _right);
 }
 
 template<typename Type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test_int32(operator_type _operator, int32_t _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test_int32(operator_t _operator, int32_t _right) const
 {
 	return promote()->test_int32(_operator, _right);
 }
 
 template<typename Type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test_int64(operator_type _operator, int64_t _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test_int64(operator_t _operator, int64_t _right) const
 {
 	return promote()->test_int64(_operator, _right);
 }
 
 template<typename Type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test_double(operator_type _operator, double _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::test_double(operator_t _operator, double _right) const
 {
 	return promote()->test_double(_operator, _right);
 }

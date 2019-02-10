@@ -47,31 +47,31 @@ inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::clone(membe
 }
 
 template<typename Char_type>
-inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call(member * _destination, operator_type _operator, const member * _right)
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 }
 
 template<typename Char_type>
-inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 }
 
 template<typename Char_type>
-inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 }
 
 template<typename Char_type>
-inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 }
 
 template<typename Char_type>
-inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_double(member * _destination, operator_type _operator, double _right)
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 }
@@ -95,25 +95,25 @@ inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test() c
 }
 
 template<typename Char_type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_member(operator_type _operator, member * _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_member(operator_t _operator, member * _right) const
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 }
 
 template<typename Char_type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_int32(operator_type _operator, int32_t _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_int32(operator_t _operator, int32_t _right) const
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 }
 
 template<typename Char_type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_int64(operator_type _operator, int64_t _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_int64(operator_t _operator, int64_t _right) const
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 }
 
 template<typename Char_type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_double(operator_type _operator, double _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::test_double(operator_t _operator, double _right) const
 {
 	throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 }

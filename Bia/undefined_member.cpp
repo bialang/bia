@@ -48,27 +48,27 @@ void BIA_VARG_MEMBER_CALLING_CONVENTION undefined_member::execute_format(member 
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call(member * _destination, operator_type _operator, const member * _right)
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_double(member * _destination, operator_type _operator, double _right)
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
 	BIA_UNDEFINED_ERROR;
 }
@@ -93,22 +93,22 @@ int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test() const
 	BIA_UNDEFINED_ERROR;
 }
 
-int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test_member(operator_type _operator, member * _right) const
+int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test_member(operator_t _operator, member * _right) const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test_int32(operator_type _operator, int32_t _right) const
+int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test_int32(operator_t _operator, int32_t _right) const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test_int64(operator_type _operator, int64_t _right) const
+int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test_int64(operator_t _operator, int64_t _right) const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test_double(operator_type _operator, double _right) const
+int32_t BIA_MEMBER_CALLING_CONVENTION undefined_member::test_double(operator_t _operator, double _right) const
 {
 	BIA_UNDEFINED_ERROR;
 }

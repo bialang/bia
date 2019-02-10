@@ -10,7 +10,7 @@ namespace native
 {
 
 template<typename Right>
-inline void big_int_member_operation(dependency::big_int & _left, dependency::big_int & _destination, operator_type _operator, Right && _right)
+inline void big_int_member_operation(dependency::big_int & _left, dependency::big_int & _destination, operator_t _operator, Right && _right)
 {
 	switch (_operator) {
 	case O_ASSIGN:
@@ -67,7 +67,7 @@ inline void big_int_member_operation(dependency::big_int & _left, dependency::bi
 }
 
 template<typename Right>
-inline void big_int_member_operation(dependency::big_int & _left, operator_type _operator, Right && _right)
+inline void big_int_member_operation(dependency::big_int & _left, operator_t _operator, Right && _right)
 {
 	switch (_operator) {
 	case O_ASSIGN:
@@ -165,7 +165,7 @@ void big_int_member::clone(member * _destination)
 	copy(_destination);
 }
 
-void big_int_member::operator_call(member * _destination, operator_type _operator, const member * _right)
+void big_int_member::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	auto _flags = _right->flags();
 
@@ -182,7 +182,7 @@ void big_int_member::operator_call(member * _destination, operator_type _operato
 	BIA_NOT_IMPLEMENTED;
 }
 
-void big_int_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+void big_int_member::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
 	if (_destination == this) {
 		big_int_member_operation(_data.get(), _operator, _right);
@@ -191,7 +191,7 @@ void big_int_member::operator_call_int32(member * _destination, operator_type _o
 	}
 }
 
-void big_int_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+void big_int_member::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
 	if (_destination == this) {
 		big_int_member_operation(_data.get(), _operator, _right);
@@ -200,7 +200,7 @@ void big_int_member::operator_call_int64(member * _destination, operator_type _o
 	}
 }
 
-void BIA_MEMBER_CALLING_CONVENTION big_int_member::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+void BIA_MEMBER_CALLING_CONVENTION big_int_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
 {
 	if (_destination == this) {
 		big_int_member_operation(_data.get(), _operator, *_right);
@@ -209,7 +209,7 @@ void BIA_MEMBER_CALLING_CONVENTION big_int_member::operator_call_big_int(member 
 	}
 }
 
-void big_int_member::operator_call_double(member * _destination, operator_type _operator, double _right)
+void big_int_member::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
 	if (_destination == this) {
 		big_int_member_operation(_data.get(), _operator, _right);
@@ -233,7 +233,7 @@ int32_t big_int_member::test() const
 	return static_cast<int32_t>(!_data->is_zero());
 }
 
-int32_t big_int_member::test_member(operator_type _operator, member * _right) const
+int32_t big_int_member::test_member(operator_t _operator, member * _right) const
 {
 	if (_operator == O_EQUALS && _right->flags() & F_BIG_INT) {
 		return _data->compare(static_cast<big_int_member*>(_right)->_data.get()) == 0;
@@ -242,7 +242,7 @@ int32_t big_int_member::test_member(operator_type _operator, member * _right) co
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t big_int_member::test_int32(operator_type _operator, int32_t _right) const
+int32_t big_int_member::test_int32(operator_t _operator, int32_t _right) const
 {
 	if (_operator == O_EQUALS) {
 		return _data->compare(_right) == 0;
@@ -251,12 +251,12 @@ int32_t big_int_member::test_int32(operator_type _operator, int32_t _right) cons
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t big_int_member::test_int64(operator_type _operator, int64_t _right) const
+int32_t big_int_member::test_int64(operator_t _operator, int64_t _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t big_int_member::test_double(operator_type _operator, double _right) const
+int32_t big_int_member::test_double(operator_t _operator, double _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }

@@ -186,7 +186,7 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_t _operator, const member * _right) = 0;
 	/**
 	 * An operator call with an int32 as right value.
 	 *
@@ -202,7 +202,7 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_t _operator, int32_t _right) = 0;
 	/**
 	 * An operator call with an int64 as right value.
 	 *
@@ -218,8 +218,8 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) = 0;
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_t _operator, int64_t _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right) = 0;
 	/**
 	 * An operator call with a double as right value.
 	 *
@@ -235,7 +235,7 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_t _operator, double _right) = 0;
 	/**
 	 * Returns a member of this member.
 	 *
@@ -301,7 +301,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_t _operator, member * _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -317,7 +317,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_t _operator, int32_t _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -333,7 +333,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_t _operator, int64_t _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -349,7 +349,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_t _operator, double _right) const = 0;
 	/**
 	 * Returns the int representation of the content.
 	 *
