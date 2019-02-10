@@ -69,8 +69,11 @@ struct invalid_index : index
 enum MEMBER_OP_CODE_OPTION
 {
 	MOCO_MEMBER,
-	MOCO_LOCAL,
-	MOCO_TEMP,
+	//MOCO_LOCAL,
+	//MOCO_TEMP,
+	MOCO_TINY_MEMBER,
+	//MOCO_TINY_LOCAL,
+	//MOCO_TINY_TEMP,
 
 	MOCO_COUNT
 };
@@ -85,40 +88,42 @@ enum IMMEDIATE_INT_OP_CODE_OPTION
 
 enum IMMEDIATE_OP_CODE_OPTION
 {
-	IOCO_INT32,
-	IOCO_INT8,
-	IOCO_INT64,
 	IOCO_FLOAT,
+	IOCO_INT64,
+	IOCO_INT8,
+	IOCO_INT32,
 
 	IOCO_COUNT
 };
 
 enum OP_CODE : op_code_t
 {
-	/** P-Type instructions: */
+	/** P-Type instructions */
 	OC_RETURN,
 
-	/** I-Type instructions: */
-	OC_SETUP,
-	OC_JUMP,
-	OC_JUMP_TRUE,
-	OC_JUMP_FALSE,
-	OC_PUSH_IMMEDIATE,
+	/** int-Type instructions */
+	OC_SETUP = OC_RETURN + IIOCO_COUNT,
+	OC_JUMP = OC_SETUP + IIOCO_COUNT,
+	OC_JUMP_TRUE = OC_JUMP + IIOCO_COUNT,
+	OC_JUMP_FALSE = OC_JUMP_TRUE + IIOCO_COUNT,
 
-	/** M-Type instructions: */
-	OC_PUSH,
-	OC_TEST,
-	OC_UNDEFINE,
-	OC_EXECUTE_VOID,
+	/** I-Type instructions */
+	OC_PUSH_IMMEDIATE = OC_JUMP_FALSE + IOCO_COUNT,
 
-	/** MM-Type instructions: */
-	OC_EXECUTE,
-	OC_CLONE,
-	OC_REFER,
-	OC_COPY,
+	/** M-Type instructions */
+	OC_PUSH = OC_PUSH_IMMEDIATE + MOCO_COUNT,
+	OC_TEST = OC_PUSH + MOCO_COUNT,
+	OC_UNDEFINE = OC_TEST + MOCO_COUNT,
+	OC_EXECUTE_VOID = OC_UNDEFINE + MOCO_COUNT,
+
+	/** MM-Type instructions */
+	OC_EXECUTE = OC_EXECUTE_VOID + MOCO_COUNT * MOCO_COUNT,
+	OC_CLONE = OC_EXECUTE + MOCO_COUNT * MOCO_COUNT,
+	OC_REFER = OC_CLONE + MOCO_COUNT * MOCO_COUNT,
+	OC_COPY = OC_REFER + MOCO_COUNT * MOCO_COUNT,
 	
-	/** MI-Type instructions: */
-	OC_INSTANTIATE,
+	/** MI-Type instructions */
+	OC_INSTANTIATE = OC_COPY + MOCO_COUNT * IOCO_COUNT,
 };
 
 class op_code
