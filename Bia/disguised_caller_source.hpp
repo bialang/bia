@@ -86,7 +86,7 @@ inline typename std::enable_if<(sizeof...(Arguments) > 0), machine::memory::allo
 }
 
 template<typename Return>
-inline void disguised_caller_count(Return(*_function)(), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -101,7 +101,7 @@ inline void disguised_caller_count(Return(*_function)(), framework::member * _de
 }
 
 template<typename Return, typename _0>
-inline void disguised_caller_count(Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -117,7 +117,7 @@ inline void disguised_caller_count(Return(*_function)(_0), framework::member * _
 }
 
 template<typename Return, typename _0, typename _1>
-inline void disguised_caller_count(Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -134,7 +134,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1), framework::member
 }
 
 template<typename Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -152,7 +152,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2), framework::me
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -171,7 +171,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3), framework
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -191,7 +191,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4), frame
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -212,7 +212,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5), f
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -234,7 +234,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -257,7 +257,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -281,7 +281,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -306,7 +306,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -332,7 +332,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -359,7 +359,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -387,7 +387,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -416,7 +416,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -446,7 +446,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -477,7 +477,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -509,7 +509,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -542,7 +542,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -576,7 +576,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -611,7 +611,7 @@ inline void disguised_caller_count(Return(*_function)(_0, _1, _2, _3, _4, _5, _6
 }
 
 
-inline void disguised_caller_count(void(*_function)(), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -628,7 +628,7 @@ inline void disguised_caller_count(void(*_function)(), framework::member * _dest
 }
 
 template<typename _0>
-inline void disguised_caller_count(void(*_function)(_0), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -646,7 +646,7 @@ inline void disguised_caller_count(void(*_function)(_0), framework::member * _de
 }
 
 template<typename _0, typename _1>
-inline void disguised_caller_count(void(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -665,7 +665,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1), framework::member *
 }
 
 template<typename _0, typename _1, typename _2>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -685,7 +685,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2), framework::memb
 }
 
 template<typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -706,7 +706,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3), framework::
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -728,7 +728,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4), framewo
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -751,7 +751,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5), fra
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -775,7 +775,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6),
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -800,7 +800,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -826,7 +826,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -853,7 +853,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -881,7 +881,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -910,7 +910,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -940,7 +940,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -971,7 +971,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -1003,7 +1003,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -1036,7 +1036,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -1070,7 +1070,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -1105,7 +1105,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -1141,7 +1141,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -1178,7 +1178,7 @@ inline void disguised_caller_count(void(*_function)(_0, _1, _2, _3, _4, _5, _6, 
 }
 
 template<typename Class, typename Return>
-inline void disguised_caller_count(Return(Class::*_function)(), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -1193,7 +1193,7 @@ inline void disguised_caller_count(Return(Class::*_function)(), Class * _instanc
 }
 
 template<typename Class, typename Return, typename _0>
-inline void disguised_caller_count(Return(Class::*_function)(_0), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -1209,7 +1209,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0), Class * _insta
 }
 
 template<typename Class, typename Return, typename _0, typename _1>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -1226,7 +1226,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1), Class * _i
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -1244,7 +1244,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2), Class 
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -1263,7 +1263,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3), Cl
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -1283,7 +1283,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4)
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -1304,7 +1304,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -1326,7 +1326,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -1349,7 +1349,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -1373,7 +1373,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -1398,7 +1398,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -1424,7 +1424,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -1451,7 +1451,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -1479,7 +1479,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -1508,7 +1508,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -1538,7 +1538,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -1569,7 +1569,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -1601,7 +1601,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -1634,7 +1634,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -1668,7 +1668,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -1703,7 +1703,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class>
-inline void disguised_caller_count(void(Class::*_function)(), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -1720,7 +1720,7 @@ inline void disguised_caller_count(void(Class::*_function)(), Class * _instance,
 }
 
 template<typename Class, typename _0>
-inline void disguised_caller_count(void(Class::*_function)(_0), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -1738,7 +1738,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0), Class * _instanc
 }
 
 template<typename Class, typename _0, typename _1>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -1757,7 +1757,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1), Class * _ins
 }
 
 template<typename Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -1777,7 +1777,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2), Class * 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -1798,7 +1798,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3), Clas
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -1820,7 +1820,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4), 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -1843,7 +1843,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -1867,7 +1867,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -1892,7 +1892,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -1918,7 +1918,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -1945,7 +1945,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -1973,7 +1973,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -2002,7 +2002,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -2032,7 +2032,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -2063,7 +2063,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -2095,7 +2095,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -2128,7 +2128,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -2162,7 +2162,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -2197,7 +2197,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -2233,7 +2233,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -2270,7 +2270,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename Return>
-inline void disguised_caller_count(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -2285,7 +2285,7 @@ inline void disguised_caller_count(Return(Class::*_function)() const, const Clas
 }
 
 template<typename Class, typename Return, typename _0>
-inline void disguised_caller_count(Return(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -2301,7 +2301,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0) const, const Cl
 }
 
 template<typename Class, typename Return, typename _0, typename _1>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -2318,7 +2318,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1) const, cons
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -2336,7 +2336,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2) const, 
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -2355,7 +2355,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3) con
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -2375,7 +2375,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4)
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -2396,7 +2396,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -2418,7 +2418,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -2441,7 +2441,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -2465,7 +2465,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -2490,7 +2490,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -2516,7 +2516,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -2543,7 +2543,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -2571,7 +2571,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -2600,7 +2600,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -2630,7 +2630,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -2661,7 +2661,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -2693,7 +2693,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -2726,7 +2726,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -2760,7 +2760,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -2795,7 +2795,7 @@ inline void disguised_caller_count(Return(Class::*_function)(_0, _1, _2, _3, _4,
 }
 
 template<typename Class>
-inline void disguised_caller_count(void(Class::*_function)() const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)() const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -2812,7 +2812,7 @@ inline void disguised_caller_count(void(Class::*_function)() const, const Class 
 }
 
 template<typename Class, typename _0>
-inline void disguised_caller_count(void(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -2830,7 +2830,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0) const, const Clas
 }
 
 template<typename Class, typename _0, typename _1>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -2849,7 +2849,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1) const, const 
 }
 
 template<typename Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -2869,7 +2869,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2) const, co
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -2890,7 +2890,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3) const
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -2912,7 +2912,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4) c
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -2935,7 +2935,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -2959,7 +2959,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -2984,7 +2984,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -3010,7 +3010,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -3037,7 +3037,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -3065,7 +3065,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -3094,7 +3094,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -3124,7 +3124,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -3155,7 +3155,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -3187,7 +3187,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -3220,7 +3220,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -3254,7 +3254,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -3289,7 +3289,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -3325,7 +3325,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -3362,7 +3362,7 @@ inline void disguised_caller_count(void(Class::*_function)(_0, _1, _2, _3, _4, _
 }
 
 template<typename Class>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -3377,7 +3377,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -3393,7 +3393,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -3410,7 +3410,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -3428,7 +3428,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -3447,7 +3447,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -3467,7 +3467,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -3488,7 +3488,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -3510,7 +3510,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -3533,7 +3533,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -3557,7 +3557,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -3582,7 +3582,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -3608,7 +3608,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -3635,7 +3635,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -3663,7 +3663,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -3692,7 +3692,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -3722,7 +3722,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -3753,7 +3753,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -3785,7 +3785,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -3818,7 +3818,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -3852,7 +3852,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_count(framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -3887,7 +3887,7 @@ inline machine::memory::allocation<Class> disguised_caller_count(framework::memb
 }
 
 template<typename Return>
-inline void disguised_caller_format(Return(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -3902,7 +3902,7 @@ inline void disguised_caller_format(Return(*_function)(), framework::member * _d
 }
 
 template<typename Return, typename _0>
-inline void disguised_caller_format(Return(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -3918,7 +3918,7 @@ inline void disguised_caller_format(Return(*_function)(_0), framework::member * 
 }
 
 template<typename Return, typename _0, typename _1>
-inline void disguised_caller_format(Return(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -3935,7 +3935,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1), framework::membe
 }
 
 template<typename Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -3953,7 +3953,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2), framework::m
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -3972,7 +3972,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3), framewor
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -3992,7 +3992,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4), fram
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -4013,7 +4013,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5), 
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -4035,7 +4035,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -4058,7 +4058,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -4082,7 +4082,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -4107,7 +4107,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -4133,7 +4133,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -4160,7 +4160,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -4188,7 +4188,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -4217,7 +4217,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -4247,7 +4247,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -4278,7 +4278,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -4310,7 +4310,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -4343,7 +4343,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -4377,7 +4377,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 template<typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -4412,7 +4412,7 @@ inline void disguised_caller_format(Return(*_function)(_0, _1, _2, _3, _4, _5, _
 }
 
 
-inline void disguised_caller_format(void(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -4429,7 +4429,7 @@ inline void disguised_caller_format(void(*_function)(), framework::member * _des
 }
 
 template<typename _0>
-inline void disguised_caller_format(void(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -4447,7 +4447,7 @@ inline void disguised_caller_format(void(*_function)(_0), framework::member * _d
 }
 
 template<typename _0, typename _1>
-inline void disguised_caller_format(void(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -4466,7 +4466,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1), framework::member 
 }
 
 template<typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -4486,7 +4486,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2), framework::mem
 }
 
 template<typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -4507,7 +4507,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3), framework:
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -4529,7 +4529,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4), framew
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -4552,7 +4552,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5), fr
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -4576,7 +4576,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6)
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -4601,7 +4601,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -4627,7 +4627,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -4654,7 +4654,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -4682,7 +4682,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -4711,7 +4711,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -4741,7 +4741,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -4772,7 +4772,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -4804,7 +4804,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -4837,7 +4837,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -4871,7 +4871,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -4906,7 +4906,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -4942,7 +4942,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -4979,7 +4979,7 @@ inline void disguised_caller_format(void(*_function)(_0, _1, _2, _3, _4, _5, _6,
 }
 
 template<typename Class, typename Return>
-inline void disguised_caller_format(Return(Class::*_function)(), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -4994,7 +4994,7 @@ inline void disguised_caller_format(Return(Class::*_function)(), Class * _instan
 }
 
 template<typename Class, typename Return, typename _0>
-inline void disguised_caller_format(Return(Class::*_function)(_0), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -5010,7 +5010,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0), Class * _inst
 }
 
 template<typename Class, typename Return, typename _0, typename _1>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -5027,7 +5027,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1), Class * _
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -5045,7 +5045,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2), Class
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -5064,7 +5064,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3), C
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -5084,7 +5084,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -5105,7 +5105,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -5127,7 +5127,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -5150,7 +5150,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -5174,7 +5174,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -5199,7 +5199,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -5225,7 +5225,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -5252,7 +5252,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -5280,7 +5280,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -5309,7 +5309,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -5339,7 +5339,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -5370,7 +5370,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -5402,7 +5402,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -5435,7 +5435,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -5469,7 +5469,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -5504,7 +5504,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class>
-inline void disguised_caller_format(void(Class::*_function)(), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -5521,7 +5521,7 @@ inline void disguised_caller_format(void(Class::*_function)(), Class * _instance
 }
 
 template<typename Class, typename _0>
-inline void disguised_caller_format(void(Class::*_function)(_0), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -5539,7 +5539,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0), Class * _instan
 }
 
 template<typename Class, typename _0, typename _1>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -5558,7 +5558,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1), Class * _in
 }
 
 template<typename Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -5578,7 +5578,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2), Class *
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -5599,7 +5599,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3), Cla
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -5621,7 +5621,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4),
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -5644,7 +5644,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -5668,7 +5668,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -5693,7 +5693,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -5719,7 +5719,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -5746,7 +5746,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -5774,7 +5774,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -5803,7 +5803,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -5833,7 +5833,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -5864,7 +5864,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -5896,7 +5896,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -5929,7 +5929,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -5963,7 +5963,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -5998,7 +5998,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -6034,7 +6034,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19), Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -6071,7 +6071,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename Return>
-inline void disguised_caller_format(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)() const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -6086,7 +6086,7 @@ inline void disguised_caller_format(Return(Class::*_function)() const, const Cla
 }
 
 template<typename Class, typename Return, typename _0>
-inline void disguised_caller_format(Return(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -6102,7 +6102,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0) const, const C
 }
 
 template<typename Class, typename Return, typename _0, typename _1>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -6119,7 +6119,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1) const, con
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -6137,7 +6137,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2) const,
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -6156,7 +6156,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3) co
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -6176,7 +6176,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -6197,7 +6197,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -6219,7 +6219,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -6242,7 +6242,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -6266,7 +6266,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -6291,7 +6291,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -6317,7 +6317,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -6344,7 +6344,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -6372,7 +6372,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -6401,7 +6401,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -6431,7 +6431,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -6462,7 +6462,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -6494,7 +6494,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -6527,7 +6527,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -6561,7 +6561,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class, typename Return, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -6596,7 +6596,7 @@ inline void disguised_caller_format(Return(Class::*_function)(_0, _1, _2, _3, _4
 }
 
 template<typename Class>
-inline void disguised_caller_format(void(Class::*_function)() const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)() const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -6613,7 +6613,7 @@ inline void disguised_caller_format(void(Class::*_function)() const, const Class
 }
 
 template<typename Class, typename _0>
-inline void disguised_caller_format(void(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -6631,7 +6631,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0) const, const Cla
 }
 
 template<typename Class, typename _0, typename _1>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -6650,7 +6650,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1) const, const
 }
 
 template<typename Class, typename _0, typename _1, typename _2>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -6670,7 +6670,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2) const, c
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -6691,7 +6691,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3) cons
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -6713,7 +6713,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4) 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -6736,7 +6736,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -6760,7 +6760,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -6785,7 +6785,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -6811,7 +6811,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -6838,7 +6838,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -6866,7 +6866,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -6895,7 +6895,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -6925,7 +6925,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -6956,7 +6956,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -6988,7 +6988,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -7021,7 +7021,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -7055,7 +7055,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -7090,7 +7090,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -7126,7 +7126,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19) const, const Class * _instance, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 
@@ -7163,7 +7163,7 @@ inline void disguised_caller_format(void(Class::*_function)(_0, _1, _2, _3, _4, 
 }
 
 template<typename Class>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 0;
 
@@ -7178,7 +7178,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 1;
 
@@ -7194,7 +7194,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 2;
 
@@ -7211,7 +7211,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 3;
 
@@ -7229,7 +7229,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 4;
 
@@ -7248,7 +7248,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 5;
 
@@ -7268,7 +7268,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 6;
 
@@ -7289,7 +7289,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 7;
 
@@ -7311,7 +7311,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 8;
 
@@ -7334,7 +7334,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 9;
 
@@ -7358,7 +7358,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 10;
 
@@ -7383,7 +7383,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 11;
 
@@ -7409,7 +7409,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 12;
 
@@ -7436,7 +7436,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 13;
 
@@ -7464,7 +7464,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 14;
 
@@ -7493,7 +7493,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 15;
 
@@ -7523,7 +7523,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 16;
 
@@ -7554,7 +7554,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 17;
 
@@ -7586,7 +7586,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 18;
 
@@ -7619,7 +7619,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 19;
 
@@ -7653,7 +7653,7 @@ inline machine::memory::allocation<Class> disguised_caller_format(const char * _
 }
 
 template<typename Class, typename _0, typename _1, typename _2, typename _3, typename _4, typename _5, typename _6, typename _7, typename _8, typename _9, typename _10, typename _11, typename _12, typename _13, typename _14, typename _15, typename _16, typename _17, typename _18, typename _19>
-inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack)
+inline machine::memory::allocation<Class> disguised_caller_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack)
 {
 	constexpr auto _arg_count = 20;
 

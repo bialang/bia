@@ -56,11 +56,11 @@ public:
 	{
 		force::disguised_caller(_function, _destination);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) override
 	{
 		force::disguised_caller_count(_function, _destination, _count, _stack);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) override
 	{
 		force::disguised_caller_format(_function, _destination, _format, _count, _stack);
 	}

@@ -23,11 +23,11 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}

@@ -58,7 +58,7 @@ inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::execute(member *
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
 {
 	BIA_NOT_IMPLEMENTED;
 	instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_count(_count, _stack)), true);
@@ -67,7 +67,7 @@ inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_cou
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
 {
 	BIA_NOT_IMPLEMENTED;
 	/*force::va_list_wrapper _args;

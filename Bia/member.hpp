@@ -51,7 +51,7 @@ public:
 	};
 
 	/** The type of the parameter count. */
-	typedef uint32_t parameter_count;
+	typedef uint8_t parameter_count_t;
 	typedef uint32_t test_result_t;
 
 	/**
@@ -151,7 +151,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_count().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) = 0;
 	/**
 	 * Executes this object as function with mixed parameters.
 	 *
@@ -170,7 +170,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_format().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) = 0;
 	/**
 	 * An operator call with another member as right value.
 	 *

@@ -59,7 +59,7 @@ public:
 	 *
 	 * @return The created instance
 	*/
-	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count _count, machine::stack * _stack) const
+	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count_t _count, machine::stack * _stack) const
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_INSTANTIATION);
 	}
@@ -78,7 +78,7 @@ public:
 	 *
 	 * @return The created instance
 	*/
-	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack) const
+	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack) const
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_INSTANTIATION);
 	}
@@ -95,11 +95,11 @@ public:
 	{
 		return machine::memory::cast_allocation<void>(force::disguised_caller<Type, Arguments...>());
 	}
-	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count _count, machine::stack * _stack) const override
+	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count_t _count, machine::stack * _stack) const override
 	{
 		return machine::memory::cast_allocation<void>(force::disguised_caller_count<Type, Arguments...>(_count, _stack));
 	}
-	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count _count, machine::stack * _stack) const override
+	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack) const override
 	{
 		return machine::memory::cast_allocation<void>(force::disguised_caller_format<Type, Arguments...>(_format, _count, _stack));
 	}

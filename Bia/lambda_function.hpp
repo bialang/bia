@@ -61,13 +61,13 @@ inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute(membe
 }
 
 template<typename Lambda>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_count(member * _destination, void * _reserved, parameter_count _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
 {
 	force::disguised_caller_count(&Lambda::operator(), &_data.get(), _destination, _count, _stack);
 }
 
 template<typename Lambda>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_format(member * _destination, const char * _format, parameter_count _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
 {
 	force::disguised_caller_format(&Lambda::operator(), &_data.get(), _destination, _format, _count, _stack);
 }
