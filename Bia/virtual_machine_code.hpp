@@ -54,6 +54,18 @@ private:
 
 		return _tmp;
 	}
+	static framework::member::test_result_t test(framework::member * _member, framework::operator_t _operator, int32_t _immediate)
+	{
+		return _member->test_int32(_operator, _immediate);
+	}
+	static framework::member::test_result_t test(framework::member * _member, framework::operator_t _operator, int64_t _immediate)
+	{
+		return _member->test_int64(_operator, _immediate);
+	}
+	static framework::member::test_result_t test(framework::member * _member, framework::operator_t _operator, double _immediate)
+	{
+		return _member->test_double(_operator, _immediate);
+	}
 };
 
 }

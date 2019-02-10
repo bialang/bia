@@ -21,10 +21,12 @@ mmtype = [
     ("OC_EXECUTE", "_member0->execute(_member1);"),
     ("OC_CLONE", "_member0->clone(_member1);"),
     ("OC_REFER", "_member0->refer(_member1);"),
-    ("OC_COPY", "_member0->copy(_member1);")
+    ("OC_COPY", "_member0->copy(_member1);"),
+    ("OC_TEST_MEMBER", "_test_register = _member0->test_member(read<framework::operator_t>(_cursor), _member1);")
 ]
 mitype = [
-    ("OC_INSTANTIATE", "framework::create_member(_member, _immediate);")
+    ("OC_INSTANTIATE", "framework::create_member(_member, _immediate);"),
+    ("OC_TEST_IMMEDIATE", "_test_register = test(_member, read<framework::operator_t>(_cursor), _immediate);")
 ]
 
 mvars = [
