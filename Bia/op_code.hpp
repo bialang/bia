@@ -129,49 +129,91 @@ enum OP_CODE : op_code_t
 class op_code
 {
 public:
-	constexpr static auto op_code_mask = 0xff;
-	constexpr static auto immediate_mask = 0;
-	constexpr static auto member_mask = 0x03;
-	constexpr static auto parameter_offset = 8;
-	constexpr static auto immediate_offset = 0;
-	constexpr static auto member_offset = 4;
-	constexpr static auto immediate_bit_count = 0;
-	constexpr static auto member_bit_count = 4;
-	constexpr static auto tiny_bit = 0x80;
+	static void write_p_type(stream::output_stream & _output, OP_CODE _operation)
+	{
+		_output.write_all(_operation);
+	}
+	template<typename Type>
+	static void write_int_type(stream::output_stream & _output, OP_CODE _operation, Type _int)
+	{
+		static_assert(std::is_integral<Type>::value && (sizeof(Type) == 4 || sizeof(Type) == 1), "Unsupported int type.");
 
-	static bool tiny_member(const index & _index) noexcept
-	{
-		return _index.value <= std::numeric_limits<tiny_member_index_t>::max();
+		_output.write_all(static_cast<op_code_t>(_operation - (sizeof(Type) == 4 ? IIOCO_INT32 : IIOCO_INT8), _int);
 	}
-	static void write_return(stream::output_stream & _output) noexcept
+	template<typename Type>
+	static void write_i_type(stream::output_stream & _output, OP_CODE _operation, Type _immediate)
 	{
-		_output.write_all(OC_RETURN);
+		_output.write_all(static_cast<op_code_t>(_operation - immediate_option<Type>()), _immediate);
 	}
-	static void write_setup(stream::output_stream & _output, uint32_t _count) noexcept
+	static void write_m_type(stream::output_stream & _output, OP_CODE _operation, const index & _member)
 	{
-		_output.write_all(OC_SETUP, _count);
-	}
-	static void write_m_type(stream::output_stream & _output, op_code_t _operation, const index & _index) noexcept
-	{
-		auto _tiny = tiny_member(_index);
-		op_code_t _op_code = (_tiny ? tiny_bit << parameter_offset : 0) | _operation;
+		auto _option = member_option(_member);
 
-		if (dynamic_cast<const member_index*>(&_index)) {
-			_op_code |= MOCO_MEMBER << member_offset + parameter_offset;
-		} else if (dynamic_cast<const temp_index*>(&_index)) {
-			_op_code |= MOCO_TEMP << member_offset + parameter_offset;
-		} else if (dynamic_cast<const local_index*>(&_index)) {
-			_op_code |= MOCO_LOCAL << member_offset + parameter_offset;
+		_output.write_all(static_cast<op_code_t>(_operation - _option));
+
+		write_member(_output, _member);
+	}
+	static void write_mm_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1)
+	{
+		auto _option0 = member_option(_member0);
+		auto _option1 = member_option(_member1);
+
+		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * MOCO_COUNT + _option1)));
+		
+		write_member(_output, _member0);
+		write_member(_output, _member1);
+	}
+	template<typename Type>
+	static void write_mi_type(stream::output_stream & _output, OP_CODE _operation, const index & _member, Type _immediate)
+	{
+		auto _option0 = member_option(_member);
+		auto _option1 = immediate_option<Type>();
+
+		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * IOCO_COUNT + _option1));
+
+		write_member(_output, _member);
+
+		_output.write_all(_immediate);
+	}
+
+private:
+	static void write_member(stream::output_stream & _output, const index & _member)
+	{
+		if (_member.value <= std::numeric_limits<tiny_member_index_t>::max()) {
+			_output.write_all(static_cast<tiny_member_index_t>(_member.value));
+		} else {
+			_output.write_all(_member.value);
+		}
+	}
+	static MEMBER_OP_CODE_OPTION member_option(const index & _member)
+	{
+		MEMBER_OP_CODE_OPTION _option = _member.value <= std::numeric_limits<tiny_member_index_t>::max() ? MOCO_TINY_MEMBER : MOCO_MEMBER;
+
+		/*if (dynamic_cast<const member_index*>(&_member)) {
+			_code -= MOCO_MEMBER;
+		} else if (dynamic_cast<const temp_index*>(&_member)) {
+			_code |= MOCO_TEMP;
+		} else if (dynamic_cast<const local_index*>(&_member)) {
+			_code |= MOCO_LOCAL;
 		} else {
 			BIA_IMPLEMENTATION_ERROR;
-		}
+		}*/
 
-		_output.write_all(_op_code);
+		return _option;
+	}
+	template<typename Type>
+	static IMMEDIATE_OP_CODE_OPTION immediate_option()
+	{
+		static_assert(std::is_same<Type, int32_t>::value || std::is_same<Type, int8_t>::value || std::is_same<Type, int64_t>::value || std::is_same<Type, double>::value, "Unsupported immediate type.");
 
-		if (_tiny) {
-			_output.write_all(static_cast<tiny_member_index_t>(_index.value));
+		if (std::is_same<Type, int32_t>::value) {
+			return IOCO_INT32;
+		} else if (std::is_same<Type, int8_t>::value) {
+			return IOCO_INT8;
+		} else if (std::is_same<Type, int64_t>::value) {
+			return IOCO_INT64;
 		} else {
-			_output.write_all(_index.value);
+			return IOCO_FLOAT;
 		}
 	}
 };
