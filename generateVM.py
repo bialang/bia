@@ -16,11 +16,21 @@ mtype = [
     ("OC_PUSH", "_stack.push(_member);"),
     ("OC_UNDEFINE", "_member->undefine();"),
     ("OC_EXECUTE_VOID", "_member->execute(nullptr);"),
-    ("OC_EXECUTE_COUNT_VOID", "_member->execute_count(nullptr, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);")
+    ("OC_EXECUTE_COUNT_VOID", "_member->execute_count(nullptr, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);"),
+    ("OC_EXECUTE_FORMAT_VOID", "auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);\n\t\t\t"
+                                "if (_cursor + _parameter_count > _end) {\n\t\t\t\t"
+                                    "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
+                                "}\n\t\t\t_member->execute_format(nullptr, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);\n\t\t\t"
+                                "_cursor += _parameter_count;")
 ]
 mmtype = [
     ("OC_EXECUTE", "_member0->execute(_member1);"),
-    ("OC_EXECUTE_COUNT", "_member0->execute_count(_member1, nullptr, read<framework::member::paramter_count_t>(_cursor), &_stack);"),
+    ("OC_EXECUTE_COUNT", "_member0->execute_count(_member1, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);"),
+    ("OC_EXECUTE_FORMAT", "auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);\n\t\t\t"
+                            "if (_cursor + _parameter_count > _end) {\n\t\t\t\t"
+                                "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
+                            "}\n\t\t\t_member0->execute_format(_member1, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);\n\t\t\t"
+                            "_cursor += _parameter_count;"),
     ("OC_CLONE", "_member0->clone(_member1);"),
     ("OC_REFER", "_member0->refer(_member1);"),
     ("OC_COPY", "_member0->copy(_member1);"),

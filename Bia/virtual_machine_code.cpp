@@ -156,6 +156,18 @@ void virtual_machine_code::execute()
 			_stack.push(_member);
 			break;
 		}
+		case (OC_UNDEFINE - MOCO_TINY_MEMBER):
+		{
+			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
+			_member->undefine();
+			break;
+		}
+		case (OC_UNDEFINE - MOCO_MEMBER):
+		{
+			auto _member = _globals[read<member_index_t>(_cursor)];
+			_member->undefine();
+			break;
+		}
 		case (OC_EXECUTE_VOID - MOCO_TINY_MEMBER):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
@@ -168,16 +180,38 @@ void virtual_machine_code::execute()
 			_member->execute(nullptr);
 			break;
 		}
-		case (OC_UNDEFINE - MOCO_TINY_MEMBER):
+		case (OC_EXECUTE_COUNT_VOID - MOCO_TINY_MEMBER):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
-			_member->undefine();
+			_member->execute_count(nullptr, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);
 			break;
 		}
-		case (OC_UNDEFINE - MOCO_MEMBER):
+		case (OC_EXECUTE_COUNT_VOID - MOCO_MEMBER):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
-			_member->undefine();
+			_member->execute_count(nullptr, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);
+			break;
+		}
+		case (OC_EXECUTE_FORMAT_VOID - MOCO_TINY_MEMBER):
+		{
+			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);
+			if (_cursor + _parameter_count > _end) {
+				BIA_IMPLEMENTATION_ERROR;
+			}
+			_member->execute_format(nullptr, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);
+			_cursor += _parameter_count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT_VOID - MOCO_MEMBER):
+		{
+			auto _member = _globals[read<member_index_t>(_cursor)];
+			auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);
+			if (_cursor + _parameter_count > _end) {
+				BIA_IMPLEMENTATION_ERROR;
+			}
+			_member->execute_format(nullptr, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);
+			_cursor += _parameter_count;
 			break;
 		}
 		/** MM-Type */
@@ -207,6 +241,82 @@ void virtual_machine_code::execute()
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->execute(_member1);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
+			_member0->execute_count(_member1, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _globals[read<member_index_t>(_cursor)];
+			_member0->execute_count(_member1, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
+			_member0->execute_count(_member1, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _globals[read<member_index_t>(_cursor)];
+			_member0->execute_count(_member1, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);
+			if (_cursor + _parameter_count > _end) {
+				BIA_IMPLEMENTATION_ERROR;
+			}
+			_member0->execute_format(_member1, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);
+			_cursor += _parameter_count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _globals[read<member_index_t>(_cursor)];
+			auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);
+			if (_cursor + _parameter_count > _end) {
+				BIA_IMPLEMENTATION_ERROR;
+			}
+			_member0->execute_format(_member1, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);
+			_cursor += _parameter_count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);
+			if (_cursor + _parameter_count > _end) {
+				BIA_IMPLEMENTATION_ERROR;
+			}
+			_member0->execute_format(_member1, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);
+			_cursor += _parameter_count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _globals[read<member_index_t>(_cursor)];
+			auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);
+			if (_cursor + _parameter_count > _end) {
+				BIA_IMPLEMENTATION_ERROR;
+			}
+			_member0->execute_format(_member1, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);
+			_cursor += _parameter_count;
 			break;
 		}
 		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
