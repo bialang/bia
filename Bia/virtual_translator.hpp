@@ -46,7 +46,7 @@ public:
 	 * @throws See stream::output_stream::position(), stream::output_stream::write_all(), stream::output_stream::set_position() and stream::output_stream::set_beginning().
 	*/
 	void finalize(member_index_t _temp_count);
-	void instantiate_int(const index & _destination, int64_t _value);
+	void instantiate_int(const index & _member, int64_t _value);
 	void test(const index & _member);
 	void execute(const index & _member);
 	void pass_parameter(const index & _member);

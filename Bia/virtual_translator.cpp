@@ -17,7 +17,7 @@ virtual_translator::virtual_translator(stream::output_stream & _output)
 
 	_temp_member_pos = _output.position();
 
-	op_code::write_setup(_output, 0);
+	op_code::write_int_type<member_index_t>(_output, OC_SETUP, 0);
 
 	_setup_end_pos = _output.position();
 }
@@ -34,7 +34,7 @@ void virtual_translator::finalize(member_index_t _temp_count)
 		auto _current_pos = _output->position();
 
 		_output->set_position(_temp_member_pos);
-		op_code::write_setup(*_output, _temp_count);
+		op_code::write_int_type<member_index_t>(*_output, OC_SETUP, _temp_count);
 		_output->set_position(_current_pos);
 	} // Skip temp member creation
 	else {
@@ -44,17 +44,14 @@ void virtual_translator::finalize(member_index_t _temp_count)
 	_output->write_all(OC_RETURN);
 }
 
-void virtual_translator::instantiate_int(const index & _destination, int64_t _value)
+void virtual_translator::instantiate_int(const index & _member, int64_t _value)
 {
-	if (!dynamic_cast<const member_index*>(&_destination)) {
-		BIA_NOT_IMPLEMENTED;
-	}
-
+	op_code::write_mm_type(*_output, OC_INSTANTIATE, _member, _value);
 }
 
 void virtual_translator::test(const index & _member)
 {
-	BIA_NOT_IMPLEMENTED;
+	op_code::write_m_type(*_output, OC_TEST, _member);
 }
 
 void virtual_translator::execute(const index & _member)
@@ -69,7 +66,27 @@ void virtual_translator::pass_parameter(const index & _member)
 
 virtual_translator::position_t virtual_translator::jump(JUMP _type, position_t _destination, position_t _overwrite_pos)
 {
-	BIA_NOT_IMPLEMENTED;
+	int32_t _pos = 0;
+	OP_CODE _operation;
+
+	switch (_type) {
+	case JUMP::JUMP:
+		_operation = OC_JUMP;
+
+		break;
+	case JUMP::JUMP_IF_TRUE:
+		_operation = OC_JUMP_TRUE;
+
+		break;
+	case JUMP::JUMP_IF_FALSE:
+		_operation = OC_JUMP_FALSE;
+
+		break;
+	default:
+		BIA_IMPLEMENTATION_ERROR;
+	}
+
+	op_code::write_int_type(*_output, _operation, _pos);
 }
 
 stream::output_stream & virtual_translator::output_stream() noexcept
