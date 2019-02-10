@@ -45,6 +45,18 @@ private:
 	/** The machine schein.  */
 	virtual_machine_schein _schein;
 
+	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, int32_t _immediate)
+	{
+		_member->operator_call_int32(_destination, _operator, _immediate);
+	}
+	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, int64_t _immediate)
+	{
+		_member->operator_call_int64(_destination, _operator, _immediate);
+	}
+	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, double _immediate)
+	{
+		_member->operator_call_double(_destination, _operator, _immediate);
+	}
 	template<typename Type>
 	static Type read(const uint8_t *& _cursor)
 	{

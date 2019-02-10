@@ -40,6 +40,12 @@ mitype = [
     ("OC_INSTANTIATE", "framework::create_member(_member, _immediate);"),
     ("OC_TEST_IMMEDIATE", "_test_register = test(_member, read<framework::operator_t>(_cursor), _immediate);")
 ]
+mmmtype = [
+    ("OC_OPERATOR_CALL", "_member0->operator_call(_member1, read<framework::operator_t>(_cursor), _member2);")
+]
+mmitype = [
+    ("OC_OPERATOR_CALL_IMMEDIATE", "operator_call(_member0, _member1, read<framework::operator_t>(_cursor), _immediate);")
+]
 
 mvars = [
     ("MOCO_TINY_MEMBER", "auto {0} = _globals[read<tiny_member_index_t>(_cursor)];"),
@@ -57,20 +63,24 @@ ivars = [
 ]
 o = open("out.txt", "w")
 
-def write_case(op_code, code, xoffset=None, xmax=None, yoffset=None, var0=None, var1=None):
+def write_case(op_code, code, xoffset=None, xmax=None, yoffset=None, ymax=None, zoffset=None, var0=None, var1=None, var2=None):
     if xoffset is None:
         offset = ""
     else:
         if xmax is None or yoffset is None:
             offset = " - " + xoffset
         else:
-            offset = " - ({0} * {1} + {2})".format(yoffset, xmax, xoffset)
+            if zoffset is None or ymax is None:
+                offset = " - ({0} * {1} + {2})".format(yoffset, xmax, xoffset)
+            else:
+                offset = " - (({0} * {1} + {2}) * {3} + {4})".format(zoffset, ymax, yoffset, xmax, xoffset)
     
-    o.write("case ({op_code}{offset}):\n\t\t{{\n\t\t\t{var0}{var1}{code}\n\t\t\tbreak;\n\t\t}}\n\t\t".format(
+    o.write("case ({op_code}{offset}):\n\t\t{{\n\t\t\t{var0}{var1}{var2}{code}\n\t\t\tbreak;\n\t\t}}\n\t\t".format(
         op_code=op_code,
         offset=offset,
         var0=var0 + "\n\t\t\t" if var0 is not None else "",
         var1=var1 + "\n\t\t\t" if var1 is not None else "",
+        var2=var2 + "\n\t\t\t" if var2 is not None else "",
         code=code
     ))
 
@@ -117,6 +127,20 @@ for i in mitype:
     for v0 in mvars:
         for v1 in ivars:
             write_case(*i, xoffset=v1[0], yoffset=v0[0], xmax="IOCO_COUNT", var0=v0[1].format("_member"), var1=v1[1])
+
+# Write MMM-Type
+for i in mmmtype:
+    for v0 in mvars:
+        for v1 in mvars:
+            for v2 in mvars:
+                write_case(*i, xoffset=v2[0], yoffset=v1[0], zoffset=v0[0], xmax="MOCO_COUNT", ymax="MOCO_COUNT", var0=v0[1].format("_member0"), var1=v1[1].format("_member1"), var2=v2[1].format("_member2"))
+
+# Write MMI-Type
+for i in mmitype:
+    for v0 in mvars:
+        for v1 in mvars:
+            for v2 in ivars:
+                write_case(*i, xoffset=v2[0], yoffset=v1[0], zoffset=v0[0], xmax="IOCO_COUNT", ymax="MOCO_COUNT", var0=v0[1].format("_member0"), var1=v1[1].format("_member1"), var2=v2[1])
 
 # Finalize
 o.write("default:\n\t\t\tBIA_IMPLEMENTATION_ERROR;\n\t\t}")
