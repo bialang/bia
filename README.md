@@ -135,7 +135,7 @@ _context.set_lambda("int_sqrt", [](double _value) {
 });
 ```
 
- ## Adding a C++ class
+## Adding a C++ class
 
 ``` cpp
 // A C++ class
