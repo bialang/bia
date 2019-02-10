@@ -14,11 +14,13 @@ itype = [
 mtype = [
     ("OC_TEST", "_test_register = _member->test();"),
     ("OC_PUSH", "_stack.push(_member);"),
+    ("OC_UNDEFINE", "_member->undefine();"),
     ("OC_EXECUTE_VOID", "_member->execute(nullptr);"),
-    ("OC_UNDEFINE", "_member->undefine();")
+    ("OC_EXECUTE_COUNT_VOID", "_member->execute_count(nullptr, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);")
 ]
 mmtype = [
     ("OC_EXECUTE", "_member0->execute(_member1);"),
+    ("OC_EXECUTE_COUNT", "_member0->execute_count(_member1, nullptr, read<framework::member::paramter_count_t>(_cursor), &_stack);"),
     ("OC_CLONE", "_member0->clone(_member1);"),
     ("OC_REFER", "_member0->refer(_member1);"),
     ("OC_COPY", "_member0->copy(_member1);"),
