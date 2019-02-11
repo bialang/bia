@@ -90,7 +90,7 @@ public:
 	template<typename Type>
 	Type cast(ptrdiff_t _offset) noexcept
 	{
-		return reinterpret_cast<Type>(_stack_pointer + _offset);
+		return *reinterpret_cast<Type*>(_stack_pointer + _offset);
 	}
 	template<typename Type>
 	Type format_cast(ptrdiff_t _offset, char _format)
