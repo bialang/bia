@@ -84,7 +84,6 @@ private:
 	 * @since 3.67.135.751
 	 * @date 6-Aug-18
 	 *
-	 * @tparam Member The type of the member.
 	 * @tparam Destination The type of the destination.
 	 *
 	 * @param _member The member.
@@ -94,26 +93,25 @@ private:
 	 * @param [in] _passer The varg passer.
 	 *
 	 * @throws See machine::string_manager::format_address().
-	 * @throws See machine::platform::toolset::call().
+	 * @throws See machine::virtual_machine::virtual_translator::execute_count().
 	*/
-	template<typename Member, typename Destination>
-	void handle_parameter_execute(Member _member, Destination _destination, const std::string & _format, bool _mixed, uint32_t _count)
+	template<typename Destination>
+	void handle_parameter_execute(const machine::virtual_machine::index & _member, Destination _destination, const std::string & _format, bool _mixed, framework::member::parameter_count_t _count)
 	{
 		// Execute without parameters
 		if (!_count) {
 			_translator.execute(_member);
 		} // Formatted execute
-		else
-			BIA_IMPLEMENTATION_ERROR;
-		/*else if (_mixed) {
-			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
-			printf("format: %s\n", std::string(_format_ptr, _format.length()).c_str()); 
+		else if (_mixed) {
+			BIA_NOT_IMPLEMENTED;
+			/*auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
+			/*printf("format: %s\n", std::string(_format_ptr, _format.length()).c_str()); 
 			printf("format: %s\n", _format.c_str());
-			_toolset.call_virtual(&framework::member::execute_format, _member, _passer, _destination, _format_ptr, _count);
+			_toolset.call_virtual(&framework::member::execute_format, _member, _passer, _destination, _format_ptr, _count);*/
 		} // Only members as parameters
 		else {
-			_toolset.call_virtual(&framework::member::execute_count, _member, _passer, _destination, machine::platform::reserved_parameter(), _count);
-		}*/
+			_translator.execute_count(_member, _count);
+		}
 	}
 	template<typename Destination>
 	void handle_variable_declaration_helper(compiler_value _expression, Destination _destination)

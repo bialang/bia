@@ -66,6 +66,13 @@ void virtual_translator::execute(const index & _member)
 	op_code::write_m_type(*_output, OC_EXECUTE_VOID, _member);
 }
 
+void virtual_translator::execute_count(const index & _member, framework::member::parameter_count_t _count)
+{
+	op_code::write_m_type(*_output, OC_EXECUTE_COUNT_VOID, _member);
+
+	_output->write_all(_count);
+}
+
 void virtual_translator::pass_parameter(const index & _member)
 {
 	op_code::write_m_type(*_output, OC_PUSH, _member);
