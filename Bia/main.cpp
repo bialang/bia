@@ -93,7 +93,7 @@ int main()
 			printf("w: %i\n", p->a);
 			//p.a = 34343434;
 		});
-		_context.set_lambda("print", [](bia::framework::member * _member) {
+		_context.set_lambda("print", [](const bia::framework::member * _member) {
 			_member->print();
 		});
 		/*_context.set_lambda("int", [](bia::framework::member * _member) {
@@ -135,8 +135,8 @@ int main()
 
 global i = 0
 
-hello_world()
-#print(i)
+#hello_world()
+print(i)
 
 )"";
 		/*test_and_time(1, []() {

@@ -55,7 +55,7 @@ struct converter<Type*> : base_convert<typename std::conditional<utility::pointe
 	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type* type;
 
-	static Type * convert(typename base::abstract_data_type _ptr)
+	static type convert(typename base::abstract_data_type _ptr)
 	{
 		return selected_convert<base::data_type>(_ptr);
 	}
@@ -67,7 +67,7 @@ struct converter<Type&> : base_convert<typename std::conditional<utility::pointe
 	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type& type;
 
-	static Type & convert(typename base::abstract_data_type _ptr)
+	static type convert(typename base::abstract_data_type _ptr)
 	{
 		return *selected_convert<base::data_type>(_ptr);
 	}
@@ -79,7 +79,7 @@ struct converter<Type&&> : base_convert<typename std::conditional<utility::point
 	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type&& type;
 
-	static Type && convert(typename base::abstract_data_type _ptr)
+	static type convert(typename base::abstract_data_type _ptr)
 	{
 		return std::move(*selected_convert<base::data_type>(_ptr));
 	}

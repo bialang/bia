@@ -263,6 +263,11 @@ public:
 	 * @throws exception::type_error If the instance type is not the right one.
 	*/
 	virtual void set_instance(const void * _instance, const std::type_info & _type) = 0;
+	template<typename Type>
+	constexpr static bool member_base() noexcept
+	{
+		return std::is_base_of<member, typename std::remove_pointer<Type>::type>::value;
+	}
 	/**
 	 * Some details about the content.
 	 *
@@ -394,14 +399,32 @@ public:
 		return static_cast<Type>(double_data());
 	}
 	template<typename Type>
-	typename std::enable_if<!std::is_arithmetic<Type>::value && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
+	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
 	{
 		return converter<Type>::convert(data(converter<Type>::info()));
 	}
 	template<typename Type>
-	typename std::enable_if<!std::is_arithmetic<Type>::value && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
+	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
 	{
 		return converter<Type>::convert(const_data(converter<Type>::info()));
+	}
+	template<typename Type>
+	typename std::enable_if<member_base<Type>() && converter<Type>::is_const, Type>::type cast()
+	{
+		if (!dynamic_cast<Type>(this)) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return static_cast<Type>(this);
+	}
+	template<typename Type>
+	typename std::enable_if<member_base<Type>() && !converter<Type>::is_const, Type>::type cast() const
+	{
+		if (!dynamic_cast<Type>(this)) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return static_cast<Type>(this);
 	}
 
 	/**
