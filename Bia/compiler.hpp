@@ -103,11 +103,7 @@ private:
 			_translator.execute(_member);
 		} // Formatted execute
 		else if (_mixed) {
-			BIA_NOT_IMPLEMENTED;
-			/*auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
-			/*printf("format: %s\n", std::string(_format_ptr, _format.length()).c_str()); 
-			printf("format: %s\n", _format.c_str());
-			_toolset.call_virtual(&framework::member::execute_format, _member, _passer, _destination, _format_ptr, _count);*/
+			_translator.execute_format(_member, _format.c_str(), _count);
 		} // Only members as parameters
 		else {
 			_translator.execute_count(_member, _count);

@@ -50,7 +50,13 @@ public:
 	void test(const index & _member);
 	void execute(const index & _member);
 	void execute_count(const index & _member, framework::member::parameter_count_t _count);
+	void execute_format(const index & _member, const char * _format, framework::member::parameter_count_t _count);
 	void pass_parameter(const index & _member);
+	template<typename Type>
+	void pass_immediate(Type _value)
+	{
+		op_code::write_i_type(*_output, OC_PUSH_IMMEDIATE, _value);
+	}
 	//position_t create_local_variables();
 	position_t jump(JUMP _type, position_t _destination = 0, position_t _overwrite_pos = -1);
 	/**

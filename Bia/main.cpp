@@ -136,7 +136,7 @@ int main()
 global i = 0
 
 #hello_world()
-print(i)
+ser(61,55)
 
 )"";
 		/*test_and_time(1, []() {

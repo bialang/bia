@@ -93,25 +93,19 @@ char compiler::handle_parameter_item()
 	using VT = compiler_value::VALUE_TYPE;
 
 	switch (_value.type()) {
-	/*case VT::TEST_VALUE_CONSTANT:
+	case VT::TEST_VALUE_CONSTANT:
 		_value.set_return(static_cast<int64_t>(_value.value().rt_test_result));
 	case VT::INT:
 	{
-		if (_value.is_int32()) {
-			_passer.pass_varg(static_cast<int32_t>(_value.value().rt_int));
-
-			return 'i';
-		}
-
-		_passer.pass_varg(_value.value().rt_int);
+		_translator.pass_immediate(_value.value().rt_int);
 
 		return 'I';
 	}
 	case VT::DOUBLE:
-		_passer.pass_varg(_value.value().rt_double);
+		_translator.pass_immediate(_value.value().rt_double);
 
 		return 'd';
-	case VT::STRING:
+	/*case VT::STRING:
 		_passer.pass_varg(_value.value().rt_string.data);
 
 		return 'a';
@@ -131,18 +125,17 @@ char compiler::handle_parameter_item()
 		_translator.pass_parameter(_translator.to_member(_value.value().rt_member));
 
 		return 'M';
-	/*case VT::TEMPORARY_MEMBER:
-		_passer.pass_varg(machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
+	case VT::TEMPORARY_MEMBER:
+		_translator.pass_parameter(_translator.to_temp(_value.value().rt_temp_member));
 
 		return 'M';
 	case VT::LOCAL_MEMBER:
-		_passer.pass_varg(machine::platform::toolset::to_local_member(_value.value().rt_local_member));
+		_translator.pass_parameter(_translator.to_local(_value.value().rt_local_member));
 
 		return 'M';
 	case VT::TEST_VALUE_REGISTER:
-		_passer.pass_varg(machine::platform::toolset::test_result_value());
 
-		return 'i';*/
+		return 'i';
 	default:
 		BIA_IMPLEMENTATION_ERROR;
 	}
@@ -477,7 +470,7 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 		for (auto i = _report + 1; i < _report->content.end; ++_count) {
 			i = handle_value_insecure<false>(i);
 
-			// Add type to format
+			// Push parameter
 			auto _type = handle_parameter_item();
 
 			_format += _type;
