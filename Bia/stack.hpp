@@ -1,10 +1,12 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 
 #include "config.hpp"
 #include "allocator.hpp"
 #include "exception.hpp"
+#include "member.hpp"
 
 
 namespace bia
@@ -22,7 +24,7 @@ namespace machine
 class stack
 {
 public:
-	typedef intptr_t element_t;
+	typedef int64_t element_t;
 
 	stack(memory::allocator * _allocator, size_t _element_count)
 	{
@@ -52,11 +54,14 @@ public:
 	template<typename Type>
 	void push(Type _value)
 	{
-		if (_stack_pointer + 1 > _buffer.first + _buffer.second) {
+		//static_assert(sizeof(Type) % element_size() == 0, "Size of Type must be a multiple of the element size.");
+
+		if (_stack_pointer + sizeof(Type) / element_size() > _buffer.first + _buffer.second) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
 		*reinterpret_cast<Type*>(_stack_pointer++) = _value;
+		//_stack_pointer += sizeof(Type) / element_size();
 	}
 	template<typename Type>
 	void push(Type * _value)
@@ -95,77 +100,47 @@ public:
 	template<typename Type>
 	Type format_cast(ptrdiff_t _offset, char _format)
 	{
-		BIA_NOT_IMPLEMENTED;
-		/*using namespace utility;
+		using namespace utility;
 		using Real_return = typename std::remove_reference<Type>::type;
-
-	gt_redo:;
 
 		switch (_format) {
 		case 'i':
-		{
-			constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
-
-			if (is_number) {
-				return chooser<is_number, Type, int32_t>::choose(va_arg(_args.args, int32_t));
-			} else {
-				break;
-			}
-		}
+			return checked_convert<Type>(cast<int32_t>(_offset));
 		case 'I':
-		{
-			constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
-
-			if (is_number) {
-				return chooser<is_number, Type, int64_t>().choose(va_arg(_args.args, int64_t));
-			} else {
-				break;
-			}
-		}
+			return checked_convert<Type>(cast<int64_t>(_offset));
 		case 'd':
-		{
-			constexpr auto is_number = std::is_integral<Real_return>::value || std::is_floating_point<Real_return>::value;
-
-			if (is_number) {
-				auto _value = va_arg(_args.args, int64_t);
-
-				return chooser<is_number, Type, double>().choose(*reinterpret_cast<double*>(&_value));
-			} else {
-				break;
-			}
-		}
+			return checked_convert<Type>(cast<double>(_offset));
 		case 'a':
-		{
-			constexpr auto is_string = std::is_same<Real_return, const char*>::value;
-
-			if (is_string) {
-				return chooser<is_string, Type, const char*>().choose(va_arg(_args.args, const char*));
-			} else {
-				break;
-			}
-		}
+			return checked_convert<Type>(reinterpret_cast<const char*>(_stack_pointer + _offset));
 		case 'M':
-			return reinterpret_cast<framework::member*>(_stack_pointer)->cast<Return>();
-		case 'r':
-			va_arg(_args.args, void*);
-
-			goto gt_redo;
+			return reinterpret_cast<framework::member*>(_stack_pointer + _offset)->cast<Type>();
 		default:
 			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
 		}
 
-		throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);*/
+		throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 	}
 
 private:
 	/** The base pointer of the stack. */
-	intptr_t * _base_pointer;
+	element_t * _base_pointer;
 	/** The stack pointer of the stack. */
-	intptr_t * _stack_pointer;
+	element_t * _stack_pointer;
 	/** The used memory allocator. */
 	memory::allocator * _allocator;
 	/** The base pointer of the stack. */
 	memory::allocation<element_t> _buffer;
+
+	template<typename To, typename From>
+	static typename std::enable_if<std::is_convertible<From, To>::value, To>::type checked_convert(From _from)
+	{
+		return static_cast<To>(_from);
+	}
+	template<typename To, typename From>
+	static typename std::enable_if<!std::is_convertible<From, To>::value, To>::type checked_convert(From _from)
+	{
+		throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
+	}
 };
 
 }

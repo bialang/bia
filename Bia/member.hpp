@@ -14,7 +14,6 @@
 #include "buffer_builder.hpp"
 #include "big_int.hpp"
 #include "member_cast_type.hpp"
-#include "stack.hpp"
 
 
 namespace bia
