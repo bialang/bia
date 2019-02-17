@@ -50,31 +50,30 @@ public:
 	 * @param _right The right hand value.
 	 *
 	 * @throws See left_constant_operation() and left_member_operation().
+	 * @throws See compiler_value::expand_to_member().
 	*/
 	void operate(compiler_value _left, framework::operator_t _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_left.type()) {
-		case VT::INT:
-			left_constant_operation(_left.value().rt_int, _operator, _right);
+		_left.expand_to_member(_translator, [&](auto _member) {
+			if (std::is_same<decltype(_member), machine::virtual_machine::invalid_index>::value) {
+				switch (_left.type()) {
+				case VT::INT:
+					left_constant_operation(_left.value().rt_int, _operator, _right);
 
-			break;
-		case VT::DOUBLE:
-			left_constant_operation(_left.value().rt_double, _operator, _right);
+					break;
+				case VT::DOUBLE:
+					left_constant_operation(_left.value().rt_double, _operator, _right);
 
-			break;
-		case VT::MEMBER:
-			left_member_operation(_left.value().rt_member, _operator, _right);
-
-			break;
-		/*case VT::TEMPORARY_MEMBER:
-			left_member_operation(machine::platform::toolset::to_temp_member(_left.value().rt_temp_member), _operator, _right);
-
-			break;*/
-		default:
-			BIA_IMPLEMENTATION_ERROR;
-		}
+					break;
+				default:
+					BIA_IMPLEMENTATION_ERROR;
+				}
+			} else {
+				left_member_operation(_member, _operator, _right);
+			}
+		});
 	}
 
 private:
@@ -89,18 +88,23 @@ private:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam Member The left member type.
-	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
 	 * @throws See machine::platform::toolset::call().
 	*/
-	template<typename Member>
-	void left_member_operation(Member && _member, framework::operator_t _operator, compiler_value _right)
+	void left_member_operation(const machine::virtual_machine::index & _member, framework::operator_t _operator, compiler_value _right)
 	{
-		BIA_NOT_IMPLEMENTED;
+		_right.expand_to_member(_translator, [&](auto _right_member) {
+			if (std::is_same<decltype(_right_member), machine::virtual_machine::invalid_index>::value) {
+				_translator.test_call_immediate(_member, _operator, _right.value().rt_int);
+				//BIA_NOT_IMPLEMENTED;
+			} else {
+				_translator.test_call(_member, _operator, _right_member);
+			}
+		});
+
 		/*
 		using VT = compiler_value::VALUE_TYPE;
 		using T = machine::platform::toolset;
@@ -136,9 +140,9 @@ private:
 			break;
 		default:
 			BIA_IMPLEMENTATION_ERROR;
-		}
+		}*/
 
-		_value.set_return_test();*/
+		_value.set_return_test();
 	}
 	/**
 	 * Executes the compare operator.
@@ -147,7 +151,6 @@ private:
 	 * @date 14-Jun-18
 	 *
 	 * @tparam Left Either int64_t or double.
-	 * @tparam Right The right member value.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
@@ -155,8 +158,8 @@ private:
 	 *
 	 * @throws See machine::platform::toolset::call().
 	*/
-	template<typename Left, typename Right>
-	void left_constant_right_member_operation(Left && _left, framework::operator_t _operator, Right && _right)
+	template<typename Left>
+	void left_constant_right_member_operation(Left && _left, framework::operator_t _operator, const machine::virtual_machine::index & _right)
 	{
 		BIA_NOT_IMPLEMENTED;
 		/*if (std::is_same<typename std::remove_reference<Left>::type, int64_t>::value) {
@@ -191,26 +194,25 @@ private:
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_right.type()) {
-		case VT::INT:
-			both_constant_operation(std::forward<Left>(_left), _operator, _right.value().rt_int);
+		_right.expand_to_member(_translator, [&](auto _right_member) {
+			if (std::is_same<decltype(_right_member), machine::virtual_machine::invalid_index>::value) {
+				switch (_right.type()) {
+				case VT::INT:
+					both_constant_operation(std::forward<Left>(_left), _operator, _right.value().rt_int);
 
-			break;
-		case VT::DOUBLE:
-			both_constant_operation(std::forward<Left>(_left), _operator, _right.value().rt_double);
+					break;
+				case VT::DOUBLE:
+					both_constant_operation(std::forward<Left>(_left), _operator, _right.value().rt_double);
 
-			break;
-		case VT::MEMBER:
-			left_constant_right_member_operation(std::forward<Left>(_left), _operator, _right.value().rt_member);
-
-			break;
-		/*case VT::TEMPORARY_MEMBER:
-			left_constant_right_member_operation(std::forward<Left>(_left), _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
-
-			break;*/
-		default:
-			BIA_IMPLEMENTATION_ERROR;
-		}
+					break;
+				default:
+					BIA_IMPLEMENTATION_ERROR;
+				}
+			} else {
+				left_constant_right_member_operation(std::forward<Left>(_left), _operator, _right_member);
+			}
+		});
+		
 	}
 	/**
 	 * Executes the compare operator.

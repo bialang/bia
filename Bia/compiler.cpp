@@ -48,44 +48,32 @@ void compiler::test_compiler_value()
 {
 	using VT = compiler_value::VALUE_TYPE;
 
-	switch (_value.type()) {
-	case VT::INT:
-		_value.set_return(_value.value().rt_int != 0);
+	_value.expand_to_member(_translator, [&](auto _member) {
+		if (std::is_same<decltype(_member), machine::virtual_machine::invalid_index>::value) {
+			switch (_value.type()) {
+			case VT::INT:
+				_value.set_return(_value.value().rt_int != 0);
 
-		break;
-	case VT::DOUBLE:
-		_value.set_return(_value.value().rt_double != 0.);
+				break;
+			case VT::DOUBLE:
+				_value.set_return(_value.value().rt_double != 0.);
 
-		break;
-	case VT::STRING:
-		_value.set_return(_value.value().rt_string.length != 0);
+				break;
+			case VT::STRING:
+				_value.set_return(_value.value().rt_string.length != 0);
 
-		break;
-	/*case VT::MEMBER:
-		_toolset.call_virtual(&framework::member::test, _value.value().rt_member);
-		_value.set_return_test();
-		_toolset.write_test();
-
-		break;
-	case VT::TEMPORARY_MEMBER:
-		_toolset.call_virtual(&framework::member::test, machine::platform::toolset::to_temp_member(_value.value().rt_temp_member));
-		_value.set_return_test();
-		_toolset.write_test();
-
-		break;
-	case VT::LOCAL_MEMBER:
-		_toolset.call_virtual(&framework::member::test, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
-		_value.set_return_test();
-		_toolset.write_test();
-
-		break;
-	case VT::TEST_VALUE_REGISTER:
-		_toolset.write_test();*/
-	case VT::TEST_VALUE_CONSTANT:
-		break;
-	default:
-		BIA_IMPLEMENTATION_ERROR;
-	}
+				break;
+			case VT::TEST_VALUE_REGISTER:
+			case VT::TEST_VALUE_CONSTANT:
+				break;
+			default:
+				BIA_IMPLEMENTATION_ERROR;
+			}
+		} else {
+			_translator.test(_member);
+			_value.set_return_test();
+		}
+	});
 }
 
 char compiler::handle_parameter_item()
@@ -134,6 +122,7 @@ char compiler::handle_parameter_item()
 
 		return 'M';
 	case VT::TEST_VALUE_REGISTER:
+		_translator.pass_test();
 
 		return 'i';
 	default:

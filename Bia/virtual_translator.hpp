@@ -52,11 +52,16 @@ public:
 	void execute_count(const index & _member, framework::member::parameter_count_t _count);
 	void execute_format(const index & _member, const char * _format, framework::member::parameter_count_t _count);
 	void pass_parameter(const index & _member);
+	void pass_test();
 	template<typename Type>
 	void pass_immediate(Type _value)
 	{
 		op_code::write_i_type(*_output, OC_PUSH_IMMEDIATE, _value);
 	}
+	//void operator_call(const index & _member, const index & _destination, framework::operator_t _operator, const index & _right);
+	void test_call(const index & _member);
+	void test_call(const index & _member, framework::operator_t _operator, const index & _right);
+	void test_call_immediate(const index & _member, framework::operator_t _operator, int64_t _value);
 	//position_t create_local_variables();
 	position_t jump(JUMP _type, position_t _destination = 0, position_t _overwrite_pos = -1);
 	/**

@@ -86,6 +86,34 @@ void virtual_translator::pass_parameter(const index & _member)
 	op_code::write_m_type(*_output, OC_PUSH, _member);
 }
 
+void virtual_translator::pass_test()
+{
+	op_code::write_p_type(*_output, OC_PUSH_TEST);
+}
+
+void virtual_translator::test_call(const index & _member)
+{
+	op_code::write_m_type(*_output, OC_TEST, _member);
+}
+
+void virtual_translator::test_call(const index & _member, framework::operator_t _operator, const index & _right)
+{
+	op_code::write_mm_type(*_output, OC_TEST_MEMBER, _member, _right);
+
+	_output->write_all(_operator);
+}
+
+void virtual_translator::test_call_immediate(const index & _member, framework::operator_t _operator, int64_t _value)
+{
+	if (_value >= std::numeric_limits<int8_t>::min() && _value <= std::numeric_limits<int8_t>::max()) {
+		op_code::write_mi_type(*_output, OC_TEST_IMMEDIATE, _member, static_cast<int8_t>(_value));
+	} else {
+		op_code::write_mi_type(*_output, OC_TEST_IMMEDIATE, _member, _value);
+	}
+
+	_output->write_all(_operator);
+}
+
 virtual_translator::position_t virtual_translator::jump(JUMP _type, position_t _destination, position_t _overwrite_pos)
 {
 	int32_t _pos = _destination - op_code::jump_instruction_length<int32_t>();

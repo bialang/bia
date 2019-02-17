@@ -100,9 +100,10 @@ enum OP_CODE : op_code_t
 {
 	/** P-Type instructions */
 	OC_RETURN,
+	OC_PUSH_TEST,
 
 	/** int-Type instructions */
-	OC_SETUP = OC_RETURN + IIOCO_COUNT,
+	OC_SETUP = OC_PUSH_TEST + IIOCO_COUNT,
 	OC_JUMP = OC_SETUP + IIOCO_COUNT,
 	OC_JUMP_TRUE = OC_JUMP + IIOCO_COUNT,
 	OC_JUMP_FALSE = OC_JUMP_TRUE + IIOCO_COUNT,
