@@ -49,40 +49,6 @@ struct native_operation_result<double, Right>
 	typedef typename std::conditional<std::is_arithmetic<Right>::value, double, void*>::type type;
 };
 
-template<bool _Choose, typename Return, typename Type>
-struct chooser
-{
-};
-
-template<typename Return, typename Type>
-struct chooser<true, Return, Type>
-{
-	static Return choose(Type _value) noexcept
-	{
-		return checked_cast(_value);
-	}
-
-private:
-	static Return checked_cast(Return _value) noexcept
-	{
-		return _value;
-	}
-	template<typename Ty>
-	static Return checked_cast(Ty _value) noexcept
-	{
-		BIA_IMPLEMENTATION_ERROR;
-	}
-};
-
-template<typename Return, typename Type>
-struct chooser<false, Return, Type>
-{
-	static Return choose(Type _value)
-	{
-		BIA_IMPLEMENTATION_ERROR;
-	}
-};
-
 template<typename T>
 struct pointer_rank
 {
