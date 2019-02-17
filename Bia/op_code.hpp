@@ -187,6 +187,13 @@ public:
 
 		_output.write_all(_immediate);
 	}
+	template<typename Type>
+	constexpr static size_t jump_instruction_length()
+	{
+		static_assert(std::is_integral<Type>::value && (sizeof(Type) == 4 || sizeof(Type) == 1), "Unsupported int type.");
+
+		return sizeof(Type) + 2;
+	}
 
 private:
 	static void write_member(stream::output_stream & _output, const index & _member)

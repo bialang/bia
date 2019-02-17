@@ -88,8 +88,17 @@ void virtual_translator::pass_parameter(const index & _member)
 
 virtual_translator::position_t virtual_translator::jump(JUMP _type, position_t _destination, position_t _overwrite_pos)
 {
-	int32_t _pos = 0;
+	int32_t _pos = _destination - op_code::jump_instruction_length<int32_t>();
 	OP_CODE _operation;
+	auto _current_pos = _output->position();
+
+	// Position provided
+	if (_overwrite_pos >= 0) {
+		_output->set_position(_overwrite_pos);
+		_pos -= _overwrite_pos;
+	} else {
+		_pos -= _current_pos;
+	}
 
 	switch (_type) {
 	case JUMP::JUMP:
@@ -109,6 +118,13 @@ virtual_translator::position_t virtual_translator::jump(JUMP _type, position_t _
 	}
 
 	op_code::write_int_type(*_output, _operation, _pos);
+
+	// Jump back
+	if (_overwrite_pos >= 0) {
+		_output->set_position(_current_pos);
+	}
+
+	return _current_pos;
 }
 
 stream::output_stream & virtual_translator::output_stream() noexcept
