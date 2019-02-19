@@ -1,50 +1,51 @@
 
 ptype = [
-    ("OC_RETURN", "goto gt_return;")
+    ("OC_RETURN", "goto gt_return;", "ret"),
+    ("OC_PUSH_TEST", "_stack.push(_test_register);", "pusht")
 ]
 inttype = [
-    ("OC_SETUP", ""),
-    ("OC_JUMP", "_cursor += _int;"),
-    ("OC_JUMP_TRUE", "_cursor += _test_register ? _int : 0;"),
-    ("OC_JUMP_FALSE", "_cursor += _test_register ? 0 : _int;")
+    ("OC_SETUP", "", "setup"),
+    ("OC_JUMP", "_cursor += _int;", "jmp"),
+    ("OC_JUMP_TRUE", "_cursor += _test_register ? _int : 0;", "jpt"),
+    ("OC_JUMP_FALSE", "_cursor += _test_register ? 0 : _int;", "jpf")
 ]
 itype = [
-    ("OC_PUSH_IMMEDIATE", "_stack.push(_immediate);")
+    ("OC_PUSH_IMMEDIATE", "_stack.push(_immediate);", "push")
 ]
 mtype = [
-    ("OC_TEST", "_test_register = _member->test();"),
-    ("OC_PUSH", "_stack.push(_member);"),
-    ("OC_UNDEFINE", "_member->undefine();"),
-    ("OC_EXECUTE_VOID", "_member->execute(nullptr);"),
-    ("OC_EXECUTE_COUNT_VOID", "_member->execute_count(nullptr, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);"),
+    ("OC_TEST", "_test_register = _member->test();", "test"),
+    ("OC_PUSH", "_stack.push(_member);", "push"),
+    ("OC_UNDEFINE", "_member->undefine();", "undf"),
+    ("OC_EXECUTE_VOID", "_member->execute(nullptr);", "exec"),
+    ("OC_EXECUTE_COUNT_VOID", "_member->execute_count(nullptr, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);", "exec"),
     ("OC_EXECUTE_FORMAT_VOID", "auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);\n\t\t\t"
                                 "if (_cursor + _parameter_count > _end) {\n\t\t\t\t"
                                     "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
                                 "}\n\t\t\t_member->execute_format(nullptr, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);\n\t\t\t"
-                                "_cursor += _parameter_count;")
+                                "_cursor += _parameter_count;", "exec")
 ]
 mmtype = [
-    ("OC_EXECUTE", "_member0->execute(_member1);"),
-    ("OC_EXECUTE_COUNT", "_member0->execute_count(_member1, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);"),
+    ("OC_EXECUTE", "_member0->execute(_member1);", "exec"),
+    ("OC_EXECUTE_COUNT", "_member0->execute_count(_member1, nullptr, read<framework::member::parameter_count_t>(_cursor), &_stack);", "exec"),
     ("OC_EXECUTE_FORMAT", "auto _parameter_count = read<framework::member::parameter_count_t>(_cursor);\n\t\t\t"
                             "if (_cursor + _parameter_count > _end) {\n\t\t\t\t"
                                 "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
                             "}\n\t\t\t_member0->execute_format(_member1, reinterpret_cast<const char*>(_cursor), _parameter_count, &_stack);\n\t\t\t"
-                            "_cursor += _parameter_count;"),
-    ("OC_CLONE", "_member0->clone(_member1);"),
-    ("OC_REFER", "_member0->refer(_member1);"),
-    ("OC_COPY", "_member0->copy(_member1);"),
-    ("OC_TEST_MEMBER", "_test_register = _member0->test_member(read<framework::operator_t>(_cursor), _member1);")
+                            "_cursor += _parameter_count;", "exec"),
+    ("OC_CLONE", "_member0->clone(_member1);", "cln"),
+    ("OC_REFER", "_member0->refer(_member1);", "ref"),
+    ("OC_COPY", "_member0->copy(_member1);", "cpy"),
+    ("OC_TEST_MEMBER", "_test_register = _member0->test_member(read<framework::operator_t>(_cursor), _member1);", "test")
 ]
 mitype = [
-    ("OC_INSTANTIATE", "framework::create_member(_member, _immediate);"),
-    ("OC_TEST_IMMEDIATE", "_test_register = test(_member, read<framework::operator_t>(_cursor), _immediate);")
+    ("OC_INSTANTIATE", "framework::create_member(_member, _immediate);", "inst"),
+    ("OC_TEST_IMMEDIATE", "_test_register = test(_member, read<framework::opertor_t>(_cursor), _immediate);", "test")
 ]
 mmmtype = [
-    ("OC_OPERATOR_CALL", "_member0->operator_call(_member1, read<framework::operator_t>(_cursor), _member2);")
+    ("OC_OPERATOR_CALL", "_member0->operator_call(_member1, read<framework::operator_t>(_cursor), _member2);", "opr")
 ]
 mmitype = [
-    ("OC_OPERATOR_CALL_IMMEDIATE", "operator_call(_member0, _member1, read<framework::operator_t>(_cursor), _immediate);")
+    ("OC_OPERATOR_CALL_IMMEDIATE", "operator_call(_member0, _member1, read<framework::operator_t>(_cursor), _immediate);", "opr")
 ]
 
 mvars = [
