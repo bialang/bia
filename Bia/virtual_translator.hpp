@@ -62,6 +62,9 @@ public:
 	void test_call(const index & _member);
 	void test_call(const index & _member, framework::operator_t _operator, const index & _right);
 	void test_call_immediate(const index & _member, framework::operator_t _operator, int64_t _value);
+	void test_call_immediate(const index & _member, framework::operator_t _operator, double _value);
+	void test_call_immediate_reverse(const index & _member, framework::operator_t _operator, int64_t _value);
+	void test_call_immediate_reverse(const index & _member, framework::operator_t _operator, double _value);
 	//position_t create_local_variables();
 	position_t jump(JUMP _type, position_t _destination = 0, position_t _overwrite_pos = -1);
 	/**

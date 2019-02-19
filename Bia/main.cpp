@@ -136,7 +136,7 @@ int main()
 global i = 10
 
 #hello_world()
-if i == 0 {
+if 5 == i {
 	ser(61,55)
 }
 
