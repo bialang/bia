@@ -58,7 +58,7 @@ public:
 	{
 		op_code::write_i_type(*_output, OC_PUSH_IMMEDIATE, _value);
 	}
-	//void operator_call(const index & _member, const index & _destination, framework::operator_t _operator, const index & _right);
+	void operator_call(const index & _member, const index * _destination, framework::operator_t _operator, const index & _right);
 	void test_call(const index & _member);
 	void test_call(const index & _member, framework::operator_t _operator, const index & _right);
 	void test_call_immediate(const index & _member, framework::operator_t _operator, int64_t _value);

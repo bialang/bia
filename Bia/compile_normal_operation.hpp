@@ -51,6 +51,7 @@ public:
 	 * @param _right The right hand value.
 	 *
 	 * @throws See left_constant_operation() and left_member_operation().
+	 * @throws See compiler_value::expand_to_member().
 	*/
 	void operate(compiler_value _left, framework::operator_t _operator, compiler_value _right)
 	{
@@ -71,11 +72,11 @@ public:
 			break;
 		default:
 			_left.expand_to_member(_translator, [&](auto _expanded) {
-				if (std::is_same<decltype(_expanded), std::nullptr_t>::value) {
+				if (std::is_same<decltype(_expanded), machine::virtual_machine::invalid_index>::value) {
 					BIA_IMPLEMENTATION_ERROR;
+				} else {
+					this->left_member_operation(_expanded, _operator, _right);
 				}
-
-				this->left_member_operation(_expanded, _operator, _right);
 			});
 		}
 	}
@@ -92,60 +93,33 @@ private:
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam Member The left member value.
-	 *
-	 * @param _left The left hand value.
+	 * @param _member The left member.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See machine::platform::toolset::call_virtual().
+	 * @throws See machine::virtual_machine::virtual_translator::operator_call().
+	 * @throws See compiler_value::expand_to_member().
 	*/
-	template<typename Member>
-	void left_member_operation(Member _member, framework::operator_t _operator, compiler_value _right)
+	void left_member_operation(const machine::virtual_machine::index & _member, framework::operator_t _operator, compiler_value _right)
 	{
-		BIA_NOT_IMPLEMENTED;
 		using VT = compiler_value::VALUE_TYPE;
 
-		/*_value.expand_to_member(nullptr, [&](auto _destination) {
-			if (std::is_same<decltype(_destination), std::nullptr_t>::value) {
-				BIA_IMPLEMENTATION_ERROR;
+		_value.expand_to_member(_translator, [&](auto _destination) {
+			auto _dest = &_destination;
+
+			// Destination is calling member
+			if (std::is_same<decltype(_destination), machine::virtual_machine::invalid_index>::value) {
+				_dest = nullptr;
 			}
 
-			switch (_right.type()) {
-			case VT::TEST_VALUE_CONSTANT:
-				_right.set_return(static_cast<int64_t>(_right.value().rt_test_result));
-			case VT::INT:
-			{
-				if (_right.is_int32()) {
-					_toolset.call_virtual(&framework::member::operator_call_int32, _member, _destination, _operator, static_cast<int32_t>(_right.value().rt_int));
+			_right.expand_to_member(_translator, [&](auto _expanded) {
+				if (std::is_same<decltype(_expanded), machine::virtual_machine::invalid_index>::value) {
+					BIA_NOT_IMPLEMENTED;
 				} else {
-					_toolset.call_virtual(&framework::member::operator_call_int64, _member, _destination, _operator, _right.value().rt_int);
+					_translator.operator_call(_member, _dest, _operator, _expanded);
 				}
-
-				break;
-			}
-			case VT::BIG_INT:
-				_toolset.call_virtual(&framework::member::operator_call_big_int, _member, _destination, _operator, _right.value().rt_big_int);
-
-				break;
-			case VT::DOUBLE:
-				_toolset.call_virtual(&framework::member::operator_call_double, _member, _destination, _operator, _right.value().rt_double);
-
-				break;
-			case VT::TEST_VALUE_REGISTER:
-				_toolset.call_virtual(&framework::member::operator_call_int32, _member, _destination, _operator, machine::platform::toolset::test_result_value());
-
-				break;
-			default:
-				_right.expand_to_member(nullptr, [&](auto _expanded) {
-					if (std::is_same<decltype(_expanded), std::nullptr_t>::value) {
-						BIA_IMPLEMENTATION_ERROR;
-					}
-
-					_toolset.call_virtual(&framework::member::operator_call, _member, _destination, _operator, _expanded);
-				});
-			}
-		});*/
+			});
+		});
 	}
 	/**
 	 * Executes the operator.
@@ -154,16 +128,15 @@ private:
 	 * @date 14-Jun-18
 	 *
 	 * @tparam Left Either int64_t or double.
-	 * @tparam Right The right member value.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
-	 * @param _right The right hand value.
+	 * @param _right The right member.
 	 *
 	 * @throws
 	*/
-	template<typename Left, typename Right>
-	void left_constant_right_member_operation(Left && _left, framework::operator_t _operator, Right && _right)
+	template<typename Left>
+	void left_constant_right_member_operation(Left _left, framework::operator_t _operator, const machine::virtual_machine::index & _right)
 	{
 		BIA_NOT_IMPLEMENTED;
 
@@ -184,58 +157,48 @@ private:
 			_toolset.call_static(&machine::link::operation_double, _destination, _operator, _right, _left);
 		}*/
 	}
-	template<typename Right>
-	void left_constant_right_member_operation(dependency::big_int & _left, framework::operator_t _operator, Right && _right)
-	{
-		BIA_NOT_IMPLEMENTED;
-	}
 	/**
 	 * Executes the operator.
 	 *
 	 * @since 3.64.131.726
 	 * @date 14-Jun-18
 	 *
-	 * @tparam Left Either int64_t or double.
+	 * @tparam Left The left constant type.
 	 *
 	 * @param _left The left hand value.
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See left_constant_right_member_operation().
+	 * @throws See left_constant_right_member_operation() and both_constant_operation().
+	 * @throws See compiler_value::expand_to_member().
 	*/
 	template<typename Left>
 	void left_constant_operation(Left && _left, framework::operator_t _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		switch (_right.type()) {
-		case VT::INT:
-			both_constant_operation(_left, _operator, _right.value().rt_int);
+		_right.expand_to_member(_translator, [&](auto _expanded) {
+			if (std::is_same<decltype(_expanded), machine::virtual_machine::invalid_index>::value) {
+				switch (_right.type()) {
+				case VT::INT:
+					both_constant_operation(_left, _operator, _right.value().rt_int);
 
-			break;
-		case VT::BIG_INT:
-			both_constant_operation(_left, _operator, *_right.value().rt_big_int);
+					break;
+				case VT::BIG_INT:
+					both_constant_operation(_left, _operator, *_right.value().rt_big_int);
 
-			break;
-		case VT::DOUBLE:
-			both_constant_operation(_left, _operator, _right.value().rt_double);
+					break;
+				case VT::DOUBLE:
+					both_constant_operation(_left, _operator, _right.value().rt_double);
 
-			break;
-		case VT::MEMBER:
-			left_constant_right_member_operation(_left, _operator, _right.value().rt_member);
-
-			break;
-		/*case VT::TEMPORARY_MEMBER:
-			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_temp_member(_right.value().rt_temp_member));
-
-			break;
-		case VT::LOCAL_MEMBER:
-			left_constant_right_member_operation(_left, _operator, machine::platform::toolset::to_local_member(_right.value().rt_local_member));
-
-			break;*/
-		default:
-			BIA_IMPLEMENTATION_ERROR;
-		}
+					break;
+				default:
+					BIA_IMPLEMENTATION_ERROR;
+				}
+			} else {
+				left_constant_right_member_operation(_left, _operator, _expanded);
+			}
+		});
 	}
 	/**
 	 * Executes the operator.

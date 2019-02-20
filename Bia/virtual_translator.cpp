@@ -91,6 +91,18 @@ void virtual_translator::pass_test()
 	op_code::write_p_type(*_output, OC_PUSH_TEST);
 }
 
+void virtual_translator::operator_call(const index & _member, const index * _destination, framework::operator_t _operator, const index & _right)
+{
+	// With destination
+	if (_destination && _member != *_destination) {
+		op_code::write_mmm_type(*_output, OC_OPERATOR_CALL, _member, *_destination, _right);
+	} else {
+		op_code::write_mm_type(*_output, OC_OPERATOR_CALL_VOID, _member, _right);
+	}
+
+	_output->write_all(_operator);
+}
+
 void virtual_translator::test_call(const index & _member)
 {
 	op_code::write_m_type(*_output, OC_TEST, _member);

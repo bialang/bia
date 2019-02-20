@@ -35,12 +35,14 @@ mmtype = [
     (("OC_CLONE", "_member0->clone(_member1);"), "cln"),
     (("OC_REFER", "_member0->refer(_member1);"), "ref"),
     (("OC_COPY", "_member0->copy(_member1);"), "cpy"),
-    (("OC_TEST_MEMBER", "_test_register = _member0->test_member(read<framework::operator_t>(_cursor), _member1);"), "test")
+    (("OC_TEST_MEMBER", "_test_register = _member0->test_member(read<framework::operator_t>(_cursor), _member1);"), "test"),
+    (("OC_OPERATOR_CALL_VOID", "_member0->operator_call(nullptr, read<framework::operator_t>(_cursor), _member1);"), "opr")
 ]
 mitype = [
     (("OC_INSTANTIATE", "framework::create_member(_member, _immediate);"), "inst"),
     (("OC_TEST_IMMEDIATE", "_test_register = test(_member, read<framework::operator_t>(_cursor), _immediate);"), "test"),
-    (("OC_TEST_IMMEDIATE_REVERSE", "BIA_NOT_IMPLEMENTED;"), "test")
+    (("OC_TEST_IMMEDIATE_REVERSE", "BIA_NOT_IMPLEMENTED;"), "test"),
+    (("OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID", "BIA_NOT_IMPLEMENTED;"), "opr")
 ]
 mmmtype = [
     (("OC_OPERATOR_CALL", "_member0->operator_call(_member1, read<framework::operator_t>(_cursor), _member2);"), "opr")

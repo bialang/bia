@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <type_traits>
 #include <limits>
+#include <typeinfo>
 
 #include "exception.hpp"
 #include "output_stream.hpp"
@@ -25,6 +26,14 @@ struct index
 {
 	member_index_t value;
 	virtual ~index() = default;
+	bool operator==(const index & _right) const noexcept
+	{
+		return value == _right.value && typeid(this) == typeid(&_right);
+	}
+	bool operator!=(const index & _right) const noexcept
+	{
+		return !this->operator==(_right);
+	}
 
 protected:
 	friend virtual_translator;
@@ -127,14 +136,16 @@ enum OP_CODE : op_code_t
 	OC_REFER = OC_CLONE + MOCO_COUNT * MOCO_COUNT,
 	OC_COPY = OC_REFER + MOCO_COUNT * MOCO_COUNT,
 	OC_TEST_MEMBER = OC_COPY + MOCO_COUNT * MOCO_COUNT,
+	OC_OPERATOR_CALL_VOID = OC_TEST_MEMBER + MOCO_COUNT * MOCO_COUNT,
 	
 	/** MI-Type instructions */
-	OC_INSTANTIATE = OC_TEST_MEMBER + MOCO_COUNT * IOCO_COUNT,
+	OC_INSTANTIATE = OC_OPERATOR_CALL_VOID + MOCO_COUNT * IOCO_COUNT,
 	OC_TEST_IMMEDIATE = OC_INSTANTIATE + MOCO_COUNT * IOCO_COUNT,
 	OC_TEST_IMMEDIATE_REVERSE = OC_TEST_IMMEDIATE + MOCO_COUNT * IOCO_COUNT,
+	OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID = OC_TEST_IMMEDIATE_REVERSE + MOCO_COUNT * IOCO_COUNT,
 
 	/** MMM-Type instructions */
-	OC_OPERATOR_CALL = OC_TEST_IMMEDIATE_REVERSE + MOCO_COUNT * MOCO_COUNT * MOCO_COUNT,
+	OC_OPERATOR_CALL = OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID + MOCO_COUNT * MOCO_COUNT * MOCO_COUNT,
 
 	/** MMI-Type instructions */
 	OC_OPERATOR_CALL_IMMEDIATE = OC_OPERATOR_CALL + MOCO_COUNT * MOCO_COUNT * IOCO_COUNT,
@@ -189,6 +200,18 @@ public:
 		write_member(_output, _member);
 
 		_output.write_all(_immediate);
+	}
+	static void write_mmm_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1, const index & _member2)
+	{
+		auto _option0 = member_option(_member0);
+		auto _option1 = member_option(_member1);
+		auto _option2 = member_option(_member2);
+
+		_output.write_all(static_cast<op_code_t>(_operation - ((_option0 * MOCO_COUNT + _option1) * MOCO_COUNT + _option2)));
+
+		write_member(_output, _member0);
+		write_member(_output, _member1);
+		write_member(_output, _member2);
 	}
 	template<typename Type>
 	constexpr static size_t jump_instruction_length()

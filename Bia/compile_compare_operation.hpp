@@ -92,30 +92,31 @@ private:
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See machine::platform::toolset::call().
+	 * @throws See machine::virtual_machine::virtual_translator::test_call_immediate() and machine::virtual_machine::virtual_translator::test_call().
+	 * @throws See compiler_value::expand_to_member().
 	*/
 	void left_member_operation(const machine::virtual_machine::index & _member, framework::operator_t _operator, compiler_value _right)
 	{
 		using VT = compiler_value::VALUE_TYPE;
 
-		_right.expand_to_member(_translator, [&](auto _right_member) {
-			if (std::is_same<decltype(_right_member), machine::virtual_machine::invalid_index>::value) {
+		_right.expand_to_member(_translator, [&](auto _expanded) {
+			if (std::is_same<decltype(_expanded), machine::virtual_machine::invalid_index>::value) {
 				switch (_right.type()) {
 				case VT::TEST_VALUE_CONSTANT:
 					_right.set_return(static_cast<int64_t>(_right.value().rt_test_result));
 				case VT::INT:
-					_translator.test_call_immediate(_makepath, _operator, _right.value().rt_int);
+					_translator.test_call_immediate(_member, _operator, _right.value().rt_int);
 
 					break;
 				case VT::DOUBLE:
-					_translator.test_call_immediate(_makepath, _operator, _right.value().rt_int);
+					_translator.test_call_immediate(_member, _operator, _right.value().rt_double);
 
 					break;
 				default:
 					BIA_IMPLEMENTATION_ERROR;
 				}
 			} else {
-				_translator.test_call(_member, _operator, _right_member);
+				_translator.test_call(_member, _operator, _expanded);
 			}
 		});
 
@@ -133,7 +134,7 @@ private:
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See machine::platform::toolset::call().
+	 * @throws See machine::virtual_machine::virtual_translator::test_call_immediate_reverse().
 	*/
 	template<typename Left>
 	void left_constant_right_member_operation(Left _left, framework::operator_t _operator, const machine::virtual_machine::index & _right)
@@ -155,6 +156,7 @@ private:
 	 * @param _right The right hand value.
 	 *
 	 * @throws See left_constant_right_member_operation().
+	 * @throws See compiler_value::expand_to_member().
 	*/
 	template<typename Left>
 	void left_constant_operation(Left _left, framework::operator_t _operator, compiler_value _right)
