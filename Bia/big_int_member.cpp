@@ -170,10 +170,10 @@ void big_int_member::operator_call(member * _destination, operator_t _operator, 
 	auto _flags = _right->flags();
 
 	if (_flags & F_BIG_INT) {
-		if (_destination == this) {
-			big_int_member_operation(_data.get(), _operator, static_cast<const big_int_member*>(_right)->_data.get());
-		} else {
+		if (_destination) {
 			big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, static_cast<const big_int_member*>(_right)->_data.get());
+		} else {
+			big_int_member_operation(_data.get(), _operator, static_cast<const big_int_member*>(_right)->_data.get());
 		}
 
 		return;
@@ -184,37 +184,37 @@ void big_int_member::operator_call(member * _destination, operator_t _operator, 
 
 void big_int_member::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
-	if (_destination == this) {
-		big_int_member_operation(_data.get(), _operator, _right);
-	} else {
+	if (_destination) {
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, _right);
+	} else {
+		big_int_member_operation(_data.get(), _operator, _right);
 	}
 }
 
 void big_int_member::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
-	if (_destination == this) {
-		big_int_member_operation(_data.get(), _operator, _right);
-	} else {
+	if (_destination) {
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, _right);
+	} else {
+		big_int_member_operation(_data.get(), _operator, _right);
 	}
 }
 
 void BIA_MEMBER_CALLING_CONVENTION big_int_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
 {
-	if (_destination == this) {
-		big_int_member_operation(_data.get(), _operator, *_right);
-	} else {
+	if (_destination) {
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, *_right);
+	} else {
+		big_int_member_operation(_data.get(), _operator, *_right);
 	}
 }
 
 void big_int_member::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
-	if (_destination == this) {
-		big_int_member_operation(_data.get(), _operator, _right);
-	} else {
+	if (_destination) {
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, _right);
+	} else {
+		big_int_member_operation(_data.get(), _operator, _right);
 	}
 }
 

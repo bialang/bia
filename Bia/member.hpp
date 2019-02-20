@@ -176,7 +176,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 12-May-18
 	 *
-	 * @param [out] _destination The operation result.
+	 * @param [out] _destination The operation result. If this is null, the value will be saved to the caller.
 	 * @param _operator The operator.
 	 * @param _right The right member.
 	 *
@@ -192,7 +192,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result.
+	 * @param [out] _destination The operation result. If this is null, the value will be saved to the caller.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
@@ -208,7 +208,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result.
+	 * @param [out] _destination The operation result. If this is null, the value will be saved to the caller.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
@@ -225,7 +225,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result.
+	 * @param [out] _destination The operation result. If this is null, the value will be saved to the caller.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
