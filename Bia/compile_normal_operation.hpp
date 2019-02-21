@@ -62,10 +62,6 @@ public:
 			left_constant_operation(_left.value().rt_int, _operator, _right);
 
 			break;
-		case VT::BIG_INT:
-			left_constant_operation(*_left.value().rt_big_int, _operator, _right);
-
-			break;
 		case VT::DOUBLE:
 			left_constant_operation(_left.value().rt_double, _operator, _right);
 
@@ -97,7 +93,7 @@ private:
 	 * @param _operator The operator.
 	 * @param _right The right hand value.
 	 *
-	 * @throws See machine::virtual_machine::virtual_translator::operator_call().
+	 * @throws See machine::virtual_machine::virtual_translator::operator_call() and machine::virtual_machine::virtual_translator::operator_call_immediate().
 	 * @throws See compiler_value::expand_to_member().
 	*/
 	void left_member_operation(const machine::virtual_machine::index & _member, framework::operator_t _operator, compiler_value _right)
@@ -114,7 +110,18 @@ private:
 
 			_right.expand_to_member(_translator, [&](auto _expanded) {
 				if (std::is_same<decltype(_expanded), machine::virtual_machine::invalid_index>::value) {
-					BIA_NOT_IMPLEMENTED;
+					switch (_right.type()) {
+					case VT::INT:
+						_translator.operator_call_immediate(_member, _dest, _operator, _right.value().rt_int);
+
+						break;
+					case VT::DOUBLE:
+						_translator.operator_call_immediate(_member, _dest, _operator, _right.value().rt_double);
+
+						break;
+					default:
+						BIA_IMPLEMENTATION_ERROR;
+					}
 				} else {
 					_translator.operator_call(_member, _dest, _operator, _expanded);
 				}
@@ -133,29 +140,22 @@ private:
 	 * @param _operator The operator.
 	 * @param _right The right member.
 	 *
-	 * @throws
+	 * @throws See machine::virtual_machine::virtual_translator::operator_call_immediate_reverse().
+	 * @throws See compiler_value::expand_to_member().
 	*/
 	template<typename Left>
 	void left_constant_right_member_operation(Left _left, framework::operator_t _operator, const machine::virtual_machine::index & _right)
 	{
-		BIA_NOT_IMPLEMENTED;
+		_value.expand_to_member(_translator, [&](auto _expanded) {
+			auto _destination = &_expanded;
 
-		/*if (_value.type() != compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-			throw;
-		}
-
-		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
-
-		if (std::is_same<typename std::remove_reference<Left>::type, int64_t>::value) {
-			// Is int32
-			if (_left <= std::numeric_limits<int32_t>::max() && _left >= std::numeric_limits<int32_t>::min()) {
-				_toolset.call_static(&machine::link::operation_int32, _destination, _operator, _right, static_cast<int32_t>(_left));
-			} else {
-				_toolset.call_static(&machine::link::operation_int64, _destination, _operator, _right, _left);
+			// No destination
+			if (std::is_same<decltype(_expanded), machine::virtual_machine::invalid_index>::value) {
+				_destination = nullptr;
 			}
-		} else {
-			_toolset.call_static(&machine::link::operation_double, _destination, _operator, _right, _left);
-		}*/
+
+			_translator.operator_call_immediate_reverse(_right, _destination, _operator, _left);
+		});
 	}
 	/**
 	 * Executes the operator.
@@ -182,10 +182,6 @@ private:
 				switch (_right.type()) {
 				case VT::INT:
 					both_constant_operation(_left, _operator, _right.value().rt_int);
-
-					break;
-				case VT::BIG_INT:
-					both_constant_operation(_left, _operator, *_right.value().rt_big_int);
 
 					break;
 				case VT::DOUBLE:

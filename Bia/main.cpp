@@ -134,13 +134,14 @@ int main()
 		char _script[] = u8R""(
 
 global i = 10
-i = 23+i
+i =i+32
 #>hello_world()
 if 5 == i {
 	ser(61,55)
 }<#
 
 print(i)
+ser(i, 6)
 
 )"";
 		/*test_and_time(1, []() {

@@ -59,6 +59,10 @@ public:
 		op_code::write_i_type(*_output, OC_PUSH_IMMEDIATE, _value);
 	}
 	void operator_call(const index & _member, const index * _destination, framework::operator_t _operator, const index & _right);
+	void operator_call_immediate(const index & _member, const index * _destination, framework::operator_t _operator, int64_t _value);
+	void operator_call_immediate(const index & _member, const index * _destination, framework::operator_t _operator, double _value);
+	void operator_call_immediate_reverse(const index & _member, const index * _destination, framework::operator_t _operator, int64_t _value);
+	void operator_call_immediate_reverse(const index & _member, const index * _destination, framework::operator_t _operator, double _value);
 	void test_call(const index & _member);
 	void test_call(const index & _member, framework::operator_t _operator, const index & _right);
 	void test_call_immediate(const index & _member, framework::operator_t _operator, int64_t _value);
@@ -121,6 +125,10 @@ private:
 	/** The position before the temp member creation. */
 	position_t _temp_member_pos;
 	virtual_machine::virtual_member_map _member_map;
+
+
+	void write_mi_type_int(OP_CODE _op_code, const index & _member, int64_t _value);
+	void write_mmi_type_int(OP_CODE _op_code, const index & _member0, const index & _member1, int64_t _value);
 };
 
 }

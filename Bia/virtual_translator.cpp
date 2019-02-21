@@ -103,6 +103,54 @@ void virtual_translator::operator_call(const index & _member, const index * _des
 	_output->write_all(_operator);
 }
 
+void virtual_translator::operator_call_immediate(const index & _member, const index * _destination, framework::operator_t _operator, int64_t _value)
+{
+	// With destination
+	if (_destination && _member != *_destination) {
+		write_mmi_type_int(OC_OPERATOR_CALL_IMMEDIATE, _member, *_destination, _value);
+	} else {
+		write_mi_type_int(OC_OPERATOR_CALL_IMMEDIATE_VOID, _member, _value);
+	}
+
+	_output->write_all(_operator);
+}
+
+void virtual_translator::operator_call_immediate(const index & _member, const index * _destination, framework::operator_t _operator, double _value)
+{
+	// With destination
+	if (_destination && _member != *_destination) {
+		op_code::write_mmi_type(*_output, OC_OPERATOR_CALL_IMMEDIATE, _member, *_destination, _value);
+	} else {
+		op_code::write_mi_type(*_output, OC_OPERATOR_CALL_IMMEDIATE_VOID, _member, _value);
+	}
+
+	_output->write_all(_operator);
+}
+
+void virtual_translator::operator_call_immediate_reverse(const index & _member, const index * _destination, framework::operator_t _operator, int64_t _value)
+{
+	// With destination
+	if (_destination && _member != *_destination) {
+		write_mmi_type_int(OC_OPERATOR_CALL_IMMEDIATE_REVERSE, _member, *_destination, _value);
+	} else {
+		write_mi_type_int(OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID, _member, _value);
+	}
+
+	_output->write_all(_operator);
+}
+
+void virtual_translator::operator_call_immediate_reverse(const index & _member, const index * _destination, framework::operator_t _operator, double _value)
+{
+	// With destination
+	if (_destination && _member != *_destination) {
+		op_code::write_mmi_type(*_output, OC_OPERATOR_CALL_IMMEDIATE_REVERSE, _member, *_destination, _value);
+	} else {
+		op_code::write_mi_type(*_output, OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID, _member, _value);
+	}
+
+	_output->write_all(_operator);
+}
+
 void virtual_translator::test_call(const index & _member)
 {
 	op_code::write_m_type(*_output, OC_TEST, _member);
@@ -117,13 +165,7 @@ void virtual_translator::test_call(const index & _member, framework::operator_t 
 
 void virtual_translator::test_call_immediate(const index & _member, framework::operator_t _operator, int64_t _value)
 {
-	if (_value >= std::numeric_limits<int8_t>::min() && _value <= std::numeric_limits<int8_t>::max()) {
-		op_code::write_mi_type(*_output, OC_TEST_IMMEDIATE, _member, static_cast<int8_t>(_value));
-	} else if (_value >= std::numeric_limits<int32_t>::min() && _value <= std::numeric_limits<int32_t>::max()) {
-		op_code::write_mi_type(*_output, OC_TEST_IMMEDIATE, _member, static_cast<int32_t>(_value));
-	} else {
-		op_code::write_mi_type(*_output, OC_TEST_IMMEDIATE, _member, _value);
-	}
+	write_mi_type_int(OC_TEST_IMMEDIATE, _member, _value);
 
 	_output->write_all(_operator);
 }
@@ -137,13 +179,7 @@ void virtual_translator::test_call_immediate(const index & _member, framework::o
 
 void virtual_translator::test_call_immediate_reverse(const index & _member, framework::operator_t _operator, int64_t _value)
 {
-	if (_value >= std::numeric_limits<int8_t>::min() && _value <= std::numeric_limits<int8_t>::max()) {
-		op_code::write_mi_type(*_output, OC_TEST_IMMEDIATE_REVERSE, _member, static_cast<int8_t>(_value));
-	} else if (_value >= std::numeric_limits<int32_t>::min() && _value <= std::numeric_limits<int32_t>::max()) {
-		op_code::write_mi_type(*_output, OC_TEST_IMMEDIATE_REVERSE, _member, static_cast<int32_t>(_value));
-	} else {
-		op_code::write_mi_type(*_output, OC_TEST_IMMEDIATE_REVERSE, _member, _value);
-	}
+	write_mi_type_int(OC_TEST_IMMEDIATE_REVERSE, _member, _value);
 
 	_output->write_all(_operator);
 }
@@ -219,6 +255,28 @@ temp_index virtual_translator::to_temp(member_index_t _index) noexcept
 local_index virtual_translator::to_local(member_index_t _index) noexcept
 {
 	return _index;
+}
+
+void virtual_translator::write_mi_type_int(OP_CODE _op_code, const index & _member, int64_t _value)
+{
+	if (_value >= std::numeric_limits<int8_t>::min() && _value <= std::numeric_limits<int8_t>::max()) {
+		op_code::write_mi_type(*_output, _op_code, _member, static_cast<int8_t>(_value));
+	} else if (_value >= std::numeric_limits<int32_t>::min() && _value <= std::numeric_limits<int32_t>::max()) {
+		op_code::write_mi_type(*_output, _op_code, _member, static_cast<int32_t>(_value));
+	} else {
+		op_code::write_mi_type(*_output, _op_code, _member, _value);
+	}
+}
+
+void virtual_translator::write_mmi_type_int(OP_CODE _op_code, const index & _member0, const index & _member1, int64_t _value)
+{
+	if (_value >= std::numeric_limits<int8_t>::min() && _value <= std::numeric_limits<int8_t>::max()) {
+		op_code::write_mmi_type(*_output, _op_code, _member0, _member1, static_cast<int8_t>(_value));
+	} else if (_value >= std::numeric_limits<int32_t>::min() && _value <= std::numeric_limits<int32_t>::max()) {
+		op_code::write_mmi_type(*_output, _op_code, _member0, _member1, static_cast<int32_t>(_value));
+	} else {
+		op_code::write_mmi_type(*_output, _op_code, _member0, _member1, _value);
+	}
 }
 
 }

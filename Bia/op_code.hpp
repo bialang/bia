@@ -215,6 +215,20 @@ public:
 		write_member(_output, _member2);
 	}
 	template<typename Type>
+	static void write_mmi_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1, Type _immediate)
+	{
+		auto _option0 = member_option(_member0);
+		auto _option1 = member_option(_member1);
+		auto _option2 = immediate_option<Type>();
+
+		_output.write_all(static_cast<op_code_t>(_operation - ((_option0 * MOCO_COUNT + _option1) * IOCO_COUNT + _option2)));
+
+		write_member(_output, _member0);
+		write_member(_output, _member1);
+
+		_output.write_all(_immediate);
+	}
+	template<typename Type>
 	constexpr static size_t jump_instruction_length()
 	{
 		static_assert(std::is_integral<Type>::value && (sizeof(Type) == 4 || sizeof(Type) == 1), "Unsupported int type.");
