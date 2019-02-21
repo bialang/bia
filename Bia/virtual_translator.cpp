@@ -91,6 +91,21 @@ void virtual_translator::pass_test()
 	op_code::write_p_type(*_output, OC_PUSH_TEST);
 }
 
+void virtual_translator::clone(const index & _member, const index & _destination)
+{
+	op_code::write_mm_type(*_output, OC_CLONE, _member, _destination);
+}
+
+void virtual_translator::refer(const index & _member, const index & _destination)
+{
+	op_code::write_mm_type(*_output, OC_REFER, _member, _destination);
+}
+
+void virtual_translator::copyof(const index & _member, const index & _destination)
+{
+	op_code::write_mm_type(*_output, OC_COPY, _member, _destination);
+}
+
 void virtual_translator::operator_call(const index & _member, const index * _destination, framework::operator_t _operator, const index & _right)
 {
 	// With destination

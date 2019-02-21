@@ -27,6 +27,7 @@ public:
 	};
 
 	typedef stream::output_stream::cursor_type position_t;
+	typedef void(virtual_translator::*ccr_function_t)(const index&, const index&);
 
 
 
@@ -58,6 +59,9 @@ public:
 	{
 		op_code::write_i_type(*_output, OC_PUSH_IMMEDIATE, _value);
 	}
+	void clone(const index & _member, const index & _destination);
+	void refer(const index & _member, const index & _destination);
+	void copyof(const index & _member, const index & _destination);
 	void operator_call(const index & _member, const index * _destination, framework::operator_t _operator, const index & _right);
 	void operator_call_immediate(const index & _member, const index * _destination, framework::operator_t _operator, int64_t _value);
 	void operator_call_immediate(const index & _member, const index * _destination, framework::operator_t _operator, double _value);

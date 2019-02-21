@@ -134,13 +134,14 @@ int main()
 		char _script[] = u8R""(
 
 global i = 10
+global k = i
 i =i+32
 #>hello_world()
 if 5 == i {
 	ser(61,55)
 }<#
 
-print(i)
+print(k)
 ser(i, 6)
 
 )"";

@@ -44,6 +44,52 @@ machine::virtual_machine::virtual_machine_schein & compiler::virtual_machine_sch
 	return _schein;
 }
 
+void compiler::handle_variable_declaration_helper(compiler_value _expression, const machine::virtual_machine::index & _destination)
+{
+	using VT = compiler_value::VALUE_TYPE;
+
+	switch (_expression.type()) {
+	case VT::TEST_VALUE_CONSTANT:
+		_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
+	case VT::INT:
+	{
+		_translator.instantiate_int(_destination, _expression.value().rt_int);
+
+		break;
+	}
+	/*case VT::BIG_INT:
+		_toolset.call_static(&machine::link::instantiate_big_int, _destination, _expression.value().rt_big_int);
+
+		break;
+	case VT::DOUBLE:
+		_toolset.call_static(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
+
+		break;
+	case VT::STRING:
+		_toolset.call_static(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
+
+		break;*/
+	case VT::MEMBER:
+		_translator.clone(_translator.to_member(_expression.value().rt_member), _destination);
+
+		break;
+	case VT::TEMPORARY_MEMBER:
+		_translator.refer(_translator.to_temp(_expression.value().rt_temp_member), _destination);
+
+		break;
+	case VT::LOCAL_MEMBER:
+		_translator.clone(_translator.to_local(_expression.value().rt_local_member), _destination);
+
+		break;
+	/*case VT::TEST_VALUE_REGISTER:
+		_toolset.call_static(&machine::link::instantiate_int32, _destination, T::test_result_value());
+
+		break;*/
+	default:
+		BIA_IMPLEMENTATION_ERROR;
+	}
+}
+
 void compiler::test_compiler_value()
 {
 	using VT = compiler_value::VALUE_TYPE;
@@ -380,6 +426,8 @@ const grammar::report * compiler::handle_math_factor(const grammar::report * _re
 
 const grammar::report * compiler::handle_member(const grammar::report * _report)
 {
+	using namespace machine::virtual_machine;
+
 	const auto _end = _report->content.end;
 	auto _destination = _value.is_member() ? _value : compiler_value();
 
@@ -389,23 +437,32 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 	if (static_cast<report::TYPE>(_report->type) == report::TYPE::STRING) {
 		_report = handle_string(_report);
 	} else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
-		member_function_signature<framework::member, void, framework::member*> _function = nullptr;
+		virtual_translator::ccr_function_t _function = nullptr;
 
 		// Ref of
 		if (_report->custom_parameter == keyword_refof::string_id()) {
-			_function = &framework::member::refer;
+			_function = &virtual_translator::refer;
 		} // Copy of
 		else if (_report->custom_parameter == keyword_copyof::string_id()) {
-			_function = &framework::member::copy;
+			_function = &virtual_translator::copyof;
 		}
 
 		_report = handle_identifier(_report);
 
 		// Get refof/copyof
 		if (_function) {
-			BIA_NOT_IMPLEMENTED;
-			//_toolset.call_virtual(_function, _value.value().rt_member, machine::platform::toolset::to_temp_member(_counter.next()));
-			_value.set_return_temp(_counter.current());
+			_destination.expand_to_member(_translator, [&](auto _expanded) {
+				if (std::is_same<decltype(_expanded), invalid_index>::value) {
+					(_translator.*_function)(_translator.to_member(_value.value().rt_member), _translator.to_temp(_counter.next()));
+
+					_value.set_return_temp(_counter.current());
+				} else {
+					(_translator.*_function)(_translator.to_member(_value.value().rt_member), _expanded);
+
+					_value = _destination;
+				}
+			});
+
 		}
 	} else {
 		BIA_IMPLEMENTATION_ERROR;

@@ -109,52 +109,7 @@ private:
 			_translator.execute_count(_member, _count);
 		}
 	}
-	template<typename Destination>
-	void handle_variable_declaration_helper(compiler_value _expression, Destination _destination)
-	{
-		using VT = compiler_value::VALUE_TYPE;
-
-		switch (_expression.type()) {
-		case VT::TEST_VALUE_CONSTANT:
-			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
-		case VT::INT:
-		{
-			_translator.instantiate_int(_destination, _expression.value().rt_int);
-
-			break;
-		}
-		/*case VT::BIG_INT:
-			_toolset.call_static(&machine::link::instantiate_big_int, _destination, _expression.value().rt_big_int);
-
-			break;
-		case VT::DOUBLE:
-			_toolset.call_static(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
-
-			break;
-		case VT::STRING:
-			_toolset.call_static(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
-
-			break;
-		case VT::MEMBER:
-			_toolset.call_virtual(&framework::member::clone, _expression.value().rt_member, _destination);
-
-			break;
-		case VT::TEMPORARY_MEMBER:
-			_toolset.call_virtual(&framework::member::refer, T::to_temp_member(_expression.value().rt_temp_member), _destination);
-
-			break;
-		case VT::LOCAL_MEMBER:
-			_toolset.call_virtual(&framework::member::clone, T::to_local_member(_expression.value().rt_local_member), _destination);
-
-			break;
-		case VT::TEST_VALUE_REGISTER:
-			_toolset.call_static(&machine::link::instantiate_int32, _destination, T::test_result_value());
-
-			break;*/
-		default:
-			BIA_IMPLEMENTATION_ERROR;
-		}
-	}
+	BIA_EXPORT void handle_variable_declaration_helper(compiler_value _expression, const machine::virtual_machine::index & _destination);
 	/**
 	 * Tests the compiler value and returns a test value.
 	 *
