@@ -10,6 +10,7 @@
 #include "machine_context.hpp"
 #include "virtual_machine_schein.hpp"
 #include "code.hpp"
+#include "operation.hpp"
 
 
 namespace bia
@@ -57,6 +58,18 @@ private:
 	{
 		_member->operator_call_double(_destination, _operator, _immediate);
 	}
+	static void operator_call_reverse(framework::member * _member, framework::member * _destination, framework::operator_t _operator, int32_t _immediate)
+	{
+		link::operation_int32(_destination, _operator, _member, _immediate);
+	}
+	static void operator_call_reverse(framework::member * _member, framework::member * _destination, framework::operator_t _operator, int64_t _immediate)
+	{
+		link::operation_int64(_destination, _operator, _member, _immediate);
+	}
+	static void operator_call_reverse(framework::member * _member, framework::member * _destination, framework::operator_t _operator, double _immediate)
+	{
+		link::operation_double(_destination, _operator, _member, _immediate);
+	}
 	template<typename Type>
 	static Type read(const uint8_t *& _cursor)
 	{
@@ -77,6 +90,18 @@ private:
 	static framework::member::test_result_t test(framework::member * _member, framework::operator_t _operator, double _immediate)
 	{
 		return _member->test_double(_operator, _immediate);
+	}
+	static framework::member::test_result_t test_reverse(framework::member * _member, framework::operator_t _operator, int32_t _immediate)
+	{
+		return link::compare_operation_int32(_operator, _member, _immediate);
+	}
+	static framework::member::test_result_t test_reverse(framework::member * _member, framework::operator_t _operator, int64_t _immediate)
+	{
+		return link::compare_operation_int64(_operator, _member, _immediate);
+	}
+	static framework::member::test_result_t test_reverse(framework::member * _member, framework::operator_t _operator, double _immediate)
+	{
+		return link::compare_operation_double(_operator, _member, _immediate);
 	}
 };
 

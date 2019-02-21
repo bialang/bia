@@ -134,7 +134,7 @@ int main()
 		char _script[] = u8R""(
 
 global i = 10
-i = i+i
+i = 23+i
 #>hello_world()
 if 5 == i {
 	ser(61,55)

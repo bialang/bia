@@ -41,15 +41,16 @@ mmtype = [
 mitype = [
     (("OC_INSTANTIATE", "framework::create_member(_member, _immediate);"), "inst"),
     (("OC_TEST_IMMEDIATE", "_test_register = test(_member, read<framework::operator_t>(_cursor), _immediate);"), "test"),
-    (("OC_TEST_IMMEDIATE_REVERSE", "BIA_NOT_IMPLEMENTED;"), "test"),
-    (("OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID", "BIA_NOT_IMPLEMENTED;"), "opr")
+    (("OC_TEST_IMMEDIATE_REVERSE", "_test_register = test_reverse(_member, read<framework::operator_t>(_cursor), _immediate);"), "test"),
+    (("OC_OPERATOR_CALL_IMMEDIATE_VOID", "operator_call(_member, nullptr, read<framework::operator_t>(_cursor), _immediate);"), "opr"),
+    (("OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID", "operator_call_reverse(_member, nullptr, read<framework::operator_t>(_cursor), _immediate);"), "opr")
 ]
 mmmtype = [
     (("OC_OPERATOR_CALL", "_member0->operator_call(_member1, read<framework::operator_t>(_cursor), _member2);"), "opr")
 ]
 mmitype = [
     (("OC_OPERATOR_CALL_IMMEDIATE", "operator_call(_member0, _member1, read<framework::operator_t>(_cursor), _immediate);"), "opr"),
-    (("OC_OPERATOR_CALL_IMMEDIATE_REVERSE", "BIA_NOT_IMPLEMENTED;"), "opr")
+    (("OC_OPERATOR_CALL_IMMEDIATE_REVERSE", "operator_call_reverse(_member0, _member1, read<framework::operator_t>(_cursor), _immediate);"), "opr")
 ]
 
 mvars = [
