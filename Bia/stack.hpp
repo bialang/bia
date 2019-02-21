@@ -54,14 +54,13 @@ public:
 	template<typename Type>
 	void push(Type _value)
 	{
-		//static_assert(sizeof(Type) % element_size() == 0, "Size of Type must be a multiple of the element size.");
+		static_assert(sizeof(Type) <= element_size(), "Size of Type must be less than the element size.");
 
-		if (_stack_pointer + sizeof(Type) / element_size() > _buffer.first + _buffer.second) {
+		if (_stack_pointer + 1 > _buffer.first + _buffer.second) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
 		*reinterpret_cast<Type*>(_stack_pointer++) = _value;
-		//_stack_pointer += sizeof(Type) / element_size();
 	}
 	template<typename Type>
 	void push(Type * _value)
@@ -113,7 +112,7 @@ public:
 		case 'a':
 			return checked_convert<Type>(reinterpret_cast<const char*>(_stack_pointer + _offset));
 		case 'M':
-			return reinterpret_cast<framework::member*>(_stack_pointer + _offset)->cast<Type>();
+			return reinterpret_cast<framework::member*>(cast<intptr_t>(_offset))->cast<Type>();
 		default:
 			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
 		}
