@@ -44,6 +44,20 @@ machine::virtual_machine::virtual_machine_schein & compiler::virtual_machine_sch
 	return _schein;
 }
 
+void compiler::handle_parameter_execute(const machine::virtual_machine::index & _member, const machine::virtual_machine::index * _destination, const std::string & _format, bool _mixed, framework::member::parameter_count_t _count)
+{
+	// Execute without parameters
+	if (!_count) {
+		_translator.execute(_member, _destination);
+	} // Formatted execute
+	else if (_mixed) {
+		_translator.execute_format(_member, _destination, _format.c_str(), _count);
+	} // Only members as parameters
+	else {
+		_translator.execute_count(_member, _destination, _count);
+	}
+}
+
 void compiler::handle_variable_declaration_helper(compiler_value _expression, const machine::virtual_machine::index & _destination)
 {
 	using VT = compiler_value::VALUE_TYPE;
@@ -236,6 +250,7 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 	case BGR_IMPORT:
 		return handle_import(_report);
 	case BGR_VALUE:
+		// Clear destination
 		_value.set_return();
 
 		return handle_value<false>(_report, [] {});
@@ -452,15 +467,15 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 		// Get refof/copyof
 		if (_function) {
 			_destination.expand_to_member(_translator, [&](auto _expanded) {
-				if (std::is_same<decltype(_expanded), invalid_index>::value) {
+				/*if (std::is_same<decltype(_expanded), invalid_index>::value) {
 					(_translator.*_function)(_translator.to_member(_value.value().rt_member), _translator.to_temp(_counter.next()));
 
 					_value.set_return_temp(_counter.current());
-				} else {
-					(_translator.*_function)(_translator.to_member(_value.value().rt_member), _expanded);
+				} else {*/
+				(_translator.*_function)(_translator.to_member(_value.value().rt_member), _expanded);
 
-					_value = _destination;
-				}
+				_value = _destination;
+				//}
 			});
 
 		}
@@ -535,16 +550,19 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		_destination.expand_to_member(_translator, [&](auto _dest) {
-			if (std::is_same<decltype(_dest), compiler_value::invalid_index_t>::value) {
-				_destination.set_return_temp(_counter.next());
+		_destination.expand_to_member(_translator, [&](auto _expanded) {
+			auto _dest = &_expanded;
 
-				this->handle_parameter_execute(_member, _translator.to_temp(_counter.current()), _format, _mixed, _count);
+			// Discard result
+			if (std::is_same<decltype(_expanded), compiler_value::invalid_index_t>::value) {
+				_dest = nullptr;
+
+				_value.set_return();
 			} else {
-				this->handle_parameter_execute(_member, _dest, _format, _mixed, _count);
+				_value = _destination;
 			}
 
-			_value = _destination;
+			this->handle_parameter_execute(_member, _dest, _format, _mixed, _count);
 		});
 	});
 

@@ -49,9 +49,9 @@ public:
 	void finalize(member_index_t _temp_count);
 	void instantiate_int(const index & _member, int64_t _value);
 	void test(const index & _member);
-	void execute(const index & _member);
-	void execute_count(const index & _member, framework::member::parameter_count_t _count);
-	void execute_format(const index & _member, const char * _format, framework::member::parameter_count_t _count);
+	void execute(const index & _member, const index * _destination);
+	void execute_count(const index & _member, const index * _destination, framework::member::parameter_count_t _count);
+	void execute_format(const index & _member, const index * _destination, const char * _format, framework::member::parameter_count_t _count);
 	void pass_parameter(const index & _member);
 	void pass_test();
 	template<typename Type>

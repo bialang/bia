@@ -123,7 +123,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 28-Apr-18
 	 *
-	 * @param [out] _destination The destination of the return result.
+	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
@@ -138,7 +138,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The destination of the return result.
+	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 * @param _reserved Reserved parameter. Do not use this.
 	 * @param _count The amount of the passed arguments.
 	 * @param [in] _stack The stack where the parameters are.
@@ -157,7 +157,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The destination of the return result.
+	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 * @param _format The types of the arguments.
 	 * @param _count The amount of the passed arguments.
 	 * @param [in] _stack The stack where the parameters are.
@@ -176,7 +176,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 12-May-18
 	 *
-	 * @param [out] _destination The operation result. If this is null, the value will be saved to the caller.
+	 * @param [out] _destination The operation result. Can be the caller. If null, the result is discarded.
 	 * @param _operator The operator.
 	 * @param _right The right member.
 	 *
@@ -192,7 +192,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result. If this is null, the value will be saved to the caller.
+	 * @param [out] _destination The operation result. Can be the caller. If null, the result is discarded.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
@@ -208,7 +208,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result. If this is null, the value will be saved to the caller.
+	 * @param [out] _destination The operation result. Can be the caller. If null, the result is discarded.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
@@ -225,7 +225,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result. If this is null, the value will be saved to the caller.
+	 * @param [out] _destination The operation result. Can be the caller. If null, the result is discarded.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *

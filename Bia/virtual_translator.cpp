@@ -61,21 +61,33 @@ void virtual_translator::test(const index & _member)
 	op_code::write_m_type(*_output, OC_TEST, _member);
 }
 
-void virtual_translator::execute(const index & _member)
+void virtual_translator::execute(const index & _member, const index * _destination)
 {
-	op_code::write_m_type(*_output, OC_EXECUTE_VOID, _member);
+	if (_destination) {
+		op_code::write_mm_type(*_output, OC_EXECUTE, _member, *_destination);
+	} else {
+		op_code::write_m_type(*_output, OC_EXECUTE_VOID, _member);
+	}
 }
 
-void virtual_translator::execute_count(const index & _member, framework::member::parameter_count_t _count)
+void virtual_translator::execute_count(const index & _member, const index * _destination, framework::member::parameter_count_t _count)
 {
-	op_code::write_m_type(*_output, OC_EXECUTE_COUNT_VOID, _member);
+	if (_destination) {
+		op_code::write_mm_type(*_output, OC_EXECUTE_COUNT, _member, *_destination);
+	} else {
+		op_code::write_m_type(*_output, OC_EXECUTE_COUNT_VOID, _member);
+	}
 
 	_output->write_all(_count);
 }
 
-void virtual_translator::execute_format(const index & _member, const char * _format, framework::member::parameter_count_t _count)
+void virtual_translator::execute_format(const index & _member, const index * _destination, const char * _format, framework::member::parameter_count_t _count)
 {
-	op_code::write_m_type(*_output, OC_EXECUTE_FORMAT_VOID, _member);
+	if (_destination) {
+		op_code::write_mm_type(*_output, OC_EXECUTE_FORMAT, _member, *_destination);
+	} else {
+		op_code::write_m_type(*_output, OC_EXECUTE_FORMAT_VOID, _member);
+	}
 
 	_output->write_all(_count);
 	_output->write(_format, _count);
@@ -109,7 +121,7 @@ void virtual_translator::copyof(const index & _member, const index & _destinatio
 void virtual_translator::operator_call(const index & _member, const index * _destination, framework::operator_t _operator, const index & _right)
 {
 	// With destination
-	if (_destination && _member != *_destination) {
+	if (_destination) {
 		op_code::write_mmm_type(*_output, OC_OPERATOR_CALL, _member, *_destination, _right);
 	} else {
 		op_code::write_mm_type(*_output, OC_OPERATOR_CALL_VOID, _member, _right);
@@ -121,7 +133,7 @@ void virtual_translator::operator_call(const index & _member, const index * _des
 void virtual_translator::operator_call_immediate(const index & _member, const index * _destination, framework::operator_t _operator, int64_t _value)
 {
 	// With destination
-	if (_destination && _member != *_destination) {
+	if (_destination) {
 		write_mmi_type_int(OC_OPERATOR_CALL_IMMEDIATE, _member, *_destination, _value);
 	} else {
 		write_mi_type_int(OC_OPERATOR_CALL_IMMEDIATE_VOID, _member, _value);
@@ -133,7 +145,7 @@ void virtual_translator::operator_call_immediate(const index & _member, const in
 void virtual_translator::operator_call_immediate(const index & _member, const index * _destination, framework::operator_t _operator, double _value)
 {
 	// With destination
-	if (_destination && _member != *_destination) {
+	if (_destination) {
 		op_code::write_mmi_type(*_output, OC_OPERATOR_CALL_IMMEDIATE, _member, *_destination, _value);
 	} else {
 		op_code::write_mi_type(*_output, OC_OPERATOR_CALL_IMMEDIATE_VOID, _member, _value);
@@ -145,7 +157,7 @@ void virtual_translator::operator_call_immediate(const index & _member, const in
 void virtual_translator::operator_call_immediate_reverse(const index & _member, const index * _destination, framework::operator_t _operator, int64_t _value)
 {
 	// With destination
-	if (_destination && _member != *_destination) {
+	if (_destination) {
 		write_mmi_type_int(OC_OPERATOR_CALL_IMMEDIATE_REVERSE, _member, *_destination, _value);
 	} else {
 		write_mi_type_int(OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID, _member, _value);
@@ -157,7 +169,7 @@ void virtual_translator::operator_call_immediate_reverse(const index & _member, 
 void virtual_translator::operator_call_immediate_reverse(const index & _member, const index * _destination, framework::operator_t _operator, double _value)
 {
 	// With destination
-	if (_destination && _member != *_destination) {
+	if (_destination) {
 		op_code::write_mmi_type(*_output, OC_OPERATOR_CALL_IMMEDIATE_REVERSE, _member, *_destination, _value);
 	} else {
 		op_code::write_mi_type(*_output, OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID, _member, _value);

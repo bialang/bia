@@ -79,36 +79,18 @@ private:
 	/**
 	 * Executes the given member.
 	 *
-	 * @remarks The @ref compiler::_value must contain the temporary destination.
-	 *
 	 * @since 3.67.135.751
 	 * @date 6-Aug-18
 	 *
-	 * @tparam Destination The type of the destination.
-	 *
 	 * @param _member The member.
+	 * @param _destination The desired destination of the result.
 	 * @param _format The format of the passed parameters.
 	 * @param _mixed Whether some constants were passed too or not.
 	 * @param _count The amount of passed parameters.
-	 * @param [in] _passer The varg passer.
 	 *
-	 * @throws See machine::string_manager::format_address().
-	 * @throws See machine::virtual_machine::virtual_translator::execute_count().
+	 * @throws See machine::virtual_machine::virtual_translator::execute(), machine::virtual_machine::virtual_translator::execute_count() and machine::virtual_machine::virtual_translator::execute_format().
 	*/
-	template<typename Destination>
-	void handle_parameter_execute(const machine::virtual_machine::index & _member, Destination _destination, const std::string & _format, bool _mixed, framework::member::parameter_count_t _count)
-	{
-		// Execute without parameters
-		if (!_count) {
-			_translator.execute(_member);
-		} // Formatted execute
-		else if (_mixed) {
-			_translator.execute_format(_member, _format.c_str(), _count);
-		} // Only members as parameters
-		else {
-			_translator.execute_count(_member, _count);
-		}
-	}
+	BIA_EXPORT void handle_parameter_execute(const machine::virtual_machine::index & _member, const machine::virtual_machine::index * _destination, const std::string & _format, bool _mixed, framework::member::parameter_count_t _count);
 	BIA_EXPORT void handle_variable_declaration_helper(compiler_value _expression, const machine::virtual_machine::index & _destination);
 	/**
 	 * Tests the compiler value and returns a test value.
