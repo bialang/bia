@@ -40,13 +40,13 @@ inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::print() const
 template<typename Type>
 inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::copy(member * _destination)
 {
-	BIA_NOT_IMPLEMENTED;
+	throw exception::execution_error(BIA_EM_UNSUPPORTED_COPY);
 }
 
 template<typename Type>
 inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::refer(member * _destination)
 {
-	BIA_NOT_IMPLEMENTED;
+	_destination->replace_this<class_template>(_data);
 }
 
 template<typename Type>
@@ -60,7 +60,6 @@ inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::execute(member *
 template<typename Type>
 inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
 {
-	BIA_NOT_IMPLEMENTED;
 	instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_count(_count, _stack)), true);
 
 	_destination->replace_this<object<Type>>(_instance, _data.get().first);
@@ -69,25 +68,9 @@ inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_cou
 template<typename Type>
 inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
 {
-	BIA_NOT_IMPLEMENTED;
-	/*force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-	auto _instance_created = false;
+	instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_format(_format, _count, _stack)), true);
 
-	try {
-		instance_holder<Type> _instance(machine::memory::cast_allocation<Type>(_data.get().second->instantiate_format(_format, _count, _args)), true);
-
-		_instance_created = true;
-		va_end(_args.args);
-
-		_destination->replace_this<object<Type>>(_instance, _data.get().first);
-	} catch (...) {
-		if (!_instance_created) {
-			va_end(_args.args);
-		}
-
-		throw;
-	}*/
+	_destination->replace_this<object<Type>>(_instance, _data.get().first);
 }
 
 template<typename Type>

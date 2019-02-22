@@ -28,6 +28,7 @@
 #define BIA_EM_UNSUPPORTED_OPERATION "This operation is not supported."
 #define BIA_EM_UNSUPPORTED_OPERATOR "Unsupported operator."
 #define BIA_EM_UNSUPPORTED_INSTANTIATION "Instantiation is not supported."
+#define BIA_EM_UNSUPPORTED_COPY "Cannot be copied."
 #define BIA_EM_FAILED_ALLOCATION "Allocation failed."
 #define BIA_EM_FAILED_MEMORY_PROTECTION "Cannot change protection of the memory address."
 #define BIA_EM_ASSIGN_ON_CONST "Assigns on constant variable are disallowed."
