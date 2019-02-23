@@ -198,6 +198,7 @@
     <ClCompile Include="big_int_member.cpp" />
     <ClCompile Include="int_member.cpp" />
     <ClCompile Include="machine_schein.cpp" />
+    <ClCompile Include="member_array.cpp" />
     <ClCompile Include="member_map.cpp" />
     <ClCompile Include="member_names.cpp" />
     <ClCompile Include="module_loader.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="disguised_caller_source.hpp" />
     <ClInclude Include="buffer_builder.hpp" />
     <ClInclude Include="local_object.hpp" />
+    <ClInclude Include="member_array.hpp" />
     <ClInclude Include="member_cast_type.hpp" />
     <ClInclude Include="member_names.hpp" />
     <ClInclude Include="cstring_member_def.hpp" />

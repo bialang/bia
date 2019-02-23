@@ -143,6 +143,7 @@ namespace machine
 {
 
 class disassembler;
+class machine_context;
 class stack;
 
 namespace platform

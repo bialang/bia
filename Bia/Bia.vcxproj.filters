@@ -234,6 +234,9 @@
     <ClCompile Include="virtual_machine_schein.cpp">
       <Filter>Source Files\machine\virtual_machine</Filter>
     </ClCompile>
+    <ClCompile Include="member_array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -585,6 +588,9 @@
       <Filter>Header Files\machine\virtual_machine</Filter>
     </ClInclude>
     <ClInclude Include="stack.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="member_array.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
   </ItemGroup>
