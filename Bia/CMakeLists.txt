@@ -124,7 +124,7 @@ source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})
 source_group("Source Files\\machine\\modular" FILES ${Bia_SOURCE_FILES_MODULAR})
 
 set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "machine_code.hpp" "machine_schein.hpp" "member_passer.hpp" "passer.hpp" "static_passer.hpp" "varg_member_passer.hpp" "x86_translator.hpp")
-set(Bia_SOURCE_FILES_PLATFORM "machine_code.cpp" "machine_schein.cpp")
+set(Bia_SOURCE_FILES_PLATFORM "machine_schein.cpp")
 
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
 source_group("Source Files\\machine\\platform" FILES ${Bia_SOURCE_FILES_PLATFORM})

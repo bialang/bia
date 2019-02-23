@@ -1,4 +1,5 @@
 #include "schein.hpp"
+#include "machine_context.hpp"
 
 
 namespace bia
@@ -6,11 +7,9 @@ namespace bia
 namespace machine
 {
 
-schein::schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator, memory::big_int_allocator * _big_int_allocator) : _stack(_allocator, 64/*TODO*/)
+schein::schein(machine::machine_context & _context) : _stack(_context.allocator(), 64/*TODO*/)
 {
-	this->_allocator = _allocator;
-	this->_executable_allocator = _executable_allocator;
-	this->_big_int_allocator = _big_int_allocator;
+	this->_context = &_context;
 }
 
 schein::~schein()
@@ -30,13 +29,15 @@ void schein::register_allocation(memory::universal_allocation _allocation, const
 
 void schein::register_big_int(memory::big_int_allocation _allocation)
 {
-	register_allocation(memory::cast_allocation<void>(_allocation), [this](memory::universal_allocation _allocation) {
-		_big_int_allocator->destroy_big_int(memory::cast_allocation<dependency::big_int>(_allocation));
+	register_allocation(memory::cast_allocation<void>(_allocation), [_allocator = _context->big_int_allocator()](memory::universal_allocation _allocation) {
+		_allocator->destroy_big_int(memory::cast_allocation<dependency::big_int>(_allocation));
 	});
 }
 
 void schein::clear()
 {
+	auto _allocator = _context->allocator();
+
 	for (auto & _allocation : _allocations) {
 		if (_allocation.second) {
 			_allocation.second(_allocation.first);
@@ -48,14 +49,9 @@ void schein::clear()
 	_allocations.clear();
 }
 
-memory::allocator * schein::allocator() noexcept
+machine::machine_context * schein::machine_context() noexcept
 {
-	return _allocator;
-}
-
-memory::executable_allocator * schein::executable_allocator() noexcept
-{
-	return _executable_allocator;
+	return _context;
 }
 
 machine::stack & schein::stack() noexcept

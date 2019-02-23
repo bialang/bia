@@ -228,9 +228,6 @@
     <ClCompile Include="schein.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
-    <ClCompile Include="machine_schein.cpp">
-      <Filter>Source Files\machine\platform</Filter>
-    </ClCompile>
     <ClCompile Include="virtual_machine_schein.cpp">
       <Filter>Source Files\machine\virtual_machine</Filter>
     </ClCompile>

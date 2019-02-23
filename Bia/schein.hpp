@@ -6,6 +6,7 @@
 
 #include "config.hpp"
 #include "allocator.hpp"
+#include "member_allocator.hpp"
 #include "executable_allocator.hpp"
 #include "big_int_allocator.hpp"
 #include "stack.hpp"
@@ -33,13 +34,11 @@ public:
 	 * @since 3.72.149.811
 	 * @date 19-Jan-19
 	 *
-	 * @param [in] _allocator The memory allocator.
-	 * @param [in] _executable_allocator The executable memory allocator.
-	 * @param [in] _big_int_allocator The big int allocator.
+	 * @param [in] _context The machine context.
 	 *
 	 * @throws See std::vector::vector().
 	*/
-	BIA_EXPORT schein(memory::allocator * _allocator, memory::executable_allocator * _executable_allocator, memory::big_int_allocator * _big_int_allocator);
+	BIA_EXPORT schein(machine::machine_context & _context);
 	schein(const schein & _copy) = delete;
 	schein(schein && _move) noexcept = default;
 	/**
@@ -100,23 +99,14 @@ public:
 	*/
 	BIA_EXPORT void clear();
 	/**
-	 * Returns ths memory allocator.
+	 * Returns the machine context.
 	 *
 	 * @since 3.72.149.811
 	 * @date 19-Jan-19
 	 *
-	 * @return The memory allocator.
+	 * @return The linked machine context.
 	*/
-	BIA_EXPORT memory::allocator * allocator() noexcept;
-	/**
-	 * Returns the executable memory allocator.
-	 *
-	 * @since 3.72.149.811
-	 * @date 19-Jan-19
-	 *
-	 * @return The executable memory allocator.
-	*/
-	BIA_EXPORT memory::executable_allocator * executable_allocator() noexcept;
+	BIA_EXPORT machine::machine_context * machine_context() noexcept;
 	/**
 	 * Returns the stack.
 	 *
@@ -126,14 +116,11 @@ public:
 	 * @return A reference to the stack.
 	*/
 	BIA_EXPORT machine::stack & stack() noexcept;
+	schein & operator=(schein && _right) noexcept = default;
 
 protected:
-	/** The memory allocator for normal memory. */
-	memory::allocator * _allocator;
-	/** The memory allocator for executable memory. */
-	memory::executable_allocator * _executable_allocator;
-	/** The memory allocator for big ints. */
-	memory::big_int_allocator * _big_int_allocator;
+	/** The linked context. */
+	machine::machine_context * _context;
 	/** Stores all registered allocations with deleter. */
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
 	/** The machine stack. */
