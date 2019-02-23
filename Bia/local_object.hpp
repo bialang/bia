@@ -64,7 +64,7 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Object does not fit.");
 
-		return new(_object_space.begin()) Ty(std::forward<Arguments>(_arguements)...);
+		return new(_object_space.data()) Ty(std::forward<Arguments>(_arguements)...);
 	}
 	/**
 	 * Returns the address of the local object as @a Ty.
@@ -81,7 +81,7 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Wrong object type.");
 
-		return reinterpret_cast<Ty*>(_object_space.begin());
+		return reinterpret_cast<Ty*>(_object_space.data());
 	}
 	/**
 	 * Returns the address of the local object as @a Ty.
@@ -98,7 +98,7 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Wrong object type.");
 
-		return reinterpret_cast<const Ty*>(_object_space.begin());
+		return reinterpret_cast<const Ty*>(_object_space.data());
 	}
 
 private:
