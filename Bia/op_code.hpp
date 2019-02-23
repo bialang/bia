@@ -79,10 +79,10 @@ enum MEMBER_OP_CODE_OPTION
 {
 	MOCO_MEMBER,
 	//MOCO_LOCAL,
-	//MOCO_TEMP,
+	MOCO_TEMP,
 	MOCO_TINY_MEMBER,
 	//MOCO_TINY_LOCAL,
-	//MOCO_TINY_TEMP,
+	MOCO_TINY_TEMP,
 
 	MOCO_COUNT
 };
@@ -247,19 +247,17 @@ private:
 	}
 	static MEMBER_OP_CODE_OPTION member_option(const index & _member)
 	{
-		MEMBER_OP_CODE_OPTION _option = _member.value <= std::numeric_limits<tiny_member_index_t>::max() ? MOCO_TINY_MEMBER : MOCO_MEMBER;
+		int _option = _member.value <= std::numeric_limits<tiny_member_index_t>::max() ? MOCO_TINY_MEMBER : MOCO_MEMBER;
 
-		/*if (dynamic_cast<const member_index*>(&_member)) {
-			_code -= MOCO_MEMBER;
+		if (dynamic_cast<const member_index*>(&_member)) {
+			_option += MOCO_MEMBER;
 		} else if (dynamic_cast<const temp_index*>(&_member)) {
-			_code |= MOCO_TEMP;
-		} else if (dynamic_cast<const local_index*>(&_member)) {
-			_code |= MOCO_LOCAL;
+			_option += MOCO_TEMP;
 		} else {
 			BIA_IMPLEMENTATION_ERROR;
-		}*/
+		}
 
-		return _option;
+		return static_cast<MEMBER_OP_CODE_OPTION>(_option);
 	}
 	template<typename Type>
 	static IMMEDIATE_OP_CODE_OPTION immediate_option()

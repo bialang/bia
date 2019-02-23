@@ -4,7 +4,7 @@ ptype = [
     (("OC_PUSH_TEST", "_stack.push(_test_register);"), "pusht")
 ]
 inttype = [
-    (("OC_SETUP", ""), "setup"),
+    (("OC_SETUP", "_temps.create(_int);"), "setup"),
     (("OC_JUMP", "_cursor += _int;"), "jmp"),
     (("OC_JUMP_TRUE", "_cursor += _test_register ? _int : 0;"), "jpt"),
     (("OC_JUMP_FALSE", "_cursor += _test_register ? 0 : _int;"), "jpf")
@@ -54,7 +54,9 @@ mmitype = [
 ]
 
 mvars = [
+    ("MOCO_TINY_TEMP", "auto {0} = _temps[read<tiny_member_index_t>(_cursor)];"),
     ("MOCO_TINY_MEMBER", "auto {0} = _globals[read<tiny_member_index_t>(_cursor)];"),
+    ("MOCO_TEMP", "auto {0} = _temps[read<member_index_t>(_cursor)];"),
     ("MOCO_MEMBER", "auto {0} = _globals[read<member_index_t>(_cursor)];")
 ]
 intvars = [

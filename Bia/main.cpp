@@ -133,16 +133,18 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-global i = 10
+#>global i = 10
 global k = i
 i =i+32
 #>hello_world()
 if 5 == i {
 	ser(61,55)
 }<#
-
-print(k)
-ser(i, 6)
+global a = printer(3)
+print(a)
+print(printer)
+#>print(k)
+ser(i, 6)<#
 
 )"";
 		/*test_and_time(1, []() {
