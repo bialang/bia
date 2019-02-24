@@ -234,6 +234,9 @@
     <ClCompile Include="member_array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="virtual_disassembler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -586,6 +589,9 @@
     </ClInclude>
     <ClInclude Include="stack.hpp">
       <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="virtual_disassembler.hpp">
+      <Filter>Header Files\machine\virtual_machine</Filter>
     </ClInclude>
     <ClInclude Include="member_array.hpp">
       <Filter>Header Files\machine</Filter>

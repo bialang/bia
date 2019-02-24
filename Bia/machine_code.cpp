@@ -57,6 +57,11 @@ void machine_code::clear()
 	}
 }
 
+void machine_code::disassemble()
+{
+	BIA_NOT_IMPLEMENTED;
+}
+
 bool machine_code::is_executable() const noexcept
 {
 	return _entry_point.first && _entry_point.second;

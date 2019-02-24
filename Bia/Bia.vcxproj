@@ -226,6 +226,7 @@
     <ClCompile Include="utf32.cpp" />
     <ClCompile Include="utf8.cpp" />
     <ClCompile Include="variable_index.cpp" />
+    <ClCompile Include="virtual_disassembler.cpp" />
     <ClCompile Include="virtual_machine_code.cpp" />
     <ClCompile Include="virtual_machine_schein.cpp" />
     <ClCompile Include="virtual_member_map.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="static_function.hpp" />
     <ClInclude Include="string_manager.hpp" />
     <ClInclude Include="temp_counter.hpp" />
+    <ClInclude Include="virtual_disassembler.hpp" />
     <ClInclude Include="virtual_machine_schein.hpp" />
     <ClInclude Include="virtual_member_map.hpp" />
     <ClInclude Include="x86_translator.hpp" />

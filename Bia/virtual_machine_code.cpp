@@ -3,6 +3,7 @@
 #include "create_member.hpp"
 #include "member_array.hpp"
 #include "machine_context.hpp"
+#include "virtual_disassembler.hpp"
 
 #include <cstring>
 
@@ -3393,6 +3394,11 @@ void virtual_machine_code::clear()
 		_schein.machine_context()->allocator()->deallocate(memory::cast_allocation<void>(_code));
 		_code.clear();
 	}
+}
+
+void virtual_machine_code::disassemble()
+{
+	virtual_disassembler::disassemble(memory::cast_allocation<const uint8_t>(_code));
 }
 
 bool virtual_machine_code::is_executable() const noexcept

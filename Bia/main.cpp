@@ -141,6 +141,7 @@ if 5 == i {
 	ser(61,55)
 }<#
 global a = printer(3)
+
 print(a)
 print(printer)
 #>print(k)
@@ -180,14 +181,17 @@ ser(i, 6)<#
 		}
 
 		puts("");
-		system("pause");
 
 		// Run
 		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.virtual_machine_schein()));
 
-				_machine_code.execute();
+		_machine_code.disassemble();
+
+		system("pause");
+
 		try {
 			test_and_time(1, [&] {
+				_machine_code.execute();
 			});
 
 			printf("Value of i: %lli\n", _context.get_member("i")->cast<long long>());

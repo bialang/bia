@@ -75,6 +75,7 @@ public:
 	 * @throws See memory::executable_allocator::deallocate_executable().
 	*/
 	BIA_EXPORT virtual void clear() override;
+	BIA_EXPORT virtual void disassemble() override;
 	BIA_EXPORT virtual bool is_executable() const noexcept override;
 	/**
 	 * Move operator.

@@ -467,15 +467,15 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 		// Get refof/copyof
 		if (_function) {
 			_destination.expand_to_member(_translator, [&](auto _expanded) {
-				/*if (std::is_same<decltype(_expanded), invalid_index>::value) {
+				if (std::is_same<decltype(_expanded), invalid_index>::value) {
 					(_translator.*_function)(_translator.to_member(_value.value().rt_member), _translator.to_temp(_counter.next()));
 
 					_value.set_return_temp(_counter.current());
-				} else {*/
-				(_translator.*_function)(_translator.to_member(_value.value().rt_member), _expanded);
+				} else {
+					(_translator.*_function)(_translator.to_member(_value.value().rt_member), _expanded);
 
-				_value = _destination;
-				//}
+					_value = _destination;
+				}
 			});
 
 		}
@@ -602,7 +602,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 	handle_value<false>(_report + 3, [&] {
 		auto _expression = _value;
 
-		// The result was already save to the identifier. See handle_value()
+		// The result was already saved to the identifier. See handle_value()
 		if (_value == _identifier) {
 			return;
 		}

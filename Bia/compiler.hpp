@@ -210,6 +210,8 @@ private:
 
 			auto _left = _value;
 
+			_value.set_return();
+
 			// Handle right value expression
 			handle_value_expression(_report + 3);
 

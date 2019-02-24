@@ -12,6 +12,7 @@ public:
 	virtual ~code() noexcept = default;
 	virtual void execute() = 0;
 	virtual void clear() = 0;
+	virtual void disassemble() = 0;
 	/**
 	 * Checks wheter the code is executable.
 	 *

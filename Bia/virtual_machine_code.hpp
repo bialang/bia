@@ -35,6 +35,7 @@ public:
 
 	BIA_EXPORT virtual void execute() override;
 	BIA_EXPORT virtual void clear() override;
+	BIA_EXPORT virtual void disassemble() override;
 	BIA_EXPORT virtual bool is_executable() const noexcept override;
 
 private:
