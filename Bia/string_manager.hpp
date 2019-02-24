@@ -47,7 +47,7 @@ public:
 	 * @date 6-May-18
 	*/
 	BIA_EXPORT ~string_manager() noexcept;
-	BIA_EXPORT void register_string(void * _resource);
+	BIA_EXPORT void register_string(memory::universal_allocation _string);
 	/**
 	 * Returns the name address. This address will be the same for the same name value.
 	 *
@@ -128,7 +128,7 @@ private:
 	/** Defines the index holding all allocated names. */
 	std::unordered_set<string_entry, string_hasher> _index;
 	/** The registered string resources. */
-	std::vector<void*> _string_resources;
+	std::vector<memory::universal_allocation> _string_resources;
 };
 
 }

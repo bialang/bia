@@ -32,17 +32,17 @@ string_manager::~string_manager() noexcept
 	}
 
 	// Delete all string resources
-	for (auto & _resource : _string_resources) {
+	for (auto & _string : _string_resources) {
 		try {
-			_allocator->deallocate({ _resource, stream::string_stream::size(_resource) });
+			_allocator->deallocate(_string);
 		} catch (...) {
 		}
 	}
 }
 
-void string_manager::register_string(void * _resource)
+void string_manager::register_string(memory::universal_allocation _string)
 {
-	_string_resources.push_back(_resource);
+	_string_resources.push_back(_string);
 }
 
 string_manager::name_t string_manager::name_address(const char * _name, size_t _length)
