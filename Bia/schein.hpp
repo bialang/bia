@@ -10,6 +10,7 @@
 #include "executable_allocator.hpp"
 #include "big_int_allocator.hpp"
 #include "stack.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -116,6 +117,15 @@ public:
 	 * @return A reference to the stack.
 	*/
 	BIA_EXPORT machine::stack & stack() noexcept;
+	/**
+	 * Returns the string manager.
+	 *
+	 * @since 3.73.150.816
+	 * @date 24-Feb-19
+	 *
+	 * @return A reference to the string manager.
+	*/
+	BIA_EXPORT machine::string_manager & string_manager() noexcept;
 	schein & operator=(schein && _right) noexcept = default;
 
 protected:
@@ -125,6 +135,8 @@ protected:
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
 	/** The machine stack. */
 	machine::stack _stack;
+	/** The manager for the string resources. */
+	machine::string_manager _string_manager;
 };
 
 }

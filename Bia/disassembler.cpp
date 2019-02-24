@@ -388,7 +388,6 @@ disassembler::function_map disassembler::init_function_map()
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int_1);
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int_n1);
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_double);
-	BIA_FUNCTION_ENTRY(machine::link::instantiate_string);
 
 	BIA_FUNCTION_ENTRY(framework::member::print);
 	BIA_FUNCTION_ENTRY(machine::link::print_int32);

@@ -59,5 +59,10 @@ machine::stack & schein::stack() noexcept
 	return _stack;
 }
 
+machine::string_manager & schein::string_manager() noexcept
+{
+	return _string_manager;
+}
+
 }
 }

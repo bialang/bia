@@ -596,6 +596,12 @@
     <ClInclude Include="name_manager.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
+    <ClInclude Include="string_manager.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="string_resource.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

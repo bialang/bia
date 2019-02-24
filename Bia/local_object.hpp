@@ -17,16 +17,30 @@ namespace utility
  *
  * @tparam Type The default type. Can be void.
  * @tparam Size The size of the internal space for the objects.
+ * @tparam Destroy If true, the held object will be destroyed at the end of the lifetime of this object (even if it was not initialized).
  *
  * @see @ref virtual_object
 */
-template<typename Type, size_t Size = sizeof(Type)>
+template<typename Type, size_t Size = sizeof(Type), bool Destroy = false>
 class local_object
 {
 public:
 	local_object(const local_object & _copy) = delete;
 	local_object(local_object && _move) = delete;
-
+	/**
+	 * Destructor.
+	 *
+	 * @since 3.73.150.816
+	 * @date 24-Feb-19
+	 *
+	 * @throws See destroy().
+	*/
+	~local_object()
+	{
+		if (Destroy) {
+			destroy<Type>();
+		}
+	}
 	/**
 	 * Destroy the local object.
 	 *

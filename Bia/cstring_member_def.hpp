@@ -1,11 +1,8 @@
 #pragma once
 
-#include <cstddef>
-#include <tuple>
-
 #include "native_variable.hpp"
 #include "share_def.hpp"
-#include "string_stream.hpp"
+#include "string_resource.hpp"
 
 
 namespace bia
@@ -19,9 +16,7 @@ template<typename Char_type>
 class cstring_member final : public native_variable
 {
 public:
-	typedef stream::string_stream::size_type size_type;
-	typedef stream::string_stream::length_type length_type;
-	typedef utility::share<std::tuple<const Char_type*, size_type, length_type>> data_type;
+	typedef utility::share<machine::string_resource_t> data_type;
 
 	/**
 	 * Constructor.
@@ -30,12 +25,10 @@ public:
 	 * @date 6-May-18
 	 *
 	 * @param _string The zero-terminated string.
-	 * @param _size The total size of the string.
-	 * @param _length The length of the string.
 	 *
 	 * @throws See utility::share::share().
 	*/
-	cstring_member(const Char_type * _string, size_type _size, length_type _length);
+	cstring_member(const Char_type * _string);
 	/**
 	 * Refer-Constructor.
 	 *

@@ -25,9 +25,9 @@ class string_stream
 {
 public:
 	/** The type of the size variable. */
-	typedef decltype(machine::memory::universal_allocation::second) size_type;
+	typedef decltype(machine::memory::universal_allocation::second) size_t;
 	/** The type of the length variable. */
-	typedef size_t length_type;
+	typedef size_t length_t;
 
 	/** Supported string encodings. */
 	enum class CODEC
@@ -150,8 +150,8 @@ public:
 		// Commit buffer
 		_buffer = _allocator->commit(_buffer, _cursor - static_cast<int8_t*>(_buffer.first));
 
-		std::memcpy(_buffer.first, &_buffer.second, sizeof(size_type));
-		std::memcpy(static_cast<int8_t*>(_buffer.first) + sizeof(_buffer.second), &_length, sizeof(length_type));
+		std::memcpy(_buffer.first, &_buffer.second, sizeof(size_t));
+		std::memcpy(static_cast<int8_t*>(_buffer.first) + sizeof(_buffer.second), &_length, sizeof(length_t));
 	}
 	/**
 	 * Checks if an encoder was set.
@@ -201,7 +201,7 @@ public:
 	*/
 	constexpr static size_t offset() noexcept
 	{
-		return sizeof(size_type) + sizeof(length_type);
+		return sizeof(size_t) + sizeof(length_t);
 	}
 	/**
 	 * The total offset until the start of the size parameter.
@@ -225,7 +225,7 @@ public:
 	*/
 	constexpr static size_t length_offset() noexcept
 	{
-		return sizeof(size_type);
+		return sizeof(size_t);
 	}
 	/**
 	 * Returns the size of the buffer.
@@ -239,9 +239,9 @@ public:
 	 *
 	 * @return The size.
 	*/
-	static size_type size(const void * _buffer) noexcept
+	static size_t size(const void * _buffer) noexcept
 	{
-		return *reinterpret_cast<const size_type*>(static_cast<const int8_t*>(_buffer) + size_offset());
+		return *reinterpret_cast<const size_t*>(static_cast<const int8_t*>(_buffer) + size_offset());
 	}
 	/**
 	 * Returns the length of the string.
@@ -255,9 +255,9 @@ public:
 	 *
 	 * @return The length.
 	*/
-	static length_type length(const void * _buffer) noexcept
+	static length_t length(const void * _buffer) noexcept
 	{
-		return *reinterpret_cast<const length_type*>(static_cast<const int8_t*>(_buffer) + length_offset());
+		return *reinterpret_cast<const length_t*>(static_cast<const int8_t*>(_buffer) + length_offset());
 	}
 	/**
 	 * Returns the string.
@@ -291,7 +291,7 @@ private:
 	/** The end of the buffer. */
 	const int8_t * _end;
 	/** The length of the string. */
-	length_type _length;
+	length_t _length;
 };
 
 }

@@ -72,8 +72,8 @@ public:
 		struct string
 		{
 			const int8_t * data;
-			stream::string_stream::size_type size;
-			stream::string_stream::length_type length;
+			stream::string_stream::size_t size;
+			stream::string_stream::length_t length;
 		} rt_string;
 		grammar::report::member_t rt_member;
 		machine::virtual_machine::member_index_t rt_temp_member;
@@ -184,7 +184,7 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const char * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	void set_return(const char * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
 		clear();
 
@@ -203,7 +203,7 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const char16_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	void set_return(const char16_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
 		clear();
 
@@ -222,7 +222,7 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const char32_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	void set_return(const char32_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
 		clear();
 
@@ -241,7 +241,7 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const wchar_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	void set_return(const wchar_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
 		clear();
 
