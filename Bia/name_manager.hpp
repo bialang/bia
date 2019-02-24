@@ -13,7 +13,7 @@ namespace bia
 namespace machine
 {
 
-class string_manager
+class name_manager
 {
 public:
 	/** The type of the member name. */
@@ -29,8 +29,8 @@ public:
 	 *
 	 * @param [in] _allocator Defines the memory allocator.
 	*/
-	BIA_EXPORT explicit string_manager(memory::allocator * _allocator) noexcept;
-	string_manager(const string_manager & _copy) = delete;
+	BIA_EXPORT explicit name_manager(memory::allocator * _allocator) noexcept;
+	name_manager(const name_manager & _copy) = delete;
 	/**
 	 * Move-Constructor.
 	 *
@@ -39,15 +39,14 @@ public:
 	 *
 	 * @param [in,out] _move Defines the object that should be moved.
 	*/
-	BIA_EXPORT string_manager(string_manager && _move) noexcept;
+	BIA_EXPORT name_manager(name_manager && _move) noexcept;
 	/**
 	 * Destructor.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	*/
-	BIA_EXPORT ~string_manager() noexcept;
-	BIA_EXPORT void register_string(memory::universal_allocation _string);
+	BIA_EXPORT ~name_manager() noexcept;
 	/**
 	 * Returns the name address. This address will be the same for the same name value.
 	 *
@@ -127,8 +126,6 @@ private:
 	memory::allocator * _allocator;
 	/** Defines the index holding all allocated names. */
 	std::unordered_set<string_entry, string_hasher> _index;
-	/** The registered string resources. */
-	std::vector<memory::universal_allocation> _string_resources;
 };
 
 }

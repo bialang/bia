@@ -73,7 +73,7 @@ void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_double(member
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::object_member(member * _destination, machine::string_manager::name_t _name)
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::object_member(member * _destination, machine::name_manager::name_t _name)
 {
 	BIA_UNDEFINED_ERROR;
 }

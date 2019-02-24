@@ -1,5 +1,4 @@
-#include "string_manager.hpp"
-#include "string_stream.hpp"
+#include "name_manager.hpp"
 #include "varg_member_passer.hpp"
 
 #include <cstring>
@@ -11,17 +10,17 @@ namespace bia
 namespace machine
 {
 
-string_manager::string_manager(memory::allocator * _allocator) noexcept
+name_manager::name_manager(memory::allocator * _allocator) noexcept
 {
 	this->_allocator = _allocator;
 }
 
-string_manager::string_manager(string_manager && _move) noexcept : _index(std::move(_move._index))
+name_manager::name_manager(name_manager && _move) noexcept : _index(std::move(_move._index))
 {
 	_allocator = _move._allocator;
 }
 
-string_manager::~string_manager() noexcept
+name_manager::~name_manager() noexcept
 {
 	// Delete all allocated strings
 	for (auto & _entry : _index) {
@@ -30,22 +29,9 @@ string_manager::~string_manager() noexcept
 		} catch (...) {
 		}
 	}
-
-	// Delete all string resources
-	for (auto & _string : _string_resources) {
-		try {
-			_allocator->deallocate(_string);
-		} catch (...) {
-		}
-	}
 }
 
-void string_manager::register_string(memory::universal_allocation _string)
-{
-	_string_resources.push_back(_string);
-}
-
-string_manager::name_t string_manager::name_address(const char * _name, size_t _length)
+name_manager::name_t name_manager::name_address(const char * _name, size_t _length)
 {
 	auto _result = _index.find({ _name, _length + 1 });
 
@@ -62,15 +48,16 @@ string_manager::name_t string_manager::name_address(const char * _name, size_t _
 	return _result->string;
 }
 
-string_manager::name_t string_manager::name_address_or_null(const char * _name, size_t _length) const noexcept
+name_manager::name_t name_manager::name_address_or_null(const char * _name, size_t _length) const noexcept
 {
 	auto _result = _index.find({ _name, _length + 1 });
 
 	return _result == _index.end() ? nullptr : _result->string;
 }
 
-const char * string_manager::format_address(const char * _format, size_t _length)
+const char * name_manager::format_address(const char * _format, size_t _length)
 {
+	BIA_NOT_IMPLEMENTED;
 	auto _result = _index.find({ _format, _length });
 
 	// Create new entry

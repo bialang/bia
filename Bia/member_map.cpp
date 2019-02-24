@@ -11,7 +11,7 @@ namespace framework
 namespace object
 {
 
-member * member_map::get(name_type _name)
+member * member_map::get(name_t _name)
 {
 	auto _result = _data.get().data.find(_name);
 
@@ -23,7 +23,7 @@ member * member_map::get(name_type _name)
 	return _result->second;
 }
 
-member * member_map::get_or_create(name_type _name)
+member * member_map::get_or_create(name_t _name)
 {
 	auto _result = _data.get().data.find(_name);
 

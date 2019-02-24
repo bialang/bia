@@ -18,7 +18,7 @@ thread_local memory::big_int_allocator * machine_context::_active_big_int_alloca
 thread_local utility::buffer_builder * machine_context::_active_buffer_builder = nullptr;
 
 
-machine_context::machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::big_int_allocator> & _big_int_allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _member_allocator(_member_allocator), _big_int_allocator(_big_int_allocator), _executable_allocator(_executable_allocator), _buffer_builder(_allocator.get()), _string_manager(this->_allocator.get()), _variable_index(this->_allocator), _module_loader(allocator())
+machine_context::machine_context(const std::shared_ptr<memory::allocator> & _allocator, const std::shared_ptr<memory::member_allocator> & _member_allocator, const std::shared_ptr<memory::big_int_allocator> & _big_int_allocator, const std::shared_ptr<memory::executable_allocator>& _executable_allocator) : _allocator(_allocator), _member_allocator(_member_allocator), _big_int_allocator(_big_int_allocator), _executable_allocator(_executable_allocator), _buffer_builder(_allocator.get()), _name_manager(this->_allocator.get()), _variable_index(this->_allocator), _module_loader(allocator())
 {
 	if (!this->_allocator || !this->_executable_allocator) {
 		throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
@@ -68,9 +68,9 @@ const platform::machine_code & machine_context::get_script(const char * _name) c
 	return _script_map.get(_name);
 }
 
-framework::member * machine_context::get_member(string_manager::name_t _name, framework::member * _default)
+framework::member * machine_context::get_member(name_manager::name_t _name, framework::member * _default)
 {
-	_name = _string_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
+	_name = _name_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
 
 	if (auto _result = _variable_index.find(_name)) {
 		return _result;
@@ -81,9 +81,9 @@ framework::member * machine_context::get_member(string_manager::name_t _name, fr
 	return _default;
 }
 
-const framework::member * machine_context::get_member(string_manager::name_t _name, framework::member * _default) const
+const framework::member * machine_context::get_member(name_manager::name_t _name, framework::member * _default) const
 {
-	_name = _string_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
+	_name = _name_manager.name_address_or_null(_name, std::char_traits<char>::length(_name));
 
 	if (auto _result = _variable_index.find(_name)) {
 		return _result;
@@ -144,9 +144,9 @@ utility::buffer_builder & machine_context::buffer_builder() noexcept
 	return _buffer_builder;
 }
 
-string_manager & machine_context::string_manager() noexcept
+name_manager & machine_context::string_manager() noexcept
 {
-	return _string_manager;
+	return _name_manager;
 }
 
 void BIA_MEMBER_CALLING_CONVENTION machine_context::import_module(const char * _name)
@@ -173,7 +173,7 @@ void BIA_MEMBER_CALLING_CONVENTION machine_context::import_module(const char * _
 
 const char * machine_context::name_address(utility::string_key _name)
 {
-	return _string_manager.name_address(_name.string(), _name.length());
+	return _name_manager.name_address(_name.string(), _name.length());
 }
 
 framework::member * machine_context::address_of_member(const char * _name)

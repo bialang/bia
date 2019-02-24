@@ -34,7 +34,7 @@ void BIA_MEMBER_CALLING_CONVENTION namespace_member::refer(member * _destination
   _destination->replace_this<namespace_member>(_data);
 }
 
-void BIA_MEMBER_CALLING_CONVENTION namespace_member::object_member(member * _destination, machine::string_manager::name_t _name)
+void BIA_MEMBER_CALLING_CONVENTION namespace_member::object_member(member * _destination, machine::name_manager::name_t _name)
 {
   _data.get(_name)->refer(_destination);
 }

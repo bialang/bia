@@ -10,7 +10,7 @@
 #include "operator.hpp"
 #include "native_type.hpp"
 #include "type_traits.hpp"
-#include "string_manager.hpp"
+#include "name_manager.hpp"
 #include "buffer_builder.hpp"
 #include "big_int.hpp"
 #include "member_cast_type.hpp"
@@ -248,7 +248,7 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member or the wanted member is not valid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_t _name) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::name_manager::name_t _name) = 0;
 	/**
 	 * Sets the instance of the member.
 	 *

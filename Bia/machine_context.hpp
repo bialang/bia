@@ -12,7 +12,7 @@
 #include "machine_code.hpp"
 #include "string_key.hpp"
 #include "member.hpp"
-#include "string_manager.hpp"
+#include "name_manager.hpp"
 #include "variable_index.hpp"
 #include "module_loader.hpp"
 #include "buffer_builder.hpp"
@@ -136,7 +136,7 @@ public:
 	 *
 	 * @return The member if it exists, otherwise the @a _default value.
 	*/
-	BIA_EXPORT framework::member * get_member(string_manager::name_t _namer, framework::member * _default = none());
+	BIA_EXPORT framework::member * get_member(name_manager::name_t _namer, framework::member * _default = none());
 	/**
 	 * Returns the member.
 	 *
@@ -150,7 +150,7 @@ public:
 	 *
 	 * @return The member if it exists, otherwise the @a _default value.
 	*/
-	BIA_EXPORT const framework::member * get_member(string_manager::name_t _name, framework::member * _default = none()) const;
+	BIA_EXPORT const framework::member * get_member(name_manager::name_t _name, framework::member * _default = none()) const;
 	template<typename Member, typename... Arguments>
 	typename std::enable_if<std::is_base_of<framework::member, Member>::value, Member*>::type emplace_member(const char * _name, Arguments &&... _arguments)
 	{
@@ -163,12 +163,12 @@ public:
 		return static_cast<Member*>(_object);
 	}
 	template<typename Return, typename... Arguments>
-	framework::executable::static_function<Return, Arguments...> * set_function(string_manager::name_t _name, Return(*_function)(Arguments...))
+	framework::executable::static_function<Return, Arguments...> * set_function(name_manager::name_t _name, Return(*_function)(Arguments...))
 	{
 		return emplace_member<framework::executable::static_function<Return, Arguments...>>(_name, _function);
 	}
 	template<typename _Lambda>
-	framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type> * set_lambda(string_manager::name_t _name, _Lambda && _lambda)
+	framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type> * set_lambda(name_manager::name_t _name, _Lambda && _lambda)
 	{
 		return emplace_member<framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_name, std::forward<_Lambda>(_lambda));
 	}
@@ -246,7 +246,7 @@ public:
 	*/
 	BIA_EXPORT memory::executable_allocator * executable_allocator() noexcept;
 	BIA_EXPORT utility::buffer_builder & buffer_builder() noexcept;
-	BIA_EXPORT machine::string_manager & string_manager() noexcept;
+	BIA_EXPORT machine::name_manager & string_manager() noexcept;
 
 private:
 	friend compiler::compiler;
@@ -275,8 +275,8 @@ private:
 	/** The allocator for executable memory. */
 	const std::shared_ptr<memory::executable_allocator> _executable_allocator;
 	utility::buffer_builder _buffer_builder;
-	/** The string manager for string like resources. */
-	machine::string_manager _string_manager;
+	/** The name manager for name resources. */
+	machine::name_manager _name_manager;
 	/** Holds all known variables, function and other. */
 	variable_index _variable_index;
 	/** The script map. */

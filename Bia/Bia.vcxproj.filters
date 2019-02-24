@@ -141,9 +141,6 @@
     <ClCompile Include="instantiate.cpp">
       <Filter>Source Files\machine\link</Filter>
     </ClCompile>
-    <ClCompile Include="string_manager.cpp">
-      <Filter>Source Files\machine</Filter>
-    </ClCompile>
     <ClCompile Include="buffer_input_stream.cpp">
       <Filter>Source Files\stream</Filter>
     </ClCompile>
@@ -231,11 +228,14 @@
     <ClCompile Include="virtual_machine_schein.cpp">
       <Filter>Source Files\machine\virtual_machine</Filter>
     </ClCompile>
+    <ClCompile Include="name_manager.cpp">
+      <Filter>Source Files\machine</Filter>
+    </ClCompile>
     <ClCompile Include="member_array.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\machine</Filter>
     </ClCompile>
     <ClCompile Include="virtual_disassembler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\machine\virtual_machine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -364,9 +364,6 @@
     </ClInclude>
     <ClInclude Include="native_test_operator.hpp">
       <Filter>Header Files\framework\native</Filter>
-    </ClInclude>
-    <ClInclude Include="string_manager.hpp">
-      <Filter>Header Files\machine</Filter>
     </ClInclude>
     <ClInclude Include="stl_allocator_wrapper.hpp">
       <Filter>Header Files\machine\memory</Filter>
@@ -594,6 +591,9 @@
       <Filter>Header Files\machine\virtual_machine</Filter>
     </ClInclude>
     <ClInclude Include="member_array.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="name_manager.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
   </ItemGroup>

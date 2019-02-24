@@ -93,7 +93,7 @@ inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call_double
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::object_member(member * _destination, machine::string_manager::name_t _name)
+inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::object_member(member * _destination, machine::name_manager::name_t _name)
 {
 	promote()->object_member(_destination, _name);
 }

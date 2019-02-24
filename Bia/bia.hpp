@@ -4,7 +4,7 @@
 #include <utility>
 
 #include "machine_context.hpp"
-#include "string_manager.hpp"
+#include "name_manager.hpp"
 #include "static_function.hpp"
 #include "member_function.hpp"
 #include "lambda_function.hpp"
@@ -19,7 +19,7 @@ namespace bia
 
 
 template<typename Class>
-inline framework::object::template_wrapper<framework::object::class_template<Class>, Class> set_class(machine::machine_context & _context, machine::string_manager::name_t _name)
+inline framework::object::template_wrapper<framework::object::class_template<Class>, Class> set_class(machine::machine_context & _context, machine::name_manager::name_t _name)
 {
 	// Set the active allocator
 	_context.activate_context();
@@ -40,7 +40,7 @@ inline framework::object::template_wrapper<framework::object::class_template<Cla
 	return framework::object::template_wrapper<framework::object::class_template<Class>, Class>(_context, _template);
 }
 
-inline framework::object::template_wrapper<framework::object::namespace_member, void> set_namespace(machine::machine_context & _context, machine::string_manager::name_t _name)
+inline framework::object::template_wrapper<framework::object::namespace_member, void> set_namespace(machine::machine_context & _context, machine::name_manager::name_t _name)
 {
 	// Set the active allocator
 	_context.activate_context();

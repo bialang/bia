@@ -218,7 +218,7 @@ void big_int_member::operator_call_double(member * _destination, operator_t _ope
 	}
 }
 
-void big_int_member::object_member(member * _destination, machine::string_manager::name_t _name)
+void big_int_member::object_member(member * _destination, machine::name_manager::name_t _name)
 {
 	BIA_NOT_IMPLEMENTED;
 }

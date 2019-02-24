@@ -84,7 +84,7 @@ inline void class_template<Type>::set_constructor()
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::object_member(member * _destination, member_map::name_type _name)
+inline void BIA_MEMBER_CALLING_CONVENTION class_template<Type>::object_member(member * _destination, member_map::name_t _name)
 {
 	_data.get().first.get(_name)->refer(_destination);
 }

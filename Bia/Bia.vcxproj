@@ -218,7 +218,7 @@
     <ClCompile Include="machine_context.cpp" />
     <ClCompile Include="operation.cpp" />
     <ClCompile Include="buffer_output_stream.cpp" />
-    <ClCompile Include="string_manager.cpp" />
+    <ClCompile Include="name_manager.cpp" />
     <ClCompile Include="undefined_member.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">true</ExcludedFromBuild>
@@ -334,7 +334,7 @@
     <ClInclude Include="print.hpp" />
     <ClInclude Include="report_bundle.hpp" />
     <ClInclude Include="static_function.hpp" />
-    <ClInclude Include="string_manager.hpp" />
+    <ClInclude Include="name_manager.hpp" />
     <ClInclude Include="temp_counter.hpp" />
     <ClInclude Include="virtual_disassembler.hpp" />
     <ClInclude Include="virtual_machine_schein.hpp" />

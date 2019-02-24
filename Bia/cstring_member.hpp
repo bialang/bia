@@ -77,7 +77,7 @@ inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::operator_ca
 }
 
 template<typename Char_type>
-inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::object_member(member * _destination, machine::string_manager::name_t _name)
+inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::object_member(member * _destination, machine::name_manager::name_t _name)
 {
 	BIA_NOT_IMPLEMENTED;
 }

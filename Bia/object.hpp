@@ -91,7 +91,7 @@ inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call_double(mem
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::object_member(member * _destination, machine::string_manager::name_t _name)
+inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::object_member(member * _destination, machine::name_manager::name_t _name)
 {
 	// Get instance, because this could be _destination
 	auto _instance = _data.get().first;
