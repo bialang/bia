@@ -170,7 +170,11 @@ public:
 	template<typename Type>
 	static void write_i_type(stream::output_stream & _output, OP_CODE _operation, Type _immediate)
 	{
-		_output.write_all(static_cast<op_code_t>(_operation - immediate_option<Type>()), _immediate);
+		auto _option = immediate_option<Type>();
+
+		_output.write_all(static_cast<op_code_t>(_operation - _option));
+
+		write_immediate(_immediate);
 	}
 	static void write_m_type(stream::output_stream & _output, OP_CODE _operation, const index & _member)
 	{
@@ -199,8 +203,7 @@ public:
 		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * IOCO_COUNT + _option1)));
 
 		write_member(_output, _member);
-
-		_output.write_all(_immediate);
+		write_immediate(_immediate);
 	}
 	static void write_mmm_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1, const index & _member2)
 	{
@@ -225,8 +228,7 @@ public:
 
 		write_member(_output, _member0);
 		write_member(_output, _member1);
-
-		_output.write_all(_immediate);
+		write_immediate(_immediate);
 	}
 	template<typename Type>
 	constexpr static size_t jump_instruction_length()
@@ -244,6 +246,24 @@ private:
 		} else {
 			_output.write_all(_member.value);
 		}
+	}
+	template<typename Type>
+	static typename std::enable_if<std::is_integral<Type>::value>::type write_immediate(stream::output_stream & _output, Type _immediate)
+	{
+		static_assert(std::is_same<Type, int32_t>::value || std::is_same<Type, int8_t>::value || std::is_same<Type, int64_t>::value, "Unsupported immediate type.");
+
+		if (_immediate >= std::numeric_limits<int8_t>::min() && _immediate <= std::numeric_limits<int8_t>::max()) {
+			_output.write_all(static_cast<int8_t>(_immediate));
+		} else if (_immediate >= std::numeric_limits<int32_t>::min() && _immediate <= std::numeric_limits<int32_t>::max()) {
+			_output.write_all(static_cast<int32_t>(_immediate));
+		} else {
+			_output.write_all(_immediate);
+		}
+	}
+	template<typename Type>
+	static typename std::enable_if<std::is_same<Type, double>::value>::type write_immediate(stream::output_stream & _output, Type _immediate)
+	{
+		_output.write_all(_immediate);
 	}
 	static MEMBER_OP_CODE_OPTION member_option(const index & _member)
 	{
