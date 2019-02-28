@@ -45,7 +45,7 @@ struct converter : base_convert<Type>
 
 	static type convert(typename base::abstract_data_type _ptr)
 	{
-		return *selected_convert<base::data_type>(_ptr);
+		return *selected_convert<typename base::data_type>(_ptr);
 	}
 };
 
@@ -57,7 +57,7 @@ struct converter<Type*> : base_convert<typename std::conditional<utility::pointe
 
 	static type convert(typename base::abstract_data_type _ptr)
 	{
-		return selected_convert<base::data_type>(_ptr);
+		return selected_convert<typename base::data_type>(_ptr);
 	}
 };
 
@@ -69,7 +69,7 @@ struct converter<Type&> : base_convert<typename std::conditional<utility::pointe
 
 	static type convert(typename base::abstract_data_type _ptr)
 	{
-		return *selected_convert<base::data_type>(_ptr);
+		return *selected_convert<typename base::data_type>(_ptr);
 	}
 };
 
@@ -81,7 +81,7 @@ struct converter<Type&&> : base_convert<typename std::conditional<utility::point
 
 	static type convert(typename base::abstract_data_type _ptr)
 	{
-		return std::move(*selected_convert<base::data_type>(_ptr));
+		return std::move(*selected_convert<typename base::data_type>(_ptr));
 	}
 };
 

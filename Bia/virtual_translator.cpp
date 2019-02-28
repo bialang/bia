@@ -264,7 +264,7 @@ stream::output_stream & virtual_translator::output_stream() noexcept
 	return *_output;
 }
 
-const virtual_member_map & virtual_translator::virtual_member_map() noexcept
+const virtual_machine::virtual_member_map & virtual_translator::virtual_member_map() noexcept
 {
 	return _member_map;
 }

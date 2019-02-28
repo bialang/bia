@@ -84,7 +84,7 @@ public:
 	 * @return A reference to the output stream.
 	*/
 	stream::output_stream & output_stream() noexcept;
-	const virtual_member_map & virtual_member_map() noexcept;
+	const virtual_machine::virtual_member_map & virtual_member_map() noexcept;
 	/**
 	 * Converts the member name to an index.
 	 *
