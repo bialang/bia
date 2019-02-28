@@ -27,13 +27,13 @@ struct base_convert
 {
 	constexpr static bool is_const = std::is_const<Type>::value;
 
-	typedef Type request_type;
-	typedef request_type* data_type;
-	typedef typename std::conditional<is_const, const void*, void*>::type abstract_data_type;
+	typedef Type request_t;
+	typedef request_t* data_t;
+	typedef typename std::conditional<is_const, const void*, void*>::type abstract_data_t;
 
 	static const std::type_info & info()
 	{
-		return typeid(request_type);
+		return typeid(request_t);
 	}
 };
 
@@ -43,9 +43,9 @@ struct converter : base_convert<Type>
 	using base = base_convert<Type>;
 	typedef typename std::conditional<std::is_arithmetic<Type>::value, Type, Type&>::type type;
 
-	static type convert(typename base::abstract_data_type _ptr)
+	static type convert(typename base::abstract_data_t _ptr)
 	{
-		return *selected_convert<typename base::data_type>(_ptr);
+		return *selected_convert<typename base::data_t>(_ptr);
 	}
 };
 
@@ -55,9 +55,9 @@ struct converter<Type*> : base_convert<typename std::conditional<utility::pointe
 	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type* type;
 
-	static type convert(typename base::abstract_data_type _ptr)
+	static type convert(typename base::abstract_data_t _ptr)
 	{
-		return selected_convert<typename base::data_type>(_ptr);
+		return selected_convert<typename base::data_t>(_ptr);
 	}
 };
 
@@ -67,9 +67,9 @@ struct converter<Type&> : base_convert<typename std::conditional<utility::pointe
 	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type& type;
 
-	static type convert(typename base::abstract_data_type _ptr)
+	static type convert(typename base::abstract_data_t _ptr)
 	{
-		return *selected_convert<typename base::data_type>(_ptr);
+		return *selected_convert<typename base::data_t>(_ptr);
 	}
 };
 
@@ -79,9 +79,9 @@ struct converter<Type&&> : base_convert<typename std::conditional<utility::point
 	using base = base_convert<typename std::conditional<utility::pointer_rank<Type*>::odd, Type, Type*>::type>;
 	typedef Type&& type;
 
-	static type convert(typename base::abstract_data_type _ptr)
+	static type convert(typename base::abstract_data_t _ptr)
 	{
-		return std::move(*selected_convert<typename base::data_type>(_ptr));
+		return std::move(*selected_convert<typename base::data_t>(_ptr));
 	}
 };
 
