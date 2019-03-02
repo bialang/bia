@@ -25,6 +25,7 @@ template<typename Type, size_t Size = sizeof(Type), bool Destroy = false>
 class local_object
 {
 public:
+	local_object() noexcept = default;
 	local_object(const local_object & _copy) = delete;
 	local_object(local_object && _move) = delete;
 	/**
@@ -38,7 +39,7 @@ public:
 	~local_object()
 	{
 		if (Destroy) {
-			destroy<Type>();
+			destroy();
 		}
 	}
 	/**

@@ -36,7 +36,7 @@ public:
 	template<typename... Arguments>
 	share(Arguments &&... _arguments);
 	/**
-	 * Constructor.
+	 * Copy-Constructor.
 	 *
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18

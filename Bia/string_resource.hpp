@@ -31,7 +31,7 @@ protected:
 class dstring_resource : public string_resource_base
 {
 public:
-	dstring_resource(memory::universal_allocation _string, memory::allocator * _allocator) : _string(_string)
+	dstring_resource(memory::universal_allocation _string, memory::allocator * _allocator) noexcept : _string(_string)
 	{
 		this->_allocator = _allocator;
 	}
@@ -65,7 +65,7 @@ class cstring_resource : public string_resource_base
 {
 public:
 	template<typename Char_type>
-	cstring_resource(const Char_type * _string)
+	cstring_resource(const Char_type * _string) noexcept
 	{
 		this->_string = _string;
 		_length = std::char_traits<Char_type>::length(_string);

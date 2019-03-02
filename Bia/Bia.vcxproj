@@ -211,6 +211,7 @@
     <ClCompile Include="compiler.cpp" />
     <ClCompile Include="lexer.cpp" />
     <ClCompile Include="lexer_token.cpp" />
+    <ClCompile Include="string_manager.cpp" />
     <ClCompile Include="syntax.cpp" />
     <ClCompile Include="instantiate.cpp" />
     <ClCompile Include="grammar_rule.cpp" />
