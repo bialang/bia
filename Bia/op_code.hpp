@@ -174,7 +174,7 @@ public:
 
 		_output.write_all(static_cast<op_code_t>(_operation - _option));
 
-		write_immediate(_immediate);
+		write_immediate(_output, _immediate);
 	}
 	static void write_m_type(stream::output_stream & _output, OP_CODE _operation, const index & _member)
 	{
@@ -203,7 +203,7 @@ public:
 		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * IOCO_COUNT + _option1)));
 
 		write_member(_output, _member);
-		write_immediate(_immediate);
+		write_immediate(_output, _immediate);
 	}
 	static void write_mmm_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1, const index & _member2)
 	{
@@ -228,7 +228,7 @@ public:
 
 		write_member(_output, _member0);
 		write_member(_output, _member1);
-		write_immediate(_immediate);
+		write_immediate(_output, _immediate);
 	}
 	template<typename Type>
 	constexpr static size_t jump_instruction_length()
