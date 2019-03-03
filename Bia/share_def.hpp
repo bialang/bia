@@ -24,6 +24,8 @@ public:
 	/**
 	 * Constructor.
 	 *
+	 * @remarks Creates the object inplace.
+	 *
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18
 	 *
@@ -31,6 +33,7 @@ public:
 	 *
 	 * @param _arguments The arguments.
 	 *
+	 * @throws See the constructor of @a Type.
 	 * @throws See machine::memory::allocator::construct().
 	*/
 	template<typename... Arguments>
@@ -44,13 +47,22 @@ public:
 	 * @param _copy The copy.
 	*/
 	share(const share & _copy) noexcept;
-	share(share && _move) = delete;
+	/**
+	 * Move-Constructor.
+	 *
+	 * @since 3.73.150.817
+	 * @date 3-Mar-19
+	 *
+	 * @param [in,out] _move The object that should be moved.
+	*/
+	share(share && _move) noexcept;
 	/**
 	 * Destructor.
 	 *
 	 * @since 3.64.132.730
 	 * @date 16-Jun-18
 	 *
+	 * @throws See the destructor of @a Type.
 	 * @throws See machine::memory::allocator::destroy().
 	*/
 	~share();
@@ -90,10 +102,37 @@ public:
 	 * @return The data of the share.
 	*/
 	const Type * operator->() const noexcept;
+	/**
+	 * Copies the right hand value.
+	 *
+	 * @since 3.73.150.817
+	 * @date 3-Mar-19
+	 *
+	 * @param _copy The right hand value.
+	 *
+	 * @throws See ~share().
+	 *
+	 * @return Returns *this.
+	*/
+	share & operator=(const share & _copy);
+	/**
+	 * Moves the right hand value.
+	 *
+	 * @since 3.73.150.817
+	 * @date 3-Mar-19
+	 *
+	 * @param [in,out] _move The right hand value.
+	 *
+	 * @throws See ~share().
+	 *
+	 * @return Returns *this.
+	*/
+	share & operator=(share && _move);
 
 private:
 	typedef std::pair<int8_t[sizeof(Type)], std::atomic_size_t> data;
 
+	/** The data pointer. */
 	data * _data;
 };
 
