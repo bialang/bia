@@ -3,6 +3,7 @@
 #include "native_variable.hpp"
 #include "share_def.hpp"
 #include "string_resource.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -16,7 +17,7 @@ template<typename Char_type>
 class cstring_member final : public native_variable
 {
 public:
-	typedef utility::share<machine::string_resource_t> data_type;
+	typedef machine::string_manager::string_t data_type;
 
 	/**
 	 * Constructor.

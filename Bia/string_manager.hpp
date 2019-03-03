@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "config.hpp"
 #include "allocator.hpp"
 #include "share_def.hpp"
 #include "string_resource.hpp"
@@ -17,6 +18,15 @@ class string_manager
 public:
 	typedef size_t index_t;
 
+	template<typename Char_type>
+	struct index_wrapper
+	{
+		index_t index;
+	};
+
+	typedef index_wrapper<char> utf8_index_t;
+	typedef utility::share<string_resource_t> string_t;
+
 	string_manager() noexcept = default;
 	string_manager(const string_manager & _copy) = delete;
 	string_manager(string_manager && _move) noexcept = default;
@@ -28,7 +38,7 @@ public:
 	 *
 	 * @throws utility::share::~share().
 	*/
-	~string_manager();
+	BIA_EXPORT ~string_manager();
 	/**
 	 * Registers a new string resource.
 	 *
@@ -41,16 +51,10 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	index_t register_string(memory::universal_allocation _string);
-	template<typename Char_type>
-	const Char_type * string(index_t _index)
-	{
-		return nullptr;
-	}
+	BIA_EXPORT index_t register_string(memory::universal_allocation _string);
+	BIA_EXPORT const string_t & string(index_t _index);
 
 private:
-	typedef utility::share<string_resource_t> string_t;
-
 	std::vector<string_t> _strings;
 };
 

@@ -26,6 +26,7 @@ inline cstring_member<Char_type>::cstring_member(const data_type & _data) noexce
 template<typename Char_type>
 inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::print() const
 {
+	puts("hi");
 	///TODO
 	//print(_data->get()->string<char>()));
 }

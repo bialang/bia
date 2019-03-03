@@ -267,8 +267,7 @@ gt_end:;
 	
 	// Register the buffer
 	_output.type = report::TYPE::STRING;
-	_output.content.string = _string_buffer;
-	_params.schein->string_manager().register_string(_string_buffer);
+	_output.content.string = { _params.schein->string_manager().register_string(_string_buffer) };
 
 	return success;
 }
