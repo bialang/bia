@@ -5,10 +5,10 @@
 #include <limits>
 #include <cstring>
 
-#include "string_stream.hpp"
 #include "big_int.hpp"
 #include "virtual_translator.hpp"
 #include "report.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -69,12 +69,7 @@ public:
 		dependency::big_int * rt_big_int;
 		/** A constant floating point. */
 		double rt_double;
-		struct string
-		{
-			const int8_t * data;
-			stream::string_stream::size_t size;
-			stream::string_stream::length_t length;
-		} rt_string;
+		machine::string_manager::utf8_index_t rt_string;
 		grammar::report::member_t rt_member;
 		machine::virtual_machine::member_index_t rt_temp_member;
 		machine::virtual_machine::member_index_t rt_local_member;
@@ -181,17 +176,13 @@ public:
 	 * @date 3-Aug-18
 	 *
 	 * @param _value The string.
-	 * @param _size The size of the string.
-	 * @param _length The length of the string.
 	*/
-	void set_return(const char * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
+	void set_return(machine::string_manager::utf8_index_t _value) noexcept
 	{
 		clear();
 
 		_return_type = VALUE_TYPE::STRING;
-		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
-		_return_value.rt_string.size = _size;
-		_return_value.rt_string.length = _length;
+		_return_value.rt_string = _value;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::STRING16.
@@ -203,7 +194,7 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const char16_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
+	/*void set_return(const char16_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
 		clear();
 
@@ -211,7 +202,7 @@ public:
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
 		_return_value.rt_string.length = _length;
-	}
+	}*/
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::STRING32.
 	 *
@@ -222,7 +213,7 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const char32_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
+	/*void set_return(const char32_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
 		clear();
 
@@ -230,7 +221,7 @@ public:
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
 		_return_value.rt_string.length = _length;
-	}
+	}*/
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::STRING.
 	 *
@@ -241,7 +232,7 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const wchar_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
+	/*void set_return(const wchar_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
 		clear();
 
@@ -249,7 +240,7 @@ public:
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
 		_return_value.rt_string.length = _length;
-	}
+	}*/
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::MEMBER.
 	 *

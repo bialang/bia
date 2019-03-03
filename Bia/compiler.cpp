@@ -66,23 +66,21 @@ void compiler::handle_variable_declaration_helper(compiler_value _expression, co
 	case VT::TEST_VALUE_CONSTANT:
 		_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
 	case VT::INT:
-	{
 		_translator.instantiate_int(_destination, _expression.value().rt_int);
 
 		break;
-	}
 	/*case VT::BIG_INT:
 		_toolset.call_static(&machine::link::instantiate_big_int, _destination, _expression.value().rt_big_int);
 
-		break;
+		break;*/
 	case VT::DOUBLE:
-		_toolset.call_static(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
+		_translator.instantiate_double(_destination, _expression.value().rt_double);
 
 		break;
 	case VT::STRING:
-		_toolset.call_static(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
+		_translator.instantiate_string(_destination, _expression.value().rt_string);
 
-		break;*/
+		break;
 	case VT::MEMBER:
 		_translator.clone(_translator.to_member(_expression.value().rt_member), _destination);
 
@@ -117,10 +115,6 @@ void compiler::test_compiler_value()
 				break;
 			case VT::DOUBLE:
 				_value.set_return(_value.value().rt_double != 0.);
-
-				break;
-			case VT::STRING:
-				_value.set_return(_value.value().rt_string.length != 0);
 
 				break;
 			case VT::TEST_VALUE_REGISTER:
@@ -571,14 +565,10 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 
 const grammar::report * compiler::handle_string(const grammar::report * _report)
 {
-	using S = stream::string_stream;
-
-	auto _buffer = _report->content.string;
-
 	switch (_report->custom_parameter) {
 	case report::ASCII:
 	case report::UTF8:
-		_value.set_return(S::string<char>(_buffer), S::size(_buffer), S::length(_buffer));
+		_value.set_return(_report->content.string);
 
 		break;
 	case report::UTF16:
