@@ -66,7 +66,8 @@ ivars = [
     ("IOCO_INT32", "auto _immediate = read<int32_t>(_cursor);"),
     ("IOCO_INT8", "auto _immediate = read<int8_t>(_cursor);"),
     ("IOCO_INT64", "auto _immediate = read<int64_t>(_cursor);"),
-    ("IOCO_FLOAT", "auto _immediate = read<double>(_cursor);")
+    ("IOCO_FLOAT", "auto _immediate = read<double>(_cursor);"),
+    ("IOCO_STRING", "auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));")
 ]
 o = open("vmcode.generated", "w")
 d = open("dissassembler.generated", "w")
@@ -79,7 +80,7 @@ def format_var_decl(var):
     return re.sub(r"((_globals|_temps)\[|])", "", var)
 
 def name_of_var(var):
-    tmp = re.search(r"auto (\w+) = (.*?)read<", var)
+    tmp = re.search(r"auto(?:\s|&)*(\w+) = (.*?)read<", var)
     
     if tmp[1] == "_immediate" or tmp[1] == "_int":
         return 'i", ' + tmp[1]
