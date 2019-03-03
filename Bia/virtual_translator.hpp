@@ -7,6 +7,7 @@
 #include "op_code.hpp"
 #include "report.hpp"
 #include "virtual_member_map.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -48,6 +49,8 @@ public:
 	*/
 	void finalize(member_index_t _temp_count);
 	void instantiate_int(const index & _member, int64_t _value);
+	void instantiate_double(const index & _member, double _value);
+	void instantiate_string(const index & _member, string_manager::utf8_index_t _value);
 	void test(const index & _member);
 	void execute(const index & _member, const index * _destination);
 	void execute_count(const index & _member, const index * _destination, framework::member::parameter_count_t _count);
