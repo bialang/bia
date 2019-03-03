@@ -7,6 +7,7 @@
 
 #include "exception.hpp"
 #include "output_stream.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -97,6 +98,7 @@ enum IMMEDIATE_INT_OP_CODE_OPTION
 
 enum IMMEDIATE_OP_CODE_OPTION
 {
+	IOCO_STRING,
 	IOCO_FLOAT,
 	IOCO_INT64,
 	IOCO_INT8,
@@ -260,10 +262,13 @@ private:
 			_output.write_all(_immediate);
 		}
 	}
-	template<typename Type>
-	static typename std::enable_if<std::is_same<Type, double>::value>::type write_immediate(stream::output_stream & _output, Type _immediate)
+	static void write_immediate(stream::output_stream & _output, double _immediate)
 	{
 		_output.write_all(_immediate);
+	}
+	static void write_immediate(stream::output_stream & _output, string_manager::utf8_index_t _immediate)
+	{
+		_output.write_all(_immediate.index);
 	}
 	static MEMBER_OP_CODE_OPTION member_option(const index & _member)
 	{
@@ -282,7 +287,7 @@ private:
 	template<typename Type>
 	static IMMEDIATE_OP_CODE_OPTION immediate_option()
 	{
-		static_assert(std::is_same<Type, int32_t>::value || std::is_same<Type, int8_t>::value || std::is_same<Type, int64_t>::value || std::is_same<Type, double>::value, "Unsupported immediate type.");
+		static_assert(std::is_same<Type, int32_t>::value || std::is_same<Type, int8_t>::value || std::is_same<Type, int64_t>::value || std::is_same<Type, double>::value || std::is_same<Type, string_manager::utf8_index_t>::value, "Unsupported immediate type.");
 
 		if (std::is_same<Type, int32_t>::value) {
 			return IOCO_INT32;
@@ -290,8 +295,10 @@ private:
 			return IOCO_INT8;
 		} else if (std::is_same<Type, int64_t>::value) {
 			return IOCO_INT64;
-		} else {
+		} else if (std::is_same<Type, double>::value) {
 			return IOCO_FLOAT;
+		} else {
+			return IOCO_STRING;
 		}
 	}
 };

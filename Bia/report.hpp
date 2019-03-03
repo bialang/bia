@@ -8,6 +8,7 @@
 #include "output_stream.hpp"
 #include "input_stream.hpp"
 #include "big_int.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -65,8 +66,7 @@ struct report
 	//uint32_t size;
 	union
 	{
-		/** A string buffer with a specific format. See @ref stream::string_stream for more information. */
-		void * string;
+		machine::string_manager::utf8_index_t string;
 		int64_t int_value;
 		dependency::big_int * big_int_value;
 		double double_value;
