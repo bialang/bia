@@ -17,15 +17,21 @@ class string_manager
 {
 public:
 	typedef size_t index_t;
+	typedef utility::share<string_resource_t> string_t;
 
 	template<typename Char_type>
 	struct index_wrapper
 	{
 		index_t index;
 	};
+	template<typename Char_type>
+	struct string_wrapper
+	{
+		const string_t * string;
+	};
 
 	typedef index_wrapper<char> utf8_index_t;
-	typedef utility::share<string_resource_t> string_t;
+	typedef string_wrapper<char> utf8_string_t;
 
 	string_manager() noexcept = default;
 	string_manager(const string_manager & _copy) = delete;
@@ -52,7 +58,13 @@ public:
 	 * @throws See utility::share::share().
 	*/
 	BIA_EXPORT index_t register_string(memory::universal_allocation _string);
-	BIA_EXPORT const string_t & string(index_t _index);
+	template<typename Char_type>
+	string_wrapper<Char_type> string(index_t _index) const
+	{
+		///TODO: add bound checking
+
+		return { &_strings[_index] };
+	}
 
 private:
 	std::vector<string_t> _strings;

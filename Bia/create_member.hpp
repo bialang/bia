@@ -100,7 +100,7 @@ inline typename std::enable_if<std::is_same<Type, const char*>::value>::type cre
 }
 
 template<typename Char_type>
-inline void create_member(member * _destination, const machine::string_manager::string_t & _string)
+inline void create_member(member * _destination, machine::string_manager::string_wrapper<Char_type> _string)
 {
 	if (_destination) {
 		_destination->template replace_this<native::cstring_member<Char_type>>(_string);

@@ -57,7 +57,7 @@ private:
 	{
 		_member->operator_call_double(_destination, _operator, _immediate);
 	}
-	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, const string_manager::string_t & _immediate)
+	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, string_manager::utf8_string_t _immediate)
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
@@ -73,7 +73,7 @@ private:
 	{
 		link::operation_double(_destination, _operator, _member, _immediate);
 	}
-	static void operator_call_reverse(framework::member * _member, framework::member * _destination, framework::operator_t _operator, const string_manager::string_t & _immediate)
+	static void operator_call_reverse(framework::member * _member, framework::member * _destination, framework::operator_t _operator, string_manager::utf8_string_t _immediate)
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
@@ -98,7 +98,7 @@ private:
 	{
 		return _member->test_double(_operator, _immediate);
 	}
-	static framework::member::test_result_t test(framework::member * _member, framework::operator_t _operator, const string_manager::string_t & _immediate)
+	static framework::member::test_result_t test(framework::member * _member, framework::operator_t _operator, string_manager::utf8_string_t _immediate)
 	{
 		BIA_NOT_IMPLEMENTED;
 	}
@@ -114,7 +114,7 @@ private:
 	{
 		return link::compare_operation_double(_operator, _member, _immediate);
 	}
-	static framework::member::test_result_t test_reverse(framework::member * _member, framework::operator_t _operator, const string_manager::string_t & _immediate)
+	static framework::member::test_result_t test_reverse(framework::member * _member, framework::operator_t _operator, string_manager::utf8_string_t _immediate)
 	{
 		BIA_NOT_IMPLEMENTED;
 	}

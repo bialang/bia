@@ -30,6 +30,7 @@ public:
 	 * @throws See utility::share::share().
 	*/
 	cstring_member(const Char_type * _string);
+	cstring_member(machine::string_manager::string_wrapper<Char_type> _string) noexcept;
 	/**
 	 * Refer-Constructor.
 	 *

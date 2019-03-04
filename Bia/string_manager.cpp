@@ -20,12 +20,5 @@ string_manager::index_t string_manager::register_string(memory::universal_alloca
 	return _strings.size() - 1;
 }
 
-const string_manager::string_t & string_manager::string(index_t _index)
-{
-	///TODO: add bound checking
-
-	return _strings[_index];
-}
-
 }
 }

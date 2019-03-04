@@ -19,6 +19,11 @@ inline cstring_member<Char_type>::cstring_member(const Char_type * _string)
 }
 
 template<typename Char_type>
+inline cstring_member<Char_type>::cstring_member(machine::string_manager::string_wrapper<Char_type> _string) noexcept : _data(*_string.string)
+{
+}
+
+template<typename Char_type>
 inline cstring_member<Char_type>::cstring_member(const data_type & _data) noexcept : _data(_data)
 {
 }

@@ -143,7 +143,7 @@ void virtual_machine_code::execute()
 		}
 		case (OC_PUSH_IMMEDIATE - IOCO_STRING):
 		{
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			_stack.push(_immediate);
 			break;
 		}
@@ -1373,7 +1373,7 @@ void virtual_machine_code::execute()
 		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			framework::create_member(_member, _immediate);
 			break;
 		}
@@ -1408,7 +1408,7 @@ void virtual_machine_code::execute()
 		case (OC_INSTANTIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			framework::create_member(_member, _immediate);
 			break;
 		}
@@ -1443,7 +1443,7 @@ void virtual_machine_code::execute()
 		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			framework::create_member(_member, _immediate);
 			break;
 		}
@@ -1478,7 +1478,7 @@ void virtual_machine_code::execute()
 		case (OC_INSTANTIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			framework::create_member(_member, _immediate);
 			break;
 		}
@@ -1517,7 +1517,7 @@ void virtual_machine_code::execute()
 		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
@@ -1557,7 +1557,7 @@ void virtual_machine_code::execute()
 		case (OC_TEST_IMMEDIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
@@ -1597,7 +1597,7 @@ void virtual_machine_code::execute()
 		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
@@ -1637,7 +1637,7 @@ void virtual_machine_code::execute()
 		case (OC_TEST_IMMEDIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
@@ -1677,7 +1677,7 @@ void virtual_machine_code::execute()
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
@@ -1717,7 +1717,7 @@ void virtual_machine_code::execute()
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
@@ -1757,7 +1757,7 @@ void virtual_machine_code::execute()
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
@@ -1797,7 +1797,7 @@ void virtual_machine_code::execute()
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
@@ -1837,7 +1837,7 @@ void virtual_machine_code::execute()
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
@@ -1877,7 +1877,7 @@ void virtual_machine_code::execute()
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
@@ -1917,7 +1917,7 @@ void virtual_machine_code::execute()
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
@@ -1957,7 +1957,7 @@ void virtual_machine_code::execute()
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
@@ -1997,7 +1997,7 @@ void virtual_machine_code::execute()
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
@@ -2037,7 +2037,7 @@ void virtual_machine_code::execute()
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
@@ -2077,7 +2077,7 @@ void virtual_machine_code::execute()
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
@@ -2117,7 +2117,7 @@ void virtual_machine_code::execute()
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
@@ -2740,7 +2740,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -2785,7 +2785,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -2830,7 +2830,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -2875,7 +2875,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -2920,7 +2920,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -2965,7 +2965,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3010,7 +3010,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3055,7 +3055,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3100,7 +3100,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3145,7 +3145,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3190,7 +3190,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3235,7 +3235,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3280,7 +3280,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3325,7 +3325,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3370,7 +3370,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3415,7 +3415,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
@@ -3460,7 +3460,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3505,7 +3505,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3550,7 +3550,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3595,7 +3595,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3640,7 +3640,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3685,7 +3685,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3730,7 +3730,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3775,7 +3775,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3820,7 +3820,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3865,7 +3865,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3910,7 +3910,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -3955,7 +3955,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -4000,7 +4000,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -4045,7 +4045,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -4090,7 +4090,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _temps[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
@@ -4135,7 +4135,7 @@ void virtual_machine_code::execute()
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;

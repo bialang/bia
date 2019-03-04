@@ -67,7 +67,7 @@ ivars = [
     ("IOCO_INT8", "auto _immediate = read<int8_t>(_cursor);"),
     ("IOCO_INT64", "auto _immediate = read<int64_t>(_cursor);"),
     ("IOCO_FLOAT", "auto _immediate = read<double>(_cursor);"),
-    ("IOCO_STRING", "auto & _immediate = _string_manager.string(read<string_manager::index_t>(_cursor));")
+    ("IOCO_STRING", "auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));")
 ]
 o = open("vmcode.generated", "w")
 d = open("dissassembler.generated", "w")
