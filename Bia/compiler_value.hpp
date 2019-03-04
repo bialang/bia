@@ -341,7 +341,7 @@ public:
 		return _return_type == VALUE_TYPE::INT && _return_value.rt_int <= std::numeric_limits<int32_t>::max() && _return_value.rt_int >= std::numeric_limits<int32_t>::min();
 	}
 	/**
-	 * Checks wheter the held value is constant.
+	 * Checks whether the held value is constant.
 	 *
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18

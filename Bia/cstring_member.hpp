@@ -37,8 +37,7 @@ inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::print() con
 template<typename Char_type>
 inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::copy(member * _destination)
 {
-	BIA_NOT_IMPLEMENTED;
-	//_destination->replace_this<cstring_member<Char_type>>(std::get<0>(_data.get()), std::get<1>(_data.get()), std::get<2>(_data.get()));
+	_destination->replace_this<cstring_member<Char_type>>(_data);
 }
 
 template<typename Char_type>

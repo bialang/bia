@@ -94,7 +94,7 @@ int main()
 			//p.a = 34343434;
 			return "ho ho how";
 		});
-		_context.set_lambda("str", []() { return ""; });
+		_context.set_lambda("str", []() { return "hi"; });
 		_context.set_lambda("print", [](const bia::framework::member * _member) {
 			_member->print();
 		});
@@ -135,10 +135,10 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = str()
+var i = ""
 var k = "hohoh"
 
-set(i, k)
+if i print(i); else print(k)
 
 )"";
 		/*test_and_time(1, []() {
