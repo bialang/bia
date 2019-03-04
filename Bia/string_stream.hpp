@@ -147,6 +147,9 @@ public:
 	{
 		append(encoding::encoder::eos);
 		
+		// Don't count terminator
+		--_length;
+
 		// Commit buffer
 		_buffer = _allocator->commit(_buffer, _cursor - static_cast<int8_t*>(_buffer.first));
 
@@ -173,7 +176,7 @@ public:
 	 *
 	 * @return The length of the string.
 	*/
-	size_t length() const noexcept
+	length_t length() const noexcept
 	{
 		return _length;
 	}
