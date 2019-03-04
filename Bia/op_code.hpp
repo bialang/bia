@@ -139,7 +139,7 @@ enum OP_CODE : op_code_t
 	OC_COPY = OC_REFER + MOCO_COUNT * MOCO_COUNT,
 	OC_TEST_MEMBER = OC_COPY + MOCO_COUNT * MOCO_COUNT,
 	OC_OPERATOR_CALL_VOID = OC_TEST_MEMBER + MOCO_COUNT * MOCO_COUNT,
-	
+
 	/** MI-Type instructions */
 	OC_INSTANTIATE = OC_OPERATOR_CALL_VOID + MOCO_COUNT * IOCO_COUNT,
 	OC_TEST_IMMEDIATE = OC_INSTANTIATE + MOCO_COUNT * IOCO_COUNT,
@@ -172,7 +172,7 @@ public:
 	template<typename Type>
 	static void write_i_type(stream::output_stream & _output, OP_CODE _operation, Type _immediate)
 	{
-		auto _option = immediate_option<Type>();
+		auto _option = immediate_option(_immediate);
 
 		_output.write_all(static_cast<op_code_t>(_operation - _option));
 
@@ -192,7 +192,7 @@ public:
 		auto _option1 = member_option(_member1);
 
 		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * MOCO_COUNT + _option1)));
-		
+
 		write_member(_output, _member0);
 		write_member(_output, _member1);
 	}
@@ -200,7 +200,7 @@ public:
 	static void write_mi_type(stream::output_stream & _output, OP_CODE _operation, const index & _member, Type _immediate)
 	{
 		auto _option0 = member_option(_member);
-		auto _option1 = immediate_option<Type>();
+		auto _option1 = immediate_option(_immediate);
 
 		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * IOCO_COUNT + _option1)));
 
@@ -224,7 +224,7 @@ public:
 	{
 		auto _option0 = member_option(_member0);
 		auto _option1 = member_option(_member1);
-		auto _option2 = immediate_option<Type>();
+		auto _option2 = immediate_option(_immediate);
 
 		_output.write_all(static_cast<op_code_t>(_operation - ((_option0 * MOCO_COUNT + _option1) * IOCO_COUNT + _option2)));
 
@@ -285,21 +285,25 @@ private:
 		return static_cast<MEMBER_OP_CODE_OPTION>(_option);
 	}
 	template<typename Type>
-	static IMMEDIATE_OP_CODE_OPTION immediate_option()
+	static IMMEDIATE_OP_CODE_OPTION immediate_option(Type _immediate)
 	{
-		static_assert(std::is_same<Type, int32_t>::value || std::is_same<Type, int8_t>::value || std::is_same<Type, int64_t>::value || std::is_same<Type, double>::value || std::is_same<Type, string_manager::utf8_index_t>::value, "Unsupported immediate type.");
+		static_assert(std::is_same<Type, int32_t>::value || std::is_same<Type, int8_t>::value || std::is_same<Type, int64_t>::value || std::is_same<Type, double>::value, "Unsupported immediate type.");
 
-		if (std::is_same<Type, int32_t>::value) {
-			return IOCO_INT32;
-		} else if (std::is_same<Type, int8_t>::value) {
-			return IOCO_INT8;
-		} else if (std::is_same<Type, int64_t>::value) {
+		if (std::is_integral<Type>::value) {
+			if (_immediate >= std::numeric_limits<int8_t>::min() && _immediate <= std::numeric_limits<int8_t>::max()) {
+				return IOCO_INT8;
+			} else if (_immediate >= std::numeric_limits<int32_t>::min() && _immediate <= std::numeric_limits<int32_t>::max()) {
+				return IOCO_INT32;
+			}
+
 			return IOCO_INT64;
-		} else if (std::is_same<Type, double>::value) {
-			return IOCO_FLOAT;
-		} else {
-			return IOCO_STRING;
 		}
+
+		return IOCO_FLOAT;
+	}
+	static IMMEDIATE_OP_CODE_OPTION immediate_option(string_manager::utf8_index_t _immediate)
+	{
+		return IOCO_STRING;
 	}
 };
 
