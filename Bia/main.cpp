@@ -92,7 +92,9 @@ int main()
 		_context.set_lambda("test", [](const printer * p) {
 			printf("w: %i\n", p->a);
 			//p.a = 34343434;
+			return "ho ho how";
 		});
+		_context.set_lambda("str", []() { return ""; });
 		_context.set_lambda("print", [](const bia::framework::member * _member) {
 			_member->print();
 		});
@@ -133,9 +135,10 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = "hi"
+var i = str()
+var k = "hohoh"
 
-print(i)
+set(i, k)
 
 )"";
 		/*test_and_time(1, []() {
@@ -175,7 +178,7 @@ print(i)
 		// Run
 		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.virtual_machine_schein()));
 
-		//_machine_code.disassemble();
+		_machine_code.disassemble();
 
 		system("pause");
 
@@ -184,7 +187,7 @@ print(i)
 				_machine_code.execute();
 			});
 
-			printf("Value of i: %lli\n", _context.get_member("i")->cast<long long>());
+			//printf("Value of i: %lli\n", _context.get_member("i")->cast<long long>());
 		} catch (const std::exception & e) {
 			printf("%s: %s\n", typeid(e).name(), e.what());
 		}
