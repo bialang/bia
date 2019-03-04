@@ -157,6 +157,7 @@ source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 source_group("Source Files\\utility" FILES ${Bia_SOURCE_FILES_UTILITY})
 
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_UTILITY})
 
 
 # Adding the library
