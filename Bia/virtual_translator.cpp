@@ -17,7 +17,7 @@ virtual_translator::virtual_translator(stream::output_stream & _output)
 
 	_temp_member_pos = _output.position();
 
-	op_code::write_int_type<member_index_t>(_output, OC_SETUP, 0);
+	op_code::write_int_type<member_index_t, false>(_output, OC_SETUP, 0);
 
 	_setup_end_pos = _output.position();
 }
@@ -34,7 +34,7 @@ void virtual_translator::finalize(member_index_t _temp_count)
 		auto _current_pos = _output->position();
 
 		_output->set_position(_temp_member_pos);
-		op_code::write_int_type<member_index_t>(*_output, OC_SETUP, _temp_count);
+		op_code::write_int_type<member_index_t, false>(*_output, OC_SETUP, _temp_count);
 		_output->set_position(_current_pos);
 	} // Skip temp member creation
 	else {
@@ -252,7 +252,7 @@ virtual_translator::position_t virtual_translator::jump(JUMP _type, position_t _
 		BIA_IMPLEMENTATION_ERROR;
 	}
 
-	op_code::write_int_type(*_output, _operation, _pos);
+	op_code::write_int_type<int32_t, false>(*_output, _operation, _pos);
 
 	// Jump back
 	if (_overwrite_pos >= 0) {

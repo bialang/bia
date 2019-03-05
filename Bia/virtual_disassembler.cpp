@@ -2034,6 +2034,263 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			print_all("oprr m", _member, " i", _immediate, " ", _operator);
 			break;
 		}
+		/** MMint-Type */
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr t", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr t", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr t", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr t", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr t", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr t", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr t", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr t", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr t", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr t", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr t", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr t", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr t", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr t", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr t", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr t", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " t", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " m", _member1, " i", _int);
+			break;
+		}
 		/** MMM-Type */
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{

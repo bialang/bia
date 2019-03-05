@@ -147,8 +147,11 @@ enum OP_CODE : op_code_t
 	OC_OPERATOR_CALL_IMMEDIATE_VOID = OC_TEST_IMMEDIATE_REVERSE + MOCO_COUNT * IOCO_COUNT,
 	OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID = OC_OPERATOR_CALL_IMMEDIATE_VOID + MOCO_COUNT * IOCO_COUNT,
 
+	/*** MMint-Type instructions */
+	OC_OBJECT_MEMBER = OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID + MOCO_COUNT * MOCO_COUNT * IIOCO_COUNT,
+
 	/** MMM-Type instructions */
-	OC_OPERATOR_CALL = OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID + MOCO_COUNT * MOCO_COUNT * MOCO_COUNT,
+	OC_OPERATOR_CALL = OC_OBJECT_MEMBER + MOCO_COUNT * MOCO_COUNT * MOCO_COUNT,
 
 	/** MMI-Type instructions */
 	OC_OPERATOR_CALL_IMMEDIATE = OC_OPERATOR_CALL + MOCO_COUNT * MOCO_COUNT * IOCO_COUNT,
@@ -162,75 +165,80 @@ public:
 	{
 		_output.write_all(_operation);
 	}
-	template<typename Type>
+	template<typename Type, bool Optimize = true>
 	static void write_int_type(stream::output_stream & _output, OP_CODE _operation, Type _int)
 	{
-		static_assert(std::is_integral<Type>::value && (sizeof(Type) == 4 || sizeof(Type) == 1), "Unsupported int type.");
+		auto _option = int_option<Optimize>(_int);
 
 		_output.write_all(static_cast<op_code_t>(_operation - (sizeof(Type) == 4 ? IIOCO_INT32 : IIOCO_INT8)), _int);
+
+		write_int<Optimize>(_output, _int);
 	}
-	template<typename Type>
+	template<typename Type, bool Optimize = true>
 	static void write_i_type(stream::output_stream & _output, OP_CODE _operation, Type _immediate)
 	{
-		auto _option = immediate_option(_immediate);
+		auto _option = immediate_option<Optimize>(_immediate);
 
 		_output.write_all(static_cast<op_code_t>(_operation - _option));
 
-		write_immediate(_output, _immediate);
+		write_immediate<Optimize>(_output, _immediate);
 	}
+	template<bool Optimize = true>
 	static void write_m_type(stream::output_stream & _output, OP_CODE _operation, const index & _member)
 	{
-		auto _option = member_option(_member);
+		auto _option = member_option<Optimize>(_member);
 
 		_output.write_all(static_cast<op_code_t>(_operation - _option));
 
-		write_member(_output, _member);
+		write_member<Optimize>(_output, _member);
 	}
+	template<bool Optimize = true>
 	static void write_mm_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1)
 	{
-		auto _option0 = member_option(_member0);
-		auto _option1 = member_option(_member1);
+		auto _option0 = member_option<Optimize>(_member0);
+		auto _option1 = member_option<Optimize>(_member1);
 
 		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * MOCO_COUNT + _option1)));
 
-		write_member(_output, _member0);
-		write_member(_output, _member1);
+		write_member<Optimize>(_output, _member0);
+		write_member<Optimize>(_output, _member1);
 	}
-	template<typename Type>
+	template<typename Type, bool Optimize = true>
 	static void write_mi_type(stream::output_stream & _output, OP_CODE _operation, const index & _member, Type _immediate)
 	{
-		auto _option0 = member_option(_member);
-		auto _option1 = immediate_option(_immediate);
+		auto _option0 = member_option<Optimize>(_member);
+		auto _option1 = immediate_option<Optimize>(_immediate);
 
 		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * IOCO_COUNT + _option1)));
 
-		write_member(_output, _member);
-		write_immediate(_output, _immediate);
+		write_member<Optimize>(_output, _member);
+		write_immediate<Optimize>(_output, _immediate);
 	}
+	template<bool Optimize = true>
 	static void write_mmm_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1, const index & _member2)
 	{
-		auto _option0 = member_option(_member0);
-		auto _option1 = member_option(_member1);
-		auto _option2 = member_option(_member2);
+		auto _option0 = member_option<Optimize>(_member0);
+		auto _option1 = member_option<Optimize>(_member1);
+		auto _option2 = member_option<Optimize>(_member2);
 
 		_output.write_all(static_cast<op_code_t>(_operation - ((_option0 * MOCO_COUNT + _option1) * MOCO_COUNT + _option2)));
 
-		write_member(_output, _member0);
-		write_member(_output, _member1);
-		write_member(_output, _member2);
+		write_member<Optimize>(_output, _member0);
+		write_member<Optimize>(_output, _member1);
+		write_member<Optimize>(_output, _member2);
 	}
-	template<typename Type>
+	template<typename Type, bool Optimize = true>
 	static void write_mmi_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1, Type _immediate)
 	{
-		auto _option0 = member_option(_member0);
-		auto _option1 = member_option(_member1);
-		auto _option2 = immediate_option(_immediate);
+		auto _option0 = member_option<Optimize>(_member0);
+		auto _option1 = member_option<Optimize>(_member1);
+		auto _option2 = immediate_option<Optimize>(_immediate);
 
 		_output.write_all(static_cast<op_code_t>(_operation - ((_option0 * MOCO_COUNT + _option1) * IOCO_COUNT + _option2)));
 
-		write_member(_output, _member0);
-		write_member(_output, _member1);
-		write_immediate(_output, _immediate);
+		write_member<Optimize>(_output, _member0);
+		write_member<Optimize>(_output, _member1);
+		write_immediate<Optimize>(_output, _immediate);
 	}
 	template<typename Type>
 	constexpr static size_t jump_instruction_length()
@@ -241,38 +249,66 @@ public:
 	}
 
 private:
+	template<bool Optimize, typename Type>
+	static typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) <= 4)>::type write_int(stream::output_stream & _output, Type _int)
+	{
+		if (Optimize && _int >= std::numeric_limits<int8_t>::min() && _int <= std::numeric_limits<int8_t>::max()) {
+			_output.write_all(static_cast<int8_t>(_int));
+		} else {
+			_output.write_all(_int);
+		}
+	}
+	template<bool Optimize>
 	static void write_member(stream::output_stream & _output, const index & _member)
 	{
-		if (_member.value <= std::numeric_limits<tiny_member_index_t>::max()) {
+		if (Optimize && _member.value <= std::numeric_limits<tiny_member_index_t>::max()) {
 			_output.write_all(static_cast<tiny_member_index_t>(_member.value));
 		} else {
 			_output.write_all(_member.value);
 		}
 	}
-	template<typename Type>
+	template<bool Optimize, typename Type>
 	static typename std::enable_if<std::is_integral<Type>::value>::type write_immediate(stream::output_stream & _output, Type _immediate)
 	{
 		static_assert(std::is_same<Type, int32_t>::value || std::is_same<Type, int8_t>::value || std::is_same<Type, int64_t>::value, "Unsupported immediate type.");
 
-		if (_immediate >= std::numeric_limits<int8_t>::min() && _immediate <= std::numeric_limits<int8_t>::max()) {
+		if (Optimize && _immediate >= std::numeric_limits<int8_t>::min() && _immediate <= std::numeric_limits<int8_t>::max()) {
 			_output.write_all(static_cast<int8_t>(_immediate));
-		} else if (_immediate >= std::numeric_limits<int32_t>::min() && _immediate <= std::numeric_limits<int32_t>::max()) {
+		} else if (Optimize && _immediate >= std::numeric_limits<int32_t>::min() && _immediate <= std::numeric_limits<int32_t>::max()) {
 			_output.write_all(static_cast<int32_t>(_immediate));
 		} else {
 			_output.write_all(_immediate);
 		}
 	}
+	template<bool Optimize>
 	static void write_immediate(stream::output_stream & _output, double _immediate)
 	{
 		_output.write_all(_immediate);
 	}
+	template<bool Optimize>
 	static void write_immediate(stream::output_stream & _output, string_manager::utf8_index_t _immediate)
 	{
 		_output.write_all(_immediate.index);
 	}
+	template<bool Optimize, typename Type>
+	static typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) <= 4), IMMEDIATE_INT_OP_CODE_OPTION>::type int_option(Type _int)
+	{
+		if (Optimize) {
+			if (sizeof(Type) == 1) {
+				return IIOCO_INT8;
+			}
+		} else {
+			if (_int >= std::numeric_limits<int8_t>::min() && _int <= std::numeric_limits<int8_t>::max()) {
+				return IIOCO_INT8;
+			}
+		}
+
+		return IIOCO_INT32;
+	}
+	template<bool Optimize>
 	static MEMBER_OP_CODE_OPTION member_option(const index & _member)
 	{
-		int _option = _member.value <= std::numeric_limits<tiny_member_index_t>::max() ? MOCO_TINY_MEMBER : MOCO_MEMBER;
+		int _option = Optimize && _member.value <= std::numeric_limits<tiny_member_index_t>::max() ? MOCO_TINY_MEMBER : MOCO_MEMBER;
 
 		if (dynamic_cast<const member_index*>(&_member)) {
 			_option += MOCO_MEMBER;
@@ -284,23 +320,34 @@ private:
 
 		return static_cast<MEMBER_OP_CODE_OPTION>(_option);
 	}
-	template<typename Type>
+	template<bool Optimize, typename Type>
 	static IMMEDIATE_OP_CODE_OPTION immediate_option(Type _immediate)
 	{
 		static_assert(std::is_same<Type, int32_t>::value || std::is_same<Type, int8_t>::value || std::is_same<Type, int64_t>::value || std::is_same<Type, double>::value, "Unsupported immediate type.");
 
-		if (std::is_integral<Type>::value) {
-			if (_immediate >= std::numeric_limits<int8_t>::min() && _immediate <= std::numeric_limits<int8_t>::max()) {
-				return IOCO_INT8;
-			} else if (_immediate >= std::numeric_limits<int32_t>::min() && _immediate <= std::numeric_limits<int32_t>::max()) {
-				return IOCO_INT32;
+		if (Optimize) {
+			if (std::is_integral<Type>::value) {
+				if (_immediate >= std::numeric_limits<int8_t>::min() && _immediate <= std::numeric_limits<int8_t>::max()) {
+					return IOCO_INT8;
+				} else if (_immediate >= std::numeric_limits<int32_t>::min() && _immediate <= std::numeric_limits<int32_t>::max()) {
+					return IOCO_INT32;
+				}
+
+				return IOCO_INT64;
 			}
-
-			return IOCO_INT64;
+		} else {
+			if (std::is_same<Type, int32_t>::value) {
+			return IOCO_INT32;
+			} else if (std::is_same<Type, int8_t>::value) {
+				return IOCO_INT8;
+			} else if (std::is_same<Type, int64_t>::value) {
+				return IOCO_INT64;
+			}
 		}
-
+		
 		return IOCO_FLOAT;
 	}
+	template<bool Optimize>
 	static IMMEDIATE_OP_CODE_OPTION immediate_option(string_manager::utf8_index_t _immediate)
 	{
 		return IOCO_STRING;

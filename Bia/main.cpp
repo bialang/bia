@@ -137,7 +137,7 @@ int main()
 
 var i = ""
 var k = "hohoh"
-
+print(i.k)
 if i print(i); else print(k)
 
 )"";
@@ -178,7 +178,7 @@ if i print(i); else print(k)
 		// Run
 		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.virtual_machine_schein()));
 
-		_machine_code.disassemble();
+		//_machine_code.disassemble();
 
 		system("pause");
 

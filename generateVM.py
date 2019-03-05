@@ -44,6 +44,9 @@ mitype = [
     ("OC_OPERATOR_CALL_IMMEDIATE_VOID", "auto _operator = read<framework::operator_t>(_cursor);", "operator_call(_member, nullptr, _operator, _immediate);", "", "opr"),
     ("OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID", "auto _operator = read<framework::operator_t>(_cursor);", "operator_call_reverse(_member, nullptr, _operator, _immediate);", "", "oprr")
 ]
+mminttype = [
+    ("OC_OBJECT_MEMBER", "", "", "", "membr")
+]
 mmmtype = [
     ("OC_OPERATOR_CALL", "auto _operator = read<framework::operator_t>(_cursor);", "_member0->operator_call(_member1, _operator, _member2);", "", "opr")
 ]
@@ -169,6 +172,15 @@ for i in mitype:
     for v0 in mvars:
         for v1 in ivars:
             write_case(*i, xoffset=v1[0], yoffset=v0[0], xmax="IOCO_COUNT", var0=v0[1].format("_member"), var1=v1[1])
+
+write("/** MMint-Type */\n\t\t")
+
+# Write MMint-Type
+for i in mminttype:
+    for v0 in mvars:
+        for v1 in mvars:
+            for v2 in intvars:
+                write_case(*i, xoffset=v2[0], yoffset=v1[0], zoffset=v0[0], xmax="IIOCO_COUNT", ymax="MOCO_COUNT", var0=v0[1].format("_member0"), var1=v1[1].format("_member1"), var2=v2[1])
 
 write("/** MMM-Type */\n\t\t")
 
