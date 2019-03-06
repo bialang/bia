@@ -135,9 +135,9 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var i = ""
+var i = "kartoffel"
 var k = "hohoh"
-print(i.k)
+
 if i print(i); else print(k)
 
 )"";

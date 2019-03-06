@@ -132,10 +132,6 @@ private:
 	/** The position before the temp member creation. */
 	position_t _temp_member_pos;
 	virtual_machine::virtual_member_map _member_map;
-
-
-	void write_mi_type_int(OP_CODE _op_code, const index & _member, int64_t _value);
-	void write_mmi_type_int(OP_CODE _op_code, const index & _member0, const index & _member1, int64_t _value);
 };
 
 }
