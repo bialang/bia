@@ -230,7 +230,6 @@
     <ClCompile Include="virtual_disassembler.cpp" />
     <ClCompile Include="virtual_machine_code.cpp" />
     <ClCompile Include="virtual_machine_schein.cpp" />
-    <ClCompile Include="virtual_member_map.cpp" />
     <ClCompile Include="virtual_translator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -341,7 +340,7 @@
     <ClInclude Include="temp_counter.hpp" />
     <ClInclude Include="virtual_disassembler.hpp" />
     <ClInclude Include="virtual_machine_schein.hpp" />
-    <ClInclude Include="virtual_member_map.hpp" />
+    <ClInclude Include="index_map.hpp" />
     <ClInclude Include="x86_translator.hpp" />
     <ClInclude Include="architecture.hpp" />
     <ClInclude Include="type_traits.hpp" />

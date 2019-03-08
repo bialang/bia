@@ -36,7 +36,7 @@ void compiler::finalize()
 	}
 
 	_translator.output_stream().set_position(_end);
-	_schein.set_member_map(_translator.virtual_member_map());
+	_schein.set_member_map(_translator.member_map());
 }
 
 machine::virtual_machine::virtual_machine_schein & compiler::virtual_machine_schein() noexcept

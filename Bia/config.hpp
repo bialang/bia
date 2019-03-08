@@ -156,7 +156,7 @@ class x86_toolset;
 namespace virtual_machine
 {
 
-class virtual_member_map;
+class virtual_machine_schein;
 
 }
 }

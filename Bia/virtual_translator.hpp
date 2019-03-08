@@ -6,8 +6,10 @@
 #include "output_stream.hpp"
 #include "op_code.hpp"
 #include "report.hpp"
-#include "virtual_member_map.hpp"
+#include "index_map.hpp"
 #include "string_manager.hpp"
+#include "name_manager.hpp"
+#include "member.hpp"
 
 
 namespace bia
@@ -87,7 +89,7 @@ public:
 	 * @return A reference to the output stream.
 	*/
 	stream::output_stream & output_stream() noexcept;
-	const virtual_machine::virtual_member_map & virtual_member_map() noexcept;
+	const utility::index_map & member_map() noexcept;
 	/**
 	 * Converts the member name to an index.
 	 *
@@ -96,7 +98,7 @@ public:
 	 *
 	 * @param _name The name of the member.
 	 *
-	 * @throws See virtual_member_map::get_or_insert().
+	 * @throws See utility::index_map::get_or_insert().
 	 *
 	 * @return Its index.
 	*/
@@ -131,7 +133,8 @@ private:
 	position_t _setup_end_pos;
 	/** The position before the temp member creation. */
 	position_t _temp_member_pos;
-	virtual_machine::virtual_member_map _member_map;
+	/** The index map for all global variables. */
+	utility::index_map _member_map;
 };
 
 }

@@ -1,7 +1,10 @@
 #pragma once
 
+#include <vector>
+
+#include "config.hpp"
 #include "schein.hpp"
-#include "virtual_member_map.hpp"
+#include "index_map.hpp"
 
 
 namespace bia
@@ -19,6 +22,8 @@ namespace virtual_machine
 class virtual_machine_schein : public schein
 {
 public:
+	typedef std::vector<framework::member*> member_list_t;
+
 	using schein::schein;
 	/**
 	 * Updates the globals list.
@@ -28,22 +33,23 @@ public:
 	 *
 	 * @param _member_map The member map.
 	 *
-	 * @throws See virtual_member_map::to_member_list().
+	 * @throws See utility::index_map::to_list().
 	*/
-	void set_member_map(const virtual_member_map & _member_map);
+	BIA_EXPORT void set_member_map(const utility::index_map & _member_map);
 	/**
 	 * Returns the globals list.
 	 *
 	 * @since 3.72.149.811
 	 * @date 19-Jan-19
 	 *
-	 * @return The globals list.
+	 * @return The global list.
 	*/
-	const virtual_member_map::member_list_t & globals() const noexcept;
+	BIA_EXPORT const member_list_t & globals() const noexcept;
+	*/
 
 private:
 	/** The globals list. */
-	virtual_member_map::member_list_t _globals;
+	member_list_t _globals;
 };
 
 }
