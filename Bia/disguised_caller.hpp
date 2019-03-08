@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdint>
 #include <type_traits>
+#include <utility>
 
 #include "disguised_caller_def.hpp"
 #include "exception.hpp"
@@ -13,6 +13,12 @@ namespace bia
 {
 namespace force
 {
+
+template<machine::stack::index_t... Indices>
+using sequence = std::integer_sequence<machine::stack::index_t, Indices...>;
+
+template<typename... Arguments>
+using make_sequence = std::make_integer_sequence<machine::stack::index_t, sizeof...(Arguments)>;
 
 template<typename... Arguments>
 inline void assert_argument_count(framework::member::parameter_count_t _count)
