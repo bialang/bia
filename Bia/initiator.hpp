@@ -5,7 +5,7 @@
 #include "member.hpp"
 #include "allocator.hpp"
 #include "exception.hpp"
-#include "disguised_caller.hpp"
+#include "disguised_caller_def.hpp"
 
 
 namespace bia
@@ -93,15 +93,15 @@ class real_initiator final : public initiator
 public:
 	virtual machine::memory::universal_allocation instantiate() const override
 	{
-		return machine::memory::cast_allocation<void>(force::disguised_caller<Type, Arguments...>());
+		return machine::memory::cast_allocation<void>(force::disguised_caller<Type, Arguments...>(nullptr, 0, nullptr));
 	}
 	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count_t _count, machine::stack * _stack) const override
 	{
-		return machine::memory::cast_allocation<void>(force::disguised_caller_count<Type, Arguments...>(_count, _stack));
+		return machine::memory::cast_allocation<void>(force::disguised_caller<Type, Arguments...>(nullptr, _count, _stack));
 	}
 	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack) const override
 	{
-		return machine::memory::cast_allocation<void>(force::disguised_caller_format<Type, Arguments...>(_format, _count, _stack));
+		return machine::memory::cast_allocation<void>(force::disguised_caller<Type, Arguments...>(_format, _count, _stack));
 	}
 };
 

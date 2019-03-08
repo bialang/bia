@@ -293,9 +293,6 @@
     <ClInclude Include="type_traits.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="disguised_caller.hpp">
-      <Filter>Header Files\force</Filter>
-    </ClInclude>
     <ClInclude Include="print.hpp">
       <Filter>Header Files\machine\link</Filter>
     </ClInclude>
@@ -521,9 +518,6 @@
     <ClInclude Include="member_names.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="disguised_caller_source.hpp">
-      <Filter>Header Files\force</Filter>
-    </ClInclude>
     <ClInclude Include="buffer_builder.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
@@ -604,6 +598,12 @@
     </ClInclude>
     <ClInclude Include="string_resource.hpp">
       <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="disguised_caller_def.hpp">
+      <Filter>Header Files\force</Filter>
+    </ClInclude>
+    <ClInclude Include="disguised_caller.hpp">
+      <Filter>Header Files\force</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

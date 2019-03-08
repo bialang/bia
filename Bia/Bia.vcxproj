@@ -243,7 +243,7 @@
     <ClInclude Include="class_template_def.hpp" />
     <ClInclude Include="code.hpp" />
     <ClInclude Include="compiler_loop_tracker.hpp" />
-    <ClInclude Include="disguised_caller_source.hpp" />
+    <ClInclude Include="disguised_caller.hpp" />
     <ClInclude Include="buffer_builder.hpp" />
     <ClInclude Include="local_object.hpp" />
     <ClInclude Include="member_array.hpp" />
@@ -282,7 +282,7 @@
     <ClInclude Include="guard.hpp" />
     <ClInclude Include="initiator.hpp" />
     <ClInclude Include="buffer_input_stream.hpp" />
-    <ClInclude Include="disguised_caller.hpp" />
+    <ClInclude Include="disguised_caller_def.hpp" />
     <ClInclude Include="input_stream.hpp" />
     <ClInclude Include="instance_holder.hpp" />
     <ClInclude Include="stack.hpp" />

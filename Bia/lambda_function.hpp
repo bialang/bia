@@ -4,7 +4,7 @@
 #include <utility>
 
 #include "lambda_function_def.hpp"
-#include "disguised_caller.hpp"
+#include "disguised_caller_def.hpp"
 #include "share.hpp"
 
 
@@ -57,19 +57,19 @@ inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::clone(member 
 template<typename Lambda>
 inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute(member * _destination)
 {
-	force::disguised_caller(&Lambda::operator(), &_data.get(), _destination);
+	force::disguised_caller(&_data.get(), &Lambda::operator(), _destination, nullptr, 0, nullptr);
 }
 
 template<typename Lambda>
 inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
 {
-	force::disguised_caller_count(&Lambda::operator(), &_data.get(), _destination, _count, _stack);
+	force::disguised_caller(&_data.get(), &Lambda::operator(), _destination, nullptr, _count, _stack);
 }
 
 template<typename Lambda>
 inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
 {
-	force::disguised_caller_format(&Lambda::operator(), &_data.get(), _destination, _format, _count, _stack);
+	force::disguised_caller(&_data.get(), &Lambda::operator(), _destination, _format, _count, _stack);
 }
 
 template<typename Lambda>

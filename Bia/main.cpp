@@ -7,7 +7,7 @@
 #include "disassembler.hpp"
 #include "static_function.hpp"
 #include "bia.hpp"
-#include "disguised_caller_source.hpp"
+#include "disguised_caller.hpp"
 #include "class_template.hpp"
 #include <chrono>
 #include <iostream>
@@ -131,15 +131,16 @@ int main()
 			.set_function("hi", &printer::hi);
 		*/
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
-
+		
 		// Script
 		char _script[] = u8R""(
 
 var i = "kartoffel"
 var k = "hohoh"
+var o = 55
 
-if i print(i); else print(k)
-
+ser(9, 88)
+ser(61,o)
 )"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
@@ -178,7 +179,7 @@ if i print(i); else print(k)
 		// Run
 		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.virtual_machine_schein()));
 
-		//_machine_code.disassemble();
+		_machine_code.disassemble();
 
 		system("pause");
 

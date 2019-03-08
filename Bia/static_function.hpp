@@ -4,7 +4,7 @@
 
 #include "function.hpp"
 #include "exception.hpp"
-#include "disguised_caller.hpp"
+#include "disguised_caller_def.hpp"
 
 
 namespace bia
@@ -54,15 +54,15 @@ public:
 	}
 	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
 	{
-		force::disguised_caller(_function, _destination);
+		force::disguised_caller(_function, _destination, nullptr, 0, nullptr);
 	}
 	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) override
 	{
-		force::disguised_caller_count(_function, _destination, _count, _stack);
+		force::disguised_caller(_function, _destination, nullptr, _count, _stack);
 	}
 	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) override
 	{
-		force::disguised_caller_format(_function, _destination, _format, _count, _stack);
+		force::disguised_caller(_function, _destination, _format, _count, _stack);
 	}
 	virtual void set_instance(const void * _instance, const std::type_info & _type) override
 	{
