@@ -37,6 +37,7 @@ void compiler::finalize()
 
 	_translator.output_stream().set_position(_end);
 	_schein.set_member_map(_translator.member_map());
+	_schein.set_name_map(_translator.name_map());
 }
 
 machine::virtual_machine::virtual_machine_schein & compiler::virtual_machine_schein() noexcept
@@ -490,13 +491,12 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 				}
 
 				_destination.expand_to_member(_translator, [&](auto _dest) {
-					/*if (std::is_same<decltype(_dest), std::nullptr_t>::value) {
+					if (std::is_same<decltype(_dest), compiler_value::invalid_index_t>::value) {
 						_destination.set_return_temp(_counter.next());
-						_toolset.call_virtual(&framework::member::object_member, _member, machine::platform::toolset::to_temp_member(_counter.current()), _report->content.member);
+						_translator.object_member(_member, _translator.to_temp(_counter.current()), _report->content.member);
 					} else {
-						_toolset.call_virtual(&framework::member::object_member, _member, _dest, _report->content.member);
-					}*/
-					BIA_NOT_IMPLEMENTED;
+						_translator.object_member(_member, _dest, _report->content.member);
+					}
 
 					_value = _destination;
 				});

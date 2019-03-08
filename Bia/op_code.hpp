@@ -214,6 +214,19 @@ public:
 		write_member<Optimize>(_output, _member);
 		write_immediate<Optimize>(_output, _immediate);
 	}
+	template<typename Type, bool Optimize = true>
+	static void write_mmint_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1, Type _int)
+	{
+		auto _option0 = member_option<Optimize>(_member0);
+		auto _option1 = member_option<Optimize>(_member1);
+		auto _option2 = int_option<Optimize>(_int);
+
+		_output.write_all(static_cast<op_code_t>(_operation - ((_option0 * MOCO_COUNT + _option1) * IIOCO_COUNT + _option2)));
+
+		write_member<Optimize>(_output, _member0);
+		write_member<Optimize>(_output, _member1);
+		write_int<Optimize>(_output, _int);
+	}
 	template<bool Optimize = true>
 	static void write_mmm_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1, const index & _member2)
 	{

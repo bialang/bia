@@ -41,7 +41,7 @@ void virtual_translator::finalize(member_index_t _temp_count)
 		_output->set_beginning(_setup_end_pos);
 	}
 
-	_output->write_all(OC_RETURN);
+	op_code::write_p_type(*_output, OC_RETURN);
 }
 
 void virtual_translator::instantiate_int(const index & _member, int64_t _value)
@@ -221,6 +221,11 @@ void virtual_translator::test_call_immediate_reverse(const index & _member, fram
 	_output->write_all(_operator);
 }
 
+void virtual_translator::object_member(const index & _member, const index & _destination, name_manager::name_t _name)
+{
+	op_code::write_mmint_type(*_output, OC_OBJECT_MEMBER, _member, _destination, _name_map.get_or_insert(_name));
+}
+
 virtual_translator::position_t virtual_translator::jump(JUMP _type, position_t _destination, position_t _overwrite_pos)
 {
 	int32_t _pos = _destination - op_code::jump_instruction_length<int32_t>();
@@ -267,9 +272,14 @@ stream::output_stream & virtual_translator::output_stream() noexcept
 	return *_output;
 }
 
-const virtual_machine::virtual_member_map & virtual_translator::virtual_member_map() noexcept
+const utility::index_map & virtual_translator::member_map() noexcept
 {
 	return _member_map;
+}
+
+const utility::index_map & virtual_translator::name_map() noexcept
+{
+	return _name_map;
 }
 
 member_index virtual_translator::to_member(grammar::report::member_t _name)
@@ -279,7 +289,7 @@ member_index virtual_translator::to_member(grammar::report::member_t _name)
 
 temp_index virtual_translator::to_temp(member_index_t _index) noexcept
 {
-	return _index;
+	return _index - 1;
 }
 
 local_index virtual_translator::to_local(member_index_t _index) noexcept

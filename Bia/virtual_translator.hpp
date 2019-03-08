@@ -78,6 +78,7 @@ public:
 	void test_call_immediate(const index & _member, framework::operator_t _operator, double _value);
 	void test_call_immediate_reverse(const index & _member, framework::operator_t _operator, int64_t _value);
 	void test_call_immediate_reverse(const index & _member, framework::operator_t _operator, double _value);
+	void object_member(const index & _member, const index & _destination, name_manager::name_t _name);
 	//position_t create_local_variables();
 	position_t jump(JUMP _type, position_t _destination = 0, position_t _overwrite_pos = -1);
 	/**
@@ -90,6 +91,7 @@ public:
 	*/
 	stream::output_stream & output_stream() noexcept;
 	const utility::index_map & member_map() noexcept;
+	const utility::index_map & name_map() noexcept;
 	/**
 	 * Converts the member name to an index.
 	 *
@@ -135,6 +137,8 @@ private:
 	position_t _temp_member_pos;
 	/** The index map for all global variables. */
 	utility::index_map _member_map;
+	/** The index map for all names. */
+	utility::index_map _name_map;
 };
 
 }

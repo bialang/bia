@@ -45,7 +45,7 @@ mitype = [
     ("OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID", "auto _operator = read<framework::operator_t>(_cursor);", "operator_call_reverse(_member, nullptr, _operator, _immediate);", "", "oprr")
 ]
 mminttype = [
-    ("OC_OBJECT_MEMBER", "", "", "", "membr")
+    ("OC_OBJECT_MEMBER", "", "_member0->object_member(_member1, _names[_int]);", "", "membr")
 ]
 mmmtype = [
     ("OC_OPERATOR_CALL", "auto _operator = read<framework::operator_t>(_cursor);", "_member0->operator_call(_member1, _operator, _member2);", "", "opr")

@@ -131,16 +131,12 @@ int main()
 			.set_function("hi", &printer::hi);
 		*/
 		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
-		
+
 		// Script
 		char _script[] = u8R""(
-
-var i = "kartoffel"
-var k = "hohoh"
-var o = 55
-
-ser(9, 88)
-ser(61,o)
+var a = printer.hey
+print(a)
+printer.hey()
 )"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
