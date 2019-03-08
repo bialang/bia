@@ -25,6 +25,7 @@ class stack
 {
 public:
 	typedef int64_t element_t;
+	typedef ptrdiff_t index_t;
 
 	stack(memory::allocator * _allocator, size_t _element_count)
 	{
