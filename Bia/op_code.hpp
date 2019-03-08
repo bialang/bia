@@ -170,7 +170,7 @@ public:
 	{
 		auto _option = int_option<Optimize>(_int);
 
-		_output.write_all(static_cast<op_code_t>(_operation - (sizeof(Type) == 4 ? IIOCO_INT32 : IIOCO_INT8)), _int);
+		_output.write_all(static_cast<op_code_t>(_operation - _option));
 
 		write_int<Optimize>(_output, _int);
 	}
@@ -252,7 +252,7 @@ private:
 	template<bool Optimize, typename Type>
 	static typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) <= 4)>::type write_int(stream::output_stream & _output, Type _int)
 	{
-		if (Optimize && _int >= std::numeric_limits<int8_t>::min() && _int <= std::numeric_limits<int8_t>::max()) {
+		if (int_option<Optimize, Type>(_int) == IIOCO_INT8) {
 			_output.write_all(static_cast<int8_t>(_int));
 		} else {
 			_output.write_all(_int);
@@ -293,17 +293,7 @@ private:
 	template<bool Optimize, typename Type>
 	static typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) <= 4), IMMEDIATE_INT_OP_CODE_OPTION>::type int_option(Type _int)
 	{
-		if (Optimize) {
-			if (sizeof(Type) == 1) {
-				return IIOCO_INT8;
-			}
-		} else {
-			if (_int >= std::numeric_limits<int8_t>::min() && _int <= std::numeric_limits<int8_t>::max()) {
-				return IIOCO_INT8;
-			}
-		}
-
-		return IIOCO_INT32;
+		return Optimize && (std::is_signed<Type>::value && _int >= std::numeric_limits<int8_t>::min() && _int <= std::numeric_limits<int8_t>::max() || _int <= std::numeric_limits<uint8_t>::max()) || sizeof(Type) == 1 ? IIOCO_INT8 : IIOCO_INT32;
 	}
 	template<bool Optimize>
 	static MEMBER_OP_CODE_OPTION member_option(const index & _member)
