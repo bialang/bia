@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(Bia_HEADER_FILES "bia.hpp" "config.hpp" "config_cmake.hpp")
+set(Bia_HEADER_FILES "bia.hpp" "config.hpp" "internal_config.hpp")
 set(Bia_SOURCE_FILES "")
 
 # common namespace

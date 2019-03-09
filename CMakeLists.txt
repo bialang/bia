@@ -15,7 +15,8 @@ else()
 endif()
 
 # Project
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared library")
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared library.")
+set(PCRE2_STATIC ON CACHE BOOL "Whether the static PCRE2 library is used or not.")
 
 # Dependencies
 find_path(MPIR_INCLUDE "mpir/mpir.h")
@@ -26,7 +27,8 @@ if(BUILD_SHARED_LIBS)
   add_definitions(-DBIA_BUILDING)
 endif(BUILD_SHARED_LIBS)
 
-configure_file("${PROJECT_SOURCE_DIR}/Bia/config_cmake.in" "${PROJECT_SOURCE_DIR}/Bia/config_cmake.hpp")
+configure_file("${PROJECT_SOURCE_DIR}/Bia/config.in" "${PROJECT_SOURCE_DIR}/Bia/config.hpp")
+configure_file("${PROJECT_SOURCE_DIR}/Bia/internal_config.in" "${PROJECT_SOURCE_DIR}/Bia/internal_config.hpp")
 
 include_directories(${MPIR_INCLUDE})
 include_directories(Bia)
