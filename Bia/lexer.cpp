@@ -45,6 +45,7 @@ void lexer::lex(stream::buffer_input_stream & _input, report_receiver & _receive
 		_param.context = &_context;
 		_param.schein = &_receiver.virtual_machine_schein();
 		_param.encoder = &encoder;
+		_param.default_codec = stream::string_stream::CODEC::UTF8;
 
 		try {
 			_rules[BGR_ROOT].run(_input, _param);

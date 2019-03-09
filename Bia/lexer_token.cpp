@@ -264,12 +264,103 @@ gt_end:;
 
 	// Transfer ownership
 	machine::memory::universal_allocation _string_buffer(std::move(_string.buffer()));
-	
+
 	// Register the buffer
 	_output.type = report::TYPE::STRING;
 	_output.content.string = { _params.schein->string_manager().register_string(_string_buffer) };
 
 	return success;
+}
+
+ACTION lexer_token::regex(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
+{
+	constexpr auto success = ACTION::REPORT;
+	constexpr auto error = ACTION::ERROR;
+
+	enum class STATE
+	{
+		START,
+		REGEX,
+		ESCAPE,
+		END
+	};
+
+	STATE _state = STATE::START;
+	stream::string_stream _pattern(_params.context->allocator());
+
+	///TODO: check encoding
+	_pattern.set_codec(_params.default_codec);
+
+	while (_input.available() > 0) {
+		auto _buffer = _input.buffer();
+		stream::buffer_input_stream::buffer_type::first_type _last = nullptr;
+
+		while (_buffer.first < _buffer.second) {
+			_last = _buffer.first;
+
+			auto _char = _params.encoder->next(_buffer.first, _buffer.second);
+
+			switch (_state) {
+			case STATE::START:
+			{
+				if (_char == '/') {
+					_state = STATE::REGEX;
+				} else {
+					return error;
+				}
+
+				break;
+			}
+			case STATE::REGEX:
+			{
+				if (_char == '\\') {
+					_state = STATE::ESCAPE;
+				} else if (_char == '/') {
+					_state = STATE::END;
+				} else {
+					_pattern.append(_char);
+				}
+
+				break;
+			}
+			case STATE::ESCAPE:
+			{
+				if (_char != '/') {
+					_pattern.append('\\');
+				}
+
+				_pattern.append(_char);
+				_state = STATE::REGEX;
+
+				break;
+			}
+			case STATE::END:
+			{
+				///TODO: match modifier
+				_input.skip(_last);
+
+				goto gt_compile_regex;
+			}
+			default:
+				BIA_IMPLEMENTATION_ERROR;
+			}
+		}
+
+		_input.skip(_buffer.first);
+	}
+
+	// Compile regex
+	if (_state == STATE::END) {
+	gt_compile_regex:;
+		_output.type = report::TYPE::REGEX;
+		_output.content.regex = nullptr;
+
+		BIA_NOT_IMPLEMENTED;
+
+		return success;
+	}
+
+	return error;
 }
 
 ACTION lexer_token::identifier(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
@@ -339,7 +430,7 @@ ACTION lexer_token::first_member(stream::buffer_input_stream & _input, token_par
 	}
 
 	// First element
-	if (string(_input, _params, _output) != ACTION::REPORT) {
+	if (string(_input, _params, _output) != ACTION::REPORT && regex(_input, _params, _output) != ACTION::REPORT) {
 		report::custom_t _info = 0;
 		_output = {};
 
@@ -368,8 +459,8 @@ ACTION lexer_token::control_statement(stream::buffer_input_stream & _input, toke
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
-	
-	if (keyword<keyword_break>(_input, _params, _output) != success && 
+
+	if (keyword<keyword_break>(_input, _params, _output) != success &&
 		keyword<keyword_continue>(_input, _params, _output) != success &&
 		keyword<keyword_goto>(_input, _params, _output) != success &&
 		keyword<keyword_exit_scope>(_input, _params, _output) != success &&
@@ -903,6 +994,8 @@ int lexer_token::whitespace_automaton(stream::buffer_input_stream & _input, enco
 
 				break;
 			}
+			default:
+				BIA_IMPLEMENTATION_ERROR;
 			}
 
 			_tmp = _buffer.first;

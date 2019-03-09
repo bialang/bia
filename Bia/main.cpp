@@ -135,12 +135,8 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-{
-var a = 0
+var pattern = /.*/
 
-print(a)
-}
-print(a)
 )"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;

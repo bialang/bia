@@ -9,6 +9,7 @@
 #include "machine_context.hpp"
 #include "virtual_machine_schein.hpp"
 #include "encoder.hpp"
+#include "string_stream.hpp"
 
 
 namespace bia
@@ -73,6 +74,8 @@ struct token_param
 	machine::virtual_machine::virtual_machine_schein * schein;
 	/** The decoder for the input stream. */
 	encoding::encoder * encoder;
+	/** The default string codec. */
+	stream::string_stream::CODEC default_codec;
 };
 
 typedef report token_output;

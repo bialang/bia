@@ -8,6 +8,7 @@
 #include "output_stream.hpp"
 #include "input_stream.hpp"
 #include "big_int.hpp"
+#include "regex.hpp"
 #include "string_manager.hpp"
 
 
@@ -37,14 +38,14 @@ struct report
 
 	enum class TYPE : uint32_t
 	{
-		STRING,
 		INT_VALUE,
-		BIG_INT_VALUE,
 		DOUBLE_VALUE,
-		BIG_DOUBLE_VALUE,
+		BIG_INT_VALUE,
+		STRING,
+		REGEX,
 		MEMBER,
-		OPERATOR_CODE,
 		KEYWORD,
+		OPERATOR_CODE,
 		BEGIN,
 		END,
 		RULE_TOKEN,
@@ -66,15 +67,16 @@ struct report
 	//uint32_t size;
 	union
 	{
-		machine::string_manager::utf8_index_t string;
 		int64_t int_value;
-		dependency::big_int * big_int_value;
 		double double_value;
-		const report * end;
+		dependency::big_int * big_int_value;
+		machine::string_manager::utf8_index_t string;
+		dependency::regex * regex;
 		/** The non-zero terminated name of the member. See @a size for the length. */
 		member_t member;
-		framework::operator_t operator_code;
 		KEYWORD_ID keyword;
+		framework::operator_t operator_code;
+		const report * end;
 	} content;
 };
 

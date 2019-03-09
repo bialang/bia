@@ -103,6 +103,7 @@ public:
 	*/
 	BIA_EXPORT static ACTION number(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	BIA_EXPORT static ACTION string(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
+	BIA_EXPORT static ACTION regex(stream::buffer_input_stream & _input, token_param & _params, token_output & _output);
 	/**
 	 * Matches an identifier. An identifier conists of alphanumeric characters and an underscore without a leading number.
 	 *
