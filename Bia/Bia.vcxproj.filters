@@ -240,6 +240,9 @@
     <ClCompile Include="regex.cpp">
       <Filter>Source Files\dependency</Filter>
     </ClCompile>
+    <ClCompile Include="regex_member.cpp">
+      <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -601,6 +604,9 @@
     </ClInclude>
     <ClInclude Include="internal_config.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="regex_member.hpp">
+      <Filter>Header Files\framework\native</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

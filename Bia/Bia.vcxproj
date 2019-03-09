@@ -203,6 +203,7 @@
     <ClCompile Include="module_loader.cpp" />
     <ClCompile Include="namespace_member.cpp" />
     <ClCompile Include="regex.cpp" />
+    <ClCompile Include="regex_member.cpp" />
     <ClCompile Include="schein.cpp" />
     <ClCompile Include="scope_exit.cpp" />
     <ClCompile Include="scope_handler.cpp" />
@@ -267,6 +268,7 @@
     <ClInclude Include="op_code.hpp" />
     <ClInclude Include="raw_object_def.hpp" />
     <ClInclude Include="regex.hpp" />
+    <ClInclude Include="regex_member.hpp" />
     <ClInclude Include="schein.hpp" />
     <ClInclude Include="scope_exit.hpp" />
     <ClInclude Include="script_map.hpp" />
