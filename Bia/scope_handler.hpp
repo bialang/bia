@@ -39,8 +39,6 @@ private:
 	std::map<key_type, std::pair<variable_index_t, scope_id_type>> _variables;
 	std::vector<variable_index_t> _variables_in_scopes;
 	machine::virtual_machine::virtual_translator & _translator;
-	/** Holds the position of the local variable creation. */
-	machine::virtual_machine::virtual_translator::position_t _start_position;
 };
 
 }
