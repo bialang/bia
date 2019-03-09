@@ -4,6 +4,7 @@
 #include "member_array.hpp"
 #include "machine_context.hpp"
 #include "virtual_disassembler.hpp"
+#include "regex_member.hpp"
 
 #include <cstring>
 
@@ -47,6 +48,7 @@ void virtual_machine_code::execute()
 	auto & _stack = _schein.stack();
 	auto & _names = _schein.names();
 	auto & _string_manager = _schein.string_manager();
+	auto & _regexs = _schein.regexs();
 	const auto _end = _code.first + _code.second;
 	const uint8_t * _cursor = _code.first;
 	framework::member::test_result_t _test_register = 0;
@@ -399,6 +401,91 @@ void virtual_machine_code::execute()
 			}
 			_member->execute_format(nullptr, reinterpret_cast<const char*>(_cursor), _count, &_stack);
 			_cursor += _count;
+			break;
+		}
+		/** Mint-Type */
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _int = read<int32_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _int = read<int8_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
+			auto _int = read<int32_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
+			auto _int = read<int8_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _int = read<int32_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _int = read<int8_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _int = read<int32_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _int = read<int8_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = _temps.from_back(read<member_index_t>(_cursor));
+			auto _int = read<int32_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = _temps.from_back(read<member_index_t>(_cursor));
+			auto _int = read<int8_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = _globals[read<member_index_t>(_cursor)];
+			auto _int = read<int32_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
+			break;
+		}
+		case (OC_INSTANTIATE_REGEX - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = _globals[read<member_index_t>(_cursor)];
+			auto _int = read<int8_t>(_cursor);
+			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
 		/** MM-Type */
