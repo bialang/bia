@@ -82,6 +82,10 @@ void compiler::handle_variable_declaration_helper(compiler_value _expression, co
 		_translator.instantiate_string(_destination, _expression.value().rt_string);
 
 		break;
+	case VT::REGEX:
+		_translator.instantiate_regex(_destination, _expression.value().rt_regex);
+
+		break;
 	case VT::MEMBER:
 		_translator.clone(_translator.to_member(_expression.value().rt_member), _destination);
 
@@ -446,6 +450,8 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 	// First member
 	if (static_cast<report::TYPE>(_report->type) == report::TYPE::STRING) {
 		_report = handle_string(_report);
+	} else if (static_cast<report::TYPE>(_report->type) == report::TYPE::REGEX) {
+		_report = handle_regex(_report);
 	} else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
 		virtual_translator::ccr_function_t _function = nullptr;
 
@@ -576,6 +582,13 @@ const grammar::report * compiler::handle_string(const grammar::report * _report)
 	default:
 		BIA_IMPLEMENTATION_ERROR;
 	}
+
+	return _report + 1;
+}
+
+const grammar::report * compiler::handle_regex(const grammar::report * _report)
+{
+	_value.set_return_regex(_report->content.regex);
 
 	return _report + 1;
 }

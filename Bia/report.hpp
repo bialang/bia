@@ -8,7 +8,7 @@
 #include "output_stream.hpp"
 #include "input_stream.hpp"
 #include "big_int.hpp"
-#include "regex.hpp"
+#include "schein.hpp"
 #include "string_manager.hpp"
 
 
@@ -71,7 +71,7 @@ struct report
 		double double_value;
 		dependency::big_int * big_int_value;
 		machine::string_manager::utf8_index_t string;
-		dependency::regex * regex;
+		machine::schein::regex_index_t regex;
 		/** The non-zero terminated name of the member. See @a size for the length. */
 		member_t member;
 		KEYWORD_ID keyword;

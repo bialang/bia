@@ -8,6 +8,7 @@
 #include "big_int.hpp"
 #include "virtual_translator.hpp"
 #include "report.hpp"
+#include "schein.hpp"
 #include "string_manager.hpp"
 
 
@@ -45,6 +46,8 @@ public:
 		STRING32,
 		/** A wchar_t string. */
 		WSTRING,
+		/** A pattern index. */
+		REGEX,
 		/** A member address. */
 		MEMBER,
 		/** An index of a temp member. */
@@ -70,6 +73,7 @@ public:
 		/** A constant floating point. */
 		double rt_double;
 		machine::string_manager::utf8_index_t rt_string;
+		machine::schein::regex_index_t rt_regex;
 		grammar::report::member_t rt_member;
 		machine::virtual_machine::member_index_t rt_temp_member;
 		machine::virtual_machine::member_index_t rt_local_member;
@@ -241,6 +245,13 @@ public:
 		_return_value.rt_string.size = _size;
 		_return_value.rt_string.length = _length;
 	}*/
+	void set_return_regex(machine::schein::regex_index_t _index)
+	{
+		clear();
+
+		_return_type = VALUE_TYPE::REGEX;
+		_return_value.rt_regex = _index;
+	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::MEMBER.
 	 *

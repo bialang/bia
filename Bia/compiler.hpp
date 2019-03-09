@@ -363,6 +363,7 @@ private:
 	*/
 	BIA_EXPORT const grammar::report * handle_parameter(const grammar::report * _report, compiler_value _destination = compiler_value());
 	BIA_EXPORT const grammar::report * handle_string(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_regex(const grammar::report * _report);
 	/**
 	 * Handles a variable declaration token.
 	 *
