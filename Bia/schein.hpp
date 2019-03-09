@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <vector>
 #include <functional>
 #include <utility>
@@ -11,6 +12,8 @@
 #include "big_int_allocator.hpp"
 #include "stack.hpp"
 #include "string_manager.hpp"
+#include "regex.hpp"
+#include "share_def.hpp"
 
 
 namespace bia
@@ -28,6 +31,7 @@ class schein
 public:
 	/** The deleter function signature. */
 	typedef std::function<void(memory::universal_allocation)> deleter_function_t;
+	typedef uint32_t regex_index_t;
 
 	/**
 	 * Constructor.
@@ -98,7 +102,11 @@ public:
 	 * @throws See memory::allocator::deallocate() and memory::big_int_allocator::destroy_big_int().
 	 * @throws See std::vector::clear().
 	*/
-	BIA_EXPORT void clear();
+	BIA_EXPORT void clear(); 
+	BIA_EXPORT regex_index_t register_regex_inplace(const uint8_t * _bytes, size_t _size);
+	BIA_EXPORT regex_index_t register_regex_inplace(const char * _string);
+	BIA_EXPORT regex_index_t register_regex_inplace(const char16_t * _string);
+	BIA_EXPORT regex_index_t register_regex_inplace(const char32_t * _string);
 	/**
 	 * Returns the machine context.
 	 *
@@ -126,6 +134,7 @@ public:
 	 * @return A reference to the string manager.
 	*/
 	BIA_EXPORT machine::string_manager & string_manager() noexcept;
+	BIA_EXPORT std::vector<utility::share<dependency::regex>> & regexs() noexcept;
 	schein & operator=(schein && _right) noexcept = default;
 
 protected:
@@ -133,6 +142,8 @@ protected:
 	machine::machine_context * _context;
 	/** Stores all registered allocations with deleter. */
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
+	/** Stores all registered regexs. */
+	std::vector<utility::share<dependency::regex>> _regexs;
 	/** The machine stack. */
 	machine::stack _stack;
 	/** The manager for the string resources. */

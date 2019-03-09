@@ -1,5 +1,6 @@
 #include "schein.hpp"
 #include "machine_context.hpp"
+#include "share.hpp"
 
 
 namespace bia
@@ -49,6 +50,42 @@ void schein::clear()
 	_allocations.clear();
 }
 
+schein::regex_index_t schein::register_regex_inplace(const uint8_t * _bytes, size_t _size)
+{
+	auto _tmp = _regexs.size();
+
+	_regexs.emplace_back(_bytes, _size);
+
+	return _tmp;
+}
+
+schein::regex_index_t schein::register_regex_inplace(const char * _string)
+{
+	auto _tmp = _regexs.size();
+
+	_regexs.emplace_back(_string);
+
+	return _tmp;
+}
+
+schein::regex_index_t schein::register_regex_inplace(const char16_t * _string)
+{
+	auto _tmp = _regexs.size();
+
+	_regexs.emplace_back(_string);
+
+	return _tmp;
+}
+
+schein::regex_index_t schein::register_regex_inplace(const char32_t * _string)
+{
+	auto _tmp = _regexs.size();
+
+	_regexs.emplace_back(_string);
+
+	return _tmp;
+}
+
 machine::machine_context * schein::machine_context() noexcept
 {
 	return _context;
@@ -62,6 +99,11 @@ machine::stack & schein::stack() noexcept
 machine::string_manager & schein::string_manager() noexcept
 {
 	return _string_manager;
+}
+
+std::vector<utility::share<dependency::regex>>& schein::regexs() noexcept
+{
+	return _regexs;
 }
 
 }

@@ -352,10 +352,10 @@ ACTION lexer_token::regex(stream::buffer_input_stream & _input, token_param & _p
 	// Compile regex
 	if (_state == STATE::END) {
 	gt_compile_regex:;
-		_output.type = report::TYPE::REGEX;
-		_output.content.regex = nullptr;
+		_pattern.finish();
 
-		BIA_NOT_IMPLEMENTED;
+		_output.type = report::TYPE::REGEX;
+		_output.content.regex = _params.schein->register_regex_inplace(stream::string_stream::string<char>(_pattern.buffer()));
 
 		return success;
 	}
