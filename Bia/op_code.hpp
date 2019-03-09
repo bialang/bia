@@ -79,10 +79,10 @@ struct invalid_index : index
 enum MEMBER_OP_CODE_OPTION
 {
 	MOCO_MEMBER,
-	//MOCO_LOCAL,
+	MOCO_LOCAL,
 	MOCO_TEMP,
 	MOCO_TINY_MEMBER,
-	//MOCO_TINY_LOCAL,
+	MOCO_TINY_LOCAL,
 	MOCO_TINY_TEMP,
 
 	MOCO_COUNT
@@ -315,6 +315,8 @@ private:
 
 		if (dynamic_cast<const member_index*>(&_member)) {
 			_option += MOCO_MEMBER;
+		} else if (dynamic_cast<const local_index*>(&_member)) {
+			_option += MOCO_LOCAL;
 		} else if (dynamic_cast<const temp_index*>(&_member)) {
 			_option += MOCO_TEMP;
 		} else {

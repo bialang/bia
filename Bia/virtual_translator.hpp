@@ -36,7 +36,7 @@ public:
 
 	virtual_translator(stream::output_stream & _output);
 	void open_scope();
-	//void close_scope(member_index_t _variable_count);
+	void close_scope(member_index_t _variable_count);
 	/**
 	 * Finalizes the ouput result.
 	 *
@@ -45,11 +45,12 @@ public:
 	 * @since 3.72.149.810
 	 * @date 12-Jan-19
 	 *
-	 * @param _temp_count The count of temporary members.
+	 * @param _temp_count The amount of temporary members.
+	 * @param _local_count The amount of local members.
 	 *
 	 * @throws See stream::output_stream::position(), stream::output_stream::write_all(), stream::output_stream::set_position() and stream::output_stream::set_beginning().
 	*/
-	void finalize(member_index_t _temp_count);
+	void finalize(member_index_t _temp_count, member_index_t _local_count);
 	void instantiate_int(const index & _member, int64_t _value);
 	void instantiate_double(const index & _member, double _value);
 	void instantiate_string(const index & _member, string_manager::utf8_index_t _value);

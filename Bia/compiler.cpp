@@ -25,7 +25,7 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 
 void compiler::finalize()
 {
-	_translator.finalize(_counter.max());
+	_translator.finalize(_counter.max(), _scope_handler.max_needed());
 
 	auto _end = _translator.output_stream().position();
 
@@ -395,19 +395,19 @@ const grammar::report * compiler::handle_identifier(const grammar::report * _rep
 {
 	// 100% local
 	if (_type == VARIABLE_TYPE::DEFINITELY_LOCAL) {
-		//_value.set_return_local(_scope_handler.declare(_report->content.member));
-		BIA_NOT_IMPLEMENTED;
+		_value.set_return_local(_scope_handler.declare(_report->content.member));
+
 		return _report + 1;
 	} // Unkown
 	else if (!_scope_handler.no_open_scopes() && _type != VARIABLE_TYPE::DEFINITELY_GLOBAL) {
-		/*auto _index = _scope_handler.variable_index(_report->content.member);
+		auto _index = _scope_handler.variable_index(_report->content.member);
 
 		// Local variable
 		if (_index != scope_handler::not_found) {
 			_value.set_return_local(_index);
 
 			return _report + 1;
-		}*/
+		}
 	}
 
 	// Global member
@@ -601,8 +601,7 @@ const grammar::report * compiler::handle_variable_declaration(const grammar::rep
 
 		// Local variable
 		if (_local_variable) {
-			BIA_NOT_IMPLEMENTED;
-			//handle_variable_declaration_helper(_expression, machine::platform::toolset::to_local_member(_value.value().rt_local_member));
+			handle_variable_declaration_helper(_expression, _translator.to_local(_value.value().rt_local_member));
 		} else {
 			handle_variable_declaration_helper(_expression, _translator.to_member(_value.value().rt_member));
 		}

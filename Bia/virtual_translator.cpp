@@ -26,15 +26,19 @@ void virtual_translator::open_scope()
 {
 }
 
-void virtual_translator::finalize(member_index_t _temp_count)
+void virtual_translator::close_scope(member_index_t _variable_count)
+{
+}
+
+void virtual_translator::finalize(member_index_t _temp_count, member_index_t _local_count)
 {
 	// Update first instruction
-	if (_temp_count) {
+	if (_temp_count + _local_count) {
 		// Update
 		auto _current_pos = _output->position();
 
 		_output->set_position(_temp_member_pos);
-		op_code::write_int_type<member_index_t, false>(*_output, OC_SETUP, _temp_count);
+		op_code::write_int_type<member_index_t, false>(*_output, OC_SETUP, _temp_count + _local_count);
 		_output->set_position(_current_pos);
 	} // Skip temp member creation
 	else {
@@ -294,7 +298,7 @@ temp_index virtual_translator::to_temp(member_index_t _index) noexcept
 
 local_index virtual_translator::to_local(member_index_t _index) noexcept
 {
-	return _index;
+	return _index - 1;
 }
 
 }

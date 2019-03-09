@@ -134,9 +134,13 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
-var a = printer.hey
+
+{
+var a = 0
+
 print(a)
-printer.hey()
+}
+print(a)
 )"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
