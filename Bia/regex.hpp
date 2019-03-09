@@ -19,6 +19,7 @@ public:
 	regex(const regex & _copy) = delete;
 	regex(regex && _move) = delete;
 	~regex();
+	bool matches(const char * _string) const;
 
 private:
 	enum class TYPE

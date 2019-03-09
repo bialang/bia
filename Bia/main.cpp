@@ -135,7 +135,13 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var pattern = /.*/
+var pattern = /\d+/
+var s = "65hi 18"
+
+if pattern == s {
+	print(s)
+}
+
 print(pattern)
 )"";
 		/*test_and_time(1, []() {

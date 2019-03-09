@@ -66,5 +66,15 @@ regex::~regex()
 	}
 }
 
+bool regex::matches(const char * _string) const
+{
+	auto _data = pcre2_match_data_create_from_pattern_8(static_cast<pcre2_code_8*>(_code), nullptr);
+	auto _matches = pcre2_match_8(static_cast<pcre2_code_8*>(_code), (PCRE2_SPTR8)_string, PCRE2_ZERO_TERMINATED, 0, PCRE2_ANCHORED, _data, nullptr) > 0;
+
+	pcre2_match_data_free_8(_data);
+
+	return _matches;
+}
+
 }
 }
