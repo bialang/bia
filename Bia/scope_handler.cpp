@@ -1,6 +1,7 @@
 #include "scope_handler.hpp"
 #include "exception.hpp"
 
+#include <algorithm>
 
 namespace bia
 {
@@ -8,7 +9,8 @@ namespace compiler
 {
 
 scope_handler::scope_handler(machine::virtual_machine::virtual_translator & _translator) : _translator(_translator)
-{	 
+{
+	_max_needed = 0;
 }
 
 void scope_handler::open_scope()
@@ -52,6 +54,8 @@ void scope_handler::close_scope()
 	}
 
 	// Scope cleanup
+	_max_needed = std::max(_max_needed, _counter.current());
+
 	_counter.pop(_variables_in_scopes.back());
 	_variables_in_scopes.pop_back();
 	BIA_NOT_IMPLEMENTED;
@@ -90,6 +94,11 @@ scope_handler::variable_index_t scope_handler::variable_index(const char * _name
 	auto _result = _variables.find(_name);
 
 	return _result == _variables.end() ? not_found : _result->second.first;
+}
+
+scope_handler::variable_index_t scope_handler::max_needed() const noexcept
+{
+	return _max_needed;
 }
 
 }

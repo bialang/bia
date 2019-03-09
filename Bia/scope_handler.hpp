@@ -18,7 +18,7 @@ class scope_handler
 public:
 	typedef size_t scope_id_type;
 	typedef const char* key_type;
-	typedef machine::virtual_machine::member_index_t variable_index_t;
+	typedef temp_counter::counter_t variable_index_t;
 
 	constexpr static variable_index_t not_found = -1;
 
@@ -28,10 +28,13 @@ public:
 	bool no_open_scopes() const noexcept;
 	variable_index_t declare(const char * _name);
 	variable_index_t variable_index(const char * _name);
+	variable_index_t max_needed() const noexcept;
 
 private:
 	/** Counts the required amount of local variables. */
 	temp_counter _counter;
+	/** Counts the max required amount of local variables. */
+	variable_index_t _max_needed;
 	/** Holds all local variables associated with their name. */
 	std::map<key_type, std::pair<variable_index_t, scope_id_type>> _variables;
 	std::vector<variable_index_t> _variables_in_scopes;
