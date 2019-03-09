@@ -20,11 +20,13 @@ public:
 	member_array(memory::member_allocator * _allocator);
 	~member_array();
 	void create(index_t _size);
-	framework::member * operator[](index_t _index);
+	framework::member * from_front(index_t _index);
+	framework::member * from_back(index_t _index);
 
 private:
 	memory::member_allocator * _allocator;
 	std::vector<memory::member_allocator::member_allocation_t> _members;
+	std::pair<framework::member*, framework::member*> _ends;
 };
 
 }

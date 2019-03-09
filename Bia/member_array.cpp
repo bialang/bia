@@ -30,11 +30,19 @@ void member_array::create(index_t _size)
 	for (auto i = _members.data(), _cond = i + _members.size(); i < _cond; ++i) {
 		*i = _allocator->construct_member<framework::undefined_member>();
 	}
+
+	_ends.first = _members.front();
+	_ends.second = _members.back();
 }
 
-framework::member * member_array::operator[](index_t _index)
+framework::member * member_array::from_front(index_t _index)
 {
-	return _members[_index];
+	return _ends.first + _index;
+}
+
+framework::member * member_array::from_back(index_t _index)
+{
+	return _ends.second - _index;
 }
 
 }

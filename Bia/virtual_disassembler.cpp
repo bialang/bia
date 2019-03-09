@@ -123,7 +123,13 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		case (OC_TEST - MOCO_TINY_TEMP):
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
-			print_all("test t", _member);
+			print_all("test ", _member);
+			break;
+		}
+		case (OC_TEST - MOCO_TINY_LOCAL):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			print_all("test ", _member);
 			break;
 		}
 		case (OC_TEST - MOCO_TINY_MEMBER):
@@ -135,7 +141,13 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		case (OC_TEST - MOCO_TEMP):
 		{
 			auto _member = read<member_index_t>(_cursor);
-			print_all("test t", _member);
+			print_all("test ", _member);
+			break;
+		}
+		case (OC_TEST - MOCO_LOCAL):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			print_all("test ", _member);
 			break;
 		}
 		case (OC_TEST - MOCO_MEMBER):
@@ -147,7 +159,13 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		case (OC_PUSH - MOCO_TINY_TEMP):
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
-			print_all("push t", _member);
+			print_all("push ", _member);
+			break;
+		}
+		case (OC_PUSH - MOCO_TINY_LOCAL):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			print_all("push ", _member);
 			break;
 		}
 		case (OC_PUSH - MOCO_TINY_MEMBER):
@@ -159,7 +177,13 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		case (OC_PUSH - MOCO_TEMP):
 		{
 			auto _member = read<member_index_t>(_cursor);
-			print_all("push t", _member);
+			print_all("push ", _member);
+			break;
+		}
+		case (OC_PUSH - MOCO_LOCAL):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			print_all("push ", _member);
 			break;
 		}
 		case (OC_PUSH - MOCO_MEMBER):
@@ -171,7 +195,13 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		case (OC_UNDEFINE - MOCO_TINY_TEMP):
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
-			print_all("undf t", _member);
+			print_all("undf ", _member);
+			break;
+		}
+		case (OC_UNDEFINE - MOCO_TINY_LOCAL):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			print_all("undf ", _member);
 			break;
 		}
 		case (OC_UNDEFINE - MOCO_TINY_MEMBER):
@@ -183,7 +213,13 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		case (OC_UNDEFINE - MOCO_TEMP):
 		{
 			auto _member = read<member_index_t>(_cursor);
-			print_all("undf t", _member);
+			print_all("undf ", _member);
+			break;
+		}
+		case (OC_UNDEFINE - MOCO_LOCAL):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			print_all("undf ", _member);
 			break;
 		}
 		case (OC_UNDEFINE - MOCO_MEMBER):
@@ -195,7 +231,13 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		case (OC_EXECUTE_VOID - MOCO_TINY_TEMP):
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
-			print_all("exec t", _member);
+			print_all("exec ", _member);
+			break;
+		}
+		case (OC_EXECUTE_VOID - MOCO_TINY_LOCAL):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member);
 			break;
 		}
 		case (OC_EXECUTE_VOID - MOCO_TINY_MEMBER):
@@ -207,7 +249,13 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		case (OC_EXECUTE_VOID - MOCO_TEMP):
 		{
 			auto _member = read<member_index_t>(_cursor);
-			print_all("exec t", _member);
+			print_all("exec ", _member);
+			break;
+		}
+		case (OC_EXECUTE_VOID - MOCO_LOCAL):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			print_all("exec ", _member);
 			break;
 		}
 		case (OC_EXECUTE_VOID - MOCO_MEMBER):
@@ -220,7 +268,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member, " ", _count);
+			print_all("exec ", _member, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT_VOID - MOCO_TINY_LOCAL):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT_VOID - MOCO_TINY_MEMBER):
@@ -234,7 +289,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member, " ", _count);
+			print_all("exec ", _member, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT_VOID - MOCO_LOCAL):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT_VOID - MOCO_MEMBER):
@@ -248,7 +310,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member, " ", _count);
+			print_all("exec ", _member, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT_VOID - MOCO_TINY_LOCAL):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -264,7 +334,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member, " ", _count);
+			print_all("exec ", _member, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT_VOID - MOCO_LOCAL):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -281,35 +359,98 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1);
+			print_all("exec ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1);
+			print_all("exec ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1);
+			print_all("exec m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -323,7 +464,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1);
+			print_all("exec m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -337,35 +485,98 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1);
+			print_all("exec ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1);
+			print_all("exec ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1);
+			print_all("exec m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -379,7 +590,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1);
+			print_all("exec m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -394,7 +612,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1, " ", _count);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -402,7 +628,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1, " ", _count);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
@@ -410,7 +636,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1, " ", _count);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
@@ -418,7 +652,55 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1, " ", _count);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -426,7 +708,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1, " ", _count);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -442,7 +732,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1, " ", _count);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -458,7 +756,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1, " ", _count);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -466,7 +772,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1, " ", _count);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
@@ -474,7 +780,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1, " ", _count);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
@@ -482,7 +796,55 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1, " ", _count);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -490,7 +852,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1, " ", _count);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -506,7 +876,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1, " ", _count);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
+			break;
+		}
+		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
 			break;
 		}
 		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -522,7 +900,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1, " ", _count);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -531,7 +918,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1, " ", _count);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -540,7 +927,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1, " ", _count);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -549,7 +945,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1, " ", _count);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -558,7 +1008,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1, " ", _count);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -576,7 +1035,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1, " ", _count);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -594,7 +1062,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1, " ", _count);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -603,7 +1080,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1, " ", _count);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -612,7 +1089,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " t", _member1, " ", _count);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -621,7 +1107,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec t", _member0, " m", _member1, " ", _count);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec ", _member0, " m", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -630,7 +1170,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1, " ", _count);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -648,7 +1197,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			print_all("exec m", _member0, " t", _member1, " ", _count);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
+			_cursor += _count;
+			break;
+		}
+		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _count = read<framework::member::parameter_count_t>(_cursor);
+			print_all("exec m", _member0, " ", _member1, " ", _count);
 			_cursor += _count;
 			break;
 		}
@@ -665,35 +1223,98 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cln t", _member0, " t", _member1);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cln t", _member0, " m", _member1);
+			print_all("cln ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cln t", _member0, " t", _member1);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cln t", _member0, " m", _member1);
+			print_all("cln ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cln m", _member0, " t", _member1);
+			print_all("cln m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -707,7 +1328,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cln m", _member0, " t", _member1);
+			print_all("cln m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -721,35 +1349,98 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cln t", _member0, " t", _member1);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cln t", _member0, " m", _member1);
+			print_all("cln ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cln t", _member0, " t", _member1);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cln t", _member0, " m", _member1);
+			print_all("cln ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cln m", _member0, " t", _member1);
+			print_all("cln m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cln m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -763,7 +1454,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cln m", _member0, " t", _member1);
+			print_all("cln m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cln m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -777,35 +1475,98 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("ref t", _member0, " t", _member1);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("ref t", _member0, " m", _member1);
+			print_all("ref ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("ref t", _member0, " t", _member1);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("ref t", _member0, " m", _member1);
+			print_all("ref ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("ref m", _member0, " t", _member1);
+			print_all("ref m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -819,7 +1580,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("ref m", _member0, " t", _member1);
+			print_all("ref m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -833,35 +1601,98 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("ref t", _member0, " t", _member1);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("ref t", _member0, " m", _member1);
+			print_all("ref ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("ref t", _member0, " t", _member1);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("ref t", _member0, " m", _member1);
+			print_all("ref ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("ref m", _member0, " t", _member1);
+			print_all("ref m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("ref m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -875,7 +1706,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("ref m", _member0, " t", _member1);
+			print_all("ref m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("ref m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -889,35 +1727,98 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cpy t", _member0, " t", _member1);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cpy t", _member0, " m", _member1);
+			print_all("cpy ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cpy t", _member0, " t", _member1);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cpy t", _member0, " m", _member1);
+			print_all("cpy ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cpy m", _member0, " t", _member1);
+			print_all("cpy m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -931,7 +1832,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cpy m", _member0, " t", _member1);
+			print_all("cpy m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -945,35 +1853,98 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cpy t", _member0, " t", _member1);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cpy t", _member0, " m", _member1);
+			print_all("cpy ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cpy t", _member0, " t", _member1);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cpy t", _member0, " m", _member1);
+			print_all("cpy ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy ", _member0, " m", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy ", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy ", _member0, " m", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
-			print_all("cpy m", _member0, " t", _member1);
+			print_all("cpy m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			print_all("cpy m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -987,7 +1958,14 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
-			print_all("cpy m", _member0, " t", _member1);
+			print_all("cpy m", _member0, " ", _member1);
+			break;
+		}
+		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			print_all("cpy m", _member0, " ", _member1);
 			break;
 		}
 		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -1002,7 +1980,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member0, " t", _member1, " ", _operator);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -1010,7 +1996,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member0, " m", _member1, " ", _operator);
+			print_all("test ", _member0, " m", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
@@ -1018,7 +2004,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member0, " t", _member1, " ", _operator);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
@@ -1026,7 +2020,55 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member0, " m", _member1, " ", _operator);
+			print_all("test ", _member0, " m", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " m", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " m", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -1034,7 +2076,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test m", _member0, " t", _member1, " ", _operator);
+			print_all("test m", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test m", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -1050,7 +2100,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test m", _member0, " t", _member1, " ", _operator);
+			print_all("test m", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test m", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -1066,7 +2124,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member0, " t", _member1, " ", _operator);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -1074,7 +2140,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member0, " m", _member1, " ", _operator);
+			print_all("test ", _member0, " m", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
@@ -1082,7 +2148,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member0, " t", _member1, " ", _operator);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
@@ -1090,7 +2164,55 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member0, " m", _member1, " ", _operator);
+			print_all("test ", _member0, " m", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " m", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member0, " m", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -1098,7 +2220,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test m", _member0, " t", _member1, " ", _operator);
+			print_all("test m", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test m", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -1114,7 +2244,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test m", _member0, " t", _member1, " ", _operator);
+			print_all("test m", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test m", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -1130,7 +2268,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -1138,7 +2284,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
@@ -1146,7 +2292,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
@@ -1154,7 +2308,55 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -1162,7 +2364,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -1178,7 +2388,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -1194,7 +2412,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -1202,7 +2428,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
@@ -1210,7 +2436,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
@@ -1218,7 +2452,55 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -1226,7 +2508,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -1242,7 +2532,15 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
@@ -1258,35 +2556,70 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1328,35 +2661,70 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 		{
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			print_all("inst t", _member, " i", _immediate);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			print_all("inst ", _member, " i", _immediate);
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			print_all("inst ", _member, " i", _immediate);
 			break;
 		}
 		case (OC_INSTANTIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1399,7 +2767,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
@@ -1407,7 +2775,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
@@ -1415,7 +2783,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
@@ -1423,7 +2791,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
@@ -1431,7 +2799,47 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1479,7 +2887,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
@@ -1487,7 +2895,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
@@ -1495,7 +2903,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
@@ -1503,7 +2911,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
@@ -1511,7 +2919,47 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("test t", _member, " i", _immediate, " ", _operator);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("test ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1559,7 +3007,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
@@ -1567,7 +3015,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
@@ -1575,7 +3023,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
@@ -1583,7 +3031,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
@@ -1591,7 +3039,47 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1639,7 +3127,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
@@ -1647,7 +3135,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
@@ -1655,7 +3143,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
@@ -1663,7 +3151,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
@@ -1671,7 +3159,47 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("testr t", _member, " i", _immediate, " ", _operator);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("testr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1719,7 +3247,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
@@ -1727,7 +3255,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
@@ -1735,7 +3263,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
@@ -1743,7 +3271,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
@@ -1751,7 +3279,47 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1799,7 +3367,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
@@ -1807,7 +3375,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
@@ -1815,7 +3383,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
@@ -1823,7 +3391,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
@@ -1831,7 +3399,47 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member, " i", _immediate, " ", _operator);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1879,7 +3487,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
@@ -1887,7 +3495,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
@@ -1895,7 +3503,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
@@ -1903,7 +3511,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
@@ -1911,7 +3519,47 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -1959,7 +3607,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
@@ -1967,7 +3615,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
@@ -1975,7 +3623,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
@@ -1983,7 +3631,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
@@ -1991,7 +3639,47 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
@@ -2040,7 +3728,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr t", _member0, " t", _member1, " i", _int);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2048,7 +3736,23 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr t", _member0, " t", _member1, " i", _int);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2056,7 +3760,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr t", _member0, " m", _member1, " i", _int);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2064,7 +3768,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr t", _member0, " m", _member1, " i", _int);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2072,7 +3776,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr t", _member0, " t", _member1, " i", _int);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2080,7 +3784,23 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr t", _member0, " t", _member1, " i", _int);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2088,7 +3808,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr t", _member0, " m", _member1, " i", _int);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2096,7 +3816,103 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr t", _member0, " m", _member1, " i", _int);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2104,7 +3920,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr m", _member0, " t", _member1, " i", _int);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2112,7 +3928,23 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr m", _member0, " t", _member1, " i", _int);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2136,7 +3968,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr m", _member0, " t", _member1, " i", _int);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2144,7 +3976,23 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<tiny_member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr m", _member0, " t", _member1, " i", _int);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2168,7 +4016,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr t", _member0, " t", _member1, " i", _int);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2176,7 +4024,23 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr t", _member0, " t", _member1, " i", _int);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2184,7 +4048,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr t", _member0, " m", _member1, " i", _int);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2192,7 +4056,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr t", _member0, " m", _member1, " i", _int);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2200,7 +4064,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr t", _member0, " t", _member1, " i", _int);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2208,7 +4072,23 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr t", _member0, " t", _member1, " i", _int);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2216,7 +4096,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr t", _member0, " m", _member1, " i", _int);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2224,7 +4104,103 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr t", _member0, " m", _member1, " i", _int);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr ", _member0, " m", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2232,7 +4208,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr m", _member0, " t", _member1, " i", _int);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2240,7 +4216,23 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr m", _member0, " t", _member1, " i", _int);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2264,7 +4256,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int32_t>(_cursor);
-			print_all("membr m", _member0, " t", _member1, " i", _int);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
@@ -2272,7 +4264,23 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member0 = read<member_index_t>(_cursor);
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _int = read<int8_t>(_cursor);
-			print_all("membr m", _member0, " t", _member1, " i", _int);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
+			break;
+		}
+		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("membr m", _member0, " ", _member1, " i", _int);
 			break;
 		}
 		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
@@ -2298,7 +4306,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2307,7 +4324,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
@@ -2316,7 +4333,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2325,7 +4351,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2334,7 +4414,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2343,7 +4432,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
@@ -2352,7 +4441,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2361,7 +4459,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2370,7 +4468,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2379,7 +4486,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
@@ -2388,7 +4495,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2397,7 +4513,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2406,7 +4576,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2415,7 +4594,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
@@ -2424,7 +4603,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2433,7 +4621,331 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2442,7 +4954,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2451,7 +4972,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
@@ -2460,7 +4981,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2469,7 +4999,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2478,7 +5062,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2496,7 +5089,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2514,7 +5116,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2523,7 +5134,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
@@ -2532,7 +5143,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2541,7 +5161,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2550,7 +5224,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2568,7 +5251,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2586,7 +5278,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2595,7 +5296,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
@@ -2604,7 +5305,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2613,7 +5323,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2622,7 +5386,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2631,7 +5404,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
@@ -2640,7 +5413,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2649,7 +5431,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2658,7 +5440,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2667,7 +5458,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
@@ -2676,7 +5467,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2685,7 +5485,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2694,7 +5548,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2703,7 +5566,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
@@ -2712,7 +5575,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2721,7 +5593,331 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " m", _member2, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2730,7 +5926,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2739,7 +5944,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
@@ -2748,7 +5953,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2757,7 +5971,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2766,7 +6034,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2784,7 +6061,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2802,7 +6088,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2811,7 +6106,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
@@ -2820,7 +6115,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2829,7 +6133,61 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " m", _member2, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " m", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
@@ -2838,7 +6196,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<tiny_member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<tiny_member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
@@ -2856,7 +6223,16 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _member2 = read<member_index_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " m", _member1, " t", _member2, " ", _operator);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _member2 = read<member_index_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " m", _member1, " ", _member2, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
@@ -2875,7 +6251,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -2884,7 +6260,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -2893,7 +6269,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -2902,7 +6278,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -2911,7 +6287,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -2920,7 +6341,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
@@ -2929,7 +6350,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
@@ -2938,7 +6359,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
@@ -2947,7 +6368,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
@@ -2956,7 +6377,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
@@ -2965,7 +6386,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -2974,7 +6395,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -2983,7 +6404,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -2992,7 +6413,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3001,7 +6422,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3010,7 +6476,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
@@ -3019,7 +6485,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
@@ -3028,7 +6494,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3037,7 +6503,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
@@ -3046,7 +6512,277 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
@@ -3055,7 +6791,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3064,7 +6800,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3073,7 +6809,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3082,7 +6818,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3091,7 +6827,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3145,7 +6926,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3154,7 +6935,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3163,7 +6944,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3172,7 +6953,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3181,7 +6962,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3235,7 +7061,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3244,7 +7070,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3253,7 +7079,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3262,7 +7088,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3271,7 +7097,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3280,7 +7151,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
@@ -3289,7 +7160,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
@@ -3298,7 +7169,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3307,7 +7178,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
@@ -3316,7 +7187,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
@@ -3325,7 +7196,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3334,7 +7205,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3343,7 +7214,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3352,7 +7223,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3361,7 +7232,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3370,7 +7286,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
@@ -3379,7 +7295,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
@@ -3388,7 +7304,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3397,7 +7313,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
@@ -3406,7 +7322,277 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
@@ -3415,7 +7601,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3424,7 +7610,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3433,7 +7619,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3442,7 +7628,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3451,7 +7637,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3505,7 +7736,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3514,7 +7745,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3523,7 +7754,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3532,7 +7763,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3541,7 +7772,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("opr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("opr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3595,7 +7871,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3604,7 +7880,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3613,7 +7889,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3622,7 +7898,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3631,7 +7907,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3640,7 +7961,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
@@ -3649,7 +7970,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
@@ -3658,7 +7979,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3667,7 +7988,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
@@ -3676,7 +7997,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
@@ -3685,7 +8006,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3694,7 +8015,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3703,7 +8024,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3712,7 +8033,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3721,7 +8042,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3730,7 +8096,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
@@ -3739,7 +8105,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
@@ -3748,7 +8114,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3757,7 +8123,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
@@ -3766,7 +8132,277 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
@@ -3775,7 +8411,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3784,7 +8420,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3793,7 +8429,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3802,7 +8438,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3811,7 +8447,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3865,7 +8546,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3874,7 +8555,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3883,7 +8564,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3892,7 +8573,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3901,7 +8582,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<tiny_member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -3955,7 +8681,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -3964,7 +8690,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -3973,7 +8699,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -3982,7 +8708,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -3991,7 +8717,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -4000,7 +8771,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
@@ -4009,7 +8780,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
@@ -4018,7 +8789,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
@@ -4027,7 +8798,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
@@ -4036,7 +8807,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
@@ -4045,7 +8816,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -4054,7 +8825,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -4063,7 +8834,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -4072,7 +8843,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -4081,7 +8852,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -4090,7 +8906,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
@@ -4099,7 +8915,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
@@ -4108,7 +8924,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
@@ -4117,7 +8933,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
@@ -4126,7 +8942,277 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr t", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr ", _member0, " m", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
@@ -4135,7 +9221,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -4144,7 +9230,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -4153,7 +9239,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -4162,7 +9248,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -4171,7 +9257,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<tiny_member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<tiny_member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
@@ -4225,7 +9356,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
@@ -4234,7 +9365,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
@@ -4243,7 +9374,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
@@ -4252,7 +9383,7 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
@@ -4261,7 +9392,52 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			auto _member1 = read<member_index_t>(_cursor);
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
-			print_all("oprr m", _member0, " t", _member1, " i", _immediate, " ", _operator);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int32_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int8_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<int64_t>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = read<double>(_cursor);
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
+			break;
+		}
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
+		{
+			auto _member0 = read<member_index_t>(_cursor);
+			auto _member1 = read<member_index_t>(_cursor);
+			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
+			auto _operator = read<framework::operator_t>(_cursor);
+			print_all("oprr m", _member0, " ", _member1, " i", _immediate, " ", _operator);
 			break;
 		}
 		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):

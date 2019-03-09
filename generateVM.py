@@ -56,9 +56,11 @@ mmitype = [
 ]
 
 mvars = [
-    ("MOCO_TINY_TEMP", "auto {0} = _temps[read<tiny_member_index_t>(_cursor)];"),
+    ("MOCO_TINY_TEMP", "auto {0} = _temps.from_front(read<tiny_member_index_t>(_cursor));"),
+    ("MOCO_TINY_LOCAL", "auto {0} = _temps.from_back(read<tiny_member_index_t>(_cursor));"),
     ("MOCO_TINY_MEMBER", "auto {0} = _globals[read<tiny_member_index_t>(_cursor)];"),
-    ("MOCO_TEMP", "auto {0} = _temps[read<member_index_t>(_cursor)];"),
+    ("MOCO_TEMP", "auto {0} = _temps.from_front(read<member_index_t>(_cursor));"),
+    ("MOCO_LOCAL", "auto {0} = _temps.from_back(read<member_index_t>(_cursor));"),
     ("MOCO_MEMBER", "auto {0} = _globals[read<member_index_t>(_cursor)];")
 ]
 intvars = [
@@ -80,7 +82,9 @@ def write(x):
     d.write(x)
 
 def format_var_decl(var):
-    return re.sub(r"((_globals|_temps)\[|])", "", var)
+    if "_string_manager" in var:
+        return var
+    return re.match(r"^auto \w+ = ", var)[0] + re.search(r"read<\w+>\(_cursor\)", var)[0] + ";"
 
 def name_of_var(var):
     tmp = re.search(r"auto(?:\s|&)*(\w+) = (.*?)read<", var)
@@ -89,8 +93,10 @@ def name_of_var(var):
         return 'i", ' + tmp[1]
     elif tmp[2] == "_globals[":
         return 'm", ' + tmp[1]
-    elif tmp[2] == "_temps[":
+    elif tmp[2] == "_temps.from_front[":
         return 't", ' + tmp[1]
+    elif tmp[2] == "_temps.from_back[":
+        return 'l", ' + tmp[1]
     else:
         return '", ' + tmp[1]
 
