@@ -106,11 +106,11 @@
       <EnableModules>false</EnableModules>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>F:\mpir\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\mpir\include;F:\PCRE2_x86\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>F:\mpir\x86-debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mpir.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>F:\mpir\x86-debug;%(AdditionalLibraryDirectories);F:\PCRE2_x86\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mpir.lib;pcre2-8d.lib;pcre2-16d.lib;pcre2-32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -135,13 +135,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>F:\mpir\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\mpir\include;F:\PCRE2_x86\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>F:\mpir\x86-release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mpir.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>F:\mpir\x86-release;%(AdditionalLibraryDirectories);F:\PCRE2_x86\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mpir.lib;pcre2-8.lib;pcre2-16.lib;pcre2-32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
@@ -152,7 +152,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>F:\mpir\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\mpir\include;F:\PCRE2_x86\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -202,6 +202,7 @@
     <ClCompile Include="member_names.cpp" />
     <ClCompile Include="module_loader.cpp" />
     <ClCompile Include="namespace_member.cpp" />
+    <ClCompile Include="regex.cpp" />
     <ClCompile Include="schein.cpp" />
     <ClCompile Include="scope_exit.cpp" />
     <ClCompile Include="scope_handler.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="compiler_loop_tracker.hpp" />
     <ClInclude Include="disguised_caller.hpp" />
     <ClInclude Include="buffer_builder.hpp" />
+    <ClInclude Include="internal_config.hpp" />
     <ClInclude Include="local_object.hpp" />
     <ClInclude Include="member_array.hpp" />
     <ClInclude Include="member_cast_type.hpp" />
@@ -264,6 +266,7 @@
     <ClInclude Include="object_variable.hpp" />
     <ClInclude Include="op_code.hpp" />
     <ClInclude Include="raw_object_def.hpp" />
+    <ClInclude Include="regex.hpp" />
     <ClInclude Include="schein.hpp" />
     <ClInclude Include="scope_exit.hpp" />
     <ClInclude Include="script_map.hpp" />
@@ -274,7 +277,6 @@
     <ClInclude Include="compiler_value.hpp" />
     <ClInclude Include="compile_compare_operation.hpp" />
     <ClInclude Include="compile_normal_operation.hpp" />
-    <ClInclude Include="config_cmake.hpp" />
     <ClInclude Include="constructor_chain.hpp" />
     <ClInclude Include="disassembler.hpp" />
     <ClInclude Include="executable_allocator.hpp" />

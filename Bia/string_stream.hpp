@@ -183,7 +183,7 @@ public:
 	/**
 	 * Returns the formatted string buffer.
 	 *
-	 * @remarks If the buffer is moved, ownership of the buffer will be transfered and the string buffer will be cleared. This string stream should not be used after a buffer ownership transfer. The string is formatted as follows: (size) + (length) + (zero-terminated string)
+	 * @remarks If the buffer is moved, ownership of the buffer will be transfered and the string buffer will be cleared. This string stream should not be used after a buffer ownership transfer. The string is formatted as follows: (size) + (length) + (zero-terminated string).
 	 *
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18

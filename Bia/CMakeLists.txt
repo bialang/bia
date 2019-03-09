@@ -24,8 +24,8 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMPILER})
 set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMPILER})
 
 # dependency namespace
-set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp")
-set(Bia_SOURCE_FILES_DEPENDENCY "big_int.cpp")
+set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp" "regex.hpp")
+set(Bia_SOURCE_FILES_DEPENDENCY "big_int.cpp" "regex.cpp")
 
 source_group("Header Files\\dependency" FILES ${Bia_HEADER_FILES_DEPENDENCY})
 source_group("Source Files\\dependency" FILES ${Bia_SOURCE_FILES_DEPENDENCY})

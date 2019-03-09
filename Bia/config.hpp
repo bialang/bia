@@ -1,7 +1,5 @@
 #pragma once
 
-#include "config_cmake.hpp"
-
 // Compiler macro
 #if defined(_MSC_VER)
 #define BIA_COMPILER_MSVC 1

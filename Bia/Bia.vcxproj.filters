@@ -237,6 +237,9 @@
     <ClCompile Include="string_manager.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
+    <ClCompile Include="regex.cpp">
+      <Filter>Source Files\dependency</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -443,9 +446,6 @@
     <ClInclude Include="namespace_member.hpp">
       <Filter>Header Files\framework\object</Filter>
     </ClInclude>
-    <ClInclude Include="config_cmake.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="module_library.hpp">
       <Filter>Header Files\machine\modular</Filter>
     </ClInclude>
@@ -601,6 +601,12 @@
     </ClInclude>
     <ClInclude Include="index_map.hpp">
       <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="regex.hpp">
+      <Filter>Header Files\dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="internal_config.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
