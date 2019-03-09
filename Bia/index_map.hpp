@@ -2,6 +2,7 @@
 
 #include <map>
 #include <vector>
+#include <cstdint>
 
 #include "name_manager.hpp"
 
@@ -17,6 +18,8 @@ namespace utility
 class index_map
 {
 public:
+	typedef uint32_t index_t;
+
 	/**
 	 * Returns the index of the entry. If it does not exist, a new entry will be created.
 	 *
@@ -29,7 +32,7 @@ public:
 	 *
 	 * @return The index of the entry.
 	*/
-	size_t get_or_insert(machine::name_manager::name_t _name)
+	index_t get_or_insert(machine::name_manager::name_t _name)
 	{
 		auto _result = _index.find(_name);
 
@@ -75,7 +78,7 @@ public:
 
 private:
 	/** Holds all entries and their indices. */
-	std::map<machine::name_manager::name_t, size_t> _index;
+	std::map<machine::name_manager::name_t, index_t> _index;
 };
 
 }

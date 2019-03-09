@@ -55,6 +55,8 @@ inline Return disguised_caller(Class * _instance, Return(Class::*_function)(Argu
 template<typename... Arguments, typename Return, typename Class, machine::stack::index_t... Indices>
 inline Return disguised_caller(Class * _instance, Return(Class::*_function)(Arguments...), const char * _format, machine::stack * _stack, sequence<Indices...>)
 {
+	constexpr auto arg_count = sizeof...(Arguments);
+
 	return (_instance->*_function)(_stack->format_cast<Arguments>(Indices - arg_count, _format[Indices])...);
 }
 
