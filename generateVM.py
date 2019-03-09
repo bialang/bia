@@ -93,9 +93,9 @@ def name_of_var(var):
         return 'i", ' + tmp[1]
     elif tmp[2] == "_globals[":
         return 'm", ' + tmp[1]
-    elif tmp[2] == "_temps.from_front[":
+    elif tmp[2] == "_temps.from_front(":
         return 't", ' + tmp[1]
-    elif tmp[2] == "_temps.from_back[":
+    elif tmp[2] == "_temps.from_back(":
         return 'l", ' + tmp[1]
     else:
         return '", ' + tmp[1]
