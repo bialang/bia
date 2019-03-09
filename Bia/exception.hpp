@@ -12,6 +12,8 @@
 #define BIA_EM_UNSUPPORTED_TYPE "Type is not supported."
 #define BIA_EM_UNEXPECTED_TYPE "Unexpected type."
 #define BIA_EM_UNDEFINED_MEMBER "Undefined member."
+#define BIA_EM_UNKNOWN_MEMBER "Unknown member."
+#define BIA_EM_UNKNOWN_SCRIPT "Unknown script."
 #define BIA_EM_NULL_INSTANCE "Cannot access member without an instance."
 #define BIA_EM_REPORT_LIMIT "Report bundle limit reached."
 #define BIA_EM_LIMITATION_EXCEEDED "Limitation has been exceeded."
@@ -26,6 +28,7 @@
 #define BIA_EM_UNSUPPORTED_OPERATION "This operation is not supported."
 #define BIA_EM_UNSUPPORTED_OPERATOR "Unsupported operator."
 #define BIA_EM_UNSUPPORTED_INSTANTIATION "Instantiation is not supported."
+#define BIA_EM_UNSUPPORTED_COPY "Cannot be copied."
 #define BIA_EM_FAILED_ALLOCATION "Allocation failed."
 #define BIA_EM_FAILED_MEMORY_PROTECTION "Cannot change protection of the memory address."
 #define BIA_EM_ASSIGN_ON_CONST "Assigns on constant variable are disallowed."
@@ -48,9 +51,31 @@ namespace exception
  *
  * Every thrown exception of Bia will inherit this.
 */
-class bia_error
+class bia_error : public std::exception
 {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.71.149.809
+	 * @date 28-Dec-18
+	 *
+	 * @param _message The message of the exception.
+	*/
+	explicit bia_error(const char * _message) noexcept : _message(_message)
+	{
+	}
+	/**
+	 * Constructor.
+	 *
+	 * @since 3.71.149.809
+	 * @date 28-Dec-18
+	 *
+	 * @param _message The message of the exception.
+	*/
+	explicit bia_error(const std::string & _message) noexcept : _message(_message)
+	{
+	}
 	/**
 	 * Destructor.
 	 *
@@ -58,6 +83,13 @@ public:
 	 * @date 21-Apr-18
 	*/
 	virtual ~bia_error() noexcept = default;
+	virtual const char * what() const noexcept override
+	{
+		return _message.c_str();
+	}
+	
+protected:
+	std::string _message;
 };
 
 /**
@@ -67,16 +99,16 @@ public:
  *
  * @see @ref runtime_error
 */
-class logic_error : public bia_error, public std::logic_error
+class logic_error : public bia_error
 {
 public:
-	using std::logic_error::logic_error;
+	using bia_error::bia_error;
 };
 
 /**
- * @brief A implementation error.
+ * @brief An implementation error.
 */
-class implementation_error : public bia_error, public std::exception
+class implementation_error : public bia_error
 {
 public:
 	/**
@@ -89,17 +121,10 @@ public:
 	 * @param _file The file.
 	 * @param _line The line.
 	*/
-	implementation_error(const std::string & _message, const char * _file, int _line) : _message(_message)
+	implementation_error(const std::string & _message, const char * _file, int _line) noexcept : bia_error(_message)
 	{
 		this->_message.append(_file).append(":").append(std::to_string(_line)).append(":").append(_message);
 	}
-	virtual const char * what() const noexcept override
-	{
-		return _message.c_str();
-	}
-
-private:
-	std::string _message;
 };
 
 /**
@@ -109,10 +134,10 @@ private:
  *
  * @see @ref logic_error
 */
-class runtime_error : public bia_error, public std::runtime_error
+class runtime_error : public bia_error
 {
 public:
-	using std::runtime_error::runtime_error;
+	using bia_error::bia_error;
 };
 
 /**

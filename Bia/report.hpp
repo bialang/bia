@@ -4,10 +4,11 @@
 #include <type_traits>
 
 #include "operator.hpp"
-#include "interpreter_string.hpp"
+#include "keyword.hpp"
 #include "output_stream.hpp"
 #include "input_stream.hpp"
 #include "big_int.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -24,13 +25,15 @@ namespace grammar
 */
 struct report
 {
-	typedef uint32_t custom_type;
-	typedef uint32_t rule_type;
-	typedef uint16_t token_type;
+	typedef uint16_t custom_t;
+	typedef uint8_t rule_t;
+	typedef uint8_t token_t;
+	typedef const char* member_t;
 
-	constexpr static int custom_bits = 27;
-	constexpr static int rule_bits = 22;
-	constexpr static int token_bits = 32 - rule_bits;
+	constexpr static auto type_bits = 4;
+	constexpr static auto custom_bits = 12;
+	constexpr static auto rule_bits = 8;
+	constexpr static auto token_bits = 8;
 
 	enum class TYPE : uint32_t
 	{
@@ -56,91 +59,23 @@ struct report
 		UTF32
 	};
 
-	TYPE type : 32 - custom_bits;
+	TYPE type : type_bits;
 	uint32_t custom_parameter : custom_bits;
 	uint32_t rule_id : rule_bits;
 	uint32_t token_id : token_bits;
+	//uint32_t size;
 	union
 	{
-		/** A string buffer with a specific format. See @ref stream::string_stream for more information. */
-		void * string;
+		machine::string_manager::utf8_index_t string;
 		int64_t int_value;
 		dependency::big_int * big_int_value;
 		double double_value;
-		const report *  end;
-		const char * member;
-		framework::operator_type operator_code;
-		INTERPRETER_STRING keyword;
+		const report * end;
+		/** The non-zero terminated name of the member. See @a size for the length. */
+		member_t member;
+		framework::operator_t operator_code;
+		KEYWORD_ID keyword;
 	} content;
-	
-	/*void serialize(stream::output_stream & _output)
-	{
-		_output.write_all<uint32_t, uint32_t>(static_cast<uint32_t>(type) << custom_bits | custom_parameter, rule_id << token_bits | token_id);
-
-		switch (type) {
-		case TYPE::STRING:
-		case TYPE::INT_VALUE:
-			_output.write_all(content.int_value);
-
-			break;
-		case TYPE::DOUBLE_VALUE:
-			_output.write_all(content.double_value);
-
-			break;
-		case TYPE::MEMBER:
-		case TYPE::OPERATOR_CODE:
-			_output.write_all(content.operator_code);
-
-			break;
-		case TYPE::KEYWORD:
-			_output.write_all(content.keyword);
-
-			break;
-		case TYPE::BEGIN:
-		case TYPE::END:
-		case TYPE::EMPTY_CHILD:
-		default:
-			throw;
-		}
-	}
-	void deserialize(stream::input_stream & _input)
-	{
-		auto _tmp = _input.read<uint32_t>();
-
-		type = static_cast<TYPE>(_tmp >> custom_bits);
-		custom_parameter = _tmp & ~uint32_t(0) << custom_bits;
-
-		_tmp = _input.read<uint32_t>();
-
-		rule_id = _tmp >> token_bits;
-		token_id = _tmp & ~uint32_t(0) << token_bits;
-
-		switch (type) {
-		case TYPE::STRING:
-		case TYPE::INT_VALUE:
-			content.int_value = _input.read<int64_t>();
-
-			break;
-		case TYPE::DOUBLE_VALUE:
-			content.double_value = _input.read<double>();
-
-			break;
-		case TYPE::MEMBER:
-		case TYPE::OPERATOR_CODE:
-			content.operator_code = _input.read<framework::operator_type>();
-
-			break;
-		case TYPE::KEYWORD:
-			content.keyword = _input.read<INTERPRETER_STRING>();
-
-			break;
-		case TYPE::BEGIN:
-		case TYPE::END:
-		case TYPE::EMPTY_CHILD:
-		default:
-			throw;
-		}
-	}*/
 };
 
 }

@@ -15,9 +15,8 @@ test::add("mod", &big_int_test::test_mod);
 test::add("power", &big_int_test::test_power);
 END_DECLARE_TESTS
 
-big_int_test::big_int_test() : _builder(&_allocator)
+big_int_test::big_int_test() : _builder(test_allocator::allocator())
 {
-	bia::machine::memory::big_int_allocator::initialize(std::shared_ptr<simple_allocator>(&_allocator, [](simple_allocator*) {}));
 }
 
 void big_int_test::test_set_get()

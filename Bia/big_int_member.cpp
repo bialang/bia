@@ -10,7 +10,7 @@ namespace native
 {
 
 template<typename Right>
-inline void big_int_member_operation(dependency::big_int & _left, dependency::big_int & _destination, operator_type _operator, Right && _right)
+inline void big_int_member_operation(dependency::big_int & _left, dependency::big_int & _destination, operator_t _operator, Right && _right)
 {
 	switch (_operator) {
 	case O_ASSIGN:
@@ -67,7 +67,7 @@ inline void big_int_member_operation(dependency::big_int & _left, dependency::bi
 }
 
 template<typename Right>
-inline void big_int_member_operation(dependency::big_int & _left, operator_type _operator, Right && _right)
+inline void big_int_member_operation(dependency::big_int & _left, operator_t _operator, Right && _right)
 {
 	switch (_operator) {
 	case O_ASSIGN:
@@ -124,8 +124,6 @@ inline void big_int_member_operation(dependency::big_int & _left, operator_type 
 }
 
 
-thread_local big_int_member::tmp_value big_int_member::_tmp_value;
-
 big_int_member::big_int_member()
 {
 }
@@ -167,7 +165,7 @@ void big_int_member::clone(member * _destination)
 	copy(_destination);
 }
 
-void big_int_member::operator_call(member * _destination, operator_type _operator, const member * _right)
+void big_int_member::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	auto _flags = _right->flags();
 
@@ -184,7 +182,7 @@ void big_int_member::operator_call(member * _destination, operator_type _operato
 	BIA_NOT_IMPLEMENTED;
 }
 
-void big_int_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+void big_int_member::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
 	if (_destination) {
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, _right);
@@ -193,7 +191,7 @@ void big_int_member::operator_call_int32(member * _destination, operator_type _o
 	}
 }
 
-void big_int_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+void big_int_member::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
 	if (_destination) {
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, _right);
@@ -202,7 +200,7 @@ void big_int_member::operator_call_int64(member * _destination, operator_type _o
 	}
 }
 
-void BIA_MEMBER_CALLING_CONVENTION big_int_member::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+void BIA_MEMBER_CALLING_CONVENTION big_int_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
 {
 	if (_destination) {
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, *_right);
@@ -211,7 +209,7 @@ void BIA_MEMBER_CALLING_CONVENTION big_int_member::operator_call_big_int(member 
 	}
 }
 
-void big_int_member::operator_call_double(member * _destination, operator_type _operator, double _right)
+void big_int_member::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
 	if (_destination) {
 		big_int_member_operation(_data.get(), _destination->template replace_this<big_int_member>()->_data.get(), _operator, _right);
@@ -220,7 +218,7 @@ void big_int_member::operator_call_double(member * _destination, operator_type _
 	}
 }
 
-void big_int_member::object_member(member * _destination, machine::string_manager::name_type _name)
+void big_int_member::object_member(member * _destination, machine::name_manager::name_t _name)
 {
 	BIA_NOT_IMPLEMENTED;
 }
@@ -235,7 +233,7 @@ int32_t big_int_member::test() const
 	return static_cast<int32_t>(!_data->is_zero());
 }
 
-int32_t big_int_member::test_member(operator_type _operator, member * _right) const
+int32_t big_int_member::test_member(operator_t _operator, member * _right) const
 {
 	if (_operator == O_EQUALS && _right->flags() & F_BIG_INT) {
 		return _data->compare(static_cast<big_int_member*>(_right)->_data.get()) == 0;
@@ -244,7 +242,7 @@ int32_t big_int_member::test_member(operator_type _operator, member * _right) co
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t big_int_member::test_int32(operator_type _operator, int32_t _right) const
+int32_t big_int_member::test_int32(operator_t _operator, int32_t _right) const
 {
 	if (_operator == O_EQUALS) {
 		return _data->compare(_right) == 0;
@@ -253,12 +251,12 @@ int32_t big_int_member::test_int32(operator_type _operator, int32_t _right) cons
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t big_int_member::test_int64(operator_type _operator, int64_t _right) const
+int32_t big_int_member::test_int64(operator_t _operator, int64_t _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t big_int_member::test_double(operator_type _operator, double _right) const
+int32_t big_int_member::test_double(operator_t _operator, double _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }
@@ -280,47 +278,19 @@ const char * big_int_member::to_cstring(utility::buffer_builder * _builder) cons
 	return _builder->buffer<char>();
 }
 
-void * big_int_member::native_data(native::NATIVE_TYPE _type)
+int32_t big_int_member::int32_data() const
 {
-	return const_cast<void*>(const_native_data(_type));
+	return static_cast<int32_t>(_data->cast_int());
 }
 
-const void * big_int_member::const_native_data(native::NATIVE_TYPE _type) const
+int64_t big_int_member::int64_data() const
 {
-	switch (_type) {
-	case NATIVE_TYPE::BOOL:
-		_tmp_value.bool_value = !_data->is_zero();
+	return _data->cast_int();
+}
 
-		return &_tmp_value.bool_value;
-	case NATIVE_TYPE::INT_8:
-		_tmp_value.int8_value = static_cast<int8_t>(_data->cast_int());
-
-		return &_tmp_value.int8_value;
-	case NATIVE_TYPE::INT_16:
-		_tmp_value.int16_value = static_cast<int16_t>(_data->cast_int());
-
-		return &_tmp_value.int16_value;
-	case NATIVE_TYPE::INT_32:
-		_tmp_value.int32_value = static_cast<int32_t>(_data->cast_int());
-
-		return &_tmp_value.int32_value;
-	case NATIVE_TYPE::INT_64:
-		_tmp_value.int64_value = _data->cast_int();
-
-		return &_tmp_value.int64_value;
-	case NATIVE_TYPE::FLOAT:
-		_tmp_value.float_value = static_cast<float>(_data->cast_double());
-
-		return &_tmp_value.float_value;
-	case NATIVE_TYPE::DOUBLE:
-		_tmp_value.double_value = _data->cast_double();
-
-		return &_tmp_value.double_value;
-	default:
-		break;
-	}
-
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+double big_int_member::double_data() const
+{
+	return _data->cast_double();
 }
 
 }

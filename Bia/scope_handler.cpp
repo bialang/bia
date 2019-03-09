@@ -1,14 +1,16 @@
 #include "scope_handler.hpp"
 #include "exception.hpp"
 
+#include <algorithm>
 
 namespace bia
 {
 namespace compiler
 {
 
-scope_handler::scope_handler(machine::platform::toolset & _toolset) : _toolset(_toolset)
-{	 
+scope_handler::scope_handler(machine::virtual_machine::virtual_translator & _translator) : _translator(_translator)
+{
+	_max_needed = 0;
 }
 
 void scope_handler::open_scope()
@@ -19,12 +21,11 @@ void scope_handler::open_scope()
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		_start_position = _toolset.create_local_variables();
 		_counter = temp_counter();
 
 		_variables_in_scopes.push_back(0);
 	} else {
-		_toolset.open_scope();
+		_translator.open_scope();
 		_variables_in_scopes.push_back(_counter.peek());
 	}
 }
@@ -36,7 +37,7 @@ void scope_handler::close_scope()
 		BIA_IMPLEMENTATION_ERROR;
 	}
 
-	variable_index_type _count = 0;
+	variable_index_t _count = 0;
 	auto _current_scope = _variables_in_scopes.size();
 
 	// Remove variables from map
@@ -51,14 +52,11 @@ void scope_handler::close_scope()
 	}
 
 	// Scope cleanup
+	_max_needed = std::max(_max_needed, _counter.current());
+
 	_counter.pop(_variables_in_scopes.back());
 	_variables_in_scopes.pop_back();
-
-	if (no_open_scopes()) {
-		_toolset.destroy_local_variables(_start_position, _counter.max());
-	} else {
-		_toolset.close_scope(_count);
-	}
+	_translator.close_scope(_count);
 }
 
 bool scope_handler::no_open_scopes() const noexcept
@@ -66,7 +64,7 @@ bool scope_handler::no_open_scopes() const noexcept
 	return _variables_in_scopes.empty();
 }
 
-scope_handler::variable_index_type scope_handler::declare(const char * _name)
+scope_handler::variable_index_t scope_handler::declare(const char * _name)
 {
 	if (no_open_scopes()) {
 		BIA_IMPLEMENTATION_ERROR;
@@ -84,11 +82,16 @@ scope_handler::variable_index_type scope_handler::declare(const char * _name)
 	return _result->second.first;
 }
 
-scope_handler::variable_index_type scope_handler::variable_index(const char * _name)
+scope_handler::variable_index_t scope_handler::variable_index(const char * _name)
 {
 	auto _result = _variables.find(_name);
 
 	return _result == _variables.end() ? not_found : _result->second.first;
+}
+
+scope_handler::variable_index_t scope_handler::max_needed() const noexcept
+{
+	return _max_needed;
 }
 
 }

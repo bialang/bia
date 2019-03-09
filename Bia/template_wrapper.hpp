@@ -7,7 +7,6 @@
 #include "static_function.hpp"
 #include "lambda_function.hpp"
 #include "member_function.hpp"
-#include "string_manager.hpp"
 
 
 namespace bia
@@ -36,7 +35,7 @@ public:
 		return *this;
 	}
 	template<typename Return, typename... Arguments>
-	template_wrapper & set_function(member_map::name_type _name, Return(*_function)(Arguments...))
+	template_wrapper & set_function(member_map::name_t _name, Return(*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
@@ -46,7 +45,7 @@ public:
 		return *this;
 	}
 	template<typename Active_class = Class, typename Function_class, typename Return, typename... Arguments>
-	typename std::enable_if<std::is_base_of<Function_class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_type _name, Return(Function_class::*_function)(Arguments...))
+	typename std::enable_if<std::is_base_of<Function_class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_t _name, Return(Function_class::*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
@@ -56,7 +55,7 @@ public:
 		return *this;
 	}
 	template<typename _Lambda>
-	template_wrapper & set_lambda(member_map::name_type _name, _Lambda && _lambda)
+	template_wrapper & set_lambda(member_map::name_t _name, _Lambda && _lambda)
 	{
 		// Set the active allocator
 		_context.activate_context();
@@ -77,7 +76,7 @@ public:
 	 *
 	 * @return The member.
 	*/
-	member * member_address(member_map::name_type _name)
+	member * member_address(member_map::name_t _name)
 	{
 		return _template_member->members().get_or_create(_context.name_address(_name));
 	}

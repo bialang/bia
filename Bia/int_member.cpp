@@ -15,8 +15,6 @@ namespace framework
 namespace native
 {
 
-thread_local int_member::tmp_value int_member::_tmp_value;
-
 int_member::int_member(int32_t _value) : _data(_value)
 {
 }
@@ -50,7 +48,7 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::clone(member * _destination)
 	copy(_destination);
 }
 
-void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call(member * _destination, operator_type _operator, const member * _right)
+void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	auto _flags = _right->flags();
 
@@ -69,7 +67,7 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call(member * _destinati
 	}
 }
 
-void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
 	if (_destination) {
 		native_operation<true>::operate_integral(_destination, _data.get(), _operator, _right);
@@ -78,7 +76,7 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int32(member * _des
 	}
 }
 
-void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
 	if (_destination) {
 		native_operation<true>::operate_integral(_destination, _data.get(), _operator, _right);
@@ -87,12 +85,12 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_int64(member * _des
 	}
 }
 
-void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right)
+void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_double(member * _destination, operator_type _operator, double _right)
+void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
 	if (_destination) {
 		native_operation<true>::operate_arithmetic(_destination, _data.get(), _operator, _right);
@@ -101,7 +99,7 @@ void BIA_MEMBER_CALLING_CONVENTION int_member::operator_call_double(member * _de
 	}
 }
 
-void BIA_MEMBER_CALLING_CONVENTION int_member::object_member(member * _destination, machine::string_manager::name_type _name)
+void BIA_MEMBER_CALLING_CONVENTION int_member::object_member(member * _destination, machine::name_manager::name_t _name)
 {
 	BIA_NOT_IMPLEMENTED;
 }
@@ -116,7 +114,7 @@ int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test() const
 	return test_operation(_data.get());
 }
 
-int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_member(operator_type _operator, member * _right) const
+int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_member(operator_t _operator, member * _right) const
 {
 	auto _flags = _right->flags();
 
@@ -130,17 +128,17 @@ int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_member(operator_type _ope
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_int32(operator_type _operator, int32_t _right) const
+int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_int32(operator_t _operator, int32_t _right) const
 {
 	return test_operation(_data.get(), _operator, _right);
 }
 
-int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_int64(operator_type _operator, int64_t _right) const
+int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_int64(operator_t _operator, int64_t _right) const
 {
 	return test_operation(_data.get(), _operator, _right);
 }
 
-int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_double(operator_type _operator, double _right) const
+int32_t BIA_MEMBER_CALLING_CONVENTION int_member::test_double(operator_t _operator, double _right) const
 {
 	return test_operation(_data.get(), _operator, _right);
 }
@@ -162,33 +160,19 @@ const char * int_member::to_cstring(utility::buffer_builder * _builder) const
 	return _builder->buffer<char>();
 }
 
-void * int_member::native_data(native::NATIVE_TYPE _type)
+int32_t int_member::int32_data() const
 {
-	return const_cast<void*>(const_native_data(_type));
+	return static_cast<int32_t>(_data.get());
 }
 
-const void * int_member::const_native_data(native::NATIVE_TYPE _type) const
+int64_t int_member::int64_data() const
 {
-	switch (_type) {
-	case NATIVE_TYPE::BOOL:
-	case NATIVE_TYPE::INT_8:
-	case NATIVE_TYPE::INT_16:
-	case NATIVE_TYPE::INT_32:
-	case NATIVE_TYPE::INT_64:
-		return &_data.get();
-	case NATIVE_TYPE::FLOAT:
-		_tmp_value.float_value = static_cast<float>(_data.get());
+	return _data.get();
+}
 
-		return &_tmp_value.float_value;
-	case NATIVE_TYPE::DOUBLE:
-		_tmp_value.double_value = static_cast<double>(_data.get());
-
-		return &_tmp_value.double_value;
-	default:
-		break;
-	}
-
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+double int_member::double_data() const
+{
+	return static_cast<double>(_data.get());
 }
 
 }

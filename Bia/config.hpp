@@ -13,7 +13,7 @@
 //#elif defined(__IBMC__) || defined(__IBMCPP__)
 //#elif defined(__SUNPRO_C)  || defined(__SUNPRO_CC)
 #else
-#error "Unsupported compiler."
+#define BIA_COMPILER_UNKNOWN
 #endif
 
 //Operating System
@@ -22,7 +22,7 @@
 #elif defined(__linux__)
 #define BIA_OS_LINUX 1
 #else
-#error "Unsupported operating system."
+#define BIA_OS_UNKNOWN
 #endif
 
 // Architecture
@@ -31,7 +31,7 @@
 #elif defined(__x86_64__) || defined(_M_X64)
 #define BIA_ARCHITECTURE_X86_64 1
 #else
-#error "Unsupported architecture."
+#define BIA_ARCHITECTURE_UNKNOWN
 #endif
 
 // Microsoft
@@ -76,6 +76,17 @@
 // Export
 #define BIA_EXPORT
 
+// Unknown compiler
+#else
+
+// Calling conventions
+#define BIA_STATIC_CALLING_CONVETION
+#define BIA_MEMBER_CALLING_CONVENTION
+#define BIA_VARG_MEMBER_CALLING_CONVENTION
+
+// Export
+#define BIA_EXPORT
+
 #endif
 
 // Function signatures
@@ -99,3 +110,55 @@ using varg_member_function_signature = _Return(BIA_VARG_MEMBER_CALLING_CONVENTIO
 #define BIA_MIN_INPUT_BUFFER_SIZE 1024
 /** The maximum identifier length. Can be at most as high as @ref BIA_MIN_INPUT_BUFFER / 4. */
 #define BIA_MAX_IDENTIFIER_LENGTH (BIA_MIN_INPUT_BUFFER_SIZE / 4)
+
+// Declarations
+namespace bia
+{
+namespace compiler
+{
+
+class compiler;
+
+}
+
+namespace framework
+{
+namespace object
+{
+
+template<typename Type, typename Class>
+class template_wrapper;
+
+}
+}
+
+namespace grammar
+{
+
+class lexer_token;
+
+}
+
+namespace machine
+{
+
+class disassembler;
+class machine_context;
+class stack;
+
+namespace platform
+{
+
+class x86_toolset;
+
+}
+
+namespace virtual_machine
+{
+
+class virtual_machine_schein;
+
+}
+}
+}
+

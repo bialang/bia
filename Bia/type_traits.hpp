@@ -49,38 +49,18 @@ struct native_operation_result<double, Right>
 	typedef typename std::conditional<std::is_arithmetic<Right>::value, double, void*>::type type;
 };
 
-template<bool _Choose, typename Return, typename Type>
-struct chooser
+template<typename T>
+struct pointer_rank
 {
+	constexpr static size_t value = 0;
+	constexpr static bool odd = false;
 };
 
-template<typename Return, typename Type>
-struct chooser<true, Return, Type>
+template<typename T>
+struct pointer_rank<T*>
 {
-	static Return choose(Type _value) noexcept
-	{
-		return checked_cast(_value);
-	}
-
-private:
-	static Return checked_cast(Return _value) noexcept
-	{
-		return _value;
-	}
-	template<typename Ty>
-	static Return checked_cast(Ty _value) noexcept
-	{
-		BIA_IMPLEMENTATION_ERROR;
-	}
-};
-
-template<typename Return, typename Type>
-struct chooser<false, Return, Type>
-{
-	static Return choose(Type _value)
-	{
-		BIA_IMPLEMENTATION_ERROR;
-	}
+	constexpr static size_t value = pointer_rank<T>::value + 1;
+	constexpr static bool odd = value % 2 != 0;
 };
 
 template<typename Type, bool Is_integral, size_t Size>

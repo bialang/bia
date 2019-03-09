@@ -22,6 +22,7 @@ public:
 	BIA_EXPORT virtual void write(const void * _buffer, size_t _size) override;
 	BIA_EXPORT virtual cursor_type position() const override;
 	BIA_EXPORT cursor_type size() const;
+	BIA_EXPORT int8_t * buffer();
 	BIA_EXPORT const int8_t * buffer() const;
 
 protected:

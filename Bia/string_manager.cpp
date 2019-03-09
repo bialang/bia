@@ -1,8 +1,6 @@
 #include "string_manager.hpp"
-#include "string_stream.hpp"
-
-#include <cstring>
-#include <utility>
+#include "share.hpp"
+#include "machine_context.hpp"
 
 
 namespace bia
@@ -10,75 +8,16 @@ namespace bia
 namespace machine
 {
 
-string_manager::string_manager(memory::allocator * _allocator) noexcept
+string_manager::~string_manager()
 {
-	this->_allocator = _allocator;
 }
 
-string_manager::string_manager(string_manager && _move) noexcept : _index(std::move(_move._index))
+string_manager::index_t string_manager::register_string(memory::universal_allocation _string)
 {
-	_allocator = _move._allocator;
-}
+	_strings.emplace_back();
+	_strings.back()->create<dstring_resource>(_string, machine_context::active_allocator());
 
-string_manager::~string_manager() noexcept
-{
-	// Delete all allocated strings
-	for (auto & _entry : _index) {
-		try {
-			_allocator->deallocate(_entry.allocation());
-		} catch (...) {
-		}
-	}
-
-	// Delete all string resources
-	for (auto & _resource : _string_resources) {
-		try {
-			_allocator->deallocate({ _resource, stream::string_stream::size(_resource) });
-		} catch (...) {
-		}
-	}
-}
-
-void string_manager::register_string(void * _resource)
-{
-	_string_resources.push_back(_resource);
-}
-
-string_manager::name_type string_manager::name_address(const char * _name, size_t _length)
-{
-	auto _result = _index.find({ _name, _length + 1 });
-
-	// Create new entry
-	if (_result == _index.end()) {
-		auto _allocation = _allocator->allocate(_length + 1);
-
-		memcpy(_allocation.first, _name, _length + 1);
-		static_cast<char*>(_allocation.first)[_length] = 0;
-
-		_result = _index.emplace(string_entry(_allocation)).first;
-	}
-
-	return _result->_string;
-}
-
-const char * string_manager::format_address(const char * _format, size_t _length)
-{
-	auto _result = _index.find({ _format, _length });
-
-	// Create new entry
-	if (_result == _index.end()) {
-		auto _allocation = _allocator->allocate(_length);
-		auto _string = static_cast<char*>(_allocation.first);
-
-		// Copy in reverse order
-		for (size_t i = 0; _length--; ++i) {
-			_string[i] = _format[_length];
-		}
-
-		_result = _index.insert(string_entry(_allocation)).first;
-	}
-
-	return _result->_string;
+	return _strings.size() - 1;
 }
 
 }

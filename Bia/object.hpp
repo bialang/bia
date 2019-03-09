@@ -55,43 +55,43 @@ inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::execute(member * _destin
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_count(member * _destination, void * _reserved, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_format(member * _destination, const char * _format, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call(member * _destination, operator_type _operator, const member * _right)
+inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call_int32(member * _destination, operator_type _operator, int32_t _right)
+inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call_int32(member * _destination, operator_t _operator, int32_t _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call_int64(member * _destination, operator_type _operator, int64_t _right)
+inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call_int64(member * _destination, operator_t _operator, int64_t _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call_double(member * _destination, operator_type _operator, double _right)
+inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::operator_call_double(member * _destination, operator_t _operator, double _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::object_member(member * _destination, machine::string_manager::name_type _name)
+inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::object_member(member * _destination, machine::name_manager::name_t _name)
 {
 	// Get instance, because this could be _destination
 	auto _instance = _data.get().first;
@@ -114,25 +114,25 @@ inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test() const
 }
 
 template<typename Type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test_member(operator_type _operator, member * _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test_member(operator_t _operator, member * _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test_int32(operator_type _operator, int32_t _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test_int32(operator_t _operator, int32_t _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test_int64(operator_type _operator, int64_t _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test_int64(operator_t _operator, int64_t _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test_double(operator_type _operator, double _right) const
+inline int32_t BIA_MEMBER_CALLING_CONVENTION object<Type>::test_double(operator_t _operator, double _right) const
 {
 	BIA_NOT_IMPLEMENTED;
 }
@@ -149,15 +149,20 @@ inline double object<Type>::to_double() const
 	BIA_NOT_IMPLEMENTED;
 }
 
-
 template<typename Type>
-inline void * object<Type>::native_data(native::NATIVE_TYPE _type)
+inline int32_t object<Type>::int32_data() const
 {
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
 
 template<typename Type>
-inline const void * object<Type>::const_native_data(native::NATIVE_TYPE _type) const
+inline int64_t object<Type>::int64_data() const
+{
+	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+}
+
+template<typename Type>
+inline double object<Type>::double_data() const
 {
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 }
@@ -167,9 +172,7 @@ inline void * object<Type>::data(const std::type_info & _type)
 {
 	if (!std::is_const<Type>::value) {
 		if (typeid(Type) == _type) {
-			return const_cast<typename std::remove_cv<Type>::type*>(static_cast<Type*>(_data.get().first.get()));
-		} else if (typeid(Type*) == _type) {
-			return &_data.get().first.get();
+			return _data.get().first.get().first;
 		}
 	}
 
@@ -180,9 +183,7 @@ template<typename Type>
 inline const void * object<Type>::const_data(const std::type_info & _type) const
 {
 	if (typeid(Type) == _type) {
-		return _data.get().first.get();
-	} else if (typeid(Type*) == _type) {
-		return &_data.get().first.get();
+		return _data.get().first.get().first;
 	}
 
 	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);

@@ -106,24 +106,24 @@
     <Filter Include="Source Files\common">
       <UniqueIdentifier>{b62cd1b3-3f84-4d0c-af28-a80977c9c1cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\machine\virtual_machine">
+      <UniqueIdentifier>{9dbedc63-6566-4c0d-8633-bff1e8d534a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\machine\virtual_machine">
+      <UniqueIdentifier>{a46065d0-f799-448f-8e9b-2c2eb7318795}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utility">
+      <UniqueIdentifier>{f1d4d637-d7bf-42d0-a860-68c8e09e9355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\machine\platform">
+      <UniqueIdentifier>{d85be8c1-d6a8-4291-aab6-41beae7b2033}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="machine_schein.cpp">
-      <Filter>Source Files\machine</Filter>
-    </ClCompile>
-    <ClCompile Include="machine_code.cpp">
-      <Filter>Source Files\machine</Filter>
-    </ClCompile>
     <ClCompile Include="syntax.cpp">
-      <Filter>Source Files\grammar</Filter>
-    </ClCompile>
-    <ClCompile Include="interpreter_rule.cpp">
-      <Filter>Source Files\grammar</Filter>
-    </ClCompile>
-    <ClCompile Include="interpreter.cpp">
       <Filter>Source Files\grammar</Filter>
     </ClCompile>
     <ClCompile Include="undefined_member.cpp">
@@ -131,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="compiler.cpp">
       <Filter>Source Files\compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="interpreter_token.cpp">
-      <Filter>Source Files\grammar</Filter>
     </ClCompile>
     <ClCompile Include="simple_allocator.cpp">
       <Filter>Source Files\machine\memory</Filter>
@@ -144,14 +141,8 @@
     <ClCompile Include="instantiate.cpp">
       <Filter>Source Files\machine\link</Filter>
     </ClCompile>
-    <ClCompile Include="string_manager.cpp">
-      <Filter>Source Files\machine</Filter>
-    </ClCompile>
     <ClCompile Include="buffer_input_stream.cpp">
       <Filter>Source Files\stream</Filter>
-    </ClCompile>
-    <ClCompile Include="simple_executable_allocator.cpp">
-      <Filter>Source Files\machine\memory</Filter>
     </ClCompile>
     <ClCompile Include="utf8.cpp">
       <Filter>Source Files\encoding</Filter>
@@ -169,9 +160,6 @@
       <Filter>Source Files\machine</Filter>
     </ClCompile>
     <ClCompile Include="variable_index.cpp">
-      <Filter>Source Files\machine</Filter>
-    </ClCompile>
-    <ClCompile Include="machine_stack.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
     <ClCompile Include="member_map.cpp">
@@ -201,11 +189,53 @@
     <ClCompile Include="member_names.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
+    <ClCompile Include="script_map.cpp">
+      <Filter>Source Files\machine</Filter>
+    </ClCompile>
     <ClCompile Include="compiler_loop_tracker.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\compiler</Filter>
     </ClCompile>
     <ClCompile Include="scope_handler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="virtual_machine_code.cpp">
+      <Filter>Source Files\machine\virtual_machine</Filter>
+    </ClCompile>
+    <ClCompile Include="virtual_translator.cpp">
+      <Filter>Source Files\machine\virtual_machine</Filter>
+    </ClCompile>
+    <ClCompile Include="lexer.cpp">
+      <Filter>Source Files\grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="grammar_rule.cpp">
+      <Filter>Source Files\grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="lexer_token.cpp">
+      <Filter>Source Files\grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="scope_exit.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="machine_code.cpp">
+      <Filter>Source Files\machine\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="schein.cpp">
+      <Filter>Source Files\machine</Filter>
+    </ClCompile>
+    <ClCompile Include="virtual_machine_schein.cpp">
+      <Filter>Source Files\machine\virtual_machine</Filter>
+    </ClCompile>
+    <ClCompile Include="name_manager.cpp">
+      <Filter>Source Files\machine</Filter>
+    </ClCompile>
+    <ClCompile Include="member_array.cpp">
+      <Filter>Source Files\machine</Filter>
+    </ClCompile>
+    <ClCompile Include="virtual_disassembler.cpp">
+      <Filter>Source Files\machine\virtual_machine</Filter>
+    </ClCompile>
+    <ClCompile Include="string_manager.cpp">
+      <Filter>Source Files\machine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,12 +248,6 @@
     <ClInclude Include="output_stream.hpp">
       <Filter>Header Files\stream</Filter>
     </ClInclude>
-    <ClInclude Include="machine_code.hpp">
-      <Filter>Header Files\machine</Filter>
-    </ClInclude>
-    <ClInclude Include="machine_schein.hpp">
-      <Filter>Header Files\machine</Filter>
-    </ClInclude>
     <ClInclude Include="config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -233,9 +257,6 @@
     <ClInclude Include="architecture.hpp">
       <Filter>Header Files\machine\platform</Filter>
     </ClInclude>
-    <ClInclude Include="toolset.hpp">
-      <Filter>Header Files\machine\platform</Filter>
-    </ClInclude>
     <ClInclude Include="machine_context.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
@@ -243,12 +264,6 @@
       <Filter>Header Files\grammar</Filter>
     </ClInclude>
     <ClInclude Include="report_bundle.hpp">
-      <Filter>Header Files\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="interpreter_rule.hpp">
-      <Filter>Header Files\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="interpreter.hpp">
       <Filter>Header Files\grammar</Filter>
     </ClInclude>
     <ClInclude Include="exception.hpp">
@@ -275,9 +290,6 @@
     <ClInclude Include="type_traits.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="disguised_caller.hpp">
-      <Filter>Header Files\force</Filter>
-    </ClInclude>
     <ClInclude Include="print.hpp">
       <Filter>Header Files\machine\link</Filter>
     </ClInclude>
@@ -287,16 +299,7 @@
     <ClInclude Include="temp_counter.hpp">
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
-    <ClInclude Include="interpreter_token.hpp">
-      <Filter>Header Files\grammar</Filter>
-    </ClInclude>
     <ClInclude Include="input_stream.hpp">
-      <Filter>Header Files\stream</Filter>
-    </ClInclude>
-    <ClInclude Include="file_output_stream.hpp">
-      <Filter>Header Files\stream</Filter>
-    </ClInclude>
-    <ClInclude Include="file_input_stream.hpp">
       <Filter>Header Files\stream</Filter>
     </ClInclude>
     <ClInclude Include="buffer_output_stream.hpp">
@@ -341,12 +344,6 @@
     <ClInclude Include="utf32.hpp">
       <Filter>Header Files\encoding</Filter>
     </ClInclude>
-    <ClInclude Include="interpreter_string.hpp">
-      <Filter>Header Files\grammar</Filter>
-    </ClInclude>
-    <ClInclude Include="interpreter_id.hpp">
-      <Filter>Header Files\grammar</Filter>
-    </ClInclude>
     <ClInclude Include="string_key.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
@@ -365,16 +362,10 @@
     <ClInclude Include="native_test_operator.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="string_manager.hpp">
-      <Filter>Header Files\machine</Filter>
-    </ClInclude>
     <ClInclude Include="stl_allocator_wrapper.hpp">
       <Filter>Header Files\machine\memory</Filter>
     </ClInclude>
     <ClInclude Include="executable_allocator.hpp">
-      <Filter>Header Files\machine\memory</Filter>
-    </ClInclude>
-    <ClInclude Include="simple_executable_allocator.hpp">
       <Filter>Header Files\machine\memory</Filter>
     </ClInclude>
     <ClInclude Include="operation.hpp">
@@ -403,9 +394,6 @@
     </ClInclude>
     <ClInclude Include="max_member_size.hpp">
       <Filter>Header Files\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="machine_stack.hpp">
-      <Filter>Header Files\machine</Filter>
     </ClInclude>
     <ClInclude Include="bia.hpp">
       <Filter>Header Files</Filter>
@@ -527,9 +515,6 @@
     <ClInclude Include="member_names.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="disguised_caller_source.hpp">
-      <Filter>Header Files\force</Filter>
-    </ClInclude>
     <ClInclude Include="buffer_builder.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
@@ -537,6 +522,84 @@
       <Filter>Header Files\compiler</Filter>
     </ClInclude>
     <ClInclude Include="local_object.hpp">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="script_map.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="member_cast_type.hpp">
+      <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="virtual_translator.hpp">
+      <Filter>Header Files\machine\virtual_machine</Filter>
+    </ClInclude>
+    <ClInclude Include="op_code.hpp">
+      <Filter>Header Files\machine\virtual_machine</Filter>
+    </ClInclude>
+    <ClInclude Include="x86_translator.hpp">
+      <Filter>Header Files\machine\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="virtual_machine_code.hpp">
+      <Filter>Header Files\machine\virtual_machine</Filter>
+    </ClInclude>
+    <ClInclude Include="lexer.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="grammar_id.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="grammar_rule.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="keyword.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="lexer_token.hpp">
+      <Filter>Header Files\grammar</Filter>
+    </ClInclude>
+    <ClInclude Include="scope_exit.hpp">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="code.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="machine_code.hpp">
+      <Filter>Header Files\machine\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="schein.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="machine_schein.hpp">
+      <Filter>Header Files\machine\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="virtual_machine_schein.hpp">
+      <Filter>Header Files\machine\virtual_machine</Filter>
+    </ClInclude>
+    <ClInclude Include="stack.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="virtual_disassembler.hpp">
+      <Filter>Header Files\machine\virtual_machine</Filter>
+    </ClInclude>
+    <ClInclude Include="member_array.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="name_manager.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="string_manager.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="string_resource.hpp">
+      <Filter>Header Files\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="disguised_caller_def.hpp">
+      <Filter>Header Files\force</Filter>
+    </ClInclude>
+    <ClInclude Include="disguised_caller.hpp">
+      <Filter>Header Files\force</Filter>
+    </ClInclude>
+    <ClInclude Include="index_map.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
   </ItemGroup>

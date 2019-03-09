@@ -1,15 +1,15 @@
-#include "interpreter.hpp"
-#include "interpreter_token.hpp"
+#include "lexer.hpp"
+#include "lexer_token.hpp"
 #include "exception.hpp"
-
 #include "utf8.hpp"
+
 
 namespace bia
 {
 namespace grammar
 {
 
-void interpreter::set_rule(interpreter_rule && _rule)
+void lexer::set_rule(grammar_rule && _rule)
 {
 	auto _rule_id = _rule.id();
 
@@ -20,33 +20,34 @@ void interpreter::set_rule(interpreter_rule && _rule)
 	}
 }
 
-void interpreter::interpret(stream::input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const
+void lexer::lex(stream::buffer_input_stream & _input, report_receiver & _receiver, machine::machine_context & _context) const
 {
 	report_bundle _bundle;
 	encoding::utf8 encoder;
-	stream::input_stream::cursor_type _last_available = 0;
+	stream::buffer_input_stream::cursor_type _last_available = 0;
 
 	while (_input.available() != _last_available) {
 		_last_available = _input.available();
 		_bundle.reset();
 
 		// Remove all leading whitespaces
-		interpreter_token::whitespace_deleter<flags::starting_padding_opt_token, true>(_input, &encoder);
+		lexer_token::whitespace_deleter<flags::starting_padding_opt_token, true>(_input, &encoder);
 
 		// Mark input buffer start
 		auto _mark = _input.mark();
 
 		// Run root
-		token_param _param;
+		token_param _param{};
 
 		_param.bundle = &_bundle;
 		_param.rules = _rules;
 		_param.token_id = 0;
 		_param.context = &_context;
+		_param.schein = &_receiver.virtual_machine_schein();
 		_param.encoder = &encoder;
 
 		try {
-			_rules[BGR_ROOT].run_rule(_input, _param);
+			_rules[BGR_ROOT].run(_input, _param);
 		} catch (const exception::limitation_error&) {
 			// Reset
 			auto _buffer = _input.buffer();
@@ -56,10 +57,6 @@ void interpreter::interpret(stream::input_stream & _input, report_receiver & _re
 
 			break;
 		}
-
-		auto _buffer = _input.buffer();
-
-		fwrite(_buffer.first, 1, _buffer.second - _buffer.first, stdout);
 
 		// Report
 		if (_bundle.size() > 0) {

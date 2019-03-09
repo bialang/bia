@@ -1,4 +1,4 @@
-#include "interpreter_token.hpp"
+#include "lexer_token.hpp"
 #include "big_int_allocator.hpp"
 
 #include <cctype>
@@ -10,21 +10,21 @@ namespace bia
 namespace grammar
 {
 
-bool interpreter_token::whitespace_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
+bool lexer_token::whitespace_skipper(stream::buffer_input_stream & _input, encoding::encoder * _encoder)
 {
 	return whitespace_automaton(_input, _encoder, [](encoding::code_point _char) {
 		return _char == ' ' || _char == '\t';
 	});
 }
 
-bool interpreter_token::padding_skipper(stream::input_stream & _input, encoding::encoder * _encoder)
+bool lexer_token::padding_skipper(stream::buffer_input_stream & _input, encoding::encoder * _encoder)
 {
 	return whitespace_automaton(_input, _encoder, [](encoding::code_point _char) {
 		return _char == ' ' || _char == '\t' || _char == '\n' || _char == '\r';
 	});
 }
 
-ACTION interpreter_token::number(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::number(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -76,14 +76,14 @@ ACTION interpreter_token::number(stream::input_stream & _input, token_param & _p
 		_new_int->negate();
 	}
 
-	_params.schein.register_big_int(_new_int);
+	_params.schein->register_big_int(_new_int);
 	_output.type = report::TYPE::BIG_INT_VALUE;
 	_output.content.big_int_value = _new_int;
 
 	return success;
 }
 
-ACTION interpreter_token::string(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::string(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -98,8 +98,8 @@ ACTION interpreter_token::string(stream::input_stream & _input, token_param & _p
 	};
 
 	uint32_t _flags = 0;
-	stream::input_stream::buffer_type _buffer;
-	stream::input_stream::cursor_type _delimitor = 0;
+	stream::buffer_input_stream::buffer_type _buffer;
+	stream::buffer_input_stream::cursor_type _delimitor = 0;
 	stream::string_stream _string(_params.context->allocator());
 
 	// Determine delimitor and quote
@@ -264,16 +264,15 @@ gt_end:;
 
 	// Transfer ownership
 	machine::memory::universal_allocation _string_buffer(std::move(_string.buffer()));
-
+	
 	// Register the buffer
 	_output.type = report::TYPE::STRING;
-	_output.content.string = _string_buffer;
-	_params.context->string_manager().register_string(_string_buffer);
+	_output.content.string = { _params.schein->string_manager().register_string(_string_buffer) };
 
 	return success;
 }
 
-ACTION interpreter_token::identifier(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::identifier(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -297,7 +296,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 		return error;
 	}
 
-	int _length = _buffer.first - _begin;
+	size_t _length = _buffer.first - _begin;
 
 	// Rest
 	while (_params.encoder->has_next(_buffer.first, _buffer.second)) {
@@ -328,7 +327,7 @@ ACTION interpreter_token::identifier(stream::input_stream & _input, token_param 
 	return success;
 }
 
-ACTION interpreter_token::first_member(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::first_member(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -341,7 +340,7 @@ ACTION interpreter_token::first_member(stream::input_stream & _input, token_para
 
 	// First element
 	if (string(_input, _params, _output) != ACTION::REPORT) {
-		report::custom_type _info = 0;
+		report::custom_t _info = 0;
 		_output = {};
 
 		_input.reset(_mark);
@@ -365,7 +364,7 @@ ACTION interpreter_token::first_member(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::control_statement(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::control_statement(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -391,7 +390,7 @@ ACTION interpreter_token::control_statement(stream::input_stream & _input, token
 	return command_end(_input, _params, _output) == ACTION::DONT_REPORT ? success : error;
 }
 
-ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::assign_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -441,7 +440,7 @@ ACTION interpreter_token::assign_operator(stream::input_stream & _input, token_p
 	return error;
 }
 
-ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::compare_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -503,7 +502,7 @@ ACTION interpreter_token::compare_operator(stream::input_stream & _input, token_
 	return error;
 }
 
-ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::dot_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -560,7 +559,7 @@ ACTION interpreter_token::dot_operator(stream::input_stream & _input, token_para
 	return success;
 }
 
-ACTION interpreter_token::command_end(stream::input_stream & _input, token_param & _params, token_output & _output)
+ACTION lexer_token::command_end(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::DONT_REPORT;
 	constexpr auto error = ACTION::ERROR;
@@ -572,7 +571,7 @@ ACTION interpreter_token::command_end(stream::input_stream & _input, token_param
 	}) == -1 || _input.available() == 0 ? success : error;
 }
 
-void interpreter_token::match_big_integer(stream::input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base)
+void lexer_token::match_big_integer(stream::buffer_input_stream & _input, stream::string_stream & _output, encoding::encoder * _encoder, int _base)
 {
 	while (_input.available() > 0) {
 		auto _buffer = _input.buffer();
@@ -606,7 +605,7 @@ void interpreter_token::match_big_integer(stream::input_stream & _input, stream:
 	}
 }
 
-bool interpreter_token::parse_sign(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
+bool lexer_token::parse_sign(stream::buffer_input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
 {
 	auto _negative = false;
 
@@ -629,7 +628,7 @@ bool interpreter_token::parse_sign(stream::input_stream::buffer_type & _buffer, 
 	return _negative;
 }
 
-int interpreter_token::match_native_number(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output)
+int lexer_token::match_native_number(stream::buffer_input_stream::buffer_type & _buffer, encoding::encoder * _encoder, int _base, bool _negative, token_output & _output)
 {
 	auto _last_digit = _buffer.first;
 	auto _digit_matched = false;
@@ -756,7 +755,7 @@ int interpreter_token::match_native_number(stream::input_stream::buffer_type & _
 	return 0;
 }
 
-int interpreter_token::parse_base(stream::input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
+int lexer_token::parse_base(stream::buffer_input_stream::buffer_type & _buffer, encoding::encoder * _encoder)
 {
 	if (_buffer.first >= _buffer.second) {
 		return -1;
@@ -809,7 +808,7 @@ int interpreter_token::parse_base(stream::input_stream::buffer_type & _buffer, e
 	return _base;
 }
 
-int interpreter_token::whitespace_automaton(stream::input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point))
+int lexer_token::whitespace_automaton(stream::buffer_input_stream & _input, encoding::encoder * _encoder, bool(*_is_ws)(encoding::code_point), bool(*_end_predicate)(encoding::code_point))
 {
 	enum class STATE
 	{
@@ -822,11 +821,11 @@ int interpreter_token::whitespace_automaton(stream::input_stream & _input, encod
 	};
 
 	STATE _state = STATE::START;
-	stream::input_stream::buffer_type::first_type _skipped = nullptr;
+	stream::buffer_input_stream::buffer_type::first_type _skipped = nullptr;
 
 	while (_input.available() > 0) {
 		auto _buffer = _input.buffer();
-		stream::input_stream::buffer_type::first_type _tmp = nullptr;
+		stream::buffer_input_stream::buffer_type::first_type _tmp = nullptr;
 
 		_skipped = nullptr;
 

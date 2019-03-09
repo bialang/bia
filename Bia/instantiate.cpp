@@ -46,7 +46,7 @@ void BIA_STATIC_CALLING_CONVETION instantiate_double(framework::member *_destina
 	_destination->template replace_this<framework::native::double_member>(_value);
 }
 
-void BIA_STATIC_CALLING_CONVETION instantiate_string(framework::member *_destination, const char *_string, framework::native::cstring_member<char>::size_type _size, framework::native::cstring_member<char>::length_type _length)
+/*void BIA_STATIC_CALLING_CONVETION instantiate_string(framework::member *_destination, const char *_string, framework::native::cstring_member<char>::size_type _size, framework::native::cstring_member<char>::length_type _length)
 {
 	_destination->template replace_this<framework::native::cstring_member<char>>(_string, _size, _length);
 }
@@ -64,7 +64,7 @@ void BIA_STATIC_CALLING_CONVETION instantiate_string32(framework::member *_desti
 void BIA_STATIC_CALLING_CONVETION instantiate_wstring(framework::member *_destination, const wchar_t *_string, framework::native::cstring_member<wchar_t>::size_type _size, framework::native::cstring_member<wchar_t>::length_type _length)
 {
 	_destination->template replace_this<framework::native::cstring_member<wchar_t>>(_string, _size, _length);
-}
+}*/
 
 }
 }

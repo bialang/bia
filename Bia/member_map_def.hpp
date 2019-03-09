@@ -5,7 +5,7 @@
 #include "config.hpp"
 #include "member.hpp"
 #include "share_def.hpp"
-#include "string_manager.hpp"
+#include "name_manager.hpp"
 
 
 namespace bia
@@ -18,7 +18,7 @@ namespace object
 class member_map
 {
 public:
-	typedef machine::string_manager::name_type name_type;
+	typedef machine::name_manager::name_t name_t;
 
 	/**
 	 * Destructor.
@@ -48,7 +48,7 @@ public:
 	 * @return The emplaced member.
 	*/
 	template<typename _Ty, typename... _Args>
-	member * emplace(name_type _name, _Args &&... _args);
+	member * emplace(name_t _name, _Args &&... _args);
 	/**
 	 * Returns the member.
 	 *
@@ -62,7 +62,7 @@ public:
 	 *
 	 * @return The member.
 	*/
-	BIA_EXPORT member * get(name_type _name);
+	BIA_EXPORT member * get(name_t _name);
 	/**
 	 * Returns the member or creates a new if it does not exist.
 	 *
@@ -76,12 +76,12 @@ public:
 	 *
 	 * @return The member.
 	*/
-	BIA_EXPORT member * get_or_create(name_type _name);
+	BIA_EXPORT member * get_or_create(name_t _name);
 
 private:
 	struct data_map
 	{
-		typedef std::map<name_type, machine::memory::allocation<member>> type;
+		typedef std::map<name_t, machine::memory::allocation<member>> type;
 
 		type data;
 

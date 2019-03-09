@@ -25,6 +25,8 @@ namespace memory
 class member_allocator
 {
 public:
+	typedef allocation<framework::member> member_allocation_t;
+
 	/** The size of one member allocation in bytes. */
 	constexpr static auto member_allocation_size = framework::max_member_size;
 

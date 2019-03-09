@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <utility>
+#include <array>
 
 
 namespace bia
@@ -16,16 +17,31 @@ namespace utility
  *
  * @tparam Type The default type. Can be void.
  * @tparam Size The size of the internal space for the objects.
+ * @tparam Destroy If true, the held object will be destroyed at the end of the lifetime of this object (even if it was not initialized).
  *
  * @see @ref virtual_object
 */
-template<typename Type, size_t Size = sizeof(Type)>
+template<typename Type, size_t Size = sizeof(Type), bool Destroy = false>
 class local_object
 {
 public:
+	local_object() noexcept = default;
 	local_object(const local_object & _copy) = delete;
 	local_object(local_object && _move) = delete;
-
+	/**
+	 * Destructor.
+	 *
+	 * @since 3.73.150.816
+	 * @date 24-Feb-19
+	 *
+	 * @throws See destroy().
+	*/
+	~local_object()
+	{
+		if (Destroy) {
+			destroy();
+		}
+	}
 	/**
 	 * Destroy the local object.
 	 *
@@ -63,7 +79,7 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Object does not fit.");
 
-		return new(_object_space) Ty(std::forward<Arguments>(_arguements)...);
+		return new(_object_space.data()) Ty(std::forward<Arguments>(_arguements)...);
 	}
 	/**
 	 * Returns the address of the local object as @a Ty.
@@ -80,7 +96,7 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Wrong object type.");
 
-		return reinterpret_cast<Ty*>(_object_space);
+		return reinterpret_cast<Ty*>(_object_space.data());
 	}
 	/**
 	 * Returns the address of the local object as @a Ty.
@@ -97,12 +113,12 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Wrong object type.");
 
-		return reinterpret_cast<const Ty*>(_object_space);
+		return reinterpret_cast<const Ty*>(_object_space.data());
 	}
 
 private:
 	/** The space which stores the local object. */
-	int8_t _object_space[Size];
+	std::array<int8_t, Size> _object_space;
 };
 
 }

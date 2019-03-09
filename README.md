@@ -1,7 +1,5 @@
 # Bia
-Embedded C++11 Scripting Language
-
-[![Build status](https://ci.appveyor.com/api/projects/status/hgg15mmsrffx3dua/branch/master?svg=true)](https://ci.appveyor.com/project/terrakuh/bia/branch/master)
+Embedded C++14 Scripting Language
 
 # Embedded Example
 
@@ -10,15 +8,15 @@ Embedded C++11 Scripting Language
 bia::machine::machine_context _context;
 
 // Add a lambda function
-bia::set_lambda(_context, "hello_world", [] {
+_context.set_lambda("hello_world", [] {
   puts("Hello, World! - C++");
 });
 
 // Bia script
 std::string _code = u8R"(
   # Print 'Hello, World' to the console
-  print "Hello, World! - Bia"
-  print u8"Hallo, schöne Welt! - German"
+  print("Hello, World! - Bia")
+  print(u8"Hallo, schöne Welt! - German")
 
   # Call the C++ function and print 'Hello, World' to the console
   hello_world()
@@ -62,8 +60,8 @@ _var = 34
 - Optimized member function call. This is more efficient in loops:
 
 ```
-global function_pointer = _object.function
-function_pointer()
+var _function_pointer = _object.function
+_function_pointer()
 ```
 
 ## Loops
@@ -71,7 +69,7 @@ function_pointer()
 
 ```
 while true {
-  print "hi"
+  print("hi")
 }
 ```
 
@@ -79,7 +77,7 @@ while true {
 
 ```
 do while true {
-  print "hi"
+  print("hi")
 }
 ```
 
@@ -89,7 +87,7 @@ These loops are just like `while` loops but with negated condition:
 
 ```
 until false {
-  print "hi"
+  print("hi")
 }
 ```
 
@@ -97,7 +95,7 @@ until false {
 
 ```
 do until false {
-  print "hi"
+  print("hi")
 }
 ```
 
@@ -108,9 +106,9 @@ Conditions that can be evaluated at compile time will be optimized away:
 
 ```
 if 1 == 0 {
-  print true
+  print("Result is:", true)
 } else if _some_value == 3 {
-  print false
+  print("Result is:", false)
 }
 ```
 
@@ -125,19 +123,19 @@ int square(int _base)
 }
 
 // Adding the function
-bia::set_function(_context, "square", &square);
+_context.set_function("square", &square);
 ```
 
 ## Adding a lambda function
 
 ``` cpp
 // Adding the function
-bia::set_lambda(_context, "int_sqrt", [] (double _value) {
+_context.set_lambda("int_sqrt", [](double _value) {
   return static_cast<int>(sqrt(_value));
 });
 ```
 
- ## Adding a C++ class
+## Adding a C++ class
 
 ``` cpp
 // A C++ class
@@ -155,7 +153,7 @@ public:
 };
 
 // Adding the class
-bia::set_class<my_class>(_context, "my_class")
+_context.set_class<my_class>("my_class")
   .set_constructor<int>()
   .set_function("print_me", &my_class::print_me);
 ```

@@ -2,7 +2,6 @@
 
 #include <cstdio>
 #include <cstdint>
-#include <cstdarg>
 #include <typeinfo>
 #include <type_traits>
 #include <utility>
@@ -11,9 +10,10 @@
 #include "operator.hpp"
 #include "native_type.hpp"
 #include "type_traits.hpp"
-#include "string_manager.hpp"
+#include "name_manager.hpp"
 #include "buffer_builder.hpp"
 #include "big_int.hpp"
+#include "member_cast_type.hpp"
 
 
 namespace bia
@@ -50,8 +50,8 @@ public:
 	};
 
 	/** The type of the parameter count. */
-	typedef uint32_t parameter_count;
-
+	typedef uint8_t parameter_count_t;
+	typedef uint32_t test_result_t;
 
 	/**
 	 * Destructor.
@@ -123,7 +123,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 28-Apr-18
 	 *
-	 * @param [out] _destination The destination of the return result.
+	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
@@ -138,10 +138,10 @@ public:
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The destination of the return result.
+	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 * @param _reserved Reserved parameter. Do not use this.
 	 * @param _count The amount of the passed arguments.
-	 * @param ... The arguments.
+	 * @param [in] _stack The stack where the parameters are.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
@@ -150,17 +150,17 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_count().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) = 0;
 	/**
 	 * Executes this object as function with mixed parameters.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The destination of the return result.
+	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 * @param _format The types of the arguments.
 	 * @param _count The amount of the passed arguments.
-	 * @param ... The arguments.
+	 * @param [in] _stack The stack where the parameters are.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
@@ -169,14 +169,14 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_format().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) = 0;
 	/**
 	 * An operator call with another member as right value.
 	 *
 	 * @since 3.64.127.716
 	 * @date 12-May-18
 	 *
-	 * @param [out] _destination The operation result.
+	 * @param [out] _destination The operation result. Can be the caller. If null, the result is discarded.
 	 * @param _operator The operator.
 	 * @param _right The right member.
 	 *
@@ -185,14 +185,14 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_t _operator, const member * _right) = 0;
 	/**
 	 * An operator call with an int32 as right value.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result.
+	 * @param [out] _destination The operation result. Can be the caller. If null, the result is discarded.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
@@ -201,14 +201,14 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_t _operator, int32_t _right) = 0;
 	/**
 	 * An operator call with an int64 as right value.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result.
+	 * @param [out] _destination The operation result. Can be the caller. If null, the result is discarded.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
@@ -217,15 +217,15 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) = 0;
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_type _operator, const dependency::big_int * _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_t _operator, int64_t _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right) = 0;
 	/**
 	 * An operator call with a double as right value.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
-	 * @param [out] _destination The operation result.
+	 * @param [out] _destination The operation result. Can be the caller. If null, the result is discarded.
 	 * @param _operator The operator.
 	 * @param _right The right value.
 	 *
@@ -234,7 +234,7 @@ public:
 	 * @throws exception::access_violation If this member cannot be modified.
 	 * @throws exception::execution_error If the operator call is invalid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_t _operator, double _right) = 0;
 	/**
 	 * Returns a member of this member.
 	 *
@@ -248,7 +248,7 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member or the wanted member is not valid.
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::name_manager::name_t _name) = 0;
 	/**
 	 * Sets the instance of the member.
 	 *
@@ -262,6 +262,11 @@ public:
 	 * @throws exception::type_error If the instance type is not the right one.
 	*/
 	virtual void set_instance(const void * _instance, const std::type_info & _type) = 0;
+	template<typename Type>
+	constexpr static bool member_base() noexcept
+	{
+		return std::is_base_of<member, typename std::remove_pointer<Type>::type>::value;
+	}
 	/**
 	 * Some details about the content.
 	 *
@@ -300,7 +305,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_t _operator, member * _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -316,7 +321,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_t _operator, int32_t _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -332,7 +337,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_t _operator, int64_t _right) const = 0;
 	/**
 	 * Tests the contents of this member to the right value.
 	 *
@@ -348,7 +353,7 @@ public:
 	 *
 	 * @return A non-zero value for the boolean value true, otherwise 0 for false.
 	*/
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const = 0;
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_t _operator, double _right) const = 0;
 	/**
 	 * Returns the int representation of the content.
 	 *
@@ -357,6 +362,7 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::type_error If no representation is available.
+	 * @throws exception::overflow_error If the value doesn't fit into a signed 64 bit integer.
 	 *
 	 * @return The int representation.
 	*/
@@ -369,106 +375,57 @@ public:
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::type_error If no representation is available.
+	 * @throws exception::overflow_error If the value doesn't fit into a double value.
 	 *
 	 * @return The double representation.
 	*/
 	virtual double to_double() const = 0;
 	virtual const char * to_cstring(utility::buffer_builder * _builder) const = 0;
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		std::is_same<member*, Real_type>::value,
-		Real_type*>::type cast()
+
+	template<typename Type>
+	typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) <= sizeof(int32_t)), Type>::type cast()
 	{
-		thread_local member * _ptr;
-
-		_ptr = this;
-
-		return &_ptr;
+		return static_cast<Type>(int32_data());
 	}
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		std::is_same<const member*, Real_type>::value,
-		Real_type*>::type cast() const
+	template<typename Type>
+	typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) > sizeof(int32_t)), Type>::type cast()
 	{
-		thread_local const member * _ptr;
-
-		_ptr = this;
-
-		return &_ptr;
+		return static_cast<Type>(int64_data());
 	}
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		!std::is_same<member*, Real_type>::value &&
-		!std::is_same<const member*, Real_type>::value &&
-		std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
-		Real_type*>::type cast()
+	template<typename Type>
+	typename std::enable_if<std::is_floating_point<Type>::value, Type>::type cast()
 	{
-		thread_local Real_type _ptr;
-
-		_ptr = dynamic_cast<Real_type>(this);
-
-		if (!_ptr) {
+		return static_cast<Type>(double_data());
+	}
+	template<typename Type>
+	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
+	{
+		return converter<Type>::convert(data(converter<Type>::info()));
+	}
+	template<typename Type>
+	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
+	{
+		return converter<Type>::convert(const_data(converter<Type>::info()));
+	}
+	template<typename Type>
+	typename std::enable_if<member_base<Type>() && converter<Type>::is_const, Type>::type cast()
+	{
+		if (!dynamic_cast<Type>(this)) {
 			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 		}
 
-		return &_ptr;
+		return static_cast<Type>(this);
 	}
-	/**
-	 * Casts this member to the specified mutable type.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @tparam Type The required type. References will be converted to pointers.
-	 * @tparam Real_type The actual type without references.
-	 *
-	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If this member cannot be casted to @a Type.
-	 *
-	 * @return A point containing the casted type.
-	*/
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		!std::is_const<typename std::remove_pointer<Real_type>::type>::value && 
-		!std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
-		Real_type*>::type cast()
+	template<typename Type>
+	typename std::enable_if<member_base<Type>() && !converter<Type>::is_const, Type>::type cast() const
 	{
-		// Native type
-		if (native::determine_native_type<Real_type>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<Real_type*>(native_data(native::determine_native_type<Real_type>()));
-		} // Custom type
-		else {
-			return static_cast<Real_type*>(data(typeid(Real_type)));
+		if (!dynamic_cast<Type>(this)) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 		}
+
+		return static_cast<Type>(this);
 	}
-	/**
-	 * Casts this member to the specified immutable type.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @tparam Type The required type. References will be converted to pointers.
-	 * @tparam Real_type The actual type without references.
-	 *
-	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If this member cannot be casted to @a Type.
-	 *
-	 * @return A point containing the casted type.
-	*/
-	template<typename Type, typename Real_type = typename std::remove_reference<Type>::type>
-	typename std::enable_if<
-		std::is_const<typename std::remove_pointer<Real_type>::type>::value &&
-		!std::is_base_of<member, typename std::remove_pointer<Real_type>::type>::value,
-		Real_type const*>::type cast() const
-	{
-		// Native type
-		if (native::determine_native_type<Real_type>() != native::NATIVE_TYPE::CUSTOM) {
-			return static_cast<Real_type const*>(const_native_data(native::determine_native_type<Real_type>()));
-		} // Custom type
-		else {
-			return static_cast<Real_type const*>(const_data(typeid(Real_type)));
-		}
-	}
+
 	/**
 	 * Replaces this obejct with the new defined one.
 	 *
@@ -497,34 +454,9 @@ public:
 	}
 
 protected:
-	/**
-	 * Returns a pointer to mutable native data.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _type The type.
-	 *
-	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If the type is not supported.
-	 *
-	 * @return A pointer to the data.
-	*/
-	virtual void * native_data(native::NATIVE_TYPE _type) = 0;
-	/**
-	 * Returns a pointer to immutable native data.
-	 *
-	 * @since 3.64.127.716
-	 * @date 21-Apr-18
-	 *
-	 * @param _type The type.
-	 *
-	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If the type is not supported.
-	 *
-	 * @return A pointer to the data.
-	*/
-	virtual const void * const_native_data(native::NATIVE_TYPE _type) const = 0;
+	virtual int32_t int32_data() const = 0;
+	virtual int64_t int64_data() const = 0;
+	virtual double double_data() const = 0;
 	/**
 	 * Returns a pointer to mutable custom data.
 	 *

@@ -36,7 +36,7 @@ namespace native
  * @return The result of the operation.
 */
 template<bool Allow_assign, typename Left, typename Right>
-inline typename utility::native_operation_result<Left, Right>::type arithmetic_operation(Left _left, operator_type _operator, Right _right)
+inline typename utility::native_operation_result<Left, Right>::type arithmetic_operation(Left _left, operator_t _operator, Right _right)
 {
 	typedef typename utility::native_operation_result<Left, Right>::type return_type;
 
@@ -100,7 +100,7 @@ inline typename utility::native_operation_result<Left, Right>::type arithmetic_o
  * @return The result of the operation.
 */
 template<bool Allow_assign, typename Left, typename Right>
-inline typename utility::native_operation_result<Left, Right>::type integral_operation(Left _left, operator_type _operator, Right _right)
+inline typename utility::native_operation_result<Left, Right>::type integral_operation(Left _left, operator_t _operator, Right _right)
 {
 	typedef typename utility::native_operation_result<Left, Right>::type return_type;
 
@@ -159,7 +159,7 @@ template<bool Allow_assign>
 struct native_operation
 {
 	template<typename Left, typename Right>
-	static void operate_integral(Left & _left, operator_type _operator, Right _right, bool _allow_assign = true)
+	static void operate_integral(Left & _left, operator_t _operator, Right _right, bool _allow_assign = true)
 	{
 		if (_allow_assign) {
 			_left = static_cast<Left>(integral_operation<true>(_left, _operator, _right));
@@ -168,12 +168,12 @@ struct native_operation
 		}
 	}
 	template<typename Left, typename Right>
-	static void operate_integral(member * _destination, Left _left, operator_type _operator, Right _right)
+	static void operate_integral(member * _destination, Left _left, operator_t _operator, Right _right)
 	{
 		create_member(_destination, integral_operation<true>(_left, _operator, _right));
 	}
 	template<typename Left, typename Right>
-	static void operate_arithmetic(Left & _left, operator_type _operator, Right _right, bool _allow_assign = true)
+	static void operate_arithmetic(Left & _left, operator_t _operator, Right _right, bool _allow_assign = true)
 	{
 		if (_allow_assign) {
 			_left = static_cast<Left>(arithmetic_operation<true>(_left, _operator, _right));
@@ -182,7 +182,7 @@ struct native_operation
 		}
 	}
 	template<typename Left, typename Right>
-	static void operate_arithmetic(member * _destination, Left _left, operator_type _operator, Right _right)
+	static void operate_arithmetic(member * _destination, Left _left, operator_t _operator, Right _right)
 	{
 		create_member(_destination, arithmetic_operation<true>(_left, _operator, _right));
 	}
@@ -192,22 +192,22 @@ template<>
 struct native_operation<false>
 {
 	template<typename Left, typename Right>
-	static void operate_integral(Left _left, operator_type _operator, Right _right)
+	static void operate_integral(Left _left, operator_t _operator, Right _right)
 	{
 		integral_operation<false>(_left, _operator, _right);
 	}
 	template<typename Left, typename Right>
-	static void operate_integral(member * _destination, Left _left, operator_type _operator, Right _right)
+	static void operate_integral(member * _destination, Left _left, operator_t _operator, Right _right)
 	{
 		create_member(_destination, integral_operation<false>(_left, _operator, _right));
 	}
 	template<typename Left, typename Right>
-	static void operate_arithmetic(Left _left, operator_type _operator, Right _right)
+	static void operate_arithmetic(Left _left, operator_t _operator, Right _right)
 	{
 		arithmetic_operation<false>(_left, _operator, _right);
 	}
 	template<typename Left, typename Right>
-	static void operate_arithmetic(member * _destination, Left _left, operator_type _operator, Right _right)
+	static void operate_arithmetic(member * _destination, Left _left, operator_t _operator, Right _right)
 	{
 		create_member(_destination, arithmetic_operation<false>(_left, _operator, _right));
 	}

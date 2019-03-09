@@ -8,7 +8,7 @@ namespace bia
 namespace grammar
 {
 
-enum BIA_GRAMMAR_RULE : report::rule_type
+enum BIA_GRAMMAR_RULE : report::rule_t
 {
 	BGR_ROOT,
 	BGR_ROOT_HELPER_0,
@@ -24,7 +24,6 @@ enum BIA_GRAMMAR_RULE : report::rule_type
 	BGR_IF,
 	BGR_IF_HELPER_0,
 	BGR_IF_HELPER_1,
-	BGR_PRINT,
 
 	// Loops
 	BGR_TEST_LOOP,

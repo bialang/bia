@@ -2,6 +2,7 @@
 
 #include "share_def.hpp"
 #include "machine_context.hpp"
+#include "scope_exit.hpp"
 
 
 namespace bia
@@ -27,13 +28,27 @@ inline share<Type>::share(const share & _copy) noexcept
 }
 
 template<typename Type>
+inline share<Type>::share(share && _move) noexcept
+{
+	_data = _move._data;
+
+	_move._data = nullptr;
+}
+
+template<typename Type>
 inline share<Type>::~share()
 {
-	if (!_data->second.fetch_sub(1, std::memory_order_acq_rel)) {
-		// Destroy object
-		reinterpret_cast<Type*>(_data->first)->~Type();
+	if (_data && !_data->second.fetch_sub(1, std::memory_order_acq_rel)) {
+		scope_exit _exit([this]() { 
+			auto _tmp = _data;
 
-		machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_data, sizeof(data)));
+			_data = nullptr;
+
+			machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_tmp, sizeof(data))); 
+		});
+
+		// Destroy object
+		reinterpret_cast<Type*>(_data->first)->~Type();		
 	}
 }
 
@@ -59,6 +74,22 @@ template<typename Type>
 inline const Type * share<Type>::operator->() const noexcept
 {
 	return &get();
+}
+
+template<typename Type>
+inline share<Type> & share<Type>::operator=(const share & _copy)
+{
+	this->~share();
+
+	return *new(this) share<Type>(_copy);
+}
+
+template<typename Type>
+inline share<Type> & share<Type>::operator=(share && _move)
+{
+	this->~share();
+
+	return *new(this) share<Type>(std::move(_move));
 }
 
 }

@@ -15,7 +15,7 @@ namespace object
 {
 
 template<typename _Ty, typename... _Args>
-inline member * member_map::emplace(name_type _name, _Args &&... _args)
+inline member * member_map::emplace(name_t _name, _Args &&... _args)
 {
 	auto _result = _data.get().data.find(_name);
 

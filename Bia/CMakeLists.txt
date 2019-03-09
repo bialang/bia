@@ -53,7 +53,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_EXCEPTION})
 
 
 # force namespace
-set(Bia_HEADER_FILES_FORCE "disguised_caller.hpp" "disguised_caller_source.hpp" "initiator.hpp")
+set(Bia_HEADER_FILES_FORCE "disguised_caller.hpp" "disguised_caller_def.hpp" "initiator.hpp")
 
 source_group("Header Files\\force" FILES ${Bia_HEADER_FILES_FORCE})
 
@@ -61,7 +61,7 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_FORCE})
 
 
 # framework namespace
-set(Bia_HEADER_FILES_FRAMEWORK "create_member.hpp" "custom_member.hpp" "max_member_size.hpp" "member.hpp" "operator.hpp" "undefined_member.hpp")
+set(Bia_HEADER_FILES_FRAMEWORK "create_member.hpp" "custom_member.hpp" "max_member_size.hpp" "member.hpp" "member_cast_type.hpp" "operator.hpp" "undefined_member.hpp")
 set(Bia_SOURCE_FILES_FRAMEWORK "undefined_member.cpp")
 
 source_group("Header Files\\framework" FILES ${Bia_HEADER_FILES_FRAMEWORK})
@@ -88,8 +88,8 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_FRAMEWORK} ${Bia_SOU
 
 
 # grammar namespace
-set(Bia_HEADER_FILES_GRAMMAR "interpreter.hpp" "interpreter_id.hpp" "interpreter_rule.hpp" "interpreter_string.hpp" "interpreter_token.hpp" "report.hpp" "report_bundle.hpp" "syntax.hpp")
-set(Bia_SOURCE_FILES_GRAMMAR "interpreter.cpp" "interpreter_rule.cpp" "interpreter_token.cpp" "syntax.cpp")
+set(Bia_HEADER_FILES_GRAMMAR "grammar_id.hpp" "grammar_rule.hpp" "keyword.hpp" "lexer.hpp" "lexer_token.hpp" "report.hpp" "report_bundle.hpp" "syntax.hpp")
+set(Bia_SOURCE_FILES_GRAMMAR "grammar_rule.cpp" "lexer.cpp" "lexer_token.cpp" "syntax.cpp")
 
 source_group("Header Files\\grammar" FILES ${Bia_HEADER_FILES_GRAMMAR})
 source_group("Source Files\\grammar" FILES ${Bia_SOURCE_FILES_GRAMMAR})
@@ -99,8 +99,8 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_GRAMMAR})
 
 
 # machine namespace
-set(Bia_HEADER_FILES_MACHINE "disassembler.hpp" "machine_code.hpp" "machine_context.hpp" "machine_schein.hpp" "machine_stack.hpp" "string_manager.hpp" "variable_index.hpp")
-set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_code.cpp" "machine_context.cpp" "machine_schein.cpp" "machine_stack.cpp" "string_manager.cpp" "variable_index.cpp")
+set(Bia_HEADER_FILES_MACHINE "code.hpp" "disassembler.hpp" "machine_context.hpp" "member_array.hpp" "name_manager.hpp" "schein.hpp" "script_map.hpp" "string_resource.hpp" "stack.hpp" "string_manager.hpp" "variable_index.hpp")
+set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_context.cpp" "member_array.cpp" "name_manager.cpp" "schein.cpp" "script_map.cpp" "string_manager.cpp" "variable_index.cpp")
 
 source_group("Header Files\\machine" FILES ${Bia_HEADER_FILES_MACHINE})
 source_group("Source Files\\machine" FILES ${Bia_SOURCE_FILES_MACHINE})
@@ -111,8 +111,8 @@ set(Bia_SOURCE_FILES_LINK "instantiate.cpp" "operation.cpp")
 source_group("Header Files\\machine\\link" FILES ${Bia_HEADER_FILES_LINK})
 source_group("Source Files\\machine\\link" FILES ${Bia_SOURCE_FILES_LINK})
 
-set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "big_int_allocator.hpp" "executable_allocator.hpp" "member_allocator.hpp" "simple_allocator.hpp" "simple_executable_allocator.hpp" "stl_allocator_wrapper.hpp")
-set(Bia_SOURCE_FILES_MEMORY "big_int_allocator.cpp" "simple_allocator.cpp" "simple_executable_allocator.cpp")
+set(Bia_HEADER_FILES_MEMORY "allocator.hpp" "big_int_allocator.hpp" "executable_allocator.hpp" "member_allocator.hpp" "simple_allocator.hpp" "stl_allocator_wrapper.hpp")
+set(Bia_SOURCE_FILES_MEMORY "big_int_allocator.cpp" "simple_allocator.cpp")
 
 source_group("Header Files\\machine\\memory" FILES ${Bia_HEADER_FILES_MEMORY})
 source_group("Source Files\\machine\\memory" FILES ${Bia_SOURCE_FILES_MEMORY})
@@ -123,15 +123,23 @@ set(Bia_SOURCE_FILES_MODULAR "module_loader.cpp")
 source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})
 source_group("Source Files\\machine\\modular" FILES ${Bia_SOURCE_FILES_MODULAR})
 
-set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "member_passer.hpp" "passer.hpp" "static_passer.hpp" "toolset.hpp" "varg_member_passer.hpp")
+set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "machine_code.hpp" "machine_schein.hpp" "member_passer.hpp" "passer.hpp" "static_passer.hpp" "varg_member_passer.hpp" "x86_translator.hpp")
+set(Bia_SOURCE_FILES_PLATFORM "machine_code.cpp")
 
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
+source_group("Source Files\\machine\\platform" FILES ${Bia_SOURCE_FILES_PLATFORM})
 
-set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_MACHINE} ${Bia_HEADER_FILES_LINK} ${Bia_HEADER_FILES_MEMORY} ${Bia_HEADER_FILES_MODULAR} ${Bia_HEADER_FILES_PLATFORM})
-set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_MACHINE} ${Bia_SOURCE_FILES_LINK} ${Bia_SOURCE_FILES_MEMORY} ${Bia_SOURCE_FILES_MODULAR})
+set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "virtual_disassembler.hpp" "virtual_machine_code.hpp" "virtual_machine_schein.hpp" "virtual_translator.hpp")
+set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "virtual_disassembler.cpp" "virtual_machine_code.cpp" "virtual_machine_schein.cpp" "virtual_translator.cpp")
+
+source_group("Header Files\\machine\\virtual_machine" FILES ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
+source_group("Source Files\\machine\\virtual_machine" FILES ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
+
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_MACHINE} ${Bia_HEADER_FILES_LINK} ${Bia_HEADER_FILES_MEMORY} ${Bia_HEADER_FILES_MODULAR} ${Bia_HEADER_FILES_PLATFORM} ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_MACHINE} ${Bia_SOURCE_FILES_LINK} ${Bia_SOURCE_FILES_MEMORY} ${Bia_SOURCE_FILES_MODULAR} ${Bia_SOURCE_FILES_PLATFORM} ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
 
 # stream namespace
-set(Bia_HEADER_FILES_STREAM "buffer_input_stream.hpp" "buffer_output_stream.hpp" "file_input_stream.hpp" "file_output_stream.hpp" "input_stream.hpp" "output_stream.hpp" "string_stream.hpp")
+set(Bia_HEADER_FILES_STREAM "buffer_input_stream.hpp" "buffer_output_stream.hpp" "input_stream.hpp" "output_stream.hpp" "string_stream.hpp")
 set(Bia_SOURCE_FILES_STREAM "buffer_input_stream.cpp" "buffer_output_stream.cpp")
 
 source_group("Header Files\\stream" FILES ${Bia_HEADER_FILES_STREAM})
@@ -142,19 +150,21 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_STREAM})
 
 
 # utility namespace
-set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "local_object.hpp" "max.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp" "virtual_object.hpp")
+set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "index_map.hpp" "local_object.hpp" "max.hpp" "scope_exit.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp" "virtual_object.hpp")
+set(Bia_SOURCE_FILES_UTILITY "scope_exit.cpp")
 
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
+source_group("Source Files\\utility" FILES ${Bia_SOURCE_FILES_UTILITY})
 
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_UTILITY})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_UTILITY})
+
 
 # Adding the library
-if(BIA_BUILD_SHARED)
-  add_library(Bia SHARED ${Bia_SOURCE_FILES})
-else(BIA_BUILD_SHARED)
-  add_library(Bia STATIC ${Bia_SOURCE_FILES})
-endif(BIA_BUILD_SHARED)
+add_library(Bia ${Bia_SOURCE_FILES})
 
+add_executable(Bia_main "main.cpp")
+target_link_libraries(Bia_main Bia)
 
 target_link_libraries(Bia ${MPIR_LIB})
 #target_include_directories(Bia ${MPIR_INCLUDE})

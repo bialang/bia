@@ -3,11 +3,12 @@
 #include <cstdint>
 #include <cstddef>
 #include <limits>
+#include <cstring>
 
-#include "member.hpp"
-#include "temp_counter.hpp"
-#include "string_stream.hpp"
 #include "big_int.hpp"
+#include "virtual_translator.hpp"
+#include "report.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -25,6 +26,9 @@ namespace compiler
 class compiler_value
 {
 public:
+	/** The fallback type if the member cannot be expanded. See expand_to_member(). */
+	typedef machine::virtual_machine::invalid_index invalid_index_t;
+
 	enum class VALUE_TYPE
 	{
 		/** The native 64 Bit signed integer type. */
@@ -65,15 +69,10 @@ public:
 		dependency::big_int * rt_big_int;
 		/** A constant floating point. */
 		double rt_double;
-		struct string
-		{
-			const int8_t * data;
-			stream::string_stream::size_type size;
-			stream::string_stream::length_type length;
-		} rt_string;
-		framework::member * rt_member;
-		temp_counter::counter_type rt_temp_member;
-		temp_counter::counter_type rt_local_member;
+		machine::string_manager::utf8_index_t rt_string;
+		grammar::report::member_t rt_member;
+		machine::virtual_machine::member_index_t rt_temp_member;
+		machine::virtual_machine::member_index_t rt_local_member;
 	};
 
 	/**
@@ -84,7 +83,7 @@ public:
 	*/
 	compiler_value() noexcept
 	{
-		_return_type = VALUE_TYPE::NONE;
+		set_return();
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::NONE.
@@ -94,6 +93,8 @@ public:
 	*/
 	void set_return() noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::NONE;
 	}
 	/**
@@ -104,6 +105,8 @@ public:
 	*/
 	void set_return_test() noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::TEST_VALUE_REGISTER;
 	}
 	/**
@@ -116,6 +119,8 @@ public:
 	*/
 	void set_return(bool _value) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::TEST_VALUE_CONSTANT;
 		_return_value.rt_test_result = _value;
 	}
@@ -129,6 +134,8 @@ public:
 	*/
 	void set_return(int64_t _value) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::INT;
 		_return_value.rt_int = _value;
 	}
@@ -142,6 +149,8 @@ public:
 	*/
 	void set_return(dependency::big_int * _value) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::BIG_INT;
 		_return_value.rt_big_int = _value;
 	}
@@ -155,6 +164,8 @@ public:
 	*/
 	void set_return(double _value) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::DOUBLE;
 		_return_value.rt_double = _value;
 	}
@@ -165,15 +176,13 @@ public:
 	 * @date 3-Aug-18
 	 *
 	 * @param _value The string.
-	 * @param _size The size of the string.
-	 * @param _length The length of the string.
 	*/
-	void set_return(const char * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	void set_return(machine::string_manager::utf8_index_t _value) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::STRING;
-		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
-		_return_value.rt_string.size = _size;
-		_return_value.rt_string.length = _length;
+		_return_value.rt_string = _value;
 	}
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::STRING16.
@@ -185,13 +194,15 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const char16_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	/*void set_return(const char16_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::STRING16;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
 		_return_value.rt_string.length = _length;
-	}
+	}*/
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::STRING32.
 	 *
@@ -202,13 +213,15 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const char32_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	/*void set_return(const char32_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::STRING32;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
 		_return_value.rt_string.length = _length;
-	}
+	}*/
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::STRING.
 	 *
@@ -219,13 +232,15 @@ public:
 	 * @param _size The size of the string.
 	 * @param _length The length of the string.
 	*/
-	void set_return(const wchar_t * _value, stream::string_stream::size_type _size, stream::string_stream::length_type _length) noexcept
+	/*void set_return(const wchar_t * _value, stream::string_stream::size_t _size, stream::string_stream::length_t _length) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::WSTRING;
 		_return_value.rt_string.data = reinterpret_cast<const int8_t*>(_value);
 		_return_value.rt_string.size = _size;
 		_return_value.rt_string.length = _length;
-	}
+	}*/
 	/**
 	 * Sets the return _value and the type VALUE_TYPE::MEMBER.
 	 *
@@ -234,8 +249,10 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return(framework::member * _value) noexcept
+	void set_return_member(grammar::report::member_t _value) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::MEMBER;
 		_return_value.rt_member = _value;
 	}
@@ -247,8 +264,10 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return_temp(temp_counter::counter_type _value) noexcept
+	void set_return_temp(machine::virtual_machine::member_index_t _value) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::TEMPORARY_MEMBER;
 		_return_value.rt_temp_member = _value;
 	}
@@ -260,10 +279,54 @@ public:
 	 *
 	 * @param _value The value.
 	*/
-	void set_return_local(temp_counter::counter_type _value) noexcept
+	void set_return_local(machine::virtual_machine::member_index_t _value) noexcept
 	{
+		clear();
+
 		_return_type = VALUE_TYPE::LOCAL_MEMBER;
 		_return_value.rt_local_member = _value;
+	}
+	/**
+	 * Expands this value to the member types (VALUE_TYPE::MEMBER, VALUE_TYPE::TEMPORARY_MEMBER and VALUE_TYPE::LOCAL_MEMBER)
+	 *
+	 * @since 3.72.149.809
+	 * @date 27-Dec-18
+	 *
+	 * @tparam Lambda The lamdba type.
+	 *
+	 * @param [in] _translator The virtual translator.
+	 * @param _lambda The callback function that is called. The callback gets the expaneded value or @a invalid_index_t.
+	 *
+	 * @throws See @a _lambda.
+	 * @throws See machine::virtual_translator::to_member().
+	*/
+	template<typename Lambda>
+	void expand_to_member(machine::virtual_machine::virtual_translator & _translator, Lambda && _lambda) const
+	{
+		// Save to member variable
+		if (_return_type == VALUE_TYPE::MEMBER) {
+			_lambda(_translator.to_member(_return_value.rt_member));
+		} // Save to temp member
+		else if (_return_type == VALUE_TYPE::TEMPORARY_MEMBER) {
+			_lambda(_translator.to_temp(_return_value.rt_temp_member));
+		} // Save to local member
+		else if (_return_type  == VALUE_TYPE::LOCAL_MEMBER) {
+			_lambda(_translator.to_local(_return_value.rt_local_member));
+		} else {
+			_lambda(invalid_index_t());
+		}
+	}
+	/**
+	 * Checks whether this value is a member or not.
+	 *
+	 * @since 3.72.149.809
+	 * @date 27-Dec-18
+	 *
+	 * @return true if this type is one of the following: VALUE_TYPE::MEMBER, VALUE_TYPE::TEMPORARY_MEMBER or VALUE_TYPE::LOCAL_MEMBER
+	*/
+	bool is_member() const noexcept
+	{
+		return _return_type == VALUE_TYPE::MEMBER || _return_type == VALUE_TYPE::TEMPORARY_MEMBER || _return_type == VALUE_TYPE::LOCAL_MEMBER;
 	}
 	/**
 	 * Checks whether the int value can be stored in a int32 type.
@@ -278,7 +341,7 @@ public:
 		return _return_type == VALUE_TYPE::INT && _return_value.rt_int <= std::numeric_limits<int32_t>::max() && _return_value.rt_int >= std::numeric_limits<int32_t>::min();
 	}
 	/**
-	 * Checks wheter the held value is constant.
+	 * Checks whether the held value is constant.
 	 *
 	 * @since 3.64.127.716
 	 * @date 29-Apr-18
@@ -323,12 +386,51 @@ public:
 	{
 		return _return_value;
 	}
+	/**
+	 * Compares this compiler value to another one.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	 *
+	 * @param _right The other compiler value.
+	 *
+	 * @return true if they are the same, otherwise false.
+	*/
+	bool operator==(const compiler_value & _right) const noexcept
+	{
+		return _return_type == _right._return_type && !std::memcmp(&_return_value, &_right._return_value, sizeof(_return_value));
+	}
+	/**
+	 * Compares this compiler value to another one.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	 *
+	 * @param _right The other compiler value.
+	 *
+	 * @return true if they are different, otherwise false.
+	*/
+	bool operator!=(const compiler_value & _right) const noexcept
+	{
+		return !operator==(_right);
+	}
 
 private:
 	/** Defines the type of the last operation result. */
 	VALUE_TYPE _return_type;
 	/** Defines the _value of the last operation result. */
 	return_value _return_value;
+
+	/**
+	 * Clears the return value completely.
+	 *
+	 * @since 3.71.149.808
+	 * @date 26-Dec-18
+	*/
+	void clear() noexcept
+	{
+		std::memset(&_return_value, 0, sizeof(_return_value));
+	}
 };
 
 }

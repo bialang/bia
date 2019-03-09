@@ -382,16 +382,12 @@ disassembler::function_map disassembler::init_function_map()
 {
 	function_map _function_map;
 
-	BIA_FUNCTION_ENTRY(machine_context::create_on_stack);
-	BIA_FUNCTION_ENTRY(machine_context::destroy_from_stack);
-
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int32);
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int64);
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int_0);
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int_1);
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_int_n1);
 	BIA_FUNCTION_ENTRY(machine::link::instantiate_double);
-	BIA_FUNCTION_ENTRY(machine::link::instantiate_string);
 
 	BIA_FUNCTION_ENTRY(framework::member::print);
 	BIA_FUNCTION_ENTRY(machine::link::print_int32);

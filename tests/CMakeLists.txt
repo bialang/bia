@@ -19,3 +19,12 @@ add_test(DivTest bigIntTest div)
 add_test(ModTest bigIntTest mod)
 add_test(PowerTest bigIntTest power)
 add_test(BigIntTest bigIntTest)
+
+# Bia Sanity Test
+add_executable(biaSanityTest test_main.cpp bia_sanity_test.cpp)
+target_link_libraries(biaSanityTest Bia)
+
+add_test(CompileBiaTest biaSanityTest compile)
+add_test(MemberInterfaceTest biaSanityTest member_interface)
+add_test(FunctionOrderTest biaSanityTest function_order)
+add_test(BiaSanityTest biaSanityTest)

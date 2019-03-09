@@ -9,45 +9,43 @@ namespace bia
 namespace grammar
 {
 
-enum INTERPRETER_STRING : int32_t
+enum KEYWORD_ID : int32_t
 {
-	IS_GLOBAL,
-	IS_VAR,
-	IS_NEW,
-	IS_FOR,
-	IS_WHILE,
-	IS_UNTIL,
-	IS_DO,
-	IS_BREAK,
-	IS_CONTINUE,
-	IS_GOTO,
-	IS_EXIT_SCOPE,
-	IS_DELETE,
-	IS_IF,
-	IS_ELSE,
-	IS_TRUE,
-	IS_FALSE,
-	IS_IMPORT,
-	IS_INCLUDE,
-	IS_FROM,
-	IS_AS,
-	IS_PRINT,
-	IS_PRINTLN,
-	IS_COPYOF,
-	IS_REFOF,
-	IS_EQUALS,
-	IS_ASSIGN,
-	IS_DOT,
-	IS_ARROW,
-	IS_COMMA,
-	IS_BRACKET_OPEN,
-	IS_BRACKET_CLOSE,
-	IS_SCOPE_OPEN,
-	IS_SCOPE_CLOSE,
-	IS_SQUARE_BRACKET_OPEN,
-	IS_SQUARE_BRACKET_CLOSE,
-	IS_LOGICAL_AND,
-	IS_LOGICAL_OR,
+	KI_GLOBAL,
+	KI_VAR,
+	KI_NEW,
+	KI_FOR,
+	KI_WHILE,
+	KI_UNTIL,
+	KI_DO,
+	KI_BREAK,
+	KI_CONTINUE,
+	KI_GOTO,
+	KI_EXIT_SCOPE,
+	KI_DELETE,
+	KI_IF,
+	KI_ELSE,
+	KI_TRUE,
+	KI_FALSE,
+	KI_IMPORT,
+	KI_INCLUDE,
+	KI_FROM,
+	KI_AS,
+	KI_COPYOF,
+	KI_REFOF,
+	KI_EQUALS,
+	KI_ASSIGN,
+	KI_DOT,
+	KI_ARROW,
+	KI_COMMA,
+	KI_BRACKET_OPEN,
+	KI_BRACKET_CLOSE,
+	KI_SCOPE_OPEN,
+	KI_SCOPE_CLOSE,
+	KI_SQUARE_BRACKET_OPEN,
+	KI_SQUARE_BRACKET_CLOSE,
+	KI_LOGICAL_AND,
+	KI_LOGICAL_OR,
 };
 
 struct keyword_global
@@ -60,9 +58,9 @@ struct keyword_global
 	{
 		return 6;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_GLOBAL;
+		return KI_GLOBAL;
 	}
 };
 
@@ -76,9 +74,9 @@ struct keyword_var
 	{
 		return 3;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_VAR;
+		return KI_VAR;
 	}
 };
 
@@ -92,9 +90,9 @@ struct keyword_new
 	{
 		return 3;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_NEW;
+		return KI_NEW;
 	}
 };
 
@@ -108,9 +106,9 @@ struct keyword_for
 	{
 		return 3;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_FOR;
+		return KI_FOR;
 	}
 };
 
@@ -124,9 +122,9 @@ struct keyword_while
 	{
 		return 5;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_WHILE;
+		return KI_WHILE;
 	}
 };
 
@@ -140,9 +138,9 @@ struct keyword_until
 	{
 		return 5;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_UNTIL;
+		return KI_UNTIL;
 	}
 };
 
@@ -156,9 +154,9 @@ struct keyword_do
 	{
 		return 2;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_DO;
+		return KI_DO;
 	}
 };
 
@@ -172,9 +170,9 @@ struct keyword_break
 	{
 		return 5;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_BREAK;
+		return KI_BREAK;
 	}
 };
 
@@ -188,9 +186,9 @@ struct keyword_continue
 	{
 		return 8;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_CONTINUE;
+		return KI_CONTINUE;
 	}
 };
 
@@ -204,9 +202,9 @@ struct keyword_goto
 	{
 		return 4;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_GOTO;
+		return KI_GOTO;
 	}
 };
 
@@ -220,9 +218,9 @@ struct keyword_exit_scope
 	{
 		return 10;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_EXIT_SCOPE;
+		return KI_EXIT_SCOPE;
 	}
 };
 
@@ -236,9 +234,9 @@ struct keyword_delete
 	{
 		return 6;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_DELETE;
+		return KI_DELETE;
 	}
 };
 
@@ -252,9 +250,9 @@ struct keyword_if
 	{
 		return 2;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_IF;
+		return KI_IF;
 	}
 };
 
@@ -268,9 +266,9 @@ struct keyword_else
 	{
 		return 4;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_ELSE;
+		return KI_ELSE;
 	}
 };
 
@@ -284,9 +282,9 @@ struct keyword_true
 	{
 		return 4;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_TRUE;
+		return KI_TRUE;
 	}
 };
 
@@ -300,9 +298,9 @@ struct keyword_false
 	{
 		return 5;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_FALSE;
+		return KI_FALSE;
 	}
 };
 
@@ -316,9 +314,9 @@ struct keyword_import
 	{
 		return 6;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_IMPORT;
+		return KI_IMPORT;
 	}
 };
 
@@ -332,9 +330,9 @@ struct keyword_include
 	{
 		return 7;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_INCLUDE;
+		return KI_INCLUDE;
 	}
 };
 
@@ -348,9 +346,9 @@ struct keyword_from
 	{
 		return 4;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_FROM;
+		return KI_FROM;
 	}
 };
 
@@ -364,25 +362,9 @@ struct keyword_as
 	{
 		return 2;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_AS;
-	}
-};
-
-struct keyword_print
-{
-	constexpr static const char * token() noexcept
-	{
-		return "print";
-	}
-	constexpr static size_t length() noexcept
-	{
-		return 5;
-	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
-	{
-		return IS_PRINT;
+		return KI_AS;
 	}
 };
 
@@ -396,9 +378,9 @@ struct keyword_copyof
 	{
 		return 6;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_COPYOF;
+		return KI_COPYOF;
 	}
 };
 
@@ -412,9 +394,9 @@ struct keyword_refof
 	{
 		return 5;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_REFOF;
+		return KI_REFOF;
 	}
 };
 
@@ -428,9 +410,9 @@ struct operator_assign
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_ASSIGN;
+		return KI_ASSIGN;
 	}
 };
 
@@ -444,9 +426,9 @@ struct operator_dot
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_DOT;
+		return KI_DOT;
 	}
 };
 
@@ -460,9 +442,9 @@ struct operator_arrow
 	{
 		return 2;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_ARROW;
+		return KI_ARROW;
 	}
 };
 
@@ -476,9 +458,9 @@ struct operator_comma
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_COMMA;
+		return KI_COMMA;
 	}
 };
 
@@ -492,9 +474,9 @@ struct operator_bracket_open
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_BRACKET_OPEN;
+		return KI_BRACKET_OPEN;
 	}
 };
 
@@ -508,9 +490,9 @@ struct operator_bracket_close
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_BRACKET_CLOSE;
+		return KI_BRACKET_CLOSE;
 	}
 };
 
@@ -524,9 +506,9 @@ struct operator_scope_open
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_SCOPE_OPEN;
+		return KI_SCOPE_OPEN;
 	}
 };
 
@@ -540,9 +522,9 @@ struct operator_scope_close
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_SCOPE_CLOSE;
+		return KI_SCOPE_CLOSE;
 	}
 };
 
@@ -556,9 +538,9 @@ struct operator_square_bracket_open
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_SQUARE_BRACKET_OPEN;
+		return KI_SQUARE_BRACKET_OPEN;
 	}
 };
 
@@ -572,9 +554,9 @@ struct operator_square_bracket_close
 	{
 		return 1;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_SQUARE_BRACKET_CLOSE;
+		return KI_SQUARE_BRACKET_CLOSE;
 	}
 };
 
@@ -588,9 +570,9 @@ struct operator_logical_and
 	{
 		return 2;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_LOGICAL_AND;
+		return KI_LOGICAL_AND;
 	}
 };
 
@@ -604,9 +586,9 @@ struct operator_logical_or
 	{
 		return 2;
 	}
-	constexpr static INTERPRETER_STRING string_id() noexcept
+	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return IS_LOGICAL_OR;
+		return KI_LOGICAL_OR;
 	}
 };
 

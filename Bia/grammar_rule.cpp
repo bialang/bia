@@ -1,4 +1,4 @@
-#include "interpreter_rule.hpp"
+#include "grammar_rule.hpp"
 #include "exception.hpp"
 
 #include <memory>
@@ -9,19 +9,19 @@ namespace bia
 namespace grammar
 {
 
-interpreter_rule::interpreter_rule() noexcept
+grammar_rule::grammar_rule() noexcept
 {
 	_id = 0;
 	_flags = F_NONE;
 }
 
-interpreter_rule::interpreter_rule(report::rule_type _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept : _tokens(std::move(_tokens))
+grammar_rule::grammar_rule(report::rule_t _id, uint32_t _flags, std::vector<bia_token_function> && _tokens) noexcept : _tokens(std::move(_tokens))
 {
 	this->_id = _id;
 	this->_flags = _flags;
 }
 
-bool interpreter_rule::run_rule(stream::input_stream & _input, token_param & _token_param) const
+bool grammar_rule::run(stream::buffer_input_stream & _input, token_param & _token_param) const
 {
 	const auto _begin_size = _token_param.bundle->size();
 	const auto _begin_mark = _input.mark();
@@ -119,12 +119,12 @@ bool interpreter_rule::run_rule(stream::input_stream & _input, token_param & _to
 	return (_flags & F_OR) == 0;
 }
 
-report::rule_type interpreter_rule::id() const noexcept
+report::rule_t grammar_rule::id() const noexcept
 {
 	return _id;
 }
 
-void interpreter_rule::begin_wrap_up(token_param & _token_param) const
+void grammar_rule::begin_wrap_up(token_param & _token_param) const
 {
 	if (_flags & F_WRAP_UP) {
 		report begin{};

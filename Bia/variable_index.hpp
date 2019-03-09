@@ -64,11 +64,9 @@ public:
 	 *
 	 * @param _key The key.
 	 *
-	 * @throws See std::unordered_map::find().
-	 *
-	 * @return The value associated with the key if it succeeds, otherwise null.
+	 * @return The value associated with the key if it exists, otherwise null.
 	*/
-	BIA_EXPORT framework::member * find(const char * _key);
+	BIA_EXPORT framework::member * find(const char * _key) const noexcept;
 
 private:
 	static void guard_action(value_type & _value);

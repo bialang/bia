@@ -22,7 +22,7 @@ framework::member * variable_index::add(const char * _key, value_type _value)
 	return _result.first->second.get().first;
 }
 
-framework::member * variable_index::find(const char * _key)
+framework::member * variable_index::find(const char * _key) const noexcept
 {
 	auto _result = _map.find(_key);
 

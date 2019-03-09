@@ -4,7 +4,7 @@
 #include <limits>
 
 #include "exception.hpp"
-#include "toolset.hpp"
+#include "virtual_translator.hpp"
 
 
 namespace bia
@@ -23,7 +23,7 @@ class temp_counter
 {
 public:
 	/** The counter type. */
-	typedef machine::platform::toolset::temp_index_type counter_type;
+	typedef machine::virtual_machine::member_index_t counter_t;
 
 	/**
 	 * Constructor.
@@ -46,7 +46,7 @@ public:
 	 *
 	 * @throws exception::argument_error If the old counter is invalid.
 	*/
-	void pop(counter_type _old_counter)
+	void pop(counter_t _old_counter)
 	{
 		// Check counter
 		if (_counter < _old_counter) {
@@ -63,7 +63,7 @@ public:
 	 *
 	 * @param _counter The higher counter value.
 	*/
-	void update(counter_type _counter) noexcept
+	void update(counter_t _counter) noexcept
 	{
 		if (_max < _counter) {
 			_max = _counter;
@@ -79,9 +79,9 @@ public:
 	 *
 	 * @return The new current counter.
 	*/
-	counter_type next()
+	counter_t next()
 	{
-		if (_counter == std::numeric_limits<counter_type>::max()) {
+		if (_counter == std::numeric_limits<counter_t>::max()) {
 			throw exception::limitation_error(BIA_EM_LIMITATION_EXCEEDED);
 		}
 
@@ -95,7 +95,7 @@ public:
 	 *
 	 * @return The current counter.
 	*/
-	counter_type current() noexcept
+	counter_t current() noexcept
 	{
 		// Update max if counter is used
 		update(_counter);
@@ -110,7 +110,7 @@ public:
 	 *
 	 * @return The current counter.
 	*/
-	counter_type peek() const noexcept
+	counter_t peek() const noexcept
 	{
 		return _counter;
 	}
@@ -122,16 +122,16 @@ public:
 	 *
 	 * @return The max counter.
 	*/
-	counter_type max() const noexcept
+	counter_t max() const noexcept
 	{
 		return _max;
 	}
 
 private:
 	/** The current counter. */
-	counter_type _counter;
+	counter_t _counter;
 	/** The max counted value. */
-	counter_type _max;
+	counter_t _max;
 };
 
 }

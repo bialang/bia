@@ -37,31 +37,31 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count...) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count _count...) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count...) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_type _operator, const member * _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_t _operator, const member * _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_type _operator, int32_t _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_t _operator, int32_t _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_type _operator, int64_t _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_t _operator, int64_t _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_type _operator, double _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_t _operator, double _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::string_manager::name_type _name) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::name_manager::name_t _name) override
 	{
 		throw exception::symbol_error(BIA_EM_UNDEFINED_MEMBER);
 	}
@@ -72,19 +72,19 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_type _operator, member * _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_member(operator_t _operator, member * _right) const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_type _operator, int32_t _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int32(operator_t _operator, int32_t _right) const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_type _operator, int64_t _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_int64(operator_t _operator, int64_t _right) const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}
-	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_type _operator, double _right) const override
+	virtual int32_t BIA_MEMBER_CALLING_CONVENTION test_double(operator_t _operator, double _right) const override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_TEST);
 	}

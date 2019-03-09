@@ -3,13 +3,14 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include <type_traits>
 
 #include "config.hpp"
+#include "report_bundle.hpp"
 #include "exception.hpp"
 #include "output_stream.hpp"
-#include "toolset.hpp"
 #include "report.hpp"
-#include "interpreter_id.hpp"
+#include "keyword.hpp"
 #include "compiler_value.hpp"
 #include "temp_counter.hpp"
 #include "operator.hpp"
@@ -17,11 +18,9 @@
 #include "compile_normal_operation.hpp"
 #include "compiler_loop_tracker.hpp"
 #include "scope_handler.hpp"
-
-#include "interpreter.hpp"
-#include "interpreter_rule.hpp"
-#include "machine_code.hpp"
-
+#include "link.hpp"
+#include "virtual_translator.hpp"
+#include "grammar_id.hpp"
 
 
 namespace bia
@@ -45,14 +44,10 @@ public:
 	 * @since 3.64.127.719
 	 * @date 16-May-18
 	 *
-	 * @throws See machine::platform::toolset::finalize().
+	 * @throws See machine::virtual_machine::virtual_translator::finalize().
 	*/
 	BIA_EXPORT void finalize();
-	machine::machine_code code()
-	{
-		return machine::machine_code({ nullptr, 0 }, machine::machine_schein(_context.allocator(), _context.executable_allocator()));
-	}
-	//machine::machine_schein get_machine_schein();
+	BIA_EXPORT virtual machine::virtual_machine::virtual_machine_schein & virtual_machine_schein() noexcept override;
 
 private:
 	enum class VARIABLE_TYPE
@@ -70,124 +65,33 @@ private:
 	temp_counter _counter;
 	/** Tracks all open loops. */
 	compiler_loop_tracker _loop_tracker;
-	/** The compilers toolset for writing the machine code. */
-	machine::platform::toolset _toolset;
+	/** The compilers translator for writing the virtual machine code. */
+	machine::virtual_machine::virtual_translator _translator;
 	/** The context. */
 	machine::machine_context & _context;
+	/** The schein. */
+	machine::virtual_machine::virtual_machine_schein _schein;
 	/** Manages all scopes and their local variables. */
 	scope_handler _scope_handler;
 	/** A list of task that need to be executed before the script is finished. */
-	std::vector<std::pair<machine::platform::toolset::position_type, std::function<void()>>> _finish_tasks;
+	std::vector<std::pair<machine::virtual_machine::virtual_translator::position_t, std::function<void()>>> _finish_tasks;
 
 	/**
 	 * Executes the given member.
 	 *
-	 * @remarks The @ref compiler::_value must contain the temporary destination.
-	 *
 	 * @since 3.67.135.751
 	 * @date 6-Aug-18
 	 *
-	 * @tparam Type The type of the member.
-	 *
 	 * @param _member The member.
+	 * @param _destination The desired destination of the result.
 	 * @param _format The format of the passed parameters.
 	 * @param _mixed Whether some constants were passed too or not.
 	 * @param _count The amount of passed parameters.
-	 * @param [in] _passer The varg passer.
 	 *
-	 * @throws See machine::string_manager::format_address().
-	 * @throws See machine::platform::toolset::call().
+	 * @throws See machine::virtual_machine::virtual_translator::execute(), machine::virtual_machine::virtual_translator::execute_count() and machine::virtual_machine::virtual_translator::execute_format().
 	*/
-	template<typename Type>
-	void handle_parameter_execute(Type _member, const std::string & _format, bool _mixed, uint32_t _count, machine::platform::varg_member_passer & _passer)
-	{
-		auto _destination = machine::platform::toolset::to_temp_member(_value.value().rt_temp_member);
-
-		// Execute without parameters
-		if (!_count) {
-			_toolset.call_virtual(&framework::member::execute, _member, _destination);
-		} // Formatted execute
-		else if (_mixed) {
-			auto _format_ptr = _context.string_manager().format_address(_format.data(), _format.length());
-
-			_toolset.call_virtual(&framework::member::execute_format, _member, _passer, _destination, _format_ptr, _count);
-		} // Only members as parameters
-		else {
-			_toolset.call_virtual(&framework::member::execute_count, _member, _passer, _destination, machine::platform::reserved_parameter(), _count);
-		}
-	}
-	template<typename Destination>
-	void handle_variable_declaration_helper(compiler_value _expression, Destination _destination)
-	{
-		using T = machine::platform::toolset;
-		using VT = compiler_value::VALUE_TYPE;
-
-		switch (_expression.type()) {
-		case VT::TEST_VALUE_CONSTANT:
-			_expression.set_return(static_cast<int64_t>(_expression.value().rt_test_result));
-		case VT::INT:
-		{
-			// Optimize common used constant values
-			switch (_expression.value().rt_int) {
-			case 0:
-				_toolset.call_static(&machine::link::instantiate_int_0, _destination);
-
-				break;
-			case 1:
-				_toolset.call_static(&machine::link::instantiate_int_1, _destination);
-
-				break;
-			case -1:
-				_toolset.call_static(&machine::link::instantiate_int_n1, _destination);
-
-				break;
-			default:
-			{
-				// Can be int32
-				if (_expression.is_int32()) {
-					_toolset.call_static(&machine::link::instantiate_int32, _destination, static_cast<int32_t>(_expression.value().rt_int));
-				} else {
-					_toolset.call_static(&machine::link::instantiate_int64, _destination, _expression.value().rt_int);
-				}
-
-				break;
-			}
-			}
-
-			break;
-		}
-		case VT::BIG_INT:
-			_toolset.call_static(&machine::link::instantiate_big_int, _destination, _expression.value().rt_big_int);
-
-			break;
-		case VT::DOUBLE:
-			_toolset.call_static(&machine::link::instantiate_double, _destination, _expression.value().rt_double);
-
-			break;
-		case VT::STRING:
-			_toolset.call_static(&machine::link::instantiate_string, _destination, _expression.value().rt_string.data, _expression.value().rt_string.size, _expression.value().rt_string.length);
-
-			break;
-		case VT::MEMBER:
-			_toolset.call_virtual(&framework::member::clone, _expression.value().rt_member, _destination);
-
-			break;
-		case VT::TEMPORARY_MEMBER:
-			_toolset.call_virtual(&framework::member::clone, T::to_temp_member(_expression.value().rt_temp_member), _destination);
-
-			break;
-		case VT::LOCAL_MEMBER:
-			_toolset.call_virtual(&framework::member::clone, T::to_local_member(_expression.value().rt_local_member), _destination);
-
-			break;
-		case VT::TEST_VALUE_REGISTER:
-			_toolset.call_static(&machine::link::instantiate_int32, _destination, T::test_result_value());
-
-			break;
-		default:
-			BIA_IMPLEMENTATION_ERROR;
-		}
-	}
+	BIA_EXPORT void handle_parameter_execute(const machine::virtual_machine::index & _member, const machine::virtual_machine::index * _destination, const std::string & _format, bool _mixed, framework::member::parameter_count_t _count);
+	BIA_EXPORT void handle_variable_declaration_helper(compiler_value _expression, const machine::virtual_machine::index & _destination);
 	/**
 	 * Tests the compiler value and returns a test value.
 	 *
@@ -203,13 +107,9 @@ private:
 	 * @since 3.67.135.751
 	 * @date 6-Aug-18
 	 *
-	 * @param [in,out] _passer The varg parameter passer.
-	 *
-	 * @throws See machine::platform::varg_member_passer::pass().
-	 *
 	 * @return The char of the item type.
 	*/
-	BIA_EXPORT char handle_parameter_item(machine::platform::varg_member_passer & _passer);
+	BIA_EXPORT char handle_parameter_item();
 	/**
 	 * Handles a math expression or a math term token.
 	 *
@@ -240,6 +140,8 @@ private:
 	}
 	/**
 	 * Handles the value rule.
+	 *
+	 * @remarks @a _value should be cleared if it is not the destination.
 	 *
 	 * @since 3.64.127.716
 	 * @date 22-Apr-18
@@ -275,7 +177,7 @@ private:
 	/**
 	 * Handles the value rule.
 	 *
-	 * @remarks This function does not handle the counter variable.
+	 * @remarks This function does not handle the counter variable. @a _value should be cleared if it is not the destination.
 	 *
 	 * @since 3.64.127.716
 	 * @date 22-Apr-18
@@ -308,6 +210,8 @@ private:
 
 			auto _left = _value;
 
+			_value.set_return();
+
 			// Handle right value expression
 			handle_value_expression(_report + 3);
 
@@ -317,7 +221,7 @@ private:
 			_value.set_return();
 
 			// Call assign operator
-			compile_normal_operation(_toolset, _value).operate(_left, _report[2].content.operator_code, _right);
+			compile_normal_operation(_translator, _value).operate(_left, _report[2].content.operator_code, _right);
 
 			// Set left as return
 			_value = _left;
@@ -347,7 +251,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	BIA_EXPORT const grammar::report * handle_root_ignore(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_root_ignore(const grammar::report * _report) const noexcept;
 	/**
 	 * Handles a math expression or a math term token.
 	 *
@@ -449,6 +353,7 @@ private:
 	 * @date 6-Aug-18
 	 *
 	 * @param _report The parameter token.
+	 * @param _destination (Optional) The destination of the return.
 	 *
 	 * @throws See handle_parameter_execute(), handle_parameter_item() and handle_value_insecure().
 	 * @throws See temp_counter::pop().
@@ -456,7 +361,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	BIA_EXPORT const grammar::report * handle_parameter(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_parameter(const grammar::report * _report, compiler_value _destination = compiler_value());
 	BIA_EXPORT const grammar::report * handle_string(const grammar::report * _report);
 	/**
 	 * Handles a variable declaration token.
@@ -486,20 +391,6 @@ private:
 	 * @return The end of the report.
 	*/
 	BIA_EXPORT const grammar::report * handle_if(const grammar::report * _report);
-	/**
-	 * Handles a print token.
-	 *
-	 * @since 3.64.127.716
-	 * @date 29-Apr-18
-	 *
-	 * @param _report The print token.
-	 *
-	 * @throws See handle_value().
-	 * @throws See machine::platform::toolset::call().
-	 *
-	 * @return The end of the report.
-	*/
-	BIA_EXPORT const grammar::report * handle_print(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_test_loop(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_loop_control(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_import(const grammar::report * _report);

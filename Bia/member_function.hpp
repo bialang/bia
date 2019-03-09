@@ -2,7 +2,7 @@
 
 #include "member_function_def.hpp"
 #include "exception.hpp"
-#include "disguised_caller.hpp"
+#include "disguised_caller_def.hpp"
 #include "share.hpp"
 #include "instance_holder.hpp"
 
@@ -51,29 +51,19 @@ inline void BIA_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Ar
 template<typename _Class, typename _Return, typename ..._Args>
 inline void BIA_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute(member * _destination)
 {
-	force::disguised_caller(_data.get().first, cast_instance(), _destination);
+	force::disguised_caller(cast_instance(), _data.get().first, _destination, nullptr, 0, nullptr);
 }
 
 template<typename _Class, typename _Return, typename ..._Args>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute_count(member * _destination, void * _reserved, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
 {
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-
-	force::disguised_caller_count(_data.get().first, cast_instance(), _destination, _count, _args);
-
-	va_end(_args.args);
+	force::disguised_caller(cast_instance(), _data.get().first, _destination, nullptr, _count, _stack);
 }
 
 template<typename _Class, typename _Return, typename ..._Args>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute_format(member * _destination, const char * _format, parameter_count _count...)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<_Return(_Class::*)(_Args...)>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
 {
-	force::va_list_wrapper _args;
-	va_start(_args.args, _count);
-
-	force::disguised_caller_format(_data.get().first, cast_instance(), _destination, _format, _count, _args);
-
-	va_end(_args.args);
+	force::disguised_caller(cast_instance(), _data.get().first, _destination, _format, _count, _stack);
 }
 
 template<typename _Class, typename _Return, typename ..._Args>
