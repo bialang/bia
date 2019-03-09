@@ -293,7 +293,6 @@
     <ClInclude Include="module_library.hpp" />
     <ClInclude Include="module_loader.hpp" />
     <ClInclude Include="namespace_member.hpp" />
-    <ClInclude Include="native_reference.hpp" />
     <ClInclude Include="compiler.hpp" />
     <ClInclude Include="config.hpp" />
     <ClInclude Include="constant_operation.hpp" />
@@ -330,7 +329,6 @@
     <ClInclude Include="member_function.hpp" />
     <ClInclude Include="native_test_operator.hpp" />
     <ClInclude Include="native_operator.hpp" />
-    <ClInclude Include="native_type.hpp" />
     <ClInclude Include="native_variable.hpp" />
     <ClInclude Include="operation.hpp" />
     <ClInclude Include="output_stream.hpp" />

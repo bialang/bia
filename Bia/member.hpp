@@ -8,7 +8,6 @@
 
 #include "config.hpp"
 #include "operator.hpp"
-#include "native_type.hpp"
 #include "type_traits.hpp"
 #include "name_manager.hpp"
 #include "buffer_builder.hpp"

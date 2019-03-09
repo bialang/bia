@@ -287,9 +287,6 @@
     <ClInclude Include="native_variable.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
-    <ClInclude Include="native_type.hpp">
-      <Filter>Header Files\framework\native</Filter>
-    </ClInclude>
     <ClInclude Include="type_traits.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
@@ -331,9 +328,6 @@
     </ClInclude>
     <ClInclude Include="lambda_function.hpp">
       <Filter>Header Files\framework\executable</Filter>
-    </ClInclude>
-    <ClInclude Include="native_reference.hpp">
-      <Filter>Header Files\framework\native</Filter>
     </ClInclude>
     <ClInclude Include="initiator.hpp">
       <Filter>Header Files\force</Filter>
