@@ -1,5 +1,11 @@
 #pragma once
 
+#define BUILD_SHARED_LIBS
+#define BIA_MPIR_IMPL_SIZE_DEBUG 16
+#define BIA_MPIR_IMPL_SIZE_RELEASE 16
+#define BIA_BOOST_REGEX_IMPL_SIZE_DEBUG 
+#define BIA_BOOST_REGEX_IMPL_SIZE_RELEASE 
+
 // Compiler macro
 #if defined(_MSC_VER)
 #define BIA_COMPILER_MSVC 1
