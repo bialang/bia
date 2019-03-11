@@ -1,10 +1,6 @@
 #pragma once
 
-#define BUILD_SHARED_LIBS
-#define BIA_MPIR_IMPL_SIZE_DEBUG 16
-#define BIA_MPIR_IMPL_SIZE_RELEASE 16
-#define BIA_BOOST_REGEX_IMPL_SIZE_DEBUG 
-#define BIA_BOOST_REGEX_IMPL_SIZE_RELEASE 
+/* #undef BIA_SHARED_BUILD */
 
 // Compiler macro
 #if defined(_MSC_VER)
@@ -53,7 +49,7 @@
 #endif
 
 // Export
-#if defined(BIA_BUILD_SHARED)
+#if defined(BIA_SHARED_BUILD)
 #if defined(BIA_BUILDING)
 #define BIA_EXPORT __declspec(dllexport)
 #else

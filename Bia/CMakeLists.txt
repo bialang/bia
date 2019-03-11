@@ -166,7 +166,7 @@ add_library(Bia ${Bia_SOURCE_FILES})
 add_executable(Bia_main "main.cpp")
 target_link_libraries(Bia_main Bia)
 
-target_link_libraries(Bia ${MPIR_LIB})
+target_link_libraries(Bia ${MPIR_LIB} Boost::regex)
 #target_include_directories(Bia ${MPIR_INCLUDE})
 
 # For dlopen and dlsym
