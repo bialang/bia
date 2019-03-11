@@ -14,17 +14,14 @@ template<typename Type>
 template<typename... Arguments>
 inline share<Type>::share(Arguments &&... _arguments)
 {
-	_data = machine::machine_context::active_allocator()->construct<data>();
-
-	// Create object inplace
-	new(_data->first) Type(std::forward<Arguments>(_arguments)...);
+	create(0, std::forward<Arguments>(_arguments)...);
 }
 
 template<typename Type>
 inline share<Type>::share(const share & _copy) noexcept
 {
 	_data = _copy._data;
-	_data->second.fetch_add(1, std::memory_order_relaxed);
+	_data->reference_count.fetch_add(1, std::memory_order_relaxed);
 }
 
 template<typename Type>
@@ -38,30 +35,30 @@ inline share<Type>::share(share && _move) noexcept
 template<typename Type>
 inline share<Type>::~share()
 {
-	if (_data && !_data->second.fetch_sub(1, std::memory_order_acq_rel)) {
+	if (_data && !_data->reference_count.fetch_sub(1, std::memory_order_acq_rel)) {
 		scope_exit _exit([this]() { 
 			auto _tmp = _data;
 
 			_data = nullptr;
 
-			machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_tmp, sizeof(data))); 
+			machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_tmp, data_size() + _tmp->extra_size)); 
 		});
 
 		// Destroy object
-		reinterpret_cast<Type*>(_data->first)->~Type();		
+		get().~Type();
 	}
 }
 
 template<typename Type>
 inline Type & share<Type>::get() noexcept
 {
-	return *reinterpret_cast<Type*>(_data->first);
+	return *reinterpret_cast<Type*>(_data + 1);
 }
 
 template<typename Type>
 inline const Type & share<Type>::get() const noexcept
 {
-	return *reinterpret_cast<const Type*>(_data->first);
+	return *reinterpret_cast<const Type*>(_data + 1);
 }
 
 template<typename Type>
@@ -90,6 +87,39 @@ inline share<Type> & share<Type>::operator=(share && _move)
 	this->~share();
 
 	return *new(this) share<Type>(std::move(_move));
+}
+
+template<typename Type>
+template<typename... Arguments>
+inline share<Type> share<Type>::factory_make(uint8_t _extra_size, Arguments &&... _arguments)
+{
+	return share<Type>(_extra_size, std::forward<Arguments>(_arguments)...);
+}
+
+template<typename Type>
+template<typename ...Arguments>
+inline share<Type>::share(uint8_t _extra_size, Arguments &&... _arguments)
+{
+	create(_extra_size, std::forward<Arguments>(_arguments)...);
+}
+
+template<typename Type>
+template<typename ...Arguments>
+inline void share<Type>::create(uint8_t _extra_size, Arguments && ..._arguments)
+{
+	auto _tmp = machine::machine_context::active_allocator()->allocate(data_size() + _extra_size);
+
+	// Create data object
+	_data = new(_tmp) data{};
+	_data->extra_size = _extra_size;
+
+	new(_data + 1) Type(std::forward<Arguments>(_arguments)...);
+}
+
+template<typename Type>
+inline constexpr size_t share<Type>::data_size()
+{
+	return sizeof(data) + sizeof(Type);
 }
 
 }
