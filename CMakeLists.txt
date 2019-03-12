@@ -16,22 +16,43 @@ endif()
 
 # Project
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared library.")
-set(PCRE2_STATIC ON CACHE BOOL "Whether the static PCRE2 library is used or not.")
+set(BIA_USE_STD_REGEX OFF CACHE BOOL "Whether to use std::regex instead of boost::regex. Not recommended.")
 set(BIA_SHARED_BUILD ${BUILD_SHARED_LIBS})
+set(BOOST_ROOT "" CACHE PATH "Boost library path.")
+set(Boost_USE_STATIC_LIBS ON CACHE BOOL "Use static libs of boost.")
 
 # Dependencies
-find_path(MPIR_INCLUDE "mpir/mpir.h")
+find_path(MPIR_INCLUDE "mpir.h")
 find_library(MPIR_LIB mpir)
-find_package(Boost REQUIRED COMPONENTS regex)
+
+set(BIA_INCLUDES ${MPIR_INCLUDE})
+set(BIA_LIBRARIES ${MPIR_LIB})
+
+# Boost.Regex
+if(NOT BIA_USE_STD_REGEX)
+  find_package(Boost REQUIRED COMPONENTS regex)
+
+  list(APPEND BIA_INCLUDES ${Boost_INCLUDE_DIRS})
+  list(APPEND BIA_LIBRARIES ${Boost_REGEX_LIBRARY})
+
+  include(CheckSymbolExists)
+  set(CMAKE_REQUIRED_INCLUDES ${Boost_INCLUDE_DIRS})
+  set(CMAKE_REQUIRED_LIBRARIES ${Boost_REGEX_LIBRARY})
+
+  check_symbol_exists("BOOST_HAS_ICU" "boost/regex/config.hpp" BOOST_HAS_ICU)
+  check_symbol_exists("BOOST_NO_STD_WSTRING" "boost/regex/config.hpp" BOOST_NO_STD_WSTRING)
+
+  if(NOT BOOST_HAS_ICU OR BOOST_NO_STD_WSTRING)
+    message(STATUS "Boost without ICU support. Falling back to own implementation.")
+  endif(NOT BOOST_HAS_ICU OR BOOST_NO_STD_WSTRING)
+endif(NOT BIA_USE_STD_REGEX)
 
 if(BUILD_SHARED_LIBS)
   add_definitions(-DBIA_BUILDING)
 endif(BUILD_SHARED_LIBS)
 
 configure_file("${PROJECT_SOURCE_DIR}/Bia/config.in" "${PROJECT_SOURCE_DIR}/Bia/config.hpp")
-configure_file("${PROJECT_SOURCE_DIR}/Bia/internal_config.in" "${PROJECT_SOURCE_DIR}/Bia/internal_config.hpp")
 
-include_directories(${MPIR_INCLUDE})
 include_directories(Bia)
 add_subdirectory(Bia)
 

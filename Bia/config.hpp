@@ -1,6 +1,6 @@
 #pragma once
 
-/* #undef BIA_SHARED_BUILD */
+#define BIA_SHARED_BUILD
 
 // Compiler macro
 #if defined(_MSC_VER)
