@@ -602,9 +602,6 @@
     <ClInclude Include="regex.hpp">
       <Filter>Header Files\dependency</Filter>
     </ClInclude>
-    <ClInclude Include="internal_config.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="regex_member.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
