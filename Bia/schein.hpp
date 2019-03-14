@@ -14,6 +14,7 @@
 #include "string_manager.hpp"
 #include "regex.hpp"
 #include "share_def.hpp"
+#include "string_stream.hpp"
 
 
 namespace bia
@@ -32,6 +33,7 @@ public:
 	/** The deleter function signature. */
 	typedef std::function<void(memory::universal_allocation)> deleter_function_t;
 	typedef uint32_t regex_index_t;
+	typedef stream::string_stream::length_t string_length_t;
 
 	/**
 	 * Constructor.
@@ -104,9 +106,9 @@ public:
 	*/
 	BIA_EXPORT void clear(); 
 	BIA_EXPORT regex_index_t register_regex_inplace(const uint8_t * _bytes, size_t _size);
-	BIA_EXPORT regex_index_t register_regex_inplace(const char * _string);
-	BIA_EXPORT regex_index_t register_regex_inplace(const char16_t * _string);
-	BIA_EXPORT regex_index_t register_regex_inplace(const char32_t * _string);
+	BIA_EXPORT regex_index_t register_regex_inplace(const char * _string, string_length_t _length);
+	BIA_EXPORT regex_index_t register_regex_inplace(const char16_t * _string, string_length_t _length);
+	BIA_EXPORT regex_index_t register_regex_inplace(const char32_t * _string, string_length_t _length);
 	/**
 	 * Returns the machine context.
 	 *

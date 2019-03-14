@@ -355,7 +355,7 @@ ACTION lexer_token::regex(stream::buffer_input_stream & _input, token_param & _p
 		_pattern.finish();
 
 		_output.type = report::TYPE::REGEX;
-		_output.content.regex = _params.schein->register_regex_inplace(stream::string_stream::string<char>(_pattern.buffer()));
+		_output.content.regex = _params.schein->register_regex_inplace(stream::string_stream::string<char>(_pattern.buffer()), stream::string_stream::length(_pattern.buffer()));
 
 		return success;
 	}
@@ -542,55 +542,27 @@ ACTION lexer_token::compare_operator(stream::buffer_input_stream & _input, token
 	}
 
 	auto _buffer = _input.buffer();
-	auto _optional = false;
+	auto _first = _params.encoder->next(_buffer.first, _buffer.second);
+	auto _tmp = _buffer.first;
+	auto _second = _params.encoder->next(_buffer.first, _buffer.second);
+
+	if (_first == '>' || _first == '<') {
+		// Optional
+		if (_second != '=') {
+			_second = _first;
+			_first = 0;
+			_buffer.first = _tmp;
+		}
+	} else if (!(_first == '=' && _second == '=' || _first == 'i' && _second == 'n' || _first == '!' && _second == '=')) {
+		return error;
+	}
 
 	_output.type = report::TYPE::OPERATOR_CODE;
-	_output.content.operator_code = _params.encoder->next(_buffer.first, _buffer.second);
+	_output.content.operator_code = _first << 8 | _second;
 
-	switch (_output.content.operator_code) {
-	case '<':
-	case '>':
-		_optional = true;
-	case '=':
-	case '!':
-	{
-		// Need at least one more
-		auto _prev = _buffer.first;
+	_input.skip(_buffer.first);
 
-		if (_params.encoder->next(_buffer.first, _buffer.second) != '=') {
-			if (_optional) {
-				// Move cursor
-				_input.skip(_prev);
-
-				return success;
-			} else {
-				return error;
-			}
-		}
-
-		_output.content.operator_code = _output.content.operator_code << 8 | '=';
-
-		if (!_optional) {
-			// Can be the same operator
-			_prev = _buffer.first;
-
-			if (_params.encoder->next(_buffer.first, _buffer.second) == '=') {
-				_output.content.operator_code = _output.content.operator_code << 8 | '=';
-			} else {
-				_buffer.first = _prev;
-			}
-		}
-
-		// Move cursor
-		_input.skip(_buffer.first);
-
-		return success;
-	}
-	default:
-		break;
-	}
-
-	return error;
+	return success;
 }
 
 ACTION lexer_token::dot_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)

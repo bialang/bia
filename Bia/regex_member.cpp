@@ -80,10 +80,17 @@ int32_t BIA_MEMBER_CALLING_CONVENTION regex_member::test() const
 int32_t BIA_MEMBER_CALLING_CONVENTION regex_member::test_member(operator_t _operator, member * _right) const
 {
 	if (_right->flags() & F_CSTRING) {
-		return static_cast<int32_t>(_data->matches(_right->cast<const char*>()));
+		///TODO:
+		auto _tmp = _right->cast<const char*>();
+
+		if (_operator == O_EQUALS) {
+			return static_cast<int32_t>(_data->matches(_tmp, std::strlen(_tmp)));
+		} else if (_operator == O_CONTAINS) {
+			return static_cast<int32_t>(_data->contains(_tmp, std::strlen(_tmp)));
+		}
 	}
 
-	BIA_NOT_IMPLEMENTED;
+	throw exception::operator_error(BIA_EM_UNSUPPORTED_OPERATOR);
 }
 
 int32_t BIA_MEMBER_CALLING_CONVENTION regex_member::test_int32(operator_t _operator, int32_t _right) const

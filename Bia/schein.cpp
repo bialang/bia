@@ -52,36 +52,37 @@ void schein::clear()
 
 schein::regex_index_t schein::register_regex_inplace(const uint8_t * _bytes, size_t _size)
 {
-	auto _tmp = _regexs.size();
+	BIA_NOT_IMPLEMENTED;
+	/*auto _tmp = _regexs.size();
 
 	_regexs.emplace_back(_bytes, _size);
 
-	return _tmp;
+	return _tmp;*/
 }
 
-schein::regex_index_t schein::register_regex_inplace(const char * _string)
+schein::regex_index_t schein::register_regex_inplace(const char * _string, string_length_t _length)
 {
 	auto _tmp = _regexs.size();
 
-	_regexs.emplace_back(_string);
-
-	return _tmp;
-}
-
-schein::regex_index_t schein::register_regex_inplace(const char16_t * _string)
-{
-	auto _tmp = _regexs.size();
-
-	_regexs.emplace_back(_string);
+	_regexs.emplace_back(_string, _length);
 
 	return _tmp;
 }
 
-schein::regex_index_t schein::register_regex_inplace(const char32_t * _string)
+schein::regex_index_t schein::register_regex_inplace(const char16_t * _string, string_length_t _length)
 {
 	auto _tmp = _regexs.size();
 
-	_regexs.emplace_back(_string);
+	_regexs.emplace_back(_string, _length);
+
+	return _tmp;
+}
+
+schein::regex_index_t schein::register_regex_inplace(const char32_t * _string, string_length_t _length)
+{
+	auto _tmp = _regexs.size();
+
+	_regexs.emplace_back(_string, _length);
 
 	return _tmp;
 }
