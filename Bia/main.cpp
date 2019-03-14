@@ -136,7 +136,7 @@ int main()
 		char _script[] = u8R""(
 
 var pattern = /\d+/
-var s = "65hi 18"
+var s = "6518"
 
 if pattern == s {
 	print(s)

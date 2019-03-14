@@ -1,6 +1,8 @@
 #pragma once
 
 /* #undef BIA_SHARED_BUILD */
+/* #undef BIA_USE_OWN_UNICODE */
+/* #undef BIA_USE_STD_REGEX */
 
 // Compiler macro
 #if defined(_MSC_VER)

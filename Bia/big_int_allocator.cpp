@@ -1,7 +1,7 @@
 #include "big_int_allocator.hpp"
 #include "exception.hpp"
 
-#include <mpir/mpir.h>
+#include <mpir.h>
 #include <cstring>
 
 

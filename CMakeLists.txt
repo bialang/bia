@@ -5,6 +5,7 @@ project(Bia)
 set(Bia_VERSION_MAJOR 3)
 set(Bia_VERSION_MINOR 60)
 set(CMAKE_MODULE_PATH "${CMAKE_PROGRAM_PATH}/cmake_mod")
+set(CMAKE_MODULE_PATH "")
 
 # Set C++14
 if(CMAKE_VERSION VERSION_LESS "3.1")
@@ -21,7 +22,7 @@ set(BIA_USE_OWN_UNICODE OFF CACHE BOOL "Whether to use own Unicode implementatio
 set(BIA_USE_STD_REGEX OFF CACHE BOOL "Whether to use std::regex instead of boost::regex. Not recommended.")
 set(BIA_SHARED_BUILD ${BUILD_SHARED_LIBS})
 set(BOOST_ROOT "" CACHE PATH "Boost library path.")
-set(Boost_USE_STATIC_LIBS ON CACHE BOOL "Use static libs of boost.")
+set(Boost_USE_STATIC_LIBS OFF CACHE BOOL "Use static libs of boost.")
 
 # Dependencies
 find_path(MPIR_INCLUDE "mpir.h")

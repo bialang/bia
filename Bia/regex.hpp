@@ -4,6 +4,7 @@
 #include <cstddef>
 
 #include "config.hpp"
+#include "string_stream.hpp"
 
 #if !defined(BIA_USE_STD_REGEX)
 #include <boost/regex.hpp>
@@ -21,14 +22,21 @@ namespace dependency
 class regex
 {
 public:
-	regex(const uint8_t * _bytes, size_t _size);
-	regex(const char * _string);
-	regex(const char16_t * _string);
-	regex(const char32_t * _string);
+	typedef stream::string_stream::length_t length_t;
+
+	regex(const char * _string, length_t _length);
+	regex(const char16_t * _string, length_t _length);
+	regex(const char32_t * _string, length_t _length);
 	regex(const regex & _copy) = delete;
 	regex(regex && _move) = delete;
 	~regex();
-	bool matches(const char * _string) const;
+
+	bool matches(const char * _string, length_t _length) const;
+	bool matches(const char16_t * _string, length_t _length) const;
+	bool matches(const char32_t * _string, length_t _length) const;
+	bool contains(const char * _string, length_t _length) const;
+	bool contains(const char16_t * _string, length_t _length) const;
+	bool contains(const char32_t * _string, length_t _length) const;
 
 private:
 	/** The compiled pattern. */

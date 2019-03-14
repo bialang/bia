@@ -1,26 +1,24 @@
 #include "regex.hpp"
 
-#include <string>
-
 
 namespace bia
 {
 namespace dependency
 {
 
-regex::regex(const uint8_t * _bytes, size_t _size) : _code(boost::make_u32regex(_bytes, _bytes + _size, boost::regex_constants::perl))
+#if defined(BIA_USE_STD_REGEX)
+#error "Not implemented."
+#else
+
+regex::regex(const char * _string, length_t _length) : _code(boost::make_u32regex(_string, _string + _length, boost::regex_constants::perl))
 {
 }
 
-regex::regex(const char * _string) : _code(boost::make_u32regex(_string, _string + std::char_traits<char>::length(_string), boost::regex_constants::perl))
+regex::regex(const char16_t * _string, length_t _length) : _code(boost::make_u32regex(_string, _string + _length, boost::regex_constants::perl))
 {
 }
 
-regex::regex(const char16_t * _string) : _code(boost::make_u32regex(_string, _string + std::char_traits<char16_t>::length(_string), boost::regex_constants::perl))
-{
-}
-
-regex::regex(const char32_t * _string) : _code(boost::make_u32regex(_string, _string + std::char_traits<char32_t>::length(_string), boost::regex_constants::perl))
+regex::regex(const char32_t * _string, length_t _length) : _code(boost::make_u32regex(_string, _string + _length, boost::regex_constants::perl))
 {
 }
 
@@ -28,10 +26,37 @@ regex::~regex()
 {
 }
 
-bool regex::matches(const char * _string) const
+bool regex::matches(const char * _string, length_t _length) const
 {
-	return boost::u32regex_match(_string, _code);
+	return boost::u32regex_match(_string, _string + _length, _code);
 }
+
+bool regex::matches(const char16_t * _string, length_t _length) const
+{
+	return boost::u32regex_match(_string, _string + _length, _code);
+}
+
+bool regex::matches(const char32_t * _string, length_t _length) const
+{
+	return boost::u32regex_match(_string, _string + _length, _code);
+}
+
+bool regex::contains(const char * _string, length_t _length) const
+{
+	return boost::u32regex_search(_string, _string + _length, _code);
+}
+
+bool regex::contains(const char16_t * _string, length_t _length) const
+{
+	return boost::u32regex_search(_string, _string + _length, _code);
+}
+
+bool regex::contains(const char32_t * _string, length_t _length) const
+{
+	return boost::u32regex_search(_string, _string + _length, _code);
+}
+
+#endif
 
 }
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <mpir/mpir.h>
+#include <mpir.h>
 #include <type_traits>
 #include <cstdlib>
 #include <algorithm>
