@@ -1,6 +1,8 @@
 #pragma once
 
 #cmakedefine BIA_SHARED_BUILD
+#cmakedefine BIA_USE_OWN_UNICODE
+#cmakedefine BIA_USE_STD_REGEX
 
 // Compiler macro
 #if defined(_MSC_VER)

@@ -3,6 +3,15 @@
 #include <cstdint>
 #include <cstddef>
 
+#include "config.hpp"
+
+#if !defined(BIA_USE_STD_REGEX)
+#include <boost/regex.hpp>
+#include <boost/regex/icu.hpp>
+#else
+#include <regex>
+#endif
+
 
 namespace bia
 {
@@ -22,18 +31,12 @@ public:
 	bool matches(const char * _string) const;
 
 private:
-	enum class TYPE
-	{
-		BYTE,
-		UTF8,
-		UTF16,
-		UTF32
-	};
-
 	/** The compiled pattern. */
-	void * _code;
-	/** The type of the compiled pattern. */
-	TYPE _type;
+#if !defined(BIA_USE_STD_REGEX)
+	boost::u32regex _code;
+#else
+	std::basic_regex<uint32_t> _code;
+#endif
 };
 
 }
