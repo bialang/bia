@@ -175,10 +175,10 @@ public:
 private:
 	/** The max size of the virtual object space in bytes. */
 	constexpr static auto max_size = max_sizeof<Types...>();
-	/** If non-zero the currently active object, otherwise no object is active. */
-	uint8_t _object_id;
 	/** The virtual object space. */
 	int8_t _object_space[max_size];
+	/** If non-zero the currently active object, otherwise no object is active. */
+	uint8_t _object_id;
 
 	/**
 	 * Checks whether @a Type is in @a Types.
