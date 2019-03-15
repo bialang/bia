@@ -15,6 +15,8 @@
 #include "big_int_allocator.hpp"
 #include "cstring_member_def.hpp"
 #include "virtual_machine_code.hpp"
+#include "parameter_option.hpp"
+#include "variant.hpp"
 
 
 struct printer
@@ -98,6 +100,20 @@ int main()
 		_context.set_lambda("print", [](const bia::framework::member * _member) {
 			_member->print();
 		});
+		_context.set_lambda("out", [](bia::utility::variant<int, double> & _option) {
+			const auto & a = _option;
+			a.get<int>();
+			switch (_option.id()) {
+			case 1:
+				puts("holds an int.");
+
+				break;
+			case 2:
+				puts("holds a double.");
+
+				break;
+			}
+		});
 		/*_context.set_lambda("int", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
@@ -135,14 +151,14 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var pattern = /\d+/
-var s = "asd 6518 as"
+var email_pattern = /\w+@\w+\.\w+/
+var s = "yunus@ayar.eu"
 
-if pattern < s {
+if email_pattern == s {
 	print(s)
 }
 
-print(pattern)
+print(email_pattern)
 )"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
