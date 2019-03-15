@@ -602,6 +602,9 @@
     <ClInclude Include="regex_member.hpp">
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
+    <ClInclude Include="variant.hpp">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

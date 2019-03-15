@@ -353,6 +353,7 @@
     <ClInclude Include="varg_member_passer.hpp" />
     <ClInclude Include="variable_index.hpp" />
     <ClInclude Include="virtual_machine_code.hpp" />
+    <ClInclude Include="variant.hpp" />
     <ClInclude Include="virtual_translator.hpp" />
   </ItemGroup>
   <ItemGroup>
