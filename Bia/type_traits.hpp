@@ -93,5 +93,25 @@ struct native_type_adapter<Type, true, 1>
 	typedef int32_t type;
 };
 
+template<bool Value, bool... Rest>
+struct all_true
+{
+private:
+	template<bool V>
+	constexpr static bool check() noexcept
+	{
+		return V;
+	}
+	template<bool V, bool... Rest>
+	constexpr static typename std::enable_if<sizeof...(Rest), bool>::type check() noexcept
+	{
+		return V && check<Rest...>();
+	}
+
+
+public:
+	constexpr static bool value = check<Value, Rest...>();
+};
+
 }
 }
