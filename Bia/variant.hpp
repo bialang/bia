@@ -27,6 +27,8 @@ template<typename Default, typename... Types>
 class variant
 {
 public:
+	typedef uint8_t id_t;
+
 	/**
 	 * Constructor.
 	 *
@@ -91,6 +93,11 @@ public:
 			_object_id = 0;
 		}
 	}
+	template<typename Type>
+	constexpr static bool has_type() noexcept
+	{
+		return do_has_type<Type, Default, Types...>();
+	}
 	bool empty() const noexcept
 	{
 		return _object_id == 0;
@@ -106,6 +113,10 @@ public:
 	operator bool() const noexcept
 	{
 		return !empty();
+	}
+	id_t id() const noexcept
+	{
+		return _object_id;
 	}
 	/**
 	 * Returns the default value for the '->' operator.
@@ -167,8 +178,6 @@ public:
 	}
 
 private:
-	typedef uint8_t id_t;
-
 	/** The max size of the virtual object space in bytes. */
 	constexpr static auto max_size = max_sizeof<Default, Types...>();
 	/** The virtual object space. */
@@ -214,6 +223,16 @@ private:
 		} else {
 			do_destroy<Rest...>(_id + 1);
 		}
+	}
+	template<typename Type>
+	constexpr static bool do_has_type() noexcept
+	{
+		return false;
+	}
+	template<typename Type, typename Other, typename... Rest>
+	constexpr static bool do_has_type() noexcept
+	{
+		return std::is_same<Type, Other>::value || do_has_type<Type, Rest...>();
 	}
 	/**
 	 * Returns the object id of @a Type.
@@ -268,12 +287,12 @@ private:
 		return object_id<Type, Rest...>() + 1;
 	}
 	template<typename Type, typename Other>
-	typename std::enable_if<std::is_base_of<Type, Other>::value, Type*>::type do_cast() noexcept
+	typename std::enable_if<std::is_base_of<Type, Other>::value, Type*>::type cast() noexcept
 	{
 		return static_cast<Type*>(reinterpret_cast<Other*>(_object_space));
 	}
 	template<typename Type, typename Other>
-	typename std::enable_if<!std::is_base_of<Type, Other>::value, Type*>::type do_cast() noexcept
+	typename std::enable_if<!std::is_base_of<Type, Other>::value, Type*>::type cast() noexcept
 	{
 		return nullptr;
 	}
@@ -286,7 +305,7 @@ private:
 	Type * do_get(id_t _id) noexcept
 	{
 		if (_object_id == _id) {
-			return do_cast<Type, Other>();
+			return cast<Type, Other>();
 		}
 
 		return do_get<Type, Rest...>(_id + 1);
@@ -295,7 +314,7 @@ private:
 	const Type * do_get(id_t _id) const noexcept
 	{
 		if (_object_id == _id) {
-			return do_cast<const Type, const Other>();
+			return cast<const Type, const Other>();
 		}
 
 		return do_get<Type, Rest...>(_id + 1);
