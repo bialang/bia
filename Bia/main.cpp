@@ -15,7 +15,6 @@
 #include "big_int_allocator.hpp"
 #include "cstring_member_def.hpp"
 #include "virtual_machine_code.hpp"
-#include "parameter_option.hpp"
 #include "variant.hpp"
 
 
@@ -100,7 +99,7 @@ int main()
 		_context.set_lambda("print", [](const bia::framework::member * _member) {
 			_member->print();
 		});
-		_context.set_lambda("out", [](bia::utility::variant<int, double> & _option) {
+		_context.set_lambda("out", [](bia::utility::variant<int, double> _option) {
 			const auto & a = _option;
 			a.get<int>();
 			switch (_option.id()) {

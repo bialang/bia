@@ -6,6 +6,7 @@
 #include <type_traits>
 
 #include "max.hpp"
+#include "type_traits.hpp"
 
 
 namespace bia
@@ -41,8 +42,22 @@ public:
 
 		_object_id = 0;
 	}
-	variant(const variant & _copy) = delete;
-	variant(variant && _move) = delete;
+	template<typename = typename std::enable_if<all_true<std::is_copy_constructible<Default>::value, std::is_copy_constructible<Types>::value...>::value>::type>
+	variant(const variant & _copy)
+	{
+		if (_object_id = _copy._object_id) {
+			copy_construct<Default, Types...>(1, _copy);
+		}
+	}
+	template<typename = typename std::enable_if<all_true<std::is_move_constructible<Default>::value, std::is_move_constructible<Types>::value...>::value>::type>
+	variant(variant && _move)
+	{
+		if (_object_id = _move._object_id) {
+			move_construct<Default, Types...>(1, std::move(_move));
+		}
+
+		_move._object_id = 0;
+	}
 	/**
 	 * Destructor.
 	 *
@@ -209,6 +224,35 @@ private:
 	/** If non-zero the currently active object, otherwise no object is active. */
 	id_t _object_id;
 
+
+	template<typename Type>
+	void copy_construct(id_t _id, const variant & _other)
+	{
+		new(_object_space) Type(*reinterpret_cast<const Type*>(_other._object_space));
+	}
+	template<typename Type, typename... Rest>
+	typename std::enable_if<sizeof...(Rest) != 0>::type copy_construct(id_t _id, const variant & _other)
+	{
+		if (_object_id == _id) {
+			new(_object_space) Type(*reinterpret_cast<const Type*>(_other._object_space));
+		} else {
+			copy_construct<Rest...>(_id + 1, _other);
+		}
+	}
+	template<typename Type>
+	void move_construct(id_t _id, variant && _other)
+	{
+		new(_object_space) Type(std::move(*reinterpret_cast<Type*>(_other._object_space)));
+	}
+	template<typename Type, typename... Rest>
+	typename std::enable_if<sizeof...(Rest) != 0>::type move_construct(id_t _id, variant && _other)
+	{
+		if (_object_id == _id) {
+			new(_object_space) Type(std::move(*reinterpret_cast<Type*>(_other._object_space)));
+		} else {
+			move_construct<Rest...>(_id + 1, std::move(_other));
+		}
+	}
 	/**
 	 * Destroys the current variant with the appropiate destructor.
 	 *
