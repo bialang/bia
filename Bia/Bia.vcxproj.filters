@@ -458,9 +458,6 @@
     <ClInclude Include="max.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="virtual_object.hpp">
-      <Filter>Header Files\utility</Filter>
-    </ClInclude>
     <ClInclude Include="class_template_def.hpp">
       <Filter>Header Files\framework\object</Filter>
     </ClInclude>
