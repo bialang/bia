@@ -132,5 +132,16 @@ struct type_transporter
 	typedef Type type;
 };
 
+template<size_t Index, typename Type, typename... Types>
+struct type_at : type_at<Index - 1, Types...>
+{
+};
+
+template<typename Type, typename... Types>
+struct type_at<0, Type, Types...>
+{
+	typedef Type type;
+};
+
 }
 }
