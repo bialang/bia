@@ -78,32 +78,6 @@ public:
 		destroy();
 	}
 	/**
-	 * Constructs a new variant. The old object will be destroyed.
-	 *
-	 * @since 3.68.140.791
-	 * @date 10-Nov-18
-	 *
-	 * @tparam Type The new variant type.
-	 * @tparam Arguments The argument types for the variant.
-	 *
-	 * @param [in,out] _arguments The arguments for the new variant.
-	 *
-	 * @throws See destroy().
-	 * @throws See constructor of @a Type.
-	*/
-	template<typename Type, typename... Arguments>
-	void reconstruct(Arguments &&... _arguments)
-	{
-		destroy();
-
-		constexpr auto id = type_id<Type>();
-
-		static_assert(id != 0, "Invalid variant type.");
-
-		_object_id = id;
-		new(_object_space) Type(std::forward<Arguments>(_arguments)...);
-	}
-	/**
 	 * Destroys the currently active variant, if any.
 	 *
 	 * @since 3.68.140.791
@@ -123,6 +97,11 @@ public:
 	constexpr static bool has_exact_type() noexcept
 	{
 		return type_id<Type>() != 0;
+	}
+	template<typename Type>
+	constexpr static bool has_promotable_type() noexcept
+	{
+		return promotable_type_id<Type>() != 0;
 	}
 	template<typename Type>
 	constexpr static bool has_convertible_type() noexcept
@@ -181,6 +160,13 @@ public:
 		return id == invalid_type_id ? 0 : id;
 	}
 	template<typename Type>
+	constexpr static id_t promotable_type_id() noexcept
+	{
+		constexpr auto id = do_promotable_type_id<Type, Default, Types...>();
+
+		return id == invalid_type_id ? 0 : id;
+	}
+	template<typename Type>
 	constexpr static id_t convertible_type_id() noexcept
 	{
 		constexpr auto id = do_convertible_type_id<Type, Default, Types...>();
@@ -193,6 +179,38 @@ public:
 		constexpr auto id = do_derived_type_id<Type, Default, Types...>();
 
 		return id == invalid_type_id ? 0 : id;
+	}
+	/**
+	 * Constructs a new variant. The old object will be destroyed.
+	 *
+	 * @since 3.68.140.791
+	 * @date 10-Nov-18
+	 *
+	 * @tparam Type The new variant type.
+	 * @tparam Arguments The argument types for the variant.
+	 *
+	 * @param [in,out] _arguments The arguments for the new variant.
+	 *
+	 * @throws See destroy().
+	 * @throws See constructor of @a Type.
+	*/
+	template<typename Type, typename... Arguments>
+	typename std::enable_if<has_exact_type<Type>()>::type reconstruct(Arguments &&... _arguments)
+	{
+		destroy();
+
+		_object_id = type_id<Type>();
+		new(_object_space) Type(std::forward<Arguments>(_arguments)...);
+	}
+	template<typename Type, typename... Arguments, typename = typename std::enable_if<!has_exact_type<Type>() && has_promotable_type<Type>()>::type>
+	void reconstruct(Arguments &&... _arguments)
+	{
+		destroy();
+
+		constexpr auto id = promotable_type_id<Type>();
+
+		_object_id = id;
+		new(_object_space) type_at<id>(std::forward<Arguments>(_arguments)...);
 	}
 	/**
 	 * Returns the id of the current value.
@@ -269,6 +287,8 @@ public:
 			return nullptr;
 		} else if (has_exact_type<Type>() && _object_id == type_id<Type>()) {
 			return reinterpret_cast<Type*>(_object_space);
+		} else if (has_promotable_type<Type>() && _object_id == promotable_type_id<Type>()) {
+			return reinterpret_cast<Type*>(_object_space);
 		}
 
 		return do_get<Type, Default, Types...>(1);
@@ -289,6 +309,8 @@ public:
 		if (empty()) {
 			return nullptr;
 		} else if (has_exact_type<Type>() && _object_id == type_id<Type>()) {
+			return reinterpret_cast<const Type*>(_object_space);
+		} else if (has_promotable_type<Type>() && _object_id == promotable_type_id<Type>()) {
 			return reinterpret_cast<const Type*>(_object_space);
 		}
 
@@ -449,6 +471,38 @@ private:
 	 * @since 3.68.140.791
 	 * @date 10-Nov-18
 	 *
+	 * @tparam Type The desired promotable type.
+	 *
+	 * @return 1.
+	*/
+	template<typename Type>
+	constexpr static id_t do_promotable_type_id() noexcept
+	{
+		return 1;
+	}
+	/**
+	 * Returns the type id of @a Type.
+	 *
+	 * @since 3.68.140.791
+	 * @date 10-Nov-18
+	 *
+	 * @tparam Type The desired promotable type.
+	 * @tparam Other A type of @a Types.
+	 * @tparam Rest The rest of @a Types.
+	 *
+	 * @return The object id.
+	*/
+	template<typename Type, typename Other, typename... Rest>
+	constexpr static id_t do_promotable_type_id() noexcept
+	{
+		return utility::is_promotable<Type, Other>::value ? 1 : do_promotable_type_id<Type, Rest...>() + 1;
+	}
+	/**
+	 * Returns the type id of @a Type.
+	 *
+	 * @since 3.68.140.791
+	 * @date 10-Nov-18
+	 *
 	 * @tparam Type The desired convertible type.
 	 *
 	 * @return 1.
@@ -473,7 +527,7 @@ private:
 	template<typename Type, typename Other, typename... Rest>
 	constexpr static id_t do_convertible_type_id() noexcept
 	{
-		return std::is_convertible<Type, Other>::value ? 1 : do_convertible_type_id<Type, Rest...>() + 1;
+		return std::is_convertible<Type, Other>::value && std::is_convertible<Other, Type>::value ? 1 : do_convertible_type_id<Type, Rest...>() + 1;
 	}
 	/**
 	 * Returns the type id of @a Type.
