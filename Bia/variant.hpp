@@ -119,6 +119,21 @@ public:
 			_object_id = 0;
 		}
 	}
+	template<typename Type>
+	constexpr static bool has_exact_type() noexcept
+	{
+		return type_id<Type>() != 0;
+	}
+	template<typename Type>
+	constexpr static bool has_convertible_type() noexcept
+	{
+		return convertible_type_id<Type>() != 0;
+	}
+	template<typename Type>
+	constexpr static bool has_derived_type() noexcept
+	{
+		return derived_type_id<Type>() != 0;
+	}
 	template<typename Functor>
 	constexpr static bool try_types(Functor && _functor)
 	{
@@ -168,7 +183,14 @@ public:
 	template<typename Type>
 	constexpr static id_t convertible_type_id() noexcept
 	{
-		constexpr auto id = do_type_id<Type, Default, Types...>();
+		constexpr auto id = do_convertible_type_id<Type, Default, Types...>();
+
+		return id == invalid_type_id ? 0 : id;
+	}
+	template<typename Type>
+	constexpr static id_t derived_type_id() noexcept
+	{
+		constexpr auto id = do_derived_type_id<Type, Default, Types...>();
 
 		return id == invalid_type_id ? 0 : id;
 	}
@@ -243,7 +265,13 @@ public:
 	template<typename Type>
 	Type * get() noexcept
 	{
-		return _object_id ? do_get<Type, Default, Types...>(1) : nullptr;
+		if (empty()) {
+			return nullptr;
+		} else if (has_exact_type<Type>() && _object_id == type_id<Type>()) {
+			return reinterpret_cast<Type*>(_object_space);
+		}
+
+		return do_get<Type, Default, Types...>(1);
 	}
 	/**
 	 * Casts the variant to @a Type.
@@ -258,7 +286,13 @@ public:
 	template<typename Type>
 	const Type * get() const noexcept
 	{
-		return _object_id ? do_get<Type, Default, Types...>(1) : nullptr;
+		if (empty()) {
+			return nullptr;
+		} else if (has_exact_type<Type>() && _object_id == type_id<Type>()) {
+			return reinterpret_cast<const Type*>(_object_space);
+		}
+
+		return do_get<Type, Default, Types...>(1);
 	}
 
 private:
@@ -439,7 +473,39 @@ private:
 	template<typename Type, typename Other, typename... Rest>
 	constexpr static id_t do_convertible_type_id() noexcept
 	{
-		return std::is_convertible<Type, Other>::value ? 1 : do_type_id<Type, Rest...>() + 1;
+		return std::is_convertible<Type, Other>::value ? 1 : do_convertible_type_id<Type, Rest...>() + 1;
+	}
+	/**
+	 * Returns the type id of @a Type.
+	 *
+	 * @since 3.68.140.791
+	 * @date 10-Nov-18
+	 *
+	 * @tparam Type The desired derived type.
+	 *
+	 * @return 1.
+	*/
+	template<typename Type>
+	constexpr static id_t do_derived_type_id() noexcept
+	{
+		return 1;
+	}
+	/**
+	 * Returns the type id of @a Type.
+	 *
+	 * @since 3.68.140.791
+	 * @date 10-Nov-18
+	 *
+	 * @tparam Type The desired derived type.
+	 * @tparam Other A type of @a Types.
+	 * @tparam Rest The rest of @a Types.
+	 *
+	 * @return The object id.
+	*/
+	template<typename Type, typename Other, typename... Rest>
+	constexpr static id_t do_derived_type_id() noexcept
+	{
+		return std::is_base_of<Type, Other>::value ? 1 : do_derived_type_id<Type, Rest...>() + 1;
 	}
 	/**
 	 * Returns the object as @a Type.
@@ -472,6 +538,7 @@ private:
 	 *
 	 * @since 3.75.150.820
 	 * @date 15-Mar-19
+	 * Returns the type id of @a Type.
 	 *
 	 * @return Returns null.
 	*/
@@ -485,6 +552,8 @@ private:
 	 *
 	 * @since 3.75.150.820
 	 * @date 15-Mar-19
+	 *
+	 * @tparam Type The desired derived type.
 	 *
 	 * @return Returns null.
 	*/
@@ -515,6 +584,10 @@ private:
 	 *
 	 * @since 3.75.150.820
 	 * @date 15-Mar-19
+	 *
+	 * @tparam Type The desired derived type.
+	 * @tparam Other A type of @a Types.
+	 * @tparam Rest The rest of @a Types.
 	 *
 	 * @return A pointer to the object, otherwise null.
 	*/
