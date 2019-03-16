@@ -30,6 +30,9 @@ class variant
 public:
 	typedef uint16_t id_t;
 
+	constexpr static id_t no_type_id = 0;
+	constexpr static id_t invalid_type_id = sizeof...(Types) + 2;
+
 	/**
 	 * Constructor.
 	 *
@@ -38,7 +41,8 @@ public:
 	*/
 	variant() noexcept
 	{
-		static_assert(sizeof...(Types) + 1 <= std::numeric_limits<id_t>::max(), "Too many variants.");
+		// Reserve last id as invalid
+		static_assert(sizeof...(Types) + 1 <= std::numeric_limits<id_t>::max() - 1, "Too many variants.");
 
 		_object_id = 0;
 	}
@@ -89,7 +93,11 @@ public:
 	{
 		destroy();
 
-		_object_id = object_id<Type, Default, Types...>();
+		constexpr auto id = type_id<Type, Default, Types...>();
+		
+		static_assert(id != invalid_type_id, "Invalid variant type.");
+
+		_object_id = id;
 		new(_object_space) Type(std::forward<Arguments>(_arguments)...);
 	}
 	/**
@@ -108,20 +116,10 @@ public:
 			_object_id = 0;
 		}
 	}
-	/**
-	 * Checks whether the type is in the variant type list.
-	 *
-	 * @since 3.75.150.820
-	 * @date 15-Mar-19
-	 *
-	 * @tparam Type The type that should be checked.
-	 *
-	 * @return true if the test succeeded, otherwise false.
-	*/
-	template<typename Type>
-	constexpr static bool has_type() noexcept
+	template<typename Functor>
+	constexpr static bool try_types(Functor && _functor)
 	{
-		return do_has_type<Type, Default, Types...>();
+		return do_try_types<Functor, Default, Types...>(std::forward<Functor>(_functor));
 	}
 	/**
 	 * Checks whether the variant is empty or not.
@@ -146,6 +144,23 @@ public:
 	operator bool() const noexcept
 	{
 		return !empty();
+	}
+	/**
+	 * Returns the type id of the list.
+	 *
+	 * @since 3.75.150.820
+	 * @date 15-Mar-19
+	 *
+	 * @tparam Type The type that should be searched.
+	 *
+	 * @return The type id if it succeeded, otherwise 0.
+	*/
+	template<typename Type>
+	constexpr static id_t type_id() noexcept
+	{
+		constexpr auto id = do_type_id<Type, Default, Types...>();
+
+		return id == invalid_type_id ? 0 : id;
 	}
 	/**
 	 * Returns the id of the current value.
@@ -318,43 +333,37 @@ private:
 	{
 		return std::is_same<Type, Other>::value || do_has_type<Type, Rest...>();
 	}
-	/**
-	 * Returns the object id of @a Type.
-	 *
-	 * @since 3.68.140.791
-	 * @date 10-Nov-18
-	 *
-	 * @tparam Type The desired type.
-	 * @tparam Other The last type of @a Types.
-	 *
-	 * @return 1.
-	*/
-	template<typename Type, typename Other>
-	constexpr static id_t object_id() noexcept
+	template<typename Functor>
+	constexpr static bool do_try_types(Functor && _functor) noexcept
 	{
-		static_assert(std::is_same<Type, Other>::value, "Invalid variant type.");
+		return false;
+	}
+	template<typename Functor, typename Other, typename... Rest>
+	constexpr static bool do_try_types(Functor && _functor)
+	{
+		if (!_functor(type_transporter<Other>())) {
+			return do_try_types<Functor, Rest...>(std::forward<Functor>(_functor));
+		}
 
-		return 1;
+		return true;
 	}
 	/**
-	 * Returns the object id of @a Type.
+	 * Returns the type id of @a Type.
 	 *
 	 * @since 3.68.140.791
 	 * @date 10-Nov-18
 	 *
 	 * @tparam Type The desired type.
-	 * @tparam Other A type of @a Types.
-	 * @tparam Rest The rest of @a Types.
 	 *
 	 * @return 1.
 	*/
-	template<typename Type, typename Other, typename... Rest>
-	constexpr static typename std::enable_if<std::is_same<Type, Other>::value && sizeof...(Rest), id_t>::type object_id() noexcept
+	template<typename Type>
+	constexpr static id_t do_type_id() noexcept
 	{
 		return 1;
 	}
 	/**
-	 * Returns the object id of @a Type.
+	 * Returns the type id of @a Type.
 	 *
 	 * @since 3.68.140.791
 	 * @date 10-Nov-18
@@ -366,9 +375,9 @@ private:
 	 * @return The object id.
 	*/
 	template<typename Type, typename Other, typename... Rest>
-	constexpr static typename std::enable_if<!std::is_same<Type, Other>::value && sizeof...(Rest), id_t>::type object_id() noexcept
+	constexpr static id_t do_type_id() noexcept
 	{
-		return object_id<Type, Rest...>() + 1;
+		return std::is_same<Type, Other>::value ? 1 : do_type_id<Type, Rest...>() + 1;
 	}
 	/**
 	 * Returns the object as @a Type.
