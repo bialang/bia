@@ -162,5 +162,13 @@ class virtual_machine_schein;
 
 }
 }
+
+namespace utility
+{
+
+template<typename Default, typename... Types>
+class variant;
+
+}
 }
 

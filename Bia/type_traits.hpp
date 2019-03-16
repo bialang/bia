@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstddef>
 
+#include "config.hpp"
 #include "exception.hpp"
 
 
@@ -111,6 +112,18 @@ private:
 
 public:
 	constexpr static bool value = check<Value, Rest...>();
+};
+
+template<typename Type>
+struct is_variant
+{
+	constexpr static bool value = false;
+};
+
+template<typename... Types>
+struct is_variant<utility::variant<Types...>>
+{
+	constexpr static bool value = true;
 };
 
 }
