@@ -33,6 +33,9 @@ public:
 	constexpr static id_t no_type_id = 0;
 	constexpr static id_t invalid_type_id = sizeof...(Types) + 2;
 
+	template<id_t Index>
+	using type_at = typename utility::type_at<Index, void, Default, Types...>::type;
+
 	/**
 	 * Constructor.
 	 *
@@ -93,9 +96,9 @@ public:
 	{
 		destroy();
 
-		constexpr auto id = type_id<Type, Default, Types...>();
-		
-		static_assert(id != invalid_type_id, "Invalid variant type.");
+		constexpr auto id = type_id<Type>();
+
+		static_assert(id != 0, "Invalid variant type.");
 
 		_object_id = id;
 		new(_object_space) Type(std::forward<Arguments>(_arguments)...);
@@ -162,6 +165,13 @@ public:
 
 		return id == invalid_type_id ? 0 : id;
 	}
+	template<typename Type>
+	constexpr static id_t convertible_type_id() noexcept
+	{
+		constexpr auto id = do_type_id<Type, Default, Types...>();
+
+		return id == invalid_type_id ? 0 : id;
+	}
 	/**
 	 * Returns the id of the current value.
 	 *
@@ -175,6 +185,26 @@ public:
 	id_t id() const noexcept
 	{
 		return _object_id;
+	}
+	template<id_t Index>
+	type_at<Index> * get() noexcept
+	{
+		// Valid conversion
+		if (Index && _object_id == Index) {
+			return reinterpret_cast<type_at<Index>*>(_object_space);
+		}
+
+		return nullptr;
+	}
+	template<id_t Index>
+	const type_at<Index> * get() const noexcept
+	{
+		// Valid conversion
+		if (Index && _object_id == Index) {
+			return reinterpret_cast<const type_at<Index>*>(_object_space);
+		}
+
+		return nullptr;
 	}
 	/**
 	 * Returns the default value for the '->' operator.
@@ -378,6 +408,38 @@ private:
 	constexpr static id_t do_type_id() noexcept
 	{
 		return std::is_same<Type, Other>::value ? 1 : do_type_id<Type, Rest...>() + 1;
+	}
+	/**
+	 * Returns the type id of @a Type.
+	 *
+	 * @since 3.68.140.791
+	 * @date 10-Nov-18
+	 *
+	 * @tparam Type The desired convertible type.
+	 *
+	 * @return 1.
+	*/
+	template<typename Type>
+	constexpr static id_t do_convertible_type_id() noexcept
+	{
+		return 1;
+	}
+	/**
+	 * Returns the type id of @a Type.
+	 *
+	 * @since 3.68.140.791
+	 * @date 10-Nov-18
+	 *
+	 * @tparam Type The desired convertible type.
+	 * @tparam Other A type of @a Types.
+	 * @tparam Rest The rest of @a Types.
+	 *
+	 * @return The object id.
+	*/
+	template<typename Type, typename Other, typename... Rest>
+	constexpr static id_t do_convertible_type_id() noexcept
+	{
+		return std::is_convertible<Type, Other>::value ? 1 : do_type_id<Type, Rest...>() + 1;
 	}
 	/**
 	 * Returns the object as @a Type.
