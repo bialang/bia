@@ -143,5 +143,11 @@ struct type_at<0, Type, Types...>
 	typedef Type type;
 };
 
+template<typename From, typename To>
+struct is_promotable
+{
+	constexpr static bool value = (std::is_floating_point<From>::value && std::is_floating_point<To>::value || std::is_integral<From>::value && std::is_integral<To>::value) && sizeof(From) <= sizeof(To);
+};
+
 }
 }
