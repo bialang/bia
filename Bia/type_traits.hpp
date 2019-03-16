@@ -126,5 +126,11 @@ struct is_variant<utility::variant<Types...>>
 	constexpr static bool value = true;
 };
 
+template<typename Type>
+struct type_transporter
+{
+	typedef Type type;
+};
+
 }
 }
