@@ -266,6 +266,11 @@ public:
 	{
 		return std::is_base_of<member, typename std::remove_pointer<Type>::type>::value;
 	}
+	template<typename Type>
+	constexpr static bool retrievable_data() noexcept
+	{
+		return !std::is_arithmetic<Type>::value && !member_base<Type>() && !utility::is_variant<Type>::value;
+	}
 	/**
 	 * Some details about the content.
 	 *
@@ -418,7 +423,7 @@ public:
 		return static_cast<Type>(_result);
 	}
 	template<typename Type>
-	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
+	typename std::enable_if<retrievable_data<Type>() && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
 	{
 		auto _success = false;
 		auto _result = data(converter<Type>::info(), _success);
@@ -430,7 +435,7 @@ public:
 		return converter<Type>::convert(_result);
 	}
 	template<typename Type>
-	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
+	typename std::enable_if<retrievable_data<Type>() && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
 	{
 		auto _success = false;
 		auto _result = const_data(converter<Type>::info(), _success);
@@ -442,7 +447,7 @@ public:
 		return converter<Type>::convert(_result);
 	}
 	template<typename Type>
-	typename std::enable_if<member_base<Type>() && converter<Type>::is_const, Type>::type cast()
+	typename std::enable_if<member_base<Type>() && !converter<Type>::is_const, Type>::type cast()
 	{
 		if (!dynamic_cast<Type>(this)) {
 			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
@@ -451,13 +456,57 @@ public:
 		return static_cast<Type>(this);
 	}
 	template<typename Type>
-	typename std::enable_if<member_base<Type>() && !converter<Type>::is_const, Type>::type cast() const
+	typename std::enable_if<member_base<Type>() && converter<Type>::is_const, Type>::type cast() const
 	{
 		if (!dynamic_cast<Type>(this)) {
 			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 		}
 
 		return static_cast<Type>(this);
+	}
+	template<typename Type>
+	typename std::enable_if<utility::is_variant<Type>::value && !converter<Type>::is_const, Type>::type cast()
+	{
+		Type _variant;
+		auto _flags = flags();
+
+		if (!Type::try_types([_flags, &_variant, this](auto _type) {
+			typedef typename decltype(_type)::type type;
+			///TODO: optimize try block away
+			try {
+				_variant.template reconstruct<type>(this->cast<type>());
+			} catch (const exception::type_error&) {
+				return false;
+			}
+
+			return true;
+		})) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return _variant;
+	}
+	template<typename Type>
+	typename std::enable_if<utility::is_variant<Type>::value && converter<Type>::is_const, Type>::type cast() const
+	{
+		Type _variant;
+		auto _flags = flags();
+
+		if (!Type::try_types([_flags, &_variant, this](auto _type) {
+			typedef typename decltype(_type)::type type;
+			///TODO: optimize try block away
+			try {
+				_variant.template reconstruct<type>(this->cast<type>());
+			} catch (const exception::type_error&) {
+				return false;
+			}
+
+			return true;
+		})) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return _variant;
 	}
 
 	/**

@@ -96,29 +96,26 @@ int main()
 			return "ho ho how";
 		});
 		_context.set_lambda("str", []() { return "hi"; });
-		_context.set_lambda("print", [](const bia::framework::member * _member) {
-			_member->print();
-		});
-		_context.set_lambda("out", [](bia::utility::variant<int64_t, double, const char*, framework::member*> _option) {
-			switch (_option.id()) {
+		_context.set_lambda("print", [](utility::variant<framework::member*, int64_t, double, const char*> _value) {
+			switch (_value.id()) {
 			case 1:
-				std::cout << *_option.get<1>() << '\n';
+				(*_value.get<1>())->print();
 
 				break;
 			case 2:
-				std::cout << *_option.get<2>() << '\n';
+				std::cout << *_value.get<2>() << '\n';
 
 				break;
 			case 3:
-				std::cout << *_option.get<3>() << '\n';
+				std::cout << *_value.get<3>() << '\n';
 
 				break;
 			case 4:
-				(*_option.get<4>())->print();
+				std::cout << *_value.get<4>() << '\n';
 
 				break;
 			default:
-				puts("holds nothing.");
+				puts("");
 
 				break;
 			}
@@ -159,11 +156,11 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
+var i = 343
 
-out(83)
-out(34.3)
-#out("hi")
-out(out)
+print(34)
+print(32.54)
+print(i)
 
 var email_pattern = /\w+@\w+\.\w+/
 var s = "yunus@ayar.eu"
