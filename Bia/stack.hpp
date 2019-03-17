@@ -7,6 +7,8 @@
 #include "allocator.hpp"
 #include "exception.hpp"
 #include "member.hpp"
+#include "type_traits.hpp"
+#include "variant.hpp"
 
 
 namespace bia
@@ -117,7 +119,7 @@ public:
 		default:
 			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
 		}
-
+		
 		throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 	}
 
@@ -137,7 +139,36 @@ private:
 		return static_cast<To>(_from);
 	}
 	template<typename To, typename From>
-	static typename std::enable_if<!std::is_convertible<From, To>::value, To>::type checked_convert(From _from)
+	static typename std::enable_if<utility::is_variant<To>::value, To>::type checked_convert(From _from)
+	{
+		To _variant;
+
+		if (!To::try_types([_from, &_variant](auto _type) {
+			typedef typename decltype(_type)::type type;
+
+			if (To::template type_id<From>()) {
+				if (std::is_same<From, type>::value) {
+					_variant.template reconstruct<type>(checked_convert<type>(_from));
+
+					return true;
+				}
+			} else {
+				if (std::is_convertible<From, type>::value) {
+					_variant.template reconstruct<type>(checked_convert<type>(_from));
+
+					return true;
+				}
+			}
+
+			return false;
+		})) {
+			throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
+		}
+
+		return _variant;
+	}
+	template<typename To, typename From>
+	static typename std::enable_if<!std::is_convertible<From, To>::value && !utility::is_variant<To>::value, To>::type checked_convert(From _from)
 	{
 		throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 	}

@@ -84,7 +84,7 @@ int main()
 		_context.set_lambda("hello_world", []() {
 			puts("Hello, World!");
 		});
-		_context.set_lambda("ser", [](int i, int j) {
+		_context.set_lambda("ser", [](int & i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
 		_context.set_lambda("set", [](const char * i, const char * j) {
@@ -99,16 +99,26 @@ int main()
 		_context.set_lambda("print", [](const bia::framework::member * _member) {
 			_member->print();
 		});
-		_context.set_lambda("out", [](bia::utility::variant<int, double> _option) {
-			const auto & a = _option;
-			a.get<int>();
+		_context.set_lambda("out", [](bia::utility::variant<int64_t, double, const char*, framework::member*> _option) {
 			switch (_option.id()) {
 			case 1:
-				puts("holds an int.");
+				std::cout << *_option.get<1>() << '\n';
 
 				break;
 			case 2:
-				puts("holds a double.");
+				std::cout << *_option.get<2>() << '\n';
+
+				break;
+			case 3:
+				std::cout << *_option.get<3>() << '\n';
+
+				break;
+			case 4:
+				(*_option.get<4>())->print();
+
+				break;
+			default:
+				puts("holds nothing.");
 
 				break;
 			}
@@ -149,6 +159,11 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
+
+out(83)
+out(34.3)
+#out("hi")
+out(out)
 
 var email_pattern = /\w+@\w+\.\w+/
 var s = "yunus@ayar.eu"
