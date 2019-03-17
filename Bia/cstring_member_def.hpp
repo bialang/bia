@@ -61,11 +61,8 @@ public:
 	const char * to_cstring(utility::buffer_builder * _builder) const override;
 
 protected:
-	virtual int32_t int32_data() const override;
-	virtual int64_t int64_data() const override;
-	virtual double double_data() const override;
-	virtual void * data(const std::type_info & _type) override;
-	virtual const void * const_data(const std::type_info & _type) const override;
+	virtual void * data(const std::type_info & _type, bool & _success) override;
+	virtual const void * const_data(const std::type_info & _type, bool & _success) const override;
 
 private:
 	/** The zero-terminated C style string, its size and its length. */

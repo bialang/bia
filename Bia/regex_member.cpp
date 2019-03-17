@@ -123,21 +123,6 @@ const char * regex_member::to_cstring(utility::buffer_builder * _builder) const
 	BIA_NOT_IMPLEMENTED;
 }
 
-int32_t regex_member::int32_data() const
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-int64_t regex_member::int64_data() const
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-double regex_member::double_data() const
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
 }
 }
 }

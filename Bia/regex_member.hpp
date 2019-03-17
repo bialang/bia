@@ -38,11 +38,6 @@ public:
 	virtual double to_double() const override;
 	virtual const char * to_cstring(utility::buffer_builder * _builder) const override;
 
-protected:
-	virtual int32_t int32_data() const override;
-	virtual int64_t int64_data() const override;
-	virtual double double_data() const override;
-
 private:
 	data_t _data;
 };

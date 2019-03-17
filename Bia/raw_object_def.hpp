@@ -75,8 +75,8 @@ public:
 	member * promote() const;
 
 protected:
-	virtual void * data(const std::type_info & _type) override;
-	virtual const void * const_data(const std::type_info & _type) const override;
+	virtual void * data(const std::type_info & _type, bool & _success) override;
+	virtual const void * const_data(const std::type_info & _type, bool & _success) const override;
 
 private:
 	data_type _data;

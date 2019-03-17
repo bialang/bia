@@ -384,27 +384,62 @@ public:
 	template<typename Type>
 	typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) <= sizeof(int32_t)), Type>::type cast()
 	{
-		return static_cast<Type>(int32_data());
+		auto _success = false;
+		auto _result = int32_data(_success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return static_cast<Type>(_result);
 	}
 	template<typename Type>
 	typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) > sizeof(int32_t)), Type>::type cast()
 	{
-		return static_cast<Type>(int64_data());
+		auto _success = false;
+		auto _result = int64_data(_success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return static_cast<Type>(_result);
 	}
 	template<typename Type>
 	typename std::enable_if<std::is_floating_point<Type>::value, Type>::type cast()
 	{
-		return static_cast<Type>(double_data());
+		auto _success = false;
+		auto _result = double_data(_success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return static_cast<Type>(_result);
 	}
 	template<typename Type>
 	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
 	{
-		return converter<Type>::convert(data(converter<Type>::info()));
+		auto _success = false;
+		auto _result = data(converter<Type>::info(), _success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return converter<Type>::convert(_result);
 	}
 	template<typename Type>
 	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
 	{
-		return converter<Type>::convert(const_data(converter<Type>::info()));
+		auto _success = false;
+		auto _result = const_data(converter<Type>::info(), _success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return converter<Type>::convert(_result);
 	}
 	template<typename Type>
 	typename std::enable_if<member_base<Type>() && converter<Type>::is_const, Type>::type cast()
@@ -453,9 +488,9 @@ public:
 	}
 
 protected:
-	virtual int32_t int32_data() const = 0;
-	virtual int64_t int64_data() const = 0;
-	virtual double double_data() const = 0;
+	virtual int32_t int32_data(bool & _success) const = 0;
+	virtual int64_t int64_data(bool & _success) const = 0;
+	virtual double double_data(bool & _success) const = 0;
 	/**
 	 * Returns a pointer to mutable custom data.
 	 *
@@ -463,13 +498,13 @@ protected:
 	 * @date 21-Apr-18
 	 *
 	 * @param _type The type.
+	 * @param [out] _success true if the returned pointer is valid, otherwise false.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.
 	*/
-	virtual void * data(const std::type_info & _type) = 0;
+	virtual void * data(const std::type_info & _type, bool & _success) = 0;
 	/**
 	 * Returns a pointer to immutable custom data.
 	 *
@@ -477,13 +512,13 @@ protected:
 	 * @date 21-Apr-18
 	 *
 	 * @param _type The type.
+	 * @param [out] _success true if the returned pointer is valid, otherwise false.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.
 	*/
-	virtual const void * const_data(const std::type_info & _type) const = 0;
+	virtual const void * const_data(const std::type_info & _type, bool & _success) const = 0;
 };
 
 }

@@ -153,25 +153,29 @@ inline member * raw_object<Type>::promote() const
 }
 
 template<typename Type>
-inline void * raw_object<Type>::data(const std::type_info & _type)
+inline void * raw_object<Type>::data(const std::type_info & _type, bool & _success)
 {
 	if (!std::is_const<Type>::value) {
 		if (typeid(Type) == _type) {
+			_success = true;
+
 			return _data.get().first;
 		}
 	}
 
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	return nullptr;
 }
 
 template<typename Type>
-inline const void * raw_object<Type>::const_data(const std::type_info & _type) const
+inline const void * raw_object<Type>::const_data(const std::type_info & _type, bool & _success) const
 {
 	if (typeid(Type) == _type) {
+		_success = true;
+
 		return _data.get().first;
 	}
 
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	return nullptr;
 }
 
 }

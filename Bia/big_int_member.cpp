@@ -278,18 +278,24 @@ const char * big_int_member::to_cstring(utility::buffer_builder * _builder) cons
 	return _builder->buffer<char>();
 }
 
-int32_t big_int_member::int32_data() const
+int32_t big_int_member::int32_data(bool & _success) const
 {
+	_success = true;
+
 	return static_cast<int32_t>(_data->cast_int());
 }
 
-int64_t big_int_member::int64_data() const
+int64_t big_int_member::int64_data(bool & _success) const
 {
+	_success = true;
+
 	return _data->cast_int();
 }
 
-double big_int_member::double_data() const
+double big_int_member::double_data(bool & _success) const
 {
+	_success = true;
+
 	return _data->cast_double();
 }
 

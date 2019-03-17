@@ -63,11 +63,8 @@ public:
 	virtual double to_double() const override;
 
 protected:
-	virtual int32_t int32_data() const override;
-	virtual int64_t int64_data() const override;
-	virtual double double_data() const override;
-	virtual void * data(const std::type_info & _type) override;
-	virtual const void * const_data(const std::type_info & _type) const override;
+	virtual void * data(const std::type_info & _type, bool & _success) override;
+	virtual const void * const_data(const std::type_info & _type, bool & _success) const override;
 
 private:
 	data_type _data;

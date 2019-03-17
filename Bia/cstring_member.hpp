@@ -146,37 +146,21 @@ inline const char * cstring_member<Char_type>::to_cstring(utility::buffer_builde
 }
 
 template<typename Char_type>
-inline int32_t cstring_member<Char_type>::int32_data() const
+inline void * cstring_member<Char_type>::data(const std::type_info & _type, bool & _success)
 {
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	return nullptr;
 }
 
 template<typename Char_type>
-inline int64_t cstring_member<Char_type>::int64_data() const
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-template<typename Char_type>
-inline double cstring_member<Char_type>::double_data() const
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-template<typename Char_type>
-inline void * cstring_member<Char_type>::data(const std::type_info & _type)
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-template<typename Char_type>
-inline const void * cstring_member<Char_type>::const_data(const std::type_info & _type) const
+inline const void * cstring_member<Char_type>::const_data(const std::type_info & _type, bool & _success) const
 {
 	if (_type == typeid(Char_type)) {
+		_success = true;
+
 		return _data->get()->string<Char_type>();
 	}
 
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	return nullptr;
 }
 
 template<typename Char_type>

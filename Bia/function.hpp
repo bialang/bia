@@ -86,25 +86,25 @@ public:
 	}
 
 protected:
-	virtual int32_t int32_data() const override
+	virtual int32_t int32_data(bool & _success) const override
 	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		return 0;
 	}
-	virtual int64_t int64_data() const override
+	virtual int64_t int64_data(bool & _success) const override
 	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		return 0;
 	}
-	virtual double double_data() const override
+	virtual double double_data(bool & _success) const override
 	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		return 0.0;
 	}
-	virtual void * data(const std::type_info & _type) override
+	virtual void * data(const std::type_info & _type, bool & _success) override
 	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		return nullptr;
 	}
-	virtual const void * const_data(const std::type_info & _type) const override
+	virtual const void * const_data(const std::type_info & _type, bool & _success) const override
 	{
-		throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		return nullptr;
 	}
 };
 
