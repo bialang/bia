@@ -163,8 +163,15 @@ struct type_container_append<Type, type_container<Types...>>
 	using type = type_container<Types..., Type>;
 };
 
+template<size_t Count, typename First, typename... Rest>
+struct type_container_splitter
+{
+	typedef type_container<> first;
+	typedef type_container<> second;
+};
+
 template<size_t Count, typename First, typename Type, typename... Rest>
-struct type_container_splitter : type_container_splitter<Count - 1, typename type_container_append<Type, First>::type, Rest...>
+struct type_container_splitter<Count, First, Type, Rest...> : type_container_splitter<Count - 1, typename type_container_append<Type, First>::type, Rest...>
 {
 };
 
