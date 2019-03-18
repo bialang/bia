@@ -163,5 +163,24 @@ struct type_container_append<Type, type_container<Types...>>
 	using type = type_container<Types..., Type>;
 };
 
+template<size_t Count, typename First, typename Type, typename... Rest>
+struct type_container_splitter : type_container_splitter<Count - 1, typename type_container_append<Type, First>::type, Rest...>
+{
+};
+
+template<typename First, typename Type, typename... Rest>
+struct type_container_splitter<1, First, Type, Rest...>
+{
+	typedef typename type_container_append<Type, First>::type first;
+	typedef type_container<Rest...> second;
+};
+
+template<typename First, typename Type, typename... Rest>
+struct type_container_splitter<0, First, Type, Rest...>
+{
+	typedef First first;
+	typedef type_container<Type, Rest...> second;
+};
+
 }
 }
