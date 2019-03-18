@@ -154,5 +154,14 @@ struct type_container
 {
 };
 
+template<typename Type, typename... Types>
+struct type_container_append;
+
+template<typename Type, typename... Types>
+struct type_container_append<Type, type_container<Types...>>
+{
+	using type = type_container<Types..., Type>;
+};
+
 }
 }
