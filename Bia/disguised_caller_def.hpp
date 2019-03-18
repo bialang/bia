@@ -30,7 +30,7 @@ void disguised_caller(const Class * _instance, void(Class::*_function)(Arguments
 template<size_t Opt_count, typename... Arguments, typename Class, typename Return, typename Format>
 void disguised_caller(const Class * _instance, Return(Class::*_function)(Arguments...) const, framework::member * _destination, Format _format, framework::member::parameter_count_t _count, machine::stack * _stack);
 
-template<typename Class, typename... Arguments, typename Format>
+template<size_t Opt_count, typename Class, typename... Arguments, typename Format>
 machine::memory::allocation<Class> disguised_caller(Format _format, framework::member::parameter_count_t _count, machine::stack * _stack);
 
 }

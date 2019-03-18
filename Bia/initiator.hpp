@@ -87,21 +87,21 @@ public:
 /**
  * @brief An implementation of @ref initiator.
 */
-template<typename Type, typename... Arguments>
+template<size_t Optional_count, typename Type, typename... Arguments>
 class real_initiator final : public initiator
 {
 public:
 	virtual machine::memory::universal_allocation instantiate() const override
 	{
-		return machine::memory::cast_allocation<void>(force::disguised_caller<Type, Arguments...>(nullptr, 0, nullptr));
+		return machine::memory::cast_allocation<void>(force::disguised_caller<Optional_count, Type, Arguments...>(nullptr, 0, nullptr));
 	}
 	virtual machine::memory::universal_allocation instantiate_count(framework::member::parameter_count_t _count, machine::stack * _stack) const override
 	{
-		return machine::memory::cast_allocation<void>(force::disguised_caller<Type, Arguments...>(nullptr, _count, _stack));
+		return machine::memory::cast_allocation<void>(force::disguised_caller<Optional_count, Type, Arguments...>(nullptr, _count, _stack));
 	}
 	virtual machine::memory::universal_allocation instantiate_format(const char * _format, framework::member::parameter_count_t _count, machine::stack * _stack) const override
 	{
-		return machine::memory::cast_allocation<void>(force::disguised_caller<Type, Arguments...>(_format, _count, _stack));
+		return machine::memory::cast_allocation<void>(force::disguised_caller<Optional_count, Type, Arguments...>(_format, _count, _stack));
 	}
 };
 

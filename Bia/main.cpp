@@ -148,13 +148,15 @@ int main()
 			.set_function("hey", &test)
 			.set_function("hi", &printer::hi);
 		*/
-		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
+		set_class<printer>(_context, "printer").set_constructor<1, int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		// Script
 		char _script[] = u8R""(
 
 print(3.4)
 print()
+var i = printer(33)
+var i = printer()
 
 )"";
 		/*test_and_time(1, []() {

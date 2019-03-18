@@ -24,13 +24,13 @@ public:
 	{
 		this->_template_member = _template_member;
 	}
-	template<typename... Arguments, bool Is_class = std::is_class<Class>::value>
+	template<size_t Optional_count, typename... Arguments, bool Is_class = std::is_class<Class>::value>
 	typename std::enable_if<Is_class, template_wrapper&>::type set_constructor()
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->template set_constructor<Arguments...>();
+		_template_member->template set_constructor<Optional_count, Arguments...>();
 
 		return *this;
 	}
