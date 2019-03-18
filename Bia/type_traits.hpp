@@ -149,5 +149,10 @@ struct is_promotable
 	constexpr static bool value = (std::is_floating_point<From>::value && std::is_floating_point<To>::value || std::is_integral<From>::value && std::is_integral<To>::value) && sizeof(From) <= sizeof(To);
 };
 
+template<typename... Types>
+struct type_container
+{
+};
+
 }
 }
