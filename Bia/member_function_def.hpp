@@ -14,22 +14,22 @@ namespace framework
 namespace executable
 {
 
-template<size_t Optional_count, typename _Class, typename _Return = void, typename... _Args>
+template<size_t Optional_count, typename Class, typename Return = void, typename... Arguments>
 class member_function;
 
 /**
  * @brief A member function member.
  *
  * @tparam Optional_count The amount of optional parameters.
- * @tparam _Class The class of the function.
- * @tparam _Return The return type of the function.
- * @tparam _Args The arguemnt types of the function.
+ * @tparam Class The class of the function.
+ * @tparam Return The return type of the function.
+ * @tparam Arguments The arguemnt types of the function.
 */
-template<size_t Optional_count, typename _Class, typename _Return, typename... _Args>
-class member_function<Optional_count, _Return(_Class::*)(_Args...)> final : public function
+template<size_t Optional_count, typename Class, typename Return, typename... Arguments>
+class member_function<Optional_count, Return(Class::*)(Arguments...)> final : public function
 {
 public:
-	typedef utility::share<std::pair<_Return(_Class::*)(_Args...), object::instance_holder<_Class>>> data_type;
+	typedef utility::share<std::pair<Return(Class::*)(Arguments...), object::instance_holder<Class>>> data_type;
 
 	/**
 	 * Constructor.
@@ -39,7 +39,7 @@ public:
 	 *
 	 * @param _function The member function address.
 	*/
-	member_function(_Return(_Class::*_function)(_Args...)) noexcept;
+	member_function(Return(Class::*_function)(Arguments...)) noexcept;
 	member_function(const data_type & _data) noexcept;
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
@@ -66,7 +66,7 @@ private:
 	 *
 	 * @return The instance.
 	*/
-	_Class * cast_instance();
+	Class * cast_instance();
 };
 
 }

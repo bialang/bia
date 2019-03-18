@@ -54,13 +54,13 @@ public:
 
 		return *this;
 	}
-	template<size_t Optional_count = 0, typename _Lambda>
-	template_wrapper & set_lambda(member_map::name_t _name, _Lambda && _lambda)
+	template<size_t Optional_count = 0, typename Lambda>
+	template_wrapper & set_lambda(member_map::name_t _name, Lambda && _lambda)
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_context.name_address(_name), std::forward<_Lambda>(_lambda));
+		_template_member->members().template emplace<framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<Lambda>::type>::type>>(_context.name_address(_name), std::forward<Lambda>(_lambda));
 
 		return *this;
 	}

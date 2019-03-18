@@ -92,17 +92,17 @@
 #endif
 
 // Function signatures
-template<typename _Return, typename... _Args>
-using static_function_signature = _Return(BIA_STATIC_CALLING_CONVETION *)(_Args...);
+template<typename Return, typename... Arguments>
+using static_function_signature = Return(BIA_STATIC_CALLING_CONVETION *)(Arguments...);
 
-template<typename _Class, typename _Return, typename... _Args>
-using member_function_signature = _Return(BIA_MEMBER_CALLING_CONVENTION _Class::*)(_Args...);
+template<typename Class, typename Return, typename... Arguments>
+using member_function_signature = Return(BIA_MEMBER_CALLING_CONVENTION Class::*)(Arguments...);
 
-template<typename _Class, typename _Return, typename... _Args>
-using const_member_function_signature = _Return(BIA_MEMBER_CALLING_CONVENTION _Class::*)(_Args...) const;
+template<typename Class, typename Return, typename... Arguments>
+using const_member_function_signature = Return(BIA_MEMBER_CALLING_CONVENTION Class::*)(Arguments...) const;
 
-template<typename _Class, typename _Return, typename... _Args>
-using varg_member_function_signature = _Return(BIA_VARG_MEMBER_CALLING_CONVENTION _Class::*)(_Args..., ...);
+template<typename Class, typename Return, typename... Arguments>
+using varg_member_function_signature = Return(BIA_VARG_MEMBER_CALLING_CONVENTION Class::*)(Arguments..., ...);
 
 // Universal macros
 #define BIA_MIN_INT_SIZE 64

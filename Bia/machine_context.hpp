@@ -167,10 +167,10 @@ public:
 	{
 		return emplace_member<framework::executable::static_function<Optional_count, Return, Arguments...>>(_name, _function);
 	}
-	template<size_t Optional_count = 0, typename _Lambda>
-	framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type> * set_lambda(name_manager::name_t _name, _Lambda && _lambda)
+	template<size_t Optional_count = 0, typename Lambda>
+	framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<Lambda>::type>::type> * set_lambda(name_manager::name_t _name, Lambda && _lambda)
 	{
-		return emplace_member<framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_name, std::forward<_Lambda>(_lambda));
+		return emplace_member<framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<Lambda>::type>::type>>(_name, std::forward<Lambda>(_lambda));
 	}
 	/**
 	 * Returns the currently active machine context in the current thread.
