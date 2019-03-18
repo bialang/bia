@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 #include "function.hpp"
 #include "share_def.hpp"
 #include "instance_holder_def.hpp"
@@ -12,18 +14,19 @@ namespace framework
 namespace executable
 {
 
-template<typename _Class, typename _Return = void, typename... _Args>
+template<size_t Optional_count, typename _Class, typename _Return = void, typename... _Args>
 class member_function;
 
 /**
  * @brief A member function member.
  *
+ * @tparam Optional_count The amount of optional parameters.
  * @tparam _Class The class of the function.
  * @tparam _Return The return type of the function.
  * @tparam _Args The arguemnt types of the function.
 */
-template<typename _Class, typename _Return, typename... _Args>
-class member_function<_Return(_Class::*)(_Args...)> final : public function
+template<size_t Optional_count, typename _Class, typename _Return, typename... _Args>
+class member_function<Optional_count, _Return(_Class::*)(_Args...)> final : public function
 {
 public:
 	typedef utility::share<std::pair<_Return(_Class::*)(_Args...), object::instance_holder<_Class>>> data_type;

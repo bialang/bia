@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 #include "function.hpp"
 #include "share_def.hpp"
 
@@ -14,9 +16,10 @@ namespace executable
 /**
  * @brief A lambda function member.
  *
+ * @tparam Optional_count The amount of optional parameters.
  * @tparam _Lambda The lambda function.
 */
-template<typename Lambda>
+template<size_t Optional_count, typename Lambda>
 class lambda_function final : public function
 {
 public:

@@ -81,9 +81,6 @@ int main()
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
 		
-		_context.set_lambda("hello_world", []() {
-			puts("Hello, World!");
-		});
 		_context.set_lambda("ser", [](int & i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
@@ -95,8 +92,7 @@ int main()
 			//p.a = 34343434;
 			return "ho ho how";
 		});
-		_context.set_lambda("str", []() { return "hi"; });
-		_context.set_lambda("print", [](utility::variant<framework::member*, int64_t, double, const char*> _value) {
+		_context.set_lambda<1>("print", [](utility::variant<framework::member*, int64_t, double, const char*> _value) {
 			switch (_value.id()) {
 			case 1:
 				(*_value.get<1>())->print();
@@ -156,20 +152,10 @@ int main()
 
 		// Script
 		char _script[] = u8R""(
-var i = 343
 
-print(34)
-print(32.54)
-print(i)
+print(3.4)
+print()
 
-var email_pattern = /\w+@\w+\.\w+/
-var s = "yunus@ayar.eu"
-
-if email_pattern == s {
-	print(s)
-}
-
-print(email_pattern)
 )"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;

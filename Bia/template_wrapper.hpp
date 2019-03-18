@@ -34,33 +34,33 @@ public:
 
 		return *this;
 	}
-	template<typename Return, typename... Arguments>
+	template<size_t Optional_count = 0, typename Return, typename... Arguments>
 	template_wrapper & set_function(member_map::name_t _name, Return(*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::static_function<Return, Arguments...>>(_context.name_address(_name), _function);
+		_template_member->members().template emplace<framework::executable::static_function<Optional_count, Return, Arguments...>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
-	template<typename Active_class = Class, typename Function_class, typename Return, typename... Arguments>
+	template<size_t Optional_count = 0, typename Active_class = Class, typename Function_class, typename Return, typename... Arguments>
 	typename std::enable_if<std::is_base_of<Function_class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_t _name, Return(Function_class::*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::member_function<Return(Active_class::*)(Arguments...)>>(_context.name_address(_name), _function);
+		_template_member->members().template emplace<framework::executable::member_function<Optional_count, Return(Active_class::*)(Arguments...)>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
-	template<typename _Lambda>
+	template<size_t Optional_count = 0, typename _Lambda>
 	template_wrapper & set_lambda(member_map::name_t _name, _Lambda && _lambda)
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_context.name_address(_name), std::forward<_Lambda>(_lambda));
+		_template_member->members().template emplace<framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_context.name_address(_name), std::forward<_Lambda>(_lambda));
 
 		return *this;
 	}
