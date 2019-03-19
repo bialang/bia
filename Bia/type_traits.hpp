@@ -103,10 +103,10 @@ private:
 	{
 		return V;
 	}
-	template<bool V, bool... Rest>
-	constexpr static typename std::enable_if<sizeof...(Rest), bool>::type check() noexcept
+	template<bool V, bool... R>
+	constexpr static typename std::enable_if<sizeof...(R), bool>::type check() noexcept
 	{
-		return V && check<Rest...>();
+		return V && check<R...>();
 	}
 
 
