@@ -57,11 +57,11 @@ include_directories(Bia)
 add_subdirectory(Bia)
 
 # Tests
-option(BIA_BUILD_TESTS "Build tests" ON)
+include(CTest)
 
-if(BIA_BUILD_TESTS)
+if(BUILD_TESTING)
   enable_testing()
   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
   
   add_subdirectory(tests)
-endif(BIA_BUILD_TESTS)
+endif()

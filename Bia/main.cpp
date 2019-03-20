@@ -81,7 +81,7 @@ int main()
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
 		
-		_context.set_lambda("ser", [](int & i, int j) {
+		_context.set_lambda<1>("ser", [](int & i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
 		_context.set_lambda("set", [](const char * i, const char * j) {
@@ -116,6 +116,19 @@ int main()
 				break;
 			}
 		});
+		_context.set_lambda("destroy", [](bia::framework::member * _member) {
+			_member->undefine();
+		});
+		_context.set_lambda("defined", [](const bia::framework::member * _member) {
+			try {
+				_member->flags();
+			} catch (const bia::exception::symbol_error&) {
+				return false;
+			}
+
+			return true;
+		});
+		_context.set_lambda("time", []() { return std::time(nullptr); });
 		/*_context.set_lambda("int", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
@@ -130,9 +143,6 @@ int main()
 
 			return _member->to_double();
 		});
-		_context.set_lambda("destroy", [](bia::framework::member * _member) {
-			_member->undefine();
-		});
 		_context.set_lambda("defined", [](const bia::framework::member * _member) {
 			try {
 				_member->flags();
@@ -142,7 +152,6 @@ int main()
 
 			return true;
 		});
-		_context.set_lambda("time", []() { return std::time(nullptr); });
 		set_class<printer>(_context, "printer")
 			.set_constructor<int>()
 			.set_function("hey", &test)
@@ -153,10 +162,28 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-print(3.4)
-print()
-var i = printer(33)
-var i = printer()
+var sum = 0
+var start = time()
+var i = 0
+var t = i < 1000000
+
+while t {
+	var t = i % 3
+	
+	if t {
+		sum += i * t
+	} else {
+		sum /= i + 1
+	}
+
+	i += 1
+	var t = i < 1000000
+}
+
+var end = time()
+print(sum)
+var sum = end - start
+print(sum)
 
 )"";
 		/*test_and_time(1, []() {

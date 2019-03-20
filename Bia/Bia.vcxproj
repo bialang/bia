@@ -109,7 +109,7 @@
       <AdditionalIncludeDirectories>F:\mpir\include;F:\Boost\include\boost-1_69;F:\icu\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>F:\mpir\x86-debug;%(AdditionalLibraryDirectories);F:\PCRE2_x86\lib;F:\Boost\lib;F:\icu\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>F:\mpir\x86-debug;F:\Boost\lib;F:\icu\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>mpir.lib;icuucd.lib;icuind.lib</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -140,8 +140,8 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>F:\mpir\x86-release;%(AdditionalLibraryDirectories);F:\PCRE2_x86\lib;F:\Boost\lib;F:\icu\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mpir.lib;pcre2-8.lib;pcre2-16.lib;pcre2-32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>F:\mpir\x86-release;F:\Boost\lib;F:\icu\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mpir.lib;icuuc.lib;icuin.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">

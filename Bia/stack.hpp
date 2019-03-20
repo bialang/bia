@@ -63,6 +63,8 @@ public:
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
+		*_stack_pointer = 0;
+
 		*reinterpret_cast<Type*>(_stack_pointer++) = _value;
 	}
 	template<typename Type>
