@@ -128,7 +128,7 @@ int main()
 
 			return true;
 		});
-		_context.set_lambda("time", []() { return std::time(nullptr); });
+		_context.set_lambda("time", []() { return std::clock()/(double)CLOCKS_PER_SEC; });
 		/*_context.set_lambda("int", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
@@ -162,7 +162,27 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
+var sum = 0
+var start = time()
 var i = 0
+var t = 0
+
+while i < 10000000 {
+	t = i % 3
+	
+	if t {
+		sum += i * t
+	} else {
+		sum /= i + 1
+	}
+
+	i += 1
+}
+
+var end = time()
+print(sum)
+var sum = end - start
+print(sum)
 
 )"";
 		/*test_and_time(1, []() {
@@ -204,7 +224,7 @@ var i = 0
 
 		_machine_code.disassemble();
 
-		system("pause");
+		//system("pause");
 
 		try {
 			test_and_time(1, [&] {
@@ -217,5 +237,5 @@ var i = 0
 		}
 	}
 
-	system("pause");
+	//system("pause");
 }

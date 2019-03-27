@@ -246,6 +246,8 @@ int32_t big_int_member::test_int32(operator_t _operator, int32_t _right) const
 {
 	if (_operator == O_EQUALS) {
 		return _data->compare(_right) == 0;
+	} else if (_operator == O_LESS_THAN) {
+		return _data->compare(_right) < 0;
 	}
 
 	BIA_NOT_IMPLEMENTED;

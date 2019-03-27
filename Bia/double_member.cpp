@@ -46,6 +46,12 @@ void double_member::clone(member * _destination)
 
 void double_member::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
+	if (_operator == O_MINUS && _right->flags() & F_DOUBLE) {
+		_destination->replace_this<double_member>(_data.get() - static_cast<const double_member*>(_right)->_data.get());
+
+		return;
+	}
+
 	BIA_NOT_IMPLEMENTED;
 }
 
