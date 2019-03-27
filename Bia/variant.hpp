@@ -49,14 +49,12 @@ public:
 
 		_object_id = 0;
 	}
-	template<typename = typename std::enable_if<all_true<std::is_copy_constructible<Default>::value, std::is_copy_constructible<Types>::value...>::value>::type>
 	variant(const variant & _copy)
 	{
 		if (_object_id = _copy._object_id) {
 			copy_construct<Default, Types...>(1, _copy);
 		}
 	}
-	template<typename = typename std::enable_if<all_true<std::is_move_constructible<Default>::value, std::is_move_constructible<Types>::value...>::value>::type>
 	variant(variant && _move)
 	{
 		if (_object_id = _move._object_id) {
@@ -331,16 +329,48 @@ private:
 	{
 		new(_object_space) Type(*reinterpret_cast<const Type*>(_other._object_space));
 	}
-	template<typename Type, typename... Rest>
-	typename std::enable_if<sizeof...(Rest) != 0>::type copy_construct(id_t _id, const variant & _other)
+	template<typename Type, typename Second, typename... Rest>
+	typename std::enable_if<!std::is_copy_constructible<Type>::value>::type copy_construct(id_t _id, const variant & _copy)
 	{
 		if (_object_id == _id) {
-			new(_object_space) Type(*reinterpret_cast<const Type*>(_other._object_space));
+			throw "hello";
 		} else {
-			copy_construct<Rest...>(_id + 1, _other);
+			copy_construct<Second, Rest...>(_id + 1, _copy);
+		}
+	}
+	template<typename Type, typename Second, typename... Rest>
+	typename std::enable_if<std::is_copy_constructible<Type>::value>::type copy_construct(id_t _id, const variant & _copy)
+	{
+		if (_object_id == _id) {
+			new(_object_space) Type(*reinterpret_cast<const Type*>(_copy._object_space));
+		} else {
+			copy_construct<Second, Rest...>(_id + 1, _copy);
 		}
 	}
 	template<typename Type>
+	void move_construct(id_t _id, variant && _move)
+	{
+		new(_object_space) Type(std::move(*reinterpret_cast<Type*>(_move._object_space)));
+	}
+	template<typename Type, typename Second, typename... Rest>
+	typename std::enable_if<!std::is_move_constructible<Type>::value>::type move_construct(id_t _id, variant && _move)
+	{
+		if (_object_id == _id) {
+			throw "hello";
+		} else {
+			move_construct<Second, Rest...>(_id + 1, std::move(_move));
+		}
+	}
+	template<typename Type, typename Second, typename... Rest>
+	typename std::enable_if<std::is_move_constructible<Type>::value>::type move_construct(id_t _id, variant && _move)
+	{
+		if (_object_id == _id) {
+			new(_object_space) Type(*reinterpret_cast<Type*>(_move._object_space));
+		} else {
+			move_construct<Second, Rest...>(_id + 1, std::move(_move));
+		}
+	}
+	/*template<typename Type>
 	void move_construct(id_t _id, variant && _other)
 	{
 		new(_object_space) Type(std::move(*reinterpret_cast<Type*>(_other._object_space)));
@@ -353,7 +383,7 @@ private:
 		} else {
 			move_construct<Rest...>(_id + 1, std::move(_other));
 		}
-	}
+	}*/
 	/**
 	 * Destroys the current variant with the appropiate destructor.
 	 *
