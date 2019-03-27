@@ -15,7 +15,7 @@ namespace native
 template<typename Char_type>
 inline cstring_member<Char_type>::cstring_member(const Char_type * _string)
 {
-	_data->create<machine::cstring_resource>(_string);
+	_data->template create<machine::cstring_resource>(_string);
 }
 
 template<typename Char_type>
@@ -31,19 +31,19 @@ inline cstring_member<Char_type>::cstring_member(const data_type & _data) noexce
 template<typename Char_type>
 inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::print() const
 {
-	print(_data->get()->string<char>());
+	print(_data->get()->template string<char>());
 }
 
 template<typename Char_type>
 inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::copy(member * _destination)
 {
-	_destination->replace_this<cstring_member<Char_type>>(_data);
+	_destination->template replace_this<cstring_member<Char_type>>(_data);
 }
 
 template<typename Char_type>
 inline void BIA_MEMBER_CALLING_CONVENTION cstring_member<Char_type>::refer(member * _destination)
 {
-	_destination->replace_this<cstring_member<Char_type>>(_data);
+	_destination->template replace_this<cstring_member<Char_type>>(_data);
 }
 
 template<typename Char_type>
@@ -157,7 +157,7 @@ inline const void * cstring_member<Char_type>::const_data(const std::type_info &
 	if (_type == typeid(Char_type)) {
 		_success = true;
 
-		return _data->get()->string<Char_type>();
+		return _data->get()->template string<Char_type>();
 	}
 
 	return nullptr;

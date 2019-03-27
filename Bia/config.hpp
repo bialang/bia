@@ -1,6 +1,6 @@
 #pragma once
 
-/* #undef BIA_SHARED_BUILD */
+#define BIA_SHARED_BUILD
 /* #undef BIA_USE_OWN_UNICODE */
 /* #undef BIA_USE_STD_REGEX */
 

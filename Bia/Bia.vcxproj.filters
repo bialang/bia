@@ -34,9 +34,6 @@
     <Filter Include="Header Files\machine\link">
       <UniqueIdentifier>{7017d3e0-f814-42b3-b90f-df3d2a64f2e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\framework">
-      <UniqueIdentifier>{ae480377-60c3-4183-ac29-fc29231c764f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\framework">
       <UniqueIdentifier>{58b22ed4-9623-4f29-8907-8e30c4585db5}</UniqueIdentifier>
     </Filter>
@@ -51,15 +48,6 @@
     </Filter>
     <Filter Include="Header Files\utility">
       <UniqueIdentifier>{157f94e7-ac36-4cfe-8f0e-71ba9f4118bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\framework\executable">
-      <UniqueIdentifier>{c8f3c24a-0d9a-4c7b-917f-74e54e2ee5dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\framework\object">
-      <UniqueIdentifier>{7ee261cb-4157-4079-a001-26ce0906ad04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\framework\native">
-      <UniqueIdentifier>{d78ba02e-fd6b-4b8a-9130-2b3312803e66}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\grammar">
       <UniqueIdentifier>{f2abf7ed-e624-43d4-a584-25d26a5f1d83}</UniqueIdentifier>
@@ -117,6 +105,18 @@
     </Filter>
     <Filter Include="Source Files\machine\platform">
       <UniqueIdentifier>{d85be8c1-d6a8-4291-aab6-41beae7b2033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\framework">
+      <UniqueIdentifier>{ae480377-60c3-4183-ac29-fc29231c764f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\framework\executable">
+      <UniqueIdentifier>{c8f3c24a-0d9a-4c7b-917f-74e54e2ee5dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\framework\object">
+      <UniqueIdentifier>{7ee261cb-4157-4079-a001-26ce0906ad04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\framework\native">
+      <UniqueIdentifier>{d78ba02e-fd6b-4b8a-9130-2b3312803e66}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
