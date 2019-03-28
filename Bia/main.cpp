@@ -224,7 +224,7 @@ print(sum)
 
 		_machine_code.disassemble();
 
-		//system("pause");
+		system("pause");
 
 		try {
 			test_and_time(1, [&] {
@@ -237,5 +237,5 @@ print(sum)
 		}
 	}
 
-	//system("pause");
+	system("pause");
 }

@@ -16,7 +16,7 @@ namespace machine
 namespace virtual_machine
 {
 
-virtual_machine_code::virtual_machine_code(memory::universal_allocation _code, virtual_machine_schein && _schein, bool _take_ownership) : _schein(std::move(_schein))
+virtual_machine_code::virtual_machine_code(memory::universal_allocation _code, virtual_machine_schein && _schein, bool _take_ownership) : _schein(std::move(_schein)), _temps(this->_schein.machine_context()->member_allocator())
 {
 	// Copy buffer
 	if (!_take_ownership) {
@@ -52,7 +52,6 @@ void virtual_machine_code::execute()
 	const auto _end = _code.first + _code.second;
 	const uint8_t * _cursor = _code.first;
 	framework::member::test_result_t _test_register = 0;
-	member_array _temps(_schein.machine_context()->member_allocator());
 	
 	while (_cursor < _end) {
 		auto _operation = read<op_code_t>(_cursor);
