@@ -29,6 +29,9 @@ enum BIA_GRAMMAR_RULE : report::rule_t
 	BGR_TEST_LOOP,
 	BGR_TEST_LOOP_HELPER_0,
 
+	// Function
+	BGR_FUNCTION,
+
 	// Import
 	BGR_IMPORT,
 

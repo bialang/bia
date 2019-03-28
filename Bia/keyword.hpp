@@ -13,6 +13,7 @@ enum KEYWORD_ID : int32_t
 {
 	KI_GLOBAL,
 	KI_VAR,
+	KI_FUNCTION,
 	KI_NEW,
 	KI_FOR,
 	KI_WHILE,
@@ -77,6 +78,22 @@ struct keyword_var
 	constexpr static KEYWORD_ID string_id() noexcept
 	{
 		return KI_VAR;
+	}
+};
+
+struct keyword_function
+{
+	constexpr static const char * token() noexcept
+	{
+		return "fun";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 3;
+	}
+	constexpr static KEYWORD_ID string_id() noexcept
+	{
+		return KI_FUNCTION;
 	}
 };
 
