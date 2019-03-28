@@ -57,7 +57,7 @@ private:
 		DEFINITELY_GLOBAL
 	};
 
-	typedef const grammar::report*(compiler::*handle_function)(const grammar::report*);
+	typedef const grammar::report*(compiler::*handle_function_t)(const grammar::report*);
 
 	/** The result value for calculating and compiling. */
 	compiler_value _value;
@@ -127,7 +127,7 @@ private:
 	template<bool Expression = true>
 	const grammar::report * handle_math_expression_and_term(const grammar::report * _report)
 	{
-		constexpr handle_function next = Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
+		constexpr handle_function_t next = Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
 
 		// Only one math expression or term to handle
 		if (_report[1].content.end == _report->content.end) {
@@ -265,7 +265,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	BIA_EXPORT const grammar::report * handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next);
+	BIA_EXPORT const grammar::report * handle_math_expression_and_term_inner(const grammar::report * _report, handle_function_t _next);
 	/**
 	 * Handles a condition expression token.
 	 *
@@ -391,6 +391,7 @@ private:
 	BIA_EXPORT const grammar::report * handle_if(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_test_loop(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_loop_control(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_function(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_import(const grammar::report * _report);
 };
 

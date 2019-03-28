@@ -246,6 +246,8 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_test_loop(_report);
 	case BGR_CONTROL_STATEMENT:
 		return handle_loop_control(_report);
+	case BGR_FUNCTION:
+		return handle_function(_report);
 	case BGR_IMPORT:
 		return handle_import(_report);
 	case BGR_VALUE:
@@ -264,7 +266,7 @@ const grammar::report * compiler::handle_root_ignore(const grammar::report * _re
 	return _report->content.end;
 }
 
-const grammar::report * compiler::handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next)
+const grammar::report * compiler::handle_math_expression_and_term_inner(const grammar::report * _report, handle_function_t _next)
 {
 	// Handle leftmost math term
 	auto _old_counter = _counter.peek();
@@ -767,6 +769,28 @@ const grammar::report * compiler::handle_loop_control(const grammar::report * _r
 	}
 
 	return _report + 1;
+}
+
+const grammar::report * compiler::handle_function(const grammar::report * _report)
+{
+	const auto _end = _report->content.end;
+
+	_report = handle_identifier(_report);
+
+	auto _identifier = _value;
+
+	// Compile function code
+	stream::buffer_output_stream _function_code;
+	compiler _compiler(_function_code, _context);
+
+	_compiler.handle_root(_report);
+	_compiler.finalize();
+
+	// Create function
+	
+	BIA_NOT_IMPLEMENTED;
+
+	return _end;
 }
 
 const grammar::report * compiler::handle_import(const grammar::report * _report)

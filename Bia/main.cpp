@@ -162,27 +162,9 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var sum = 0
-var start = time()
-var i = 0
-var t = 0
-
-while i < 10000000 {
-	t = i % 3
-	
-	if t {
-		sum += i * t
-	} else {
-		sum /= i + 1
-	}
-
-	i += 1
+fun foo() {
+	print(0)
 }
-
-var end = time()
-print(sum)
-var sum = end - start
-print(sum)
 
 )"";
 		/*test_and_time(1, []() {

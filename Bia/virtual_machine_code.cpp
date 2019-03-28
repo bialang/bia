@@ -30,7 +30,7 @@ virtual_machine_code::virtual_machine_code(memory::universal_allocation _code, v
 	this->_code = memory::cast_allocation<uint8_t>(_code);
 }
 
-virtual_machine_code::virtual_machine_code(virtual_machine_code && _move) : _schein(std::move(_move._schein))
+virtual_machine_code::virtual_machine_code(virtual_machine_code && _move) : _schein(std::move(_move._schein)), _temps(std::move(_move._temps))
 {
 	_code = std::move(_move._code);
 
