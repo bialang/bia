@@ -87,6 +87,8 @@ enum OPERATOR : operator_t
 	O_GREATER_THAN = 0x3e,
 	/** The `>=` operator. */
 	O_GREATER_EQUALS = 0x3e3d,
+	/** The `in` operator. */
+	O_CONTAINS = 0x696e,
 };
 
 }

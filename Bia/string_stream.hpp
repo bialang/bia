@@ -6,7 +6,7 @@
 #include "encoder.hpp"
 #include "ascii.hpp"
 #include "utf8.hpp"
-#include "virtual_object.hpp"
+#include "variant.hpp"
 
 
 namespace bia
@@ -69,7 +69,7 @@ public:
 	 * @date 3-Aug-18
 	 *
 	 * @throws See machine::memory::allocator::destroy().
-	 * @throws See utility::virtual_object::~virtual_object().
+	 * @throws See utility::variant::~variant().
 	*/
 	~string_stream()
 	{
@@ -86,7 +86,7 @@ public:
 	 *
 	 * @param _codec One of the supported string encodings.
 	 *
-	 * @throws See utility::virtual_object::reconstruct().
+	 * @throws See utility::variant::reconstruct().
 	*/
 	void set_codec(CODEC _codec)
 	{
@@ -183,7 +183,7 @@ public:
 	/**
 	 * Returns the formatted string buffer.
 	 *
-	 * @remarks If the buffer is moved, ownership of the buffer will be transfered and the string buffer will be cleared. This string stream should not be used after a buffer ownership transfer. The string is formatted as follows: (size) + (length) + (zero-terminated string)
+	 * @remarks If the buffer is moved, ownership of the buffer will be transfered and the string buffer will be cleared. This string stream should not be used after a buffer ownership transfer. The string is formatted as follows: (size) + (length) + (zero-terminated string).
 	 *
 	 * @since 3.66.135.743
 	 * @date 3-Aug-18
@@ -288,7 +288,7 @@ private:
 	/** The allocated space. */
 	machine::memory::universal_allocation _buffer;
 	/** The string encoder. */
-	utility::virtual_object<encoding::encoder, encoding::ascii, encoding::utf8> _encoder;
+	utility::variant<encoding::encoder, encoding::ascii, encoding::utf8> _encoder;
 	/** The current position. */
 	int8_t * _cursor;
 	/** The end of the buffer. */

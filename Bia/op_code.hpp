@@ -130,8 +130,11 @@ enum OP_CODE : op_code_t
 	OC_EXECUTE_COUNT_VOID = OC_EXECUTE_VOID + MOCO_COUNT,
 	OC_EXECUTE_FORMAT_VOID = OC_EXECUTE_COUNT_VOID + MOCO_COUNT,
 
+	/** Mint-Type instructions */
+	OC_INSTANTIATE_REGEX = OC_EXECUTE_FORMAT_VOID + MOCO_COUNT * IIOCO_COUNT,
+
 	/** MM-Type instructions */
-	OC_EXECUTE = OC_EXECUTE_FORMAT_VOID + MOCO_COUNT * MOCO_COUNT,
+	OC_EXECUTE = OC_INSTANTIATE_REGEX + MOCO_COUNT * MOCO_COUNT,
 	OC_EXECUTE_COUNT = OC_EXECUTE + MOCO_COUNT * MOCO_COUNT,
 	OC_EXECUTE_FORMAT = OC_EXECUTE_COUNT + MOCO_COUNT * MOCO_COUNT,
 	OC_CLONE = OC_EXECUTE_FORMAT + MOCO_COUNT * MOCO_COUNT,
@@ -191,6 +194,17 @@ public:
 		_output.write_all(static_cast<op_code_t>(_operation - _option));
 
 		write_member<Optimize>(_output, _member);
+	}
+	template<typename Type, bool Optimize = true>
+	static void write_mint_type(stream::output_stream & _output, OP_CODE _operation, const index & _member, Type _int)
+	{
+		auto _option0 = member_option<Optimize>(_member);
+		auto _option1 = int_option<Optimize>(_int);
+
+		_output.write_all(static_cast<op_code_t>(_operation - (_option0 * IIOCO_COUNT + _option1)));
+
+		write_member<Optimize>(_output, _member);
+		write_int<Optimize>(_output, _int);
 	}
 	template<bool Optimize = true>
 	static void write_mm_type(stream::output_stream & _output, OP_CODE _operation, const index & _member0, const index & _member1)

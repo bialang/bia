@@ -141,8 +141,6 @@ private:
 	/**
 	 * Handles the value rule.
 	 *
-	 * @remarks @a _value should be cleared if it is not the destination.
-	 *
 	 * @since 3.64.127.716
 	 * @date 22-Apr-18
 	 *
@@ -177,7 +175,7 @@ private:
 	/**
 	 * Handles the value rule.
 	 *
-	 * @remarks This function does not handle the counter variable. @a _value should be cleared if it is not the destination.
+	 * @remarks This function does not handle the counter variable.
 	 *
 	 * @since 3.64.127.716
 	 * @date 22-Apr-18
@@ -353,7 +351,6 @@ private:
 	 * @date 6-Aug-18
 	 *
 	 * @param _report The parameter token.
-	 * @param _destination (Optional) The destination of the return.
 	 *
 	 * @throws See handle_parameter_execute(), handle_parameter_item() and handle_value_insecure().
 	 * @throws See temp_counter::pop().
@@ -361,8 +358,9 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	BIA_EXPORT const grammar::report * handle_parameter(const grammar::report * _report, compiler_value _destination = compiler_value());
+	BIA_EXPORT const grammar::report * handle_parameter(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_string(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_regex(const grammar::report * _report);
 	/**
 	 * Handles a variable declaration token.
 	 *

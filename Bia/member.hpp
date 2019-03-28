@@ -8,7 +8,6 @@
 
 #include "config.hpp"
 #include "operator.hpp"
-#include "native_type.hpp"
 #include "type_traits.hpp"
 #include "name_manager.hpp"
 #include "buffer_builder.hpp"
@@ -267,6 +266,11 @@ public:
 	{
 		return std::is_base_of<member, typename std::remove_pointer<Type>::type>::value;
 	}
+	template<typename Type>
+	constexpr static bool retrievable_data() noexcept
+	{
+		return !std::is_arithmetic<Type>::value && !member_base<Type>() && !utility::is_variant<Type>::value;
+	}
 	/**
 	 * Some details about the content.
 	 *
@@ -385,30 +389,65 @@ public:
 	template<typename Type>
 	typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) <= sizeof(int32_t)), Type>::type cast()
 	{
-		return static_cast<Type>(int32_data());
+		auto _success = false;
+		auto _result = int32_data(_success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return static_cast<Type>(_result);
 	}
 	template<typename Type>
 	typename std::enable_if<(std::is_integral<Type>::value && sizeof(Type) > sizeof(int32_t)), Type>::type cast()
 	{
-		return static_cast<Type>(int64_data());
+		auto _success = false;
+		auto _result = int64_data(_success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return static_cast<Type>(_result);
 	}
 	template<typename Type>
 	typename std::enable_if<std::is_floating_point<Type>::value, Type>::type cast()
 	{
-		return static_cast<Type>(double_data());
+		auto _success = false;
+		auto _result = double_data(_success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return static_cast<Type>(_result);
 	}
 	template<typename Type>
-	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
+	typename std::enable_if<retrievable_data<Type>() && !converter<Type>::is_const, typename converter<Type>::type>::type cast()
 	{
-		return converter<Type>::convert(data(converter<Type>::info()));
+		auto _success = false;
+		auto _result = data(converter<Type>::info(), _success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return converter<Type>::convert(_result);
 	}
 	template<typename Type>
-	typename std::enable_if<!std::is_arithmetic<Type>::value && !member_base<Type>() && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
+	typename std::enable_if<retrievable_data<Type>() && converter<Type>::is_const, typename converter<Type>::type>::type cast() const
 	{
-		return converter<Type>::convert(const_data(converter<Type>::info()));
+		auto _success = false;
+		auto _result = const_data(converter<Type>::info(), _success);
+
+		if (!_success) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return converter<Type>::convert(_result);
 	}
 	template<typename Type>
-	typename std::enable_if<member_base<Type>() && converter<Type>::is_const, Type>::type cast()
+	typename std::enable_if<member_base<Type>() && !converter<Type>::is_const, Type>::type cast()
 	{
 		if (!dynamic_cast<Type>(this)) {
 			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
@@ -417,13 +456,57 @@ public:
 		return static_cast<Type>(this);
 	}
 	template<typename Type>
-	typename std::enable_if<member_base<Type>() && !converter<Type>::is_const, Type>::type cast() const
+	typename std::enable_if<member_base<Type>() && converter<Type>::is_const, Type>::type cast() const
 	{
 		if (!dynamic_cast<Type>(this)) {
 			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
 		}
 
 		return static_cast<Type>(this);
+	}
+	template<typename Type>
+	typename std::enable_if<utility::is_variant<Type>::value && !converter<Type>::is_const, Type>::type cast()
+	{
+		Type _variant;
+		auto _flags = flags();
+
+		if (!Type::try_types([_flags, &_variant, this](auto _type) {
+			typedef typename decltype(_type)::type type;
+			///TODO: optimize try block away
+			try {
+				_variant.template reconstruct<type>(this->cast<type>());
+			} catch (const exception::type_error&) {
+				return false;
+			}
+
+			return true;
+		})) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return _variant;
+	}
+	template<typename Type>
+	typename std::enable_if<utility::is_variant<Type>::value && converter<Type>::is_const, Type>::type cast() const
+	{
+		Type _variant;
+		auto _flags = flags();
+
+		if (!Type::try_types([_flags, &_variant, this](auto _type) {
+			typedef typename decltype(_type)::type type;
+			///TODO: optimize try block away
+			try {
+				_variant.template reconstruct<type>(this->cast<type>());
+			} catch (const exception::type_error&) {
+				return false;
+			}
+
+			return true;
+		})) {
+			throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+		}
+
+		return _variant;
 	}
 
 	/**
@@ -454,9 +537,9 @@ public:
 	}
 
 protected:
-	virtual int32_t int32_data() const = 0;
-	virtual int64_t int64_data() const = 0;
-	virtual double double_data() const = 0;
+	virtual int32_t int32_data(bool & _success) const = 0;
+	virtual int64_t int64_data(bool & _success) const = 0;
+	virtual double double_data(bool & _success) const = 0;
 	/**
 	 * Returns a pointer to mutable custom data.
 	 *
@@ -464,13 +547,13 @@ protected:
 	 * @date 21-Apr-18
 	 *
 	 * @param _type The type.
+	 * @param [out] _success true if the returned pointer is valid, otherwise false.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.
 	*/
-	virtual void * data(const std::type_info & _type) = 0;
+	virtual void * data(const std::type_info & _type, bool & _success) = 0;
 	/**
 	 * Returns a pointer to immutable custom data.
 	 *
@@ -478,13 +561,13 @@ protected:
 	 * @date 21-Apr-18
 	 *
 	 * @param _type The type.
+	 * @param [out] _success true if the returned pointer is valid, otherwise false.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
-	 * @throws exception::type_error If the type is not supported.
 	 *
 	 * @return A pointer to the data.
 	*/
-	virtual const void * const_data(const std::type_info & _type) const = 0;
+	virtual const void * const_data(const std::type_info & _type, bool & _success) const = 0;
 };
 
 }

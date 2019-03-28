@@ -46,6 +46,12 @@ void double_member::clone(member * _destination)
 
 void double_member::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
+	if (_operator == O_MINUS && _right->flags() & F_DOUBLE) {
+		_destination->replace_this<double_member>(_data.get() - static_cast<const double_member*>(_right)->_data.get());
+
+		return;
+	}
+
 	BIA_NOT_IMPLEMENTED;
 }
 
@@ -133,18 +139,24 @@ const char * double_member::to_cstring(utility::buffer_builder * _builder) const
 	return _builder->buffer<char>();
 }
 
-int32_t double_member::int32_data() const
+int32_t double_member::int32_data(bool & _success) const
 {
+	_success = true;
+
 	return static_cast<int32_t>(_data.get());
 }
 
-int64_t double_member::int64_data() const
+int64_t double_member::int64_data(bool & _success) const
 {
+	_success = true;
+
 	return static_cast<int64_t>(_data.get());
 }
 
-double double_member::double_data() const
+double double_member::double_data(bool & _success) const
 {
+	_success = true;
+
 	return _data.get();
 }
 

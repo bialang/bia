@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mpir/mpir.h>
+#include <mpir.h>
 #include <cstdio>
 #include <cstdint>
 

@@ -150,43 +150,29 @@ inline double object<Type>::to_double() const
 }
 
 template<typename Type>
-inline int32_t object<Type>::int32_data() const
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-template<typename Type>
-inline int64_t object<Type>::int64_data() const
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-template<typename Type>
-inline double object<Type>::double_data() const
-{
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
-}
-
-template<typename Type>
-inline void * object<Type>::data(const std::type_info & _type)
+inline void * object<Type>::data(const std::type_info & _type, bool & _success)
 {
 	if (!std::is_const<Type>::value) {
 		if (typeid(Type) == _type) {
+			_success = true;
+
 			return _data.get().first.get().first;
 		}
 	}
 
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	return nullptr;
 }
 
 template<typename Type>
-inline const void * object<Type>::const_data(const std::type_info & _type) const
+inline const void * object<Type>::const_data(const std::type_info & _type, bool & _success) const
 {
 	if (typeid(Type) == _type) {
+		_success = true;
+
 		return _data.get().first.get().first;
 	}
 
-	throw exception::type_error(BIA_EM_UNSUPPORTED_TYPE);
+	return nullptr;
 }
 
 }

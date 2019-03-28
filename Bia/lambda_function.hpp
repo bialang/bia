@@ -15,65 +15,65 @@ namespace framework
 namespace executable
 {
 
-template<typename Lambda>
-inline lambda_function<Lambda>::lambda_function(const Lambda & _lambda) : _data(_lambda)
+template<size_t Optional_count, typename Lambda>
+inline lambda_function<Optional_count, Lambda>::lambda_function(const Lambda & _lambda) : _data(_lambda)
 {
 }
 
-template<typename Lambda>
-inline lambda_function<Lambda>::lambda_function(Lambda && _lambda) : _data(std::move(_lambda))
+template<size_t Optional_count, typename Lambda>
+inline lambda_function<Optional_count, Lambda>::lambda_function(Lambda && _lambda) : _data(std::move(_lambda))
 {
 }
 
-template<typename Lambda>
-inline lambda_function<Lambda>::lambda_function(const data_type & _data) noexcept : _data(_data)
+template<size_t Optional_count, typename Lambda>
+inline lambda_function<Optional_count, Lambda>::lambda_function(const data_type & _data) noexcept : _data(_data)
 {
 }
 
-template<typename Lambda>
-inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::print() const
+template<size_t Optional_count, typename Lambda>
+inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::print() const
 {
 	puts(typeid(&Lambda::operator()).name());
 }
 
-template<typename Lambda>
-inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::copy(member * _destination)
+template<size_t Optional_count, typename Lambda>
+inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::copy(member * _destination)
 {
-	_destination->replace_this<lambda_function<Lambda>>(_data.get());
+	_destination->replace_this<lambda_function<Optional_count, Lambda>>(_data.get());
 }
 
-template<typename Lambda>
-inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::refer(member * _destination)
+template<size_t Optional_count, typename Lambda>
+inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::refer(member * _destination)
 {
-	_destination->replace_this<lambda_function<Lambda>>(_data);
+	_destination->replace_this<lambda_function<Optional_count, Lambda>>(_data);
 }
 
-template<typename Lambda>
-inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::clone(member * _destination)
+template<size_t Optional_count, typename Lambda>
+inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::clone(member * _destination)
 {
 	refer(_destination);
 }
 
-template<typename Lambda>
-inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute(member * _destination)
+template<size_t Optional_count, typename Lambda>
+inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute(member * _destination)
 {
-	force::disguised_caller(&_data.get(), &Lambda::operator(), _destination, nullptr, 0, nullptr);
+	force::disguised_caller<Optional_count>(&_data.get(), &Lambda::operator(), _destination, nullptr, 0, nullptr);
 }
 
-template<typename Lambda>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
+template<size_t Optional_count, typename Lambda>
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
 {
-	force::disguised_caller(&_data.get(), &Lambda::operator(), _destination, nullptr, _count, _stack);
+	force::disguised_caller<Optional_count>(&_data.get(), &Lambda::operator(), _destination, nullptr, _count, _stack);
 }
 
-template<typename Lambda>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Lambda>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
+template<size_t Optional_count, typename Lambda>
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
 {
-	force::disguised_caller(&_data.get(), &Lambda::operator(), _destination, _format, _count, _stack);
+	force::disguised_caller<Optional_count>(&_data.get(), &Lambda::operator(), _destination, _format, _count, _stack);
 }
 
-template<typename Lambda>
-inline void lambda_function<Lambda>::set_instance(const void * _instance, const std::type_info & _type)
+template<size_t Optional_count, typename Lambda>
+inline void lambda_function<Optional_count, Lambda>::set_instance(const void * _instance, const std::type_info & _type)
 {
 }
 

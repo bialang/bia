@@ -125,7 +125,7 @@ template<typename Return, typename... Arguments>
 inline void create_member(member * _destination, Return(*_function)(Arguments...))
 {
 	if (_destination) {
-		_destination->template replace_this<executable::static_function<Return, Arguments...>>(_function);
+		_destination->template replace_this<executable::static_function<0, Return, Arguments...>>(_function);
 	}
 }
 
@@ -148,7 +148,7 @@ template<typename Class, typename Return, typename... Arguments>
 inline void create_member(member * _destination, Return(Class::*_function)(Arguments...))
 {
 	if (_destination) {
-		_destination->template replace_this<executable::member_function<Return(Class::*)(Arguments...)>>(_function);
+		_destination->template replace_this<executable::member_function<0, Return(Class::*)(Arguments...)>>(_function);
 	}
 }
 
@@ -171,7 +171,7 @@ template<typename Class, typename Return, typename... Arguments>
 inline void create_member(member * _destination, Return(Class::*_function)(Arguments...) const)
 {
 	if (_destination) {
-		_destination->template replace_this<executable::member_function<Return(Class::*)(Arguments...) const>>(_function);
+		_destination->template replace_this<executable::member_function<0, Return(Class::*)(Arguments...) const>>(_function);
 	}
 }
 

@@ -47,8 +47,8 @@ public:
 	 *
 	 * @return The emplaced member.
 	*/
-	template<typename _Ty, typename... _Args>
-	member * emplace(name_t _name, _Args &&... _args);
+	template<typename _Ty, typename... Arguments>
+	member * emplace(name_t _name, Arguments &&... _args);
 	/**
 	 * Returns the member.
 	 *

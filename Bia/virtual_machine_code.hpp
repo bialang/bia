@@ -9,6 +9,7 @@
 #include "code.hpp"
 #include "operation.hpp"
 #include "string_manager.hpp"
+#include "member_array.hpp"
 
 
 namespace bia
@@ -42,8 +43,10 @@ public:
 private:
 	/** Contains the instructions for the virtual machine code. */
 	memory::allocation<uint8_t> _code;
-	/** The machine schein.  */
+	/** The machine schein. */
 	virtual_machine_schein _schein;
+	/** Contains all temporary and local members. */
+	member_array _temps;
 
 	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, int32_t _immediate)
 	{

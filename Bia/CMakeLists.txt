@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(Bia_HEADER_FILES "bia.hpp" "config.hpp" "config_cmake.hpp")
+set(Bia_HEADER_FILES "bia.hpp" "config.hpp" "internal_config.hpp")
 set(Bia_SOURCE_FILES "")
 
 # common namespace
@@ -24,8 +24,8 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMPILER})
 set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMPILER})
 
 # dependency namespace
-set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp")
-set(Bia_SOURCE_FILES_DEPENDENCY "big_int.cpp")
+set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp" "regex.hpp")
+set(Bia_SOURCE_FILES_DEPENDENCY "big_int.cpp" "regex.cpp")
 
 source_group("Header Files\\dependency" FILES ${Bia_HEADER_FILES_DEPENDENCY})
 source_group("Source Files\\dependency" FILES ${Bia_SOURCE_FILES_DEPENDENCY})
@@ -71,8 +71,8 @@ set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "lambda_fun
 
 source_group("Header Files\\framework\\executable" FILES ${Bia_HEADER_FILES_EXECUTABLE})
 
-set(Bia_HEADER_FILES_NATIVE "big_int_member.hpp" "cstring_member.hpp" "double_member.hpp" "int_member.hpp" "native_operator.hpp" "native_reference.hpp" "native_test_operator.hpp" "native_type.hpp" "native_variable.hpp")
-set(Bia_SOURCE_FILES_NATIVE "big_int_member.cpp" 	"double_member.cpp" "int_member.cpp")
+set(Bia_HEADER_FILES_NATIVE "big_int_member.hpp" "cstring_member.hpp" "double_member.hpp" "int_member.hpp" "native_operator.hpp" "native_test_operator.hpp" "native_variable.hpp" "regex_member.hpp")
+set(Bia_SOURCE_FILES_NATIVE "big_int_member.cpp" "double_member.cpp" "int_member.cpp" "regex_member.cpp")
 
 source_group("Header Files\\framework\\native" FILES ${Bia_HEADER_FILES_NATIVE})
 source_group("Source Files\\framework\\native" FILES ${Bia_SOURCE_FILES_NATIVE})
@@ -150,7 +150,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_STREAM})
 
 
 # utility namespace
-set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "index_map.hpp" "local_object.hpp" "max.hpp" "scope_exit.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp" "virtual_object.hpp")
+set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "index_map.hpp" "local_object.hpp" "max.hpp" "scope_exit.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp" "variant.hpp")
 set(Bia_SOURCE_FILES_UTILITY "scope_exit.cpp")
 
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
@@ -166,8 +166,8 @@ add_library(Bia ${Bia_SOURCE_FILES})
 add_executable(Bia_main "main.cpp")
 target_link_libraries(Bia_main Bia)
 
-target_link_libraries(Bia ${MPIR_LIB})
-#target_include_directories(Bia ${MPIR_INCLUDE})
+target_link_libraries(Bia ${BIA_LIBRARIES})
+target_include_directories(Bia PUBLIC ${BIA_INCLUDES})
 
 # For dlopen and dlsym
 if(CMAKE_DL_LIBS)

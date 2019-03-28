@@ -15,6 +15,7 @@
 #include "big_int_allocator.hpp"
 #include "cstring_member_def.hpp"
 #include "virtual_machine_code.hpp"
+#include "variant.hpp"
 
 
 struct printer
@@ -80,10 +81,7 @@ int main()
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
 		
-		_context.set_lambda("hello_world", []() {
-			puts("Hello, World!");
-		});
-		_context.set_lambda("ser", [](int i, int j) {
+		_context.set_lambda<1>("ser", [](int & i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
 		_context.set_lambda("set", [](const char * i, const char * j) {
@@ -94,10 +92,43 @@ int main()
 			//p.a = 34343434;
 			return "ho ho how";
 		});
-		_context.set_lambda("str", []() { return "hi"; });
-		_context.set_lambda("print", [](const bia::framework::member * _member) {
-			_member->print();
+		_context.set_lambda<1>("print", [](utility::variant<framework::member*, int64_t, double, const char*> _value) {
+			switch (_value.id()) {
+			case 1:
+				(*_value.get<1>())->print();
+
+				break;
+			case 2:
+				std::cout << *_value.get<2>() << '\n';
+
+				break;
+			case 3:
+				std::cout << *_value.get<3>() << '\n';
+
+				break;
+			case 4:
+				std::cout << *_value.get<4>() << '\n';
+
+				break;
+			default:
+				puts("");
+
+				break;
+			}
 		});
+		_context.set_lambda("destroy", [](bia::framework::member * _member) {
+			_member->undefine();
+		});
+		_context.set_lambda("defined", [](const bia::framework::member * _member) {
+			try {
+				_member->flags();
+			} catch (const bia::exception::symbol_error&) {
+				return false;
+			}
+
+			return true;
+		});
+		_context.set_lambda("time", []() { return std::clock()/(double)CLOCKS_PER_SEC; });
 		/*_context.set_lambda("int", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
@@ -112,9 +143,6 @@ int main()
 
 			return _member->to_double();
 		});
-		_context.set_lambda("destroy", [](bia::framework::member * _member) {
-			_member->undefine();
-		});
 		_context.set_lambda("defined", [](const bia::framework::member * _member) {
 			try {
 				_member->flags();
@@ -124,23 +152,38 @@ int main()
 
 			return true;
 		});
-		_context.set_lambda("time", []() { return std::time(nullptr); });
 		set_class<printer>(_context, "printer")
 			.set_constructor<int>()
 			.set_function("hey", &test)
 			.set_function("hi", &printer::hi);
 		*/
-		set_class<printer>(_context, "printer").set_constructor<int>().set_function("hey", &test).set_function("hi", &printer::hi);
+		set_class<printer>(_context, "printer").set_constructor<1, int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
 		// Script
 		char _script[] = u8R""(
 
-{
-var a = 0
+var sum = 0
+var start = time()
+var i = 0
+var t = 0
 
-print(a)
+while i < 10000000 {
+	t = i % 3
+	
+	if t {
+		sum += i * t
+	} else {
+		sum /= i + 1
+	}
+
+	i += 1
 }
-print(a)
+
+var end = time()
+print(sum)
+var sum = end - start
+print(sum)
+
 )"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;

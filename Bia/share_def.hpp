@@ -2,7 +2,6 @@
 
 #include <atomic>
 #include <cstdint>
-#include <utility>
 
 
 namespace bia
@@ -128,12 +127,24 @@ public:
 	 * @return Returns *this.
 	*/
 	share & operator=(share && _move);
+	template<typename... Arguments>
+	static share factory_make(uint8_t _extra_size, Arguments &&... _arguments);
 
 private:
-	typedef std::pair<int8_t[sizeof(Type)], std::atomic_size_t> data;
+	struct data
+	{
+		uint8_t extra_size;
+		std::atomic_uint32_t reference_count;
+	};
 
 	/** The data pointer. */
 	data * _data;
+
+	template<typename... Arguments>
+	share(uint8_t _extra_size, Arguments &&... _arguments);
+	template<typename... Arguments>
+	void create(uint8_t _extra_size, Arguments &&... _arguments);
+	constexpr static size_t data_size();
 };
 
 }

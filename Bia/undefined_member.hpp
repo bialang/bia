@@ -37,11 +37,11 @@ public:
 	BIA_EXPORT virtual const char * to_cstring(utility::buffer_builder * _builder) const override;
 
 protected:
-	BIA_EXPORT virtual int32_t int32_data() const override;
-	BIA_EXPORT virtual int64_t int64_data() const override;
-	BIA_EXPORT virtual double double_data() const override;
-	BIA_EXPORT virtual void * data(const std::type_info & _type) override;
-	BIA_EXPORT virtual const void * const_data(const std::type_info & _type) const override;
+	BIA_EXPORT virtual int32_t int32_data(bool & _success) const override;
+	BIA_EXPORT virtual int64_t int64_data(bool & _success) const override;
+	BIA_EXPORT virtual double double_data(bool & _success) const override;
+	BIA_EXPORT virtual void * data(const std::type_info & _type, bool & _success) override;
+	BIA_EXPORT virtual const void * const_data(const std::type_info & _type, bool & _success) const override;
 };
 
 }

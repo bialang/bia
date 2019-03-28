@@ -82,6 +82,10 @@ void compiler::handle_variable_declaration_helper(compiler_value _expression, co
 		_translator.instantiate_string(_destination, _expression.value().rt_string);
 
 		break;
+	case VT::REGEX:
+		_translator.instantiate_regex(_destination, _expression.value().rt_regex);
+
+		break;
 	case VT::MEMBER:
 		_translator.clone(_translator.to_member(_expression.value().rt_member), _destination);
 
@@ -245,9 +249,6 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 	case BGR_IMPORT:
 		return handle_import(_report);
 	case BGR_VALUE:
-		// Clear destination
-		_value.set_return();
-
 		return handle_value<false>(_report, [] {});
 	default:
 		BIA_IMPLEMENTATION_ERROR;
@@ -268,7 +269,6 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 	// Handle leftmost math term
 	auto _old_counter = _counter.peek();
 	auto i = (this->*_next)(_report + 1);
-	const auto _destiantion = _value;
 	auto _left = _value;
 
 	// Pop if not used
@@ -286,20 +286,16 @@ const grammar::report * compiler::handle_math_expression_and_term_inner(const gr
 		// Pop if not used and set destination
 		auto _right = _value;
 
-		if (_destiantion.is_member() && _destiantion == _left) {
-			_value = _destiantion;
+		// Get the lower one
+		if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER && _right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_value.set_return_temp(_left.value().rt_temp_member < _right.value().rt_temp_member ? _left.value().rt_temp_member : _right.value().rt_temp_member);
+		} else if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_value.set_return_temp(_left.value().rt_temp_member);
+		} else if (_right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
+			_value.set_return_temp(_right.value().rt_temp_member);
 		} else {
-			// Get the lower one
-			if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER && _right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-				_value.set_return_temp(_left.value().rt_temp_member < _right.value().rt_temp_member ? _left.value().rt_temp_member : _right.value().rt_temp_member);
-			} else if (_left.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-				_value.set_return_temp(_left.value().rt_temp_member);
-			} else if (_right.type() == compiler_value::VALUE_TYPE::TEMPORARY_MEMBER) {
-				_value.set_return_temp(_right.value().rt_temp_member);
-			} else {
-				//_counter.pop(_old_counter);
-				_value.set_return_temp(_counter.next());
-			}
+			//_counter.pop(_old_counter);
+			_value.set_return_temp(_counter.next());
 		}
 
 		// Call operator
@@ -439,13 +435,14 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 	using namespace machine::virtual_machine;
 
 	const auto _end = _report->content.end;
-	auto _destination = _value.is_member() ? _value : compiler_value();
 
 	++_report;
 
 	// First member
 	if (static_cast<report::TYPE>(_report->type) == report::TYPE::STRING) {
 		_report = handle_string(_report);
+	} else if (static_cast<report::TYPE>(_report->type) == report::TYPE::REGEX) {
+		_report = handle_regex(_report);
 	} else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
 		virtual_translator::ccr_function_t _function = nullptr;
 
@@ -461,18 +458,9 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 
 		// Get refof/copyof
 		if (_function) {
-			_destination.expand_to_member(_translator, [&](auto _expanded) {
-				if (std::is_same<decltype(_expanded), invalid_index>::value) {
-					(_translator.*_function)(_translator.to_member(_value.value().rt_member), _translator.to_temp(_counter.next()));
+			(_translator.*_function)(_translator.to_member(_value.value().rt_member), _translator.to_temp(_counter.next()));
 
-					_value.set_return_temp(_counter.current());
-				} else {
-					(_translator.*_function)(_translator.to_member(_value.value().rt_member), _expanded);
-
-					_value = _destination;
-				}
-			});
-
+			_value.set_return_temp(_counter.current());
 		}
 	} else {
 		BIA_IMPLEMENTATION_ERROR;
@@ -482,7 +470,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 	while (_report < _end) {
 		// Handle parameter
 		if (_report->rule_id == BGR_PARAMETER || _report->rule_id == BGR_PARAMETER_ITEM_ACCESS) {
-			_report = handle_parameter(_report, _destination);
+			_report = handle_parameter(_report);
 		} // Get member
 		else if (static_cast<report::TYPE>(_report->type) == report::TYPE::MEMBER) {
 			_value.expand_to_member(_translator, [&](auto _member) {
@@ -490,16 +478,8 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 					BIA_IMPLEMENTATION_ERROR;
 				}
 
-				_destination.expand_to_member(_translator, [&](auto _dest) {
-					if (std::is_same<decltype(_dest), compiler_value::invalid_index_t>::value) {
-						_destination.set_return_temp(_counter.next());
-						_translator.object_member(_member, _translator.to_temp(_counter.current()), _report->content.member);
-					} else {
-						_translator.object_member(_member, _dest, _report->content.member);
-					}
-
-					_value = _destination;
-				});
+				_value.set_return_temp(_counter.next());
+				_translator.object_member(_member, _translator.to_temp(_counter.current()), _report->content.member);
 			});
 
 			++_report;
@@ -509,7 +489,7 @@ const grammar::report * compiler::handle_member(const grammar::report * _report)
 	return _end;
 }
 
-const grammar::report * compiler::handle_parameter(const grammar::report * _report, compiler_value _destination)
+const grammar::report * compiler::handle_parameter(const grammar::report * _report)
 {
 	using VT = compiler_value::VALUE_TYPE;
 
@@ -539,26 +519,34 @@ const grammar::report * compiler::handle_parameter(const grammar::report * _repo
 	}
 
 	// Call function
-	_caller.expand_to_member(_translator, [&](auto _member) {
-		if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
-			BIA_IMPLEMENTATION_ERROR;
-		}
+	switch (_caller.type()) {
+	case VT::MEMBER:
+	case VT::LOCAL_MEMBER:
+	{
+		// Create temporary destination
+		auto _destination = _translator.to_temp(_counter.next());
 
-		_destination.expand_to_member(_translator, [&](auto _expanded) {
-			auto _dest = &_expanded;
-
-			// Discard result
-			if (std::is_same<decltype(_expanded), compiler_value::invalid_index_t>::value) {
-				_dest = nullptr;
-
-				_value.set_return();
-			} else {
-				_value = _destination;
-			}
-
-			this->handle_parameter_execute(_member, _dest, _format, _mixed, _count);
+		_caller.expand_to_member(_translator, [&](auto _member) {
+			handle_parameter_execute(_member, &_destination, _format, _mixed, _count);
 		});
-	});
+
+		_value.set_return_temp(_counter.current());
+
+		break;
+	}
+	case VT::TEMPORARY_MEMBER:
+	{
+		auto _tmp = _translator.to_temp(_caller.value().rt_temp_member);
+
+		handle_parameter_execute(_tmp, &_tmp, _format, _mixed, _count);
+
+		_value = _caller;
+
+		break;
+	}
+	default:
+		BIA_IMPLEMENTATION_ERROR;
+	}
 
 	return _report->content.end;
 }
@@ -576,6 +564,13 @@ const grammar::report * compiler::handle_string(const grammar::report * _report)
 	default:
 		BIA_IMPLEMENTATION_ERROR;
 	}
+
+	return _report + 1;
+}
+
+const grammar::report * compiler::handle_regex(const grammar::report * _report)
+{
+	_value.set_return_regex(_report->content.regex);
 
 	return _report + 1;
 }

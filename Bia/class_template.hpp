@@ -74,13 +74,13 @@ inline void BIA_VARG_MEMBER_CALLING_CONVENTION class_template<Type>::execute_for
 }
 
 template<typename Type>
-template<typename ...Arguments>
+template<size_t Optional_count, typename ...Arguments>
 inline void class_template<Type>::set_constructor()
 {
 	auto _allocator = machine::machine_context::active_allocator();
 
 	_allocator->destroy(_data.get().second);
-	_data.get().second = _allocator->construct<force::initiator, force::real_initiator<Type, Arguments...>>();
+	_data.get().second = _allocator->construct<force::initiator, force::real_initiator<Optional_count, Type, Arguments...>>();
 }
 
 template<typename Type>

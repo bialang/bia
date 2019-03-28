@@ -21,18 +21,20 @@ member_array::~member_array()
 
 void member_array::create(index_t _size)
 {
-	if (!_members.empty()) {
-		BIA_IMPLEMENTATION_ERROR;
+	if (_members.size() < _size) {
+		if (!_members.empty()) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
+
+		_members.resize(_size);
+
+		for (auto i = _members.data(), _cond = i + _members.size(); i < _cond; ++i) {
+			*i = _allocator->construct_member<framework::undefined_member>();
+		}
+
+		_ends.first = _members.front();
+		_ends.second = _members.back();
 	}
-
-	_members.resize(_size);
-
-	for (auto i = _members.data(), _cond = i + _members.size(); i < _cond; ++i) {
-		*i = _allocator->construct_member<framework::undefined_member>();
-	}
-
-	_ends.first = _members.front();
-	_ends.second = _members.back();
 }
 
 framework::member * member_array::from_front(index_t _index)

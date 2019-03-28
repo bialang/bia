@@ -1,3 +1,0 @@
-#pragma once
-
-#cmakedefine BIA_BUILD_SHARED

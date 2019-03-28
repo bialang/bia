@@ -128,27 +128,27 @@ const char * undefined_member::to_cstring(utility::buffer_builder * _builder) co
 	BIA_UNDEFINED_ERROR;
 }
 
-int32_t undefined_member::int32_data() const
+int32_t undefined_member::int32_data(bool & _success) const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-int64_t undefined_member::int64_data() const
+int64_t undefined_member::int64_data(bool & _success) const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-double undefined_member::double_data() const
+double undefined_member::double_data(bool & _success) const
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void * undefined_member::data(const std::type_info & _type)
+void * undefined_member::data(const std::type_info & _type, bool & _success)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-const void * undefined_member::const_data(const std::type_info & _type) const
+const void * undefined_member::const_data(const std::type_info & _type, bool & _success) const
 {
 	BIA_UNDEFINED_ERROR;
 }

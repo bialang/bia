@@ -24,6 +24,9 @@ mtype = [
                                     "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
                                 "}\n\t\t\t_member->execute_format(nullptr, reinterpret_cast<const char*>(_cursor), _count, &_stack);", "_cursor += _count;", "exec")
 ]
+minttype = [
+    ("OC_INSTANTIATE_REGEX", "", "_member->template replace_this<framework::native::regex_member>(_regexs[_int]);", "", "instreg")
+]
 mmtype = [
     ("OC_EXECUTE", "", "_member0->execute(_member1);", "", "exec"),
     ("OC_EXECUTE_COUNT", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member0->execute_count(_member1, nullptr, _count, &_stack);", "", "exec"),
@@ -162,6 +165,14 @@ write("/** M-Type */\n\t\t")
 for i in mtype:
     for v in mvars:
         write_case(*i, xoffset=v[0], var0=v[1].format("_member"))
+
+write("/** Mint-Type */\n\t\t")
+
+# Write Mint-Type
+for i in minttype:
+    for v0 in mvars:
+        for v1 in intvars:
+            write_case(*i, xoffset=v1[0], yoffset=v0[0], xmax="IIOCO_COUNT", var0=v0[1].format("_member"), var1=v1[1])
 
 write("/** MM-Type */\n\t\t")
 

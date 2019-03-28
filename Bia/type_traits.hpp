@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstddef>
 
+#include "config.hpp"
 #include "exception.hpp"
 
 
@@ -91,6 +92,101 @@ template<typename Type>
 struct native_type_adapter<Type, true, 1>
 {
 	typedef int32_t type;
+};
+
+template<bool Value, bool... Rest>
+struct all_true
+{
+private:
+	template<bool V>
+	constexpr static bool check() noexcept
+	{
+		return V;
+	}
+	template<bool V, bool... R>
+	constexpr static typename std::enable_if<sizeof...(R), bool>::type check() noexcept
+	{
+		return V && check<R...>();
+	}
+
+
+public:
+	constexpr static bool value = check<Value, Rest...>();
+};
+
+template<typename Type>
+struct is_variant
+{
+	constexpr static bool value = false;
+};
+
+template<typename... Types>
+struct is_variant<utility::variant<Types...>>
+{
+	constexpr static bool value = true;
+};
+
+template<typename Type>
+struct type_transporter
+{
+	typedef Type type;
+};
+
+template<size_t Index, typename Type, typename... Types>
+struct type_at : type_at<Index - 1, Types...>
+{
+};
+
+template<typename Type, typename... Types>
+struct type_at<0, Type, Types...>
+{
+	typedef Type type;
+};
+
+template<typename From, typename To>
+struct is_promotable
+{
+	constexpr static bool value = (std::is_floating_point<From>::value && std::is_floating_point<To>::value || std::is_integral<From>::value && std::is_integral<To>::value) && sizeof(From) <= sizeof(To);
+};
+
+template<typename... Types>
+struct type_container
+{
+};
+
+template<typename Type, typename... Types>
+struct type_container_append;
+
+template<typename Type, typename... Types>
+struct type_container_append<Type, type_container<Types...>>
+{
+	using type = type_container<Types..., Type>;
+};
+
+template<size_t Count, typename First, typename... Rest>
+struct type_container_splitter
+{
+	typedef type_container<> first;
+	typedef type_container<> second;
+};
+
+template<size_t Count, typename First, typename Type, typename... Rest>
+struct type_container_splitter<Count, First, Type, Rest...> : type_container_splitter<Count - 1, typename type_container_append<Type, First>::type, Rest...>
+{
+};
+
+template<typename First, typename Type, typename... Rest>
+struct type_container_splitter<1, First, Type, Rest...>
+{
+	typedef typename type_container_append<Type, First>::type first;
+	typedef type_container<Rest...> second;
+};
+
+template<typename First, typename Type, typename... Rest>
+struct type_container_splitter<0, First, Type, Rest...>
+{
+	typedef First first;
+	typedef type_container<Type, Rest...> second;
 };
 
 }

@@ -24,7 +24,7 @@ constexpr auto max_member_size = utility::max(
 	sizeof(native::big_int_member),
 	sizeof(native::double_member),
 	sizeof(native::cstring_member<char>),
-	sizeof(executable::static_function<void>),
+	sizeof(executable::static_function<0, void>),
 	//sizeof(executable::lambda_function),
 	//sizeof(executable::member_function),
 	sizeof(object::raw_object<int>),

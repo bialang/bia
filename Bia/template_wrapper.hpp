@@ -24,43 +24,43 @@ public:
 	{
 		this->_template_member = _template_member;
 	}
-	template<typename... Arguments, bool Is_class = std::is_class<Class>::value>
+	template<size_t Optional_count, typename... Arguments, bool Is_class = std::is_class<Class>::value>
 	typename std::enable_if<Is_class, template_wrapper&>::type set_constructor()
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->template set_constructor<Arguments...>();
+		_template_member->template set_constructor<Optional_count, Arguments...>();
 
 		return *this;
 	}
-	template<typename Return, typename... Arguments>
+	template<size_t Optional_count = 0, typename Return, typename... Arguments>
 	template_wrapper & set_function(member_map::name_t _name, Return(*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::static_function<Return, Arguments...>>(_context.name_address(_name), _function);
+		_template_member->members().template emplace<framework::executable::static_function<Optional_count, Return, Arguments...>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
-	template<typename Active_class = Class, typename Function_class, typename Return, typename... Arguments>
+	template<size_t Optional_count = 0, typename Active_class = Class, typename Function_class, typename Return, typename... Arguments>
 	typename std::enable_if<std::is_base_of<Function_class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_t _name, Return(Function_class::*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::member_function<Return(Active_class::*)(Arguments...)>>(_context.name_address(_name), _function);
+		_template_member->members().template emplace<framework::executable::member_function<Optional_count, Return(Active_class::*)(Arguments...)>>(_context.name_address(_name), _function);
 
 		return *this;
 	}
-	template<typename _Lambda>
-	template_wrapper & set_lambda(member_map::name_t _name, _Lambda && _lambda)
+	template<size_t Optional_count = 0, typename Lambda>
+	template_wrapper & set_lambda(member_map::name_t _name, Lambda && _lambda)
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::lambda_function<typename std::remove_cv<typename std::remove_reference<_Lambda>::type>::type>>(_context.name_address(_name), std::forward<_Lambda>(_lambda));
+		_template_member->members().template emplace<framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<Lambda>::type>::type>>(_context.name_address(_name), std::forward<Lambda>(_lambda));
 
 		return *this;
 	}
