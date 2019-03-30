@@ -613,5 +613,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="compiler.cd" />
+    <None Include="dependency.cd" />
+    <None Include="encoding.cd" />
+    <None Include="exception.cd" />
+    <None Include="force.cd" />
+    <None Include="framework.cd" />
+    <None Include="grammar.cd" />
+    <None Include="machine.cd" />
+    <None Include="stream.cd" />
+    <None Include="utility.cd" />
   </ItemGroup>
 </Project>
