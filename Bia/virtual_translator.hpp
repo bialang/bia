@@ -56,6 +56,7 @@ public:
 	void instantiate_double(const index & _member, double _value);
 	void instantiate_string(const index & _member, string_manager::utf8_index_t _value);
 	void instantiate_regex(const index & _member, schein::regex_index_t _regex);
+	void instantiate_function(const index & _member, schein::function_index_t _function);
 	void test(const index & _member);
 	void execute(const index & _member, const index * _destination);
 	void execute_count(const index & _member, const index * _destination, framework::member::parameter_count_t _count);

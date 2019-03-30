@@ -68,6 +68,11 @@ void virtual_translator::instantiate_regex(const index & _member, schein::regex_
 	op_code::write_mint_type(*_output, OC_INSTANTIATE_REGEX, _member, _regex);
 }
 
+void virtual_translator::instantiate_function(const index & _member, schein::function_index_t _function)
+{
+	op_code::write_mint_type(*_output, OC_INSTANTIATE_FUNCTION, _member, _function);
+}
+
 void virtual_translator::test(const index & _member)
 {
 	op_code::write_m_type(*_output, OC_TEST, _member);
