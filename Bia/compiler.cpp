@@ -3,6 +3,7 @@
 #include "buffer_output_stream.hpp"
 #include "string_stream.hpp"
 #include "grammar_id.hpp"
+#include "virtual_machine_code.hpp"
 
 #include <vector>
 
@@ -786,9 +787,16 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 	_compiler.handle_root(_report);
 	_compiler.finalize();
 
+	auto _function = _schein.register_function_inplace({ _function_code.buffer(), _function_code.size() }, std::move(_compiler.virtual_machine_schein()));
+
 	// Create function
-	
-	BIA_NOT_IMPLEMENTED;
+	_identifier.expand_to_member(_translator, [&](auto _member) {
+		if (std::is_same<decltype<_member>, compiler_value::invalid_index_t>::value) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
+		
+		_translator.instantiate_function(_member, _function);
+	});
 
 	return _end;
 }
