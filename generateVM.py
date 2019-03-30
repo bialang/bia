@@ -25,7 +25,8 @@ mtype = [
                                 "}\n\t\t\t_member->execute_format(nullptr, reinterpret_cast<const char*>(_cursor), _count, &_stack);", "_cursor += _count;", "exec")
 ]
 minttype = [
-    ("OC_INSTANTIATE_REGEX", "", "_member->template replace_this<framework::native::regex_member>(_regexs[_int]);", "", "instreg")
+    ("OC_INSTANTIATE_REGEX", "", "_member->template replace_this<framework::native::regex_member>(_regexs[_int]);", "", "instreg"),
+    ("OC_INSTANTIATE_FUNCTION", "", "_member->template replace_this<framework::executable::bia_function>(_functions[_int]);", "", "instfun")
 ]
 mmtype = [
     ("OC_EXECUTE", "", "_member0->execute(_member1);", "", "exec"),
