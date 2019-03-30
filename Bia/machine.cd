@@ -1,0 +1,906 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+  <Class Name="bia::machine::virtual_machine::virtual_translator" Collapsed="true">
+    <Position X="34.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IFIbAKkBIQQgAgAAAAUEAgYABBQAAAAqCIIAEAgAAAA=</HashCode>
+      <FileName>virtual_translator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::virtual_machine::op_code" Collapsed="true">
+    <Position X="34.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAABQBiAAAAAAQAAgAgEAAAMAAAACEAAAAAEAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::virtual_machine::virtual_disassembler" Collapsed="true">
+    <Position X="33" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAwAAAAACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>virtual_disassembler.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::virtual_machine::virtual_machine_code">
+    <Position X="24.5" Y="18.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>IEAAACAAAAAQAACAACAEAAAAAAAAABAIEAAgAIEgAAA=</HashCode>
+      <FileName>virtual_machine_code.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::virtual_machine::virtual_machine_schein">
+    <Position X="23.5" Y="12.25" Width="2" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::virtual_machine::virtual_machine_schein::member_list_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>virtual_machine_schein.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::virtual_machine::virtual_machine_schein::name_list_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>virtual_machine_schein.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAIAIAAAAAAAAAAAAAAAAAAAAAAgAAAIAAAAAAABAIA=</HashCode>
+      <FileName>virtual_machine_schein.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::code">
+    <Position X="26.75" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAQAAAAAAAEAAAAAAAAAAAAAAAgAABAAAA=</HashCode>
+      <FileName>code.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::disassembler" Collapsed="true">
+    <Position X="31.25" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="bia::machine::disassembler::instruction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>disassembler.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Typedef Name="bia::machine::disassembler::instruction_list" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>disassembler.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::disassembler::function_map" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>disassembler.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAABAAECAAAAEAAAAAAAAEAAAAEA=</HashCode>
+      <FileName>disassembler.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::machine_context" Collapsed="true">
+    <Position X="33" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SQAhAhAEQKABABAAAEIFgCAgCAUFAAhGIQAggiEBIgA=</HashCode>
+      <FileName>machine_context.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::member_array" Collapsed="true">
+    <Position X="34.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::member_array::index_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>member_array.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAABBAABAAEAAAAAAAAAAAAAAAAhAAAAAACA=</HashCode>
+      <FileName>member_array.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::name_manager" Collapsed="true">
+    <Position X="33" Y="1.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::name_manager::name_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>name_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Struct Name="bia::machine::name_manager::string_entry" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>name_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="bia::machine::name_manager::string_hasher" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>name_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAEBAAEAAAAgAAgAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>name_manager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::schein" Collapsed="true">
+    <Position X="25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CGgAAAAEAAAQBAAAAQYBAAAAAAEAAIAABAAgAABAABA=</HashCode>
+      <FileName>schein.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::script_map" Collapsed="true">
+    <Position X="31.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAQAQAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>script_map.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::stack" Collapsed="true">
+    <Position X="33" Y="2.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::stack::element_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stack.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::stack::index_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stack.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>FAAAAAAgAABBAAAAAIAAAAgAAAAAAYBIAEAIAAAAACA=</HashCode>
+      <FileName>stack.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::string_manager" Collapsed="true">
+    <Position X="36.5" Y="2.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::string_manager::index_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::string_manager::string_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Struct Name="bia::machine::string_manager::index_wrapper&lt;Char_type&gt;" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="bia::machine::string_manager::string_wrapper&lt;Char_type&gt;" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Typedef Name="bia::machine::string_manager::utf8_index_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::string_manager::utf8_string_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAABAAQAAAAABAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>string_manager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::string_resource_base">
+    <Position X="11" Y="18" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAABAAAAAAMAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>string_resource.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::dstring_resource">
+    <Position X="11.75" Y="21" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAEMAAAAAAAAAAAAAAAARAAAAAAAQ=</HashCode>
+      <FileName>string_resource.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::cstring_resource">
+    <Position X="9.5" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAMAAAAAAIAAAAAAABARAAAIAAAA=</HashCode>
+      <FileName>string_resource.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::variable_index" Collapsed="true">
+    <Position X="31.25" Y="3.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::variable_index::value_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>variable_index.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::variable_index::key_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>variable_index.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::variable_index::mapped_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>variable_index.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::variable_index::allocator_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>variable_index.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEAAAAADAQA=</HashCode>
+      <FileName>variable_index.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::platform::machine_code">
+    <Position X="28" Y="18.5" Width="2.25" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::platform::machine_code::entry_point" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>machine_code.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAQAAAAAAAEAAAAEAAAAABAAAAgAQAAEAA=</HashCode>
+      <FileName>machine_code.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::platform::machine_schein">
+    <Position X="26.25" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>machine_schein.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::platform::member_passer">
+    <Position X="17.5" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>member_passer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::platform::static_passer">
+    <Position X="18.5" Y="15" Width="3" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::platform::static_passer::pass_count_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>static_passer.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAgAAAAAAEIAIAAgwAAQAAARAgCAAIAAAABAA=</HashCode>
+      <FileName>static_passer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::platform::varg_member_passer">
+    <Position X="19.75" Y="20" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAkAAAAAAAAAAAAgAAAAAAAAAgCAAAAAAAgAA=</HashCode>
+      <FileName>varg_member_passer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::platform::passer" Collapsed="true">
+    <Position X="36.5" Y="1.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::platform::passer::pass_count_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>passer.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::passer::entry_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>passer.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAACAAIAAABAAAAAAAQAAABAAICA=</HashCode>
+      <FileName>passer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::platform::x86_translator" Collapsed="true">
+    <Position X="36.5" Y="3.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::platform::x86_translator::result_register" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::temp_index_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::pass_count" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::saved_result_register" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::temp_result" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::local_result" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::test_result_register" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::local_index_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Enum Name="bia::machine::platform::x86_translator::JUMP" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Typedef Name="bia::machine::platform::x86_translator::temp_members" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::index_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::platform::x86_translator::position_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>MBASAJABAEgBBgAAAAGAEAAAABAAAAACAQAAABAgAEA=</HashCode>
+      <FileName>x86_translator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::modular::module_loader" Collapsed="true">
+    <Position X="31.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAACAAAAEAAAAAAAACAAAAAAAg=</HashCode>
+      <FileName>module_loader.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::modular::module_library" Collapsed="true">
+    <Position X="36.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAQAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>module_library.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::memory::allocation&lt;Type&gt;" Collapsed="true">
+    <Position X="5.5" Y="21.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EUAAAAAAAAAAAAAEAgEAAgAAAAAAAAAAAAAiAAAAAAA=</HashCode>
+      <FileName>allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::memory::allocator">
+    <Position X="12.25" Y="11.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>QgQAAABAEAAAAAAABIAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::memory::big_int_allocator">
+    <Position X="5.5" Y="11" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAggAAAAABAAAABAEEAAAAAAAAAAAEAAAAEAAAAAA=</HashCode>
+      <FileName>big_int_allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::memory::executable_allocator">
+    <Position X="9.5" Y="12.5" Width="2" />
+    <NestedTypes>
+      <Enum Name="bia::machine::memory::executable_allocator::PROTECTION_FLAGS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>executable_allocator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAABAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>executable_allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::memory::member_allocator">
+    <Position X="16" Y="12" Width="3" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::memory::member_allocator::member_allocation_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>member_allocator.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAQAAAAAEAAAAAAAAAAAAAAAAAMAAAAAAAAAAQ=</HashCode>
+      <FileName>member_allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::memory::simple_allocator">
+    <Position X="5.75" Y="15" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QAQAgABQECAAAAAABABEAAAAAAAAAAAIAAACAAAAAAA=</HashCode>
+      <FileName>simple_allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;" Collapsed="true">
+    <Position X="34.75" Y="2.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::value_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::pointer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::const_pointer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::reference" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::const_reference" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::size_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Struct Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::rebind&lt;Ty&gt;" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAEAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>stl_allocator_wrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="bia::machine::virtual_machine::index" Collapsed="true">
+    <Position X="21" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAQAAAAAAACAAAAAAAAABAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::virtual_machine::member_index" Collapsed="true">
+    <Position X="20" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::virtual_machine::temp_index" Collapsed="true">
+    <Position X="22.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::virtual_machine::local_index" Collapsed="true">
+    <Position X="24.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::virtual_machine::invalid_index" Collapsed="true">
+    <Position X="17.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::register32" Collapsed="true">
+    <Position X="11" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::eax" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::ecx" Collapsed="true">
+    <Position X="8.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::edx" Collapsed="true">
+    <Position X="14" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::ebx" Collapsed="true">
+    <Position X="4.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::esp" Collapsed="true">
+    <Position X="28.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::ebp" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::register64_basic" Collapsed="true">
+    <Position X="14" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::register64_extended" Collapsed="true">
+    <Position X="11.75" Y="15" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm" Collapsed="true">
+    <Position X="14" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::rax" Collapsed="true">
+    <Position X="15.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::rcx" Collapsed="true">
+    <Position X="19.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::rdx" Collapsed="true">
+    <Position X="6.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::rbx" Collapsed="true">
+    <Position X="8.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::rsp" Collapsed="true">
+    <Position X="10.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::rbp" Collapsed="true">
+    <Position X="13" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::rsi" Collapsed="true">
+    <Position X="17.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::rdi" Collapsed="true">
+    <Position X="22" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::r8" Collapsed="true">
+    <Position X="9.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::r9" Collapsed="true">
+    <Position X="12" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::r11" Collapsed="true">
+    <Position X="14.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm0" Collapsed="true">
+    <Position X="13" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm1" Collapsed="true">
+    <Position X="17.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm2" Collapsed="true">
+    <Position X="22" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm3" Collapsed="true">
+    <Position X="6.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm4" Collapsed="true">
+    <Position X="8.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm5" Collapsed="true">
+    <Position X="10.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm6" Collapsed="true">
+    <Position X="15.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::xmm7" Collapsed="true">
+    <Position X="19.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::register_offset&lt;Register, Offset_type, Effective_address&gt;" Collapsed="true">
+    <Position X="31.25" Y="4.75" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::platform::register_offset&lt;Register, Offset_type, Effective_address&gt;::register_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>architecture_utils.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAQAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::register_offset&lt;Register, void, Effective_address&gt;" Collapsed="true">
+    <Position X="33" Y="4.75" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::platform::register_offset&lt;Register, void, Effective_address&gt;::register_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>architecture_utils.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="bia::machine::platform::reserved_parameter" Collapsed="true">
+    <Position X="34.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>passer.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="bia::machine::virtual_machine::op_code_t" Collapsed="true">
+    <Position X="36.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::virtual_machine::member_index_t" Collapsed="true">
+    <Position X="31.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::virtual_machine::tiny_member_index_t" Collapsed="true">
+    <Position X="34.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::string_resource_t" Collapsed="true">
+    <Position X="33" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>string_resource.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::platform::accumulator" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::platform::stack_pointer" Collapsed="true">
+    <Position X="28.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::platform::base_pointer" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::platform::local_variable_pointer" Collapsed="true">
+    <Position X="3.75" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::modular::module_loader_signature" Collapsed="true">
+    <Position X="33" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>module_library.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::modular::module_unloader_signature" Collapsed="true">
+    <Position X="34.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>module_library.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::memory::size_type" Collapsed="true">
+    <Position X="31.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::memory::universal_allocation" Collapsed="true">
+    <Position X="5" Y="25.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::memory::const_universal_allocation" Collapsed="true">
+    <Position X="0.5" Y="21.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="bia::machine::memory::big_int_allocation" Collapsed="true">
+    <Position X="4.5" Y="23.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>big_int_allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="bia::machine::virtual_machine::MEMBER_OP_CODE_OPTION" Collapsed="true">
+    <Position X="34.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAIAAAAAAACABABAAAAAAAQAAAAAAAEAAAA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="bia::machine::virtual_machine::IMMEDIATE_INT_OP_CODE_OPTION" Collapsed="true">
+    <Position X="31.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAQ=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="bia::machine::virtual_machine::IMMEDIATE_OP_CODE_OPTION" Collapsed="true">
+    <Position X="33" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAIABAAAAAAQAAAAAAAgAAAEA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="bia::machine::virtual_machine::OP_CODE" Collapsed="true">
+    <Position X="36.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gEgDRICCAACICARAABABAQFRBAAAAgEAAAAAAAIBAoA=</HashCode>
+      <FileName>op_code.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="bia::machine::platform::OP_CODE" Collapsed="true">
+    <Position X="31.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAQAAACAAoAAAEAAAAggAABwAAAAAAAAAAQAAIA=</HashCode>
+      <FileName>architecture_utils.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
