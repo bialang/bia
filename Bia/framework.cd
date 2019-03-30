@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1">
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="NameAndType">
   <Class Name="bia::framework::custom_member&lt;Data&gt;">
-    <Position X="2.5" Y="14.5" Width="2.5" />
+    <Position X="2.5" Y="14.75" Width="2.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::custom_member&lt;Data&gt;::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -15,14 +15,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::custom_member&lt;void&gt;">
-    <Position X="2.75" Y="9" Width="2" />
+    <Position X="2.75" Y="9.25" Width="2" />
     <TypeIdentifier>
       <HashCode>KBQBYIEEAAgAAAAAAAAEAACAAAQAAAAIGAAAEAAAAAA=</HashCode>
       <FileName>custom_member.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::member">
-    <Position X="26" Y="0.5" Width="2.5" />
+    <Position X="26.25" Y="0.5" Width="3" />
     <NestedTypes>
       <Enum Name="bia::framework::member::FLAG" Collapsed="true">
         <TypeIdentifier>
@@ -46,14 +46,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::undefined_member">
-    <Position X="37" Y="9" Width="1.75" />
+    <Position X="37.25" Y="9.25" Width="2" />
     <TypeIdentifier>
       <HashCode>KBQhYIEEAAgAQCAAAACEAACAAAQAAAIIGACQEAAACAQ=</HashCode>
       <FileName>undefined_member.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::object::class_template&lt;Type&gt;">
-    <Position X="39.5" Y="15.5" Width="3.25" />
+    <Position X="40" Y="16" Width="3.75" />
     <NestedTypes>
       <Struct Name="bia::framework::object::class_template&lt;Type&gt;::data_pair" Collapsed="true">
         <TypeIdentifier>
@@ -72,7 +72,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::object::instance_holder&lt;Type&gt;" Collapsed="true">
-    <Position X="52.75" Y="0.5" Width="1.5" />
+    <Position X="54" Y="0.5" Width="1.5" />
     <NestedTypes>
       <Struct Name="bia::framework::object::instance_holder&lt;Type&gt;::data_pair" Collapsed="true">
         <TypeIdentifier>
@@ -91,7 +91,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::object::member_map" Collapsed="true">
-    <Position X="54.5" Y="0.5" Width="1.5" />
+    <Position X="55.75" Y="0.5" Width="1.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::object::member_map::name_t" Collapsed="true">
         <TypeIdentifier>
@@ -110,7 +110,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::object::namespace_member">
-    <Position X="43.5" Y="15.5" Width="2.75" />
+    <Position X="44.5" Y="16" Width="2.75" />
     <NestedTypes>
       <Typedef Name="bia::framework::object::namespace_member::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -124,7 +124,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::object::object&lt;Type&gt;">
-    <Position X="47" Y="15.5" Width="1.75" />
+    <Position X="48" Y="16" Width="2" />
     <NestedTypes>
       <Typedef Name="bia::framework::object::object&lt;Type&gt;::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -138,14 +138,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::object::object_variable">
-    <Position X="44.75" Y="9" Width="1.75" />
+    <Position X="45.5" Y="9.25" Width="2" />
     <TypeIdentifier>
       <HashCode>KBQhYIEEAAgAQCAAAACEAACAAAAAAAAIGACQEAAACAQ=</HashCode>
       <FileName>object_variable.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::object::raw_object&lt;Type&gt;">
-    <Position X="49.5" Y="15.5" Width="2.25" />
+    <Position X="50.75" Y="16" Width="2.25" />
     <NestedTypes>
       <Typedef Name="bia::framework::object::raw_object&lt;Type&gt;::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -159,14 +159,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::object::template_wrapper&lt;Type, Class&gt;" Collapsed="true">
-    <Position X="56.25" Y="0.5" Width="1.5" />
+    <Position X="57.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAQAAAAAABIAAAAAICAAAAAAAAAAAAQAgAAAAAAA=</HashCode>
       <FileName>template_wrapper.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::native::big_int_member">
-    <Position X="5.75" Y="12.75" Width="2.5" />
+    <Position X="5.75" Y="13.25" Width="2.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::native::big_int_member::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -180,7 +180,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::native::cstring_member&lt;Char_type&gt;">
-    <Position X="9" Y="12.75" Width="2.5" />
+    <Position X="9" Y="13.25" Width="2.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::native::cstring_member&lt;Char_type&gt;::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -194,7 +194,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::native::double_member">
-    <Position X="12.25" Y="12.75" Width="2.5" />
+    <Position X="12.25" Y="13.25" Width="2.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::native::double_member::double_type" Collapsed="true">
         <TypeIdentifier>
@@ -213,7 +213,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::native::int_member">
-    <Position X="15.5" Y="12.75" Width="2.25" />
+    <Position X="15.5" Y="13.25" Width="2.25" />
     <NestedTypes>
       <Typedef Name="bia::framework::native::int_member::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -227,14 +227,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::native::native_variable">
-    <Position X="12.25" Y="9" Width="1.5" />
+    <Position X="12.25" Y="9.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAgIIAEAAAAQCAAAAAEAAAAAAAAAAAACACQAAAAAAA=</HashCode>
       <FileName>native_variable.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::native::regex_member">
-    <Position X="18.5" Y="12.75" Width="1.75" />
+    <Position X="18.5" Y="13.25" Width="2" />
     <NestedTypes>
       <Typedef Name="bia::framework::native::regex_member::data_t" Collapsed="true">
         <TypeIdentifier>
@@ -248,7 +248,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::executable::bia_function">
-    <Position X="21" Y="14.75" Width="1.5" />
+    <Position X="21.25" Y="15.25" Width="1.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::executable::bia_function::data_t" Collapsed="true">
         <TypeIdentifier>
@@ -262,14 +262,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::executable::function">
-    <Position X="27.75" Y="9" Width="1.75" />
+    <Position X="28" Y="9.25" Width="2" />
     <TypeIdentifier>
       <HashCode>KBQhYAEAAAgAQCAAAACAAACAAAQAAAAIEACQAAAACAQ=</HashCode>
       <FileName>function.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::executable::lambda_function&lt;Optional_count, Lambda&gt;">
-    <Position X="23.25" Y="14.75" Width="3.25" />
+    <Position X="23.5" Y="15.25" Width="3.25" />
     <NestedTypes>
       <Typedef Name="bia::framework::executable::lambda_function&lt;Optional_count, Lambda&gt;::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -283,7 +283,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::executable::member_function&lt;Optional_count, Return(Class::*)(Arguments...)&gt;">
-    <Position X="31.75" Y="14.75" Width="4.5" />
+    <Position X="32" Y="15.25" Width="4.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::executable::member_function&lt;Optional_count, Return(Class::*)(Arguments...)&gt;::data_type" Collapsed="true">
         <TypeIdentifier>
@@ -297,14 +297,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="bia::framework::executable::static_function&lt;Optional_count, Return, ...Arguments&gt;">
-    <Position X="27.25" Y="14.75" Width="3.75" />
+    <Position X="27.5" Y="15.25" Width="3.75" />
     <TypeIdentifier>
       <HashCode>ABQAAIAEAAAAAAAAAAAEAAAAAAAAAAIBCAAQEAAAAAA=</HashCode>
       <FileName>static_function.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="bia::framework::base_convert&lt;Type&gt;">
-    <Position X="4" Y="0.5" Width="1.75" />
+    <Position X="4" Y="0.5" Width="2" />
     <NestedTypes>
       <Typedef Name="bia::framework::base_convert&lt;Type&gt;::request_t" Collapsed="true">
         <TypeIdentifier>
@@ -328,7 +328,7 @@
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::converter&lt;Type&gt;">
-    <Position X="3" Y="3" Width="1.5" />
+    <Position X="3" Y="2.75" Width="1.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::converter&lt;Type&gt;::type" Collapsed="true">
         <TypeIdentifier>
@@ -342,7 +342,7 @@
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::converter&lt;Type*&gt;">
-    <Position X="7.75" Y="3" Width="1.5" />
+    <Position X="7.75" Y="2.75" Width="1.5" />
     <NestedTypes>
       <Typedef Name="bia::framework::converter&lt;Type*&gt;::type" Collapsed="true">
         <TypeIdentifier>
@@ -356,7 +356,7 @@
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::converter&lt;Type&amp;&gt;">
-    <Position X="0.5" Y="3" Width="1.75" />
+    <Position X="0.5" Y="2.75" Width="1.75" />
     <NestedTypes>
       <Typedef Name="bia::framework::converter&lt;Type&amp;&gt;::type" Collapsed="true">
         <TypeIdentifier>
@@ -370,7 +370,7 @@
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::converter&lt;Type&amp;&amp;&gt;">
-    <Position X="5.25" Y="3" Width="1.75" />
+    <Position X="5.25" Y="2.75" Width="1.75" />
     <NestedTypes>
       <Typedef Name="bia::framework::converter&lt;Type&amp;&amp;&gt;::type" Collapsed="true">
         <TypeIdentifier>
@@ -384,56 +384,56 @@
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::object::constructor_chain&lt;Type, true, true&gt;" Collapsed="true">
-    <Position X="52.75" Y="1.75" Width="1.5" />
+    <Position X="54" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>constructor_chain.hpp</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::object::constructor_chain&lt;Type, true, false&gt;" Collapsed="true">
-    <Position X="54.5" Y="1.75" Width="1.5" />
+    <Position X="55.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>constructor_chain.hpp</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::object::constructor_chain&lt;Type, false, true&gt;" Collapsed="true">
-    <Position X="56.25" Y="1.75" Width="1.5" />
+    <Position X="57.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>constructor_chain.hpp</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::object::constructor_chain&lt;Type, false, false&gt;" Collapsed="true">
-    <Position X="52.75" Y="2.75" Width="1.5" />
+    <Position X="54" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>constructor_chain.hpp</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::native::native_operation&lt;Allow_assign&gt;" Collapsed="true">
-    <Position X="54.5" Y="2.75" Width="1.5" />
+    <Position X="55.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAIAAAAA=</HashCode>
       <FileName>native_operator.hpp</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="bia::framework::native::native_operation&lt;false&gt;" Collapsed="true">
-    <Position X="56.25" Y="2.75" Width="1.5" />
+    <Position X="57.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAIAAAAA=</HashCode>
       <FileName>native_operator.hpp</FileName>
     </TypeIdentifier>
   </Struct>
   <Typedef Name="bia::framework::operator_t" Collapsed="true">
-    <Position X="52.75" Y="5" Width="1.5" />
+    <Position X="54" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>operator.hpp</FileName>
     </TypeIdentifier>
   </Typedef>
   <Enum Name="bia::framework::OPERATOR" Collapsed="true">
-    <Position X="52.75" Y="4" Width="1.5" />
+    <Position X="54" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AhAAQgACGgCIADBoAEAgAAEBEYoBAAEAAhIAQQCAGAA=</HashCode>
       <FileName>operator.hpp</FileName>
