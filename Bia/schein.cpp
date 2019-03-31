@@ -50,6 +50,16 @@ void schein::clear()
 	_allocations.clear();
 }
 
+void schein::set_member_map(const utility::index_map & _member_map)
+{
+	_globals = _member_map.to_list<framework::member*>([&](auto _name) { return _context->address_of_member(_name); });
+}
+
+void schein::set_name_map(const utility::index_map & _name_map)
+{
+	_names = _name_map.to_list<name_manager::name_t>([](auto _name) { return _name; });
+}
+
 schein::regex_index_t schein::register_regex_inplace(const uint8_t * _bytes, size_t _size)
 {
 	BIA_NOT_IMPLEMENTED;
@@ -105,6 +115,16 @@ machine::string_manager & schein::string_manager() noexcept
 std::vector<utility::share<dependency::regex>>& schein::regexs() noexcept
 {
 	return _regexs;
+}
+
+const schein::member_list_t & schein::globals() const noexcept
+{
+	return _globals;
+}
+
+const schein::name_list_t & schein::names() const noexcept
+{
+	return _names;
 }
 
 }

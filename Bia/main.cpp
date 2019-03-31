@@ -202,7 +202,7 @@ fun foo() {
 		puts("");
 
 		// Run
-		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.virtual_machine_schein()));
+		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.schein()));
 
 		_machine_code.disassemble();
 

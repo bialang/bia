@@ -222,9 +222,6 @@
     <ClCompile Include="schein.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
-    <ClCompile Include="virtual_machine_schein.cpp">
-      <Filter>Source Files\machine\virtual_machine</Filter>
-    </ClCompile>
     <ClCompile Include="name_manager.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
@@ -562,9 +559,6 @@
     </ClInclude>
     <ClInclude Include="schein.hpp">
       <Filter>Header Files\machine</Filter>
-    </ClInclude>
-    <ClInclude Include="virtual_machine_schein.hpp">
-      <Filter>Header Files\machine\virtual_machine</Filter>
     </ClInclude>
     <ClInclude Include="stack.hpp">
       <Filter>Header Files\machine</Filter>

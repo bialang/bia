@@ -7,7 +7,7 @@
 #include "report_bundle.hpp"
 #include "buffer_input_stream.hpp"
 #include "machine_context.hpp"
-#include "virtual_machine_schein.hpp"
+#include "schein.hpp"
 #include "encoder.hpp"
 #include "string_stream.hpp"
 
@@ -71,7 +71,7 @@ struct token_param
 	/** The corresponding machine context. */
 	machine::machine_context * context;
 	/** The schein of the resulting code. */
-	machine::virtual_machine::virtual_machine_schein * schein;
+	machine::schein * schein;
 	/** The decoder for the input stream. */
 	encoding::encoder * encoder;
 	/** The default string codec. */

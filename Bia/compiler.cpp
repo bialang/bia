@@ -41,7 +41,7 @@ void compiler::finalize()
 	_schein.set_name_map(_translator.name_map());
 }
 
-machine::virtual_machine::virtual_machine_schein & compiler::virtual_machine_schein() noexcept
+machine::schein & compiler::schein() noexcept
 {
 	return _schein;
 }
