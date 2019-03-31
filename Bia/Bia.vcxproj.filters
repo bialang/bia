@@ -563,9 +563,6 @@
     <ClInclude Include="schein.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
-    <ClInclude Include="machine_schein.hpp">
-      <Filter>Header Files\machine\platform</Filter>
-    </ClInclude>
     <ClInclude Include="virtual_machine_schein.hpp">
       <Filter>Header Files\machine\virtual_machine</Filter>
     </ClInclude>

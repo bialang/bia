@@ -11,8 +11,10 @@ namespace machine
 namespace platform
 {
 
-machine_code::machine_code(std::pair<const void*, size_t> _machine_code, machine_schein && _machine_schein) : _machine_schein(std::move(_machine_schein))
+machine_code::machine_code(std::pair<const void*, size_t> _machine_code)
 {
+	BIA_NOT_IMPLEMENTED;
+	/*
 	// Allocate
 	_entry_point = this->_machine_schein.machine_context()->executable_allocator()->allocate_executable(_machine_code.second);
 
@@ -28,10 +30,10 @@ machine_code::machine_code(std::pair<const void*, size_t> _machine_code, machine
 
 	// Copy code
 	memcpy(_entry_point.first, _machine_code.first, _machine_code.second);
-	this->_machine_schein.machine_context()->executable_allocator()->protect_executable(_entry_point, memory::executable_allocator::PF_EXECUTE);
+	this->_machine_schein.machine_context()->executable_allocator()->protect_executable(_entry_point, memory::executable_allocator::PF_EXECUTE);*/
 }
 
-machine_code::machine_code(machine_code && _rvalue) noexcept : _machine_schein(std::move(_rvalue._machine_schein))
+machine_code::machine_code(machine_code && _rvalue) noexcept
 {
 	_entry_point = _rvalue._entry_point;
 	_rvalue._entry_point.clear();
@@ -51,8 +53,9 @@ void machine_code::execute()
 
 void machine_code::clear()
 {
+	BIA_NOT_IMPLEMENTED;
 	if (_entry_point.first) {
-		_machine_schein.machine_context()->executable_allocator()->deallocate_executable(_entry_point);
+		//_machine_schein.machine_context()->executable_allocator()->deallocate_executable(_entry_point);
 		_entry_point.clear();
 	}
 }

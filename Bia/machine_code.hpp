@@ -6,7 +6,7 @@
 
 #include "config.hpp"
 #include "code.hpp"
-#include "machine_schein.hpp"
+#include "schein.hpp"
 
 
 namespace bia
@@ -37,7 +37,7 @@ public:
 	 *
 	 * @throws See memory::executable_allocator::allocate_executable() and memory::executable_allocator::protect_executable().
 	 */
-	BIA_EXPORT machine_code(std::pair<const void*, size_t> _machine_code, machine_schein && _machine_schein);
+	BIA_EXPORT machine_code(std::pair<const void*, size_t> _machine_code);
 	BIA_EXPORT machine_code(const machine_code & _copy) = delete;
 	/**
 	 * Move-Constructor.
@@ -96,8 +96,6 @@ private:
 
 	/** If non-null, defines the entry point of the machine code. */
 	memory::universal_allocation _entry_point;
-	/** Defines the machine code details. */
-	machine_schein _machine_schein;
 };
 
 }
