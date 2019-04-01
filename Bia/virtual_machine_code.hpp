@@ -6,7 +6,6 @@
 #include "allocator.hpp"
 #include "member.hpp"
 #include "schein.hpp"
-#include "code.hpp"
 #include "operation.hpp"
 #include "string_manager.hpp"
 #include "member_array.hpp"
@@ -19,7 +18,7 @@ namespace machine
 namespace virtual_machine
 {
 
-class virtual_machine_code : public code
+class virtual_machine_code
 {
 public:
 	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, schein && _schein, bool _take_ownership = false);
@@ -35,10 +34,10 @@ public:
 	*/
 	BIA_EXPORT ~virtual_machine_code();
 
-	BIA_EXPORT virtual void execute() override;
-	BIA_EXPORT virtual void clear() override;
-	BIA_EXPORT virtual void disassemble() override;
-	BIA_EXPORT virtual bool is_executable() const noexcept override;
+	BIA_EXPORT void execute();
+	BIA_EXPORT void clear();
+	BIA_EXPORT void disassemble();
+	BIA_EXPORT bool is_executable() const noexcept;
 
 private:
 	/** Contains the instructions for the virtual machine code. */

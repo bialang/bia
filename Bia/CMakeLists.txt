@@ -99,7 +99,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_GRAMMAR})
 
 
 # machine namespace
-set(Bia_HEADER_FILES_MACHINE "code.hpp" "disassembler.hpp" "machine_context.hpp" "member_array.hpp" "name_manager.hpp" "schein.hpp" "script_map.hpp" "string_resource.hpp" "stack.hpp" "string_manager.hpp" "variable_index.hpp")
+set(Bia_HEADER_FILES_MACHINE "disassembler.hpp" "machine_context.hpp" "member_array.hpp" "name_manager.hpp" "schein.hpp" "script_map.hpp" "string_resource.hpp" "stack.hpp" "string_manager.hpp" "variable_index.hpp")
 set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_context.cpp" "member_array.cpp" "name_manager.cpp" "schein.cpp" "script_map.cpp" "string_manager.cpp" "variable_index.cpp")
 
 source_group("Header Files\\machine" FILES ${Bia_HEADER_FILES_MACHINE})

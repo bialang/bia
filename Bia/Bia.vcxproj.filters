@@ -548,9 +548,6 @@
     <ClInclude Include="scope_exit.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="code.hpp">
-      <Filter>Header Files\machine</Filter>
-    </ClInclude>
     <ClInclude Include="schein.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
