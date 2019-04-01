@@ -118,6 +118,9 @@
     <Filter Include="Header Files\detail">
       <UniqueIdentifier>{f03efed1-96d9-4cec-9b65-31f7391608d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\framework\executable">
+      <UniqueIdentifier>{b1f04ed2-3dc6-4f1a-a119-4bae4f0d6a21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -236,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="regex_member.cpp">
       <Filter>Source Files\framework\native</Filter>
+    </ClCompile>
+    <ClCompile Include="bia_function.cpp">
+      <Filter>Source Files\framework\executable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -586,6 +592,9 @@
     </ClInclude>
     <ClInclude Include="variant.hpp">
       <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="bia_function.hpp">
+      <Filter>Header Files\framework\executable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

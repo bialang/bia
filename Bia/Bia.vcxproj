@@ -191,6 +191,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bia_function.cpp" />
     <ClCompile Include="big_int.cpp" />
     <ClCompile Include="big_int_allocator.cpp" />
     <ClCompile Include="compiler_loop_tracker.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="architecture_utils.hpp" />
     <ClInclude Include="ascii.hpp" />
     <ClInclude Include="bia.hpp" />
+    <ClInclude Include="bia_function.hpp" />
     <ClInclude Include="big_int.hpp" />
     <ClInclude Include="class_template.hpp" />
     <ClInclude Include="class_template_def.hpp" />
