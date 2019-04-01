@@ -50,7 +50,7 @@ public:
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_t _operator, const detail::big_int * _right) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_OPERATION);
 	}

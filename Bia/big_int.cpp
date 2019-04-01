@@ -5,7 +5,7 @@
 
 namespace bia
 {
-namespace dependency
+namespace detail
 {
 
 big_int::big_int() noexcept : _buffer{}

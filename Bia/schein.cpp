@@ -31,7 +31,7 @@ void schein::register_allocation(memory::universal_allocation _allocation, const
 void schein::register_big_int(memory::big_int_allocation _allocation)
 {
 	register_allocation(memory::cast_allocation<void>(_allocation), [_allocator = _context->big_int_allocator()](memory::universal_allocation _allocation) {
-		_allocator->destroy_big_int(memory::cast_allocation<dependency::big_int>(_allocation));
+		_allocator->destroy_big_int(memory::cast_allocation<detail::big_int>(_allocation));
 	});
 }
 
@@ -112,7 +112,7 @@ machine::string_manager & schein::string_manager() noexcept
 	return _string_manager;
 }
 
-std::vector<utility::share<dependency::regex>>& schein::regexs() noexcept
+std::vector<utility::share<detail::regex>>& schein::regexs() noexcept
 {
 	return _regexs;
 }

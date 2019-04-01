@@ -19,7 +19,7 @@ namespace native
 class big_int_member : public native_variable
 {
 public:
-	typedef utility::share<dependency::big_int> data_type;
+	typedef utility::share<detail::big_int> data_type;
 
 	/**
 	 * Constructor. The default value is 0.
@@ -62,7 +62,7 @@ public:
 	 *
 	 * @throws See utility::share::share().
 	*/
-	BIA_EXPORT big_int_member(const dependency::big_int & _value);
+	BIA_EXPORT big_int_member(const detail::big_int & _value);
 	/**
 	 * Refer-Constructor.
 	 *
@@ -79,7 +79,7 @@ public:
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_t _operator, const member * _right) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_t _operator, int32_t _right) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_t _operator, int64_t _right) override;
-	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_t _operator, const detail::big_int * _right) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_t _operator, double _right) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::name_manager::name_t _name) override;
 	BIA_EXPORT virtual int flags() const override;

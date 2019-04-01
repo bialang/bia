@@ -69,7 +69,7 @@ struct report
 	{
 		int64_t int_value;
 		double double_value;
-		dependency::big_int * big_int_value;
+		detail::big_int * big_int_value;
 		machine::string_manager::utf8_index_t string;
 		machine::schein::regex_index_t regex;
 		/** The non-zero terminated name of the member. See @a size for the length. */

@@ -73,7 +73,7 @@ void double_member::operator_call_int64(member * _destination, operator_t _opera
 	}
 }
 
-void BIA_MEMBER_CALLING_CONVENTION double_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
+void BIA_MEMBER_CALLING_CONVENTION double_member::operator_call_big_int(member * _destination, operator_t _operator, const detail::big_int * _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }

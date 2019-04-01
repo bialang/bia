@@ -52,7 +52,7 @@ void BIA_MEMBER_CALLING_CONVENTION regex_member::operator_call_int64(member * _d
 	BIA_NOT_IMPLEMENTED;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION regex_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
+void BIA_MEMBER_CALLING_CONVENTION regex_member::operator_call_big_int(member * _destination, operator_t _operator, const detail::big_int * _right)
 {
 	BIA_NOT_IMPLEMENTED;
 }

@@ -16,7 +16,7 @@
 
 namespace bia
 {
-namespace dependency
+namespace detail
 {
 
 class regex

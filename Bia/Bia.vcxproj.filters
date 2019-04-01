@@ -82,9 +82,6 @@
     <Filter Include="Source Files\framework\native">
       <UniqueIdentifier>{0a236c15-4e27-4ad6-b580-264b476386e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\dependency">
-      <UniqueIdentifier>{f03efed1-96d9-4cec-9b65-31f7391608d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\dependency">
       <UniqueIdentifier>{dbdee223-1bca-42f3-b81e-08be42573bc8}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,9 @@
     </Filter>
     <Filter Include="Header Files\framework\native">
       <UniqueIdentifier>{d78ba02e-fd6b-4b8a-9130-2b3312803e66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\detail">
+      <UniqueIdentifier>{f03efed1-96d9-4cec-9b65-31f7391608d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -489,7 +489,7 @@
       <Filter>Header Files\framework\native</Filter>
     </ClInclude>
     <ClInclude Include="big_int.hpp">
-      <Filter>Header Files\dependency</Filter>
+      <Filter>Header Files\detail</Filter>
     </ClInclude>
     <ClInclude Include="big_int_allocator.hpp">
       <Filter>Header Files\machine\memory</Filter>
@@ -588,7 +588,7 @@
       <Filter>Header Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="regex.hpp">
-      <Filter>Header Files\dependency</Filter>
+      <Filter>Header Files\detail</Filter>
     </ClInclude>
     <ClInclude Include="regex_member.hpp">
       <Filter>Header Files\framework\native</Filter>

@@ -164,7 +164,7 @@ public:
 	 * @return A reference to the string manager.
 	*/
 	BIA_EXPORT machine::string_manager & string_manager() noexcept;
-	BIA_EXPORT std::vector<utility::share<dependency::regex>> & regexs() noexcept;
+	BIA_EXPORT std::vector<utility::share<detail::regex>> & regexs() noexcept;
 	/**
 	 * Returns the globals list.
 	 *
@@ -191,7 +191,7 @@ protected:
 	/** Stores all registered allocations with deleter. */
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
 	/** Stores all registered regexs. */
-	std::vector<utility::share<dependency::regex>> _regexs;
+	std::vector<utility::share<detail::regex>> _regexs;
 	/** The machine stack. */
 	machine::stack _stack;
 	/** The manager for the string resources. */

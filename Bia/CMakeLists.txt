@@ -23,15 +23,15 @@ source_group("Source Files\\compiler" FILES ${Bia_SOURCE_FILES_COMPILER})
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMPILER})
 set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMPILER})
 
-# dependency namespace
-set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp" "regex.hpp")
-set(Bia_SOURCE_FILES_DEPENDENCY "big_int.cpp" "regex.cpp")
+# detail namespace
+set(Bia_HEADER_FILES_DETAIL "big_int.hpp" "regex.hpp")
+set(Bia_SOURCE_FILES_DETAIL "big_int.cpp" "regex.cpp")
 
-source_group("Header Files\\dependency" FILES ${Bia_HEADER_FILES_DEPENDENCY})
-source_group("Source Files\\dependency" FILES ${Bia_SOURCE_FILES_DEPENDENCY})
+source_group("Header Files\\detail" FILES ${Bia_HEADER_FILES_DETAIL})
+source_group("Source Files\\detail" FILES ${Bia_SOURCE_FILES_DETAIL})
 
-set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_DEPENDENCY})
-set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_DEPENDENCY})
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_DETAIL})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_DETAIL})
 
 # encoding namespace
 set(Bia_HEADER_FILES_ENCODING "ascii.hpp" "encoder.hpp" "utf8.hpp" "utf32.hpp")

@@ -17,7 +17,7 @@ namespace machine
 namespace memory
 {
 
-typedef allocation<dependency::big_int> big_int_allocation;
+typedef allocation<detail::big_int> big_int_allocation;
 
 /**
  * @brief Allocates memory for big ints.
@@ -30,7 +30,7 @@ class big_int_allocator
 {
 public:
 	/** The size of a big int allocation in bytes. */
-	constexpr static auto big_int_allocation_size = sizeof(dependency::big_int);
+	constexpr static auto big_int_allocation_size = sizeof(detail::big_int);
 
 	/**
 	 * Destructor.
@@ -104,7 +104,7 @@ public:
 	{
 		auto _big_int = allocate_big_int();
 
-		new(_big_int) dependency::big_int(std::forward<Arguments>(_arguments)...);
+		new(_big_int) detail::big_int(std::forward<Arguments>(_arguments)...);
 
 		return _big_int;
 	}
