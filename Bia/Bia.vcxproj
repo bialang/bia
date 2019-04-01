@@ -218,7 +218,6 @@
     <ClCompile Include="syntax.cpp" />
     <ClCompile Include="instantiate.cpp" />
     <ClCompile Include="grammar_rule.cpp" />
-    <ClCompile Include="machine_code.cpp" />
     <ClCompile Include="machine_context.cpp" />
     <ClCompile Include="operation.cpp" />
     <ClCompile Include="buffer_output_stream.cpp" />
@@ -322,7 +321,6 @@
     <ClInclude Include="instantiate.hpp" />
     <ClInclude Include="lambda_function.hpp" />
     <ClInclude Include="link.hpp" />
-    <ClInclude Include="machine_code.hpp" />
     <ClInclude Include="machine_context.hpp" />
     <ClInclude Include="member.hpp" />
     <ClInclude Include="create_member.hpp" />

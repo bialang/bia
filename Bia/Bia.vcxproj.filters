@@ -216,9 +216,6 @@
     <ClCompile Include="scope_exit.cpp">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="machine_code.cpp">
-      <Filter>Source Files\machine\platform</Filter>
-    </ClCompile>
     <ClCompile Include="schein.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>
@@ -553,9 +550,6 @@
     </ClInclude>
     <ClInclude Include="code.hpp">
       <Filter>Header Files\machine</Filter>
-    </ClInclude>
-    <ClInclude Include="machine_code.hpp">
-      <Filter>Header Files\machine\platform</Filter>
     </ClInclude>
     <ClInclude Include="schein.hpp">
       <Filter>Header Files\machine</Filter>

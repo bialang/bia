@@ -4,7 +4,6 @@
 #include <string>
 
 #include "config.hpp"
-#include "machine_code.hpp"
 
 
 namespace bia
@@ -50,7 +49,7 @@ public:
 	 *
 	 * @throws See std::map::emplace().
 	*/
-	BIA_EXPORT void set(const char * _name, platform::machine_code && _code);
+	//BIA_EXPORT void set(const char * _name, platform::machine_code && _code);
 	/**
 	 * Returns the script with the name.
 	 *
@@ -63,10 +62,10 @@ public:
 	 *
 	 * @return The script.
 	*/
-	BIA_EXPORT const platform::machine_code & get(const char * _name) const;
+	//BIA_EXPORT const platform::machine_code & get(const char * _name) const;
 
 private:
-	std::map<std::string, platform::machine_code> _scripts;
+	//std::map<std::string, platform::machine_code> _scripts;
 };
 
 }
