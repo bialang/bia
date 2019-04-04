@@ -8,7 +8,6 @@
 #include "schein.hpp"
 #include "operation.hpp"
 #include "string_manager.hpp"
-#include "member_array.hpp"
 #include "stack.hpp"
 
 
@@ -45,8 +44,6 @@ private:
 	memory::allocation<uint8_t> _code;
 	/** The machine schein. */
 	schein _schein;
-	/** Contains all temporary and local members. */
-	member_array _temps;
 
 	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, int32_t _immediate)
 	{

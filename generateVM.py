@@ -5,7 +5,7 @@ ptype = [
     ("OC_PUSH_TEST", "", "_stack.push(_test_register);", "", "pusht")
 ]
 inttype = [
-    ("OC_SETUP", "", "_temps.create(_int);", "", "setup"),
+    ("OC_SETUP", "", "_temps = member_array_view(_stack.allocate_space(_int * framework::max_member_size), _int);", "", "setup"),
     ("OC_JUMP", "", "_cursor += _int;", "", "jmp"),
     ("OC_JUMP_TRUE", "", "_cursor += _test_register ? _int : 0;", "", "jpt"),
     ("OC_JUMP_FALSE", "", "_cursor += _test_register ? 0 : _int;", "", "jpf")

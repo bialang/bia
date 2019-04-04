@@ -1,7 +1,7 @@
 #include "virtual_machine_code.hpp"
 #include "op_code.hpp"
 #include "create_member.hpp"
-#include "member_array.hpp"
+#include "member_array_view.hpp"
 #include "machine_context.hpp"
 #include "virtual_disassembler.hpp"
 #include "regex_member.hpp"
@@ -51,7 +51,8 @@ void virtual_machine_code::execute(stack & _stack)
 	const auto _end = _code.first + _code.second;
 	const uint8_t * _cursor = _code.first;
 	framework::member::test_result_t _test_register = 0;
-	
+	member_array_view _temps(nullptr, 0);
+
 	while (_cursor < _end) {
 		auto _operation = read<op_code_t>(_cursor);
 
@@ -72,13 +73,13 @@ void virtual_machine_code::execute(stack & _stack)
 		case (OC_SETUP - IIOCO_INT32):
 		{
 			auto _int = read<int32_t>(_cursor);
-			_temps.create(_int);
+			_temps = member_array_view(_stack.allocate_space(_int * framework::max_member_size), _int);
 			break;
 		}
 		case (OC_SETUP - IIOCO_INT8):
 		{
 			auto _int = read<int8_t>(_cursor);
-			_temps.create(_int);
+			_temps = member_array_view(_stack.allocate_space(_int * framework::max_member_size), _int);
 			break;
 		}
 		case (OC_JUMP - IIOCO_INT32):
