@@ -8,7 +8,7 @@ namespace bia
 namespace machine
 {
 
-schein::schein(machine::machine_context & _context) : _stack(_context.allocator(), 64/*TODO*/)
+schein::schein(machine::machine_context & _context)
 {
 	this->_context = &_context;
 }
@@ -100,11 +100,6 @@ schein::regex_index_t schein::register_regex_inplace(const char32_t * _string, s
 machine::machine_context * schein::machine_context() noexcept
 {
 	return _context;
-}
-
-machine::stack & schein::stack() noexcept
-{
-	return _stack;
 }
 
 machine::string_manager & schein::string_manager() noexcept

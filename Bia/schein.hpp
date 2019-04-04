@@ -10,7 +10,6 @@
 #include "member_allocator.hpp"
 #include "executable_allocator.hpp"
 #include "big_int_allocator.hpp"
-#include "stack.hpp"
 #include "name_manager.hpp"
 #include "string_manager.hpp"
 #include "regex.hpp"
@@ -147,15 +146,6 @@ public:
 	*/
 	BIA_EXPORT machine::machine_context * machine_context() noexcept;
 	/**
-	 * Returns the stack.
-	 *
-	 * @since 3.72.149.812
-	 * @date 1-Feb-19
-	 *
-	 * @return A reference to the stack.
-	*/
-	BIA_EXPORT machine::stack & stack() noexcept;
-	/**
 	 * Returns the string manager.
 	 *
 	 * @since 3.73.150.816
@@ -192,8 +182,6 @@ protected:
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
 	/** Stores all registered regexs. */
 	std::vector<utility::share<detail::regex>> _regexs;
-	/** The machine stack. */
-	machine::stack _stack;
 	/** The manager for the string resources. */
 	machine::string_manager _string_manager;
 	/** The globals list. */

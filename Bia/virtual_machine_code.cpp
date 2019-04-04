@@ -42,10 +42,9 @@ virtual_machine_code::~virtual_machine_code()
 	clear();
 }
 
-void virtual_machine_code::execute()
+void virtual_machine_code::execute(stack & _stack)
 {
 	auto & _globals = _schein.globals();
-	auto & _stack = _schein.stack();
 	auto & _names = _schein.names();
 	auto & _string_manager = _schein.string_manager();
 	auto & _regexs = _schein.regexs();

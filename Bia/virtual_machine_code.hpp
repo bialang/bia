@@ -9,6 +9,7 @@
 #include "operation.hpp"
 #include "string_manager.hpp"
 #include "member_array.hpp"
+#include "stack.hpp"
 
 
 namespace bia
@@ -34,7 +35,7 @@ public:
 	*/
 	BIA_EXPORT ~virtual_machine_code();
 
-	BIA_EXPORT void execute();
+	BIA_EXPORT void execute(stack & _stack);
 	BIA_EXPORT void clear();
 	BIA_EXPORT void disassemble();
 	BIA_EXPORT bool is_executable() const noexcept;
