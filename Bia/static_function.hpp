@@ -54,15 +54,15 @@ public:
 	{
 		_destination->replace_this<static_function<Optional_count, Return, Arguments...>>(_function);
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(machine::stack * _stack, member * _destination) override
 	{
 		force::disguised_caller<Optional_count>(_function, _destination, nullptr, 0, nullptr);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count) override
 	{
 		force::disguised_caller<Optional_count>(_function, _destination, nullptr, _count, _stack);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count) override
 	{
 		force::disguised_caller<Optional_count>(_function, _destination, _format, _count, _stack);
 	}

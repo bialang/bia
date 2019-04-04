@@ -1,4 +1,5 @@
 #include "bia_function.hpp"
+#include "share.hpp"
 
 
 namespace bia
@@ -8,7 +9,11 @@ namespace framework
 namespace executable
 {
 
-bia_function::bia_function(data_t _data) noexcept : _data(_data)
+bia_function::bia_function(const data_t & _data) noexcept : _data(_data)
+{
+}
+
+bia_function::~bia_function()
 {
 }
 
@@ -32,17 +37,17 @@ void BIA_MEMBER_CALLING_CONVENTION bia_function::clone(member * _destination)
 	refer(_destination);
 }
 
-void BIA_MEMBER_CALLING_CONVENTION bia_function::execute(member * _destination)
+void BIA_MEMBER_CALLING_CONVENTION bia_function::execute(machine::stack * _stack, member * _destination)
 {
-	_data->execute(_destination);
+	_data->execute(*_stack, _destination);
 }
 
-void BIA_VARG_MEMBER_CALLING_CONVENTION bia_function::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
+void BIA_VARG_MEMBER_CALLING_CONVENTION bia_function::execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
-void BIA_VARG_MEMBER_CALLING_CONVENTION bia_function::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
+void BIA_VARG_MEMBER_CALLING_CONVENTION bia_function::execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count)
 {
 	BIA_NOT_IMPLEMENTED;
 }

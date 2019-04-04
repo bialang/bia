@@ -122,6 +122,7 @@ public:
 	 * @since 3.64.127.716
 	 * @date 28-Apr-18
 	 *
+	 * @param [in] _stack The stack where the parameters are.
 	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
@@ -130,17 +131,17 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate().
 	*/
-	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) = 0;
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(machine::stack * _stack, member * _destination) = 0;
 	/**
 	 * Executes this object as function with only member parameters.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
+	 * @param [in] _stack The stack where the parameters are.
 	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 * @param _reserved Reserved parameter. Do not use this.
 	 * @param _count The amount of the passed arguments.
-	 * @param [in] _stack The stack where the parameters are.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
@@ -149,17 +150,17 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_count().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count) = 0;
 	/**
 	 * Executes this object as function with mixed parameters.
 	 *
 	 * @since 3.64.127.716
 	 * @date 6-May-18
 	 *
+	 * @param [in] _stack The stack where the parameters are.
 	 * @param [out] _destination The destination of the return result. Can be the caller. If null, the result is discarded.
 	 * @param _format The types of the arguments.
 	 * @param _count The amount of the passed arguments.
-	 * @param [in] _stack The stack where the parameters are.
 	 *
 	 * @throws exception::symbol_error If this member is not valid.
 	 * @throws exception::execution_error If this object cannot be executed.
@@ -168,7 +169,7 @@ public:
 	 * @throws See cast().
 	 * @throws See force::initiator::instantiate_format().
 	*/
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) = 0;
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count) = 0;
 	/**
 	 * An operator call with another member as right value.
 	 *

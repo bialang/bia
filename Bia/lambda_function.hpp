@@ -55,19 +55,19 @@ inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda
 }
 
 template<size_t Optional_count, typename Lambda>
-inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute(member * _destination)
+inline void BIA_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute(machine::stack * _stack, member * _destination)
 {
 	force::disguised_caller<Optional_count>(&_data.get(), &Lambda::operator(), _destination, nullptr, 0, nullptr);
 }
 
 template<size_t Optional_count, typename Lambda>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count)
 {
 	force::disguised_caller<Optional_count>(&_data.get(), &Lambda::operator(), _destination, nullptr, _count, _stack);
 }
 
 template<size_t Optional_count, typename Lambda>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION lambda_function<Optional_count, Lambda>::execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count)
 {
 	force::disguised_caller<Optional_count>(&_data.get(), &Lambda::operator(), _destination, _format, _count, _stack);
 }

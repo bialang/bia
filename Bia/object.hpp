@@ -49,19 +49,19 @@ inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::refer(member * _destinat
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::execute(member * _destination)
+inline void BIA_MEMBER_CALLING_CONVENTION object<Type>::execute(machine::stack * _stack, member * _destination)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count)
 {
 	BIA_NOT_IMPLEMENTED;
 }
 
 template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION object<Type>::execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count)
 {
 	BIA_NOT_IMPLEMENTED;
 }
