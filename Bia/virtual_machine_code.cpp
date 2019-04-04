@@ -5,6 +5,7 @@
 #include "machine_context.hpp"
 #include "virtual_disassembler.hpp"
 #include "regex_member.hpp"
+#include "scope_exit.hpp"
 
 #include <cstring>
 
@@ -16,7 +17,7 @@ namespace machine
 namespace virtual_machine
 {
 
-virtual_machine_code::virtual_machine_code(memory::universal_allocation _code, schein && _schein, bool _take_ownership) : _schein(std::move(_schein)), _temps(this->_schein.machine_context()->member_allocator())
+virtual_machine_code::virtual_machine_code(memory::universal_allocation _code, schein && _schein, bool _take_ownership) : _schein(std::move(_schein))
 {
 	// Copy buffer
 	if (!_take_ownership) {
@@ -30,7 +31,7 @@ virtual_machine_code::virtual_machine_code(memory::universal_allocation _code, s
 	this->_code = memory::cast_allocation<uint8_t>(_code);
 }
 
-virtual_machine_code::virtual_machine_code(virtual_machine_code && _move) : _schein(std::move(_move._schein)), _temps(std::move(_move._temps))
+virtual_machine_code::virtual_machine_code(virtual_machine_code && _move) : _schein(std::move(_move._schein))
 {
 	_code = std::move(_move._code);
 
@@ -52,6 +53,11 @@ void virtual_machine_code::execute(stack & _stack)
 	const uint8_t * _cursor = _code.first;
 	framework::member::test_result_t _test_register = 0;
 	member_array_view _temps(nullptr, 0);
+
+	// Setup stack
+	utility::scope_exit _stack_cleaner([_stack_frame = _stack.create_stack_frame(), &_stack]() {
+		_stack.drop_stack_frame(_stack_frame);
+	});
 
 	while (_cursor < _end) {
 		auto _operation = read<op_code_t>(_cursor);

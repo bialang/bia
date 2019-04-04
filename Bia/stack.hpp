@@ -54,6 +54,10 @@ public:
 			_allocator->deallocate(memory::cast_allocation<void>(_buffer));
 		}
 	}
+	void push(int8_t _value)
+	{
+		push(static_cast<int32_t>(_value));
+	}
 	template<typename Type>
 	void push(Type _value)
 	{
@@ -62,8 +66,6 @@ public:
 		if (_stack_pointer + 1 > _buffer.first + _buffer.second) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
-
-		*_stack_pointer = 0;
 
 		*reinterpret_cast<Type*>(_stack_pointer++) = _value;
 	}
@@ -88,6 +90,14 @@ public:
 
 		_stack_pointer -= _count;
 	}
+	void drop_stack_frame(const element_t * _stack_frame)
+	{
+		if (_stack_frame < _base_pointer || _stack_frame > _buffer.first + _buffer.second) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
+
+		_stack_pointer = const_cast<element_t*>(_stack_frame);
+	}
 	size_t size() const noexcept
 	{
 		return _stack_pointer - _base_pointer;
@@ -95,6 +105,25 @@ public:
 	constexpr static size_t element_size() noexcept
 	{
 		return sizeof(element_t);
+	}
+	void * allocate_space(size_t _size)
+	{
+		auto _elements = _size / element_size() + (_size % element_size() ? element_size() : 0);
+
+		// Check bounds
+		if (_stack_pointer + _elements > _buffer.first + _buffer.second) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
+
+		auto _tmp = _stack_pointer;
+
+		_stack_pointer += _elements;
+
+		return _stack_pointer;
+	}
+	const element_t * create_stack_frame() const noexcept
+	{
+		return _stack_pointer;
 	}
 	template<typename Type>
 	Type cast(ptrdiff_t _offset) noexcept
@@ -104,9 +133,6 @@ public:
 	template<typename Type>
 	Type format_cast(ptrdiff_t _offset, char _format)
 	{
-		using namespace utility;
-		using Real_return = typename std::remove_reference<Type>::type;
-
 		switch (_format) {
 		case 'i':
 			return checked_convert<Type>(cast<int32_t>(_offset));
