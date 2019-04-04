@@ -85,6 +85,14 @@ public:
 
 		_stack_pointer = const_cast<element_t*>(_stack_frame);
 	}
+	void pop_count(size_t _count)
+	{
+		if (_stack_pointer - _count < _base_pointer) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
+
+		_stack_pointer -= _count;
+	}
 	size_t size() const noexcept
 	{
 		return _stack_pointer - _base_pointer;

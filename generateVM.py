@@ -18,11 +18,11 @@ mtype = [
     ("OC_PUSH", "", "_stack.push(_member);", "", "push"),
     ("OC_UNDEFINE", "", "_member->undefine();", "", "undf"),
     ("OC_EXECUTE_VOID", "", "_member->execute(&_stack, nullptr);", "", "exec"),
-    ("OC_EXECUTE_COUNT_VOID", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member->execute_count(&_stack, nullptr, nullptr, _count);", "", "exec"),
+    ("OC_EXECUTE_COUNT_VOID", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member->execute_count(&_stack, nullptr, nullptr, _count);\n\t\t\t_stack.pop_count(_count);", "", "exec"),
     ("OC_EXECUTE_FORMAT_VOID", "auto _count = read<framework::member::parameter_count_t>(_cursor);", 
                                 "if (_cursor + _count > _end) {\n\t\t\t\t"
                                     "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
-                                "}\n\t\t\t_member->execute_format(&_stack, nullptr, reinterpret_cast<const char*>(_cursor), _count);", "_cursor += _count;", "exec")
+                                "}\n\t\t\t_member->execute_format(&_stack, nullptr, reinterpret_cast<const char*>(_cursor), _count);\n\t\t\t_stack.pop_count(_count);", "_cursor += _count;", "exec")
 ]
 minttype = [
     ("OC_INSTANTIATE_REGEX", "", "_member->template replace_this<framework::native::regex_member>(_regexs[_int]);", "", "instreg"),
@@ -30,11 +30,11 @@ minttype = [
 ]
 mmtype = [
     ("OC_EXECUTE", "", "_member0->execute(&_stack, _member1);", "", "exec"),
-    ("OC_EXECUTE_COUNT", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member0->execute_count(&_stack, _member1, nullptr, _count);", "", "exec"),
+    ("OC_EXECUTE_COUNT", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member0->execute_count(&_stack, _member1, nullptr, _count);\n\t\t\t_stack.pop_count(_count);", "", "exec"),
     ("OC_EXECUTE_FORMAT", "auto _count = read<framework::member::parameter_count_t>(_cursor);",
                             "if (_cursor + _count > _end) {\n\t\t\t\t"
                                 "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
-                            "}\n\t\t\t_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);", "_cursor += _count;", "exec"),
+                            "}\n\t\t\t_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);\n\t\t\t_stack.pop_count(_count);", "_cursor += _count;", "exec"),
     ("OC_CLONE", "", "_member0->clone(_member1);", "", "cln"),
     ("OC_REFER", "", "_member0->refer(_member1);", "", "ref"),
     ("OC_COPY", "", "_member0->copy(_member1);", "", "cpy"),
