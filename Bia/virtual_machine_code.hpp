@@ -35,7 +35,7 @@ public:
 
 	BIA_EXPORT void execute(stack & _stack);
 	BIA_EXPORT void clear();
-	BIA_EXPORT void disassemble();
+	BIA_EXPORT void disassemble() const;
 	BIA_EXPORT bool is_executable() const noexcept;
 
 private:

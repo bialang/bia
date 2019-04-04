@@ -10,6 +10,11 @@ function_holder::function_holder(machine::virtual_machine::virtual_machine_code 
 {
 }
 
+void function_holder::disassemble() const
+{
+	_function.disassemble();
+}
+
 void function_holder::execute(machine::stack & _stack, framework::member * _destination)
 {
 	_function.execute(_stack);

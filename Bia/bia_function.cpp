@@ -17,6 +17,11 @@ bia_function::~bia_function()
 {
 }
 
+void bia_function::disassemble() const
+{
+	_data->disassemble();
+}
+
 void BIA_MEMBER_CALLING_CONVENTION bia_function::print() const
 {
 	printf("<bia function at %p>\n", this);

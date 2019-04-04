@@ -19,6 +19,7 @@ public:
 
 	bia_function(const data_t & _data) noexcept;
 	~bia_function();
+	void disassemble() const;
 	virtual void BIA_MEMBER_CALLING_CONVENTION print() const override;
 	virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
 	virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;

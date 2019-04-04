@@ -17,6 +17,7 @@ public:
 	function_holder(const function_holder & _copy) = delete;
 	function_holder(function_holder && _move) noexcept = default;
 	~function_holder() = default;
+	void disassemble() const;
 	void execute(machine::stack & _stack, framework::member * _destination);
 	void execute_count(framework::member * _destination);
 	void execute_format(framework::member * _destination);

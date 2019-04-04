@@ -16,6 +16,7 @@
 #include "cstring_member_def.hpp"
 #include "virtual_machine_code.hpp"
 #include "variant.hpp"
+#include "bia_function.hpp"
 
 
 struct printer
@@ -129,6 +130,7 @@ int main()
 			return true;
 		});
 		_context.set_lambda("time", []() { return std::clock()/(double)CLOCKS_PER_SEC; });
+		_context.set_lambda("disassemble", [](bia::framework::executable::bia_function * _function) { _function->disassemble(); });
 		/*_context.set_lambda("int", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
@@ -162,7 +164,31 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-print(2)
+var sum = 0
+var start = time()
+var i = 0
+
+fun foo {
+	var t = i % 3
+	
+	if t sum += i * t
+	else sum /= i + 1
+
+	i += 1
+}
+
+while i < 1000000 {
+	foo()
+}
+
+var end = time()
+print(sum)
+var sum = end - start
+print(sum)
+
+disassemble(foo)
+
+#>print(2)
 
 fun foo {
 	print(0)

@@ -9841,7 +9841,7 @@ void virtual_machine_code::clear()
 	}
 }
 
-void virtual_machine_code::disassemble()
+void virtual_machine_code::disassemble() const
 {
 	virtual_disassembler::disassemble(memory::cast_allocation<const uint8_t>(_code));
 }
