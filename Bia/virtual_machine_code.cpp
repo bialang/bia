@@ -6,6 +6,8 @@
 #include "virtual_disassembler.hpp"
 #include "regex_member.hpp"
 #include "scope_exit.hpp"
+#include "schein.hpp"
+#include "bia_function.hpp"
 
 #include <cstring>
 
@@ -17,11 +19,11 @@ namespace machine
 namespace virtual_machine
 {
 
-virtual_machine_code::virtual_machine_code(memory::universal_allocation _code, schein && _schein, bool _take_ownership) : _schein(std::move(_schein))
+virtual_machine_code::virtual_machine_code(memory::universal_allocation _code, memory::allocation<schein> && _schein, bool _take_ownership) : _schein(_schein)
 {
 	// Copy buffer
 	if (!_take_ownership) {
-		auto _tmp = this->_schein.machine_context()->allocator()->allocate(_code.second);
+		auto _tmp = _schein->machine_context()->allocator()->allocate(_code.second);
 
 		std::memcpy(_tmp.first, _code.first, _code.second);
 
@@ -45,10 +47,11 @@ virtual_machine_code::~virtual_machine_code()
 
 void virtual_machine_code::execute(stack & _stack)
 {
-	auto & _globals = _schein.globals();
-	auto & _names = _schein.names();
-	auto & _string_manager = _schein.string_manager();
-	auto & _regexs = _schein.regexs();
+	auto & _globals = _schein->globals();
+	auto & _names = _schein->names();
+	auto & _string_manager = _schein->string_manager();
+	auto & _regexs = _schein->regexs();
+	auto & _functions = _schein->functions();
 	const auto _end = _code.first + _code.second;
 	const uint8_t * _cursor = _code.first;
 	framework::member::test_result_t _test_register = 0;
@@ -497,84 +500,84 @@ void virtual_machine_code::execute(stack & _stack)
 		{
 			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
 			auto _int = read<int32_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
 			auto _int = read<int8_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
 			auto _int = read<int32_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
 			auto _int = read<int8_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _temps.from_front(read<member_index_t>(_cursor));
 			auto _int = read<int32_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _temps.from_front(read<member_index_t>(_cursor));
 			auto _int = read<int8_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _temps.from_back(read<member_index_t>(_cursor));
 			auto _int = read<int32_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _temps.from_back(read<member_index_t>(_cursor));
 			auto _int = read<int8_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		case (OC_INSTANTIATE_FUNCTION - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
-			//_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
+			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
 		/** MM-Type */
@@ -9828,8 +9831,13 @@ gt_return:;
 void virtual_machine_code::clear()
 {
 	if (_code) {
-		_schein.machine_context()->allocator()->deallocate(memory::cast_allocation<void>(_code));
+		auto _allocator = _schein->machine_context()->allocator();
+
+		_allocator->deallocate(memory::cast_allocation<void>(_code));
+		_allocator->destroy(_schein);
+
 		_code.clear();
+		_schein.clear();
 	}
 }
 

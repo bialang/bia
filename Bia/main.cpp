@@ -162,9 +162,88 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-fun foo() {
+print(2)
+
+fun foo {
 	print(0)
 }
+
+foo()
+print(foo)
+
+#>
+
+fun range(a, b=null) {
+	if b is null {
+		for a times {
+			yield .loop_count
+		}
+	} else {
+		for b - a times with i = a {
+			yield i
+		}
+	}
+}
+
+for i in range(3) {
+	print(i)
+
+	break after 2 times
+}
+
+class iterator : object
+{
+	version = "2.0.0.0"
+
+	iterator(val) {
+		print("constructed iterator")
+		this.val = val
+	}
+
+	fun next() {
+		return val--
+	}
+
+	static fun version() {
+		print("Iterator version:", version)
+	}
+
+	fun has_next() {
+		return val > 0
+	}
+
+	operator +=(t) {
+		for t times
+			next()
+	}
+
+	operator bool {
+		return has_next()
+	}
+
+	operator <=>(other) {
+		return val <=> other.val
+	}
+}
+
+var it = iterator(3)
+
+iterator.version()
+
+while it {
+	print(it += 1)
+}
+
+fun call_me(callback) {
+	callback()
+}
+
+call_me(iterator.version)
+call_me(it.next)
+call_me(it.operator bool)
+call_me(() -> print("hi"))
+
+<#
 
 )"";
 		/*test_and_time(1, []() {
@@ -208,9 +287,11 @@ fun foo() {
 
 		system("pause");
 
+		machine::stack _stack(_context.allocator(), 96);
+
 		try {
 			test_and_time(1, [&] {
-				_machine_code.execute();
+				_machine_code.execute(_stack);
 			});
 
 			//printf("Value of i: %lli\n", _context.get_member("i")->cast<long long>());

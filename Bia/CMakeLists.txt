@@ -24,8 +24,8 @@ set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMPILER})
 set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMPILER})
 
 # detail namespace
-set(Bia_HEADER_FILES_DETAIL "big_int.hpp" "regex.hpp")
-set(Bia_SOURCE_FILES_DETAIL "big_int.cpp" "regex.cpp")
+set(Bia_HEADER_FILES_DETAIL "big_int.hpp" "function_holder.hpp" "regex.hpp")
+set(Bia_SOURCE_FILES_DETAIL "big_int.cpp" "function_holder.hpp" "regex.cpp")
 
 source_group("Header Files\\detail" FILES ${Bia_HEADER_FILES_DETAIL})
 source_group("Source Files\\detail" FILES ${Bia_SOURCE_FILES_DETAIL})

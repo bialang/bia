@@ -47,7 +47,7 @@ public:
 	 * @throws See machine::virtual_machine::virtual_translator::finalize().
 	*/
 	BIA_EXPORT void finalize();
-	BIA_EXPORT virtual machine::schein & schein() noexcept override;
+	BIA_EXPORT virtual machine::memory::allocation<machine::schein> & schein() noexcept override;
 
 private:
 	enum class VARIABLE_TYPE
@@ -70,7 +70,7 @@ private:
 	/** The context. */
 	machine::machine_context & _context;
 	/** The schein. */
-	machine::schein _schein;
+	machine::memory::allocation<machine::schein> _schein;
 	/** Manages all scopes and their local variables. */
 	scope_handler _scope_handler;
 	/** A list of task that need to be executed before the script is finished. */

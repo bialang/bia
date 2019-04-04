@@ -16,6 +16,8 @@
 #include "index_map.hpp"
 #include "share_def.hpp"
 #include "string_stream.hpp"
+#include "function_holder.hpp"
+#include "virtual_machine_code.hpp"
 
 
 namespace bia
@@ -135,7 +137,7 @@ public:
 	BIA_EXPORT regex_index_t register_regex_inplace(const char * _string, string_length_t _length);
 	BIA_EXPORT regex_index_t register_regex_inplace(const char16_t * _string, string_length_t _length);
 	BIA_EXPORT regex_index_t register_regex_inplace(const char32_t * _string, string_length_t _length);
-	function_index_t register_function_inplace(memory::universal_allocation _code, schein * );
+	BIA_EXPORT function_index_t register_function_inplace(machine::virtual_machine::virtual_machine_code && _function_code);
 	/**
 	 * Returns the machine context.
 	 *
@@ -155,6 +157,7 @@ public:
 	*/
 	BIA_EXPORT machine::string_manager & string_manager() noexcept;
 	BIA_EXPORT std::vector<utility::share<detail::regex>> & regexs() noexcept;
+	BIA_EXPORT std::vector<utility::share<detail::function_holder>> & functions() noexcept;
 	/**
 	 * Returns the globals list.
 	 *
@@ -182,6 +185,8 @@ protected:
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
 	/** Stores all registered regexs. */
 	std::vector<utility::share<detail::regex>> _regexs;
+	/** Stores all registered bia functions. */
+	std::vector<utility::share<detail::function_holder>> _functions;
 	/** The manager for the string resources. */
 	machine::string_manager _string_manager;
 	/** The globals list. */

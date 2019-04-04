@@ -28,25 +28,6 @@
       <FileName>virtual_machine_code.hpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="bia::machine::virtual_machine::virtual_machine_schein">
-    <Position X="23.5" Y="12.25" Width="2" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::virtual_machine::virtual_machine_schein::member_list_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>virtual_machine_schein.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::virtual_machine::virtual_machine_schein::name_list_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>virtual_machine_schein.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>AAIAIAAAAAAAAAAAAAAAAAAAAAAgAAAIAAAAAAABAIA=</HashCode>
-      <FileName>virtual_machine_schein.hpp</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="bia::machine::code">
     <Position X="26.75" Y="16" Width="1.5" />
     <TypeIdentifier>
@@ -56,23 +37,6 @@
   </Class>
   <Class Name="bia::machine::disassembler" Collapsed="true">
     <Position X="31.25" Y="0.5" Width="1.5" />
-    <NestedTypes>
-      <Struct Name="bia::machine::disassembler::instruction" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>disassembler.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Typedef Name="bia::machine::disassembler::instruction_list" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>disassembler.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::disassembler::function_map" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>disassembler.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAAAAABAAECAAAAEAAAAAAAAEAAAAEA=</HashCode>
       <FileName>disassembler.hpp</FileName>
@@ -87,13 +51,6 @@
   </Class>
   <Class Name="bia::machine::member_array" Collapsed="true">
     <Position X="34.75" Y="0.5" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::member_array::index_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>member_array.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAEAAABBAABAAEAAAAAAAAAAAAAAAAhAAAAAACA=</HashCode>
       <FileName>member_array.hpp</FileName>
@@ -101,32 +58,47 @@
   </Class>
   <Class Name="bia::machine::name_manager" Collapsed="true">
     <Position X="33" Y="1.5" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::name_manager::name_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>name_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Struct Name="bia::machine::name_manager::string_entry" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>name_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="bia::machine::name_manager::string_hasher" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>name_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAQAAAAEBAAEAAAAgAAgAAAAAAAAAAAAAAAAAIAA=</HashCode>
       <FileName>name_manager.hpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="bia::machine::schein" Collapsed="true">
-    <Position X="25" Y="11" Width="1.5" />
+  <Class Name="bia::machine::schein">
+    <Position X="25" Y="8.75" Width="2.75" />
+    <NestedTypes>
+      <Typedef Name="bia::machine::schein::deleter_function_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>schein.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::schein::regex_index_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>schein.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::schein::function_index_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>schein.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::schein::string_length_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>schein.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::schein::member_list_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>schein.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::machine::schein::name_list_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>schein.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>CGgAAAAEAAAQBAAAAQYBAAAAAAEAAIAABAAgAABAABA=</HashCode>
+      <HashCode>CGoAIAAEAAAQBAAAAQYBAAAAAAEgAIAIBAAgAABBAJA=</HashCode>
       <FileName>schein.hpp</FileName>
     </TypeIdentifier>
   </Class>
@@ -139,18 +111,6 @@
   </Class>
   <Class Name="bia::machine::stack" Collapsed="true">
     <Position X="33" Y="2.5" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::stack::element_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stack.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::stack::index_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stack.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>FAAAAAAgAABBAAAAAIAAAAgAAAAAAYBIAEAIAAAAACA=</HashCode>
       <FileName>stack.hpp</FileName>
@@ -158,38 +118,6 @@
   </Class>
   <Class Name="bia::machine::string_manager" Collapsed="true">
     <Position X="36.5" Y="2.5" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::string_manager::index_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::string_manager::string_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Struct Name="bia::machine::string_manager::index_wrapper&lt;Char_type&gt;" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="bia::machine::string_manager::string_wrapper&lt;Char_type&gt;" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Typedef Name="bia::machine::string_manager::utf8_index_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::string_manager::utf8_string_t" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>string_manager.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAgAAAAAAABAAQAAAAABAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
       <FileName>string_manager.hpp</FileName>
@@ -218,28 +146,6 @@
   </Class>
   <Class Name="bia::machine::variable_index" Collapsed="true">
     <Position X="31.25" Y="3.5" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::variable_index::value_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>variable_index.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::variable_index::key_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>variable_index.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::variable_index::mapped_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>variable_index.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::variable_index::allocator_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>variable_index.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEAAAAADAQA=</HashCode>
       <FileName>variable_index.hpp</FileName>
@@ -255,15 +161,8 @@
       </Typedef>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AEAAAAAAAAAQAAAAAAAEAAAAEAAAAABAAAAgAQAAEAA=</HashCode>
+      <HashCode>AEAAAAAAAAAQAAAAAAAEAAAAAAAAAABAAAAgAQAAEAA=</HashCode>
       <FileName>machine_code.hpp</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="bia::machine::platform::machine_schein">
-    <Position X="26.25" Y="12.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>machine_schein.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bia::machine::platform::member_passer">
@@ -296,18 +195,6 @@
   </Class>
   <Class Name="bia::machine::platform::passer" Collapsed="true">
     <Position X="36.5" Y="1.5" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::platform::passer::pass_count_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>passer.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::passer::entry_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>passer.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAIAAAAAACAAIAAABAAAAAAAQAAABAAICA=</HashCode>
       <FileName>passer.hpp</FileName>
@@ -315,68 +202,6 @@
   </Class>
   <Class Name="bia::machine::platform::x86_translator" Collapsed="true">
     <Position X="36.5" Y="3.5" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::platform::x86_translator::result_register" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::temp_index_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::pass_count" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::saved_result_register" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::temp_result" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::local_result" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::test_result_register" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::local_index_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Enum Name="bia::machine::platform::x86_translator::JUMP" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-      <Typedef Name="bia::machine::platform::x86_translator::temp_members" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::index_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::platform::x86_translator::position_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>x86_translator.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>MBASAJABAEgBBgAAAAGAEAAAABAAAAACAQAAABAgAEA=</HashCode>
       <FileName>x86_translator.hpp</FileName>
@@ -454,43 +279,6 @@
   </Class>
   <Class Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;" Collapsed="true">
     <Position X="34.75" Y="2.5" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::value_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::pointer" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::const_pointer" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::reference" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::const_reference" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::size_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Struct Name="bia::machine::memory::stl_allocator_wrapper&lt;Type&gt;::rebind&lt;Ty&gt;" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>stl_allocator_wrapper.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAQAEAAAEAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>stl_allocator_wrapper.hpp</FileName>
@@ -736,13 +524,6 @@
   </Struct>
   <Struct Name="bia::machine::platform::register_offset&lt;Register, Offset_type, Effective_address&gt;" Collapsed="true">
     <Position X="31.25" Y="4.75" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::platform::register_offset&lt;Register, Offset_type, Effective_address&gt;::register_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>architecture_utils.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AACAAAAAAAAAAAAAAAAAAQAAAAAAAAIAAAAAAAAAAAA=</HashCode>
       <FileName>architecture_utils.hpp</FileName>
@@ -750,13 +531,6 @@
   </Struct>
   <Struct Name="bia::machine::platform::register_offset&lt;Register, void, Effective_address&gt;" Collapsed="true">
     <Position X="33" Y="4.75" Width="1.5" />
-    <NestedTypes>
-      <Typedef Name="bia::machine::platform::register_offset&lt;Register, void, Effective_address&gt;::register_type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>architecture_utils.hpp</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>architecture_utils.hpp</FileName>

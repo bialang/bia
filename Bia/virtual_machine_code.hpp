@@ -5,7 +5,6 @@
 #include "config.hpp"
 #include "allocator.hpp"
 #include "member.hpp"
-#include "schein.hpp"
 #include "operation.hpp"
 #include "string_manager.hpp"
 #include "stack.hpp"
@@ -21,7 +20,7 @@ namespace virtual_machine
 class virtual_machine_code
 {
 public:
-	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, schein && _schein, bool _take_ownership = false);
+	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, memory::allocation<schein> && _schein, bool _take_ownership = false);
 	virtual_machine_code(const virtual_machine_code & _copy) = delete;
 	BIA_EXPORT virtual_machine_code(virtual_machine_code && _move);
 	/**
@@ -43,7 +42,7 @@ private:
 	/** Contains the instructions for the virtual machine code. */
 	memory::allocation<uint8_t> _code;
 	/** The machine schein. */
-	schein _schein;
+	memory::allocation<schein> _schein;
 
 	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, int32_t _immediate)
 	{

@@ -120,7 +120,7 @@ lexer syntax::init_rules()
 	_lexer.set_rule(grammar_rule(BGR_FUNCTION, grammar_rule::F_WRAP_UP, {
 		lexer_token::keyword<keyword_function, flags::filler_token | flags::ending_ws_token>,
 		lexer_token::identifier,
-		lexer_token::rule_pointer<BGR_PARAMETER, flags::filler_token | flags::starting_ws_opt_token>,
+	//	lexer_token::rule_pointer<BGR_PARAMETER, flags::filler_token | flags::starting_ws_opt_token>,
 		lexer_token::rule_pointer<BGR_NORMAL_STATEMENT>
 		}));
 

@@ -15,8 +15,9 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _translator(_output), _context(_context), _schein(_context), _scope_handler(_translator)
+compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _translator(_output), _context(_context), _scope_handler(_translator)
 {
+	_schein = _context.allocator()->template construct<machine::schein>(_context);
 }
 
 void compiler::report(const grammar::report * _begin, const grammar::report * _end)
@@ -37,11 +38,11 @@ void compiler::finalize()
 	}
 
 	_translator.output_stream().set_position(_end);
-	_schein.set_member_map(_translator.member_map());
-	_schein.set_name_map(_translator.name_map());
+	_schein->set_member_map(_translator.member_map());
+	_schein->set_name_map(_translator.name_map());
 }
 
-machine::schein & compiler::schein() noexcept
+machine::memory::allocation<machine::schein> & compiler::schein() noexcept
 {
 	return _schein;
 }
@@ -147,7 +148,7 @@ char compiler::handle_parameter_item()
 	{
 		_translator.pass_immediate(_value.value().rt_int);
 
-		return 'I';
+		return _value.is_int32() ? 'i' : 'I';
 	}
 	case VT::DOUBLE:
 		_translator.pass_immediate(_value.value().rt_double);
@@ -776,9 +777,11 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 {
 	const auto _end = _report->content.end;
 
-	_report = handle_identifier(_report);
+	_report = handle_identifier(_report + 1);
 
 	auto _identifier = _value;
+
+	///TODO: handle parameter
 
 	// Compile function code
 	stream::buffer_output_stream _function_code;
@@ -787,11 +790,11 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 	_compiler.handle_root(_report);
 	_compiler.finalize();
 
-	auto _function = _schein.register_function_inplace({ _function_code.buffer(), _function_code.size() }, std::move(_compiler.virtual_machine_schein()));
+	auto _function = _schein->register_function_inplace(machine::virtual_machine::virtual_machine_code({ _function_code.buffer(), static_cast<size_t>(_function_code.size()) }, std::move(_compiler.schein())));
 
 	// Create function
 	_identifier.expand_to_member(_translator, [&](auto _member) {
-		if (std::is_same<decltype<_member>, compiler_value::invalid_index_t>::value) {
+		if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 		

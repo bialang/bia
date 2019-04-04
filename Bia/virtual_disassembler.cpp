@@ -439,6 +439,90 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			print_all("instreg m", _member, " i", _int);
 			break;
 		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("instfun t", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("instfun t", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("instfun l", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("instfun l", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("instfun m", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = read<tiny_member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("instfun m", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("instfun t", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("instfun t", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("instfun l", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("instfun l", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _int = read<int32_t>(_cursor);
+			print_all("instfun m", _member, " i", _int);
+			break;
+		}
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
+		{
+			auto _member = read<member_index_t>(_cursor);
+			auto _int = read<int8_t>(_cursor);
+			print_all("instfun m", _member, " i", _int);
+			break;
+		}
 		/** MM-Type */
 		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
 		{

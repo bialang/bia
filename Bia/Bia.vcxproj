@@ -198,6 +198,7 @@
     <ClCompile Include="disassembler.cpp" />
     <ClCompile Include="double_member.cpp" />
     <ClCompile Include="big_int_member.cpp" />
+    <ClCompile Include="function_holder.cpp" />
     <ClCompile Include="int_member.cpp" />
     <ClCompile Include="member_map.cpp" />
     <ClCompile Include="member_names.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="compiler_loop_tracker.hpp" />
     <ClInclude Include="disguised_caller.hpp" />
     <ClInclude Include="buffer_builder.hpp" />
+    <ClInclude Include="function_holder.hpp" />
     <ClInclude Include="local_object.hpp" />
     <ClInclude Include="member_array_view.hpp" />
     <ClInclude Include="member_cast_type.hpp" />

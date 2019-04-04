@@ -237,6 +237,9 @@
     <ClCompile Include="bia_function.cpp">
       <Filter>Source Files\framework\executable</Filter>
     </ClCompile>
+    <ClCompile Include="function_holder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -586,6 +589,9 @@
     </ClInclude>
     <ClInclude Include="bia_function.hpp">
       <Filter>Header Files\framework\executable</Filter>
+    </ClInclude>
+    <ClInclude Include="function_holder.hpp">
+      <Filter>Header Files\detail</Filter>
     </ClInclude>
     <ClInclude Include="member_array_view.hpp">
       <Filter>Header Files\machine</Filter>

@@ -97,6 +97,15 @@ schein::regex_index_t schein::register_regex_inplace(const char32_t * _string, s
 	return _tmp;
 }
 
+schein::function_index_t schein::register_function_inplace(machine::virtual_machine::virtual_machine_code && _function_code)
+{
+	auto _tmp = _functions.size();
+
+	_functions.emplace_back(std::move(_function_code));
+
+	return _tmp;
+}
+
 machine::machine_context * schein::machine_context() noexcept
 {
 	return _context;
@@ -110,6 +119,11 @@ machine::string_manager & schein::string_manager() noexcept
 std::vector<utility::share<detail::regex>>& schein::regexs() noexcept
 {
 	return _regexs;
+}
+
+std::vector<utility::share<detail::function_holder>>& schein::functions() noexcept
+{
+	return _functions;
 }
 
 const schein::member_list_t & schein::globals() const noexcept

@@ -5,6 +5,7 @@
 #include "report.hpp"
 #include "exception.hpp"
 #include "schein.hpp"
+#include "allocator.hpp"
 
 
 namespace bia
@@ -146,7 +147,7 @@ public:
 	 * @param _end The ending of the report range.
 	*/
 	virtual void report(const report * _begin, const report * _end) = 0;
-	virtual machine::schein & schein() noexcept = 0;
+	virtual machine::memory::allocation<machine::schein> & schein() noexcept = 0;
 };
 
 }
