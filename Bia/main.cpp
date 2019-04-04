@@ -131,6 +131,7 @@ int main()
 		});
 		_context.set_lambda("time", []() { return std::clock()/(double)CLOCKS_PER_SEC; });
 		_context.set_lambda("disassemble", [](bia::framework::executable::bia_function * _function) { _function->disassemble(); });
+		_context.set_lambda("pause", []() { system("pause"); });
 		/*_context.set_lambda("int", [](bia::framework::member * _member) {
 			if (_member->flags() & bia::framework::member::F_CSTRING) {
 				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
@@ -164,7 +165,18 @@ int main()
 		// Script
 		char _script[] = u8R""(
 
-var sum = 0
+var c = 0
+
+fun recursion {
+	print(c += 1)
+	recursion()
+}
+
+disassemble(recursion)
+pause()
+recursion()
+
+#>var sum = 0
 var start = time()
 var i = 0
 
@@ -187,6 +199,7 @@ var sum = end - start
 print(sum)
 
 disassemble(foo)
+print(t)
 
 #>print(2)
 
@@ -287,7 +300,7 @@ call_me(() -> print("hi"))
 		// Compile
 		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
 		bia::stream::buffer_output_stream _output;
-		bia::compiler::compiler _compiler(_output, _context);
+		bia::compiler::compiler _compiler(_output, _context, nullptr);
 
 		test_and_time(1, [&]() {
 			bia::grammar::syntax::lexer().lex(_input, _compiler, _context);
@@ -313,7 +326,7 @@ call_me(() -> print("hi"))
 
 		system("pause");
 
-		machine::stack _stack(_context.allocator(), 96);
+		machine::stack _stack(_context.allocator(), 15);
 
 		try {
 			test_and_time(1, [&] {

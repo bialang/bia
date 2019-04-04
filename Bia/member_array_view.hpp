@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <utility>
 
 #include "member.hpp"
 #include "max_member_size.hpp"
@@ -37,6 +38,17 @@ public:
 		for (auto i = _begin; i < _end; i += framework::max_member_size) {
 			new(i) framework::undefined_member();
 		}
+
+		_end -= framework::max_member_size;
+	}
+	member_array_view(const member_array_view & _copy) = delete;
+	member_array_view(member_array_view && _move)
+	{
+		_begin = _move._begin;
+		_end = _move._end;
+
+		_move._begin = nullptr;
+		_move._end = nullptr;
 	}
 	/**
 	 * Destructor.
@@ -48,6 +60,8 @@ public:
 	*/
 	~member_array_view()
 	{
+		_end += framework::max_member_size;
+
 		// Destroy all members
 		for (auto i = _begin; i < _end; i += framework::max_member_size) {
 			reinterpret_cast<framework::member*>(i)->~member();
@@ -80,6 +94,14 @@ public:
 	framework::member * from_back(index_t _index) noexcept
 	{
 		return reinterpret_cast<framework::member*>(_end - _index * framework::max_member_size);
+	}
+	member_array_view & operator=(const member_array_view & _copy) = delete;
+	member_array_view & operator=(member_array_view && _move)
+	{
+		std::swap(_begin, _move._begin);
+		std::swap(_end, _move._end);
+
+		return *this;
 	}
 
 private:
