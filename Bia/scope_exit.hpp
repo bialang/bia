@@ -1,6 +1,6 @@
 #pragma once
 
-#include <functional>
+#include <utility>
 
 
 namespace bia
@@ -11,12 +11,10 @@ namespace utility
 /**
  * @brief A simple scope guard.
 */
+template<typename Lambda>
 class scope_exit
 {
 public:
-	/** The exit function type. */
-	typedef std::function<void()> function_t;
-
 	/**
 	 * Constructor.
 	 *
@@ -25,7 +23,9 @@ public:
 	 *
 	 * @param [in] _exit The exit function.
 	*/
-	scope_exit(function_t && _exit) noexcept;
+	scope_exit(Lambda && _exit) noexcept : _exit(std::move(_exit))
+	{
+	}
 	/**
 	 * Destructor.
 	 *
@@ -34,12 +34,22 @@ public:
 	 *
 	 * @throws See @a _exit.
 	*/
-	~scope_exit();
+	~scope_exit()
+	{
+		_exit();
+	}
 
 private:
 	/** The function that is called on destruction. */
-	function_t _exit;
+	Lambda _exit;
 };
+
+
+template<typename Lambda>
+inline scope_exit<Lambda> make_scope_exit(Lambda && _exit)
+{
+	return { std::forward<Lambda>(_exit) };
+}
 
 }
 }

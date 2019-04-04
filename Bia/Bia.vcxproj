@@ -206,7 +206,6 @@
     <ClCompile Include="regex.cpp" />
     <ClCompile Include="regex_member.cpp" />
     <ClCompile Include="schein.cpp" />
-    <ClCompile Include="scope_exit.cpp" />
     <ClCompile Include="scope_handler.cpp" />
     <ClCompile Include="script_map.cpp" />
     <ClCompile Include="simple_allocator.cpp" />

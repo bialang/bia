@@ -216,9 +216,6 @@
     <ClCompile Include="lexer_token.cpp">
       <Filter>Source Files\grammar</Filter>
     </ClCompile>
-    <ClCompile Include="scope_exit.cpp">
-      <Filter>Source Files\utility</Filter>
-    </ClCompile>
     <ClCompile Include="schein.cpp">
       <Filter>Source Files\machine</Filter>
     </ClCompile>

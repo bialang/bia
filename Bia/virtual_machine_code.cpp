@@ -55,7 +55,7 @@ void virtual_machine_code::execute(stack & _stack)
 	member_array_view _temps(nullptr, 0);
 
 	// Setup stack
-	utility::scope_exit _stack_cleaner([_stack_frame = _stack.create_stack_frame(), &_stack]() {
+	auto _stack_cleaner = utility::make_scope_exit([_stack_frame = _stack.create_stack_frame(), &_stack]() {
 		_stack.drop_stack_frame(_stack_frame);
 	});
 
