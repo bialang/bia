@@ -15,7 +15,7 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _translator(_output), _context(_context), _scope_handler(_translator)
+compiler::compiler(stream::output_stream & _output, machine::machine_context & _context, compiler * _parent) : _translator(_output), _context(_context), _scope_handler(_translator, _parent ? &_parent->_scope_handler : nullptr)
 {
 	_schein = _context.allocator()->template construct<machine::schein>(_context);
 }
@@ -27,6 +27,7 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 
 void compiler::finalize()
 {
+	_scope_handler.finalize();
 	_translator.finalize(_counter.max(), _scope_handler.max_needed());
 
 	auto _end = _translator.output_stream().position();
@@ -399,7 +400,7 @@ const grammar::report * compiler::handle_identifier(const grammar::report * _rep
 
 		return _report + 1;
 	} // Unkown
-	else if (!_scope_handler.no_open_scopes() && _type != VARIABLE_TYPE::DEFINITELY_GLOBAL) {
+	else if (_scope_handler.has_open_scopes() && _type != VARIABLE_TYPE::DEFINITELY_GLOBAL) {
 		auto _index = _scope_handler.variable_index(_report->content.member);
 
 		// Local variable
@@ -581,7 +582,7 @@ const grammar::report * compiler::handle_regex(const grammar::report * _report)
 
 const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)
 {
-	auto _local_variable = _report[1].content.keyword == grammar::keyword_var::string_id() && !_scope_handler.no_open_scopes();
+	auto _local_variable = _report[1].content.keyword == grammar::keyword_var::string_id() && _scope_handler.has_open_scopes();
 
 	handle_identifier(_report + 2, _local_variable ? VARIABLE_TYPE::DEFINITELY_LOCAL : VARIABLE_TYPE::DEFINITELY_GLOBAL);
 
@@ -785,7 +786,7 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 
 	// Compile function code
 	stream::buffer_output_stream _function_code;
-	compiler _compiler(_function_code, _context);
+	compiler _compiler(_function_code, _context, this);
 
 	_compiler.handle_root(_report);
 	_compiler.finalize();

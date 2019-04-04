@@ -22,15 +22,17 @@ public:
 
 	constexpr static variable_index_t not_found = -1;
 
-	scope_handler(machine::virtual_machine::virtual_translator & _translator);
+	scope_handler(machine::virtual_machine::virtual_translator & _translator, scope_handler * _parent);
 	void open_scope();
 	void close_scope();
-	bool no_open_scopes() const noexcept;
+	void finalize();
+	bool has_open_scopes() const noexcept;
 	variable_index_t declare(const char * _name);
 	variable_index_t variable_index(const char * _name);
 	variable_index_t max_needed() const noexcept;
 
 private:
+	scope_handler * _parent;
 	/** Counts the required amount of local variables. */
 	temp_counter _counter;
 	/** Counts the max required amount of local variables. */

@@ -31,7 +31,7 @@ namespace compiler
 class compiler : public grammar::report_receiver
 {
 public:
-	BIA_EXPORT compiler(stream::output_stream & _output, machine::machine_context & _context);
+	BIA_EXPORT compiler(stream::output_stream & _output, machine::machine_context & _context, compiler * _parent);
 	compiler(const compiler & _copy) = delete;
 	compiler(compiler && _rvalue) = delete;
 	~compiler()
