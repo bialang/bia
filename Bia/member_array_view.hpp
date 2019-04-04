@@ -39,6 +39,21 @@ public:
 		}
 	}
 	/**
+	 * Destructor.
+	 *
+	 * @since 3.79.150.825
+	 * @date 4-Apr-19
+	 *
+	 * @throws See framework::member::~member().
+	*/
+	~member_array_view()
+	{
+		// Destroy all members
+		for (auto i = _begin; i < _end; i += framework::max_member_size) {
+			reinterpret_cast<framework::member*>(i)->~member();
+		}
+	}
+	/**
 	 * Returns the nth element from the front.
 	 *
 	 * @since 3.79.150.825
@@ -50,7 +65,7 @@ public:
 	*/
 	framework::member * from_front(index_t _index) noexcept
 	{
-		return reinterpret_cast<framework::member*>(_end + _index * framework::max_member_size);
+		return reinterpret_cast<framework::member*>(_begin + _index * framework::max_member_size);
 	}
 	/**
 	 * Returns the nth element from the back.

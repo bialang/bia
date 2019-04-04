@@ -119,7 +119,7 @@ public:
 
 		_stack_pointer += _elements;
 
-		return _stack_pointer;
+		return _tmp;
 	}
 	const element_t * create_stack_frame() const noexcept
 	{
