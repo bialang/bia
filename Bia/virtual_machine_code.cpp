@@ -159,167 +159,111 @@ void virtual_machine_code::execute(stack & _stack)
 			break;
 		}
 		/** M-Type */
-		case (OC_TEST - MOCO_TINY_TEMP):
+		case (OC_TEST - MOCO_TINY_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			_test_register = _member->test();
 			break;
 		}
-		case (OC_TEST - MOCO_TINY_LOCAL):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_test_register = _member->test();
-			break;
-		}
-		case (OC_TEST - MOCO_TINY_MEMBER):
+		case (OC_TEST - MOCO_TINY_PERMANENT):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			_test_register = _member->test();
 			break;
 		}
-		case (OC_TEST - MOCO_TEMP):
+		case (OC_TEST - MOCO_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			_test_register = _member->test();
 			break;
 		}
-		case (OC_TEST - MOCO_LOCAL):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			_test_register = _member->test();
-			break;
-		}
-		case (OC_TEST - MOCO_MEMBER):
+		case (OC_TEST - MOCO_PERMANENT):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			_test_register = _member->test();
 			break;
 		}
-		case (OC_PUSH - MOCO_TINY_TEMP):
+		case (OC_PUSH - MOCO_TINY_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			_stack.push(_member);
 			break;
 		}
-		case (OC_PUSH - MOCO_TINY_LOCAL):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_stack.push(_member);
-			break;
-		}
-		case (OC_PUSH - MOCO_TINY_MEMBER):
+		case (OC_PUSH - MOCO_TINY_PERMANENT):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			_stack.push(_member);
 			break;
 		}
-		case (OC_PUSH - MOCO_TEMP):
+		case (OC_PUSH - MOCO_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			_stack.push(_member);
 			break;
 		}
-		case (OC_PUSH - MOCO_LOCAL):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			_stack.push(_member);
-			break;
-		}
-		case (OC_PUSH - MOCO_MEMBER):
+		case (OC_PUSH - MOCO_PERMANENT):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			_stack.push(_member);
 			break;
 		}
-		case (OC_UNDEFINE - MOCO_TINY_TEMP):
+		case (OC_UNDEFINE - MOCO_TINY_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			_member->undefine();
 			break;
 		}
-		case (OC_UNDEFINE - MOCO_TINY_LOCAL):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member->undefine();
-			break;
-		}
-		case (OC_UNDEFINE - MOCO_TINY_MEMBER):
+		case (OC_UNDEFINE - MOCO_TINY_PERMANENT):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			_member->undefine();
 			break;
 		}
-		case (OC_UNDEFINE - MOCO_TEMP):
+		case (OC_UNDEFINE - MOCO_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			_member->undefine();
 			break;
 		}
-		case (OC_UNDEFINE - MOCO_LOCAL):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			_member->undefine();
-			break;
-		}
-		case (OC_UNDEFINE - MOCO_MEMBER):
+		case (OC_UNDEFINE - MOCO_PERMANENT):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			_member->undefine();
 			break;
 		}
-		case (OC_EXECUTE_VOID - MOCO_TINY_TEMP):
+		case (OC_EXECUTE_VOID - MOCO_TINY_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			_member->execute(&_stack, nullptr);
 			break;
 		}
-		case (OC_EXECUTE_VOID - MOCO_TINY_LOCAL):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member->execute(&_stack, nullptr);
-			break;
-		}
-		case (OC_EXECUTE_VOID - MOCO_TINY_MEMBER):
+		case (OC_EXECUTE_VOID - MOCO_TINY_PERMANENT):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			_member->execute(&_stack, nullptr);
 			break;
 		}
-		case (OC_EXECUTE_VOID - MOCO_TEMP):
+		case (OC_EXECUTE_VOID - MOCO_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			_member->execute(&_stack, nullptr);
 			break;
 		}
-		case (OC_EXECUTE_VOID - MOCO_LOCAL):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			_member->execute(&_stack, nullptr);
-			break;
-		}
-		case (OC_EXECUTE_VOID - MOCO_MEMBER):
+		case (OC_EXECUTE_VOID - MOCO_PERMANENT):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			_member->execute(&_stack, nullptr);
 			break;
 		}
-		case (OC_EXECUTE_COUNT_VOID - MOCO_TINY_TEMP):
+		case (OC_EXECUTE_COUNT_VOID - MOCO_TINY_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member->execute_count(&_stack, nullptr, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT_VOID - MOCO_TINY_LOCAL):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member->execute_count(&_stack, nullptr, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT_VOID - MOCO_TINY_MEMBER):
+		case (OC_EXECUTE_COUNT_VOID - MOCO_TINY_PERMANENT):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
@@ -327,23 +271,15 @@ void virtual_machine_code::execute(stack & _stack)
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT_VOID - MOCO_TEMP):
+		case (OC_EXECUTE_COUNT_VOID - MOCO_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member->execute_count(&_stack, nullptr, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT_VOID - MOCO_LOCAL):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member->execute_count(&_stack, nullptr, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT_VOID - MOCO_MEMBER):
+		case (OC_EXECUTE_COUNT_VOID - MOCO_PERMANENT):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
@@ -351,9 +287,9 @@ void virtual_machine_code::execute(stack & _stack)
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_FORMAT_VOID - MOCO_TINY_TEMP):
+		case (OC_EXECUTE_FORMAT_VOID - MOCO_TINY_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -363,19 +299,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT_VOID - MOCO_TINY_LOCAL):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member->execute_format(&_stack, nullptr, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT_VOID - MOCO_TINY_MEMBER):
+		case (OC_EXECUTE_FORMAT_VOID - MOCO_TINY_PERMANENT):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
@@ -387,9 +311,9 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT_VOID - MOCO_TEMP):
+		case (OC_EXECUTE_FORMAT_VOID - MOCO_TEMPORARY):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -399,19 +323,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT_VOID - MOCO_LOCAL):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member->execute_format(&_stack, nullptr, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT_VOID - MOCO_MEMBER):
+		case (OC_EXECUTE_FORMAT_VOID - MOCO_PERMANENT):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
@@ -424,168 +336,112 @@ void virtual_machine_code::execute(stack & _stack)
 			break;
 		}
 		/** Mint-Type */
-		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_TEMPORARY * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_TEMPORARY * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
-			break;
-		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
-			break;
-		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_PERMANENT * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_INSTANTIATE_REGEX - (MOCO_TINY_PERMANENT * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_INSTANTIATE_REGEX - (MOCO_TEMPORARY * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_INSTANTIATE_REGEX - (MOCO_TEMPORARY * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
-			break;
-		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
-			break;
-		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_INSTANTIATE_REGEX - (MOCO_PERMANENT * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_REGEX - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_INSTANTIATE_REGEX - (MOCO_PERMANENT * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member->template replace_this<framework::native::regex_member>(_regexs[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_TEMPORARY * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_TEMP * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_TEMPORARY * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
-			break;
-		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
-			break;
-		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_PERMANENT * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TINY_PERMANENT * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TEMPORARY * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_TEMP * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_TEMPORARY * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
-			break;
-		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_LOCAL * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
-			break;
-		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_PERMANENT * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member->template replace_this<framework::executable::bia_function>(_functions[_int]);
 			break;
 		}
-		case (OC_INSTANTIATE_FUNCTION - (MOCO_MEMBER * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_INSTANTIATE_FUNCTION - (MOCO_PERMANENT * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
@@ -593,385 +449,164 @@ void virtual_machine_code::execute(stack & _stack)
 			break;
 		}
 		/** MM-Type */
-		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_EXECUTE - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_EXECUTE - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_EXECUTE - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_EXECUTE - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_EXECUTE - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_EXECUTE - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_EXECUTE - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->execute(&_stack, _member1);
-			break;
-		}
-		case (OC_EXECUTE - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_EXECUTE - (MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->execute(&_stack, _member1);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -980,25 +615,16 @@ void virtual_machine_code::execute(stack & _stack)
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_EXECUTE_COUNT - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -1007,133 +633,52 @@ void virtual_machine_code::execute(stack & _stack)
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE_COUNT - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_EXECUTE_COUNT - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE_COUNT - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_EXECUTE_COUNT - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE_COUNT - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_EXECUTE_COUNT - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -1142,25 +687,16 @@ void virtual_machine_code::execute(stack & _stack)
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE_COUNT - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			_member0->execute_count(&_stack, _member1, nullptr, _count);
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			_member0->execute_count(&_stack, _member1, nullptr, _count);
-			_stack.pop_count(_count);
-			break;
-		}
-		case (OC_EXECUTE_COUNT - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_EXECUTE_COUNT - (MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -1169,10 +705,10 @@ void virtual_machine_code::execute(stack & _stack)
 			_stack.pop_count(_count);
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -1182,22 +718,9 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
@@ -1208,10 +731,10 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -1221,22 +744,9 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
@@ -1247,88 +757,10 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -1338,20 +770,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -1364,10 +783,10 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -1377,20 +796,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -1403,10 +809,10 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -1416,22 +822,9 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
@@ -1442,10 +835,10 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -1455,22 +848,9 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_EXECUTE_FORMAT - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
@@ -1481,88 +861,10 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_EXECUTE_FORMAT - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -1572,20 +874,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_EXECUTE_FORMAT - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -1598,10 +887,10 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_EXECUTE_FORMAT - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _count = read<framework::member::parameter_count_t>(_cursor);
 			if (_cursor + _count > _end) {
 				BIA_IMPLEMENTATION_ERROR;
@@ -1611,20 +900,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _count = read<framework::member::parameter_count_t>(_cursor);
-			if (_cursor + _count > _end) {
-				BIA_IMPLEMENTATION_ERROR;
-			}
-			_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);
-			_stack.pop_count(_count);
-			_cursor += _count;
-			break;
-		}
-		case (OC_EXECUTE_FORMAT - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_EXECUTE_FORMAT - (MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -1637,875 +913,383 @@ void virtual_machine_code::execute(stack & _stack)
 			_cursor += _count;
 			break;
 		}
-		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_CLONE - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_CLONE - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_CLONE - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_CLONE - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_CLONE - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_CLONE - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_CLONE - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_CLONE - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_CLONE - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_CLONE - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_CLONE - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_CLONE - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_CLONE - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_CLONE - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_CLONE - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->clone(_member1);
-			break;
-		}
-		case (OC_CLONE - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_CLONE - (MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->clone(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_REFER - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_REFER - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_REFER - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_REFER - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_REFER - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_REFER - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_REFER - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_REFER - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_REFER - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_REFER - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_REFER - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_REFER - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_REFER - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_REFER - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_REFER - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->refer(_member1);
-			break;
-		}
-		case (OC_REFER - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_REFER - (MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->refer(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_COPY - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_COPY - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_COPY - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_COPY - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_COPY - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_COPY - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_COPY - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_COPY - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_COPY - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_COPY - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_COPY - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_COPY - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_COPY - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_COPY - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_COPY - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			_member0->copy(_member1);
-			break;
-		}
-		case (OC_COPY - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_COPY - (MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			_member0->copy(_member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_TEST_MEMBER - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_TEST_MEMBER - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_TEST_MEMBER - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_TEST_MEMBER - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_TEST_MEMBER - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_TEST_MEMBER - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -2513,23 +1297,15 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_TEST_MEMBER - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_TEST_MEMBER - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -2537,119 +1313,47 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_TEST_MEMBER - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_TEST_MEMBER - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_TEST_MEMBER - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_TEST_MEMBER - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_TEST_MEMBER - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_TEST_MEMBER - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -2657,23 +1361,15 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_TEST_MEMBER - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = _member0->test_member(_operator, _member1);
-			break;
-		}
-		case (OC_TEST_MEMBER - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_TEST_MEMBER - (MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -2681,119 +1377,47 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = _member0->test_member(_operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -2801,23 +1425,15 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -2825,119 +1441,47 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -2945,23 +1489,15 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(nullptr, _operator, _member1);
 			break;
 		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(nullptr, _operator, _member1);
-			break;
-		}
-		case (OC_OPERATOR_CALL_VOID - (MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_OPERATOR_CALL_VOID - (MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -2970,297 +1506,187 @@ void virtual_machine_code::execute(stack & _stack)
 			break;
 		}
 		/** MI-Type */
-		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_INSTANTIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_INSTANTIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_INSTANTIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_INSTANTIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_INSTANTIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_INSTANTIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_INSTANTIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_INSTANTIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_INSTANTIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_INSTANTIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			framework::create_member(_member, _immediate);
-			break;
-		}
-		case (OC_INSTANTIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_INSTANTIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_INSTANTIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_INSTANTIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_INSTANTIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_INSTANTIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_INSTANTIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			framework::create_member(_member, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
@@ -3268,7 +1694,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
@@ -3276,7 +1702,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
@@ -3284,7 +1710,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
@@ -3292,7 +1718,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
@@ -3300,87 +1726,47 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_TEST_IMMEDIATE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_TEST_IMMEDIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
@@ -3388,7 +1774,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_TEST_IMMEDIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
@@ -3396,7 +1782,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_TEST_IMMEDIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
@@ -3404,7 +1790,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_TEST_IMMEDIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
@@ -3412,7 +1798,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_TEST_IMMEDIATE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
@@ -3420,87 +1806,47 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
@@ -3508,7 +1854,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
@@ -3516,7 +1862,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
@@ -3524,7 +1870,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
@@ -3532,7 +1878,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
@@ -3540,87 +1886,47 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_test_register = test_reverse(_member, _operator, _immediate);
-			break;
-		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
@@ -3628,7 +1934,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
@@ -3636,7 +1942,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
@@ -3644,7 +1950,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
@@ -3652,7 +1958,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_TEST_IMMEDIATE_REVERSE - (MOCO_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
@@ -3660,87 +1966,47 @@ void virtual_machine_code::execute(stack & _stack)
 			_test_register = test_reverse(_member, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
@@ -3748,7 +2014,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
@@ -3756,7 +2022,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
@@ -3764,7 +2030,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
@@ -3772,7 +2038,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
@@ -3780,87 +2046,47 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
@@ -3868,7 +2094,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
@@ -3876,7 +2102,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
@@ -3884,7 +2110,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
@@ -3892,7 +2118,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
@@ -3900,87 +2126,47 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
@@ -3988,7 +2174,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
@@ -3996,7 +2182,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
@@ -4004,7 +2190,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
@@ -4012,7 +2198,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TINY_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
@@ -4020,87 +2206,47 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_TEMPORARY * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_LOCAL * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member, nullptr, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
@@ -4108,7 +2254,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
@@ -4116,7 +2262,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
@@ -4124,7 +2270,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
@@ -4132,7 +2278,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member, nullptr, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_MEMBER * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID - (MOCO_PERMANENT * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
@@ -4141,231 +2287,87 @@ void virtual_machine_code::execute(stack & _stack)
 			break;
 		}
 		/** MMint-Type */
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -4373,7 +2375,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -4381,39 +2383,23 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -4421,7 +2407,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -4429,231 +2415,87 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IIOCO_COUNT + IIOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IIOCO_COUNT + IIOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -4661,7 +2503,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -4669,39 +2511,23 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int32_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _int = read<int8_t>(_cursor);
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT32)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int32_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IIOCO_COUNT + IIOCO_INT8)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _int = read<int8_t>(_cursor);
-			_member0->object_member(_member1, _names[_int]);
-			break;
-		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT32)):
+		case (OC_OBJECT_MEMBER - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IIOCO_COUNT + IIOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -4709,7 +2535,7 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->object_member(_member1, _names[_int]);
 			break;
 		}
-		case (OC_OBJECT_MEMBER - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IIOCO_COUNT + IIOCO_INT8)):
+		case (OC_OBJECT_MEMBER - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IIOCO_COUNT + IIOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -4718,781 +2544,196 @@ void virtual_machine_code::execute(stack & _stack)
 			break;
 		}
 		/** MMM-Type */
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -5501,25 +2742,16 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -5528,133 +2760,52 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -5663,25 +2814,16 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_OPERATOR_CALL - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -5690,781 +2832,196 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -6473,25 +3030,16 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -6500,133 +3048,52 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_LOCAL)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _member2 = _globals[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_TEMP)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TINY_MEMBER)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_TEMP)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * MOCO_COUNT + MOCO_MEMBER)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member2 = _globals[read<member_index_t>(_cursor)];
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TINY_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member2 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TINY_MEMBER)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TINY_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -6635,25 +3102,16 @@ void virtual_machine_code::execute(stack & _stack)
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_TEMP)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_TEMPORARY)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member2 = _temps[read<member_index_t>(_cursor)];
 			auto _operator = read<framework::operator_t>(_cursor);
 			_member0->operator_call(_member1, _operator, _member2);
 			break;
 		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_LOCAL)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _member2 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			_member0->operator_call(_member1, _operator, _member2);
-			break;
-		}
-		case (OC_OPERATOR_CALL - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * MOCO_COUNT + MOCO_MEMBER)):
+		case (OC_OPERATOR_CALL - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * MOCO_COUNT + MOCO_PERMANENT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -6663,637 +3121,232 @@ void virtual_machine_code::execute(stack & _stack)
 			break;
 		}
 		/** MMI-Type */
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -7302,7 +3355,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -7311,7 +3364,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -7320,7 +3373,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -7329,7 +3382,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -7338,97 +3391,52 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -7437,7 +3445,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -7446,7 +3454,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -7455,7 +3463,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -7464,7 +3472,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -7473,637 +3481,232 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8112,7 +3715,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8121,7 +3724,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8130,7 +3733,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8139,7 +3742,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8148,97 +3751,52 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -8247,7 +3805,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -8256,7 +3814,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -8265,7 +3823,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -8274,7 +3832,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -8283,637 +3841,232 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8922,7 +4075,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8931,7 +4084,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8940,7 +4093,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8949,7 +4102,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -8958,97 +4111,52 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9057,7 +4165,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9066,7 +4174,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9075,7 +4183,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9084,7 +4192,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TINY_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9093,637 +4201,232 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMP * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_TEMPORARY * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member0 = _temps[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
+			auto _member0 = _globals[read<member_index_t>(_cursor)];
+			auto _member1 = _temps[read<tiny_member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_LOCAL * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _member1 = _globals[read<member_index_t>(_cursor)];
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_TEMP) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<tiny_member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -9732,7 +4435,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -9741,7 +4444,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -9750,7 +4453,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -9759,7 +4462,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TINY_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TINY_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<tiny_member_index_t>(_cursor)];
@@ -9768,97 +4471,52 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int32_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int8_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<int64_t>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = read<double>(_cursor);
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_TEMP) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_TEMPORARY) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_front(read<member_index_t>(_cursor));
+			auto _member1 = _temps[read<member_index_t>(_cursor)];
 			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
 			auto _operator = read<framework::operator_t>(_cursor);
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT32)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int32_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT8)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int8_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_INT64)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<int64_t>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_FLOAT)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = read<double>(_cursor);
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_LOCAL) * IOCO_COUNT + IOCO_STRING)):
-		{
-			auto _member0 = _globals[read<member_index_t>(_cursor)];
-			auto _member1 = _temps.from_back(read<member_index_t>(_cursor));
-			auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));
-			auto _operator = read<framework::operator_t>(_cursor);
-			operator_call_reverse(_member0, _member1, _operator, _immediate);
-			break;
-		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT32)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT32)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9867,7 +4525,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT8)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT8)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9876,7 +4534,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_INT64)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_INT64)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9885,7 +4543,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_FLOAT)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_FLOAT)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
@@ -9894,7 +4552,7 @@ void virtual_machine_code::execute(stack & _stack)
 			operator_call_reverse(_member0, _member1, _operator, _immediate);
 			break;
 		}
-		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_MEMBER * MOCO_COUNT + MOCO_MEMBER) * IOCO_COUNT + IOCO_STRING)):
+		case (OC_OPERATOR_CALL_IMMEDIATE_REVERSE - ((MOCO_PERMANENT * MOCO_COUNT + MOCO_PERMANENT) * IOCO_COUNT + IOCO_STRING)):
 		{
 			auto _member0 = _globals[read<member_index_t>(_cursor)];
 			auto _member1 = _globals[read<member_index_t>(_cursor)];
