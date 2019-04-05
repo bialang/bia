@@ -18,7 +18,7 @@ class member_array_view
 {
 public:
 	/** The index type. */
-	typedef uint32_t index_t;
+	typedef int32_t index_t;
 
 	/**
 	 * Constructor.
@@ -38,11 +38,9 @@ public:
 		for (auto i = _begin; i < _end; i += framework::max_member_size) {
 			new(i) framework::undefined_member();
 		}
-
-		_end -= framework::max_member_size;
 	}
 	member_array_view(const member_array_view & _copy) = delete;
-	member_array_view(member_array_view && _move)
+	member_array_view(member_array_view && _move) noexcept
 	{
 		_begin = _move._begin;
 		_end = _move._end;
@@ -60,48 +58,54 @@ public:
 	*/
 	~member_array_view()
 	{
-		_end += framework::max_member_size;
-
 		// Destroy all members
 		for (auto i = _begin; i < _end; i += framework::max_member_size) {
 			reinterpret_cast<framework::member*>(i)->~member();
 		}
 	}
-	/**
-	 * Returns the nth element from the front.
-	 *
-	 * @since 3.79.150.825
-	 * @date 4-Apr-19
-	 *
-	 * @param _index The index of the element. Must be within the view.
-	 *
-	 * @return The member.
-	*/
-	framework::member * from_front(index_t _index) noexcept
-	{
-		return reinterpret_cast<framework::member*>(_begin + _index * framework::max_member_size);
-	}
-	/**
-	 * Returns the nth element from the back.
-	 *
-	 * @since 3.79.150.825
-	 * @date 4-Apr-19
-	 *
-	 * @param _index The index of the element. Must be within the view.
-	 *
-	 * @return The member.
-	*/
-	framework::member * from_back(index_t _index) noexcept
-	{
-		return reinterpret_cast<framework::member*>(_end - _index * framework::max_member_size);
-	}
 	member_array_view & operator=(const member_array_view & _copy) = delete;
-	member_array_view & operator=(member_array_view && _move)
+	member_array_view & operator=(member_array_view && _move) noexcept
 	{
 		std::swap(_begin, _move._begin);
 		std::swap(_end, _move._end);
 
 		return *this;
+	}
+	/**
+	 * Returns the nth element from either the positive or the negative range.
+	 *
+	 * @since 3.80.151.828
+	 * @date 5-Apr-19
+	 *
+	 * @param _index The index of the element. Must be within the view.
+	 *
+	 * @todo Update exception throwing.
+	 *
+	 * @return The member.
+	*/
+	framework::member * operator[](index_t _index)
+	{
+		int8_t * _ptr;
+
+		// Negative range
+		if (_index < 0) {
+			_ptr = _end + _index * framework::max_member_size;
+			
+			// Check lower bound
+			if (_ptr < _begin) {
+				BIA_IMPLEMENTATION_ERROR;
+			}
+		} // Positive range
+		else {
+			_ptr = _begin + _index * framework::max_member_size;
+
+			// Check upper bound
+			if (_ptr >= _end) {
+				BIA_IMPLEMENTATION_ERROR;
+			}
+		}
+
+		return reinterpret_cast<framework::member*>(_ptr);
 	}
 
 private:
