@@ -79,6 +79,7 @@ public:
 	 * @param _arguments The arguments passed to the constructor of @a Ty.
 	 *
 	 * @throws See the constructor of @a Ty.
+	 * @throws See destroy().
 	 *
 	 * @return The address to the newly created object.
 	*/
@@ -86,6 +87,8 @@ public:
 	Ty * create(Arguments &&... _arguements)
 	{
 		static_assert(sizeof(Ty) <= Size, "Object does not fit.");
+
+		destroy();
 
 		auto _ptr = new(&_object_space) Ty(std::forward<Arguments>(_arguements)...);
 

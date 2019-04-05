@@ -1,7 +1,7 @@
 import re
 
 ptype = [
-    ("OC_RETURN", "", "goto gt_return;", "", "ret"),
+    ("OC_RETURN_VOID", "", "goto gt_return;", "", "ret"),
     ("OC_PUSH_TEST", "", "_stack.push(_test_register);", "", "pusht")
 ]
 inttype = [
@@ -11,9 +11,11 @@ inttype = [
     ("OC_JUMP_FALSE", "", "_cursor += _test_register ? 0 : _int;", "", "jpf")
 ]
 itype = [
+    ("OC_RETURN_IMMEDIATE", "", "framework::create_member(_return.get(), _immediate);\n\t\t\tgoto gt_return;", "", "ret"),
     ("OC_PUSH_IMMEDIATE", "", "_stack.push(_immediate);", "", "push")
 ]
 mtype = [
+    ("OC_RETURN", "", "_member->refer(_return.get());\n\t\t\tgoto gt_return;", "", "ret"),
     ("OC_TEST", "", "_test_register = _member->test();", "", "test"),
     ("OC_PUSH", "", "_stack.push(_member);", "", "push"),
     ("OC_UNDEFINE", "", "_member->undefine();", "", "undf"),

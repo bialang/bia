@@ -52,6 +52,8 @@ public:
 	 * @throws See stream::output_stream::position(), stream::output_stream::write_all(), stream::output_stream::set_position() and stream::output_stream::set_beginning().
 	*/
 	void finalize(member_index_t _temp_count, member_index_t _local_count);
+	void return_void();
+	void return_member(const index & _member);
 	void instantiate_int(const index & _member, int64_t _value);
 	void instantiate_double(const index & _member, double _value);
 	void instantiate_string(const index & _member, string_manager::utf8_index_t _value);

@@ -45,7 +45,17 @@ void virtual_translator::finalize(member_index_t _temp_count, member_index_t _lo
 		_output->set_beginning(_setup_end_pos);
 	}
 
-	op_code::write_p_type(*_output, OC_RETURN);
+	return_void();
+}
+
+void virtual_translator::return_void()
+{
+	op_code::write_p_type(*_output, OC_RETURN_VOID);
+}
+
+void virtual_translator::return_member(const index & _member)
+{
+	op_code::write_m_type(*_output, OC_RETURN, _member);
 }
 
 void virtual_translator::instantiate_int(const index & _member, int64_t _value)

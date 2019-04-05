@@ -1,13 +1,14 @@
 
 
 fun foo{
-var _printer = printer(0)
+	var _printer = printer(0)
 
-print(_printer.hey())
-_printer.hi()
+	return _printer
 }
 
-foo()
+var a = foo()
+a.hey()
+a.hi()
 disassemble(foo)
 
 pause()#>

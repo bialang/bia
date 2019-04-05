@@ -19,6 +19,7 @@ enum KEYWORD_ID : int32_t
 	KI_WHILE,
 	KI_UNTIL,
 	KI_DO,
+	KI_RETURN,
 	KI_BREAK,
 	KI_CONTINUE,
 	KI_GOTO,
@@ -174,6 +175,22 @@ struct keyword_do
 	constexpr static KEYWORD_ID string_id() noexcept
 	{
 		return KI_DO;
+	}
+};
+
+struct keyword_return
+{
+	constexpr static const char * token() noexcept
+	{
+		return "return";
+	}
+	constexpr static size_t length() noexcept
+	{
+		return 6;
+	}
+	constexpr static KEYWORD_ID string_id() noexcept
+	{
+		return KI_RETURN;
 	}
 };
 

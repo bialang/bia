@@ -755,7 +755,21 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 const grammar::report * compiler::handle_loop_control(const grammar::report * _report)
 {
-	if (_report->content.keyword == grammar::KI_DELETE) {
+	if (_report->content.keyword == grammar::KI_RETURN) {
+		if (_report->custom_parameter == 0x659) {
+			handle_identifier(++_report);
+
+			_value.expand_to_member(_translator, [&](auto _member) {
+				if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
+					BIA_IMPLEMENTATION_ERROR;
+				}
+
+				_translator.return_member(_member);
+			});
+		} else {
+			_translator.return_void();
+		}
+	} else if (_report->content.keyword == grammar::KI_DELETE) {
 		// Reset temp member
 		_finish_tasks.emplace_back(std::make_pair(_translator.output_stream().position(), [this]() {
 			BIA_NOT_IMPLEMENTED;

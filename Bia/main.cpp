@@ -228,8 +228,9 @@ int main()
 		machine::stack _stack(_context.allocator(), 15);
 
 		try {
+			machine::virtual_machine::virtual_machine_code::return_t _return;
 			test_and_time(1, [&] {
-				_machine_code.execute(_stack);
+				_machine_code.execute(_stack, _return);
 			});
 
 			//printf("Value of i: %lli\n", _context.get_member("i")->cast<long long>());

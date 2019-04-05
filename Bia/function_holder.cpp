@@ -17,7 +17,11 @@ void function_holder::disassemble() const
 
 void function_holder::execute(machine::stack & _stack, framework::member * _destination)
 {
-	_function.execute(_stack);
+	machine::virtual_machine::virtual_machine_code::return_t _return;
+
+	_function.execute(_stack, _return);
+
+	_return.get()->refer(_destination);
 }
 
 void function_holder::execute_count(framework::member * _destination)

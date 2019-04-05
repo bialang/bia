@@ -8,6 +8,8 @@
 #include "operation.hpp"
 #include "string_manager.hpp"
 #include "stack.hpp"
+#include "local_object.hpp"
+#include "max_member_size.hpp"
 
 
 namespace bia
@@ -20,6 +22,8 @@ namespace virtual_machine
 class virtual_machine_code
 {
 public:
+	typedef utility::local_object<framework::member, framework::max_member_size, framework::max_member_alignment> return_t;
+
 	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, memory::allocation<schein> && _schein, bool _take_ownership = false);
 	virtual_machine_code(const virtual_machine_code & _copy) = delete;
 	BIA_EXPORT virtual_machine_code(virtual_machine_code && _move);
@@ -33,7 +37,7 @@ public:
 	*/
 	BIA_EXPORT ~virtual_machine_code();
 
-	BIA_EXPORT void execute(stack & _stack);
+	BIA_EXPORT void execute(stack & _stack, return_t & _return);
 	BIA_EXPORT void clear();
 	BIA_EXPORT void disassemble() const;
 	BIA_EXPORT bool is_executable() const noexcept;
