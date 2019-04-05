@@ -60,12 +60,10 @@ mmitype = [
 ]
 
 mvars = [
-    ("MOCO_TINY_TEMP", "auto {0} = _temps.from_front(read<tiny_member_index_t>(_cursor));"),
-    ("MOCO_TINY_LOCAL", "auto {0} = _temps.from_back(read<tiny_member_index_t>(_cursor));"),
-    ("MOCO_TINY_MEMBER", "auto {0} = _globals[read<tiny_member_index_t>(_cursor)];"),
-    ("MOCO_TEMP", "auto {0} = _temps.from_front(read<member_index_t>(_cursor));"),
-    ("MOCO_LOCAL", "auto {0} = _temps.from_back(read<member_index_t>(_cursor));"),
-    ("MOCO_MEMBER", "auto {0} = _globals[read<member_index_t>(_cursor)];")
+    ("MOCO_TINY_TEMPORARY", "auto {0} = _temps.from_back(read<tiny_member_index_t>(_cursor));"),
+    ("MOCO_TINY_PERMANENT", "auto {0} = _globals[read<tiny_member_index_t>(_cursor)];"),
+    ("MOCO_TEMPORARY", "auto {0} = _temps.from_back(read<member_index_t>(_cursor));"),
+    ("MOCO_PERMANENT", "auto {0} = _globals[read<member_index_t>(_cursor)];")
 ]
 intvars = [
     ("IIOCO_INT32", "auto _int = read<int32_t>(_cursor);"),
