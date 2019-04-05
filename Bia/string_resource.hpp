@@ -92,7 +92,7 @@ private:
 	stream::string_stream::size_t _size;
 };
 
-typedef utility::local_object<string_resource_base, utility::max_sizeof<dstring_resource, cstring_resource>(), true> string_resource_t;
+typedef utility::local_object<string_resource_base, utility::max_sizeof<dstring_resource, cstring_resource>(), utility::max_alignof<dstring_resource, cstring_resource>()> string_resource_t;
 
 }
 }

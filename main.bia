@@ -1,15 +1,16 @@
-#>
-print(0x46)
-print(0777)
-print(0b11010)
 
-{
+
+fun foo{
 var _printer = printer(0)
 
 print(_printer.hey())
 _printer.hi()
 }
-pause()<#
+
+foo()
+disassemble(foo)
+
+pause()#>
 var sum = 0
 var i = 0
 
