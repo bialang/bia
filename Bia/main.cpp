@@ -227,21 +227,6 @@ int main()
 
 		machine::stack _stack(_context.allocator(), 15);
 
-		test_and_time(1, [] {
-			detail::big_int _sum;
-			auto start = std::clock() / (double)CLOCKS_PER_SEC;
-
-			for (auto i = 0; i < 1000000; ++i) {
-				if (i % 3)
-					_sum.add(i * (i % 3));
-				else
-					_sum.divide(i + 1);
-			}
-
-			_sum.print(stdout);
-			std::cout << "time: " << (std::clock() / (double)CLOCKS_PER_SEC - start) << std::endl;
-		});
-
 		try {
 			test_and_time(1, [&] {
 				_machine_code.execute(_stack);

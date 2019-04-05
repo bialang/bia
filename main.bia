@@ -3,12 +3,12 @@ print(0x46)
 print(0777)
 print(0b11010)
 
+{
 var _printer = printer(0)
 
 print(_printer.hey())
 _printer.hi()
-
-destroy(_printer)
+}
 pause()<#
 var sum = 0
 var i = 0

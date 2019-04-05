@@ -90,7 +90,7 @@ private:
 
 struct invalid_index : index
 {
-	invalid_index() noexcept : index(~member_index_t(0))
+	invalid_index() noexcept : index(0)
 	{
 	}
 };
