@@ -1,0 +1,111 @@
+#>
+print(0x46)
+print(0777)
+print(0b11010)
+
+var _printer = printer(0)
+
+print(_printer.hey())
+_printer.hi()
+
+destroy(_printer)
+pause()<#
+var sum = 0
+var i = 0
+
+var start = time()
+
+while i < 1000000 {
+	var t = i % 3
+	
+	if t sum += i * t
+	else sum /= i + 1
+
+	i += 1
+}
+
+print(time() - start)
+print(sum)
+
+#>print(2)
+
+fun foo {
+	print(0)
+}
+
+foo()
+print(foo)
+
+#>
+
+fun range(a, b=null) {
+	if b is null {
+		for a times {
+			yield .loop_count
+		}
+	} else {
+		for b - a times with i = a {
+			yield i
+		}
+	}
+}
+
+for i in range(3) {
+	print(i)
+
+	break after 2 times
+}
+
+class iterator : object
+{
+	version = "2.0.0.0"
+
+	iterator(val) {
+		print("constructed iterator")
+		this.val = val
+	}
+
+	fun next() {
+		return val--
+	}
+
+	static fun version() {
+		print("Iterator version:", version)
+	}
+
+	fun has_next() {
+		return val > 0
+	}
+
+	operator +=(t) {
+		for t times
+			next()
+	}
+
+	operator bool {
+		return has_next()
+	}
+
+	operator <=>(other) {
+		return val <=> other.val
+	}
+}
+
+var it = iterator(3)
+
+iterator.version()
+
+while it {
+	print(it += 1)
+}
+
+fun call_me(callback) {
+	callback()
+}
+
+call_me(iterator.version)
+call_me(it.next)
+call_me(it.operator bool)
+call_me(() -> print("hi"))
+
+<#

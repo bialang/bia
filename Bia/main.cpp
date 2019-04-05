@@ -12,6 +12,8 @@
 #include <chrono>
 #include <iostream>
 #include <regex>
+#include <sstream>
+#include <fstream>
 #include "big_int_allocator.hpp"
 #include "cstring_member_def.hpp"
 #include "virtual_machine_code.hpp"
@@ -81,7 +83,7 @@ int main()
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
-		
+
 		_context.set_lambda<1>("ser", [](int & i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
@@ -129,22 +131,32 @@ int main()
 
 			return true;
 		});
-		_context.set_lambda("time", []() { return std::clock()/(double)CLOCKS_PER_SEC; });
+		_context.set_lambda("time", []() { return std::clock() / (double)CLOCKS_PER_SEC; });
 		_context.set_lambda("disassemble", [](bia::framework::executable::bia_function * _function) { _function->disassemble(); });
 		_context.set_lambda("pause", []() { system("pause"); });
-		/*_context.set_lambda("int", [](bia::framework::member * _member) {
-			if (_member->flags() & bia::framework::member::F_CSTRING) {
-				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
+		_context.set_lambda("int", [](utility::variant<framework::member*, int64_t, double, const char*> _value) -> int64_t {
+			switch (_value.id()) {
+			case 1:
+				return (*_value.get<1>())->to_int();
+			case 2:
+				return *_value.get<2>();
+			case 3:
+				return *_value.get<3>();
 			}
 
-			return _member->to_int();
+			BIA_IMPLEMENTATION_ERROR;
 		});
-		_context.set_lambda("float", [](bia::framework::member * _member) {
-			if (_member->flags() & bia::framework::member::F_CSTRING) {
-				return std::stod(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
+		_context.set_lambda("float", [](utility::variant<framework::member*, int64_t, double, const char*> _value) -> double {
+			switch (_value.id()) {
+			case 1:
+				return (*_value.get<1>())->to_double();
+			case 2:
+				return *_value.get<2>();
+			case 3:
+				return *_value.get<3>();
 			}
 
-			return _member->to_double();
+			BIA_IMPLEMENTATION_ERROR;
 		});
 		_context.set_lambda("defined", [](const bia::framework::member * _member) {
 			try {
@@ -155,136 +167,9 @@ int main()
 
 			return true;
 		});
-		set_class<printer>(_context, "printer")
-			.set_constructor<int>()
-			.set_function("hey", &test)
-			.set_function("hi", &printer::hi);
-		*/
+		_context.set_function("system", &system);
 		set_class<printer>(_context, "printer").set_constructor<1, int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
-		// Script
-		char _script[] = u8R""(
-
-var c = 0
-
-fun recursion {
-	print(c += 1)
-	recursion()
-}
-
-disassemble(recursion)
-pause()
-recursion()
-
-#>var sum = 0
-var start = time()
-var i = 0
-
-fun foo {
-	var t = i % 3
-	
-	if t sum += i * t
-	else sum /= i + 1
-
-	i += 1
-}
-
-while i < 1000000 {
-	foo()
-}
-
-var end = time()
-print(sum)
-var sum = end - start
-print(sum)
-
-disassemble(foo)
-print(t)
-
-#>print(2)
-
-fun foo {
-	print(0)
-}
-
-foo()
-print(foo)
-
-#>
-
-fun range(a, b=null) {
-	if b is null {
-		for a times {
-			yield .loop_count
-		}
-	} else {
-		for b - a times with i = a {
-			yield i
-		}
-	}
-}
-
-for i in range(3) {
-	print(i)
-
-	break after 2 times
-}
-
-class iterator : object
-{
-	version = "2.0.0.0"
-
-	iterator(val) {
-		print("constructed iterator")
-		this.val = val
-	}
-
-	fun next() {
-		return val--
-	}
-
-	static fun version() {
-		print("Iterator version:", version)
-	}
-
-	fun has_next() {
-		return val > 0
-	}
-
-	operator +=(t) {
-		for t times
-			next()
-	}
-
-	operator bool {
-		return has_next()
-	}
-
-	operator <=>(other) {
-		return val <=> other.val
-	}
-}
-
-var it = iterator(3)
-
-iterator.version()
-
-while it {
-	print(it += 1)
-}
-
-fun call_me(callback) {
-	callback()
-}
-
-call_me(iterator.version)
-call_me(it.next)
-call_me(it.operator bool)
-call_me(() -> print("hi"))
-
-<#
-
-)"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
 
@@ -297,8 +182,22 @@ call_me(() -> print("hi"))
 			}
 		});*/
 
+		std::string _script;
+
+		{
+			std::stringstream _ss;
+			std::ifstream _file("main.bia");
+
+			if (!_file.is_open()) {
+				_file = std::ifstream("../main.bia");
+			}
+
+			_ss << _file.rdbuf();
+			_script = _ss.str();
+		}
+
 		// Compile
-		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
+		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script.data()), [](const int8_t*) {}), _script.length());
 		bia::stream::buffer_output_stream _output;
 		bia::compiler::compiler _compiler(_output, _context, nullptr);
 
@@ -327,6 +226,21 @@ call_me(() -> print("hi"))
 		system("pause");
 
 		machine::stack _stack(_context.allocator(), 15);
+
+		test_and_time(1, [] {
+			detail::big_int _sum;
+			auto start = std::clock() / (double)CLOCKS_PER_SEC;
+
+			for (auto i = 0; i < 1000000; ++i) {
+				if (i % 3)
+					_sum.add(i * (i % 3));
+				else
+					_sum.divide(i + 1);
+			}
+
+			_sum.print(stdout);
+			std::cout << "time: " << (std::clock() / (double)CLOCKS_PER_SEC - start) << std::endl;
+		});
 
 		try {
 			test_and_time(1, [&] {
