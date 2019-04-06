@@ -11,6 +11,7 @@ namespace machine
 schein::schein(machine::machine_context & _context)
 {
 	this->_context = &_context;
+	_setup_count = 0;
 }
 
 schein::~schein()
@@ -58,6 +59,16 @@ void schein::set_member_map(const utility::index_map & _member_map)
 void schein::set_name_map(const utility::index_map & _name_map)
 {
 	_names = _name_map.to_list<name_manager::name_t>([](auto _name) { return _name; });
+}
+
+void schein::set_setup_count(setup_count_t _count) noexcept
+{
+	_setup_count = _count;
+}
+
+schein::setup_count_t schein::setup_count() const noexcept
+{
+	return _setup_count;
 }
 
 schein::regex_index_t schein::register_regex_inplace(const uint8_t * _bytes, size_t _size)

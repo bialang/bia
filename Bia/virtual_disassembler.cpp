@@ -40,18 +40,6 @@ void virtual_disassembler::disassemble(memory::allocation<const uint8_t> _code)
 			break;
 		}
 		/** int-Type */
-		case (OC_SETUP - IIOCO_INT32):
-		{
-			auto _int = read<int32_t>(_cursor);
-			print_all("setup i", _int);
-			break;
-		}
-		case (OC_SETUP - IIOCO_INT8):
-		{
-			auto _int = read<int8_t>(_cursor);
-			print_all("setup i", _int);
-			break;
-		}
 		case (OC_JUMP - IIOCO_INT32):
 		{
 			auto _int = read<int32_t>(_cursor);

@@ -35,6 +35,7 @@ class schein
 public:
 	/** The deleter function signature. */
 	typedef std::function<void(memory::universal_allocation)> deleter_function_t;
+	typedef uint32_t setup_count_t;
 	typedef uint32_t regex_index_t;
 	typedef uint32_t function_index_t;
 	typedef stream::string_stream::length_t string_length_t;
@@ -133,6 +134,8 @@ public:
 	 * @throws See utility::index_map::to_list().
 	*/
 	BIA_EXPORT void set_name_map(const utility::index_map & _name_map);
+	BIA_EXPORT void set_setup_count(setup_count_t _count) noexcept;
+	BIA_EXPORT setup_count_t setup_count() const noexcept;
 	BIA_EXPORT regex_index_t register_regex_inplace(const uint8_t * _bytes, size_t _size);
 	BIA_EXPORT regex_index_t register_regex_inplace(const char * _string, string_length_t _length);
 	BIA_EXPORT regex_index_t register_regex_inplace(const char16_t * _string, string_length_t _length);
@@ -181,6 +184,8 @@ public:
 protected:
 	/** The linked context. */
 	machine::machine_context * _context;
+	/** The amount of temporary members needed at setup. */
+	setup_count_t _setup_count;
 	/** Stores all registered allocations with deleter. */
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
 	/** Stores all registered regexs. */

@@ -1,11 +1,16 @@
 
 
-fun foo(x) {
-	var i = 99
-	print(x)
+var x = "yunus@ayar.eu"
+var y = "kartoffel"
+	var email = /\w+@\w+\.\w+/
+
+fun foo {
+
+	print(email == x)
+	print(email == y)
 }
-disassemble(foo)
-print(foo())
+
+foo()
 
 #>
 var sum = 0

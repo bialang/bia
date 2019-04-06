@@ -28,7 +28,7 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 void compiler::finalize()
 {
 	_scope_handler.finalize();
-	_translator.finalize(_counter.max(), _scope_handler.max_needed());
+	_translator.finalize();
 
 	auto _end = _translator.output_stream().position();
 
@@ -41,6 +41,7 @@ void compiler::finalize()
 	_translator.output_stream().set_position(_end);
 	_schein->set_member_map(_translator.member_map());
 	_schein->set_name_map(_translator.name_map());
+	_schein->set_setup_count(_counter.max() + _scope_handler.max_needed());
 }
 
 machine::memory::allocation<machine::schein> & compiler::schein() noexcept

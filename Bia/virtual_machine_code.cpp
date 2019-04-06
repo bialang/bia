@@ -56,12 +56,12 @@ void virtual_machine_code::execute(stack & _stack, return_t & _return)
 	const auto _end = _code.first + _code.second;
 	const uint8_t * _cursor = _code.first;
 	framework::member::test_result_t _test_register = 0;
-	member_array_view _temps(nullptr, 0);
 
 	// Setup stack
 	auto _stack_cleaner = utility::make_scope_exit([_stack_frame = _stack.create_stack_frame(), &_stack]() {
 		_stack.drop_stack_frame(_stack_frame);
 	});
+	member_array_view _temps(_stack.allocate_space(_schein->setup_count() * framework::max_member_size), _schein->setup_count());
 
 	_return.create<framework::undefined_member>();
 
@@ -82,18 +82,6 @@ void virtual_machine_code::execute(stack & _stack, return_t & _return)
 			break;
 		}
 		/** int-Type */
-		case (OC_SETUP - IIOCO_INT32):
-		{
-			auto _int = read<int32_t>(_cursor);
-			_temps = member_array_view(_stack.allocate_space(_int * framework::max_member_size), _int);
-			break;
-		}
-		case (OC_SETUP - IIOCO_INT8):
-		{
-			auto _int = read<int8_t>(_cursor);
-			_temps = member_array_view(_stack.allocate_space(_int * framework::max_member_size), _int);
-			break;
-		}
 		case (OC_JUMP - IIOCO_INT32):
 		{
 			auto _int = read<int32_t>(_cursor);
