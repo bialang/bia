@@ -2,7 +2,7 @@
 
 fun foo{
 	var i = 99
-	return i
+	return
 }
 
 print(foo())

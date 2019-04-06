@@ -455,47 +455,6 @@ ACTION lexer_token::first_member(stream::buffer_input_stream & _input, token_par
 	return success;
 }
 
-ACTION lexer_token::control_statement(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
-{
-	auto success = ACTION::REPORT;
-	constexpr auto error = ACTION::ERROR;
-
-	if (keyword<keyword_return>(_input, _params, _output) != success &&
-		keyword<keyword_break>(_input, _params, _output) != success &&
-		keyword<keyword_continue>(_input, _params, _output) != success &&
-		keyword<keyword_goto>(_input, _params, _output) != success &&
-		keyword<keyword_exit_scope>(_input, _params, _output) != success &&
-		keyword<keyword_delete>(_input, _params, _output) != success) {
-		return error;
-	}
-
-	// Additional identifier
-	if (_output.content.keyword == keyword_return::string_id()) {
-		auto _mark = _input.mark();
-		auto _tmp = _output;
-		auto _fallback = _params.bundle->size();
-
-		_tmp.custom_parameter = 0x659;
-		_tmp.rule_id = BGR_FLOW_CONTROL;
-		_output = {};
-
-		_params.bundle->add(_tmp);
-
-		// Required whitespaces before identifier
-		if (!whitespace_deleter<flags::starting_ws_token, true>(_input, _params.encoder) || (success = rule_pointer<BGR_VALUE>(_input, _params, _output)) == ACTION::ERROR) {
-			_input.reset(_mark);
-			_params.bundle->rollback(_fallback);
-			_output = _tmp;
-			success = ACTION::REPORT;
-		}
-	}
-
-	_output.rule_id = BGR_FLOW_CONTROL;
-
-	// Match end
-	return command_end(_input, _params, _output) == ACTION::DONT_REPORT ? success : error;
-}
-
 ACTION lexer_token::assign_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;

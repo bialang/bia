@@ -755,9 +755,14 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 
 const grammar::report * compiler::handle_flow_control(const grammar::report * _report)
 {
-	if (_report->content.keyword == grammar::KI_RETURN) {
-		if (_report->custom_parameter == 0x659) {
-			return handle_value<false>(_report + 1, [&]() {
+	const auto _end = _report++->content.end;
+
+	switch (_report->content.keyword) {
+	case grammar::KI_RETURN:
+	{
+		// Return a value
+		if (++_report < _end) {
+			handle_value<false>(_report, [&]() {
 				_value.expand_to_member(_translator, [&](auto _member) {
 					if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
 						BIA_NOT_IMPLEMENTED;
@@ -769,23 +774,29 @@ const grammar::report * compiler::handle_flow_control(const grammar::report * _r
 		} else {
 			_translator.return_void();
 		}
-	} else if (_report->content.keyword == grammar::KI_DELETE) {
-		// Reset temp member
-		_finish_tasks.emplace_back(std::make_pair(_translator.output_stream().position(), [this]() {
-			BIA_NOT_IMPLEMENTED;
-			//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(_counter.max()));
-		}));
-		BIA_NOT_IMPLEMENTED;
-		//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(0));
-	} else if (_loop_tracker.open_loops()) {
-		if (_report->content.keyword == grammar::KI_BREAK) {
-			_loop_tracker.add_end_update(_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, 0));
-		} else {
-			_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, _loop_tracker.loop_start());
-		}
+
+		break;
+	}
+	//else if (_report->content.keyword == grammar::KI_DELETE) {
+	//	// Reset temp member
+	//	_finish_tasks.emplace_back(std::make_pair(_translator.output_stream().position(), [this]() {
+	//		BIA_NOT_IMPLEMENTED;
+	//		//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(_counter.max()));
+	//	}));
+	//	BIA_NOT_IMPLEMENTED;
+	//	//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(0));
+	//} else if (_loop_tracker.open_loops()) {
+	//	if (_report->content.keyword == grammar::KI_BREAK) {
+	//		_loop_tracker.add_end_update(_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, 0));
+	//	} else {
+	//		_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, _loop_tracker.loop_start());
+	//	}
+	//}
+	default:
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
-	return _report + 1;
+	return _end;
 }
 
 const grammar::report * compiler::handle_function(const grammar::report * _report)
@@ -812,7 +823,7 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 		if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
-		
+
 		_translator.instantiate_function(_member, _function);
 	});
 
