@@ -1,17 +1,13 @@
 
 
 fun foo{
-	var _printer = printer(0)
-
-	return _printer
+	var i = 99
+	return i
 }
 
-var a = foo()
-a.hey()
-a.hi()
-disassemble(foo)
+print(foo())
 
-pause()#>
+#>
 var sum = 0
 var i = 0
 

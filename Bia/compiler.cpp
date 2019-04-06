@@ -247,8 +247,8 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_if(_report);
 	case BGR_TEST_LOOP:
 		return handle_test_loop(_report);
-	case BGR_CONTROL_STATEMENT:
-		return handle_loop_control(_report);
+	case BGR_FLOW_CONTROL:
+		return handle_flow_control(_report);
 	case BGR_FUNCTION:
 		return handle_function(_report);
 	case BGR_IMPORT:
@@ -753,18 +753,18 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 	return _end;
 }
 
-const grammar::report * compiler::handle_loop_control(const grammar::report * _report)
+const grammar::report * compiler::handle_flow_control(const grammar::report * _report)
 {
 	if (_report->content.keyword == grammar::KI_RETURN) {
 		if (_report->custom_parameter == 0x659) {
-			handle_identifier(++_report);
-
-			_value.expand_to_member(_translator, [&](auto _member) {
-				if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
-					BIA_IMPLEMENTATION_ERROR;
-				}
-
-				_translator.return_member(_member);
+			return handle_value<false>(_report + 1, [&]() {
+				_value.expand_to_member(_translator, [&](auto _member) {
+					if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
+						BIA_NOT_IMPLEMENTED;
+					} else {
+						_translator.return_member(_member);
+					}
+				});
 			});
 		} else {
 			_translator.return_void();
