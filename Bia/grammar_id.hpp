@@ -38,6 +38,11 @@ enum BIA_GRAMMAR_RULE : report::rule_t
 	// Function
 	BGR_FUNCTION,
 
+	// Parameter signature
+	BGR_PARAMETER_SIGNATURE,
+	BGR_PARAMETER_SIGNATURE_HELPER_0,
+	BGR_PARAMETER_SIGNATURE_HELPER_1,
+	
 	// Import
 	BGR_IMPORT,
 

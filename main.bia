@@ -1,10 +1,10 @@
 
 
-fun foo{
+fun foo(x) {
 	var i = 99
-	return
+	print(x)
 }
-
+disassemble(foo)
 print(foo())
 
 #>

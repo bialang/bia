@@ -807,11 +807,14 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 
 	auto _identifier = _value;
 
-	///TODO: handle parameter
-
 	// Compile function code
 	stream::buffer_output_stream _function_code;
 	compiler _compiler(_function_code, _context, this);
+
+	// Handle parameter
+	if (_report->rule_id == grammar::BGR_PARAMETER_SIGNATURE) {
+		_report = _compiler.handle_parameter_signature(_report);
+	}
 
 	_compiler.handle_root(_report);
 	_compiler.finalize();
@@ -826,6 +829,17 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 
 		_translator.instantiate_function(_member, _function);
 	});
+
+	return _end;
+}
+
+const grammar::report * compiler::handle_parameter_signature(const grammar::report * _report)
+{
+	const auto _end = _report++->content.end;
+
+	while (_report < _end) {
+		_report = handle_identifier(_report, VARIABLE_TYPE::DEFINITELY_LOCAL);
+	}
 
 	return _end;
 }

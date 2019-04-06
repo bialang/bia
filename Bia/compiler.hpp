@@ -392,6 +392,7 @@ private:
 	BIA_EXPORT const grammar::report * handle_test_loop(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_flow_control(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_function(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_parameter_signature(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_import(const grammar::report * _report);
 };
 
