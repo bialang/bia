@@ -265,6 +265,7 @@
     <ClInclude Include="object_def.hpp" />
     <ClInclude Include="object_variable.hpp" />
     <ClInclude Include="op_code.hpp" />
+    <ClInclude Include="parameter_setter.hpp" />
     <ClInclude Include="raw_object_def.hpp" />
     <ClInclude Include="regex.hpp" />
     <ClInclude Include="regex_member.hpp" />

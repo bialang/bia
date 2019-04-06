@@ -37,7 +37,7 @@ public:
 	*/
 	BIA_EXPORT ~virtual_machine_code();
 
-	BIA_EXPORT void execute(stack & _stack, return_t & _return);
+	BIA_EXPORT void execute(stack & _stack, framework::member::parameter_count_t _count, return_t & _return);
 	BIA_EXPORT void clear();
 	BIA_EXPORT void disassemble() const;
 	BIA_EXPORT bool is_executable() const noexcept;

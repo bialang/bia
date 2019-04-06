@@ -839,6 +839,8 @@ const grammar::report * compiler::handle_parameter_signature(const grammar::repo
 	const auto _end = _report++->content.end;
 
 	while (_report < _end) {
+		_schein->parameter_setter().add_parameter(_report->content.member);
+
 		_report = handle_identifier(_report, VARIABLE_TYPE::DEFINITELY_LOCAL);
 	}
 

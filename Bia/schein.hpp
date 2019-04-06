@@ -18,6 +18,7 @@
 #include "string_stream.hpp"
 #include "function_holder.hpp"
 #include "virtual_machine_code.hpp"
+#include "parameter_setter.hpp"
 
 
 namespace bia
@@ -179,6 +180,10 @@ public:
 	 * @return The name list.
 	*/
 	BIA_EXPORT const name_list_t & names() const noexcept;
+	virtual_machine::parameter_setter & parameter_setter() noexcept
+	{
+		return _parameter_setter;
+	}
 	schein & operator=(schein && _right) noexcept = default;
 
 protected:
@@ -198,6 +203,8 @@ protected:
 	member_list_t _globals;
 	/** The names. */
 	name_list_t _names;
+	/** The parameter setter that is responsible for the incoming parameters. */
+	virtual_machine::parameter_setter _parameter_setter;
 };
 
 }

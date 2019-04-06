@@ -18,8 +18,7 @@ public:
 	function_holder(function_holder && _move) noexcept = default;
 	~function_holder() = default;
 	void disassemble() const;
-	void execute(machine::stack & _stack, framework::member * _destination);
-	void execute_count(framework::member * _destination);
+	void execute_count(machine::stack & _stack, framework::member * _destination, framework::member::parameter_count_t _count);
 	void execute_format(framework::member * _destination);
 
 private:

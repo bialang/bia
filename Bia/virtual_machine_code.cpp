@@ -46,7 +46,7 @@ virtual_machine_code::~virtual_machine_code()
 	clear();
 }
 
-void virtual_machine_code::execute(stack & _stack, return_t & _return)
+void virtual_machine_code::execute(stack & _stack, framework::member::parameter_count_t _count, return_t & _return)
 {
 	auto & _globals = _schein->globals();
 	auto & _names = _schein->names();
@@ -58,11 +58,19 @@ void virtual_machine_code::execute(stack & _stack, return_t & _return)
 	framework::member::test_result_t _test_register = 0;
 
 	// Setup stack
+	auto _stack_frame = _stack.create_stack_frame();
 	auto _stack_cleaner = utility::make_scope_exit([_stack_frame = _stack.create_stack_frame(), &_stack]() {
 		_stack.drop_stack_frame(_stack_frame);
 	});
 	member_array_view _temps(_stack.allocate_space(_schein->setup_count() * framework::max_member_size), _schein->setup_count());
+	auto _current_tmp = _stack.create_stack_frame();
+	_stack.drop_stack_frame(_stack_frame);
+	// Parameter setup
+	_schein->parameter_setter().setup(_stack, _temps, _count);
 
+	_stack.drop_stack_frame(_current_tmp);
+
+	// Clear return
 	_return.create<framework::undefined_member>();
 
 	while (_cursor < _end) {

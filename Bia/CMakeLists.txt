@@ -131,7 +131,7 @@ set(Bia_SOURCE_FILES_PLATFORM "")
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
 source_group("Source Files\\machine\\platform" FILES ${Bia_SOURCE_FILES_PLATFORM})
 
-set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "virtual_disassembler.hpp" "virtual_machine_code.hpp" "virtual_translator.hpp")
+set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "parameter_setter.hpp" "virtual_disassembler.hpp" "virtual_machine_code.hpp" "virtual_translator.hpp")
 set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "virtual_disassembler.cpp" "virtual_machine_code.cpp" "virtual_translator.cpp")
 
 source_group("Header Files\\machine\\virtual_machine" FILES ${Bia_HEADER_FILES_VIRTUAL_MACHINE})

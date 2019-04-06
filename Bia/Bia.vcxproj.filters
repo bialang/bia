@@ -596,6 +596,9 @@
     <ClInclude Include="member_array_view.hpp">
       <Filter>Header Files\machine</Filter>
     </ClInclude>
+    <ClInclude Include="parameter_setter.hpp">
+      <Filter>Header Files\machine\virtual_machine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
