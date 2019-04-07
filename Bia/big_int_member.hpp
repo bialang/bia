@@ -52,6 +52,10 @@ public:
 	 * @throws See utility::share::share().
 	*/
 	BIA_EXPORT big_int_member(int64_t _value);
+	template<typename Type, typename = typename std::enable_if<std::is_integral<Type>::value>::type>
+	big_int_member(Type _value) : big_int_member(static_cast<int64_t>(_value))
+	{
+	}
 	/**
 	 * Constructor.
 	 *

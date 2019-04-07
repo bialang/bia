@@ -95,14 +95,14 @@ int main()
 			//p.a = 34343434;
 			return "ho ho how";
 		});
-		_context.set_lambda<1>("print", [](utility::variant<framework::member*, int64_t, double, const char*> _value) {
+		_context.set_lambda<1>("print", [](utility::variant<std::string, framework::member*, int64_t, double, const char*> _value) {
 			switch (_value.id()) {
 			case 1:
-				(*_value.get<1>())->print();
+				std::cout << *_value.get<1>() << '\n';
 
 				break;
 			case 2:
-				std::cout << *_value.get<2>() << '\n';
+				(*_value.get<2>())->print();
 
 				break;
 			case 3:
@@ -111,6 +111,10 @@ int main()
 				break;
 			case 4:
 				std::cout << *_value.get<4>() << '\n';
+
+				break;
+			case 5:
+				std::cout << *_value.get<5>() << '\n';
 
 				break;
 			default:
@@ -167,9 +171,19 @@ int main()
 
 			return true;
 		});
+		_context.set_lambda("input", [](const char * _message, bia::framework::object::object<std::string> * _output) {
+			std::cout << _message;
+
+			std::getline(std::cin, _output->cast<std::string>());
+		});
 		_context.set_function("system", &system);
 		set_class<printer>(_context, "printer").set_constructor<1, int>().set_function("hey", &test).set_function("hi", &printer::hi);
-
+		set_class<std::string>(_context, "string")
+			.set_constructor<0, const char*>()
+			.set_function("length", &std::string::length)
+			.set_function("append", static_cast<std::string&(std::string::*)(const char*)>(&std::string::append))
+			.set_function("c_str", &std::string::c_str)
+			;
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
 

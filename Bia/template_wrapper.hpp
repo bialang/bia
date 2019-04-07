@@ -44,13 +44,23 @@ public:
 
 		return *this;
 	}
-	template<size_t Optional_count = 0, typename Active_class = Class, typename Function_class, typename Return, typename... Arguments>
-	typename std::enable_if<std::is_base_of<Function_class, Active_class>::value, template_wrapper&>::type  set_function(member_map::name_t _name, Return(Function_class::*_function)(Arguments...))
+	template<size_t Optional_count = 0, typename Function_class, typename Return, typename... Arguments>
+	typename std::enable_if<std::is_base_of<Function_class, Class>::value, template_wrapper&>::type  set_function(member_map::name_t _name, Return(Function_class::*_function)(Arguments...))
 	{
 		// Set the active allocator
 		_context.activate_context();
 
-		_template_member->members().template emplace<framework::executable::member_function<Optional_count, Return(Active_class::*)(Arguments...)>>(_context.name_address(_name), _function);
+		_template_member->members().template emplace<framework::executable::member_function<Optional_count, Return(Function_class::*)(Arguments...)>>(_context.name_address(_name), _function);
+
+		return *this;
+	}
+	template<size_t Optional_count = 0, typename Function_class, typename Return, typename... Arguments>
+	typename std::enable_if<std::is_base_of<Function_class, Class>::value, template_wrapper&>::type  set_function(member_map::name_t _name, Return(Function_class::*_function)(Arguments...) const)
+	{
+		// Set the active allocator
+		_context.activate_context();
+
+		_template_member->members().template emplace<framework::executable::member_function<Optional_count, Return(Function_class::*)(Arguments...) const>>(_context.name_address(_name), _function);
 
 		return *this;
 	}

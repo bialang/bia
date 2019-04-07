@@ -1,7 +1,9 @@
-fun a(){
-return 4
-}
-print(a())
+
+var output = string("")
+
+input("geb was ein: ", output)
+
+system(output)
 
 #>
 fun quadrat(x) {
