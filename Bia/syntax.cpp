@@ -52,8 +52,8 @@ lexer syntax::init_rules()
 
 	// Statement
 	_lexer.set_rule(grammar_rule(BGR_NORMAL_STATEMENT, grammar_rule::F_OR, {
-		lexer_token::rule_pointer<BGR_ROOT_HELPER_1, flags::filler_token | flags::starting_ws_token>,
-		lexer_token::rule_pointer<BGR_ROOT_HELPER_0, flags::filler_token | flags::starting_ws_opt_token> }));
+		lexer_token::rule_pointer<BGR_ROOT_HELPER_1, flags::filler_token | flags::starting_padding_token>,
+		lexer_token::rule_pointer<BGR_ROOT_HELPER_0, flags::filler_token | flags::starting_padding_opt_token> }));
 
 	// Flow control
 	_lexer.set_rule(grammar_rule(BGR_FLOW_CONTROL, grammar_rule::F_WRAP_UP | grammar_rule::F_OR, {
@@ -144,12 +144,12 @@ lexer syntax::init_rules()
 	_lexer.set_rule(grammar_rule(BGR_FUNCTION, grammar_rule::F_WRAP_UP, {
 		lexer_token::keyword<keyword_function, flags::filler_token>,
 		lexer_token::rule_pointer<BGR_FUNCTION_HELPER_0, flags::filler_token | flags::starting_ws_token | flags::opt_token>,
-		lexer_token::rule_pointer<BGR_PARAMETER_SIGNATURE, flags::filler_token | flags::starting_ws_opt_token | flags::opt_token>,
+		lexer_token::rule_pointer<BGR_PARAMETER_SIGNATURE, flags::filler_token | flags::starting_ws_opt_token>,
 		lexer_token::rule_pointer<BGR_NORMAL_STATEMENT>
 		}));
 
 	// Function helper 0
-	_lexer.set_rule(grammar_rule(BGR_FUNCTION_HELPER_0, grammar_rule::F_DONT_REPORT_EMPTY, {
+	_lexer.set_rule(grammar_rule(BGR_FUNCTION_HELPER_0, grammar_rule::F_NONE, {
 		lexer_token::identifier
 		}));
 
