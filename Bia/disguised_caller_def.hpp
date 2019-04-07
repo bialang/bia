@@ -2,8 +2,8 @@
 
 #include <cstddef>
 
+#include "config.hpp"
 #include "member.hpp"
-#include "stack.hpp"
 #include "allocator.hpp"
 
 

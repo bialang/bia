@@ -230,7 +230,7 @@ int main()
 		try {
 			machine::virtual_machine::virtual_machine_code::return_t _return;
 			test_and_time(1, [&] {
-				_machine_code.execute(_stack, 0, _return);
+				_machine_code.execute(_stack, nullptr, 0, _return);
 			});
 
 			//printf("Value of i: %lli\n", _context.get_member("i")->cast<long long>());

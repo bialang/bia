@@ -1,20 +1,8 @@
-fun multiapply(f, k, v)  {
-    if k == 0 {
-        return v
-	}
-    return f(multiapply(f, k-1, v))
+fun moo(x) {
+	return x**x
 }
 
-fun sq(v) {
-    return v*v
-}
-
-var t = 22
-var l = 12345
-
-var bignum = multiapply(sq, t, l)
-
-print(bignum % 10)
+print(moo(3))
 
 #>
 fun quadrat(x) {

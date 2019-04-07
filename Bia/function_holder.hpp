@@ -18,8 +18,7 @@ public:
 	function_holder(function_holder && _move) noexcept = default;
 	~function_holder() = default;
 	void disassemble() const;
-	void execute_count(machine::stack & _stack, framework::member * _destination, framework::member::parameter_count_t _count);
-	void execute_format(framework::member * _destination);
+	void execute_format(machine::stack & _stack, framework::member * _destination, const char * _format, framework::member::parameter_count_t _count);
 
 private:
 	machine::virtual_machine::virtual_machine_code _function;

@@ -9,6 +9,7 @@
 #include "member.hpp"
 #include "type_traits.hpp"
 #include "variant.hpp"
+#include "create_member.hpp"
 
 
 namespace bia
@@ -92,6 +93,33 @@ public:
 		}
 
 		_stack_pointer -= _count;
+	}
+	void format_cast(ptrdiff_t _offset, char _format, framework::member * _destination)
+	{
+		switch (_format) {
+		case 'i':
+			framework::create_member(_destination, cast<int32_t>(_offset));
+
+			break;
+		case 'I':
+			framework::create_member(_destination, cast<int64_t>(_offset));
+
+			break;
+		case 'd':
+			framework::create_member(_destination, cast<double>(_offset));
+
+			break;
+		case 'a':
+			framework::create_member(_destination, reinterpret_cast<const char*>(_stack_pointer + _offset));
+
+			break;
+		case 'M':
+			reinterpret_cast<framework::member*>(cast<intptr_t>(_offset))->refer(_destination);
+
+			break;
+		default:
+			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
+		}
 	}
 	size_t size() const noexcept
 	{

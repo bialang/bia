@@ -46,7 +46,7 @@ virtual_machine_code::~virtual_machine_code()
 	clear();
 }
 
-void virtual_machine_code::execute(stack & _stack, framework::member::parameter_count_t _count, return_t & _return)
+void virtual_machine_code::execute(stack & _stack, const char * _format, framework::member::parameter_count_t _count, return_t & _return)
 {
 	auto & _globals = _schein->globals();
 	auto & _names = _schein->names();
@@ -65,8 +65,8 @@ void virtual_machine_code::execute(stack & _stack, framework::member::parameter_
 	member_array_view _temps(_stack.allocate_space(_schein->setup_count() * framework::max_member_size), _schein->setup_count());
 	auto _current_tmp = _stack.create_stack_frame();
 	_stack.drop_stack_frame(_stack_frame);
-	// Parameter setup
-	_schein->parameter_setter().setup(_stack, _temps, _count);
+	///TODO Parameter setup
+	_schein->parameter_setter().setup(_stack, _temps, _format, _count);
 
 	_stack.drop_stack_frame(_current_tmp);
 

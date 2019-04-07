@@ -44,17 +44,17 @@ void BIA_MEMBER_CALLING_CONVENTION bia_function::clone(member * _destination)
 
 void BIA_MEMBER_CALLING_CONVENTION bia_function::execute(machine::stack * _stack, member * _destination)
 {
-	_data->execute_count(*_stack, _destination, 0);
+	_data->execute_format(*_stack, _destination, nullptr, 0);
 }
 
 void BIA_VARG_MEMBER_CALLING_CONVENTION bia_function::execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count)
 {
-	_data->execute_count(*_stack, _destination, _count);
+	_data->execute_format(*_stack, _destination, nullptr, _count);
 }
 
 void BIA_VARG_MEMBER_CALLING_CONVENTION bia_function::execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count)
 {
-	BIA_NOT_IMPLEMENTED;
+	_data->execute_format(*_stack, _destination, _format, _count);
 }
 
 void bia_function::set_instance(const void * _instance, const std::type_info & _type)
