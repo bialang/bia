@@ -40,7 +40,6 @@ lexer syntax::init_rules()
 		lexer_token::rule_pointer<BGR_IF>,
 		lexer_token::rule_pointer<BGR_TEST_LOOP>,
 		lexer_token::rule_pointer<BGR_FLOW_CONTROL>,
-		lexer_token::rule_pointer<BGR_FUNCTION>,
 		lexer_token::rule_pointer<BGR_IMPORT>,
 		lexer_token::rule_pointer<BGR_ROOT_HELPER_2>
 		}));
@@ -143,10 +142,15 @@ lexer syntax::init_rules()
 
 	// Function
 	_lexer.set_rule(grammar_rule(BGR_FUNCTION, grammar_rule::F_WRAP_UP, {
-		lexer_token::keyword<keyword_function, flags::filler_token | flags::ending_ws_token>,
-		lexer_token::identifier,
+		lexer_token::keyword<keyword_function, flags::filler_token>,
+		lexer_token::rule_pointer<BGR_FUNCTION_HELPER_0, flags::filler_token | flags::starting_ws_token | flags::opt_token>,
 		lexer_token::rule_pointer<BGR_PARAMETER_SIGNATURE, flags::filler_token | flags::starting_ws_opt_token | flags::opt_token>,
 		lexer_token::rule_pointer<BGR_NORMAL_STATEMENT>
+		}));
+
+	// Function helper 0
+	_lexer.set_rule(grammar_rule(BGR_FUNCTION_HELPER_0, grammar_rule::F_DONT_REPORT_EMPTY, {
+		lexer_token::identifier
 		}));
 
 	// Parameter signature
@@ -180,6 +184,7 @@ lexer syntax::init_rules()
 		lexer_token::number, // BV_NUMBER
 		lexer_token::keyword<keyword_true>, // BV_TRUE
 		lexer_token::keyword<keyword_false>, // BV_FALSE
+		lexer_token::rule_pointer<BGR_FUNCTION>, // BV_FUNCTION
 		lexer_token::rule_pointer<BGR_MEMBER> // BV_MEMBER
 		}));
 

@@ -37,6 +37,7 @@ enum BIA_GRAMMAR_RULE : report::rule_t
 
 	// Function
 	BGR_FUNCTION,
+	BGR_FUNCTION_HELPER_0,
 
 	// Parameter signature
 	BGR_PARAMETER_SIGNATURE,
@@ -88,6 +89,7 @@ enum BIA_VALUE
 	BV_NUMBER = 1,
 	BV_TRUE,
 	BV_FALSE,
+	BV_FUNCTION,
 	BV_MEMBER
 };
 

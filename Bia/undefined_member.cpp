@@ -20,17 +20,14 @@ void BIA_MEMBER_CALLING_CONVENTION undefined_member::print() const
 
 void BIA_MEMBER_CALLING_CONVENTION undefined_member::copy(member * _destination)
 {
-	BIA_UNDEFINED_ERROR;
 }
 
 void BIA_MEMBER_CALLING_CONVENTION undefined_member::refer(member * _destination)
 {
-	BIA_UNDEFINED_ERROR;
 }
 
 void BIA_MEMBER_CALLING_CONVENTION undefined_member::clone(member * _destination)
 {
-	BIA_UNDEFINED_ERROR;
 }
 
 void BIA_MEMBER_CALLING_CONVENTION undefined_member::execute(machine::stack * _stack, member * _destination)

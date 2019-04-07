@@ -250,8 +250,6 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_test_loop(_report);
 	case BGR_FLOW_CONTROL:
 		return handle_flow_control(_report);
-	case BGR_FUNCTION:
-		return handle_function(_report);
 	case BGR_IMPORT:
 		return handle_import(_report);
 	case BGR_VALUE:
@@ -380,6 +378,10 @@ const grammar::report * compiler::handle_raw_value(const grammar::report * _repo
 		break;
 	case BV_FALSE:
 		_value.set_return(false);
+
+		break;
+	case BV_FUNCTION:
+		handle_function(_report + 1);
 
 		break;
 	case BV_MEMBER:
@@ -804,9 +806,14 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 {
 	const auto _end = _report->content.end;
 
-	_report = handle_identifier(_report + 1);
+	if ((++_report)->rule_id == grammar::BGR_FUNCTION_HELPER_0) {
+		_report = handle_identifier(_report);
+	} else {
+		_counter.next();
+		_value.set_return_temp(_counter.current());
+	}
 
-	auto _identifier = _value;
+	auto _destination = _value;
 
 	// Compile function code
 	stream::buffer_output_stream _function_code;
@@ -823,13 +830,15 @@ const grammar::report * compiler::handle_function(const grammar::report * _repor
 	auto _function = _schein->register_function_inplace(machine::virtual_machine::virtual_machine_code({ _function_code.buffer(), static_cast<size_t>(_function_code.size()) }, std::move(_compiler.schein())));
 
 	// Create function
-	_identifier.expand_to_member(_translator, [&](auto _member) {
+	_destination.expand_to_member(_translator, [&](auto _member) {
 		if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
 		_translator.instantiate_function(_member, _function);
 	});
+
+	_value = _destination;
 
 	return _end;
 }

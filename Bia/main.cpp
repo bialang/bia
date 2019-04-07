@@ -226,9 +226,9 @@ int main()
 		system("pause");
 
 		machine::stack _stack(_context.allocator(), 1000);
+		machine::virtual_machine::virtual_machine_code::return_t _return;
 
 		try {
-			machine::virtual_machine::virtual_machine_code::return_t _return;
 			test_and_time(1, [&] {
 				_machine_code.execute(_stack, nullptr, 0, _return);
 			});

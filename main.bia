@@ -1,8 +1,11 @@
-fun moo(x) {
-	return x**x
+fun do_callback(callback) {
+	print(callback())
 }
 
-print(moo(3))
+do_callback(fun() {
+var i = 9
+return i
+})
 
 #>
 fun quadrat(x) {
