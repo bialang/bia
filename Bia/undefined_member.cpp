@@ -33,17 +33,17 @@ void BIA_MEMBER_CALLING_CONVENTION undefined_member::clone(member * _destination
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::execute(member * _destination)
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::execute(machine::stack * _stack, member * _destination)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_VARG_MEMBER_CALLING_CONVENTION undefined_member::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
+void BIA_VARG_MEMBER_CALLING_CONVENTION undefined_member::execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count)
 {
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_VARG_MEMBER_CALLING_CONVENTION undefined_member::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
+void BIA_VARG_MEMBER_CALLING_CONVENTION undefined_member::execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count)
 {
 	BIA_UNDEFINED_ERROR;
 }
@@ -63,7 +63,7 @@ void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_int64(member 
 	BIA_UNDEFINED_ERROR;
 }
 
-void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right)
+void BIA_MEMBER_CALLING_CONVENTION undefined_member::operator_call_big_int(member * _destination, operator_t _operator, const detail::big_int * _right)
 {
 	BIA_UNDEFINED_ERROR;
 }

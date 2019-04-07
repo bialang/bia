@@ -9,6 +9,7 @@
 #include "member.hpp"
 #include "type_traits.hpp"
 #include "variant.hpp"
+#include "create_member.hpp"
 
 
 namespace bia
@@ -35,18 +36,21 @@ public:
 		_buffer = memory::cast_allocation<element_t>(_allocator->allocate(_element_count * element_size()));
 		_base_pointer = _buffer.first;
 		_stack_pointer = _base_pointer;
+		_top_pointer = _base_pointer + _element_count;
 	}
 	stack(const stack & _copy) = delete;
 	stack(stack && _move) noexcept
 	{
-		_allocator = _move._allocator;
-		_buffer = std::move(_move._buffer);
 		_base_pointer = _move._base_pointer;
 		_stack_pointer = _move._stack_pointer;
+		_top_pointer = _move._top_pointer;
+		_allocator = _move._allocator;
+		_buffer = std::move(_move._buffer);
 
-		_move._allocator = nullptr;
 		_move._base_pointer = nullptr;
 		_move._stack_pointer = nullptr;
+		_move._top_pointer = nullptr;
+		_move._allocator = nullptr;
 	}
 	~stack()
 	{
@@ -54,16 +58,18 @@ public:
 			_allocator->deallocate(memory::cast_allocation<void>(_buffer));
 		}
 	}
+	void push(int8_t _value)
+	{
+		push(static_cast<int32_t>(_value));
+	}
 	template<typename Type>
 	void push(Type _value)
 	{
 		static_assert(sizeof(Type) <= element_size(), "Size of Type must be less than the element size.");
 
-		if (_stack_pointer + 1 > _buffer.first + _buffer.second) {
+		if (_stack_pointer + 1 > _top_pointer) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
-
-		*_stack_pointer = 0;
 
 		*reinterpret_cast<Type*>(_stack_pointer++) = _value;
 	}
@@ -72,13 +78,13 @@ public:
 	{
 		push(reinterpret_cast<intptr_t>(_value));
 	}
-	void push_count(size_t _count)
+	void drop_stack_frame(const element_t * _stack_frame)
 	{
-		if (_stack_pointer + _count > _buffer.first + _buffer.second) {
+		if (_stack_frame < _base_pointer || _stack_frame > _top_pointer) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
-		_stack_pointer += _count;
+		_stack_pointer = const_cast<element_t*>(_stack_frame);
 	}
 	void pop_count(size_t _count)
 	{
@@ -88,6 +94,33 @@ public:
 
 		_stack_pointer -= _count;
 	}
+	void format_cast(ptrdiff_t _offset, char _format, framework::member * _destination)
+	{
+		switch (_format) {
+		case 'i':
+			framework::create_member(_destination, cast<int32_t>(_offset));
+
+			break;
+		case 'I':
+			framework::create_member(_destination, cast<int64_t>(_offset));
+
+			break;
+		case 'd':
+			framework::create_member(_destination, cast<double>(_offset));
+
+			break;
+		case 'a':
+			framework::create_member(_destination, reinterpret_cast<const char*>(_stack_pointer + _offset));
+
+			break;
+		case 'M':
+			reinterpret_cast<framework::member*>(cast<intptr_t>(_offset))->refer(_destination);
+
+			break;
+		default:
+			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
+		}
+	}
 	size_t size() const noexcept
 	{
 		return _stack_pointer - _base_pointer;
@@ -95,6 +128,25 @@ public:
 	constexpr static size_t element_size() noexcept
 	{
 		return sizeof(element_t);
+	}
+	void * allocate_space(size_t _size)
+	{
+		auto _elements = _size / element_size() + (_size % element_size() ? element_size() : 0);
+
+		// Check bounds
+		if (_stack_pointer + _elements > _top_pointer) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
+
+		auto _tmp = _stack_pointer;
+
+		_stack_pointer += _elements;
+
+		return _tmp;
+	}
+	const element_t * create_stack_frame() const noexcept
+	{
+		return _stack_pointer;
 	}
 	template<typename Type>
 	Type cast(ptrdiff_t _offset) noexcept
@@ -104,9 +156,6 @@ public:
 	template<typename Type>
 	Type format_cast(ptrdiff_t _offset, char _format)
 	{
-		using namespace utility;
-		using Real_return = typename std::remove_reference<Type>::type;
-
 		switch (_format) {
 		case 'i':
 			return checked_convert<Type>(cast<int32_t>(_offset));
@@ -130,6 +179,8 @@ private:
 	element_t * _base_pointer;
 	/** The stack pointer of the stack. */
 	element_t * _stack_pointer;
+	/** The top pointer of the stack. */
+	const element_t * _top_pointer;
 	/** The used memory allocator. */
 	memory::allocator * _allocator;
 	/** The base pointer of the stack. */

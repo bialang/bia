@@ -15,10 +15,6 @@ virtual_translator::virtual_translator(stream::output_stream & _output)
 {
 	this->_output = &_output;
 
-	_temp_member_pos = _output.position();
-
-	op_code::write_int_type<member_index_t, false>(_output, OC_SETUP, 0);
-
 	_setup_end_pos = _output.position();
 }
 
@@ -30,22 +26,21 @@ void virtual_translator::close_scope(member_index_t _variable_count)
 {
 }
 
-void virtual_translator::finalize(member_index_t _temp_count, member_index_t _local_count)
+void virtual_translator::finalize()
 {
-	// Update first instruction
-	if (_temp_count + _local_count) {
-		// Update
-		auto _current_pos = _output->position();
+	_output->set_beginning(_setup_end_pos);
 
-		_output->set_position(_temp_member_pos);
-		op_code::write_int_type<member_index_t, false>(*_output, OC_SETUP, _temp_count + _local_count);
-		_output->set_position(_current_pos);
-	} // Skip temp member creation
-	else {
-		_output->set_beginning(_setup_end_pos);
-	}
+	return_void();
+}
 
-	op_code::write_p_type(*_output, OC_RETURN);
+void virtual_translator::return_void()
+{
+	op_code::write_p_type(*_output, OC_RETURN_VOID);
+}
+
+void virtual_translator::return_member(const index & _member)
+{
+	op_code::write_m_type(*_output, OC_RETURN, _member);
 }
 
 void virtual_translator::instantiate_int(const index & _member, int64_t _value)
@@ -66,6 +61,11 @@ void virtual_translator::instantiate_string(const index & _member, string_manage
 void virtual_translator::instantiate_regex(const index & _member, schein::regex_index_t _regex)
 {
 	op_code::write_mint_type(*_output, OC_INSTANTIATE_REGEX, _member, _regex);
+}
+
+void virtual_translator::instantiate_function(const index & _member, schein::function_index_t _function)
+{
+	op_code::write_mint_type(*_output, OC_INSTANTIATE_FUNCTION, _member, _function);
 }
 
 void virtual_translator::test(const index & _member)

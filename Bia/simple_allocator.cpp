@@ -128,7 +128,7 @@ allocation<framework::member> simple_allocator::allocate_member()
 
 big_int_allocation simple_allocator::allocate_big_int()
 {
-	return cast_allocation<dependency::big_int>(allocate(big_int_allocation_size));
+	return cast_allocation<detail::big_int>(allocate(big_int_allocation_size));
 }
 
 universal_allocation simple_allocator::prepare(size_type _size)

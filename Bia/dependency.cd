@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="bia::dependency::big_int">
+    <Position X="0.5" Y="0.5" Width="3" />
+    <NestedTypes>
+      <Typedef Name="bia::dependency::big_int::type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>big_int.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ABUEACAkAACGAAEAAARBQAAJAwGGAAUCMIACAACCQAg=</HashCode>
+      <FileName>big_int.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::dependency::regex">
+    <Position X="4.5" Y="0.5" Width="2" />
+    <NestedTypes>
+      <Typedef Name="bia::dependency::regex::length_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>regex.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ABAAAAAQAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAgAAA=</HashCode>
+      <FileName>regex.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

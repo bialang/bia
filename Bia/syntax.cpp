@@ -39,7 +39,8 @@ lexer syntax::init_rules()
 		lexer_token::rule_pointer<BGR_VARIABLE_DECLARATION>,
 		lexer_token::rule_pointer<BGR_IF>,
 		lexer_token::rule_pointer<BGR_TEST_LOOP>,
-		lexer_token::control_statement,
+		lexer_token::rule_pointer<BGR_FLOW_CONTROL>,
+		lexer_token::rule_pointer<BGR_FUNCTION>,
 		lexer_token::rule_pointer<BGR_IMPORT>,
 		lexer_token::rule_pointer<BGR_ROOT_HELPER_2>
 		}));
@@ -54,6 +55,31 @@ lexer syntax::init_rules()
 	_lexer.set_rule(grammar_rule(BGR_NORMAL_STATEMENT, grammar_rule::F_OR, {
 		lexer_token::rule_pointer<BGR_ROOT_HELPER_1, flags::filler_token | flags::starting_ws_token>,
 		lexer_token::rule_pointer<BGR_ROOT_HELPER_0, flags::filler_token | flags::starting_ws_opt_token> }));
+
+	// Flow control
+	_lexer.set_rule(grammar_rule(BGR_FLOW_CONTROL, grammar_rule::F_WRAP_UP | grammar_rule::F_OR, {
+		lexer_token::rule_pointer<BGR_FLOW_CONTROL_HELPER_0>,
+		lexer_token::rule_pointer<BGR_FLOW_CONTROL_HELPER_2>
+		}));
+
+	// Flow control helper: return
+	_lexer.set_rule(grammar_rule(BGR_FLOW_CONTROL_HELPER_0, grammar_rule::F_NONE, {
+		lexer_token::keyword<keyword_return>,
+		lexer_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_token | flags::opt_token>,
+		lexer_token::command_end
+		}));
+
+	// Flow control helper: single commands
+	_lexer.set_rule(grammar_rule(BGR_FLOW_CONTROL_HELPER_1, grammar_rule::F_OR, {
+		lexer_token::keyword<keyword_break>,
+		lexer_token::keyword<keyword_continue>
+		}));
+
+	// Flow control helper: single command
+	_lexer.set_rule(grammar_rule(BGR_FLOW_CONTROL_HELPER_2, grammar_rule::F_NONE, {
+		lexer_token::rule_pointer<BGR_FLOW_CONTROL_HELPER_1>,
+		lexer_token::command_end
+		}));
 
 	// Variable declaration
 	_lexer.set_rule(grammar_rule(BGR_VARIABLE_DECLARATION, grammar_rule::F_WRAP_UP, {
@@ -113,6 +139,33 @@ lexer syntax::init_rules()
 	_lexer.set_rule(grammar_rule(BGR_TEST_LOOP_HELPER_0, grammar_rule::F_OR, {
 		lexer_token::keyword<keyword_while>,
 		lexer_token::keyword<keyword_until>
+		}));
+
+	// Function
+	_lexer.set_rule(grammar_rule(BGR_FUNCTION, grammar_rule::F_WRAP_UP, {
+		lexer_token::keyword<keyword_function, flags::filler_token | flags::ending_ws_token>,
+		lexer_token::identifier,
+		lexer_token::rule_pointer<BGR_PARAMETER_SIGNATURE, flags::filler_token | flags::starting_ws_opt_token | flags::opt_token>,
+		lexer_token::rule_pointer<BGR_NORMAL_STATEMENT>
+		}));
+
+	// Parameter signature
+	_lexer.set_rule(grammar_rule(BGR_PARAMETER_SIGNATURE, grammar_rule::F_WRAP_UP, {
+		lexer_token::keyword<operator_bracket_open, flags::filler_token>,
+		lexer_token::rule_pointer<BGR_PARAMETER_SIGNATURE_HELPER_0, flags::filler_token | flags::opt_token | flags::starting_ws_opt_token>,
+		lexer_token::keyword<operator_bracket_close, flags::filler_token | flags::starting_ws_opt_token>
+		}));
+
+	// Parameter signature helper 0
+	_lexer.set_rule(grammar_rule(BGR_PARAMETER_SIGNATURE_HELPER_0, grammar_rule::F_NONE, {
+		lexer_token::identifier,
+		lexer_token::rule_pointer<BGR_PARAMETER_SIGNATURE_HELPER_1, flags::filler_token | flags::looping_token>
+		}));
+
+	// Parameter signature helper 1
+	_lexer.set_rule(grammar_rule(BGR_PARAMETER_SIGNATURE_HELPER_1, grammar_rule::F_NONE, {
+		lexer_token::keyword<operator_comma, flags::filler_token | flags::starting_ws_opt_token | flags::ending_ws_opt_token>,
+		lexer_token::identifier
 		}));
 
 	// Import

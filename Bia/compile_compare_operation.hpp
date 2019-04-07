@@ -100,7 +100,7 @@ private:
 		using VT = compiler_value::VALUE_TYPE;
 
 		_right.expand_to_member(_translator, [&](auto _expanded) {
-			if (std::is_same<decltype(_expanded), machine::virtual_machine::invalid_index>::value) {
+			if (std::is_same<decltype(_expanded), compiler_value::invalid_index_t>::value) {
 				switch (_right.type()) {
 				case VT::TEST_VALUE_CONSTANT:
 					_right.set_return(static_cast<int64_t>(_right.value().rt_test_result));

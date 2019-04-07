@@ -9,7 +9,6 @@
 #include "big_int_allocator.hpp"
 #include "executable_allocator.hpp"
 #include "buffer_input_stream.hpp"
-#include "machine_code.hpp"
 #include "string_key.hpp"
 #include "member.hpp"
 #include "name_manager.hpp"
@@ -110,7 +109,7 @@ public:
 	 *
 	 * @return A reference to the script.
 	*/
-	BIA_EXPORT const platform::machine_code & get_script(const char * _name) const;
+	//BIA_EXPORT const platform::machine_code & get_script(const char * _name) const;
 	/**
 	 * Returns the none pointer.
 	 *
@@ -255,7 +254,7 @@ private:
 	friend grammar::lexer_token;
 	friend disassembler;
 	friend platform::x86_toolset;
-	friend virtual_machine::virtual_machine_schein;
+	friend schein;
 
 	/** The active context in the current thread. */
 	static thread_local machine_context * _active_context;
@@ -299,7 +298,7 @@ private:
 	 * @return The member address.
 	*/
 	BIA_EXPORT framework::member * address_of_member(const char * _name);
-	BIA_EXPORT platform::machine_code compile_script(stream::buffer_input_stream & _script);
+	//BIA_EXPORT platform::machine_code compile_script(stream::buffer_input_stream & _script);
 };
 
 }

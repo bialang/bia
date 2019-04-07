@@ -3,6 +3,7 @@
 #include "buffer_output_stream.hpp"
 #include "string_stream.hpp"
 #include "grammar_id.hpp"
+#include "virtual_machine_code.hpp"
 
 #include <vector>
 
@@ -14,8 +15,9 @@ namespace compiler
 
 using namespace bia::grammar;
 
-compiler::compiler(stream::output_stream & _output, machine::machine_context & _context) : _translator(_output), _context(_context), _schein(_context), _scope_handler(_translator)
+compiler::compiler(stream::output_stream & _output, machine::machine_context & _context, compiler * _parent) : _translator(_output), _context(_context), _scope_handler(_translator, _parent ? &_parent->_scope_handler : nullptr)
 {
+	_schein = _context.allocator()->template construct<machine::schein>(_context);
 }
 
 void compiler::report(const grammar::report * _begin, const grammar::report * _end)
@@ -25,7 +27,8 @@ void compiler::report(const grammar::report * _begin, const grammar::report * _e
 
 void compiler::finalize()
 {
-	_translator.finalize(_counter.max(), _scope_handler.max_needed());
+	_scope_handler.finalize();
+	_translator.finalize();
 
 	auto _end = _translator.output_stream().position();
 
@@ -36,11 +39,12 @@ void compiler::finalize()
 	}
 
 	_translator.output_stream().set_position(_end);
-	_schein.set_member_map(_translator.member_map());
-	_schein.set_name_map(_translator.name_map());
+	_schein->set_member_map(_translator.member_map());
+	_schein->set_name_map(_translator.name_map());
+	_schein->set_setup_count(_counter.max() + _scope_handler.max_needed());
 }
 
-machine::virtual_machine::virtual_machine_schein & compiler::virtual_machine_schein() noexcept
+machine::memory::allocation<machine::schein> & compiler::schein() noexcept
 {
 	return _schein;
 }
@@ -146,7 +150,7 @@ char compiler::handle_parameter_item()
 	{
 		_translator.pass_immediate(_value.value().rt_int);
 
-		return 'I';
+		return _value.is_int32() ? 'i' : 'I';
 	}
 	case VT::DOUBLE:
 		_translator.pass_immediate(_value.value().rt_double);
@@ -244,8 +248,10 @@ const grammar::report * compiler::handle_root(const grammar::report * _report)
 		return handle_if(_report);
 	case BGR_TEST_LOOP:
 		return handle_test_loop(_report);
-	case BGR_CONTROL_STATEMENT:
-		return handle_loop_control(_report);
+	case BGR_FLOW_CONTROL:
+		return handle_flow_control(_report);
+	case BGR_FUNCTION:
+		return handle_function(_report);
 	case BGR_IMPORT:
 		return handle_import(_report);
 	case BGR_VALUE:
@@ -264,7 +270,7 @@ const grammar::report * compiler::handle_root_ignore(const grammar::report * _re
 	return _report->content.end;
 }
 
-const grammar::report * compiler::handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next)
+const grammar::report * compiler::handle_math_expression_and_term_inner(const grammar::report * _report, handle_function_t _next)
 {
 	// Handle leftmost math term
 	auto _old_counter = _counter.peek();
@@ -395,7 +401,7 @@ const grammar::report * compiler::handle_identifier(const grammar::report * _rep
 
 		return _report + 1;
 	} // Unkown
-	else if (!_scope_handler.no_open_scopes() && _type != VARIABLE_TYPE::DEFINITELY_GLOBAL) {
+	else if (_scope_handler.has_open_scopes() && _type != VARIABLE_TYPE::DEFINITELY_GLOBAL) {
 		auto _index = _scope_handler.variable_index(_report->content.member);
 
 		// Local variable
@@ -577,7 +583,7 @@ const grammar::report * compiler::handle_regex(const grammar::report * _report)
 
 const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)
 {
-	auto _local_variable = _report[1].content.keyword == grammar::keyword_var::string_id() && !_scope_handler.no_open_scopes();
+	auto _local_variable = _report[1].content.keyword == grammar::keyword_var::string_id() && _scope_handler.has_open_scopes();
 
 	handle_identifier(_report + 2, _local_variable ? VARIABLE_TYPE::DEFINITELY_LOCAL : VARIABLE_TYPE::DEFINITELY_GLOBAL);
 
@@ -748,25 +754,97 @@ const grammar::report * compiler::handle_test_loop(const grammar::report * _repo
 	return _end;
 }
 
-const grammar::report * compiler::handle_loop_control(const grammar::report * _report)
+const grammar::report * compiler::handle_flow_control(const grammar::report * _report)
 {
-	if (_report->content.keyword == grammar::KI_DELETE) {
-		// Reset temp member
-		_finish_tasks.emplace_back(std::make_pair(_translator.output_stream().position(), [this]() {
-			BIA_NOT_IMPLEMENTED;
-			//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(_counter.max()));
-		}));
-		BIA_NOT_IMPLEMENTED;
-		//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(0));
-	} else if (_loop_tracker.open_loops()) {
-		if (_report->content.keyword == grammar::KI_BREAK) {
-			_loop_tracker.add_end_update(_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, 0));
+	const auto _end = _report++->content.end;
+
+	switch (_report->content.keyword) {
+	case grammar::KI_RETURN:
+	{
+		// Return a value
+		if (++_report < _end) {
+			handle_value<false>(_report, [&]() {
+				_value.expand_to_member(_translator, [&](auto _member) {
+					if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
+						BIA_NOT_IMPLEMENTED;
+					} else {
+						_translator.return_member(_member);
+					}
+				});
+			});
 		} else {
-			_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, _loop_tracker.loop_start());
+			_translator.return_void();
 		}
+
+		break;
+	}
+	//else if (_report->content.keyword == grammar::KI_DELETE) {
+	//	// Reset temp member
+	//	_finish_tasks.emplace_back(std::make_pair(_translator.output_stream().position(), [this]() {
+	//		BIA_NOT_IMPLEMENTED;
+	//		//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(_counter.max()));
+	//	}));
+	//	BIA_NOT_IMPLEMENTED;
+	//	//_toolset.call_member(&machine::machine_context::recreate_range_on_stack, &_context, machine::platform::toolset::to_temp_member(1), uint32_t(0));
+	//} else if (_loop_tracker.open_loops()) {
+	//	if (_report->content.keyword == grammar::KI_BREAK) {
+	//		_loop_tracker.add_end_update(_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, 0));
+	//	} else {
+	//		_translator.jump(machine::virtual_machine::virtual_translator::JUMP::JUMP, _loop_tracker.loop_start());
+	//	}
+	//}
+	default:
+		BIA_IMPLEMENTATION_ERROR;
 	}
 
-	return _report + 1;
+	return _end;
+}
+
+const grammar::report * compiler::handle_function(const grammar::report * _report)
+{
+	const auto _end = _report->content.end;
+
+	_report = handle_identifier(_report + 1);
+
+	auto _identifier = _value;
+
+	// Compile function code
+	stream::buffer_output_stream _function_code;
+	compiler _compiler(_function_code, _context, this);
+
+	// Handle parameter
+	if (_report->rule_id == grammar::BGR_PARAMETER_SIGNATURE) {
+		_report = _compiler.handle_parameter_signature(_report);
+	}
+
+	_compiler.handle_root(_report);
+	_compiler.finalize();
+
+	auto _function = _schein->register_function_inplace(machine::virtual_machine::virtual_machine_code({ _function_code.buffer(), static_cast<size_t>(_function_code.size()) }, std::move(_compiler.schein())));
+
+	// Create function
+	_identifier.expand_to_member(_translator, [&](auto _member) {
+		if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
+
+		_translator.instantiate_function(_member, _function);
+	});
+
+	return _end;
+}
+
+const grammar::report * compiler::handle_parameter_signature(const grammar::report * _report)
+{
+	const auto _end = _report++->content.end;
+
+	while (_report < _end) {
+		_schein->parameter_setter().add_parameter(_report->content.member);
+
+		_report = handle_identifier(_report, VARIABLE_TYPE::DEFINITELY_LOCAL);
+	}
+
+	return _end;
 }
 
 const grammar::report * compiler::handle_import(const grammar::report * _report)

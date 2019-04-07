@@ -21,16 +21,16 @@ inline constexpr typename std::enable_if<(sizeof...(Arguments) > 1), Type>::type
 	return _first > max(_arguments...) ? _first : max(_arguments...);
 }
 
-template<typename Type>
+template<typename... Types>
 inline constexpr size_t max_sizeof() noexcept
 {
-	return sizeof(Type);
+	return max(sizeof(Types)...);
 }
 
-template<typename Type, typename... Types>
-inline constexpr typename std::enable_if<(sizeof...(Types) > 0), size_t>::type max_sizeof() noexcept
+template<typename... Types>
+inline constexpr size_t max_alignof() noexcept
 {
-	return sizeof(Type) > max_sizeof<Types...>() ? sizeof(Type) : max_sizeof<Types...>();
+	return max(alignof(Types)...);
 }
 
 }

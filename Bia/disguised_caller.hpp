@@ -7,6 +7,7 @@
 #include "exception.hpp"
 #include "create_member.hpp"
 #include "machine_context.hpp"
+#include "stack.hpp"
 
 
 namespace bia

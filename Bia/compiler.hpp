@@ -31,7 +31,7 @@ namespace compiler
 class compiler : public grammar::report_receiver
 {
 public:
-	BIA_EXPORT compiler(stream::output_stream & _output, machine::machine_context & _context);
+	BIA_EXPORT compiler(stream::output_stream & _output, machine::machine_context & _context, compiler * _parent);
 	compiler(const compiler & _copy) = delete;
 	compiler(compiler && _rvalue) = delete;
 	~compiler()
@@ -47,7 +47,7 @@ public:
 	 * @throws See machine::virtual_machine::virtual_translator::finalize().
 	*/
 	BIA_EXPORT void finalize();
-	BIA_EXPORT virtual machine::virtual_machine::virtual_machine_schein & virtual_machine_schein() noexcept override;
+	BIA_EXPORT virtual machine::memory::allocation<machine::schein> & schein() noexcept override;
 
 private:
 	enum class VARIABLE_TYPE
@@ -57,7 +57,7 @@ private:
 		DEFINITELY_GLOBAL
 	};
 
-	typedef const grammar::report*(compiler::*handle_function)(const grammar::report*);
+	typedef const grammar::report*(compiler::*handle_function_t)(const grammar::report*);
 
 	/** The result value for calculating and compiling. */
 	compiler_value _value;
@@ -70,7 +70,7 @@ private:
 	/** The context. */
 	machine::machine_context & _context;
 	/** The schein. */
-	machine::virtual_machine::virtual_machine_schein _schein;
+	machine::memory::allocation<machine::schein> _schein;
 	/** Manages all scopes and their local variables. */
 	scope_handler _scope_handler;
 	/** A list of task that need to be executed before the script is finished. */
@@ -127,7 +127,7 @@ private:
 	template<bool Expression = true>
 	const grammar::report * handle_math_expression_and_term(const grammar::report * _report)
 	{
-		constexpr handle_function next = Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
+		constexpr handle_function_t next = Expression ? &compiler::handle_math_expression_and_term<false> : &compiler::handle_math_factor;
 
 		// Only one math expression or term to handle
 		if (_report[1].content.end == _report->content.end) {
@@ -265,7 +265,7 @@ private:
 	 *
 	 * @return The end of the report.
 	*/
-	BIA_EXPORT const grammar::report * handle_math_expression_and_term_inner(const grammar::report * _report, handle_function _next);
+	BIA_EXPORT const grammar::report * handle_math_expression_and_term_inner(const grammar::report * _report, handle_function_t _next);
 	/**
 	 * Handles a condition expression token.
 	 *
@@ -390,7 +390,9 @@ private:
 	*/
 	BIA_EXPORT const grammar::report * handle_if(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_test_loop(const grammar::report * _report);
-	BIA_EXPORT const grammar::report * handle_loop_control(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_flow_control(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_function(const grammar::report * _report);
+	BIA_EXPORT const grammar::report * handle_parameter_signature(const grammar::report * _report);
 	BIA_EXPORT const grammar::report * handle_import(const grammar::report * _report);
 };
 

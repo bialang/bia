@@ -21,7 +21,7 @@ void BIA_STATIC_CALLING_CONVETION instantiate_int64(framework::member *_destinat
 	_destination->template replace_this<framework::native::big_int_member>(_value);
 }
 
-void BIA_STATIC_CALLING_CONVETION instantiate_big_int(framework::member * _destination, dependency::big_int * _value)
+void BIA_STATIC_CALLING_CONVETION instantiate_big_int(framework::member * _destination, detail::big_int * _value)
 {
 	_destination->template replace_this<framework::native::big_int_member>(*_value);
 }

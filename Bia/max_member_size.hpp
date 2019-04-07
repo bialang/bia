@@ -33,5 +33,19 @@ constexpr auto max_member_size = utility::max(
 	sizeof(object::namespace_member)
 );
 
+constexpr auto max_member_alignment = utility::max_alignof<
+	native::int_member,
+	native::big_int_member,
+	native::double_member,
+	native::cstring_member<char>,
+	executable::static_function<0, void>,
+	//sizeof(executable::lambda_function),
+	//sizeof(executable::member_function),
+	object::raw_object<int>,
+	object::object<int>,
+	object::class_template<int>,
+	object::namespace_member
+>();
+
 }
 }

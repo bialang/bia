@@ -191,14 +191,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bia_function.cpp" />
     <ClCompile Include="big_int.cpp" />
     <ClCompile Include="big_int_allocator.cpp" />
     <ClCompile Include="compiler_loop_tracker.cpp" />
     <ClCompile Include="disassembler.cpp" />
     <ClCompile Include="double_member.cpp" />
     <ClCompile Include="big_int_member.cpp" />
+    <ClCompile Include="function_holder.cpp" />
     <ClCompile Include="int_member.cpp" />
-    <ClCompile Include="member_array.cpp" />
     <ClCompile Include="member_map.cpp" />
     <ClCompile Include="member_names.cpp" />
     <ClCompile Include="module_loader.cpp" />
@@ -206,7 +207,6 @@
     <ClCompile Include="regex.cpp" />
     <ClCompile Include="regex_member.cpp" />
     <ClCompile Include="schein.cpp" />
-    <ClCompile Include="scope_exit.cpp" />
     <ClCompile Include="scope_handler.cpp" />
     <ClCompile Include="script_map.cpp" />
     <ClCompile Include="simple_allocator.cpp" />
@@ -218,7 +218,6 @@
     <ClCompile Include="syntax.cpp" />
     <ClCompile Include="instantiate.cpp" />
     <ClCompile Include="grammar_rule.cpp" />
-    <ClCompile Include="machine_code.cpp" />
     <ClCompile Include="machine_context.cpp" />
     <ClCompile Include="operation.cpp" />
     <ClCompile Include="buffer_output_stream.cpp" />
@@ -232,7 +231,6 @@
     <ClCompile Include="variable_index.cpp" />
     <ClCompile Include="virtual_disassembler.cpp" />
     <ClCompile Include="virtual_machine_code.cpp" />
-    <ClCompile Include="virtual_machine_schein.cpp" />
     <ClCompile Include="virtual_translator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -240,15 +238,16 @@
     <ClInclude Include="architecture_utils.hpp" />
     <ClInclude Include="ascii.hpp" />
     <ClInclude Include="bia.hpp" />
+    <ClInclude Include="bia_function.hpp" />
     <ClInclude Include="big_int.hpp" />
     <ClInclude Include="class_template.hpp" />
     <ClInclude Include="class_template_def.hpp" />
-    <ClInclude Include="code.hpp" />
     <ClInclude Include="compiler_loop_tracker.hpp" />
     <ClInclude Include="disguised_caller.hpp" />
     <ClInclude Include="buffer_builder.hpp" />
+    <ClInclude Include="function_holder.hpp" />
     <ClInclude Include="local_object.hpp" />
-    <ClInclude Include="member_array.hpp" />
+    <ClInclude Include="member_array_view.hpp" />
     <ClInclude Include="member_cast_type.hpp" />
     <ClInclude Include="member_names.hpp" />
     <ClInclude Include="cstring_member_def.hpp" />
@@ -266,6 +265,7 @@
     <ClInclude Include="object_def.hpp" />
     <ClInclude Include="object_variable.hpp" />
     <ClInclude Include="op_code.hpp" />
+    <ClInclude Include="parameter_setter.hpp" />
     <ClInclude Include="raw_object_def.hpp" />
     <ClInclude Include="regex.hpp" />
     <ClInclude Include="regex_member.hpp" />
@@ -323,9 +323,7 @@
     <ClInclude Include="instantiate.hpp" />
     <ClInclude Include="lambda_function.hpp" />
     <ClInclude Include="link.hpp" />
-    <ClInclude Include="machine_code.hpp" />
     <ClInclude Include="machine_context.hpp" />
-    <ClInclude Include="machine_schein.hpp" />
     <ClInclude Include="member.hpp" />
     <ClInclude Include="create_member.hpp" />
     <ClInclude Include="member_function.hpp" />
@@ -341,7 +339,6 @@
     <ClInclude Include="name_manager.hpp" />
     <ClInclude Include="temp_counter.hpp" />
     <ClInclude Include="virtual_disassembler.hpp" />
-    <ClInclude Include="virtual_machine_schein.hpp" />
     <ClInclude Include="index_map.hpp" />
     <ClInclude Include="x86_translator.hpp" />
     <ClInclude Include="architecture.hpp" />
@@ -361,6 +358,16 @@
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="utility.cd" />
+    <None Include="stream.cd" />
+    <None Include="machine.cd" />
+    <None Include="grammar.cd" />
+    <None Include="framework.cd" />
+    <None Include="force.cd" />
+    <None Include="exception.cd" />
+    <None Include="encoding.cd" />
+    <None Include="dependency.cd" />
+    <None Include="compiler.cd" />
     <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

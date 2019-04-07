@@ -49,19 +49,19 @@ inline void BIA_MEMBER_CALLING_CONVENTION member_function<Optional_count, Return
 }
 
 template<size_t Optional_count, typename Class, typename Return, typename ...Arguments>
-inline void BIA_MEMBER_CALLING_CONVENTION member_function<Optional_count, Return(Class::*)(Arguments...)>::execute(member * _destination)
+inline void BIA_MEMBER_CALLING_CONVENTION member_function<Optional_count, Return(Class::*)(Arguments...)>::execute(machine::stack * _stack, member * _destination)
 {
 	force::disguised_caller<Optional_count>(cast_instance(), _data.get().first, _destination, nullptr, 0, nullptr);
 }
 
 template<size_t Optional_count, typename Class, typename Return, typename ...Arguments>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<Optional_count, Return(Class::*)(Arguments...)>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<Optional_count, Return(Class::*)(Arguments...)>::execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count)
 {
 	force::disguised_caller<Optional_count>(cast_instance(), _data.get().first, _destination, nullptr, _count, _stack);
 }
 
 template<size_t Optional_count, typename Class, typename Return, typename ...Arguments>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<Optional_count, Return(Class::*)(Arguments...)>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
+inline void BIA_VARG_MEMBER_CALLING_CONVENTION member_function<Optional_count, Return(Class::*)(Arguments...)>::execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count)
 {
 	force::disguised_caller<Optional_count>(cast_instance(), _data.get().first, _destination, _format, _count, _stack);
 }

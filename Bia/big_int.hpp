@@ -15,7 +15,7 @@
 
 namespace bia
 {
-namespace dependency
+namespace detail
 {
 
 /**

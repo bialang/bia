@@ -51,24 +51,6 @@ inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::refer(member * _dest
 }
 
 template<typename Type>
-inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::execute(member * _destination)
-{
-	promote()->execute(_destination);
-}
-
-template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION raw_object<Type>::execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack)
-{
-	BIA_NOT_IMPLEMENTED;
-}
-
-template<typename Type>
-inline void BIA_VARG_MEMBER_CALLING_CONVENTION raw_object<Type>::execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack)
-{
-	BIA_NOT_IMPLEMENTED;
-}
-
-template<typename Type>
 inline void BIA_MEMBER_CALLING_CONVENTION raw_object<Type>::operator_call(member * _destination, operator_t _operator, const member * _right)
 {
 	return promote()->operator_call(_destination, _operator, _right);

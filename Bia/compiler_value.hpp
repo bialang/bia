@@ -69,7 +69,7 @@ public:
 		/** A constant 64 bit integer. */
 		int64_t rt_int;
 		/** A constant big integer. */
-		dependency::big_int * rt_big_int;
+		detail::big_int * rt_big_int;
 		/** A constant floating point. */
 		double rt_double;
 		machine::string_manager::utf8_index_t rt_string;
@@ -151,7 +151,7 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return(dependency::big_int * _value) noexcept
+	void set_return(detail::big_int * _value) noexcept
 	{
 		clear();
 

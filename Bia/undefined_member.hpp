@@ -16,13 +16,13 @@ public:
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION copy(member * _destination) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION refer(member * _destination) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION clone(member * _destination) override;
-	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override;
-	BIA_EXPORT virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) override;
-	BIA_EXPORT virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION execute(machine::stack * _stack, member * _destination) override;
+	BIA_EXPORT virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count) override;
+	BIA_EXPORT virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call(member * _destination, operator_t _operator, const member * _right) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int32(member * _destination, operator_t _operator, int32_t _right) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_int64(member * _destination, operator_t _operator, int64_t _right) override;
-	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_t _operator, const dependency::big_int * _right) override;
+	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_big_int(member * _destination, operator_t _operator, const detail::big_int * _right) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION operator_call_double(member * _destination, operator_t _operator, double _right) override;
 	BIA_EXPORT virtual void BIA_MEMBER_CALLING_CONVENTION object_member(member * _destination, machine::name_manager::name_t _name) override;
 	BIA_EXPORT virtual void set_instance(const void * _instance, const std::type_info & _type) override;

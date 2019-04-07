@@ -5,11 +5,11 @@
 #include "config.hpp"
 #include "allocator.hpp"
 #include "member.hpp"
-#include "virtual_machine_schein.hpp"
-#include "code.hpp"
 #include "operation.hpp"
 #include "string_manager.hpp"
-#include "member_array.hpp"
+#include "stack.hpp"
+#include "local_object.hpp"
+#include "max_member_size.hpp"
 
 
 namespace bia
@@ -19,10 +19,12 @@ namespace machine
 namespace virtual_machine
 {
 
-class virtual_machine_code : public code
+class virtual_machine_code
 {
 public:
-	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, virtual_machine_schein && _schein, bool _take_ownership = false);
+	typedef utility::local_object<framework::member, framework::max_member_size, framework::max_member_alignment> return_t;
+
+	BIA_EXPORT virtual_machine_code(memory::universal_allocation _code, memory::allocation<schein> && _schein, bool _take_ownership = false);
 	virtual_machine_code(const virtual_machine_code & _copy) = delete;
 	BIA_EXPORT virtual_machine_code(virtual_machine_code && _move);
 	/**
@@ -35,18 +37,16 @@ public:
 	*/
 	BIA_EXPORT ~virtual_machine_code();
 
-	BIA_EXPORT virtual void execute() override;
-	BIA_EXPORT virtual void clear() override;
-	BIA_EXPORT virtual void disassemble() override;
-	BIA_EXPORT virtual bool is_executable() const noexcept override;
+	BIA_EXPORT void execute(stack & _stack, const char * _format, framework::member::parameter_count_t _count, return_t & _return);
+	BIA_EXPORT void clear();
+	BIA_EXPORT void disassemble() const;
+	BIA_EXPORT bool is_executable() const noexcept;
 
 private:
 	/** Contains the instructions for the virtual machine code. */
 	memory::allocation<uint8_t> _code;
 	/** The machine schein. */
-	virtual_machine_schein _schein;
-	/** Contains all temporary and local members. */
-	member_array _temps;
+	memory::allocation<schein> _schein;
 
 	static void operator_call(framework::member * _member, framework::member * _destination, framework::operator_t _operator, int32_t _immediate)
 	{

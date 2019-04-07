@@ -1,8 +1,7 @@
 #pragma once
 
-#include <cstdint>
 #include <utility>
-#include <array>
+#include <type_traits>
 
 
 namespace bia
@@ -21,11 +20,14 @@ namespace utility
  *
  * @see @ref virtual_object
 */
-template<typename Type, size_t Size = sizeof(Type), bool Destroy = false>
+template<typename Type, size_t Size = sizeof(Type), size_t Alignment = alignof(Type)>
 class local_object
 {
 public:
-	local_object() noexcept = default;
+	local_object() noexcept
+	{
+		_initialized = false;
+	}
 	local_object(const local_object & _copy) = delete;
 	local_object(local_object && _move) = delete;
 	/**
@@ -38,9 +40,7 @@ public:
 	*/
 	~local_object()
 	{
-		if (Destroy) {
 			destroy();
-		}
 	}
 	/**
 	 * Destroy the local object.
@@ -55,7 +55,15 @@ public:
 	template<typename Ty = Type>
 	void destroy()
 	{
-		get<Ty>()->~Ty();
+		if (_initialized) {
+			get<Ty>()->~Ty();
+
+			_initialized = false;
+		}
+	}
+	bool initialized() const noexcept
+	{
+		return _initialized;
 	}
 	/**
 	 * Creates a new object of the type @a Ty.
@@ -71,6 +79,7 @@ public:
 	 * @param _arguments The arguments passed to the constructor of @a Ty.
 	 *
 	 * @throws See the constructor of @a Ty.
+	 * @throws See destroy().
 	 *
 	 * @return The address to the newly created object.
 	*/
@@ -79,7 +88,13 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Object does not fit.");
 
-		return new(_object_space.data()) Ty(std::forward<Arguments>(_arguements)...);
+		destroy();
+
+		auto _ptr = new(&_object_space) Ty(std::forward<Arguments>(_arguements)...);
+
+		_initialized = true;
+
+		return _ptr;
 	}
 	/**
 	 * Returns the address of the local object as @a Ty.
@@ -96,7 +111,7 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Wrong object type.");
 
-		return reinterpret_cast<Ty*>(_object_space.data());
+		return reinterpret_cast<Ty*>(&_object_space);
 	}
 	/**
 	 * Returns the address of the local object as @a Ty.
@@ -113,12 +128,18 @@ public:
 	{
 		static_assert(sizeof(Ty) <= Size, "Wrong object type.");
 
-		return reinterpret_cast<const Ty*>(_object_space.data());
+		return reinterpret_cast<const Ty*>(&_object_space);
+	}
+	operator bool() const noexcept
+	{
+		return initialized();
 	}
 
 private:
 	/** The space which stores the local object. */
-	std::array<int8_t, Size> _object_space;
+	typename std::aligned_storage<Size, Alignment>::type _object_space;
+	/** If true the object was initialized, otherwise not. */
+	bool _initialized;
 };
 
 }

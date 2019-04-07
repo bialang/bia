@@ -52,21 +52,21 @@ void machine_context::unset_active_context() noexcept
 void machine_context::execute(stream::buffer_input_stream & _script)
 {
 	activate_context();
-
-	compile_script(_script).execute();
+	BIA_NOT_IMPLEMENTED;
+	//compile_script(_script).execute();
 }
 
 void machine_context::add_script(const char * _name, stream::buffer_input_stream & _script)
 {
 	activate_context();
-
-	_script_map.set(_name, compile_script(_script));
+	BIA_NOT_IMPLEMENTED;
+	//_script_map.set(_name, compile_script(_script));
 }
 
-const platform::machine_code & machine_context::get_script(const char * _name) const
-{
-	return _script_map.get(_name);
-}
+//const platform::machine_code & machine_context::get_script(const char * _name) const
+//{
+//	return _script_map.get(_name);
+//}
 
 framework::member * machine_context::get_member(name_manager::name_t _name, framework::member * _default)
 {
@@ -188,20 +188,20 @@ framework::member * machine_context::address_of_member(const char * _name)
 	printf("created: %p\n", a);
 	return a;
 }
-
-platform::machine_code machine_context::compile_script(stream::buffer_input_stream & _script)
-{
-	// Create compiler
-	stream::buffer_output_stream _output;
-	compiler::compiler _compiler(_output, *this);
-
-	// Lex and compile
-	grammar::syntax::lexer().lex(_script, _compiler, *this);
-
-	_compiler.finalize();
-	BIA_NOT_IMPLEMENTED;
-	//return platform::machine_code(std::make_pair(_output.buffer(), _output.size()), machine_schein(_allocator.get(), _executable_allocator.get()));
-}
+//
+//platform::machine_code machine_context::compile_script(stream::buffer_input_stream & _script)
+//{
+//	// Create compiler
+//	stream::buffer_output_stream _output;
+//	compiler::compiler _compiler(_output, *this);
+//
+//	// Lex and compile
+//	grammar::syntax::lexer().lex(_script, _compiler, *this);
+//
+//	_compiler.finalize();
+//	BIA_NOT_IMPLEMENTED;
+//	//return platform::machine_code(std::make_pair(_output.buffer(), _output.size()), machine_schein(_allocator.get(), _executable_allocator.get()));
+//}
 
 
 }

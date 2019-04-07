@@ -1,39 +1,41 @@
 import re
 
 ptype = [
-    ("OC_RETURN", "", "goto gt_return;", "", "ret"),
+    ("OC_RETURN_VOID", "", "goto gt_return;", "", "ret"),
     ("OC_PUSH_TEST", "", "_stack.push(_test_register);", "", "pusht")
 ]
 inttype = [
-    ("OC_SETUP", "", "_temps.create(_int);", "", "setup"),
     ("OC_JUMP", "", "_cursor += _int;", "", "jmp"),
     ("OC_JUMP_TRUE", "", "_cursor += _test_register ? _int : 0;", "", "jpt"),
     ("OC_JUMP_FALSE", "", "_cursor += _test_register ? 0 : _int;", "", "jpf")
 ]
 itype = [
+    ("OC_RETURN_IMMEDIATE", "", "framework::create_member(_return.get(), _immediate);\n\t\t\tgoto gt_return;", "", "ret"),
     ("OC_PUSH_IMMEDIATE", "", "_stack.push(_immediate);", "", "push")
 ]
 mtype = [
+    ("OC_RETURN", "", "_member->refer(_return.get());\n\t\t\tgoto gt_return;", "", "ret"),
     ("OC_TEST", "", "_test_register = _member->test();", "", "test"),
     ("OC_PUSH", "", "_stack.push(_member);", "", "push"),
     ("OC_UNDEFINE", "", "_member->undefine();", "", "undf"),
-    ("OC_EXECUTE_VOID", "", "_member->execute(nullptr);", "", "exec"),
-    ("OC_EXECUTE_COUNT_VOID", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member->execute_count(nullptr, nullptr, _count, &_stack);", "", "exec"),
+    ("OC_EXECUTE_VOID", "", "_member->execute(&_stack, nullptr);", "", "exec"),
+    ("OC_EXECUTE_COUNT_VOID", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member->execute_count(&_stack, nullptr, nullptr, _count);\n\t\t\t_stack.pop_count(_count);", "", "exec"),
     ("OC_EXECUTE_FORMAT_VOID", "auto _count = read<framework::member::parameter_count_t>(_cursor);", 
                                 "if (_cursor + _count > _end) {\n\t\t\t\t"
                                     "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
-                                "}\n\t\t\t_member->execute_format(nullptr, reinterpret_cast<const char*>(_cursor), _count, &_stack);", "_cursor += _count;", "exec")
+                                "}\n\t\t\t_member->execute_format(&_stack, nullptr, reinterpret_cast<const char*>(_cursor), _count);\n\t\t\t_stack.pop_count(_count);", "_cursor += _count;", "exec")
 ]
 minttype = [
-    ("OC_INSTANTIATE_REGEX", "", "_member->template replace_this<framework::native::regex_member>(_regexs[_int]);", "", "instreg")
+    ("OC_INSTANTIATE_REGEX", "", "_member->template replace_this<framework::native::regex_member>(_regexs[_int]);", "", "instreg"),
+    ("OC_INSTANTIATE_FUNCTION", "", "_member->template replace_this<framework::executable::bia_function>(_functions[_int]);", "", "instfun")
 ]
 mmtype = [
-    ("OC_EXECUTE", "", "_member0->execute(_member1);", "", "exec"),
-    ("OC_EXECUTE_COUNT", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member0->execute_count(_member1, nullptr, _count, &_stack);", "", "exec"),
+    ("OC_EXECUTE", "", "_member0->execute(&_stack, _member1);", "", "exec"),
+    ("OC_EXECUTE_COUNT", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member0->execute_count(&_stack, _member1, nullptr, _count);\n\t\t\t_stack.pop_count(_count);", "", "exec"),
     ("OC_EXECUTE_FORMAT", "auto _count = read<framework::member::parameter_count_t>(_cursor);",
                             "if (_cursor + _count > _end) {\n\t\t\t\t"
                                 "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
-                            "}\n\t\t\t_member0->execute_format(_member1, reinterpret_cast<const char*>(_cursor), _count, &_stack);", "_cursor += _count;", "exec"),
+                            "}\n\t\t\t_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);\n\t\t\t_stack.pop_count(_count);", "_cursor += _count;", "exec"),
     ("OC_CLONE", "", "_member0->clone(_member1);", "", "cln"),
     ("OC_REFER", "", "_member0->refer(_member1);", "", "ref"),
     ("OC_COPY", "", "_member0->copy(_member1);", "", "cpy"),
@@ -59,12 +61,10 @@ mmitype = [
 ]
 
 mvars = [
-    ("MOCO_TINY_TEMP", "auto {0} = _temps.from_front(read<tiny_member_index_t>(_cursor));"),
-    ("MOCO_TINY_LOCAL", "auto {0} = _temps.from_back(read<tiny_member_index_t>(_cursor));"),
-    ("MOCO_TINY_MEMBER", "auto {0} = _globals[read<tiny_member_index_t>(_cursor)];"),
-    ("MOCO_TEMP", "auto {0} = _temps.from_front(read<member_index_t>(_cursor));"),
-    ("MOCO_LOCAL", "auto {0} = _temps.from_back(read<member_index_t>(_cursor));"),
-    ("MOCO_MEMBER", "auto {0} = _globals[read<member_index_t>(_cursor)];")
+    ("MOCO_TINY_TEMPORARY", "auto {0} = _temps[read<tiny_member_index_t>(_cursor)];"),
+    ("MOCO_TINY_PERMANENT", "auto {0} = _globals[read<tiny_member_index_t>(_cursor)];"),
+    ("MOCO_TEMPORARY", "auto {0} = _temps[read<member_index_t>(_cursor)];"),
+    ("MOCO_PERMANENT", "auto {0} = _globals[read<member_index_t>(_cursor)];")
 ]
 intvars = [
     ("IIOCO_INT32", "auto _int = read<int32_t>(_cursor);"),

@@ -251,7 +251,7 @@ private:
 		BIA_IMPLEMENTATION_ERROR;
 	}
 	template<typename Right>
-	void both_constant_operation(dependency::big_int & _left, framework::operator_t _operator, Right && _right)
+	void both_constant_operation(detail::big_int & _left, framework::operator_t _operator, Right && _right)
 	{
 		using namespace framework;
 
@@ -287,7 +287,7 @@ private:
 		_value.set_return(&_left);
 		free_big_int(_right);
 	}
-	void free_big_int(const dependency::big_int & _big_int)
+	void free_big_int(const detail::big_int & _big_int)
 	{
 		///TODO
 	}

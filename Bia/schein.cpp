@@ -8,9 +8,10 @@ namespace bia
 namespace machine
 {
 
-schein::schein(machine::machine_context & _context) : _stack(_context.allocator(), 64/*TODO*/)
+schein::schein(machine::machine_context & _context)
 {
 	this->_context = &_context;
+	_setup_count = 0;
 }
 
 schein::~schein()
@@ -31,7 +32,7 @@ void schein::register_allocation(memory::universal_allocation _allocation, const
 void schein::register_big_int(memory::big_int_allocation _allocation)
 {
 	register_allocation(memory::cast_allocation<void>(_allocation), [_allocator = _context->big_int_allocator()](memory::universal_allocation _allocation) {
-		_allocator->destroy_big_int(memory::cast_allocation<dependency::big_int>(_allocation));
+		_allocator->destroy_big_int(memory::cast_allocation<detail::big_int>(_allocation));
 	});
 }
 
@@ -48,6 +49,26 @@ void schein::clear()
 	}
 
 	_allocations.clear();
+}
+
+void schein::set_member_map(const utility::index_map & _member_map)
+{
+	_globals = _member_map.to_list<framework::member*>([&](auto _name) { return _context->address_of_member(_name); });
+}
+
+void schein::set_name_map(const utility::index_map & _name_map)
+{
+	_names = _name_map.to_list<name_manager::name_t>([](auto _name) { return _name; });
+}
+
+void schein::set_setup_count(setup_count_t _count) noexcept
+{
+	_setup_count = _count;
+}
+
+schein::setup_count_t schein::setup_count() const noexcept
+{
+	return _setup_count;
 }
 
 schein::regex_index_t schein::register_regex_inplace(const uint8_t * _bytes, size_t _size)
@@ -87,14 +108,18 @@ schein::regex_index_t schein::register_regex_inplace(const char32_t * _string, s
 	return _tmp;
 }
 
+schein::function_index_t schein::register_function_inplace(machine::virtual_machine::virtual_machine_code && _function_code)
+{
+	auto _tmp = _functions.size();
+
+	_functions.emplace_back(std::move(_function_code));
+
+	return _tmp;
+}
+
 machine::machine_context * schein::machine_context() noexcept
 {
 	return _context;
-}
-
-machine::stack & schein::stack() noexcept
-{
-	return _stack;
 }
 
 machine::string_manager & schein::string_manager() noexcept
@@ -102,9 +127,24 @@ machine::string_manager & schein::string_manager() noexcept
 	return _string_manager;
 }
 
-std::vector<utility::share<dependency::regex>>& schein::regexs() noexcept
+std::vector<utility::share<detail::regex>>& schein::regexs() noexcept
 {
 	return _regexs;
+}
+
+std::vector<utility::share<detail::function_holder>>& schein::functions() noexcept
+{
+	return _functions;
+}
+
+const schein::member_list_t & schein::globals() const noexcept
+{
+	return _globals;
+}
+
+const schein::name_list_t & schein::names() const noexcept
+{
+	return _names;
 }
 
 }

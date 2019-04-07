@@ -36,12 +36,12 @@ template<typename Type>
 inline share<Type>::~share()
 {
 	if (_data && !_data->reference_count.fetch_sub(1, std::memory_order_acq_rel)) {
-		scope_exit _exit([this]() { 
+		auto _exit = make_scope_exit([this]() {
 			auto _tmp = _data;
 
 			_data = nullptr;
 
-			machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_tmp, data_size() + _tmp->extra_size)); 
+			machine::machine_context::active_allocator()->destroy(machine::memory::allocation<data>(_tmp, data_size() + _tmp->extra_size));
 		});
 
 		// Destroy object

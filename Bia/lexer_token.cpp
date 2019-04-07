@@ -455,32 +455,6 @@ ACTION lexer_token::first_member(stream::buffer_input_stream & _input, token_par
 	return success;
 }
 
-ACTION lexer_token::control_statement(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
-{
-	constexpr auto success = ACTION::REPORT;
-	constexpr auto error = ACTION::ERROR;
-
-	if (keyword<keyword_break>(_input, _params, _output) != success &&
-		keyword<keyword_continue>(_input, _params, _output) != success &&
-		keyword<keyword_goto>(_input, _params, _output) != success &&
-		keyword<keyword_exit_scope>(_input, _params, _output) != success &&
-		keyword<keyword_delete>(_input, _params, _output) != success) {
-		return error;
-	}
-
-	// Additional identifier
-	if (_output.content.keyword == keyword_goto::string_id()) {
-		identifier(_input, _params, _output);
-
-		return error;
-	}
-
-	_output.rule_id = BGR_CONTROL_STATEMENT;
-
-	// Match end
-	return command_end(_input, _params, _output) == ACTION::DONT_REPORT ? success : error;
-}
-
 ACTION lexer_token::assign_operator(stream::buffer_input_stream & _input, token_param & _params, token_output & _output)
 {
 	constexpr auto success = ACTION::REPORT;

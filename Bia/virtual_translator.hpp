@@ -41,21 +41,20 @@ public:
 	/**
 	 * Finalizes the ouput result.
 	 *
-	 * @remarks This function may only be called with the original output stream.
-	 *
 	 * @since 3.72.149.810
 	 * @date 12-Jan-19
 	 *
-	 * @param _temp_count The amount of temporary members.
-	 * @param _local_count The amount of local members.
-	 *
-	 * @throws See stream::output_stream::position(), stream::output_stream::write_all(), stream::output_stream::set_position() and stream::output_stream::set_beginning().
+	 * @throws See return_void()
+	 * @throws See stream::output_stream::set_beginning().
 	*/
-	void finalize(member_index_t _temp_count, member_index_t _local_count);
+	void finalize();
+	void return_void();
+	void return_member(const index & _member);
 	void instantiate_int(const index & _member, int64_t _value);
 	void instantiate_double(const index & _member, double _value);
 	void instantiate_string(const index & _member, string_manager::utf8_index_t _value);
 	void instantiate_regex(const index & _member, schein::regex_index_t _regex);
+	void instantiate_function(const index & _member, schein::function_index_t _function);
 	void test(const index & _member);
 	void execute(const index & _member, const index * _destination);
 	void execute_count(const index & _member, const index * _destination, framework::member::parameter_count_t _count);
@@ -136,8 +135,6 @@ private:
 	stream::output_stream * _output;
 	/** The end position of the setup. */
 	position_t _setup_end_pos;
-	/** The position before the temp member creation. */
-	position_t _temp_member_pos;
 	/** The index map for all global variables. */
 	utility::index_map _member_map;
 	/** The index map for all names. */

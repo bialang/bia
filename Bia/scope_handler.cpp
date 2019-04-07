@@ -8,16 +8,21 @@ namespace bia
 namespace compiler
 {
 
-scope_handler::scope_handler(machine::virtual_machine::virtual_translator & _translator) : _translator(_translator)
+scope_handler::scope_handler(machine::virtual_machine::virtual_translator & _translator, scope_handler * _parent) : _translator(_translator)
 {
+	this->_parent = _parent;
 	_max_needed = 0;
+
+	if (_parent) {
+		open_scope();
+	}
 }
 
 void scope_handler::open_scope()
 {
 	// First local scope
-	if (no_open_scopes()) {
-		if (!_variables_in_scopes.empty() || !_variables.empty()) {
+	if (!has_open_scopes()) {
+		if (!_variables.empty()) {
 			BIA_IMPLEMENTATION_ERROR;
 		}
 
@@ -33,7 +38,7 @@ void scope_handler::open_scope()
 void scope_handler::close_scope()
 {
 	// No scope open
-	if (no_open_scopes()) {
+	if (!has_open_scopes()) {
 		BIA_IMPLEMENTATION_ERROR;
 	}
 
@@ -59,14 +64,21 @@ void scope_handler::close_scope()
 	_translator.close_scope(_count);
 }
 
-bool scope_handler::no_open_scopes() const noexcept
+void scope_handler::finalize()
 {
-	return _variables_in_scopes.empty();
+	if (_parent) {
+		close_scope();
+	}
+}
+
+bool scope_handler::has_open_scopes() const noexcept
+{
+	return !_variables_in_scopes.empty();
 }
 
 scope_handler::variable_index_t scope_handler::declare(const char * _name)
 {
-	if (no_open_scopes()) {
+	if (!has_open_scopes()) {
 		BIA_IMPLEMENTATION_ERROR;
 	} 
 	

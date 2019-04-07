@@ -36,7 +36,7 @@ void big_int_allocator::destroy_big_int(big_int_allocation _big_int)
 void big_int_allocator::free(void * _ptr, size_t _size)
 {
 	// Free if memory is not provieded by big_int
-	if (_size != dependency::big_int::reserved_space) {
+	if (_size != detail::big_int::reserved_space) {
 		_allocator->deallocate({ _ptr, _size });
 	}
 }
@@ -53,7 +53,7 @@ void * big_int_allocator::reallocate(void * _buffer, size_t _old_size, size_t _n
 	}
 
 	// Memory is provided by big_int
-	if (_old_size == dependency::big_int::reserved_space) {
+	if (_old_size == detail::big_int::reserved_space) {
 		// Copy buffer to new location
 		auto _new = allocate(_new_size);
 

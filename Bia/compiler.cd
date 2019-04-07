@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="bia::compiler::compile_compare_operation">
+    <Position X="1.5" Y="2.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAEAAQAAAAAAAAAAAAAAABACABAAAACAAAAAAIA=</HashCode>
+      <FileName>compile_compare_operation.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::compiler::compile_normal_operation">
+    <Position X="1.25" Y="5.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAEAAAAAAAAAAAAAAAAIABACABAAAAiAAAAAAIA=</HashCode>
+      <FileName>compile_normal_operation.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::compiler::compiler">
+    <Position X="6.75" Y="3.25" Width="6.75" />
+    <NestedTypes>
+      <Enum Name="bia::compiler::compiler::VARIABLE_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>compiler.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Typedef Name="bia::compiler::compiler::handle_function_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>compiler.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AlAUDCAAAoAABAKBAMAgAAgQRARQABkCCIAAAIAQEEM=</HashCode>
+      <FileName>compiler.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::compiler::compiler_loop_tracker">
+    <Position X="1.75" Y="9.5" Width="3.5" />
+    <NestedTypes>
+      <Typedef Name="bia::compiler::compiler_loop_tracker::position_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>compiler_loop_tracker.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Struct Name="bia::compiler::compiler_loop_tracker::loop" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>compiler_loop_tracker.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAIBABAEAAAAQAAAAAAAgAAAA=</HashCode>
+      <FileName>compiler_loop_tracker.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::compiler::compiler_value">
+    <Position X="14.25" Y="7.75" Width="2.75" />
+    <NestedTypes>
+      <Typedef Name="bia::compiler::compiler_value::invalid_index_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>compiler_value.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Enum Name="bia::compiler::compiler_value::VALUE_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>compiler_value.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AECAAAAAAAAAAAAAgCQCIwAAgAADASAEAAQAAAAAAAQ=</HashCode>
+      <FileName>compiler_value.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::compiler::scope_handler">
+    <Position X="14.25" Y="0.5" Width="4.5" />
+    <NestedTypes>
+      <Typedef Name="bia::compiler::scope_handler::scope_id_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>scope_handler.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::compiler::scope_handler::key_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>scope_handler.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="bia::compiler::scope_handler::variable_index_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>scope_handler.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>KAABAAQACAAAAAAAAAEAAAAAAAAAABAQAAgAAgADEAA=</HashCode>
+      <FileName>scope_handler.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bia::compiler::temp_counter">
+    <Position X="17.5" Y="4.75" Width="1.75" />
+    <NestedTypes>
+      <Typedef Name="bia::compiler::temp_counter::counter_t" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>temp_counter.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAEAQAAAAAAAAAAAAACIAAgAAAAAAAAABAAAIEEAA=</HashCode>
+      <FileName>temp_counter.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

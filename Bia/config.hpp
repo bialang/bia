@@ -147,18 +147,12 @@ namespace machine
 class disassembler;
 class machine_context;
 class stack;
+class schein;
 
 namespace platform
 {
 
 class x86_toolset;
-
-}
-
-namespace virtual_machine
-{
-
-class virtual_machine_schein;
 
 }
 }

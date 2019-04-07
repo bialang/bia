@@ -10,11 +10,15 @@
 #include "member_allocator.hpp"
 #include "executable_allocator.hpp"
 #include "big_int_allocator.hpp"
-#include "stack.hpp"
+#include "name_manager.hpp"
 #include "string_manager.hpp"
 #include "regex.hpp"
+#include "index_map.hpp"
 #include "share_def.hpp"
 #include "string_stream.hpp"
+#include "function_holder.hpp"
+#include "virtual_machine_code.hpp"
+#include "parameter_setter.hpp"
 
 
 namespace bia
@@ -32,8 +36,12 @@ class schein
 public:
 	/** The deleter function signature. */
 	typedef std::function<void(memory::universal_allocation)> deleter_function_t;
+	typedef uint32_t setup_count_t;
 	typedef uint32_t regex_index_t;
+	typedef uint32_t function_index_t;
 	typedef stream::string_stream::length_t string_length_t;
+	typedef std::vector<framework::member*> member_list_t;
+	typedef std::vector<name_manager::name_t> name_list_t;
 
 	/**
 	 * Constructor.
@@ -104,11 +112,36 @@ public:
 	 * @throws See memory::allocator::deallocate() and memory::big_int_allocator::destroy_big_int().
 	 * @throws See std::vector::clear().
 	*/
-	BIA_EXPORT void clear(); 
+	BIA_EXPORT void clear();
+	/**
+	 * Updates the globals list.
+	 *
+	 * @since 3.72.149.811
+	 * @date 19-Jan-19
+	 *
+	 * @param _member_map The member map.
+	 *
+	 * @throws See utility::index_map::to_list().
+	*/
+	BIA_EXPORT void set_member_map(const utility::index_map & _member_map);
+	/**
+	 * Updates the name list.
+	 *
+	 * @since 3.73.150.818
+	 * @date 8-Mar-19
+	 *
+	 * @param _name_map The name map.
+	 *
+	 * @throws See utility::index_map::to_list().
+	*/
+	BIA_EXPORT void set_name_map(const utility::index_map & _name_map);
+	BIA_EXPORT void set_setup_count(setup_count_t _count) noexcept;
+	BIA_EXPORT setup_count_t setup_count() const noexcept;
 	BIA_EXPORT regex_index_t register_regex_inplace(const uint8_t * _bytes, size_t _size);
 	BIA_EXPORT regex_index_t register_regex_inplace(const char * _string, string_length_t _length);
 	BIA_EXPORT regex_index_t register_regex_inplace(const char16_t * _string, string_length_t _length);
 	BIA_EXPORT regex_index_t register_regex_inplace(const char32_t * _string, string_length_t _length);
+	BIA_EXPORT function_index_t register_function_inplace(machine::virtual_machine::virtual_machine_code && _function_code);
 	/**
 	 * Returns the machine context.
 	 *
@@ -119,15 +152,6 @@ public:
 	*/
 	BIA_EXPORT machine::machine_context * machine_context() noexcept;
 	/**
-	 * Returns the stack.
-	 *
-	 * @since 3.72.149.812
-	 * @date 1-Feb-19
-	 *
-	 * @return A reference to the stack.
-	*/
-	BIA_EXPORT machine::stack & stack() noexcept;
-	/**
 	 * Returns the string manager.
 	 *
 	 * @since 3.73.150.816
@@ -136,20 +160,51 @@ public:
 	 * @return A reference to the string manager.
 	*/
 	BIA_EXPORT machine::string_manager & string_manager() noexcept;
-	BIA_EXPORT std::vector<utility::share<dependency::regex>> & regexs() noexcept;
+	BIA_EXPORT std::vector<utility::share<detail::regex>> & regexs() noexcept;
+	BIA_EXPORT std::vector<utility::share<detail::function_holder>> & functions() noexcept;
+	/**
+	 * Returns the globals list.
+	 *
+	 * @since 3.72.149.811
+	 * @date 19-Jan-19
+	 *
+	 * @return The global list.
+	*/
+	BIA_EXPORT const member_list_t & globals() const noexcept;
+	/**
+	 * Returns the name list.
+	 *
+	 * @since 3.73.150.818
+	 * @date 8-Mar-19
+	 *
+	 * @return The name list.
+	*/
+	BIA_EXPORT const name_list_t & names() const noexcept;
+	virtual_machine::parameter_setter & parameter_setter() noexcept
+	{
+		return _parameter_setter;
+	}
 	schein & operator=(schein && _right) noexcept = default;
 
 protected:
 	/** The linked context. */
 	machine::machine_context * _context;
+	/** The amount of temporary members needed at setup. */
+	setup_count_t _setup_count;
 	/** Stores all registered allocations with deleter. */
 	std::vector<std::pair<memory::universal_allocation, deleter_function_t>> _allocations;
 	/** Stores all registered regexs. */
-	std::vector<utility::share<dependency::regex>> _regexs;
-	/** The machine stack. */
-	machine::stack _stack;
+	std::vector<utility::share<detail::regex>> _regexs;
+	/** Stores all registered bia functions. */
+	std::vector<utility::share<detail::function_holder>> _functions;
 	/** The manager for the string resources. */
 	machine::string_manager _string_manager;
+	/** The globals list. */
+	member_list_t _globals;
+	/** The names. */
+	name_list_t _names;
+	/** The parameter setter that is responsible for the incoming parameters. */
+	virtual_machine::parameter_setter _parameter_setter;
 };
 
 }

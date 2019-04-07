@@ -198,7 +198,7 @@ public:
 		destroy();
 
 		_object_id = type_id<Type>();
-		new(_object_space) Type(std::forward<Arguments>(_arguments)...);
+		new(&_object_space) Type(std::forward<Arguments>(_arguments)...);
 	}
 	template<typename Type, typename... Arguments, typename = typename std::enable_if<!has_exact_type<Type>() && has_promotable_type<Type>()>::type>
 	void reconstruct(Arguments &&... _arguments)
@@ -208,7 +208,7 @@ public:
 		constexpr auto id = promotable_type_id<Type>();
 
 		_object_id = id;
-		new(_object_space) type_at<id>(std::forward<Arguments>(_arguments)...);
+		new(&_object_space) type_at<id>(std::forward<Arguments>(_arguments)...);
 	}
 	/**
 	 * Returns the id of the current value.
@@ -229,7 +229,7 @@ public:
 	{
 		// Valid conversion
 		if (Index && _object_id == Index) {
-			return reinterpret_cast<type_at<Index>*>(_object_space);
+			return reinterpret_cast<type_at<Index>*>(&_object_space);
 		}
 
 		return nullptr;
@@ -239,7 +239,7 @@ public:
 	{
 		// Valid conversion
 		if (Index && _object_id == Index) {
-			return reinterpret_cast<const type_at<Index>*>(_object_space);
+			return reinterpret_cast<const type_at<Index>*>(&_object_space);
 		}
 
 		return nullptr;
@@ -284,9 +284,9 @@ public:
 		if (empty()) {
 			return nullptr;
 		} else if (has_exact_type<Type>() && _object_id == type_id<Type>()) {
-			return reinterpret_cast<Type*>(_object_space);
+			return reinterpret_cast<Type*>(&_object_space);
 		} else if (has_promotable_type<Type>() && _object_id == promotable_type_id<Type>()) {
-			return reinterpret_cast<Type*>(_object_space);
+			return reinterpret_cast<Type*>(&_object_space);
 		}
 
 		return do_get<Type, Default, Types...>(1);
@@ -307,9 +307,9 @@ public:
 		if (empty()) {
 			return nullptr;
 		} else if (has_exact_type<Type>() && _object_id == type_id<Type>()) {
-			return reinterpret_cast<const Type*>(_object_space);
+			return reinterpret_cast<const Type*>(&_object_space);
 		} else if (has_promotable_type<Type>() && _object_id == promotable_type_id<Type>()) {
-			return reinterpret_cast<const Type*>(_object_space);
+			return reinterpret_cast<const Type*>(&_object_space);
 		}
 
 		return do_get<Type, Default, Types...>(1);
@@ -319,7 +319,7 @@ private:
 	/** The max size of the virtual object space in bytes. */
 	constexpr static auto max_size = max_sizeof<Default, Types...>();
 	/** The virtual object space. */
-	intptr_t _object_space[max_size / sizeof(intptr_t) + (max_size % sizeof(intptr_t) ? 1 : 0)];
+	typename std::aligned_storage<max_size, max_alignof<Default, Types...>()>::type _object_space;
 	/** If non-zero the currently active object, otherwise no object is active. */
 	id_t _object_id;
 
@@ -327,7 +327,7 @@ private:
 	template<typename Type>
 	void copy_construct(id_t _id, const variant & _other)
 	{
-		new(_object_space) Type(*reinterpret_cast<const Type*>(_other._object_space));
+		new(&_object_space) Type(*reinterpret_cast<const Type*>(&_other._object_space));
 	}
 	template<typename Type, typename Second, typename... Rest>
 	typename std::enable_if<!std::is_copy_constructible<Type>::value>::type copy_construct(id_t _id, const variant & _copy)
@@ -342,7 +342,7 @@ private:
 	typename std::enable_if<std::is_copy_constructible<Type>::value>::type copy_construct(id_t _id, const variant & _copy)
 	{
 		if (_object_id == _id) {
-			new(_object_space) Type(*reinterpret_cast<const Type*>(_copy._object_space));
+			new(&_object_space) Type(*reinterpret_cast<const Type*>(&_copy._object_space));
 		} else {
 			copy_construct<Second, Rest...>(_id + 1, _copy);
 		}
@@ -350,7 +350,7 @@ private:
 	template<typename Type>
 	void move_construct(id_t _id, variant && _move)
 	{
-		new(_object_space) Type(std::move(*reinterpret_cast<Type*>(_move._object_space)));
+		new(&_object_space) Type(std::move(*reinterpret_cast<Type*>(&_move._object_space)));
 	}
 	template<typename Type, typename Second, typename... Rest>
 	typename std::enable_if<!std::is_move_constructible<Type>::value>::type move_construct(id_t _id, variant && _move)
@@ -365,25 +365,11 @@ private:
 	typename std::enable_if<std::is_move_constructible<Type>::value>::type move_construct(id_t _id, variant && _move)
 	{
 		if (_object_id == _id) {
-			new(_object_space) Type(*reinterpret_cast<Type*>(_move._object_space));
+			new(&_object_space) Type(*reinterpret_cast<Type*>(&_move._object_space));
 		} else {
 			move_construct<Second, Rest...>(_id + 1, std::move(_move));
 		}
 	}
-	/*template<typename Type>
-	void move_construct(id_t _id, variant && _other)
-	{
-		new(_object_space) Type(std::move(*reinterpret_cast<Type*>(_other._object_space)));
-	}
-	template<typename Type, typename... Rest>
-	typename std::enable_if<sizeof...(Rest) != 0>::type move_construct(id_t _id, variant && _other)
-	{
-		if (_object_id == _id) {
-			new(_object_space) Type(std::move(*reinterpret_cast<Type*>(_other._object_space)));
-		} else {
-			move_construct<Rest...>(_id + 1, std::move(_other));
-		}
-	}*/
 	/**
 	 * Destroys the current variant with the appropiate destructor.
 	 *
@@ -399,7 +385,7 @@ private:
 	template<typename Type>
 	void do_destroy(id_t _id)
 	{
-		reinterpret_cast<Type*>(_object_space)->~Type();
+		reinterpret_cast<Type*>(&_object_space)->~Type();
 	}
 	/**
 	 * Destroys the current variant with the appropiate destructor.
@@ -418,7 +404,7 @@ private:
 	typename std::enable_if<sizeof...(Rest) != 0>::type do_destroy(id_t _id)
 	{
 		if (_object_id == _id) {
-			reinterpret_cast<Type*>(_object_space)->~Type();
+			reinterpret_cast<Type*>(&_object_space)->~Type();
 		} else {
 			do_destroy<Rest...>(_id + 1);
 		}
@@ -602,7 +588,7 @@ private:
 	template<typename Type, typename Other>
 	typename std::enable_if<std::is_base_of<Type, Other>::value, Type*>::type cast() noexcept
 	{
-		return static_cast<Type*>(reinterpret_cast<Other*>(_object_space));
+		return static_cast<Type*>(reinterpret_cast<Other*>(&_object_space));
 	}
 	/**
 	 * Returns the object as @a Type.
@@ -615,14 +601,13 @@ private:
 	template<typename Type, typename Other>
 	typename std::enable_if<std::is_base_of<Type, Other>::value, const Type*>::type cast() const noexcept
 	{
-		return static_cast<const Type*>(reinterpret_cast<const Other*>(_object_space));
+		return static_cast<const Type*>(reinterpret_cast<const Other*>(&_object_space));
 	}
 	/**
 	 * Returns null.
 	 *
 	 * @since 3.75.150.820
 	 * @date 15-Mar-19
-	 * Returns the type id of @a Type.
 	 *
 	 * @return Returns null.
 	*/

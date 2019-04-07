@@ -23,15 +23,15 @@ source_group("Source Files\\compiler" FILES ${Bia_SOURCE_FILES_COMPILER})
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_COMPILER})
 set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_COMPILER})
 
-# dependency namespace
-set(Bia_HEADER_FILES_DEPENDENCY "big_int.hpp" "regex.hpp")
-set(Bia_SOURCE_FILES_DEPENDENCY "big_int.cpp" "regex.cpp")
+# detail namespace
+set(Bia_HEADER_FILES_DETAIL "big_int.hpp" "function_holder.hpp" "regex.hpp")
+set(Bia_SOURCE_FILES_DETAIL "big_int.cpp" "function_holder.hpp" "regex.cpp")
 
-source_group("Header Files\\dependency" FILES ${Bia_HEADER_FILES_DEPENDENCY})
-source_group("Source Files\\dependency" FILES ${Bia_SOURCE_FILES_DEPENDENCY})
+source_group("Header Files\\detail" FILES ${Bia_HEADER_FILES_DETAIL})
+source_group("Source Files\\detail" FILES ${Bia_SOURCE_FILES_DETAIL})
 
-set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_DEPENDENCY})
-set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_DEPENDENCY})
+set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_DETAIL})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_DETAIL})
 
 # encoding namespace
 set(Bia_HEADER_FILES_ENCODING "ascii.hpp" "encoder.hpp" "utf8.hpp" "utf32.hpp")
@@ -67,9 +67,11 @@ set(Bia_SOURCE_FILES_FRAMEWORK "undefined_member.cpp")
 source_group("Header Files\\framework" FILES ${Bia_HEADER_FILES_FRAMEWORK})
 source_group("Source Files\\framework" FILES ${Bia_SOURCE_FILES_FRAMEWORK})
 
-set(Bia_HEADER_FILES_EXECUTABLE "function.hpp" "lambda_function.hpp" "lambda_function_def.hpp" "member_function.hpp" "member_function_def.hpp" "static_function.hpp")
+set(Bia_HEADER_FILES_EXECUTABLE "bia_function.hpp" "function.hpp" "lambda_function.hpp" "lambda_function_def.hpp" "member_function.hpp" "member_function_def.hpp" "static_function.hpp")
+set(Bia_SOURCE_FILES_EXECUTABLE "bia_function.cpp")
 
 source_group("Header Files\\framework\\executable" FILES ${Bia_HEADER_FILES_EXECUTABLE})
+source_group("Source Files\\framework\\executable" FILES ${Bia_SOURCE_FILES_EXECUTABLE})
 
 set(Bia_HEADER_FILES_NATIVE "big_int_member.hpp" "cstring_member.hpp" "double_member.hpp" "int_member.hpp" "native_operator.hpp" "native_test_operator.hpp" "native_variable.hpp" "regex_member.hpp")
 set(Bia_SOURCE_FILES_NATIVE "big_int_member.cpp" "double_member.cpp" "int_member.cpp" "regex_member.cpp")
@@ -84,7 +86,7 @@ source_group("Header Files\\framework\\object" FILES ${Bia_HEADER_FILES_OBJECT})
 source_group("Source Files\\framework\\object" FILES ${Bia_SOURCE_FILES_OBJECT})
 
 set(Bia_HEADER_FILES ${Bia_HEADER_FILES} ${Bia_HEADER_FILES_FRAMEWORK} ${Bia_HEADER_FILES_EXECUTABLE} ${Bia_HEADER_FILES_NATIVE} ${Bia_HEADER_FILES_OBJECT})
-set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_FRAMEWORK} ${Bia_SOURCE_FILES_NATIVE} ${Bia_SOURCE_FILES_OBJECT})
+set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_FRAMEWORK} ${Bia_SOURCE_FILES_EXECUTABLE} ${Bia_SOURCE_FILES_NATIVE} ${Bia_SOURCE_FILES_OBJECT})
 
 
 # grammar namespace
@@ -99,8 +101,8 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_GRAMMAR})
 
 
 # machine namespace
-set(Bia_HEADER_FILES_MACHINE "code.hpp" "disassembler.hpp" "machine_context.hpp" "member_array.hpp" "name_manager.hpp" "schein.hpp" "script_map.hpp" "string_resource.hpp" "stack.hpp" "string_manager.hpp" "variable_index.hpp")
-set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_context.cpp" "member_array.cpp" "name_manager.cpp" "schein.cpp" "script_map.cpp" "string_manager.cpp" "variable_index.cpp")
+set(Bia_HEADER_FILES_MACHINE "disassembler.hpp" "machine_context.hpp" "member_array_view.hpp" "name_manager.hpp" "schein.hpp" "script_map.hpp" "string_resource.hpp" "stack.hpp" "string_manager.hpp" "variable_index.hpp")
+set(Bia_SOURCE_FILES_MACHINE "disassembler.cpp" "machine_context.cpp" "name_manager.cpp" "schein.cpp" "script_map.cpp" "string_manager.cpp" "variable_index.cpp")
 
 source_group("Header Files\\machine" FILES ${Bia_HEADER_FILES_MACHINE})
 source_group("Source Files\\machine" FILES ${Bia_SOURCE_FILES_MACHINE})
@@ -123,14 +125,14 @@ set(Bia_SOURCE_FILES_MODULAR "module_loader.cpp")
 source_group("Header Files\\machine\\modular" FILES ${Bia_HEADER_FILES_MODULAR})
 source_group("Source Files\\machine\\modular" FILES ${Bia_SOURCE_FILES_MODULAR})
 
-set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "machine_code.hpp" "machine_schein.hpp" "member_passer.hpp" "passer.hpp" "static_passer.hpp" "varg_member_passer.hpp" "x86_translator.hpp")
-set(Bia_SOURCE_FILES_PLATFORM "machine_code.cpp")
+set(Bia_HEADER_FILES_PLATFORM "architecture.hpp" "architecture_utils.hpp" "member_passer.hpp" "passer.hpp" "static_passer.hpp" "varg_member_passer.hpp" "x86_translator.hpp")
+set(Bia_SOURCE_FILES_PLATFORM "")
 
 source_group("Header Files\\machine\\platform" FILES ${Bia_HEADER_FILES_PLATFORM})
 source_group("Source Files\\machine\\platform" FILES ${Bia_SOURCE_FILES_PLATFORM})
 
-set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "virtual_disassembler.hpp" "virtual_machine_code.hpp" "virtual_machine_schein.hpp" "virtual_translator.hpp")
-set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "virtual_disassembler.cpp" "virtual_machine_code.cpp" "virtual_machine_schein.cpp" "virtual_translator.cpp")
+set(Bia_HEADER_FILES_VIRTUAL_MACHINE "op_code.hpp" "parameter_setter.hpp" "virtual_disassembler.hpp" "virtual_machine_code.hpp" "virtual_translator.hpp")
+set(Bia_SOURCE_FILES_VIRTUAL_MACHINE "virtual_disassembler.cpp" "virtual_machine_code.cpp" "virtual_translator.cpp")
 
 source_group("Header Files\\machine\\virtual_machine" FILES ${Bia_HEADER_FILES_VIRTUAL_MACHINE})
 source_group("Source Files\\machine\\virtual_machine" FILES ${Bia_SOURCE_FILES_VIRTUAL_MACHINE})
@@ -151,7 +153,7 @@ set(Bia_SOURCE_FILES ${Bia_SOURCE_FILES} ${Bia_SOURCE_FILES_STREAM})
 
 # utility namespace
 set(Bia_HEADER_FILES_UTILITY "buffer_builder.hpp" "guard.hpp" "hasher.hpp" "index_map.hpp" "local_object.hpp" "max.hpp" "scope_exit.hpp" "share.hpp" "share_def.hpp" "string_key.hpp" "type_traits.hpp" "variant.hpp")
-set(Bia_SOURCE_FILES_UTILITY "scope_exit.cpp")
+set(Bia_SOURCE_FILES_UTILITY "")
 
 source_group("Header Files\\utility" FILES ${Bia_HEADER_FILES_UTILITY})
 source_group("Source Files\\utility" FILES ${Bia_SOURCE_FILES_UTILITY})

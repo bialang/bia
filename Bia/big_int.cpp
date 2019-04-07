@@ -5,7 +5,7 @@
 
 namespace bia
 {
-namespace dependency
+namespace detail
 {
 
 big_int::big_int() noexcept : _buffer{}
@@ -174,7 +174,8 @@ void big_int::power(int32_t _exponent)
 
 void big_int::power(const big_int & _exponent)
 {
-	BIA_NOT_IMPLEMENTED;
+	///TODO
+	power(_exponent.to_int());
 }
 
 void big_int::power(int32_t _exponent, big_int & _result) const
@@ -188,7 +189,8 @@ void big_int::power(int32_t _exponent, big_int & _result) const
 
 void big_int::power(const big_int & _exponent, big_int & _result) const
 {
-	BIA_NOT_IMPLEMENTED;
+	///TODO
+	power(_exponent.to_int(), _result);
 }
 
 void big_int::negate()

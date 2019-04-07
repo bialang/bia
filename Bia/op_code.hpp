@@ -18,8 +18,8 @@ namespace virtual_machine
 {
 
 typedef uint16_t op_code_t;
-typedef uint32_t member_index_t;
-typedef uint8_t tiny_member_index_t;
+typedef int32_t member_index_t;
+typedef int8_t tiny_member_index_t;
 
 class virtual_translator;
 
@@ -39,12 +39,21 @@ struct index
 protected:
 	friend virtual_translator;
 
-	index(member_index_t _value) noexcept
+	index(member_index_t _value)
 	{
+		if (_value < 0) {
+			BIA_IMPLEMENTATION_ERROR;
+		}
+
 		value = _value;
 	}
 };
 
+/**
+ * A member index. This is a permanent index with the positive range.
+ *
+ * @see @ref index
+*/
 struct member_index : index
 {
 private:
@@ -53,6 +62,11 @@ private:
 	using index::index;
 };
 
+/**
+ * A temporary member index. This is a temporary index with the positive range.
+ *
+ * @see @ref index
+*/
 struct temp_index : index
 {
 private:
@@ -61,6 +75,11 @@ private:
 	using index::index;
 };
 
+/**
+ * A local member index. This is a temporary index with the negative range.
+ *
+ * @see @ref index
+*/
 struct local_index : index
 {
 private:
@@ -71,19 +90,17 @@ private:
 
 struct invalid_index : index
 {
-	invalid_index() noexcept : index(~member_index_t(0))
+	invalid_index() noexcept : index(0)
 	{
 	}
 };
 
 enum MEMBER_OP_CODE_OPTION
 {
-	MOCO_MEMBER,
-	MOCO_LOCAL,
-	MOCO_TEMP,
-	MOCO_TINY_MEMBER,
-	MOCO_TINY_LOCAL,
-	MOCO_TINY_TEMP,
+	MOCO_PERMANENT,
+	MOCO_TEMPORARY,
+	MOCO_TINY_PERMANENT,
+	MOCO_TINY_TEMPORARY,
 
 	MOCO_COUNT
 };
@@ -110,20 +127,21 @@ enum IMMEDIATE_OP_CODE_OPTION
 enum OP_CODE : op_code_t
 {
 	/** P-Type instructions */
-	OC_RETURN,
+	OC_RETURN_VOID,
 	OC_PUSH_TEST,
 
 	/** int-Type instructions */
-	OC_SETUP = OC_PUSH_TEST + IIOCO_COUNT,
-	OC_JUMP = OC_SETUP + IIOCO_COUNT,
+	OC_JUMP = OC_PUSH_TEST + IIOCO_COUNT,
 	OC_JUMP_TRUE = OC_JUMP + IIOCO_COUNT,
 	OC_JUMP_FALSE = OC_JUMP_TRUE + IIOCO_COUNT,
 
 	/** I-Type instructions */
-	OC_PUSH_IMMEDIATE = OC_JUMP_FALSE + IOCO_COUNT,
+	OC_RETURN_IMMEDIATE = OC_JUMP_FALSE + IOCO_COUNT,
+	OC_PUSH_IMMEDIATE = OC_RETURN_IMMEDIATE + IOCO_COUNT,
 
 	/** M-Type instructions */
-	OC_PUSH = OC_PUSH_IMMEDIATE + MOCO_COUNT,
+	OC_RETURN = OC_PUSH_IMMEDIATE + MOCO_COUNT,
+	OC_PUSH = OC_RETURN + MOCO_COUNT,
 	OC_TEST = OC_PUSH + MOCO_COUNT,
 	OC_UNDEFINE = OC_TEST + MOCO_COUNT,
 	OC_EXECUTE_VOID = OC_UNDEFINE + MOCO_COUNT,
@@ -132,9 +150,10 @@ enum OP_CODE : op_code_t
 
 	/** Mint-Type instructions */
 	OC_INSTANTIATE_REGEX = OC_EXECUTE_FORMAT_VOID + MOCO_COUNT * IIOCO_COUNT,
+	OC_INSTANTIATE_FUNCTION = OC_INSTANTIATE_REGEX + MOCO_COUNT * IIOCO_COUNT,
 
 	/** MM-Type instructions */
-	OC_EXECUTE = OC_INSTANTIATE_REGEX + MOCO_COUNT * MOCO_COUNT,
+	OC_EXECUTE = OC_INSTANTIATE_FUNCTION + MOCO_COUNT * MOCO_COUNT,
 	OC_EXECUTE_COUNT = OC_EXECUTE + MOCO_COUNT * MOCO_COUNT,
 	OC_EXECUTE_FORMAT = OC_EXECUTE_COUNT + MOCO_COUNT * MOCO_COUNT,
 	OC_CLONE = OC_EXECUTE_FORMAT + MOCO_COUNT * MOCO_COUNT,
@@ -288,10 +307,16 @@ private:
 	template<bool Optimize>
 	static void write_member(stream::output_stream & _output, const index & _member)
 	{
+		auto _index = _member.value;
+
+		if (dynamic_cast<const local_index*>(&_member)) {
+			_index = -_index - 1;
+		}
+
 		if (Optimize && _member.value <= std::numeric_limits<tiny_member_index_t>::max()) {
-			_output.write_all(static_cast<tiny_member_index_t>(_member.value));
+			_output.write_all(static_cast<tiny_member_index_t>(_index));
 		} else {
-			_output.write_all(_member.value);
+			_output.write_all(_index);
 		}
 	}
 	template<bool Optimize, typename Type>
@@ -325,14 +350,12 @@ private:
 	template<bool Optimize>
 	static MEMBER_OP_CODE_OPTION member_option(const index & _member)
 	{
-		int _option = Optimize && _member.value <= std::numeric_limits<tiny_member_index_t>::max() ? MOCO_TINY_MEMBER : MOCO_MEMBER;
+		int _option = Optimize && _member.value <= std::numeric_limits<tiny_member_index_t>::max() ? MOCO_TINY_PERMANENT : MOCO_PERMANENT;
 
 		if (dynamic_cast<const member_index*>(&_member)) {
-			_option += MOCO_MEMBER;
-		} else if (dynamic_cast<const local_index*>(&_member)) {
-			_option += MOCO_LOCAL;
-		} else if (dynamic_cast<const temp_index*>(&_member)) {
-			_option += MOCO_TEMP;
+			_option += MOCO_PERMANENT;
+		} else if (dynamic_cast<const temp_index*>(&_member) || dynamic_cast<const local_index*>(&_member)) {
+			_option += MOCO_TEMPORARY;
 		} else {
 			BIA_IMPLEMENTATION_ERROR;
 		}
@@ -356,14 +379,14 @@ private:
 			}
 		} else {
 			if (std::is_same<Type, int32_t>::value) {
-			return IOCO_INT32;
+				return IOCO_INT32;
 			} else if (std::is_same<Type, int8_t>::value) {
 				return IOCO_INT8;
 			} else if (std::is_same<Type, int64_t>::value) {
 				return IOCO_INT64;
 			}
 		}
-		
+
 		return IOCO_FLOAT;
 	}
 	template<bool Optimize>

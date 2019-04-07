@@ -3,7 +3,7 @@
 
 namespace bia
 {
-namespace dependency
+namespace detail
 {
 
 #if defined(BIA_USE_STD_REGEX)

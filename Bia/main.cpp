@@ -12,10 +12,13 @@
 #include <chrono>
 #include <iostream>
 #include <regex>
+#include <sstream>
+#include <fstream>
 #include "big_int_allocator.hpp"
 #include "cstring_member_def.hpp"
 #include "virtual_machine_code.hpp"
 #include "variant.hpp"
+#include "bia_function.hpp"
 
 
 struct printer
@@ -80,7 +83,7 @@ int main()
 		// Create context which handles almost everything
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
-		
+
 		_context.set_lambda<1>("ser", [](int & i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
@@ -128,20 +131,32 @@ int main()
 
 			return true;
 		});
-		_context.set_lambda("time", []() { return std::clock()/(double)CLOCKS_PER_SEC; });
-		/*_context.set_lambda("int", [](bia::framework::member * _member) {
-			if (_member->flags() & bia::framework::member::F_CSTRING) {
-				return std::stoll(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
+		_context.set_lambda("time", []() { return std::clock() / (double)CLOCKS_PER_SEC; });
+		_context.set_lambda("disassemble", [](bia::framework::executable::bia_function * _function) { _function->disassemble(); });
+		_context.set_lambda("pause", []() { system("pause"); });
+		_context.set_lambda("int", [](utility::variant<framework::member*, int64_t, double, const char*> _value) -> int64_t {
+			switch (_value.id()) {
+			case 1:
+				return (*_value.get<1>())->to_int();
+			case 2:
+				return *_value.get<2>();
+			case 3:
+				return *_value.get<3>();
 			}
 
-			return _member->to_int();
+			BIA_IMPLEMENTATION_ERROR;
 		});
-		_context.set_lambda("float", [](bia::framework::member * _member) {
-			if (_member->flags() & bia::framework::member::F_CSTRING) {
-				return std::stod(static_cast<bia::framework::native::cstring_member<char>*>(_member)->to_cstring(nullptr));
+		_context.set_lambda("float", [](utility::variant<framework::member*, int64_t, double, const char*> _value) -> double {
+			switch (_value.id()) {
+			case 1:
+				return (*_value.get<1>())->to_double();
+			case 2:
+				return *_value.get<2>();
+			case 3:
+				return *_value.get<3>();
 			}
 
-			return _member->to_double();
+			BIA_IMPLEMENTATION_ERROR;
 		});
 		_context.set_lambda("defined", [](const bia::framework::member * _member) {
 			try {
@@ -152,39 +167,9 @@ int main()
 
 			return true;
 		});
-		set_class<printer>(_context, "printer")
-			.set_constructor<int>()
-			.set_function("hey", &test)
-			.set_function("hi", &printer::hi);
-		*/
+		_context.set_function("system", &system);
 		set_class<printer>(_context, "printer").set_constructor<1, int>().set_function("hey", &test).set_function("hi", &printer::hi);
 
-		// Script
-		char _script[] = u8R""(
-
-var sum = 0
-var start = time()
-var i = 0
-var t = 0
-
-while i < 10000000 {
-	t = i % 3
-	
-	if t {
-		sum += i * t
-	} else {
-		sum /= i + 1
-	}
-
-	i += 1
-}
-
-var end = time()
-print(sum)
-var sum = end - start
-print(sum)
-
-)"";
 		/*test_and_time(1, []() {
 			bia::dependency::big_int _sum;
 
@@ -197,10 +182,24 @@ print(sum)
 			}
 		});*/
 
+		std::string _script;
+
+		{
+			std::stringstream _ss;
+			std::ifstream _file("main.bia");
+
+			if (!_file.is_open()) {
+				_file = std::ifstream("../main.bia");
+			}
+
+			_ss << _file.rdbuf();
+			_script = _ss.str();
+		}
+
 		// Compile
-		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script), [](const int8_t*) {}), sizeof(_script) - 1);
+		bia::stream::buffer_input_stream _input(std::shared_ptr<const int8_t>(reinterpret_cast<const int8_t*>(_script.data()), [](const int8_t*) {}), _script.length());
 		bia::stream::buffer_output_stream _output;
-		bia::compiler::compiler _compiler(_output, _context);
+		bia::compiler::compiler _compiler(_output, _context, nullptr);
 
 		test_and_time(1, [&]() {
 			bia::grammar::syntax::lexer().lex(_input, _compiler, _context);
@@ -220,15 +219,18 @@ print(sum)
 		puts("");
 
 		// Run
-		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.virtual_machine_schein()));
+		bia::machine::virtual_machine::virtual_machine_code _machine_code({ static_cast<void*>(_output.buffer()), static_cast<size_t>(_output.size()) }, std::move(_compiler.schein()));
 
 		_machine_code.disassemble();
 
 		system("pause");
 
+		machine::stack _stack(_context.allocator(), 1000);
+
 		try {
+			machine::virtual_machine::virtual_machine_code::return_t _return;
 			test_and_time(1, [&] {
-				_machine_code.execute();
+				_machine_code.execute(_stack, nullptr, 0, _return);
 			});
 
 			//printf("Value of i: %lli\n", _context.get_member("i")->cast<long long>());

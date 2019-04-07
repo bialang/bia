@@ -19,15 +19,15 @@ public:
 	{
 		replace_this<undefined_member>();
 	}
-	virtual void BIA_MEMBER_CALLING_CONVENTION execute(member * _destination) override
+	virtual void BIA_MEMBER_CALLING_CONVENTION execute(machine::stack * _stack, member * _destination) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(member * _destination, void * _reserved, parameter_count_t _count, machine::stack * _stack) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_count(machine::stack * _stack, member * _destination, void * _reserved, parameter_count_t _count) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
-	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(member * _destination, const char * _format, parameter_count_t _count, machine::stack * _stack) override
+	virtual void BIA_VARG_MEMBER_CALLING_CONVENTION execute_format(machine::stack * _stack, member * _destination, const char * _format, parameter_count_t _count) override
 	{
 		throw exception::execution_error(BIA_EM_UNSUPPORTED_EXECUTE);
 	}
