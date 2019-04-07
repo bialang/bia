@@ -50,6 +50,11 @@ public:
 	void finalize();
 	void return_void();
 	void return_member(const index & _member);
+	template<typename Type>
+	void return_immediate(Type _value)
+	{
+		op_code::write_i_type(*_output, OC_RETURN_IMMEDIATE, _value);
+	}
 	void instantiate_int(const index & _member, int64_t _value);
 	void instantiate_double(const index & _member, double _value);
 	void instantiate_string(const index & _member, string_manager::utf8_index_t _value);

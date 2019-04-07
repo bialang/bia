@@ -768,7 +768,26 @@ const grammar::report * compiler::handle_flow_control(const grammar::report * _r
 			handle_value<false>(_report, [&]() {
 				_value.expand_to_member(_translator, [&](auto _member) {
 					if (std::is_same<decltype(_member), compiler_value::invalid_index_t>::value) {
-						BIA_NOT_IMPLEMENTED;
+						using VT = compiler_value::VALUE_TYPE;
+
+						switch (_value.type()) {
+						case VT::TEST_VALUE_CONSTANT:
+							_value.set_return(static_cast<int64_t>(_value.value().rt_test_result));
+						case VT::INT:
+							_translator.return_immediate(_value.value().rt_int);
+
+							break;
+						case VT::DOUBLE:
+							_translator.return_immediate(_value.value().rt_double);
+
+							break;
+						case VT::STRING:
+							_translator.return_immediate(_value.value().rt_string);
+
+							break;
+						default:
+							BIA_IMPLEMENTATION_ERROR;
+						}
 					} else {
 						_translator.return_member(_member);
 					}
