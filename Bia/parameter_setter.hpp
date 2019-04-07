@@ -20,15 +20,15 @@ public:
 
 	parameter_setter() noexcept
 	{
-		_count = 0;
+		_parameter_count = 0;
 	}
 	void add_parameter(const char * _name)
 	{
-		++_count;
+		++_parameter_count;
 	}
 	void setup(stack & _stack, member_array_view & _temps, const char * _format, parameter_count_t _count)
 	{
-		if (this->_count != _count) {
+		if (_parameter_count != _count) {
 			throw exception::argument_error(BIA_EM_INVALID_ARGUMENT);
 		}
 
@@ -44,7 +44,7 @@ public:
 		}
 	}
 private:
-	parameter_count_t _count;
+	parameter_count_t _parameter_count;
 };
 
 }

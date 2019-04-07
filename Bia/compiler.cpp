@@ -156,11 +156,11 @@ char compiler::handle_parameter_item()
 		_translator.pass_immediate(_value.value().rt_double);
 
 		return 'd';
-	/*case VT::STRING:
-		_passer.pass_varg(_value.value().rt_string.data);
+	case VT::STRING:
+		_translator.pass_immediate(_value.value().rt_string);
 
 		return 'a';
-	case VT::STRING16:
+	/*case VT::STRING16:
 		_passer.pass_varg(_value.value().rt_string.data);
 
 		return 'u';

@@ -1,10 +1,7 @@
-fun do_callback(callback) {
-	print(callback())
+fun a(){
+return 4
 }
-
-var i = 9
-
-do_callback(fun() return i;)
+print(a())
 
 #>
 fun quadrat(x) {

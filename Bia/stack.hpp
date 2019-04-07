@@ -10,6 +10,7 @@
 #include "type_traits.hpp"
 #include "variant.hpp"
 #include "create_member.hpp"
+#include "string_manager.hpp"
 
 
 namespace bia
@@ -78,6 +79,11 @@ public:
 	{
 		push(reinterpret_cast<intptr_t>(_value));
 	}
+	template<typename Char_type>
+	void push(string_manager::string_wrapper<Char_type> _value)
+	{
+		push(_value.string->get().get()->string<Char_type>());
+	}
 	void drop_stack_frame(const element_t * _stack_frame)
 	{
 		if (_stack_frame < _base_pointer || _stack_frame > _top_pointer) {
@@ -110,7 +116,7 @@ public:
 
 			break;
 		case 'a':
-			framework::create_member(_destination, reinterpret_cast<const char*>(_stack_pointer + _offset));
+			framework::create_member(_destination, reinterpret_cast<const char*>(cast<intptr_t>(_offset)));
 
 			break;
 		case 'M':
@@ -164,14 +170,12 @@ public:
 		case 'd':
 			return checked_convert<Type>(cast<double>(_offset));
 		case 'a':
-			return checked_convert<Type>(reinterpret_cast<const char*>(_stack_pointer + _offset));
+			return checked_convert<Type>(reinterpret_cast<const char*>(cast<intptr_t>(_offset)));
 		case 'M':
 			return reinterpret_cast<framework::member*>(cast<intptr_t>(_offset))->cast<Type>();
 		default:
 			throw BIA_IMPLEMENTATION_EXCEPTION("Invalid format type.");
 		}
-		
-		throw exception::type_error(BIA_EM_UNEXPECTED_TYPE);
 	}
 
 private:
