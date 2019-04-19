@@ -1,9 +1,62 @@
+auto sy = system("pause")
 
+print(sy)
+
+#>
 var output = string("")
 
 input("geb was ein: ", output)
 
 system(output)
+
+export fun foo() {
+	return 3
+}
+
+export function foo: return 3
+export default fun: return "hi"
+import module_default, { foo } from "./module"
+
+var obj = {
+	file: "hi",
+	type: "file"
+}
+
+auto [file, type] = obj
+
+
+
+export output
+export default output
+
+import sqlite3
+import hashlib
+
+var con = sqlite3.connect("file.db")
+
+if not con.is_valid()
+
+con.execute("CREAT...")
+con.create_function("md5", fun(x) return hashlib.md5.update(x).hexdigest();)
+
+con.execute("SELECT md5('hello');")
+con.close()
+
+import thread
+
+var t1 = thread(fun() {
+	while not thread.interrupted() {
+		print("hi")
+		thread.sleep(0.5s)
+	}
+})
+
+t1.start()
+
+thread.sleep(50s)
+t1.interrupt()
+
+t1.join()
 
 #>
 fun quadrat(x) {

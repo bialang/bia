@@ -82,7 +82,7 @@ lexer syntax::init_rules()
 
 	// Variable declaration
 	_lexer.set_rule(grammar_rule(BGR_VARIABLE_DECLARATION, grammar_rule::F_WRAP_UP, {
-		lexer_token::rule_pointer<BGR_VARIABLE_DECLARATION_HELPER_0, flags::filler_token | flags::ending_ws_token>,
+		lexer_token::keyword<keyword_auto, flags::ending_ws_token>,
 		lexer_token::identifier,
 		lexer_token::keyword<operator_assign, flags::filler_token | flags::starting_ws_opt_token>,
 		lexer_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>,
@@ -91,16 +91,10 @@ lexer syntax::init_rules()
 
 	// Variable declaration inline
 	_lexer.set_rule(grammar_rule(BGR_VARIABLE_DECLARATION_INLINE, grammar_rule::F_WRAP_UP, {
-		lexer_token::rule_pointer<BGR_VARIABLE_DECLARATION_HELPER_0, flags::filler_token | flags::ending_ws_token>,
+		lexer_token::keyword<keyword_auto, flags::ending_ws_token>,
 		lexer_token::identifier,
 		lexer_token::keyword<operator_assign, flags::filler_token | flags::starting_ws_opt_token>,
 		lexer_token::rule_pointer<BGR_VALUE, flags::filler_token | flags::starting_ws_opt_token>
-		}));
-
-	// Variable declaration helper 0
-	_lexer.set_rule(grammar_rule(BGR_VARIABLE_DECLARATION_HELPER_0, grammar_rule::F_OR, {
-		lexer_token::keyword<keyword_var>,
-		lexer_token::keyword<keyword_global>,
 		}));
 
 	// If

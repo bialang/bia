@@ -11,8 +11,7 @@ namespace grammar
 
 enum KEYWORD_ID : int32_t
 {
-	KI_GLOBAL,
-	KI_VAR,
+	KI_AUTO,
 	KI_FUNCTION,
 	KI_NEW,
 	KI_FOR,
@@ -50,35 +49,19 @@ enum KEYWORD_ID : int32_t
 	KI_LOGICAL_OR,
 };
 
-struct keyword_global
+struct keyword_auto
 {
 	constexpr static const char * token() noexcept
 	{
-		return "global";
+		return "auto";
 	}
 	constexpr static size_t length() noexcept
 	{
-		return 6;
+		return 4;
 	}
 	constexpr static KEYWORD_ID string_id() noexcept
 	{
-		return KI_GLOBAL;
-	}
-};
-
-struct keyword_var
-{
-	constexpr static const char * token() noexcept
-	{
-		return "var";
-	}
-	constexpr static size_t length() noexcept
-	{
-		return 3;
-	}
-	constexpr static KEYWORD_ID string_id() noexcept
-	{
-		return KI_VAR;
+		return KI_AUTO;
 	}
 };
 

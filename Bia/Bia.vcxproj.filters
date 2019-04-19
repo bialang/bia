@@ -82,9 +82,6 @@
     <Filter Include="Source Files\framework\native">
       <UniqueIdentifier>{0a236c15-4e27-4ad6-b580-264b476386e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\dependency">
-      <UniqueIdentifier>{dbdee223-1bca-42f3-b81e-08be42573bc8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\common">
       <UniqueIdentifier>{91f841e8-df12-4670-a284-baa71fcff7fb}</UniqueIdentifier>
     </Filter>
@@ -120,6 +117,9 @@
     </Filter>
     <Filter Include="Source Files\framework\executable">
       <UniqueIdentifier>{b1f04ed2-3dc6-4f1a-a119-4bae4f0d6a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\detail">
+      <UniqueIdentifier>{dbdee223-1bca-42f3-b81e-08be42573bc8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +181,7 @@
       <Filter>Source Files\machine\memory</Filter>
     </ClCompile>
     <ClCompile Include="big_int.cpp">
-      <Filter>Source Files\dependency</Filter>
+      <Filter>Source Files\detail</Filter>
     </ClCompile>
     <ClCompile Include="big_int_member.cpp">
       <Filter>Source Files\framework\native</Filter>
@@ -229,7 +229,7 @@
       <Filter>Source Files\machine</Filter>
     </ClCompile>
     <ClCompile Include="regex.cpp">
-      <Filter>Source Files\dependency</Filter>
+      <Filter>Source Files\detail</Filter>
     </ClCompile>
     <ClCompile Include="regex_member.cpp">
       <Filter>Source Files\framework\native</Filter>
@@ -238,7 +238,7 @@
       <Filter>Source Files\framework\executable</Filter>
     </ClCompile>
     <ClCompile Include="function_holder.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\detail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

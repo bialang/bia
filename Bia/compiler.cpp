@@ -585,7 +585,7 @@ const grammar::report * compiler::handle_regex(const grammar::report * _report)
 
 const grammar::report * compiler::handle_variable_declaration(const grammar::report * _report)
 {
-	auto _local_variable = _report[1].content.keyword == grammar::keyword_var::string_id() && _scope_handler.has_open_scopes();
+	auto _local_variable = _report[1].content.keyword == grammar::keyword_auto::string_id() && _scope_handler.has_open_scopes();
 
 	handle_identifier(_report + 2, _local_variable ? VARIABLE_TYPE::DEFINITELY_LOCAL : VARIABLE_TYPE::DEFINITELY_GLOBAL);
 
