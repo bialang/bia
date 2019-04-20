@@ -69,7 +69,7 @@ public:
 		/** A constant 64 bit integer. */
 		int64_t rt_int;
 		/** A constant big integer. */
-		detail::big_int * rt_big_int;
+		detail::big_int* rt_big_int;
 		/** A constant floating point. */
 		double rt_double;
 		machine::string_manager::utf8_index_t rt_string;
@@ -151,7 +151,7 @@ public:
 	 *
 	 * @param _value Defines the _value.
 	*/
-	void set_return(detail::big_int * _value) noexcept
+	void set_return(detail::big_int* _value) noexcept
 	{
 		clear();
 
@@ -312,7 +312,7 @@ public:
 	 * @throws See machine::virtual_translator::to_member().
 	*/
 	template<typename Lambda>
-	void expand_to_member(machine::virtual_machine::virtual_translator & _translator, Lambda && _lambda) const
+	void expand_to_member(machine::virtual_machine::virtual_translator& _translator, Lambda&& _lambda) const
 	{
 		// Save to member variable
 		if (_return_type == VALUE_TYPE::MEMBER) {
@@ -321,7 +321,7 @@ public:
 		else if (_return_type == VALUE_TYPE::TEMPORARY_MEMBER) {
 			_lambda(_translator.to_temp(_return_value.rt_temp_member));
 		} // Save to local member
-		else if (_return_type  == VALUE_TYPE::LOCAL_MEMBER) {
+		else if (_return_type == VALUE_TYPE::LOCAL_MEMBER) {
 			_lambda(_translator.to_local(_return_value.rt_local_member));
 		} else {
 			_lambda(invalid_index_t());
@@ -407,7 +407,7 @@ public:
 	 *
 	 * @return true if they are the same, otherwise false.
 	*/
-	bool operator==(const compiler_value & _right) const noexcept
+	bool operator==(const compiler_value& _right) const noexcept
 	{
 		return _return_type == _right._return_type && !std::memcmp(&_return_value, &_right._return_value, sizeof(_return_value));
 	}
@@ -421,7 +421,7 @@ public:
 	 *
 	 * @return true if they are different, otherwise false.
 	*/
-	bool operator!=(const compiler_value & _right) const noexcept
+	bool operator!=(const compiler_value& _right) const noexcept
 	{
 		return !operator==(_right);
 	}

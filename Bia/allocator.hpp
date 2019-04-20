@@ -22,7 +22,7 @@ class allocation
 {
 public:
 	/** The pointer to the buffer. */
-	Type * first;
+	Type* first;
 	/** The size of the buffer in bytes. */
 	size_type second;
 
@@ -47,12 +47,12 @@ public:
 	 * @param [in] _first The buffer.
 	 * @param _second The size of the buffer.
 	*/
-	allocation(Type * _first, size_type _second) noexcept
+	allocation(Type* _first, size_type _second) noexcept
 	{
 		first = _first;
 		second = _second;
 	}
-	allocation(const allocation & _copy) noexcept = default;
+	allocation(const allocation& _copy) noexcept = default;
 	/**
 	 * Move-Constructor.
 	 *
@@ -61,7 +61,7 @@ public:
 	 *
 	 * @param [in,out] _move The object that should be moved. @a _move will be cleared after this operation.
 	*/
-	allocation(allocation && _move) noexcept
+	allocation(allocation&& _move) noexcept
 	{
 		first = _move.first;
 		second = _move.second;
@@ -99,7 +99,7 @@ public:
 	 *
 	 * @return The buffer pointer.
 	*/
-	operator Type*() noexcept
+	operator Type* () noexcept
 	{
 		return first;
 	}
@@ -111,7 +111,7 @@ public:
 	 *
 	 * @return The buffer pointer.
 	*/
-	operator const Type*() const noexcept
+	operator const Type* () const noexcept
 	{
 		return first;
 	}
@@ -123,7 +123,7 @@ public:
 	 *
 	 * @return The buffer pointer.
 	*/
-	Type * operator->() noexcept
+	Type* operator->() noexcept
 	{
 		return first;
 	}
@@ -135,7 +135,7 @@ public:
 	 *
 	 * @return The buffer pointer.
 	*/
-	const Type * operator->() const noexcept
+	const Type* operator->() const noexcept
 	{
 		return first;
 	}
@@ -147,7 +147,7 @@ public:
 	 *
 	 * @return The reference to the buffer pointer.
 	*/
-	Type ** operator&() noexcept
+	Type** operator&() noexcept
 	{
 		return &first;
 	}
@@ -159,7 +159,7 @@ public:
 	 *
 	 * @return The reference to the buffer pointer.
 	*/
-	Type * const* operator&() const noexcept
+	Type* const* operator&() const noexcept
 	{
 		return &first;
 	}
@@ -173,7 +173,7 @@ public:
 	 *
 	 * @return Retruns @a *this.
 	*/
-	allocation & operator=(const allocation & _copy) noexcept = default;
+	allocation& operator=(const allocation& _copy) noexcept = default;
 	/**
 	 * Assign operator.
 	 *
@@ -184,7 +184,7 @@ public:
 	 *
 	 * @return Returns @a *this.
 	*/
-	allocation & operator=(allocation && _move) noexcept
+	allocation& operator=(allocation&& _move) noexcept
 	{
 		first = _move.first;
 		second = _move.second;
@@ -352,7 +352,7 @@ public:
 	 * @return The allocated and constructed block.
 	*/
 	template<typename Base, typename Deriviate = Base, typename... Arguments>
-	allocation<Base> construct(Arguments &&... _arguments)
+	allocation<Base> construct(Arguments&& ... _arguments)
 	{
 		auto _allocation = allocate(sizeof(Deriviate));
 

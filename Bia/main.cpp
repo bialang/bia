@@ -28,7 +28,7 @@ struct printer
 		a = i;
 		printf("default constructor%i\n", i);
 	}
-	printer(const printer & c)
+	printer(const printer& c)
 	{
 		a = c.a;
 		puts("copy constructor");
@@ -51,7 +51,7 @@ struct printer
 };
 
 template<typename Lambda>
-inline void test_and_time(int _count, Lambda && _lambda)
+inline void test_and_time(int _count, Lambda&& _lambda)
 {
 	auto _time_taken = 0ll;
 
@@ -84,10 +84,10 @@ int main()
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
 
-		_context.set_lambda<1>("ser", [](int & i, int j) {
+		_context.set_lambda<1>("ser", [](int& i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
-		_context.set_lambda("set", [](const char * i, const char * j) {
+		_context.set_lambda("set", [](const char* i, const char* j) {
 			printf("%s bye %s\n", i, j);
 		});
 		_context.set_lambda("test", [](const printer * p) {
@@ -171,7 +171,7 @@ int main()
 
 			return true;
 		});
-		_context.set_lambda("input", [](const char * _message, bia::framework::object::object<std::string> * _output) {
+		_context.set_lambda("input", [](const char* _message, bia::framework::object::object<std::string> * _output) {
 			std::cout << _message;
 
 			std::getline(std::cin, _output->cast<std::string>());
@@ -181,7 +181,7 @@ int main()
 		set_class<std::string>(_context, "string")
 			.set_constructor<0, const char*>()
 			.set_function("length", &std::string::length)
-			.set_function("append", static_cast<std::string&(std::string::*)(const char*)>(&std::string::append))
+			.set_function("append", static_cast<std::string & (std::string::*)(const char*)>(&std::string::append))
 			.set_function("c_str", &std::string::c_str)
 			;
 		/*test_and_time(1, []() {
