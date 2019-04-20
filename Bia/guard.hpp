@@ -23,7 +23,7 @@ public:
 	 *
 	 * @throws See the constructor of @a Type.
 	*/
-	guard(Type && _object, Action && _action) : _object(std::forward<Type>(_object)), _action(std::forward<Action>(_action))
+	guard(Type&& _object, Action&& _action) : _object(std::forward<Type>(_object)), _action(std::forward<Action>(_action))
 	{
 		_valid = true;
 	}
@@ -37,7 +37,7 @@ public:
 	 *
 	 * @throws See the move constructor of @a Type.
 	*/
-	guard(guard<Type, Action> && _move) : _object(std::move(_move._object)), _action(std::move(_move._action))
+	guard(guard<Type, Action>&& _move) : _object(std::move(_move._object)), _action(std::move(_move._action))
 	{
 		_valid = true;
 		_move._valid = false;
@@ -55,6 +55,10 @@ public:
 		if (is_valid()) {
 			_action(_object);
 		}
+	}
+	void invalidate() noexcept
+	{
+		_valid = false;
 	}
 	/**
 	 * Checks if this guard is valid.
@@ -76,7 +80,7 @@ public:
 	 *
 	 * @return A reference.
 	*/
-	Type & get() noexcept
+	Type& get() noexcept
 	{
 		return _object;
 	}
@@ -88,7 +92,7 @@ public:
 	 *
 	 * @return A reference.
 	*/
-	const Type & get() const noexcept
+	const Type& get() const noexcept
 	{
 		return _object;
 	}
@@ -103,7 +107,7 @@ private:
 };
 
 template<typename Type, typename Action>
-inline guard<Type, Action> make_guard(Type && _object, Action && _action)
+inline guard<Type, Action> make_guard(Type&& _object, Action&& _action)
 {
 	return guard<Type, Action>(std::forward<Type>(_object), std::forward<Action>(_action));
 }

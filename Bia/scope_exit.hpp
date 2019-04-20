@@ -23,7 +23,7 @@ public:
 	 *
 	 * @param [in] _exit The exit function.
 	*/
-	scope_exit(Lambda && _exit) noexcept : _exit(std::move(_exit))
+	scope_exit(Lambda&& _exit) noexcept : _exit(std::move(_exit))
 	{
 	}
 	/**
@@ -46,7 +46,7 @@ private:
 
 
 template<typename Lambda>
-inline scope_exit<Lambda> make_scope_exit(Lambda && _exit)
+inline scope_exit<Lambda> make_scope_exit(Lambda&& _exit)
 {
 	return { std::forward<Lambda>(_exit) };
 }
