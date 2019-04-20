@@ -13,6 +13,15 @@ namespace bia
 namespace utility
 {
 
+template<typename... Types>
+struct make_void
+{
+	typedef void type;
+};
+
+template<typename... Types>
+using void_t = typename make_void<Types...>::type;
+
 template<bool Value>
 struct negation
 {
@@ -188,6 +197,12 @@ struct type_container_splitter<0, First, Type, Rest...>
 	typedef First first;
 	typedef type_container<Type, Rest...> second;
 };
+
+template<typename Functor, typename = void>
+struct has_one_functor : std::false_type {};
+
+template<typename Functor>
+struct has_one_functor<Functor, void_t<decltype(&Functor::operator())>> : std::true_type {};
 
 }
 }
