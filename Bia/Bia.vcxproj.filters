@@ -82,12 +82,6 @@
     <Filter Include="Source Files\framework\native">
       <UniqueIdentifier>{0a236c15-4e27-4ad6-b580-264b476386e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\common">
-      <UniqueIdentifier>{91f841e8-df12-4670-a284-baa71fcff7fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\common">
-      <UniqueIdentifier>{b62cd1b3-3f84-4d0c-af28-a80977c9c1cf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\machine\virtual_machine">
       <UniqueIdentifier>{9dbedc63-6566-4c0d-8633-bff1e8d534a5}</UniqueIdentifier>
     </Filter>
@@ -188,9 +182,6 @@
     </ClCompile>
     <ClCompile Include="int_member.cpp">
       <Filter>Source Files\framework\native</Filter>
-    </ClCompile>
-    <ClCompile Include="member_names.cpp">
-      <Filter>Source Files\common</Filter>
     </ClCompile>
     <ClCompile Include="script_map.cpp">
       <Filter>Source Files\machine</Filter>
@@ -502,9 +493,6 @@
     </ClInclude>
     <ClInclude Include="int_member.hpp">
       <Filter>Header Files\framework\native</Filter>
-    </ClInclude>
-    <ClInclude Include="member_names.hpp">
-      <Filter>Header Files\common</Filter>
     </ClInclude>
     <ClInclude Include="buffer_builder.hpp">
       <Filter>Header Files\utility</Filter>
