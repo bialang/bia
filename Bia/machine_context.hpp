@@ -166,8 +166,8 @@ public:
 	{
 		return emplace_member<framework::executable::static_function<Optional_count, Return, Arguments...>>(_name, _function);
 	}
-	template<size_t Optional_count = 0, typename Lambda>
-	framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<Lambda>::type>::type> * set_lambda(name_manager::name_t _name, Lambda && _lambda)
+	template<std::size_t Optional_count = 0, typename Lambda>
+	typename std::enable_if<utility::has_one_functor<Lambda>::value, framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<Lambda>::type>::type>*>::type set_function(name_manager::name_t _name, Lambda && _lambda)
 	{
 		return emplace_member<framework::executable::lambda_function<Optional_count, typename std::remove_cv<typename std::remove_reference<Lambda>::type>::type>>(_name, std::forward<Lambda>(_lambda));
 	}

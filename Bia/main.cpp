@@ -84,18 +84,18 @@ int main()
 		auto _allocator = std::make_shared<machine::memory::simple_allocator>();
 		bia::machine::machine_context _context(_allocator, _allocator, _allocator, _allocator);
 
-		_context.set_lambda<1>("ser", [](int& i, int j) {
+		_context.set_function<1>("ser", [](int& i, int j) {
 			printf("%i bye %i\n", i, j);
 		});
-		_context.set_lambda("set", [](const char* i, const char* j) {
+		_context.set_function("set", [](const char* i, const char* j) {
 			printf("%s bye %s\n", i, j);
 		});
-		_context.set_lambda("test", [](const printer * p) {
+		_context.set_function("test", [](const printer * p) {
 			printf("w: %i\n", p->a);
 			//p.a = 34343434;
 			return "ho ho how";
 		});
-		_context.set_lambda<1>("print", [](utility::variant<std::string, framework::member*, int64_t, double, const char*> _value) {
+		_context.set_function<1>("print", [](utility::variant<std::string, framework::member*, int64_t, double, const char*> _value) {
 			switch (_value.id()) {
 			case 1:
 				std::cout << *_value.get<1>() << '\n';
@@ -123,10 +123,10 @@ int main()
 				break;
 			}
 		});
-		_context.set_lambda("destroy", [](bia::framework::member * _member) {
+		_context.set_function("destroy", [](bia::framework::member * _member) {
 			_member->undefine();
 		});
-		_context.set_lambda("defined", [](const bia::framework::member * _member) {
+		_context.set_function("defined", [](const bia::framework::member * _member) {
 			try {
 				_member->flags();
 			} catch (const bia::exception::symbol_error&) {
@@ -135,10 +135,10 @@ int main()
 
 			return true;
 		});
-		_context.set_lambda("time", []() { return std::clock() / (double)CLOCKS_PER_SEC; });
-		_context.set_lambda("disassemble", [](bia::framework::executable::bia_function * _function) { _function->disassemble(); });
-		_context.set_lambda("pause", []() { system("pause"); });
-		_context.set_lambda("int", [](utility::variant<framework::member*, int64_t, double, const char*> _value) -> int64_t {
+		_context.set_function("time", []() { return std::clock() / (double)CLOCKS_PER_SEC; });
+		_context.set_function("disassemble", [](bia::framework::executable::bia_function * _function) { _function->disassemble(); });
+		_context.set_function("pause", []() { system("pause"); });
+		_context.set_function("int", [](utility::variant<framework::member*, int64_t, double, const char*> _value) -> int64_t {
 			switch (_value.id()) {
 			case 1:
 				return (*_value.get<1>())->to_int();
@@ -150,7 +150,7 @@ int main()
 
 			BIA_IMPLEMENTATION_ERROR;
 		});
-		_context.set_lambda("float", [](utility::variant<framework::member*, int64_t, double, const char*> _value) -> double {
+		_context.set_function("float", [](utility::variant<framework::member*, int64_t, double, const char*> _value) -> double {
 			switch (_value.id()) {
 			case 1:
 				return (*_value.get<1>())->to_double();
@@ -162,7 +162,7 @@ int main()
 
 			BIA_IMPLEMENTATION_ERROR;
 		});
-		_context.set_lambda("defined", [](const bia::framework::member * _member) {
+		_context.set_function("defined", [](const bia::framework::member * _member) {
 			try {
 				_member->flags();
 			} catch (const bia::exception::symbol_error&) {
@@ -171,7 +171,7 @@ int main()
 
 			return true;
 		});
-		_context.set_lambda("input", [](const char* _message, bia::framework::object::object<std::string> * _output) {
+		_context.set_function("input", [](const char* _message, bia::framework::object::object<std::string> * _output) {
 			std::cout << _message;
 
 			std::getline(std::cin, _output->cast<std::string>());
