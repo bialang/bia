@@ -13,3 +13,5 @@ main
 *.generated
 *.bll
 Bia/config_cmake.hpp
+out/
+CMakeSettings.json
