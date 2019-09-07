@@ -5,6 +5,8 @@
 [Rr]elease/
 ReleaseDLL/
 x64/
+build/
+install/
 
 Makefile
 main
