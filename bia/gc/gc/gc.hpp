@@ -9,6 +9,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <cstddef>
+#include <cstring>
 #include <exception/implementation_error.hpp>
 #include <functional>
 #include <memory>
@@ -17,6 +18,7 @@
 #include <util/data/synchronized_set.hpp>
 #include <util/data/synchronized_stack.hpp>
 #include <util/thread/phaser.hpp>
+#include <util/thread/shared_lock.hpp>
 #include <util/thread/shared_spin_mutex.hpp>
 #include <util/thread/spin_mutex.hpp>
 #include <util/thread/thread_pool.hpp>
@@ -133,21 +135,20 @@ public:
 	}
 	void* allocate(std::size_t size, bool zero = false)
 	{
-		auto ptr  = mem_allocator->checked_allocate(size + sizeof(object_info), sizeof(object_info));
-		auto info = new (ptr) object_info(){};
+		auto ptr = allocate_impl(size, true);
 
-		info->leaf = true;
+		if (zero) {
+			std::memset(ptr, 0, size);
+		}
 
-		allocated.insert(info);
-
-		return ptr + sizeof(object_info);
+		return ptr;
 	}
 	/*
 	 Allocates and constructs the given type with its arguments.
 
 	 @param args are forwarded to the constructor of *T*
 	 @returns the newly constructed object as a @ref object_ptr
-	 @throws allocate()
+	 @throws allocate_impl()
 	 @tparam T is the type that should be created
 	 @tparam Args are the argument types for the constructor
 	*/
@@ -160,11 +161,7 @@ public:
 		static_assert(alignof(object_info) <= memory_allocator::previous_data_alignment,
 					  "the required alignment of object info is not met");
 
-		auto ptr = mem_allocator->checked_allocate(sizeof(T) + sizeof(object_info), sizeof(object_info));
-
-		allocated.insert(new (ptr) object_info(){});
-
-		return new (ptr + sizeof(object_info)) T(std::forward<Args>(args)...);
+		return new (allocate_impl(sizeof(T), false)) T(std::forward<Args>(args)...);
 	}
 	/*
 	 Returns the memory allocator of this garbage collector. Memory allocated
@@ -213,26 +210,46 @@ private:
 		util::thread::spin_mutex>
 		roots;
 	/* a stack which stores all (potentially) missed objects while the gc was
-	 * concurrently collecting */
+	 concurrently collecting */
 	util::data::synchronized_stack<std::vector<void*, std_memory_allocator<void*>>, util::thread::spin_mutex>
 		missed_objects;
 	/* locks shared when allocating memory */
-	util::thread::shared_spin_mutex gc_lock;
+	util::thread::shared_spin_mutex gc_mutex;
+	/* the current gc mark; this is only set by the main gc thread and is locked by gc_mutex */
+	bool current_mark;
 	/* the count of registered threads */
 	std::atomic_size_t registered_thread_count;
 	/* the count of reported threads */
 	std::atomic_size_t reported_thread_count;
-	std::atomic_bool current_mark;
 	/* marks whether the gc is currently in the marking phase */
 	std::atomic_bool gc_active;
 	std::atomic_bool first_marking_phase;
 
+	void* allocate_impl(std::size_t size, bool leaf)
+	{
+		auto ptr  = mem_allocator->checked_allocate(size + sizeof(object_info), sizeof(object_info));
+		auto info = new (ptr) object_info(){};
+
+		info->leaf = leaf;
+
+		// synchronize with the gc thread
+		util::thread::shared_lock<decltype(gc_mutex)> lock(gc_mutex);
+
+		allocated.insert(info);
+
+		return ptr + sizeof(object_info);
+	}
 	void main_thread(std::unique_ptr<bia::util::thread::thread_pool> thread_pool)
 	{
 		{
-			// signal that gc is active and reset the reported thread count
-			reported_thread_count.store(0, std::memory_order_relaxed);
-			gc_active.store(true, std::memory_order_release);
+			{
+				// signal that gc is active and reset the reported thread count
+				std::unique_lock<decltype(gc_mutex)> lock(gc_mutex);
+
+				reported_thread_count.store(0, std::memory_order_relaxed);
+				current_mark = !current_mark;
+				gc_active.store(true, std::memory_order_release);
+			}
 
 			// wait for acknowlegement from the user threads; if new threads are registered after this check completes
 			// there will be no problem since they must update their state either way
@@ -244,7 +261,7 @@ private:
 			worker_context context{};
 			auto phase = context.phaser.register_party(2);
 
-			context.mark = !current_mark.load(std::memory_order_acquire);
+			context.mark = current_mark;
 
 			for (auto i = thread_pool->task_count(), c = thread_pool->max_pool_size(); i < c; ++i) {
 				context.phaser.register_party();
