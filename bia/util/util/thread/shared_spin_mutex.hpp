@@ -58,9 +58,11 @@ public:
 
 		if (unique.load(std::memory_order_acquire)) {
 			shared_counter.fetch_sub(1, std::memory_order_release);
-		} else {
-			break;
+
+			return false;
 		}
+
+		return true;
 	}
 
 private:

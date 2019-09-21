@@ -18,7 +18,8 @@ file(GLOB_RECURSE UTIL_SOURCE_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 add_library("util" STATIC ${UTIL_SOURCE_FILES})
-target_include_directories("util" PUBLIC "util/")
+target_include_directories("util"
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/")
 
 # Tests
 if(BIA_BUILD_TESTS)

@@ -30,16 +30,16 @@ protected:
 	 @param ptr that should be marked
 	 @param mark is the current mark
 	*/
-	static void gc_mark(const object_ptr& ptr, bool mark)
+	static void gc_mark(void* ptr, bool mark)
 	{
-		auto info = object_info(const_cast<void*>(ptr));
+		auto info = object_info(ptr);
 
 		if (info->leaf) {
 			info->marked.store(mark, std::memory_order_relaxed);
 		} else {
 			if (info->marked.exchange(mark, std::memory_order_relaxed) !=
 				mark) {
-				static_cast<const object*>(ptr)->gc_mark_children(mark);
+				static_cast<object*>(ptr)->gc_mark_children(mark);
 			}
 		}
 	}

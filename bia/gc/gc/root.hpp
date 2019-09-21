@@ -60,7 +60,7 @@ public:
 
 private:
 	friend class gc;
-	friend class ::std::hash<object_ptr*>;
+	friend class ::std::hash<root>;
 
 	/* the array holding the memory addresses */
 	object_ptr* const ptrs;

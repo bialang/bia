@@ -13,19 +13,17 @@ function(download_submodule_library LIB_NAME)
 	endif()
 endfunction()
 
-option(BIA_BUILD_BIA_TOOL "Builds the command line tool for Bia." ON)
+set(CMAKE_CXX_STANDARD 11)
+
+option(BIA_BUILD_BIA_TOOL "Builds the command line tool for Bia." OFF)
 option(BUILD_SHARED_LIBS "Builds the Bia library as a shared library." ON)
 option(BIA_BUILD_TESTS "Builds the tests for the Bia library." ON)
-option(BIA_GENERATE_DOCUMENTATION "Generate the documentatio with Doxygen." ON)
+option(BIA_GENERATE_DOCUMENTATION "Generate the documentatio with Doxygen." OFF)
 
 # Enable testing
 if(BIA_BUILD_TESTS)
 	include(CTest)
-	option(CATCH_INSTALL_DOCS "" OFF)
-	option(CATCH_INSTALL_HELPERS "" OFF)
-	add_subdirectory("dependencies/Catch2")
-	string(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/dependencies/Catch2/contrib;")
-	include(Catch)
+	set(CATCH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Catch2")
 	enable_testing()
 endif()
 

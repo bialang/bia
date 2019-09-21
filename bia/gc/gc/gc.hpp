@@ -9,15 +9,14 @@
 #include <atomic>
 #include <condition_variable>
 #include <cstddef>
+#include <cstdint>
 #include <cstring>
-#include <exception/implementation_error.hpp>
+//#include <exception/implementation_error.hpp>
 #include <functional>
 #include <memory>
 #include <type_traits>
 #include <unordered_set>
-#include <util/data/synchronized_set.hpp>
 #include <util/data/synchronized_stack.hpp>
-#include <util/thread/phaser.hpp>
 #include <util/thread/shared_lock.hpp>
 #include <util/thread/shared_spin_mutex.hpp>
 #include <util/thread/spin_mutex.hpp>
@@ -36,7 +35,66 @@ namespace gc {
 class gc
 {
 public:
-	class token;
+	class token
+	{
+	public:
+		token(const token& copy) = delete;
+		token(token&& move) noexcept : g(move.g)
+		{
+			move.g = nullptr;
+		}
+		/*
+		 Destructor.
+		*/
+		~token() noexcept
+		{
+			// deregister from gc
+			if (g) {
+				active_gc_instance = nullptr;
+			}
+		}
+		/*
+		 Sets the destination pointer to the source pointer. If the gc is active, additional work is done.
+
+		 @param[out] dest defines the destination
+		 @param src defines the source
+		*/
+		void set_object_ptr(object_ptr& dest, object_ptr& src)
+		{
+			util::thread::shared_lock<decltype(g->mutex)> lock(g->mutex);
+
+			if (g->is_active) {
+				g->missed_objects.push(dest.get());
+			}
+
+			dest.set(src.get());
+		}
+		/*
+		 Sets the destination pointer to the source pointer. If the gc is active, additional work is done.
+
+		 @param[out] dest defines the destination
+		 @param src defines the source
+		*/
+		void set_object_ptr(object_ptr& dest, void* src)
+		{
+			util::thread::shared_lock<decltype(g->mutex)> lock(g->mutex);
+
+			if (g->is_active) {
+				g->missed_objects.push(dest.get());
+			}
+
+			dest.set(src);
+		}
+
+	private:
+		friend gc;
+
+		/* the parent gc */
+		gc* g;
+
+		token(gc* g) noexcept : g(g)
+		{}
+	};
 
 	/*
 	 Constructor.
@@ -46,12 +104,15 @@ public:
 	 collection; this pool should be exclusively used by this collector
 	*/
 	gc(std::unique_ptr<memory_allocator> allocator, std::unique_ptr<bia::util::thread::thread_pool> thread_pool)
-		: mem_allocator(std::move(allocator))
+		: mem_allocator(std::move(allocator)), allocated{ { 1, {}, {}, mem_allocator.get() },
+														  { 1, {}, {}, mem_allocator.get() } },
+		  roots{ { 1, {}, {}, mem_allocator.get() }, { 1, {}, {}, mem_allocator.get() } },
+		  missed_objects(std::vector<void*, std_memory_allocator<void*>>(mem_allocator.get()))
 	{
 		// Start gc main thread
-		if (thread_pool && thread_pool->max_pool_size() > 0 && thread_pool->task_count() == 0) {
+		/*if (thread_pool && thread_pool->max_pool_size() > 0 && thread_pool->task_count() == 0) {
 			thread_pool->execute(std::bind(&gc::main_thread, this));
-		}
+		}*/
 	}
 	/*
 	 Registeres the current thread. If this thread has already been registered, an exception is thrown.
@@ -62,52 +123,12 @@ public:
 	{
 		// There is already a registered instance
 		if (active_gc_instance) {
-			throw exception::implementation_error(u"active gc instance detected");
+			// throw exception::implementation_error(u"active gc instance detected");
 		}
 
 		active_gc_instance = this;
-		registered_thread_count.fetch_add(1, std::memory_order_relaxed);
 
 		return { this };
-	}
-	void force_synchronous_run(bia::util::thread::thread_pool* thread_pool)
-	{
-		// Wait for all threads that are using the gc to pause
-
-		bool mark = false;
-
-		if (thread_pool) {
-		} else {
-			// Mark
-			for (std::size_t i = 0, c = roots.size(); i < c; ++i) {
-				auto root = roots[i];
-
-				for (std::size_t j = 0; j < root.size; ++j) {
-					auto ptr = root.ptrs->get();
-
-					if (ptr) {
-						object::gc_mark(ptr, mark);
-					}
-				}
-			}
-
-			// Sweep
-			for (std::size_t i = 0, c = allocated.size(); i < c; ++i) {
-				auto info = allocated[i];
-
-				if (info->marked.load(std::memory_order_acquire) != mark) {
-					auto ptr = allocator->pointer(info);
-
-					// Destroy
-					if (!info->leaf) {
-						static_cast<object*>(ptr)->~object();
-					}
-
-					// Deallocate
-					allocator->deallocate(ptr, true);
-				}
-			}
-		}
 	}
 	root create_root(std::size_t ptr_count)
 	{
@@ -118,16 +139,22 @@ public:
 			new (ptr + i) object_ptr();
 		}
 
-		roots.insert({ ptr, ptr_count });
+		util::thread::shared_lock<decltype(roots_mutex)> lock(roots_mutex);
+
+		roots[roots_index].insert({ ptr, ptr_count });
 
 		return { ptr, ptr_count };
 	}
 	void free_root(root obj)
 	{
-		roots.erase(obj);
+		{
+			util::thread::shared_lock<decltype(roots_mutex)> lock(roots_mutex);
+
+			roots[roots_index].erase(obj);
+		}
 
 		// Destroy the pointer objects
-		for (std::size_t i = 0; i < obj.size; ++i) {
+		for (std::size_t i = 0; i < obj.size(); ++i) {
 			obj.ptrs[i].~object_ptr();
 		}
 
@@ -171,7 +198,7 @@ public:
 	*/
 	memory_allocator* allocator() noexcept
 	{
-		return mem_allocator;
+		return mem_allocator.get();
 	}
 	/*
 	 Returns the active gc of the current thread.
@@ -181,229 +208,117 @@ public:
 	static gc* active_gc() noexcept;
 
 private:
-	struct worker_context
-	{
-		/* manages the synchronization between the main thread and its workers
-		 */
-		util::thread::phaser phaser;
-		/* contains every object that has not been marked and is free to
-		 * deallocate */
-		util::data::synchronized_stack<std::vector<void*, std_memory_allocator<void*>>, util::thread::spin_mutex>
-			free_list;
-		bool destroy;
-		/* the current, as active considered, mark */
-		bool mark;
-	};
-
 	/* the currently active instance */
 	static thread_local gc* active_gc_instance;
 	/* the memory allocator */
 	std::unique_ptr<memory_allocator> mem_allocator;
-	/* a list of all gc monitored objects */
-	util::data::synchronized_set<std::unordered_set<object_info*, std::hash<object_ptr*>, std::equal_to<object_ptr*>,
-													std_memory_allocator<object_info*>>,
-								 util::thread::spin_mutex>
-		allocated;
+
+	util::thread::shared_spin_mutex allocated_mutex;
+	std::size_t allocated_index;
+	/* a list of all gc monitored objects allocated before the gc was active */
+	std::unordered_set<void*, std::hash<void*>, std::equal_to<void*>, std_memory_allocator<void*>> allocated[2];
+
+	util::thread::shared_spin_mutex roots_mutex;
+	std::size_t roots_index;
 	/* a list of all created roots */
-	util::data::synchronized_set<
-		std::unordered_set<root, std::hash<root>, std::equal_to<object_ptr*>, std_memory_allocator<root>>,
-		util::thread::spin_mutex>
-		roots;
+	std::unordered_set<root, std::hash<root>, std::equal_to<root>, std_memory_allocator<root>> roots[2];
+
 	/* a stack which stores all (potentially) missed objects while the gc was
 	 concurrently collecting */
 	util::data::synchronized_stack<std::vector<void*, std_memory_allocator<void*>>, util::thread::spin_mutex>
 		missed_objects;
+
 	/* locks shared when allocating memory */
-	util::thread::shared_spin_mutex gc_mutex;
+	util::thread::shared_spin_mutex mutex;
 	/* the current gc mark; this is only set by the main gc thread and is locked by gc_mutex */
 	bool current_mark;
-	/* the count of registered threads */
-	std::atomic_size_t registered_thread_count;
-	/* the count of reported threads */
-	std::atomic_size_t reported_thread_count;
-	/* marks whether the gc is currently in the marking phase */
-	std::atomic_bool gc_active;
-	std::atomic_bool first_marking_phase;
+	/* whether the gc is currently in the marking phase */
+	bool is_active;
 
 	void* allocate_impl(std::size_t size, bool leaf)
 	{
 		auto ptr  = mem_allocator->checked_allocate(size + sizeof(object_info), sizeof(object_info));
-		auto info = new (ptr) object_info(){};
+		auto info = new (ptr) object_info();
 
 		info->leaf = leaf;
 
-		// synchronize with the gc thread
-		util::thread::shared_lock<decltype(gc_mutex)> lock(gc_mutex);
+		mutex.lock_shared();
+		info->marked.store(current_mark, std::memory_order_relaxed);
+		mutex.unlock_shared();
 
-		allocated.insert(info);
+		util::thread::shared_lock<decltype(allocated_mutex)> lock(allocated_mutex);
 
-		return ptr + sizeof(object_info);
+		allocated[allocated_index].insert(info);
+
+		return static_cast<int8_t*>(ptr) + sizeof(object_info);
 	}
 	void main_thread(std::unique_ptr<bia::util::thread::thread_pool> thread_pool)
 	{
-		{
-			{
-				// signal that gc is active and reset the reported thread count
-				std::unique_lock<decltype(gc_mutex)> lock(gc_mutex);
+		mutex.lock();
+		is_active	= true;
+		current_mark = !current_mark;
+		mutex.unlock();
 
-				reported_thread_count.store(0, std::memory_order_relaxed);
-				current_mark = !current_mark;
-				gc_active.store(true, std::memory_order_release);
+		// mark
+		auto done = false;
+
+	gt_roots_redo:;
+		for (auto r : roots[(roots_index + 1) % 2]) {
+			for (std::size_t i = r.size(); i-- > 0;) {
+				object::gc_mark(r[i], current_mark);
 			}
-
-			// wait for acknowlegement from the user threads; if new threads are registered after this check completes
-			// there will be no problem since they must update their state either way
-			while (reported_thread_count.load(std::memory_order_consume) <
-				   registered_thread_count.load(std::memory_order_consume))
-				;
-
-			// start workers
-			worker_context context{};
-			auto phase = context.phaser.register_party(2);
-
-			context.mark = current_mark;
-
-			for (auto i = thread_pool->task_count(), c = thread_pool->max_pool_size(); i < c; ++i) {
-				context.phaser.register_party();
-				thread_pool->execute(std::bind(&gc::worker_thread, this, std::ref(context)));
-			}
-
-			// Work through own work
-
-			// Synchronize with worker threads
-			context.phaser.arrive();
-
-			// Synchronize with user threads
-			gc_active.store(false, std::memory_order_release);
-
-			// Wait for acknowlegement from the user threads
-
-			// Advance to next phase
-
-			// Work through items in the missed list
-			void* ptr = nullptr;
-
-			while (missed_objects.pop(ptr)) {
-				object::gc_mark(ptr, context.mark);
-			}
-
-			// Synchronize with workers
-			context.phaser.arrive_and_wait();
-
-			// Signal user threads that they don't have to mind the gc anymore
-			gc_active.store(false, std::memory_order_release);
-
-			// Wait for acknowlegement from the user threads
-
-			// Start sweeping
-		}
-	}
-	void worker_thread(worker_context& context)
-	{
-		// Work through the available work
-
-		// Signal the main thread that marking is done
-		context.phaser.arrive_and_wait();
-
-		// Work through remaining items in the list
-		void* ptr = nullptr;
-
-		while (missed_objects.pop(ptr)) {
-			object::gc_mark(ptr, context.mark);
 		}
 
-		context.phaser.arrive_and_wait();
+		if (!done) {
+			std::unique_lock<decltype(roots_mutex)> lock(roots_mutex);
 
-		// Destroy the object
-		if (context.destroy) {
-		}
-		switch (context.sweep_mode) {
-		case worker_context::SWEEP_MODE::LEAF_ONLY: break;
-		}
-	}
-};
+			done		= true;
+			roots_index = (roots_index + 1) % 2;
 
-class gc::token
-{
-public:
-	token(const token& copy) = delete;
-	token(token&& move) noexcept : g(move.g)
-	{
-		move.g	= nullptr;
-		is_active = move.is_active;
-	}
-	/*
-	 Destructor.
-	*/
-	~token() noexcept
-	{
-		// deregister from gc
-		if (g) {
-			g->registered_thread_count.fetch_sub(1, std::memory_order_consume);
-			active_gc_instance = nullptr;
-		}
-	}
-	/*
-	 Sets the destination pointer to the source pointer. If the gc is active, additional work is done.
-
-	 @param[out] dest defines the destination
-	 @param src defines the source
-	*/
-	void set_object_ptr(object_ptr& dest, const object_ptr& src)
-	{
-		auto ptr = src.get();
-
-		if (is_active) {
-			g->missed_objects.push(ptr);
+			goto gt_roots_redo;
 		}
 
-		dest.set(ptr);
-	}
-	/*
-	 Sets the destination pointer to the source pointer. If the gc is active, additional work is done.
-
-	 @param[out] dest defines the destination
-	 @param src defines the source
-	*/
-	void set_object_ptr(object_ptr& dest, const void* src)
-	{
-		if (is_active) {
-			g->missed_objects.push(src);
-		}
-
-		dest.set(src);
-	}
-	/*
-	 Gc monitored memory may only be allocated after an update. The time between updates should be minimal in order to
-	 avoid long waiting times on the gc threads.
-
-	 @returns `true` if the gc is currently in the marking phase, otherwise
-	 `false`
-	*/
-	void update() noexcept
-	{
-		// check if gc is active
-		if (is_active != g->gc_active.load(std::memory_order_consume)) {
-			// tell gc that the status has been acknowledged
-			g->reported_thread_count.fetch_add(1, std::memory_order_relaxed);
-
-			is_active = !is_active;
-		}
-
-		return is_active;
-	}
-
-private:
-	/* the parent gc */
-	gc* g;
-	/* the last status of the gc */
-	bool is_active;
-
-	token(gc* g) noexcept : g(g)
-	{
+		// finished
+		mutex.lock();
 		is_active = false;
+		mutex.unlock();
+
+		// mark missed
+		void* missed = nullptr;
+
+		while (missed_objects.pop(missed)) {
+			object::gc_mark(missed, current_mark);
+		}
+
+		// sweep
+		done = false;
+
+	gt_allocated_redo:;
+		for (auto obj : allocated[(allocated_index + 1) % 2]) {
+			auto info = object::object_info(obj);
+
+			if (info->marked.load(std::memory_order_consume) != current_mark) {
+				if (!info->leaf) {
+					static_cast<object*>(obj)->~object();
+				}
+
+				mem_allocator->deallocate(info, sizeof(object_info));
+				allocated[(allocated_index + 1) % 2].erase(obj);
+			}
+		}
+
+		if (!done) {
+			std::unique_lock<decltype(allocated_mutex)> lock(allocated_mutex);
+
+			done			= true;
+			allocated_index = (allocated_index + 1) % 2;
+
+			goto gt_allocated_redo;
+		}
 	}
 };
+
+
 
 } // namespace gc
 } // namespace bia

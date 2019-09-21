@@ -31,7 +31,7 @@ public:
 		typedef std_memory_allocator<U> other;
 	};
 
-	explicit std_memory_allocator(memory_allocator* allocator)
+	std_memory_allocator(memory_allocator* allocator)
 		: allocator(allocator)
 	{}
 	std_memory_allocator(const std_memory_allocator& copy)
@@ -49,11 +49,11 @@ public:
 	}
 	void deallocate(pointer ptr, size_type n)
 	{
-		allocator->deallocate(ptr);
+		allocator->deallocate(ptr, 0);
 	}
 	pointer allocate(size_type n)
 	{
-		return allocator->allocate(n * sizeof(T));
+		return static_cast<pointer>(allocator->allocate(n * sizeof(T), 0));
 	}
 	bool operator==(const std_memory_allocator& other) noexcept
 	{
