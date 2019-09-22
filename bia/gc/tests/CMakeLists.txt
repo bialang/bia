@@ -5,3 +5,5 @@ add_executable("gctest" ${TEST_SOURCE_FILES})
 target_link_libraries("gctest" "gc")
 target_include_directories("gctest"
 	PRIVATE ${CATCH_INCLUDE_DIRS})
+
+add_test("gc" "gctest")

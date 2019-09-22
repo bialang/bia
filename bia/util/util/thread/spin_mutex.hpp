@@ -13,6 +13,7 @@ namespace thread {
 class spin_mutex
 {
 public:
+	spin_mutex()					   = default;
 	spin_mutex(const spin_mutex& copy) = delete;
 	spin_mutex(spin_mutex&& move)	  = delete;
 	/*

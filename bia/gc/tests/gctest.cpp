@@ -5,14 +5,17 @@
 #include <cstdlib>
 #include <gc/gc.hpp>
 #include <gc/object.hpp>
+#include <gc/simple_allocator.hpp>
+#include <memory>
+#include <set>
 
 using namespace bia::gc;
 
-std::size_t total_allocated_size = 0;
+std::set<void*> allocated;
 
-void my_free(void* ptr, std::size_t size)
+void my_free(void* ptr)
 {
-	total_allocated_size -= size;
+	allocated.erase(ptr);
 
 	free(ptr);
 }
@@ -22,54 +25,45 @@ void* my_allocate(std::size_t size)
 	auto ptr = malloc(size);
 
 	if (ptr) {
-		total_allocated_size += size;
+		allocated.insert(ptr);
 	}
 
 	return ptr;
 }
 
+std::unique_ptr<gc> create_gc()
+{
+	return std::unique_ptr<gc>(
+		new gc(std::unique_ptr<memory_allocator>(new simple_allocator(&my_allocate, &my_free)), nullptr));
+}
+
 TEST_CASE("unmonitored memory allocation", "[gc]")
 {
-	REQUIRE(total_allocated_size == 0);
+	REQUIRE(allocated.size() == 0);
 
 	SECTION("alignment")
 	{
-		gc g(sizeof(void*), &my_allocate, &my_free);
-		auto ptr1 = g.unmonitored_allocate(6);
-		auto ptr2 = g.unmonitored_allocate(6);
+		auto g	= create_gc();
+		auto ptr1 = g->allocator()->allocate(6, 0);
+		auto ptr2 = g->allocator()->allocate(6, 0);
 
 		REQUIRE(ptr1 != nullptr);
 		REQUIRE(ptr2 != nullptr);
 		REQUIRE(ptr1 != ptr2);
+		REQUIRE(allocated.size() == 2);
 		REQUIRE(reinterpret_cast<std::intptr_t>(ptr1) % sizeof(void*) == 0);
 		REQUIRE(reinterpret_cast<std::intptr_t>(ptr2) % sizeof(void*) == 0);
 
-		g.unmonitored_free(ptr1, 6);
-		g.unmonitored_free(ptr2, 6);
+		g->allocator()->deallocate(ptr1, 0);
+		g->allocator()->deallocate(ptr2, 0);
 	}
 
-	SECTION("allocating zeroed memory")
-	{
-		gc g(sizeof(void*), &my_allocate, &my_free);
-		auto ptr = static_cast<int8_t*>(g.unmonitored_allocate(16, true));
-
-		REQUIRE(ptr != nullptr);
-
-		for (auto i = 0; i < 16; ++i) {
-			if (ptr[i]) {
-				FAIL("memory is not zero")
-			}
-		}
-
-		g.unmonitored_free(ptr);
-	}
-
-	REQUIRE(total_allocated_size == 0);
+	REQUIRE(allocated.size() == 0);
 }
-
+/*
 TEST_CASE("monitored memory allocation", "[gc]")
 {
-	REQUIRE(total_allocated_size == 0);
+	REQUIRE(allocated.size() == 0);
 
 	SECTION("alignment")
 	{
@@ -91,8 +85,7 @@ TEST_CASE("monitored memory allocation", "[gc]")
 		class test_class : public object
 		{
 		public:
-			test_class(int& destroy_count, gc& g, bool contains_nodes)
-				: destroy_count(destroy_count)
+			test_class(int& destroy_count, gc& g, bool contains_nodes) : destroy_count(destroy_count)
 			{
 				raw_data = g.allocate(7);
 
@@ -136,4 +129,4 @@ TEST_CASE("monitored memory allocation", "[gc]")
 	}
 
 	REQUIRE(total_allocated_size == 0);
-}
+}*/

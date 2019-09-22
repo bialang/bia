@@ -18,9 +18,9 @@ class std_memory_allocator
 {
 public:
 	typedef T* pointer;
-	typedef const pointer const_pointer;
+	typedef const T* const_pointer;
 	typedef T& reference;
-	typedef const reference const_reference;
+	typedef const T& const_reference;
 	typedef T value_type;
 	typedef std::size_t size_type;
 	typedef std::ptrdiff_t difference_type;
@@ -31,10 +31,11 @@ public:
 		typedef std_memory_allocator<U> other;
 	};
 
-	std_memory_allocator(memory_allocator* allocator)
+	std_memory_allocator(memory_allocator* allocator) noexcept
 		: allocator(allocator)
 	{}
-	std_memory_allocator(const std_memory_allocator& copy)
+	template<typename U>
+	std_memory_allocator(const std_memory_allocator<U>& copy) noexcept
 		: allocator(copy.allocator)
 	{}
 	template<typename U, typename... Args>
@@ -55,16 +56,21 @@ public:
 	{
 		return static_cast<pointer>(allocator->allocate(n * sizeof(T), 0));
 	}
-	bool operator==(const std_memory_allocator& other) noexcept
+	template<typename U>
+	bool operator==(const std_memory_allocator<U>& other) noexcept
 	{
 		return allocator == other.allocator;
 	}
-	bool operator!=(const std_memory_allocator& other) noexcept
+	template<typename U>
+	bool operator!=(const std_memory_allocator<U>& other) noexcept
 	{
 		return !operator==(other);
 	}
 
 private:
+	template<typename U>
+	friend class std_memory_allocator;
+
 	memory_allocator* const allocator;
 };
 

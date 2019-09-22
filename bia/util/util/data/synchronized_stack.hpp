@@ -1,7 +1,6 @@
 #pragma once
 
 #include <mutex>
-#include <stack>
 #include <utility>
 
 namespace bia {

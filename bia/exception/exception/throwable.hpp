@@ -14,7 +14,7 @@ public:
 	explicit throwable(const std::u16string& message) noexcept
 		: u16message(message)
 	{}
-	virtual const char* what() const final override
+	virtual const char* what() const noexcept final override
 	{
 		return u8message.c_str();
 	}

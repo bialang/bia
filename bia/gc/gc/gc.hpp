@@ -104,9 +104,7 @@ public:
 	 collection; this pool should be exclusively used by this collector
 	*/
 	gc(std::unique_ptr<memory_allocator> allocator, std::unique_ptr<bia::util::thread::thread_pool> thread_pool)
-		: mem_allocator(std::move(allocator)), allocated{ { 1, {}, {}, mem_allocator.get() },
-														  { 1, {}, {}, mem_allocator.get() } },
-		  roots{ { 1, {}, {}, mem_allocator.get() }, { 1, {}, {}, mem_allocator.get() } },
+		: mem_allocator(std::move(allocator)),
 		  missed_objects(std::vector<void*, std_memory_allocator<void*>>(mem_allocator.get()))
 	{
 		// Start gc main thread
@@ -216,12 +214,12 @@ private:
 	util::thread::shared_spin_mutex allocated_mutex;
 	std::size_t allocated_index;
 	/* a list of all gc monitored objects allocated before the gc was active */
-	std::unordered_set<void*, std::hash<void*>, std::equal_to<void*>, std_memory_allocator<void*>> allocated[2];
+	std::unordered_set<void*, std::hash<void*>, std::equal_to<void*>> allocated[2];
 
 	util::thread::shared_spin_mutex roots_mutex;
 	std::size_t roots_index;
 	/* a list of all created roots */
-	std::unordered_set<root, std::hash<root>, std::equal_to<root>, std_memory_allocator<root>> roots[2];
+	std::unordered_set<root, std::hash<root>, std::equal_to<root>> roots[2];
 
 	/* a stack which stores all (potentially) missed objects while the gc was
 	 concurrently collecting */

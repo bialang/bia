@@ -1,7 +1,7 @@
 project("exception"
-	LANGUAGE CXX)
+	LANGUAGES CXX)
 
-add_library("exception")
+add_library("exception" INTERFACE)
 
 target_include_directories("exception"
-	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/")
+	INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/")
