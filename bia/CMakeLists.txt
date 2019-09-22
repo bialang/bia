@@ -4,8 +4,8 @@ project("bia"
 set(BIA_VERSION_MAJOR 4)
 set(BIA_VERSION_MINOR 0)
 
-#add_subdirectory("external")
 add_subdirectory("exception")
+add_subdirectory("external")
 add_subdirectory("util")
 add_subdirectory("gc")
 

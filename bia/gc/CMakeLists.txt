@@ -10,7 +10,7 @@ target_include_directories("gc"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/")
 target_link_libraries("gc"
 	PUBLIC "util"
-	PUBLIC "exception")
+	INTERFACE "exception")
 
 # Tests
 if(BIA_BUILD_TESTS)
