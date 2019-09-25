@@ -22,6 +22,7 @@
 #include <util/thread/shared_spin_mutex.hpp>
 #include <util/thread/spin_mutex.hpp>
 #include <util/thread/thread_pool.hpp>
+#include <util/type_traits.hpp>
 #include <utility>
 #include <vector>
 
@@ -92,6 +93,14 @@ public:
 
 			dest.set(src);
 		}
+		void set(std::size_t root_index, std::size_t index, void* src)
+		{
+			set_object_ptr(roots[root_index][index], src);
+		}
+		root& root_at(std::size_t index) noexcept
+		{
+			return roots[index];
+		}
 
 	private:
 		friend gc;
@@ -132,7 +141,7 @@ public:
 	 @tparam Counts must be integers describing how large each root should be
 	*/
 	template<typename... Counts>
-	token<sizeof...(Counts)> register_thread(Counts... counts)
+	typename std::enable_if<bia::util::conjunction<std::is_unsigned<Counts>::value...>::value, token<sizeof...(Counts)>>::type register_thread(Counts... counts)
 	{
 		// There is already a registered instance
 		if (active_gc_instance) {

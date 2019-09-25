@@ -69,10 +69,10 @@ TEST_CASE("garbage collection test", "[gc]")
 
 	SECTION("collection of leafs")
 	{
-		auto ptr1 = g->allocate(50);
-		auto ptr2 = g->allocate(20);
+		auto token = g->register_thread(2u);
 
-		auto token = g->register_thread(2);
+		token.set(0, 0, g->allocate(59));
+		token.set(0, 1, g->allocate(23));
 	}
 
 	SECTION("destruction of objects")
