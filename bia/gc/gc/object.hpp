@@ -48,9 +48,13 @@ private:
 	friend class gc;
 
 	static void* inject_object_info(void* ptr)
-	{}
-	static object_info* object_info(void* ptr)
-	{}
+	{
+		return nullptr;
+	}
+	static gc::object_info* object_info(void* ptr)
+	{
+		return nullptr;
+	}
 };
 
 } // namespace gc

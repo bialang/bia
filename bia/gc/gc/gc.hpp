@@ -6,6 +6,7 @@
 #include "root.hpp"
 #include "std_memory_allocator.hpp"
 
+#include <array>
 #include <atomic>
 #include <condition_variable>
 #include <cstddef>
@@ -35,11 +36,12 @@ namespace gc {
 class gc
 {
 public:
+	template<std::size_t Roots>
 	class token
 	{
 	public:
 		token(const token& copy) = delete;
-		token(token&& move) noexcept : g(move.g)
+		token(token&& move) noexcept : g(move.g), roots(std::move(move.roots))
 		{
 			move.g = nullptr;
 		}
@@ -51,6 +53,11 @@ public:
 			// deregister from gc
 			if (g) {
 				active_gc_instance = nullptr;
+
+				// free roots
+				for (auto& root : roots) {
+					g->free_root(root);
+				}
 			}
 		}
 		/*
@@ -91,9 +98,14 @@ public:
 
 		/* the parent gc */
 		gc* g;
+		/* the roots */
+		std::array<root, Roots> roots;
 
-		token(gc* g) noexcept : g(g)
-		{}
+		template<typename... Counts>
+		token(gc* g, Counts... counts) noexcept : g(g), roots{ g->create_root(counts)... }
+		{
+			static_assert(sizeof...(Counts) == Roots, "Size of Counts and Roots mismatch.");
+		}
 	};
 
 	/*
@@ -115,9 +127,12 @@ public:
 	/*
 	 Registeres the current thread. If this thread has already been registered, an exception is thrown.
 
+	 @param counts is how many roots and with how much space they should be created
 	 @returns a token which deregisteres this thread upon destruction
+	 @tparam Counts must be integers describing how large each root should be
 	*/
-	token register_thread()
+	template<typename... Counts>
+	token<sizeof...(Counts)> register_thread(Counts... counts)
 	{
 		// There is already a registered instance
 		if (active_gc_instance) {
@@ -126,37 +141,7 @@ public:
 
 		active_gc_instance = this;
 
-		return { this };
-	}
-	root create_root(std::size_t ptr_count)
-	{
-		auto ptr = static_cast<object_ptr*>(mem_allocator->checked_allocate(ptr_count * sizeof(object_ptr), 0));
-
-		// Construct the pointer objects
-		for (std::size_t i = 0; i < ptr_count; ++i) {
-			new (ptr + i) object_ptr();
-		}
-
-		util::thread::shared_lock<decltype(roots_mutex)> lock(roots_mutex);
-
-		roots[roots_index].insert({ ptr, ptr_count });
-
-		return { ptr, ptr_count };
-	}
-	void free_root(root obj)
-	{
-		{
-			util::thread::shared_lock<decltype(roots_mutex)> lock(roots_mutex);
-
-			roots[roots_index].erase(obj);
-		}
-
-		// Destroy the pointer objects
-		for (std::size_t i = 0; i < obj.size(); ++i) {
-			obj.ptrs[i].~object_ptr();
-		}
-
-		mem_allocator->deallocate(obj.ptrs, 0);
+		return { this, counts... };
 	}
 	void* allocate(std::size_t size, bool zero = false)
 	{
@@ -250,6 +235,36 @@ private:
 
 		return static_cast<int8_t*>(ptr) + sizeof(object_info);
 	}
+	root create_root(std::size_t ptr_count)
+	{
+		auto ptr = static_cast<object_ptr*>(mem_allocator->checked_allocate(ptr_count * sizeof(object_ptr), 0));
+
+		// Construct the pointer objects
+		for (std::size_t i = 0; i < ptr_count; ++i) {
+			new (ptr + i) object_ptr();
+		}
+
+		util::thread::shared_lock<decltype(roots_mutex)> lock(roots_mutex);
+
+		roots[roots_index].insert({ ptr, ptr_count });
+
+		return { ptr, ptr_count };
+	}
+	void free_root(root obj)
+	{
+		{
+			util::thread::shared_lock<decltype(roots_mutex)> lock(roots_mutex);
+
+			roots[roots_index].erase(obj);
+		}
+
+		// Destroy the pointer objects
+		for (std::size_t i = 0; i < obj.size(); ++i) {
+			obj.ptrs[i].~object_ptr();
+		}
+
+		mem_allocator->deallocate(obj.ptrs, 0);
+	}
 	void main_thread(std::unique_ptr<bia::util::thread::thread_pool> thread_pool)
 	{
 		mutex.lock();
@@ -315,8 +330,6 @@ private:
 		}
 	}
 };
-
-
 
 } // namespace gc
 } // namespace bia

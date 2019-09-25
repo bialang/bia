@@ -60,6 +60,28 @@ TEST_CASE("unmonitored memory allocation", "[gc]")
 
 	REQUIRE(allocated.size() == 0);
 }
+
+TEST_CASE("garbage collection test", "[gc]")
+{
+	REQUIRE(allocated.size() == 0);
+
+	auto g = create_gc();
+
+	SECTION("collection of leafs")
+	{
+		auto ptr1 = g->allocate(50);
+		auto ptr2 = g->allocate(20);
+
+		auto token = g->register_thread(2);
+	}
+
+	SECTION("destruction of objects")
+	{
+
+	}
+
+	REQUIRE(allocated.size() == 0);
+}
 /*
 TEST_CASE("monitored memory allocation", "[gc]")
 {
