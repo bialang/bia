@@ -1,9 +1,8 @@
 #define CATCH_CONFIG_MAIN
 
 #include <catch.hpp>
-#include <thread>
 #include <util/finally.hpp>
-#include <util/thread/spin_mutex.hpp>
+#include <util/type_traits.hpp>
 
 using namespace bia::util;
 
@@ -32,28 +31,11 @@ TEST_CASE("scope guard 'finally'", "[util]")
 	}
 }
 
-TEST_CASE("spin mutex", "[mutex][thread]")
+TEST_CASE("conjunction", "[type_traits]")
 {
-	thread::spin_mutex mutex;
-	auto counter = 0;
-
-	mutex.lock();
-
-	std::thread t([&] {
-		mutex.lock();
-		counter++;
-		mutex.unlock();
-	});
-
-	counter++;
-	REQUIRE(counter == 1);
-	mutex.unlock();
-
-	mutex.lock();
-	counter++;
-	mutex.unlock();
-
-	t.join();
-
-	REQUIRE(counter == 3);
+	REQUIRE(conjunction<>::value == true);
+	REQUIRE(conjunction<true>::value == true);
+	REQUIRE(conjunction<false>::value == false);
+	REQUIRE(conjunction<true, true, true, true>::value == true);
+	REQUIRE(conjunction<true, true, false, true>::value == false);
 }

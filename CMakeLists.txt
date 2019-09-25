@@ -24,6 +24,7 @@ option(BIA_GENERATE_DOCUMENTATION "Generate the documentatio with Doxygen." OFF)
 if(BIA_BUILD_TESTS)
 	include(CTest)
 	set(CATCH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Catch2")
+	set(BIA_TEST_ARGS "-s")
 	enable_testing()
 endif()
 
