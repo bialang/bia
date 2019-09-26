@@ -3,6 +3,7 @@ file(GLOB_RECURSE TEST_SOURCE_FILES
 
 add_executable("utiltest" ${TEST_SOURCE_FILES})
 target_link_libraries("utiltest" "util")
-target_include_directories("utiltest" PRIVATE ${CATCH_INCLUDE_DIRS})
+target_include_directories("utiltest"
+	PRIVATE ${CATCH_INCLUDE_DIRS})
 
 add_test("util" "utiltest" ${BIA_TEST_ARGS})

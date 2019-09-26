@@ -41,22 +41,19 @@ TEST_CASE("unmonitored memory allocation", "[gc]")
 {
 	REQUIRE(allocated.size() == 0);
 
-	SECTION("alignment")
-	{
-		auto g	= create_gc();
-		auto ptr1 = g->allocator()->allocate(6, 0);
-		auto ptr2 = g->allocator()->allocate(6, 0);
+	auto g	= create_gc();
+	auto ptr1 = g->allocator()->allocate(6, 0);
+	auto ptr2 = g->allocator()->allocate(6, 0);
 
-		REQUIRE(ptr1 != nullptr);
-		REQUIRE(ptr2 != nullptr);
-		REQUIRE(ptr1 != ptr2);
-		REQUIRE(allocated.size() == 2);
-		REQUIRE(reinterpret_cast<std::intptr_t>(ptr1) % sizeof(void*) == 0);
-		REQUIRE(reinterpret_cast<std::intptr_t>(ptr2) % sizeof(void*) == 0);
+	REQUIRE(ptr1 != nullptr);
+	REQUIRE(ptr2 != nullptr);
+	REQUIRE(ptr1 != ptr2);
+	REQUIRE(allocated.size() == 2);
+	REQUIRE(reinterpret_cast<std::intptr_t>(ptr1) % sizeof(void*) == 0);
+	REQUIRE(reinterpret_cast<std::intptr_t>(ptr2) % sizeof(void*) == 0);
 
-		g->allocator()->deallocate(ptr1, 0);
-		g->allocator()->deallocate(ptr2, 0);
-	}
+	g->allocator()->deallocate(ptr1, 0);
+	g->allocator()->deallocate(ptr2, 0);
 
 	REQUIRE(allocated.size() == 0);
 }
@@ -66,19 +63,24 @@ TEST_CASE("garbage collection test", "[gc]")
 	REQUIRE(allocated.size() == 0);
 
 	auto g = create_gc();
-
+	
 	SECTION("collection of leafs")
 	{
-		auto token = g->register_thread(2u);
+		{
+			auto token = g->register_thread(2u);
 
-		token.set(0, 0, g->allocate(59));
-		token.set(0, 1, g->allocate(23));
+			token.set(0, 0, g->allocate(59));
+			token.set(0, 1, g->allocate(23));
+			token.set(0, 0, g->allocate(12));
+
+			REQUIRE(allocated.size() == 4);
+		}
+
+		REQUIRE(allocated.size() == 3);
 	}
 
-	SECTION("destruction of objects")
-	{
-
-	}
+	// run garbage collector
+	g->run_synchronously();
 
 	REQUIRE(allocated.size() == 0);
 }

@@ -3,6 +3,8 @@
 #include "object_info.hpp"
 #include "object_ptr.hpp"
 
+#include <cstdint>
+
 namespace bia {
 namespace gc {
 
@@ -53,7 +55,7 @@ private:
 	}
 	static gc::object_info* object_info(void* ptr)
 	{
-		return nullptr;
+		return reinterpret_cast<gc::object_info*>(static_cast<int8_t*>(ptr) - sizeof(gc::object_info));
 	}
 };
 

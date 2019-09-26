@@ -5,7 +5,7 @@
 #include "object_ptr.hpp"
 #include "root.hpp"
 #include "std_memory_allocator.hpp"
-
+#include <cstdio>
 #include <array>
 #include <atomic>
 #include <condition_variable>
@@ -133,6 +133,10 @@ public:
 			thread_pool->execute(std::bind(&gc::main_thread, this));
 		}*/
 	}
+	void run_synchronously()
+	{
+		main_thread();
+	}
 	/*
 	 Registeres the current thread. If this thread has already been registered, an exception is thrown.
 
@@ -205,15 +209,13 @@ private:
 	/* the memory allocator */
 	std::unique_ptr<memory_allocator> mem_allocator;
 
-	util::thread::shared_spin_mutex allocated_mutex;
-	std::size_t allocated_index;
+	util::thread::spin_mutex allocated_mutex;
 	/* a list of all gc monitored objects allocated before the gc was active */
-	std::unordered_set<void*, std::hash<void*>, std::equal_to<void*>> allocated[2];
+	std::unordered_set<object_info*, std::hash<object_info*>, std::equal_to<object_info*>> allocated;
 
-	util::thread::shared_spin_mutex roots_mutex;
-	std::size_t roots_index;
+	util::thread::spin_mutex roots_mutex;
 	/* a list of all created roots */
-	std::unordered_set<root, std::hash<root>, std::equal_to<root>> roots[2];
+	std::unordered_set<root, std::hash<root>, std::equal_to<root>> roots;
 
 	/* a stack which stores all (potentially) missed objects while the gc was
 	 concurrently collecting */
@@ -223,9 +225,9 @@ private:
 	/* locks shared when allocating memory */
 	util::thread::shared_spin_mutex mutex;
 	/* the current gc mark; this is only set by the main gc thread and is locked by gc_mutex */
-	bool current_mark;
+	bool current_mark =false;
 	/* whether the gc is currently in the marking phase */
-	bool is_active;
+	bool is_active = false;
 
 	void* allocate_impl(std::size_t size, bool leaf)
 	{
@@ -238,9 +240,9 @@ private:
 		info->marked.store(current_mark, std::memory_order_relaxed);
 		mutex.unlock_shared();
 
-		util::thread::shared_lock<decltype(allocated_mutex)> lock(allocated_mutex);
+		std::unique_lock<decltype(allocated_mutex)> lock(allocated_mutex);
 
-		allocated[allocated_index].insert(info);
+		allocated.insert(info);
 
 		return static_cast<int8_t*>(ptr) + sizeof(object_info);
 	}
@@ -253,18 +255,18 @@ private:
 			new (ptr + i) object_ptr();
 		}
 
-		util::thread::shared_lock<decltype(roots_mutex)> lock(roots_mutex);
+		std::unique_lock<decltype(roots_mutex)> lock(roots_mutex);
 
-		roots[roots_index].insert({ ptr, ptr_count });
+		roots.insert({ ptr, ptr_count });
 
 		return { ptr, ptr_count };
 	}
 	void free_root(root obj)
 	{
 		{
-			util::thread::shared_lock<decltype(roots_mutex)> lock(roots_mutex);
+			std::unique_lock<decltype(roots_mutex)> lock(roots_mutex);
 
-			roots[roots_index].erase(obj);
+			roots.erase(obj);
 		}
 
 		// Destroy the pointer objects
@@ -274,7 +276,7 @@ private:
 
 		mem_allocator->deallocate(obj.ptrs, 0);
 	}
-	void main_thread(std::unique_ptr<bia::util::thread::thread_pool> thread_pool)
+	void main_thread()
 	{
 		mutex.lock();
 		is_active	= true;
@@ -282,22 +284,14 @@ private:
 		mutex.unlock();
 
 		// mark
-		auto done = false;
-
-	gt_roots_redo:;
-		for (auto r : roots[(roots_index + 1) % 2]) {
-			for (std::size_t i = r.size(); i-- > 0;) {
-				object::gc_mark(r[i], current_mark);
-			}
-		}
-
-		if (!done) {
+		{
 			std::unique_lock<decltype(roots_mutex)> lock(roots_mutex);
 
-			done		= true;
-			roots_index = (roots_index + 1) % 2;
-
-			goto gt_roots_redo;
+			for (auto r : roots) {
+				for (std::size_t i = r.size(); i-- > 0;) {
+					object::gc_mark(r[i], current_mark);
+				}
+			}
 		}
 
 		// finished
@@ -311,31 +305,29 @@ private:
 		while (missed_objects.pop(missed)) {
 			object::gc_mark(missed, current_mark);
 		}
-
+printf("Size of roots: %d\n", roots.size());
+printf("Size of allocated: %d\n", allocated.size());
 		// sweep
-		done = false;
-
-	gt_allocated_redo:;
-		for (auto obj : allocated[(allocated_index + 1) % 2]) {
-			auto info = object::object_info(obj);
-
-			if (info->marked.load(std::memory_order_consume) != current_mark) {
-				if (!info->leaf) {
-					static_cast<object*>(obj)->~object();
-				}
-
-				mem_allocator->deallocate(info, sizeof(object_info));
-				allocated[(allocated_index + 1) % 2].erase(obj);
-			}
-		}
-
-		if (!done) {
+		{
 			std::unique_lock<decltype(allocated_mutex)> lock(allocated_mutex);
 
-			done			= true;
-			allocated_index = (allocated_index + 1) % 2;
+			for (auto i = allocated.begin(); i != allocated.end(); ) {
+				auto info = *i;
 
-			goto gt_allocated_redo;
+				if (info->marked.load(std::memory_order_consume) != current_mark) {
+					if (!info->leaf) {
+						reinterpret_cast<object*>(info + 1)->~object();
+					}
+
+					printf("GCing %p\n", info + 1);
+
+					mem_allocator->deallocate(info, sizeof(object_info));
+					i = allocated.erase(i);
+				} else {
+					++i;
+					printf("Not marked %p\n", info + 1);
+				}
+			}
 		}
 	}
 };

@@ -6,4 +6,4 @@ target_link_libraries("gctest" "gc")
 target_include_directories("gctest"
 	PRIVATE ${CATCH_INCLUDE_DIRS})
 
-add_test("gc" "gctest")
+add_test("gc" "gctest" ${BIA_TEST_ARGS})
