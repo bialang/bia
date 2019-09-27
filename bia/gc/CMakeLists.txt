@@ -9,10 +9,7 @@ add_library("gc" STATIC
 target_include_directories("gc"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/")
 target_link_libraries("gc"
-	PUBLIC "util"
-	PUBLIC "exception")
+	PUBLIC "thread"
+	PUBLIC "util")
 
-# Tests
-if(BIA_BUILD_TESTS)
-	add_subdirectory("tests")
-endif()
+create_tests("gc")

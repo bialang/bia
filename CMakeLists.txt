@@ -13,6 +13,20 @@ function(download_submodule_library LIB_NAME)
 	endif()
 endfunction()
 
+function(create_tests NAME)
+	if(BIA_BUILD_TESTS)
+		file(GLOB_RECURSE TMP_SOURCE_FILES
+			"${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
+
+		add_executable("${NAME}_test" ${TMP_SOURCE_FILES})
+		target_link_libraries("${NAME}_test" ${NAME})
+		target_include_directories("${NAME}_test"
+			PRIVATE ${CATCH_INCLUDE_DIRS})
+
+		add_test(${NAME} "${NAME}_test" "-s")
+	endif()
+endfunction()
+
 set(CMAKE_CXX_STANDARD 11)
 
 option(BIA_BUILD_BIA_TOOL "Builds the command line tool for Bia." OFF)
@@ -24,7 +38,6 @@ option(BIA_GENERATE_DOCUMENTATION "Generate the documentatio with Doxygen." OFF)
 if(BIA_BUILD_TESTS)
 	include(CTest)
 	set(CATCH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Catch2")
-	set(BIA_TEST_ARGS "-s")
 	enable_testing()
 endif()
 

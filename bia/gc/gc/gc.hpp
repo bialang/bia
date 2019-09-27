@@ -17,11 +17,11 @@
 #include <memory>
 #include <type_traits>
 #include <unordered_set>
-#include <util/data/synchronized_stack.hpp>
-#include <util/thread/shared_lock.hpp>
-#include <util/thread/shared_spin_mutex.hpp>
-#include <util/thread/spin_mutex.hpp>
-#include <util/thread/thread_pool.hpp>
+#include <thread/data/synchronized_stack.hpp>
+#include <thread/shared_lock.hpp>
+#include <thread/shared_spin_mutex.hpp>
+#include <thread/spin_mutex.hpp>
+#include <thread/thread_pool.hpp>
 #include <util/type_traits.hpp>
 #include <utility>
 #include <vector>
@@ -69,7 +69,7 @@ public:
 		*/
 		void set_object_ptr(object_ptr& dest, object_ptr& src)
 		{
-			util::thread::shared_lock<decltype(g->mutex)> lock(g->mutex);
+			thread::shared_lock<decltype(g->mutex)> lock(g->mutex);
 
 			if (g->is_active) {
 				g->missed_objects.push(dest.get());
@@ -85,7 +85,7 @@ public:
 		*/
 		void set_object_ptr(object_ptr& dest, void* src)
 		{
-			util::thread::shared_lock<decltype(g->mutex)> lock(g->mutex);
+			thread::shared_lock<decltype(g->mutex)> lock(g->mutex);
 
 			if (g->is_active) {
 				g->missed_objects.push(dest.get());
@@ -124,7 +124,7 @@ public:
 	 @param thread_pool (optional) launches the gc thread for concurrent
 	 collection; this pool should be exclusively used by this collector
 	*/
-	gc(std::unique_ptr<memory_allocator> allocator, std::unique_ptr<bia::util::thread::thread_pool> thread_pool)
+	gc(std::unique_ptr<memory_allocator> allocator, std::unique_ptr<bia::thread::thread_pool> thread_pool)
 		: mem_allocator(std::move(allocator)),
 		  missed_objects(std::vector<void*, std_memory_allocator<void*>>(mem_allocator.get()))
 	{
@@ -209,21 +209,21 @@ private:
 	/* the memory allocator */
 	std::unique_ptr<memory_allocator> mem_allocator;
 
-	util::thread::spin_mutex allocated_mutex;
+	thread::spin_mutex allocated_mutex;
 	/* a list of all gc monitored objects allocated before the gc was active */
 	std::unordered_set<object_info*, std::hash<object_info*>, std::equal_to<object_info*>> allocated;
 
-	util::thread::spin_mutex roots_mutex;
+	thread::spin_mutex roots_mutex;
 	/* a list of all created roots */
 	std::unordered_set<root, std::hash<root>, std::equal_to<root>> roots;
 
 	/* a stack which stores all (potentially) missed objects while the gc was
 	 concurrently collecting */
-	util::data::synchronized_stack<std::vector<void*, std_memory_allocator<void*>>, util::thread::spin_mutex>
+	thread::data::synchronized_stack<std::vector<void*, std_memory_allocator<void*>>, thread::spin_mutex>
 		missed_objects;
 
 	/* locks shared when allocating memory */
-	util::thread::shared_spin_mutex mutex;
+	thread::shared_spin_mutex mutex;
 	/* the current gc mark; this is only set by the main gc thread and is locked by gc_mutex */
 	bool current_mark =false;
 	/* whether the gc is currently in the marking phase */

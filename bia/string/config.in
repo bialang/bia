@@ -1,0 +1,4 @@
+#pragma once
+
+#cmakedefine BIA_STRING_ENCODING_BACKEND_ICU
+#cmakedefine BIA_STRING_ENCODING_BACKEND_NONE

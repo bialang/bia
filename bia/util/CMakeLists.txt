@@ -10,7 +10,4 @@ add_library("util" STATIC
 target_include_directories("util"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/")
 
-# Tests
-if(BIA_BUILD_TESTS)
-	add_subdirectory("tests")
-endif()
+create_tests("util")

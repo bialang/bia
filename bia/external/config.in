@@ -1,4 +1,0 @@
-#pragma once
-
-#cmakedefine BIA_THREAD_BACKEND_STD
-#cmakedefine BIA_THREAD_BACKEND_BOOST
