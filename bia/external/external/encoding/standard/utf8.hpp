@@ -35,7 +35,7 @@ protected:
 
         while (input < end) {
             // check character
-            if (!is_valid_utf8(*input)) {
+            if (!is_valid_unicode(*input)) {
                 throw exception::char_encoding_exception(error_msg);
             }
 
@@ -107,7 +107,9 @@ protected:
                 throw exception::char_encoding_exception(error_msg);
             }
 
-            ++output;
+            if(!is_valid_unicode(*output++)) {
+                throw exception::char_encoding_exception(error_msg);
+            }
         }
 
         return output;
@@ -115,11 +117,6 @@ protected:
 
 private:
     constexpr static auto error_msg = u"invalid UTF-8 character";
-
-    static bool is_valid_utf8(code_point value) noexcept
-    {
-        return is_valid_unicode(value);
-    }
 };
 
 }
