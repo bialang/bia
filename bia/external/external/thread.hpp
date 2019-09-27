@@ -4,8 +4,7 @@
 #include <memory>
 
 namespace bia {
-namespace util {
-namespace thread {
+namespace external {
 
 class thread final
 {
@@ -27,6 +26,5 @@ private:
 	std::unique_ptr<impl> pimpl;
 };
 
-} // namespace thread
-} // namespace util
+} // namespace external
 } // namespace bia

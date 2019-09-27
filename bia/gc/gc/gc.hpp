@@ -12,7 +12,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
-//#include <exception/implementation_error.hpp>
+#include <exception/implementation_error.hpp>
 #include <functional>
 #include <memory>
 #include <type_traits>
@@ -149,7 +149,7 @@ public:
 	{
 		// There is already a registered instance
 		if (active_gc_instance) {
-			// throw exception::implementation_error(u"active gc instance detected");
+			throw exception::implementation_error(u"active gc instance detected");
 		}
 
 		active_gc_instance = this;
@@ -305,8 +305,8 @@ private:
 		while (missed_objects.pop(missed)) {
 			object::gc_mark(missed, current_mark);
 		}
-printf("Size of roots: %d\n", roots.size());
-printf("Size of allocated: %d\n", allocated.size());
+printf("Size of roots: %zi\n", roots.size());
+printf("Size of allocated: %zi\n", allocated.size());
 		// sweep
 		{
 			std::unique_lock<decltype(allocated_mutex)> lock(allocated_mutex);

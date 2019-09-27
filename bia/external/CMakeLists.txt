@@ -1,36 +1,64 @@
 project("external"
 		LANGUAGES CXX)
 
-## Regex dependecy
-#set(BIA_REGEX_BACKEND "PCRE2" 
-#	CACHE STRING "The regex backend that should be used for default patterns in the Bia language.")
-#set_property(CACHE BIA_REGEX_BACKEND
-#	PROPERTY STRINGS "PCRE2" "std::regex" "none")
-#
-#if(${BIA_REGEX_BACKEND} STREQUAL "none")
-#	# Download PCRE2
-#	download_submodule_library("PCRE2")
-#
-#	# Build
-#	option(PCRE2_BUILD_PCRE2_8 "" OFF)
-#	option(PCRE2_BUILD_PCRE2_16 "" ON)
-#	option(PCRE2_SUPPORT_JIT "" ON)
-#	option(PCRE2_BUILD_PCRE2GREP "" OFF)
-#	set(TMP_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
-#	set(BUILD_SHARED_LIBS OFF
-#		CACHE BOOL "" FORCE)
-#	
-#	add_subdirectory("${CMAKE_SOURCE_DIR}/dependencies/PCRE2")
-#
-#	set(BUILD_SHARED_LIBS ${TMP_BUILD_SHARED_LIBS}
-#		CACHE BOOL "" FORCE)
-#
-#	target_link_libraries("external" "pcre2-16")
-#elseif(${BIA_REGEX_BACKEND} STREQUAL "std::regex")
-#
-#else()
-#endif()
-#
+file(GLOB_RECURSE EXTERNAL_SOURCE_FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+
+add_library("external" STATIC
+	${EXTERNAL_SOURCE_FILES})
+target_include_directories("external"
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries("external"
+	PUBLIC "gc")
+
+# Thread backend
+set(BIA_THREAD_BACKEND "std::thread"
+	CACHE STRING "The thread backend that should be used for creating threads in Bia and in its implementation.")
+set_property(CACHE BIA_THREAD_BACKEND
+	PROPERTY STRINGS "std::thread" "boost::thread")
+
+if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
+	set(BIA_THREAD_BACKEND_STD ON)
+
+	find_package(Threads REQUIRED)
+	target_link_libraries("external" ${CMAKE_THREAD_LIBS_INIT})
+else()
+	set(BIA_THREAD_BACKEND_BOOST ON)
+endif()
+
+# Regex dependecy
+set(BIA_REGEX_BACKEND "PCRE2" 
+	CACHE STRING "The regex backend that should be used for default patterns in the Bia language.")
+set_property(CACHE BIA_REGEX_BACKEND
+	PROPERTY STRINGS "PCRE2" "std::regex" "none")
+
+if(${BIA_REGEX_BACKEND} STREQUAL "PCRE2")
+	set(BIA_REGEX_BACKEND_PCRE2 ON)
+
+	# Download PCRE2
+	download_submodule_library("PCRE2")
+
+	# Build
+	option(PCRE2_BUILD_PCRE2_8 "" OFF)
+	option(PCRE2_BUILD_PCRE2_16 "" ON)
+	option(PCRE2_SUPPORT_JIT "" ON)
+	option(PCRE2_BUILD_PCRE2GREP "" OFF)
+	set(TMP_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+	set(BUILD_SHARED_LIBS OFF
+		CACHE BOOL "" FORCE)
+	
+	add_subdirectory("${CMAKE_SOURCE_DIR}/dependencies/PCRE2")
+
+	set(BUILD_SHARED_LIBS ${TMP_BUILD_SHARED_LIBS}
+		CACHE BOOL "" FORCE)
+
+	target_link_libraries("external"
+		PRIVATE "pcre2-16")
+elseif(${BIA_REGEX_BACKEND} STREQUAL "std::regex")
+	set(BIA_REGEX_BACKEND_STD ON)
+else()
+endif()
+
 ## Big integer dependency
 #set(BIA_BIG_INT_BACKEND "MPIR"
 #	CACHE STRING "The big integer backend that should be used for the default integers in Bia.")
@@ -75,13 +103,8 @@ project("external"
 #else()
 #endif()
 
-file(GLOB_RECURSE EXTERNAL_SOURCE_FILES
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-
-add_library("external" ${EXTERNAL_SOURCE_FILES})
-target_include_directories("external"
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/external/config.hpp")
 
 if(BUILD_TESTS)
 	add_subdirectory("tests")

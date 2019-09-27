@@ -7,7 +7,7 @@ namespace bia {
 namespace gc {
 
 /*
- An atmoic pointer to the gc monitored object.
+ An atmoic pointer to the gc monitored object. This holder object is only required when this is meant to be set several times.
 */
 class object_ptr
 {
