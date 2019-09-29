@@ -22,7 +22,7 @@
 #include <thread/shared_spin_mutex.hpp>
 #include <thread/spin_mutex.hpp>
 #include <thread/thread_pool.hpp>
-#include <util/type_traits.hpp>
+#include <util/type_traits/conjunction.hpp>
 #include <utility>
 #include <vector>
 
@@ -145,7 +145,7 @@ public:
 	 @tparam Counts must be integers describing how large each root should be
 	*/
 	template<typename... Counts>
-	typename std::enable_if<bia::util::conjunction<std::is_unsigned<Counts>::value...>::value, token<sizeof...(Counts)>>::type register_thread(Counts... counts)
+	typename std::enable_if<bia::util::type_traits::conjunction<std::is_unsigned<Counts>::value...>::value, token<sizeof...(Counts)>>::type register_thread(Counts... counts)
 	{
 		// There is already a registered instance
 		if (active_gc_instance) {
