@@ -4,6 +4,7 @@
 #include <util/finally.hpp>
 #include <util/type_traits/conjunction.hpp>
 #include <util/type_traits/size_of.hpp>
+#include <util/type_traits/equals_any.hpp>
 
 using namespace bia::util;
 using namespace bia::util::type_traits;
@@ -35,7 +36,7 @@ TEST_CASE("scope guard 'finally'", "[util]")
 
 TEST_CASE("conjunction", "[type_traits][util]")
 {
-	REQUIRE(conjunction<>::value == true);
+	REQUIRE(conjunction<>::value == false);
 	REQUIRE(conjunction<true>::value == true);
 	REQUIRE(conjunction<false>::value == false);
 	REQUIRE(conjunction<true, true, true, true>::value == true);
@@ -47,4 +48,12 @@ TEST_CASE("size_of", "[type_traits][util]")
 	REQUIRE(size_of<>::value == 0);
 	REQUIRE(size_of<int>::value == sizeof(int));
 	REQUIRE(size_of<int, float, double>::value == sizeof(int) + sizeof(float) + sizeof(double));
+}
+
+TEST_CASE("equals_any", "[type_traits][util]")
+{
+	REQUIRE(equals_any<int, 0>::value == false);
+	REQUIRE(equals_any<int, 0, 1, 2>::value == false);
+	REQUIRE(equals_any<int, 0, 1, 2, 3, 0>::value == true);
+	REQUIRE(equals_any<int, 0, 1, 2, 3, 0, 2, 6>::value == true);
 }

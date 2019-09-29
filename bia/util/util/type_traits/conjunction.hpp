@@ -7,7 +7,7 @@ namespace util {
 namespace type_traits {
 
 template<bool...>
-struct conjunction : std::true_type
+struct conjunction : std::false_type
 {};
 
 template<bool B>
