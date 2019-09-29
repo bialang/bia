@@ -24,7 +24,7 @@ private:
 	std::size_t current_size;
 	std::size_t max_size;
 	std::int8_t* buffer;
-	gc::memory_allocator* allocator
+	gc::memory_allocator* allocator;
 };
 
 }

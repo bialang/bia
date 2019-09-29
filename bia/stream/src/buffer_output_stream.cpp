@@ -16,12 +16,12 @@ buffer_output_stream::buffer_output_stream(buffer_output_stream&& move)
 {
 	current_size = move.current_size;
 	max_size	 = move.max_size;
-	buffer		 = move.max_size;
+	buffer		 = move.buffer;
 	allocator	= move.allocator;
 
 	move.current_size = 0;
 	move.max_size	 = 0;
-	move.buffer		  = write_all;
+	move.buffer		  = nullptr;
 }
 
 buffer_output_stream::~buffer_output_stream()
@@ -59,7 +59,7 @@ void buffer_output_stream::reserve(std::size_t additional_size)
 			allocator->deallocate(buffer, 0);
 		}
 
-		buffer   = new_buffer;
+		buffer   = static_cast<std::int8_t*>(new_buffer);
 		max_size = new_max;
 	}
 }
