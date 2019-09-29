@@ -2,10 +2,8 @@
 
 #include <cstdint>
 
-namespace bia
-{
-namespace bvm
-{
+namespace bia {
+namespace bytecode {
 
 typedef int op_code_type;
 constexpr auto max_instruction_size = 2;
@@ -43,19 +41,20 @@ enum OP_CODE : op_code_type
 	OC_RETURN_VOID, // returns nothing from the BVM
 
 	/* immediate int parameter instructions */
-	OC_JUMP = OC_RETURN_VOID + IIOCO_COUNT, // jumps to a relative location
+	OC_JUMP		 = OC_RETURN_VOID + IIOCO_COUNT, // jumps to a relative location
 	OC_JUMP_TRUE = OC_JUMP + IIOCO_COUNT, // jumps to a relative location if the test register evaluates to `true`
-	OC_JUMP_FALSE = OC_JUMP_TRUE + IIOCO_COUNT, // jumps to a relative location if the test register evaluates to `false`
+	OC_JUMP_FALSE =
+		OC_JUMP_TRUE + IIOCO_COUNT, // jumps to a relative location if the test register evaluates to `false`
 
 	/* member-immeadiate instruction */
 	OC_INSTANTIATE = MOCO_COUNT * IOCO_COUNT, // instantiates a member with the given immediate
 
 	/* member-member instructions */
-	OC_CLONE = MOCO_COUNT * MOCO_COUNT, // clones the second member to the first
+	OC_CLONE		= MOCO_COUNT * MOCO_COUNT,			  // clones the second member to the first
 	OC_SHALLOW_COPY = OC_CLONE + MOCO_COUNT * MOCO_COUNT, // makes a shallow copy of the second object to the first one
 	OC_DEEP_COPY = OC_SHALLOW_COPY + MOCO_COUNT * MOCO_COUNT, // makes a deep copy of the second object to the first one
-	OC_REFER = OC_DEEP_COPY + MOCO_COUNT * MOCO_COUNT, // makes a references
+	OC_REFER	 = OC_DEEP_COPY + MOCO_COUNT * MOCO_COUNT,	// makes a references
 };
 
-}
-}
+} // namespace bytecode
+} // namespace bia

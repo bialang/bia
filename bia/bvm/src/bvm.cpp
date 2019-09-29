@@ -1,4 +1,4 @@
-#include <bvm.hpp>
+#include <bvm/bvm.hpp>
 #include <bvm/framework/int_member.hpp>
 #include <bvm/op_code.hpp>
 #include <util/endian.hpp>
