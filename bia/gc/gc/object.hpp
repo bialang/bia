@@ -53,9 +53,9 @@ private:
 	{
 		return nullptr;
 	}
-	static gc::object_info* object_info(void* ptr)
+	static bia::gc::object_info* object_info(void* ptr)
 	{
-		return reinterpret_cast<gc::object_info*>(static_cast<int8_t*>(ptr) - sizeof(gc::object_info));
+		return reinterpret_cast<bia::gc::object_info*>(static_cast<int8_t*>(ptr) - sizeof(bia::gc::object_info));
 	}
 };
 

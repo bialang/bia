@@ -46,7 +46,7 @@ public:
      @return a pointer to the instance that can **ONLY** be used in the current thread
      @throws exception::unknown_encoder_exception if the standard type is not known
     */
-    static encoder* get_instance(STANDARD_ENCODING type);
+    static encoder& get_instance(STANDARD_ENCODING type);
     /*
      Returns the encoder by name. This function can return more encoders than the one with standard encodings, depending on the backend encoding library.
 
@@ -54,7 +54,7 @@ public:
      @return a pointer to the instance that can **ONLY** be used in the current thread
      @throws exception::unknown_encoder_exception if the encoder is unknown
     */
-    static encoder* get_instance(string name);
+    static encoder& get_instance(string name);
 
 protected:
     /*

@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 
+project("bialang"
+	LANGUAGES CXX)
+
 function(download_submodule_library LIB_NAME)
 	if(NOT EXISTS "${CMAKE_SOURCE_DIR}/dependencies/${LIB_NAME}")
 		if(NOT GIT_FOUND)

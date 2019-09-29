@@ -8,6 +8,7 @@ file(GLOB_RECURSE UTIL_SOURCE_FILES
 add_library("util" STATIC
 	${UTIL_SOURCE_FILES})
 target_include_directories("util"
-	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/")
+	PUBLIC ${BIA_BIA_CONFIG_PATH}
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 create_tests("util")

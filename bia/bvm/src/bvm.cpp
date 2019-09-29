@@ -1,20 +1,19 @@
 #include <bvm.hpp>
 #include <bvm/framework/int_member.hpp>
 #include <bvm/op_code.hpp>
+#include <util/endian.hpp>
 
 namespace bia {
 namespace bvm {
 
-inline void set(bool gc_active, gc::object_ptr& dest, gc::object_ptr&& src)
-{
-	if (gc_active) {
-	}
-
-	dest = src;
-}
-
 inline op_code_type next_op_code(int8_t*& ptr)
-{}
+{
+	auto tmp = util::from_little_endian<op_code_type>(ptr);
+
+	ptr += sizeof(op_code_type);
+
+	return tmp;
+}
 
 void bvm::execute(context& context, const code& code)
 {
@@ -23,19 +22,12 @@ void bvm::execute(context& context, const code& code)
 	const auto gc				   = context.gc();
 
 	// register
-	auto gc_token = gc->register_thread();
-
-	// allocate roots
-	auto temp_members  = gc->create_root(code.temp_member_count());
-	auto local_members = gc->create_root(code.local_member_count());
+	auto gc_token = gc->register_thread(code.temp_member_count(), code.local_member_count());
 
 	while (instruction_ptr < instruction_ptr_end) {
-		// update status
-		gc_token.update();
-
 		// read next instruction
 		auto op_code = next_op_code(instruction_ptr);
-
+		
 		/* auto-generated switch for evaluating byte code instructions */
 		switch (op_code) {}
 		/* auto-generated switch for evaluating byte code instructions */

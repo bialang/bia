@@ -42,6 +42,4 @@ target_include_directories("string"
 target_link_libraries("string"
 	${LINK_LIBS})
 
-if(BUILD_TESTS)
-	add_subdirectory("tests")
-endif()
+create_tests("string")
