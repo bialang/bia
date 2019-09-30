@@ -32,7 +32,7 @@ protected:
 	 @param ptr that should be marked
 	 @param mark is the current mark
 	*/
-	static void gc_mark(void* ptr, bool mark)
+	static void gc_mark(const void* ptr, bool mark)
 	{
 		auto info = object_info(ptr);
 
@@ -41,13 +41,9 @@ protected:
 		} else {
 			if (info->marked.exchange(mark, std::memory_order_relaxed) !=
 				mark) {
-				static_cast<object*>(ptr)->gc_mark_children(mark);
+				static_cast<const object*>(ptr)->gc_mark_children(mark);
 			}
 		}
-	}
-	static void gc_mark(const void* ptr, bool mark)
-	{
-		gc_mark(const_cast<void*>(ptr), mark);
 	}
 
 private:
@@ -57,9 +53,9 @@ private:
 	{
 		return nullptr;
 	}
-	static bia::gc::object_info* object_info(void* ptr)
+	static bia::gc::object_info* object_info(const void* ptr)
 	{
-		return reinterpret_cast<bia::gc::object_info*>(static_cast<int8_t*>(ptr) - sizeof(bia::gc::object_info));
+		return reinterpret_cast<bia::gc::object_info*>(static_cast<int8_t*>(const_cast<void*>(ptr)) - sizeof(bia::gc::object_info));
 	}
 };
 
