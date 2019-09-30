@@ -12,7 +12,8 @@ namespace thread {
 class spin_mutex
 {
 public:
-	spin_mutex()					   = default;
+	spin_mutex() : flag(ATOMIC_FLAG_INIT)
+	{}
 	spin_mutex(const spin_mutex& copy) = delete;
 	spin_mutex(spin_mutex&& move)	  = delete;
 	/*
@@ -42,7 +43,7 @@ public:
 	}
 
 private:
-	std::atomic_flag flag = ATOMIC_FLAG_INIT;
+	std::atomic_flag flag;
 };
 
 } // namespace thread

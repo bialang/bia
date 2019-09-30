@@ -1,5 +1,6 @@
 #include <thread/config.hpp>
 #include <thread/thread.hpp>
+#include <thread/hybrid_mutex.hpp>
 #include <utility>
 
 #ifdef BIA_THREAD_BACKEND_STD
@@ -16,11 +17,12 @@ struct thread::impl
 	bool started;
 	bool daemon;
 	std::function<void()> target;
+	hybrid_mutex mutex;
 #if defined(BIA_THREAD_BACKEND_STD)
 	std::thread t;
 #endif
 
-	impl(std::function<void()>&& target) : target(std::move(target))
+	impl(std::function<void()>&& target) : mutex(100), target(std::move(target))
 	{
 		interrupted = false;
 		alive = false;
@@ -38,6 +40,8 @@ thread::~thread()
 
 void thread::join()
 {
+	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
+
 #if defined(BIA_THREAD_BACKEND_STD)
 	pimpl->t.join();
 #endif
@@ -45,7 +49,8 @@ void thread::join()
 
 void thread::start()
 {
-	//todo: lock
+	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
+	
 	if (pimpl->started) {
 		throw;
 	}
@@ -64,6 +69,8 @@ void thread::start()
 
 void thread::interrupt()
 {
+	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
+	
 	if (pimpl->alive) {
 		pimpl->interrupted = true;
 	}
@@ -71,6 +78,8 @@ void thread::interrupt()
 
 void thread::daemon(bool daemon)
 {
+	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
+	
 	pimpl->daemon = daemon;
 }
 
@@ -83,16 +92,22 @@ void thread::yield()
 
 bool thread::daemon() const noexcept
 {
+	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
+	
 	return pimpl->daemon;
 }
 
 bool thread::alive() const noexcept
 {
+	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
+	
 	return pimpl->alive;
 }
 
 bool thread::interrupted() const noexcept
 {
+	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
+	
 	return pimpl->interrupted;
 }
 

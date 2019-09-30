@@ -18,6 +18,8 @@ TEST_CASE("spin mutex", "[mutex][thread]")
 		mutex.unlock();
 	});
 
+	t.start();
+
 	counter++;
 	REQUIRE(counter == 1);
 	mutex.unlock();
@@ -31,7 +33,7 @@ TEST_CASE("spin mutex", "[mutex][thread]")
 	REQUIRE(counter == 3);
 }
 
-TEST_CASE("shared sping mutex", "[mutex][thread]")
+TEST_CASE("shared spin mutex", "[mutex][thread]")
 {
 	shared_spin_mutex mutex;
 	auto counter = 0;
@@ -51,6 +53,9 @@ TEST_CASE("shared sping mutex", "[mutex][thread]")
 		tmp1 = counter;
 		mutex.unlock_shared();
 	});
+
+	t0.start();
+	t1.start();
 
 	counter++;
 	REQUIRE(counter == 1);

@@ -14,7 +14,7 @@ endif()
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.in"
 	"${CMAKE_CURRENT_SOURCE_DIR}/bia/config.hpp")
 
-set(BIA_BIA_CONFIG_PATH "${CMAKE_CURRENT_SOURCE_DIR}/bia/config.hpp")
+set(BIA_BIA_CONFIG_PATH "${CMAKE_CURRENT_SOURCE_DIR}/bia/")
 
 add_subdirectory("exception")
 add_subdirectory("util")
