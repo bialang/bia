@@ -56,4 +56,9 @@ TEST_CASE("equals_any", "[type_traits][util]")
 	REQUIRE(equals_any<int, 0, 1, 2>::value == false);
 	REQUIRE(equals_any<int, 0, 1, 2, 3, 0>::value == true);
 	REQUIRE(equals_any<int, 0, 1, 2, 3, 0, 2, 6>::value == true);
+
+	REQUIRE(equals_any_type<void>::value == false);
+	REQUIRE(equals_any_type<void, int, float>::value == false);
+	REQUIRE(equals_any_type<void, int, float, void>::value == true);
+	REQUIRE(equals_any_type<void, int, float, void, int>::value == true);
 }
