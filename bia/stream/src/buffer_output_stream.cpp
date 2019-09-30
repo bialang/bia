@@ -4,20 +4,18 @@
 namespace bia {
 namespace stream {
 
-bia::stream::buffer_output_stream::buffer_output_stream(bia::gc::memory_allocator* allocator) noexcept
+bia::stream::buffer_output_stream::buffer_output_stream(bia::gc::memory_allocator& allocator) noexcept : allocator(allocator)
 {
 	current_size	= 0;
 	max_size		= 0;
 	buffer			= nullptr;
-	this->allocator = allocator;
 }
 
-buffer_output_stream::buffer_output_stream(buffer_output_stream&& move)
+buffer_output_stream::buffer_output_stream(buffer_output_stream&& move) noexcept : allocator(move.allocator)
 {
 	current_size = move.current_size;
 	max_size	 = move.max_size;
 	buffer		 = move.buffer;
-	allocator	= move.allocator;
 
 	move.current_size = 0;
 	move.max_size	 = 0;
@@ -27,7 +25,7 @@ buffer_output_stream::buffer_output_stream(buffer_output_stream&& move)
 buffer_output_stream::~buffer_output_stream()
 {
 	if (buffer) {
-		allocator->deallocate(buffer, 0);
+		allocator.deallocate(buffer, 0);
 	}
 }
 
@@ -50,13 +48,13 @@ void buffer_output_stream::reserve(std::size_t additional_size)
 	}
 
 	if (new_max != max_size) {
-		auto new_buffer = allocator->allocate(new_max, 0);
+		auto new_buffer = allocator.allocate(new_max, 0);
 
 		// copy & deallocate
 		if (buffer) {
 			std::memcpy(new_buffer, buffer, current_size);
 
-			allocator->deallocate(buffer, 0);
+			allocator.deallocate(buffer, 0);
 		}
 
 		buffer   = static_cast<std::int8_t*>(new_buffer);
@@ -64,14 +62,20 @@ void buffer_output_stream::reserve(std::size_t additional_size)
 	}
 }
 
-const void* buffer_output_stream::data() const noexcept
+gc::memory_allocator& buffer_output_stream::memory_allocator() noexcept
 {
-	return buffer;
+	return allocator;
 }
 
-std::size_t buffer_output_stream::size() const noexcept
+std::tuple<void*, std::size_t, std::size_t> buffer_output_stream::take_buffer() noexcept
 {
-	return current_size;
+	std::tuple<void*, std::size_t, std::size_t> tmp(buffer, current_size, max_size);
+
+	buffer = nullptr;
+	current_size = 0;
+	max_size = 0;
+
+	return tmp;
 }
 
 } // namespace stream
