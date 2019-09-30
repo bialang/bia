@@ -12,6 +12,7 @@ namespace tokenizer {
 struct rule_parameter
 {
     string::encoding::encoder& encoder;
+
 };
 
 typedef void(*rule_function_type)(stream::input_stream&, rule_parameter&);

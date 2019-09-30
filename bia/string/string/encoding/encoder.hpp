@@ -34,11 +34,11 @@ public:
     /*
      Converts the buffer `input` to UTF-16 encoded string.
 
-     @param[in] from the encoding of `input`
      @param input the input buffer
      @param length the length of the input buffer
+     @return the UTF-16 encoded string
     */
-    static string convert(encoder& from, const std::int8_t* input, std::size_t length);
+    string convert(const std::int8_t* input, std::size_t length);
     /*
      Returns the standard encoder.
 
@@ -46,7 +46,7 @@ public:
      @return a pointer to the instance that can **ONLY** be used in the current thread
      @throws exception::unknown_encoder_exception if the standard type is not known
     */
-    static encoder& get_instance(STANDARD_ENCODING type);
+    static encoder* get_instance(STANDARD_ENCODING type);
     /*
      Returns the encoder by name. This function can return more encoders than the one with standard encodings, depending on the backend encoding library.
 
@@ -54,7 +54,8 @@ public:
      @return a pointer to the instance that can **ONLY** be used in the current thread
      @throws exception::unknown_encoder_exception if the encoder is unknown
     */
-    static encoder& get_instance(string name);
+    static encoder* get_instance(string name);
+    static void free_instance(encoder* enc);
 
 protected:
     /*

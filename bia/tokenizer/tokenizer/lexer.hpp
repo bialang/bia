@@ -10,7 +10,7 @@ namespace tokenizer {
 class lexer
 {
 public:
-    virtual ~lexer();
+    virtual ~lexer() = default;
     virtual void lex(stream::input_stream& input, token_receiver& receiver) = 0;
 };
 

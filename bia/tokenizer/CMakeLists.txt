@@ -9,4 +9,5 @@ add_library("tokenizer" STATIC
 target_include_directories("tokenizer"
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries("tokenizer"
-    PUBLIC "stream")
+    PUBLIC "stream"
+    PUBLIC "string")
