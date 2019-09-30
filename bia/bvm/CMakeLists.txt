@@ -9,4 +9,5 @@ add_library("bvm" STATIC
 target_include_directories("bvm"
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries("bvm"
-    PUBLIC "string")
+    PUBLIC "string"
+    PUBLIC "compiler")
