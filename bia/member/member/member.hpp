@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <external/big_int.hpp>
 #include <gc/object.hpp>
 
 namespace bia {
@@ -17,6 +16,7 @@ public:
 
 	enum FLAG : flag_type
 	{
+		F_MUTABLE = 0x1,
 	};
 
 	virtual ~member() = default;
@@ -39,12 +39,6 @@ public:
 	 @returns a deep copy
 	*/
 	virtual member* deep_copy() = 0;
-	/*
-	 Copies or creates a reference to this object based on its type and default behavior.
-
-	 @return a copy or reference
-	*/
-	virtual member* clone() = 0;
 
 protected:
 };

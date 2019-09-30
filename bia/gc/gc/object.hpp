@@ -45,6 +45,10 @@ protected:
 			}
 		}
 	}
+	static void gc_mark(const void* ptr, bool mark)
+	{
+		gc_mark(const_cast<void*>(ptr), mark);
+	}
 
 private:
 	friend class gc;

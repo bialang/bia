@@ -9,4 +9,4 @@ add_library("member" STATIC
 target_include_directories("member"
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries("member"
-	PUBLIC "gc")
+	PUBLIC "string")

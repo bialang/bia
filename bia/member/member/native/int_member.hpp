@@ -1,25 +1,27 @@
 #pragma once
 
-#include "member.hpp"
+#include "../member.hpp"
 
-#include <external/big_int.hpp>
-#include <gc/gc.hpp>
+#include <cstdint>
 
 namespace bia {
-namespace bvm {
+namespace member {
 namespace framework {
 
+/*
+ A simple int member capable of holding an int64. This member is always unmutable. If an integer overflow would occur, the result will be stored in an big int.
+*/
 class int_member : public member
 {
 public:
-	int_member(intmax_t value, bool constant = false)
-		: integ(value), constant(constant)
+	typedef std::int64_t int_type;
+
+	int_member(int_type value) : value(value)
 	{}
-	int_member(const char* value, int base, bool constant = false)
-		: integ(value, base), constant(constant)
-	{}
-	int_member(const int_member& copy) : integ(copy.integ), constant(false)
-	{}
+	virtual flag_type flags() const override
+	{
+		return 0;
+	}
 	virtual member* shallow_copy() override
 	{
 		return gc::gc::active_gc()->construct<int_member>(*this);
@@ -27,10 +29,6 @@ public:
 	virtual member* deep_copy() override
 	{
 		return shallow_copy();
-	}
-	virtual member* clone() override
-	{
-		return constant ? this : shallow_copy();
 	}
 
 protected:
@@ -40,10 +38,7 @@ protected:
 	}
 
 private:
-	constexpr static auto min_bits = 64;
-
-	external::big_int integ;
-	const bool constant;
+	int_type value;
 };
 
 } // namespace framework
