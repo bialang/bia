@@ -1,39 +1,29 @@
 #pragma once
 
-#include <utility>
 #include <functional>
+#include <utility>
 
+namespace bia {
+namespace util {
 
-namespace bia
-{
-namespace util
-{
-
+template<typename Lambda>
 class finally
 {
 public:
-	typedef std::function<void()> exit_type;
-
-	finally(const exit_type& exit) : exit(exit)
+	finally(const Lambda& lambda) : lambda(lambda)
 	{
 		run = true;
 	}
-	finally(exit_type&& exit) : exit(std::move(exit))
+	finally(Lambda&& lambda) : lambda(std::move(lambda))
 	{
 		run = true;
 	}
 	finally(const finally& copy) = delete;
-	finally(finally&& move) : exit(std::move(move.exit))
-	{
-		run = move.run;
-
-		move.exit = {};
-		move.run = false;
-	}
+	finally(finally&& move)		 = default;
 	~finally()
 	{
-		if (run && exit) {
-			exit();
+		if (run) {
+			lambda();
 		}
 	}
 	void cancel(bool x = true) noexcept
@@ -44,10 +34,17 @@ public:
 	{
 		return !run;
 	}
+
 private:
-	exit_type exit;
+	Lambda lambda;
 	bool run;
 };
 
+template<typename Lambda>
+inline finally<Lambda> make_finally(Lambda&& lambda)
+{
+	return { std::forward<Lambda>(lambda) };
 }
-}
+
+} // namespace util
+} // namespace bia

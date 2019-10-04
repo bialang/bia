@@ -16,8 +16,8 @@ TEST_CASE("scope guard 'finally'", "[util]")
 
 	SECTION("without cancel")
 	{
-		{
-			finally f([&] { x = false; });
+		{ 
+			auto f = make_finally([&] { x = false; });
 		}
 
 		REQUIRE_FALSE(x);
@@ -26,7 +26,7 @@ TEST_CASE("scope guard 'finally'", "[util]")
 	SECTION("with cancel")
 	{
 		{
-			finally f([&] { x = false; });
+			auto f = make_finally([&] { x = false; });
 
 			f.cancel();
 		}
