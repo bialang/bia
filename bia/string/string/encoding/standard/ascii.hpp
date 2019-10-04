@@ -3,6 +3,7 @@
 #include "../encoder.hpp"
 
 #include <exception/char_encoding_exception.hpp>
+#include <exception/length_encoding_exception.hpp>
 
 namespace bia {
 namespace string {
@@ -14,58 +15,74 @@ namespace standard {
 */
 class ascii final : public encoder
 {
+public:
+	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end) override
+	{
+		if (begin >= end) {
+			throw exception::length_encoding_exception(u"");
+		}
 
+		code_point val = *reinterpret_cast<const code_point*>(begin);
+
+		if (val & ~0x7f) {
+			throw exception::char_encoding_exception(u"invalid ASCII character");
+		}
+
+		return val;
+	}
 
 protected:
-    virtual std::size_t min_size(std::size_t count) const noexcept override
-    {
-        return count;
-    }
-    virtual std::size_t max_size(std::size_t count) const noexcept override
-    {
-        return count;
-    }
-    virtual std::size_t min_code_points(std::size_t size) const noexcept override
-    {
-        return size;
-    }
-    virtual std::size_t max_code_points(std::size_t size) const noexcept override
-    {
-        return size;
-    }
-    virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output, std::size_t output_len) override
-    {
-        const auto end = input + input_len;
+	virtual std::size_t min_size(std::size_t count) const noexcept override
+	{
+		return count;
+	}
+	virtual std::size_t max_size(std::size_t count) const noexcept override
+	{
+		return count;
+	}
+	virtual std::size_t min_code_points(std::size_t size) const noexcept override
+	{
+		return size;
+	}
+	virtual std::size_t max_code_points(std::size_t size) const noexcept override
+	{
+		return size;
+	}
+	virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output,
+								std::size_t output_len) override
+	{
+		const auto end = input + input_len;
 
-        while (input < end && output_len-- > 0) {
-            // check character
-            if (*input & ~0x7f) {
-                throw exception::char_encoding_exception(u"invalid ASCII character");
-            }
+		while (input < end && output_len-- > 0) {
+			// check character
+			if (*input & ~0x7f) {
+				throw exception::char_encoding_exception(u"invalid ASCII character");
+			}
 
-            *output++ = static_cast<std::int8_t>(*input++);
-        }
+			*output++ = static_cast<std::int8_t>(*input++);
+		}
 
-        return output;
-    }
-    virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output, std::size_t output_len) override
-    {
-        const auto end = input + input_len;
+		return output;
+	}
+	virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output,
+							   std::size_t output_len) override
+	{
+		const auto end = input + input_len;
 
-        while (input < end && output_len-- > 0) {
-            // check character
-            if (*input & ~0x7f) {
-                throw exception::char_encoding_exception(u"invalid ASCII character");
-            }
+		while (input < end && output_len-- > 0) {
+			// check character
+			if (*input & ~0x7f) {
+				throw exception::char_encoding_exception(u"invalid ASCII character");
+			}
 
-            *output++ = *input++;
-        }
+			*output++ = *input++;
+		}
 
-        return output;
-    }
+		return output;
+	}
 };
 
-}
-}
-}
-}
+} // namespace standard
+} // namespace encoding
+} // namespace string
+} // namespace bia
