@@ -6,13 +6,13 @@ namespace bia {
 namespace util {
 namespace type_traits {
 
+/* equals any */
 template<typename T, T Value, T... Other>
 struct equals_any : std::false_type
 {};
 
 template<typename T, T Value, T Other>
-struct equals_any<T, Value, Other>
-	: std::conditional<Value == Other, std::true_type, std::false_type>::type
+struct equals_any<T, Value, Other> : std::conditional<Value == Other, std::true_type, std::false_type>::type
 {};
 
 template<typename T, T Value, T Other, T... Others>
@@ -20,6 +20,7 @@ struct equals_any<T, Value, Other, Others...>
 	: std::conditional<Value == Other, std::true_type, equals_any<T, Value, Others...>>::type
 {};
 
+/* equals any type */
 template<typename T, typename... Other>
 struct equals_any_type : std::false_type
 {};

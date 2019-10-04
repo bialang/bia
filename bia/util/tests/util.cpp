@@ -2,9 +2,10 @@
 
 #include <catch.hpp>
 #include <util/finally.hpp>
+#include <util/iterator_equals.hpp>
 #include <util/type_traits/conjunction.hpp>
-#include <util/type_traits/size_of.hpp>
 #include <util/type_traits/equals_any.hpp>
+#include <util/type_traits/size_of.hpp>
 
 using namespace bia::util;
 using namespace bia::util::type_traits;
@@ -31,6 +32,36 @@ TEST_CASE("scope guard 'finally'", "[util]")
 		}
 
 		REQUIRE(x);
+	}
+}
+
+TEST_CASE("iterator_equals", "[util]")
+{
+	auto str0	 = u"hello world";
+	auto end_str0 = str0 + std::char_traits<char16_t>::length(str0);
+	auto str1	 = "hello world";
+	auto end_str1 = str1 + std::char_traits<char>::length(str1);
+	auto str2	 = "hello";
+	auto end_str2 = str2 + std::char_traits<char>::length(str2);
+	auto str3	 = U"qwe";
+	auto end_str3 = str3 + std::char_traits<char32_t>::length(str3);
+
+	SECTION("only one")
+	{
+		auto result = iterator_equals(str0, end_str0, str1, end_str1);
+
+		REQUIRE(result == 1);
+
+		result = iterator_equals(str0, end_str0, str2, end_str2);
+
+		REQUIRE(result == 0);
+	}
+
+	SECTION("multiple")
+	{
+		auto result = iterator_equals(str0, end_str0, str1, end_str1, str2, end_str2, str3, end_str3);
+
+		REQUIRE(result == 1);
 	}
 }
 
