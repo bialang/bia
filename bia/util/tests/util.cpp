@@ -109,6 +109,11 @@ TEST_CASE("iterator_starts_with", "[util]")
 			iterator_starts_with(str0, end_str0, str3, end_str3, str4, end_str4, str2, end_str2, str1, end_str1).first;
 
 		REQUIRE(result == 2);
+
+		result =
+			iterator_starts_with(str0, end_str0, str3, end_str3, str4, end_str4, str1, end_str1, str2, end_str2).first;
+
+		REQUIRE(result == 2);
 	}
 }
 
