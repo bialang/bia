@@ -1,0 +1,23 @@
+identifier_char ::= "{Ll}" | "{Lu}" | "{Pc}"
+identifier ::= identifier_char (identifier_char | "{N*}")*
+
+regex ::= /* see regex.ebnf */
+number ::= /* see number.ebnf */
+string ::= /* see string.ebnf */
+bool ::= "true" | "false"
+constant ::= bool | string | number | regex
+direct_value ::= constant | identifier | calling_statement
+
+calling_statement ::= identifier ("." identifier)+
+
+stmt ::= simple_stmt
+simple_stmt ::= small_stmt (";" small_stmt) ";"? NEWLINE?
+small_stmt ::= (expression | decl_stmt | flow_stmt)
+
+expression ::= /* see expression.ebnf */
+decl_stmt ::= "let" identifier "=" value
+flow_stmt ::= break_stmt | continue_stmt | return_stmt
+
+break_stmt ::= "break"
+continue_stmt ::= "continue"
+return_stmt ::= "return" (value)?

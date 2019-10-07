@@ -10,7 +10,7 @@ namespace stream {
 class input_stream
 {
 public:
-	typedef std::int64_t mark_type;
+	typedef std::intptr_t mark_type;
 
 	virtual ~input_stream()														= default;
 	virtual void reset_to_mark(mark_type mark)									= 0;

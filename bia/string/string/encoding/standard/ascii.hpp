@@ -3,7 +3,6 @@
 #include "../encoder.hpp"
 
 #include <exception/char_encoding_exception.hpp>
-#include <exception/length_encoding_exception.hpp>
 
 namespace bia {
 namespace string {
@@ -16,10 +15,14 @@ namespace standard {
 class ascii final : public encoder
 {
 public:
+	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) const override
+	{
+		return begin < end;
+	}
 	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end) override
 	{
 		if (begin >= end) {
-			throw exception::length_encoding_exception(u"");
+			return eof;
 		}
 
 		code_point val = *reinterpret_cast<const code_point*>(begin);

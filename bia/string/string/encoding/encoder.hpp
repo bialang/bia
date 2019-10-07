@@ -29,9 +29,12 @@ public:
 		UTF_32_BE
 	};
 
+	constexpr static code_point eof = ~code_point(0);
+
 	virtual ~encoder() = default;
 
-	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end) = 0;
+	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) const = 0;
+	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end)	= 0;
 	/*
 	 Converts the buffer `input` to UTF-16 encoded string.
 

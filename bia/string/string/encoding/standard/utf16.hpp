@@ -25,13 +25,13 @@ public:
 		code_point output;
 
 		if (begin + 1 >= end) {
-			throw exception::length_encoding_exception(u"");
+			return eof;
 		}
 
 		// with surrogates
 		if ((begin[i0] & 0xfc) == 0xd8) {
 			if (begin + 3 >= end) {
-				throw exception::length_encoding_exception(u"");
+				return eof;
 			}
 
 			// check low surrogate
