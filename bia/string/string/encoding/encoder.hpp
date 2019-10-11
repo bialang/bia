@@ -33,8 +33,8 @@ public:
 
 	virtual ~encoder() = default;
 
-	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) const = 0;
-	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end)	= 0;
+	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) = 0;
+	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end) = 0;
 	/*
 	 Converts the buffer `input` to UTF-16 encoded string.
 
@@ -69,14 +69,14 @@ protected:
 	 @param count the amount of code points
 	 @return the minimum size
 	*/
-	virtual std::size_t min_size(std::size_t count) const noexcept;
+	virtual std::size_t min_size(std::size_t count) const noexcept = 0;
 	/*
 	 Returns the maximum size when `count` many code points should be encoded.
 
 	 @param count the amount of code points
 	 @return the maximum size
 	*/
-	virtual std::size_t max_size(std::size_t count) const noexcept;
+	virtual std::size_t max_size(std::size_t count) const noexcept = 0;
 	/*
 	 Returns the minimum amount of resulting code points when decoding a buffer with the size of `size`.
 
@@ -84,7 +84,7 @@ protected:
 	 @return the minimum count
 	 @throws exception::char_encoding_exception if the size cannot be resolved into a valid output string
 	*/
-	virtual std::size_t min_code_points(std::size_t size) const;
+	virtual std::size_t min_code_points(std::size_t size) const = 0;
 	/*
 	 Returns the maximum amount of resulting code points when decoding a buffer with the size of `size`.
 
@@ -92,11 +92,11 @@ protected:
 	 @return the maximum count
 	 @throws exception::char_encoding_exception if the size cannot be resolved into a valid output string
 	*/
-	virtual std::size_t max_code_points(std::size_t size) const;
+	virtual std::size_t max_code_points(std::size_t size) const = 0;
 	virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output,
-								std::size_t output_len);
+								std::size_t output_len)			= 0;
 	virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output,
-							   std::size_t output_len);
+							   std::size_t output_len)			= 0;
 };
 
 } // namespace encoding

@@ -21,12 +21,14 @@ function(create_tests NAME)
 		file(GLOB_RECURSE TMP_SOURCE_FILES
 			"${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
 
-		add_executable("${NAME}_test" ${TMP_SOURCE_FILES})
-		target_link_libraries("${NAME}_test" ${NAME})
+		add_executable("${NAME}_test"
+			${TMP_SOURCE_FILES})
+		target_link_libraries("${NAME}_test"
+			PUBLIC ${NAME})
 		target_include_directories("${NAME}_test"
-			PRIVATE ${CATCH_INCLUDE_DIRS})
+			PUBLIC ${CATCH_INCLUDE_DIRS})
 
-		add_test(${NAME} "${NAME}_test" "-s")
+		add_test(${NAME} "${NAME}_test" "~[benchmark]")
 	endif()
 endfunction()
 

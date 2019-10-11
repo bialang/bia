@@ -13,7 +13,7 @@ namespace standard {
 class utf8 final : public encoder
 {
 public:
-	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) const override
+	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) override
 	{
 		throw;
 	}

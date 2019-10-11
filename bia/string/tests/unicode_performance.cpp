@@ -6,7 +6,7 @@
 
 using namespace bia::string::encoding::standard;
 
-TEST_CASE("standard unicode", "[string][encoding][standrad]")
+TEST_CASE("standard unicode", "[string][encoding][standrad][benchmark]")
 {
 	BENCHMARK("category of: a")
 	{
