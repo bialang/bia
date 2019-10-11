@@ -15,23 +15,19 @@ namespace standard {
 class ascii final : public encoder
 {
 public:
-	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) override
-	{
-		return begin < end;
-	}
-	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end) override
+	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const override
 	{
 		if (begin >= end) {
-			return eof;
+			return false;
 		}
 
-		code_point val = *reinterpret_cast<const code_point*>(begin);
+		output = static_cast<code_point>(*begin);
 
-		if (val & ~0x7f) {
-			throw exception::char_encoding_exception(u"invalid ASCII character");
+		if (output & ~0x7f) {
+			BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");
 		}
 
-		return val;
+		return true;
 	}
 
 protected:
@@ -59,7 +55,7 @@ protected:
 		while (input < end && output_len-- > 0) {
 			// check character
 			if (*input & ~0x7f) {
-				throw exception::char_encoding_exception(u"invalid ASCII character");
+				BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");
 			}
 
 			*output++ = static_cast<std::int8_t>(*input++);
@@ -75,7 +71,7 @@ protected:
 		while (input < end && output_len-- > 0) {
 			// check character
 			if (*input & ~0x7f) {
-				throw exception::char_encoding_exception(u"invalid ASCII character");
+				BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");
 			}
 
 			*output++ = *input++;

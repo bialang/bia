@@ -33,8 +33,7 @@ public:
 
 	virtual ~encoder() = default;
 
-	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) = 0;
-	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end) = 0;
+	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const = 0;
 	/*
 	 Converts the buffer `input` to UTF-16 encoded string.
 

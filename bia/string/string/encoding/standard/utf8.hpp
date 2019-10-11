@@ -13,23 +13,19 @@ namespace standard {
 class utf8 final : public encoder
 {
 public:
-	virtual bool has_next(const std::int8_t* begin, const std::int8_t* end) override
-	{
-		throw;
-	}
-	virtual code_point next(const std::int8_t*& begin, const std::int8_t* end) override
+	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const override
 	{
 		if (begin >= end) {
-			throw exception::length_encoding_exception(u"");
+			return false;
 		}
 
-		code_point val = *reinterpret_cast<const code_point*>(begin);
+		output = *reinterpret_cast<const code_point*>(begin);
 
-		if (val & ~0x7f) {
-			throw exception::char_encoding_exception(u"invalid ASCII character");
+		if (output & ~0x7f) {
+			BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");
 		}
 
-		return val;
+		return output;
 	}
 
 protected:
@@ -58,7 +54,7 @@ protected:
 		while (input < end) {
 			// check character
 			if (!is_valid_unicode(*input)) {
-				throw exception::char_encoding_exception(error_msg);
+				BIA_THROW(exception::char_encoding_exception, error_msg);
 			}
 
 			// only one byte required (7 bits)
@@ -115,7 +111,7 @@ protected:
 			} // two bytes
 			else if ((*input & 0xe0) == 0xc0) {
 				if (input + 2 > end) {
-					throw exception::char_encoding_exception(error_msg);
+					BIA_THROW(exception::char_encoding_exception, error_msg);
 				}
 
 				*output = ((input[0] & 0x1f) << 6) | (input[1] & 0x3f);
@@ -123,7 +119,7 @@ protected:
 			} // three bytes
 			else if ((*input & 0xf0) == 0xe0) {
 				if (input + 3 > end) {
-					throw exception::char_encoding_exception(error_msg);
+					BIA_THROW(exception::char_encoding_exception, error_msg);
 				}
 
 				*output = ((input[0] & 0x0f) << 12) | ((input[1] & 0x3f) << 6) | (input[2] & 0x3f);
@@ -131,18 +127,18 @@ protected:
 			} // four bytes
 			else if ((*input & 0xf8) == 0xf0) {
 				if (input + 4 > end) {
-					throw exception::char_encoding_exception(error_msg);
+					BIA_THROW(exception::char_encoding_exception, error_msg);
 				}
 
 				*output = ((input[0] & 0x07) << 18) | ((input[1] & 0x3f) << 12) | ((input[2] & 0x3f) << 6) |
 						  (input[3] & 0x3f);
 				input += 4;
 			} else {
-				throw exception::char_encoding_exception(error_msg);
+				BIA_THROW(exception::char_encoding_exception, error_msg);
 			}
 
 			if (!is_valid_unicode(*output++)) {
-				throw exception::char_encoding_exception(error_msg);
+				BIA_THROW(exception::char_encoding_exception, error_msg);
 			}
 		}
 

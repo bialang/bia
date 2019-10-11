@@ -141,7 +141,7 @@ public:
 	{
 		// There is already a registered instance
 		if (active_gc_instance) {
-			throw exception::implementation_error(u"active gc instance detected");
+			BIA_IMPLEMENTATION_ERROR(u"active gc instance detected");
 		}
 
 		active_gc_instance = this;

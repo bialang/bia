@@ -20,14 +20,11 @@ TEST_CASE("bool_token", "[lexer token][tokenizer]")
 	auto enc = encoder::get_instance(encoder::STANDARD_ENCODING::ASCII);
 	rule_parameter parameter(*enc);
 
-	SECTION("true")
-	{
-		auto stream = make_stream("true");
+	auto stream = make_stream("true");
 
-		bool_token(stream, parameter);
+	REQUIRE(bool_token(stream, parameter) == TOKEN_ACTION::SUCCEEDED);
 
-		REQUIRE(stream.left_size() == 0);
-		REQUIRE(parameter.bundle.begin()->type == token::TYPE::KEYWORD);
-		REQUIRE(parameter.bundle.begin()->content.keyword == KEYWORD::TRUE);
-	}
+	REQUIRE(stream.left_size() == 0);
+	REQUIRE(parameter.bundle.begin()->type == token::TYPE::KEYWORD);
+	REQUIRE(parameter.bundle.begin()->content.keyword == KEYWORD::TRUE);
 }

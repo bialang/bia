@@ -14,9 +14,9 @@ namespace encoding {
 
 #elif defined(BIA_STRING_ENCODING_BACKEND_NONE)
 standard::ascii ascii_encoder;
-//standard::utf8 utf8_encoder;
-//standard::utf16<false> utf16le_encoder;
-//standard::utf16<true> utf16be_encoder;
+// standard::utf8 utf8_encoder;
+// standard::utf16<false> utf16le_encoder;
+// standard::utf16<true> utf16be_encoder;
 #endif
 
 string encoder::convert(const std::int8_t* input, std::size_t length)
@@ -43,11 +43,11 @@ encoder* encoder::get_instance(STANDARD_ENCODING type)
 
 #elif defined(BIA_STRING_ENCODING_BACKEND_NONE)
 	switch (type) {
-	//case STANDARD_ENCODING::ASCII: return &ascii_encoder;
-	//case STANDARD_ENCODING::UTF_8: return &utf8_encoder;
-	//case STANDARD_ENCODING::UTF_16_LE: return &utf16le_encoder;
-	//case STANDARD_ENCODING::UTF_16_BE: return &utf16be_encoder;
-	default: throw exception::unknown_encoder_exception(u"unsupported string encoding");
+	case STANDARD_ENCODING::ASCII: return &ascii_encoder;
+	// case STANDARD_ENCODING::UTF_8: return &utf8_encoder;
+	// case STANDARD_ENCODING::UTF_16_LE: return &utf16le_encoder;
+	// case STANDARD_ENCODING::UTF_16_BE: return &utf16be_encoder;
+	default: BIA_THROW(exception::unknown_encoder_exception, u"unsupported string encoding");
 	}
 #endif
 }
@@ -64,7 +64,7 @@ encoder* encoder::get_instance(string name)
 void encoder::free_instance(encoder* enc)
 {
 #if defined(BIA_STRING_ENCODING_BACKEND_ICU)
-	
+
 #elif defined(BIA_STRING_ENCODING_BACKEND_NONE)
 	// these instances are static
 #endif
