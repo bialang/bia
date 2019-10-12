@@ -102,7 +102,8 @@ TEST_CASE("iterator_starts_with", "[util]")
 	SECTION("multiple")
 	{
 		auto result = iterator_starts_with(cstring_iterator<char16_t>(str0), cstring_iterator<char32_t>(str3),
-										   cstring_iterator<char>(str4), cstring_iterator<char>(str1))
+										   cstring_iterator<char>(str4), cstring_iterator<char>(str2),
+										   cstring_iterator<char>(str1))
 						  .first;
 
 		REQUIRE(result == 2);

@@ -21,7 +21,7 @@ public:
 			return false;
 		}
 
-		output = static_cast<code_point>(*begin);
+		output = static_cast<code_point>(*begin++);
 
 		if (output & ~0x7f) {
 			BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");

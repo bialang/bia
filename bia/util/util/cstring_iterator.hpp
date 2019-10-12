@@ -24,6 +24,10 @@ public:
 	{
 		return *current++;
 	}
+	const T* cursor() const noexcept
+	{
+		return current;
+	}
 
 private:
 	const T* current;

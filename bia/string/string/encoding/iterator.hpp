@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "encoder.hpp"
 
 namespace bia {
@@ -9,9 +11,9 @@ namespace encoding {
 class input_iterator
 {
 public:
-	input_iterator(encoder* enc, const std::int8_t* begin, const std::int8_t* end)
+	input_iterator(encoder* enc, const std::int8_t* begin, const std::int8_t* end) noexcept
 	{
-		hn		  = true;
+		nt		  = true;
 		this->enc = enc;
 		n		  = 0;
 		current   = begin;
@@ -19,10 +21,18 @@ public:
 	}
 	bool has_next()
 	{
-		return hn && (hn = enc->next(current, end, n));
+		if (nt) {
+			nt = false;
+
+			return enc->next(current, end, n);
+		}
+
+		return true;
 	}
-	code_point next()
+	code_point next() noexcept
 	{
+		nt = true;
+
 		return n;
 	}
 	const std::int8_t* cursor() const noexcept
@@ -31,7 +41,7 @@ public:
 	}
 
 private:
-	bool hn;
+	bool nt;
 	encoder* enc;
 	code_point n;
 	const std::int8_t* current;
