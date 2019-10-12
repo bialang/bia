@@ -5,7 +5,7 @@ regex ::= /* see regex.ebnf */
 number ::= /* see number.ebnf */
 string ::= /* see string.ebnf */
 bool ::= "true" | "false"
-constant ::= bool | string | number | regex
+constant ::= "null" | bool | string | number | regex
 direct_value ::= constant | identifier | calling_statement
 
 calling_statement ::= identifier ("." identifier)+
