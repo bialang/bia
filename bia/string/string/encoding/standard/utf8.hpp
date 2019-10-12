@@ -19,13 +19,43 @@ public:
 			return false;
 		}
 
-		output = *reinterpret_cast<const code_point*>(begin);
+		// only one byte
+		if (!(*begin & 0x80)) {
+			output = *begin++;
+		} // two bytes
+		else if ((*begin & 0xe0) == 0xc0) {
+			if (begin + 2 > end) {
+				return false;
+			}
 
-		if (output & ~0x7f) {
-			BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");
+			output = ((begin[0] & 0x1f) << 6) | (begin[1] & 0x3f);
+			begin += 2;
+		} // three bytes
+		else if ((*begin & 0xf0) == 0xe0) {
+			if (begin + 3 > end) {
+				return false;
+			}
+
+			output = ((begin[0] & 0x0f) << 12) | ((begin[1] & 0x3f) << 6) | (begin[2] & 0x3f);
+			begin += 3;
+		} // four bytes
+		else if ((*begin & 0xf8) == 0xf0) {
+			if (begin + 4 > end) {
+				return false;
+			}
+
+			output =
+				((begin[0] & 0x07) << 18) | ((begin[1] & 0x3f) << 12) | ((begin[2] & 0x3f) << 6) | (begin[3] & 0x3f);
+			begin += 4;
+		} else {
+			BIA_THROW(exception::char_encoding_exception, error_msg);
 		}
 
-		return output;
+		if (!is_valid_unicode(output)) {
+			BIA_THROW(exception::char_encoding_exception, error_msg);
+		}
+
+		return true;
 	}
 
 protected:
