@@ -2,20 +2,30 @@
 
 #include <cstdint>
 #include <gc/object.hpp>
+#include <typeinfo>
 
 namespace bia {
 namespace member {
 
-class member : public bia::gc::object
+/*
+ The parent type for all member types. All members are gc objects and must provide the following functions.
+*/
+class member : public gc::object
 {
 public:
 	typedef unsigned int parameter_count_type;
 	typedef int operator_type;
+	/* the flag type */
 	typedef int flag_type;
+	/* the type for testing operations */
 	typedef int bool_type;
 
+	/*
+	 Additional flags describing the member and how its going to behave in certain situations.
+	*/
 	enum FLAG : flag_type
 	{
+		/* describes that this member can be mutated */
 		F_MUTABLE = 0x1,
 	};
 
@@ -32,15 +42,27 @@ public:
 
 	 @returns a shallow copy
 	*/
-	virtual member* shallow_copy() = 0;
+	virtual member* shallow_copy() const = 0;
 	/*
 	 Creates a deep copy of this object. Every child object will be deep copied unlike in shallow_copy().
 
 	 @returns a deep copy
 	*/
-	virtual member* deep_copy() = 0;
+	virtual member* deep_copy() const = 0;
+	/*
+	 Tests this member.
+
+	 @returns a `1` if the test succeeded, otherwise `0`
+	*/
+	virtual bool_type test() const = 0;
+	template<typename T>
+	friend T cast(member* m);
 
 protected:
+	virtual bool int64_data(std::int64_t& data) const							 = 0;
+	virtual bool double_data(double& data) const								 = 0;
+	virtual bool other_data(const std::type_info& type, void*& data)			 = 0;
+	virtual bool other_data(const std::type_info& type, const void*& data) const = 0;
 };
 
 } // namespace member

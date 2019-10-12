@@ -2,18 +2,16 @@
 
 #include "../member.hpp"
 
-#include <string/string.hpp>
 #include <gc/gc.hpp>
+#include <string/string.hpp>
 
-namespace bia
-{
-namespace member
-{
-namespace framework
-{
+namespace bia {
+namespace member {
+namespace framework {
 
 /*
- A member holding a single gc collected string. This member is always unmutable.
+ A member holding a single gc collected string. This member is always unmutable. Copying the string doesn't copy the
+ underlying string.
 */
 class string_member : public member
 {
@@ -26,14 +24,34 @@ public:
 	}
 	virtual member* shallow_copy() override
 	{
-		return gc::gc::active_gc()->construct<string_member>(*this);
+		return deep_copy();
 	}
 	virtual member* deep_copy() override
 	{
-		return shallow_copy();
+		return gc::gc::active_gc()->construct<string_member>(*this);
+	}
+	virtual bool_type test() const override
+	{
+		return str.length() ? 1 : 0;
 	}
 
 protected:
+	virtual bool int64_data(std::int64_t& data) const override
+	{
+		return false;
+	}
+	virtual bool double_data(double& data) const override
+	{
+		return false;
+	}
+	virtual bool other_data(const std::type_info& type, void*& data) override
+	{
+		return false;
+	}
+	virtual bool other_data(const std::type_info& type, const void*& data) const override
+	{
+		return false;
+	}
 	virtual void gc_mark_children(bool mark) const noexcept
 	{
 		// mark string
@@ -44,6 +62,6 @@ private:
 	string::string str;
 };
 
-}
-}
-}
+} // namespace framework
+} // namespace member
+} // namespace bia
