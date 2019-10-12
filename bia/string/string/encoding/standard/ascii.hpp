@@ -15,6 +15,8 @@ namespace standard {
 class ascii final : public encoder
 {
 public:
+	virtual void read_start(const std::int8_t*& begin, const std::int8_t* end) const override
+	{}
 	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const override
 	{
 		if (begin >= end) {

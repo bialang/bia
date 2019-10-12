@@ -13,49 +13,29 @@ namespace standard {
 class utf8 final : public encoder
 {
 public:
+	virtual void read_start(const std::int8_t*& begin, const std::int8_t* end) const override
+	{
+		auto tmp	  = begin;
+		code_point cp = 0;
+
+		if (next_unchecked(tmp, end, cp)) {
+			// is bom
+			if (cp == bom) {
+				begin = tmp;
+			}
+		}
+	}
 	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const override
 	{
-		if (begin >= end) {
-			return false;
-		}
-
-		// only one byte
-		if (!(*begin & 0x80)) {
-			output = static_cast<code_point>(*begin++);
-		} // two bytes
-		else if ((*begin & 0xe0) == 0xc0) {
-			if (begin + 2 > end) {
-				return false;
+		if (next_unchecked(begin, end, output)) {
+			if (!is_valid_unicode(output)) {
+				BIA_THROW(exception::char_encoding_exception, error_msg);
 			}
 
-			output = ((begin[0] & 0x1f) << 6) | (begin[1] & 0x3f);
-			begin += 2;
-		} // three bytes
-		else if ((*begin & 0xf0) == 0xe0) {
-			if (begin + 3 > end) {
-				return false;
-			}
-
-			output = ((begin[0] & 0x0f) << 12) | ((begin[1] & 0x3f) << 6) | (begin[2] & 0x3f);
-			begin += 3;
-		} // four bytes
-		else if ((*begin & 0xf8) == 0xf0) {
-			if (begin + 4 > end) {
-				return false;
-			}
-
-			output =
-				((begin[0] & 0x07) << 18) | ((begin[1] & 0x3f) << 12) | ((begin[2] & 0x3f) << 6) | (begin[3] & 0x3f);
-			begin += 4;
-		} else {
-			BIA_THROW(exception::char_encoding_exception, error_msg);
+			return true;
 		}
 
-		if (!is_valid_unicode(output)) {
-			BIA_THROW(exception::char_encoding_exception, error_msg);
-		}
-
-		return true;
+		return false;
 	}
 
 protected:
@@ -177,6 +157,47 @@ protected:
 
 private:
 	constexpr static auto error_msg = u"invalid UTF-8 character";
+
+	bool next_unchecked(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const
+	{
+		if (begin >= end) {
+			return false;
+		}
+
+		// only one byte
+		if (!(*begin & 0x80)) {
+			output = static_cast<code_point>(*begin++);
+		} // two bytes
+		else if ((*begin & 0xe0) == 0xc0) {
+			if (begin + 2 > end) {
+				return false;
+			}
+
+			output = ((begin[0] & 0x1f) << 6) | (begin[1] & 0x3f);
+			begin += 2;
+		} // three bytes
+		else if ((*begin & 0xf0) == 0xe0) {
+			if (begin + 3 > end) {
+				return false;
+			}
+
+			output = ((begin[0] & 0x0f) << 12) | ((begin[1] & 0x3f) << 6) | (begin[2] & 0x3f);
+			begin += 3;
+		} // four bytes
+		else if ((*begin & 0xf8) == 0xf0) {
+			if (begin + 4 > end) {
+				return false;
+			}
+
+			output =
+				((begin[0] & 0x07) << 18) | ((begin[1] & 0x3f) << 12) | ((begin[2] & 0x3f) << 6) | (begin[3] & 0x3f);
+			begin += 4;
+		} else {
+			BIA_THROW(exception::char_encoding_exception, error_msg);
+		}
+
+		return true;
+	}
 };
 
 } // namespace standard

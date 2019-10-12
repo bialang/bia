@@ -29,10 +29,21 @@ public:
 		UTF_32_BE
 	};
 
-	constexpr static code_point eof = ~code_point(0);
+	/* the byte order mark */
+	constexpr static code_point bom = 0xfeff;
 
 	virtual ~encoder() = default;
 
+	virtual void read_start(const std::int8_t*& begin, const std::int8_t* end) const = 0;
+	/*
+	 Reads the next code point from the buffer and advances the pointer.
+
+	 @param[in,out] begin is the start of the buffer; will be advanced on a successful read
+	 @param end is the end of the buffer
+	 @param[out] output is the read code point
+	 @return `true` if there were no errors and the code point was read to `output`, otherwise `false`
+	 @throws exception::char_encoding_exception if the read code point is invalid
+	*/
 	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const = 0;
 	/*
 	 Converts the buffer `input` to UTF-16 encoded string.
@@ -59,6 +70,11 @@ public:
 	 @throws exception::unknown_encoder_exception if the encoder is unknown
 	*/
 	static encoder* get_instance(string name);
+	/*
+	 Frees the instance returned by get_instance().
+
+	 @param[in] enc the encoder
+	*/
 	static void free_instance(encoder* enc);
 
 protected:
