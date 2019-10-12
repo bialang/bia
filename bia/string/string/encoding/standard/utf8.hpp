@@ -21,7 +21,7 @@ public:
 
 		// only one byte
 		if (!(*begin & 0x80)) {
-			output = *begin++;
+			output = static_cast<code_point>(*begin++);
 		} // two bytes
 		else if ((*begin & 0xe0) == 0xc0) {
 			if (begin + 2 > end) {

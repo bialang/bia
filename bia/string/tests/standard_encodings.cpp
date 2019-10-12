@@ -19,7 +19,7 @@ inline void test_encoding(encoder* enc, const T* string, const char32_t* charact
 	REQUIRE_FALSE(enc->next(begin, end, cp));
 }
 
-TEST_CASE("standard ascii encoder", "[string][encoder]")
+TEST_CASE("standard ascii encoder", "[string][encoder][standard]")
 {
 	auto enc = encoder::get_instance(encoder::STANDARD_ENCODING::ASCII);
 
@@ -41,9 +41,14 @@ TEST_CASE("standard ascii encoder", "[string][encoder]")
 	encoder::free_instance(enc);
 }
 
-TEST_CASE("standard utf8 encoder", "[string][encoder]")
+TEST_CASE("standard utf8 encoder", "[string][encoder][standard]")
 {
 	auto enc = encoder::get_instance(encoder::STANDARD_ENCODING::UTF_8);
+
+	SECTION("ascii")
+	{
+		test_encoding(enc, "Hello!", U"Hello!");
+	}
 
 	SECTION("correct encoding")
 	{
