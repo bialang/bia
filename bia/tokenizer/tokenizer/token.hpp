@@ -15,6 +15,7 @@ struct token
 		INT_VALUE,
 		KEYWORD,
 		OPERATOR,
+		IDENTIFIER,
 		WRAP_BEGIN,
 		WRAP_END
 	};

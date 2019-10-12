@@ -1,5 +1,5 @@
-identifier_char ::= "{Ll}" | "{Lu}" | "{Pc}"
-identifier ::= identifier_char (identifier_char | "{N*}")*
+identifier_char ::= "{Ll}" | "{Lu}" | "{Lt}" | "{Lo}" | "{Pc}" | "{Nl}"
+identifier ::= identifier_char (identifier_char | "{Nd}" | "{No}")*
 
 regex ::= /* see regex.ebnf */
 number ::= /* see number.ebnf */
