@@ -11,40 +11,48 @@
 
 using namespace bia::gc;
 
-std::set<void*> allocated;
-
-void my_free(void* ptr)
+class tracking_allocator : public simple_allocator
 {
-	allocated.erase(ptr);
+public:
+	virtual void deallocate(void* ptr, std::size_t previous_size) override
+	{
+		allocated.erase(static_cast<std::int8_t*>(ptr) + previous_size);
 
-	free(ptr);
-}
+		simple_allocator::deallocate(ptr, previous_size);
+	}
+	virtual void* allocate(std::size_t size, std::size_t previous_size) override
+	{
+		auto ptr = simple_allocator::allocate(size, previous_size);
 
-void* my_allocate(std::size_t size)
-{
-	auto ptr = malloc(size);
+		allocated.insert(static_cast<std::int8_t*>(ptr) + previous_size);
 
-	if (ptr) {
-		allocated.insert(ptr);
+		return ptr;
+	}
+	bool has(const void* ptr) const noexcept
+	{
+		return allocated.find(ptr) != allocated.end();
+	}
+	std::size_t allocation_count() const noexcept
+	{
+		return allocated.size();
 	}
 
-	return ptr;
-}
+private:
+	std::set<const void*> allocated;
+};
 
 std::unique_ptr<gc> create_gc()
 {
 	return std::unique_ptr<gc>(
-		new gc(std::unique_ptr<memory_allocator>(new simple_allocator(&my_allocate, &my_free)), nullptr));
+		new gc(std::unique_ptr<memory_allocator>(new tracking_allocator()), nullptr));
 }
 
 TEST_CASE("unmonitored memory allocation", "[gc]")
 {
-	REQUIRE(allocated.size() == 0);
-
 	auto g	= create_gc();
 	auto ptr1 = g->allocator()->allocate(6, 0);
 	auto ptr2 = g->allocator()->allocate(6, 0);
-
+	
 	REQUIRE(ptr1 != nullptr);
 	REQUIRE(ptr2 != nullptr);
 	REQUIRE(ptr1 != ptr2);
@@ -54,14 +62,13 @@ TEST_CASE("unmonitored memory allocation", "[gc]")
 	g->allocator()->deallocate(ptr1, 0);
 	g->allocator()->deallocate(ptr2, 0);
 
-	REQUIRE(allocated.size() == 0);
+	REQUIRE(static_cast<tracking_allocator*>(g->allocator())->allocation_count() == 0);
 }
 
 TEST_CASE("garbage collection test", "[gc]")
 {
-	REQUIRE(allocated.size() == 0);
-
 	auto g = create_gc();
+	auto allocator = static_cast<tracking_allocator*>(g->allocator());
 	void* p0;
 	void* p1;
 	void* p2;
@@ -74,24 +81,24 @@ TEST_CASE("garbage collection test", "[gc]")
 		token.set(0, 1, p1 = g->allocate(23));
 		token.set(0, 0, p2 = g->allocate(12));
 
-		REQUIRE(allocated.find(p0) != allocated.end());
-		REQUIRE(allocated.find(p1) != allocated.end());
-		REQUIRE(allocated.find(p2) != allocated.end());
+		REQUIRE(allocator->has(p0));
+		REQUIRE(allocator->has(p1));
+		REQUIRE(allocator->has(p2));
 
 		// collect p0
 		g->run_synchronously();
 
-		REQUIRE(allocated.find(p0) == allocated.end());
-		REQUIRE(allocated.find(p1) != allocated.end());
-		REQUIRE(allocated.find(p2) != allocated.end());
+		REQUIRE(!allocator->has(p0));
+		REQUIRE(allocator->has(p1));
+		REQUIRE(allocator->has(p2));
 	}
 
 	// run garbage collector
 	g->run_synchronously();
 
-	REQUIRE(allocated.find(p0) == allocated.end());
-	REQUIRE(allocated.find(p1) == allocated.end());
-	REQUIRE(allocated.find(p2) == allocated.end());
+	REQUIRE(!allocator->has(p0));
+	REQUIRE(!allocator->has(p1));
+	REQUIRE(!allocator->has(p2));
 }
 /*
 TEST_CASE("monitored memory allocation", "[gc]")
