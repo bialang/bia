@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../encoder.hpp"
-#include "unicode.hpp"
+#include "../unicode.hpp"
 
 #include <exception/char_encoding_exception.hpp>
 #include <exception/length_encoding_exception.hpp>

@@ -1,12 +1,11 @@
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
 
 #include <catch.hpp>
+#include <string/encoding/unicode.hpp>
 
-#include <string/encoding/standard/unicode.hpp>
+using namespace bia::string::encoding;
 
-using namespace bia::string::encoding::standard;
-
-TEST_CASE("standard unicode", "[string][encoding][standrad][benchmark]")
+TEST_CASE("standard unicode", "[string][encoding][benchmark]")
 {
 	BENCHMARK("category of: a")
 	{
