@@ -28,7 +28,11 @@ function(create_tests NAME)
 		target_include_directories("${NAME}_test"
 			PUBLIC ${CATCH_INCLUDE_DIRS})
 
-		add_test(${NAME} "${NAME}_test" "~[benchmark]")
+		if(BIA_BUILD_BENCHMARKS)
+			add_test(${NAME} "${NAME}_test")
+		else()
+			add_test(${NAME} "${NAME}_test" "~[benchmark]")
+		endif()
 	endif()
 endfunction()
 
@@ -44,6 +48,7 @@ if(BIA_BUILD_TESTS)
 	include(CTest)
 	set(CATCH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Catch2")
 	enable_testing()
+	option(BIA_BUILD_BENCHMARKS "Build additional benchmark tests." OFF)
 endif()
 
 # Add Bia library
