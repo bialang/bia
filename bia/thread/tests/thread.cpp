@@ -2,6 +2,7 @@
 
 #include <catch.hpp>
 #include <thread/thread.hpp>
+#include <exception/interrupt_exception.hpp>
 
 using namespace bia::thread;
 
@@ -16,4 +17,17 @@ TEST_CASE("testing thread", "[thread]")
 	t.join();
 
 	REQUIRE(t0 == 30);
+}
+
+TEST_CASE("interupting", "[thread]")
+{
+	auto mt = thread::current_thread();
+
+	thread t([&] { mt.interrupt(); });
+
+	t.start();
+
+	REQUIRE_THROWS_AS(thread::sleep(~std::uintmax_t(0)), bia::exception::interrupt_exception);
+
+	t.join();
 }

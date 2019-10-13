@@ -78,6 +78,11 @@ thread thread::current_thread()
 
 	// create thread
 	if (result == impl::threads.end()) {
+		thread t;
+
+		impl::threads.insert({ std::this_thread::get_id(), t });
+
+		return t;
 	}
 
 	return result->second;
@@ -135,7 +140,7 @@ void thread::interrupt()
 {
 	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
 
-	if (pimpl->alive) {
+	if (pimpl->started) {
 		pimpl->interrupted = true;
 	}
 }
@@ -170,6 +175,11 @@ bool thread::interrupted() const noexcept
 	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
 
 	return pimpl->interrupted;
+}
+
+thread::thread() : pimpl(new impl({}))
+{
+	pimpl->started = true;
 }
 
 } // namespace thread

@@ -34,6 +34,8 @@ private:
 	struct impl;
 
 	std::shared_ptr<impl> pimpl;
+
+	thread();
 };
 
 } // namespace thread
