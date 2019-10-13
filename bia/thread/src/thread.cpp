@@ -58,12 +58,18 @@ void thread::yield()
 void thread::sleep(std::uintmax_t duration)
 {
 	auto t = current_thread();
-
 	std::unique_lock<decltype(impl::mutex)> lock(t.pimpl->mutex);
+	auto was_interrupted = true;
+
+	if (duration) {
+		was_interrupted = t.pimpl->cv.wait_for(lock, std::chrono::duration<std::uintmax_t, std::milli>(duration),
+											   [&t] { return t.pimpl->interrupted; });
+	} else {
+		t.pimpl->cv.wait(lock, [&t] { return t.pimpl->interrupted; });
+	}
 
 	// sleep was interrupted
-	if (t.pimpl->cv.wait_for(lock, std::chrono::duration<std::uintmax_t, std::milli>(duration),
-							 [&t] { return t.pimpl->interrupted; })) {
+	if (was_interrupted) {
 		// consume and throw
 		t.pimpl->interrupted = false;
 
@@ -142,6 +148,7 @@ void thread::interrupt()
 
 	if (pimpl->started) {
 		pimpl->interrupted = true;
+		pimpl->cv.notify_one();
 	}
 }
 
@@ -151,6 +158,7 @@ void thread::daemon(bool daemon)
 
 	// thread was already started
 	if (pimpl->started) {
+		throw;
 	}
 
 	pimpl->daemon = daemon;

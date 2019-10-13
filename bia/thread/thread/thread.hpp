@@ -17,7 +17,7 @@ public:
 	 Blocks the execution of the current thread for `duration` milliseconds. If the thread is interrupted an exception
 	 is thrown.
 
-	 @param duration is the length of the sleep in milliseconds
+	 @param duration is the length of the sleep in milliseconds; passing `0` caueses the thread to block indefinitely until it is interrupted
 	 @throws exception::interrupt_exception if the thread was interrupted
 	*/
 	static void sleep(std::uintmax_t duration);

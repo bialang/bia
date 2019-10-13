@@ -27,7 +27,7 @@ TEST_CASE("interupting", "[thread]")
 
 	t.start();
 
-	REQUIRE_THROWS_AS(thread::sleep(~std::uintmax_t(0)), bia::exception::interrupt_exception);
+	REQUIRE_THROWS_AS(thread::sleep(0), bia::exception::interrupt_exception);
 
 	t.join();
 }
