@@ -7,7 +7,7 @@ file(GLOB_RECURSE THREAD_SOURCE_FILES
 add_library("thread" STATIC
 	${THREAD_SOURCE_FILES})
 list(APPEND LINK_LIBS
-	INTERFACE "exception")
+	PUBLIC "exception")
 
 # Thread backend
 set(BIA_THREAD_BACKEND "std::thread"
@@ -22,9 +22,9 @@ if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
 	list(APPEND LINK_LIBS
 		PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 elseif(${BIA_THREAD_BACKEND} STREQUAL "boost::thread")
-    set(BIA_THREAD_BACKEND_BOOST ON)
+	set(BIA_THREAD_BACKEND_BOOST ON)
 else()
-    set(BIA_THREAD_BACKEND_NONE ON)
+	set(BIA_THREAD_BACKEND_NONE ON)
 endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.in"
