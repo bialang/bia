@@ -1,14 +1,14 @@
 #pragma once
 
-#include "error.hpp"
+#include "exception.hpp"
 
 namespace bia {
 namespace exception {
 
-class invalid_op_code_error : public error
+class invalid_op_code_exception : public exception
 {
 public:
-	using error::error;
+	using exception::exception;
 };
 
 } // namespace exception
