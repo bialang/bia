@@ -135,13 +135,11 @@ TEST_CASE("size_of", "[type_traits][util]")
 
 TEST_CASE("equals_any", "[type_traits][util]")
 {
-	REQUIRE(equals_any<int, 0>::value == false);
-	REQUIRE(equals_any<int, 0, 1, 2>::value == false);
-	REQUIRE(equals_any<int, 0, 1, 2, 3, 0>::value == true);
-	REQUIRE(equals_any<int, 0, 1, 2, 3, 0, 2, 6>::value == true);
+	REQUIRE(equals_any<int, 0, 1, 2>::value == 0);
+	REQUIRE(equals_any<int, 0, 1, 2, 3, 0>::value == 4);
+	REQUIRE(equals_any<int, 0, 1, 2, 3, 0, 2, 6>::value == 4);
 
-	REQUIRE(equals_any_type<void>::value == false);
-	REQUIRE(equals_any_type<void, int, float>::value == false);
-	REQUIRE(equals_any_type<void, int, float, void>::value == true);
-	REQUIRE(equals_any_type<void, int, float, void, int>::value == true);
+	REQUIRE(equals_any_type<void, int, float>::value == 0);
+	REQUIRE(equals_any_type<void, int, float, void>::value == 3);
+	REQUIRE(equals_any_type<void, int, float, void, int>::value == 3);
 }
