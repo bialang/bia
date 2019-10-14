@@ -40,11 +40,7 @@ public:
 	*/
 	bytecode::op_code_type next_op_code() noexcept
 	{
-		auto op_code = util::from_little_endian<bytecode::op_code_type>(cursor);
-
-		cursor += sizeof(bytecode::op_code_type);
-
-		return op_code;
+		return read<bytecode::op_code_type>();
 	}
 	instruction_pointer& operator+=(std::int32_t offset)
 	{
@@ -54,6 +50,8 @@ public:
 		if (cursor < start || cursor > end) {
 			throw;
 		}
+
+		return *this;
 	}
 	operator bool() const noexcept
 	{

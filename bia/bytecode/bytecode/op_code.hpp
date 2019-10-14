@@ -21,6 +21,9 @@ struct string_index
 struct test_register
 {};
 
+struct accumulator_register
+{};
+
 enum MEMBER_OP_CODE_OPTION
 {
 	MOCO_COUNT
@@ -42,6 +45,7 @@ enum IMMEDIATE_OP_CODE_OPTION
 	IOCO_FLOAT,			// a constant 64 bit double precision IEEE 754 floating point value
 	IOCO_TEST_REGISTER, // the current value in the test register
 	IOCO_STRING,		// a string
+	IOCO_ACCUMULATOR,   // the current value in the accumulator
 
 	IOCO_COUNT
 };
@@ -55,7 +59,9 @@ enum OP_CODE : op_code_type
 	OC_JUMP		 = OC_RETURN_VOID + IIOCO_COUNT, // jumps to a relative location
 	OC_JUMP_TRUE = OC_JUMP + IIOCO_COUNT, // jumps to a relative location if the test register evaluates to `true`
 	OC_JUMP_FALSE =
-		OC_JUMP_TRUE + IIOCO_COUNT, // jumps to a relative location if the test register evaluates to `false`
+		OC_JUMP_TRUE + IIOCO_COUNT,		   // jumps to a relative location if the test register evaluates to `false`
+	OC_CALL = OC_JUMP_FALSE + IIOCO_COUNT, // calls the function in the accumulator with n parameters
+	OC_POP  = OC_CALL + IIOCO_COUNT,	   // pops n elements from the stack
 
 	/* immediate instruction */
 	OC_PUSH_IMMEDIATE   = OC_JUMP_FALSE + IOCO_COUNT,	 // pushes an immediate value
@@ -65,6 +71,7 @@ enum OP_CODE : op_code_type
 	OC_PUSH_MEMBER   = OC_RETURN_IMMEDIATE + MOCO_COUNT,
 	OC_RETURN_MEMBER = OC_PUSH_MEMBER + MOCO_COUNT,
 	OC_TEST			 = OC_RETURN_MEMBER + MOCO_COUNT,
+	OC_LOAD			 = OC_TEST + MOCO_COUNT, // loads the member into the accumulator
 
 	/* member-immeadiate instruction */
 	OC_INSTANTIATE = OC_TEST + MOCO_COUNT * IOCO_COUNT, // instantiates a member with the given immediate

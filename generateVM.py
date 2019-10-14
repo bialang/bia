@@ -1,36 +1,42 @@
 import re
 
+accumulator = "gc_token.root_at(0)[0]"
+
 ptype = [
 	("OC_RETURN_VOID", "goto gt_return;", "ret")
 ]
 inttype = [
 	("OC_JUMP", "instruction_ptr += {};", "jmp"),
 	("OC_JUMP_TRUE", "instruction_ptr += test_register ? {} : 0;", "jpt"),
-	("OC_JUMP_FALSE", "instruction_ptr += test_register ? 0 : {};", "jpf")
+	("OC_JUMP_FALSE", "instruction_ptr += test_register ? 0 : {};", "jpf"),
+	("OC_CALL", "{0} = {0}.get()->call(stack, {{}});".format(accumulator), "call"),
+	("OC_POP", "stack.pop({});", "pop")
 ]
 itype = [
-	("OC_PUSH_IMMEDIATE", "", "push"),
+	("OC_PUSH_IMMEDIATE", 'myprint("pushing", {});', "push"),
 	("OC_RETURN_IMMEDIATE", "", "ret")
 ]
 mtype = [
 	("OC_PUSH_MEMBER", "", "push"),
 	("OC_RETURN_MEMBER", "", "ret"),
-	("OC_TEST", "test_register = {}->test();", "test")
+	("OC_TEST", "test_register = static_cast<bool>({}->test());", "test"),
+	("OC_LOAD", "{} = {{}};".format(accumulator), "load")
 ]
 
 mvars = [
 ]
 intvars = [
-	("IIOCO_INT32", "auto {} = instruction_ptr.read<int32_t>();"),
-	("IIOCO_INT8", "auto {} = instruction_ptr.read<int8_t>();")
+	("IIOCO_INT32", "auto {} = instruction_ptr.read<std::int32_t>();"),
+	("IIOCO_INT8", "auto {} = instruction_ptr.read<std::int8_t>();")
 ]
 ivars = [
+	("IOCO_ACCUMULATOR", "auto& {} = gc_token.root_at(0)[0];"),
 	("IOCO_STRING", "auto {} = \"some placeholder\";"),
 	("IOCO_TEST_REGISTER", "auto {} = test_register;"),
-	("IOCO_FLOAT", "auto {} = instruction_ptr.read<double>();"),
-	("IOCO_INT64", "auto {} = instruction_ptr.read<int64_t>();"),
-	("IOCO_INT32", "auto {} = instruction_ptr.read<int32_t>();"),
-	("IOCO_INT8", "auto {} = instruction_ptr.read<int8_t>();")
+	("IOCO_FLOAT", "auto {} = instruction_ptr.read</*placeholder*/std::int64_t>();"),
+	("IOCO_INT64", "auto {} = instruction_ptr.read<std::int64_t>();"),
+	("IOCO_INT32", "auto {} = instruction_ptr.read<std::int32_t>();"),
+	("IOCO_INT8", "auto {} = instruction_ptr.read<std::int8_t>();")
 ]
 
 o = open("vmcode.generated", "w")
