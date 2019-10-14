@@ -5,7 +5,7 @@
 namespace bia {
 namespace bytecode {
 
-typedef int op_code_type;
+typedef std::uint8_t op_code_type;
 constexpr auto max_instruction_size = 2;
 
 struct string_index
@@ -34,9 +34,9 @@ enum IMMEDIATE_INT_OP_CODE_OPTION
 	IIOCO_COUNT
 };
 
-enum IMMEADIATE_OP_CODE_OPTION
+enum IMMEDIATE_OP_CODE_OPTION
 {
-	ICOC_INT8,			// a constant 8 bit value
+	IOCO_INT8,			// a constant 8 bit value
 	IOCO_INT32,			// a constant 32 bit value
 	IOCO_INT64,			// a constant 64 bit value
 	IOCO_FLOAT,			// a constant 64 bit double precision IEEE 754 floating point value
