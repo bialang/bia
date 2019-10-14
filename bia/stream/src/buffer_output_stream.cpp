@@ -4,11 +4,12 @@
 namespace bia {
 namespace stream {
 
-bia::stream::buffer_output_stream::buffer_output_stream(bia::gc::memory_allocator& allocator) noexcept : allocator(allocator)
+bia::stream::buffer_output_stream::buffer_output_stream(bia::gc::memory_allocator& allocator) noexcept
+	: allocator(allocator)
 {
-	current_size	= 0;
-	max_size		= 0;
-	buffer			= nullptr;
+	current_size = 0;
+	max_size	 = 0;
+	buffer		 = nullptr;
 }
 
 buffer_output_stream::buffer_output_stream(buffer_output_stream&& move) noexcept : allocator(move.allocator)
@@ -35,15 +36,17 @@ void buffer_output_stream::write(const void* buffer, std::size_t size)
 		reserve(size);
 	}
 
-	std::memcpy(this->buffer, buffer, size);
+	std::memcpy(this->buffer + current_size, buffer, size);
+
+	current_size += size;
 }
 
 void buffer_output_stream::reserve(std::size_t additional_size)
 {
 	const auto end = current_size + additional_size;
-	auto new_max   = max_size;
+	auto new_max   = max_size ? max_size : additional_size;
 
-	while (end > new_max) {
+	while (end >= new_max) {
 		new_max *= 2;
 	}
 
@@ -71,9 +74,9 @@ std::tuple<void*, std::size_t, std::size_t> buffer_output_stream::take_buffer() 
 {
 	std::tuple<void*, std::size_t, std::size_t> tmp(buffer, current_size, max_size);
 
-	buffer = nullptr;
+	buffer		 = nullptr;
 	current_size = 0;
-	max_size = 0;
+	max_size	 = 0;
 
 	return tmp;
 }
