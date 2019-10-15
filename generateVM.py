@@ -3,7 +3,7 @@ import re
 accumulator = "gc_token.root_at(0)[0]"
 
 ptype = [
-	("OC_RETURN_VOID", "goto gt_return;", "ret")
+	("OC_RETURN_VOID", "return;", "ret")
 ]
 inttype = [
 	("OC_JUMP", "instruction_ptr += {};", "jmp"),
@@ -13,7 +13,7 @@ inttype = [
 	("OC_POP", "stack.pop({});", "pop")
 ]
 itype = [
-	("OC_PUSH_IMMEDIATE", 'myprint("pushing", {});', "push"),
+	("OC_PUSH_IMMEDIATE", 'stack.push({});', "push"),
 	("OC_RETURN_IMMEDIATE", "", "ret")
 ]
 mtype = [
@@ -66,9 +66,9 @@ def write_case(op_code, vmcode, name, *args):
 		names.append("x{}".format(i))
 		code += v[1].format(names[i]) + "\n"
 
-	code += vmcode.format(*names)
+	code += vmcode if vmcode == "return;" else vmcode.format(*names) + "\nbreak;";
 
-	write("case {case}: {{\n{code}\nbreak;\n}}".format(case=make_case(op_code, *args), code=code))
+	write("case {case}: {{\n{code}\n}}".format(case=make_case(op_code, *args), code=code))
 
 
 write("switch (instruction_ptr.next_op_code()) {\n/** P-Type */\n")

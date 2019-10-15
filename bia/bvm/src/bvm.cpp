@@ -1,87 +1,121 @@
 #include <bvm/bvm.hpp>
 #include <bvm/instruction_pointer.hpp>
-#include <member/member.hpp>
+#include <bytecode/op_code.hpp>
 #include <exception/invalid_op_code_exception.hpp>
 
 namespace bia {
 namespace bvm {
 
+using namespace bytecode;
+
 void bvm::execute(context& context, const compiler::code& code)
 {
 	instruction_pointer instruction_ptr(code.begin(), code.end());
-	const auto gc = context.gc();
-	member::member::bool_type test_register = 0;
+	auto& gc			   = context.gc();
+	auto& stack			   = context.stack();
+	const auto stack_frame = stack.create_frame();
+	auto test_register	 = false;
 
 	// register and allocate members
-	auto gc_token = gc->register_thread(code.temp_member_count(), code.local_member_count());
+	auto gc_token = gc.register_thread(code.temp_member_count() + 1 /* plus 1 because of the accumulator */,
+										code.local_member_count());
 
 	while (instruction_ptr) {
 		/* auto-generated switch for evaluating byte code instructions */
 		switch (instruction_ptr.next_op_code()) {
 		/** P-Type */
 		case OC_RETURN_VOID: {
-			goto gt_return;
-			break;
+			return;
 		}
 		/** int-Type */
 		case (OC_JUMP - IIOCO_INT32): {
-			auto x0 = instruction_ptr.read<int32_t>();
+			auto x0 = instruction_ptr.read<std::int32_t>();
 			instruction_ptr += x0;
 			break;
 		}
 		case (OC_JUMP - IIOCO_INT8): {
-			auto x0 = instruction_ptr.read<int8_t>();
+			auto x0 = instruction_ptr.read<std::int8_t>();
 			instruction_ptr += x0;
 			break;
 		}
 		case (OC_JUMP_TRUE - IIOCO_INT32): {
-			auto x0 = instruction_ptr.read<int32_t>();
+			auto x0 = instruction_ptr.read<std::int32_t>();
 			instruction_ptr += test_register ? x0 : 0;
 			break;
 		}
 		case (OC_JUMP_TRUE - IIOCO_INT8): {
-			auto x0 = instruction_ptr.read<int8_t>();
+			auto x0 = instruction_ptr.read<std::int8_t>();
 			instruction_ptr += test_register ? x0 : 0;
 			break;
 		}
 		case (OC_JUMP_FALSE - IIOCO_INT32): {
-			auto x0 = instruction_ptr.read<int32_t>();
+			auto x0 = instruction_ptr.read<std::int32_t>();
 			instruction_ptr += test_register ? 0 : x0;
 			break;
 		}
 		case (OC_JUMP_FALSE - IIOCO_INT8): {
-			auto x0 = instruction_ptr.read<int8_t>();
+			auto x0 = instruction_ptr.read<std::int8_t>();
 			instruction_ptr += test_register ? 0 : x0;
 			break;
 		}
+		case (OC_CALL - IIOCO_INT32): {
+			auto x0				   = instruction_ptr.read<std::int32_t>();
+			gc_token.root_at(0)[0] = gc_token.root_at(0)[0].get()->call(stack, x0);
+			break;
+		}
+		case (OC_CALL - IIOCO_INT8): {
+			auto x0				   = instruction_ptr.read<std::int8_t>();
+			gc_token.root_at(0)[0] = gc_token.root_at(0)[0].get()->call(stack, x0);
+			break;
+		}
+		case (OC_POP - IIOCO_INT32): {
+			auto x0 = instruction_ptr.read<std::int32_t>();
+			stack.pop(x0);
+			break;
+		}
+		case (OC_POP - IIOCO_INT8): {
+			auto x0 = instruction_ptr.read<std::int8_t>();
+			stack.pop(x0);
+			break;
+		}
 		/** I-Type */
+		case (OC_PUSH_IMMEDIATE - IOCO_ACCUMULATOR): {
+			auto& x0 = gc_token.root_at(0)[0];
+			stack.push(x0);
+			break;
+		}
 		case (OC_PUSH_IMMEDIATE - IOCO_STRING): {
 			auto x0 = "some placeholder";
-
+			stack.push(x0);
 			break;
 		}
 		case (OC_PUSH_IMMEDIATE - IOCO_TEST_REGISTER): {
 			auto x0 = test_register;
-
+			stack.push(x0);
 			break;
 		}
 		case (OC_PUSH_IMMEDIATE - IOCO_FLOAT): {
-			auto x0 = instruction_ptr.read<double>();
-
+			auto x0 = instruction_ptr.read</*placeholder*/ std::int64_t>();
+			stack.push(x0);
 			break;
 		}
 		case (OC_PUSH_IMMEDIATE - IOCO_INT64): {
-			auto x0 = instruction_ptr.read<int64_t>();
-
+			auto x0 = instruction_ptr.read<std::int64_t>();
+			stack.push(x0);
 			break;
 		}
 		case (OC_PUSH_IMMEDIATE - IOCO_INT32): {
-			auto x0 = instruction_ptr.read<int32_t>();
-
+			auto x0 = instruction_ptr.read<std::int32_t>();
+			stack.push(x0);
 			break;
 		}
 		case (OC_PUSH_IMMEDIATE - IOCO_INT8): {
-			auto x0 = instruction_ptr.read<int8_t>();
+			auto x0 = instruction_ptr.read<std::int8_t>();
+			stack.push(x0);
+			break;
+		}
+		case (OC_RETURN_IMMEDIATE - IOCO_ACCUMULATOR): {
+			auto& x0 = gc_token.root_at(0)[0];
 
 			break;
 		}
@@ -96,22 +130,22 @@ void bvm::execute(context& context, const compiler::code& code)
 			break;
 		}
 		case (OC_RETURN_IMMEDIATE - IOCO_FLOAT): {
-			auto x0 = instruction_ptr.read<double>();
+			auto x0 = instruction_ptr.read</*placeholder*/ std::int64_t>();
 
 			break;
 		}
 		case (OC_RETURN_IMMEDIATE - IOCO_INT64): {
-			auto x0 = instruction_ptr.read<int64_t>();
+			auto x0 = instruction_ptr.read<std::int64_t>();
 
 			break;
 		}
 		case (OC_RETURN_IMMEDIATE - IOCO_INT32): {
-			auto x0 = instruction_ptr.read<int32_t>();
+			auto x0 = instruction_ptr.read<std::int32_t>();
 
 			break;
 		}
 		case (OC_RETURN_IMMEDIATE - IOCO_INT8): {
-			auto x0 = instruction_ptr.read<int8_t>();
+			auto x0 = instruction_ptr.read<std::int8_t>();
 
 			break;
 		}
@@ -120,8 +154,6 @@ void bvm::execute(context& context, const compiler::code& code)
 		}
 		/* auto-generated switch for evaluating byte code instructions */
 	}
-
-gt_return:;
 }
 
 } // namespace bvm

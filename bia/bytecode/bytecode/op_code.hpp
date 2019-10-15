@@ -64,7 +64,7 @@ enum OP_CODE : op_code_type
 	OC_POP  = OC_CALL + IIOCO_COUNT,	   // pops n elements from the stack
 
 	/* immediate instruction */
-	OC_PUSH_IMMEDIATE   = OC_JUMP_FALSE + IOCO_COUNT,	 // pushes an immediate value
+	OC_PUSH_IMMEDIATE   = OC_POP + IOCO_COUNT,			  // pushes an immediate value
 	OC_RETURN_IMMEDIATE = OC_PUSH_IMMEDIATE + IOCO_COUNT, // returns an immediate
 
 	/* member instruction */
