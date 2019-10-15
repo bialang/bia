@@ -19,7 +19,11 @@ public:
 		run = true;
 	}
 	finally(const finally& copy) = delete;
-	finally(finally&& move)		 = default;
+	finally(finally&& move) : lambda(std::move(move.lambda))
+	{
+		run		 = move.run;
+		move.run = false;
+	}
 	~finally()
 	{
 		if (run) {
