@@ -1,11 +1,6 @@
 project("string"
 		LANGUAGES CXX)
 
-file(GLOB_RECURSE STRING_SOURCE_FILES
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-
-add_library("string" STATIC
-	${STRING_SOURCE_FILES})
 list(APPEND LINK_LIBS
 	PUBLIC "gc")
 
@@ -36,10 +31,5 @@ endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.in"
 	"${CMAKE_CURRENT_SOURCE_DIR}/string/config.hpp")
-
-target_include_directories("string"
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries("string"
-	${LINK_LIBS})
-
-create_tests("string")
+	
+create_library(STATIC ${LINK_LIBS})

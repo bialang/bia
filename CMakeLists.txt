@@ -16,10 +16,10 @@ function(download_submodule_library LIB_NAME)
 	endif()
 endfunction()
 
-function(create_tests NAME)
+function(create_tests NAME PATH)
 	if(BIA_BUILD_TESTS)
 		file(GLOB_RECURSE TMP_SOURCE_FILES
-			"${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
+			"${PATH}/*.cpp")
 
 		add_executable("${NAME}_test"
 			${TMP_SOURCE_FILES})

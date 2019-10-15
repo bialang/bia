@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../member.hpp"
-
 #include <gc/gc.hpp>
+#include <member_interface/member.hpp>
 #include <string/string.hpp>
 
 namespace bia {

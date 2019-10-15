@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../member.hpp"
-
 #include <cstdint>
+#include <member_interface/member.hpp>
 
 namespace bia {
 namespace member {

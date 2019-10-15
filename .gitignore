@@ -17,3 +17,4 @@ main
 Bia/config_cmake.hpp
 out/
 CMakeSettings.json
+doc/

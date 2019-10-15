@@ -1,11 +1,6 @@
 project("thread"
 		LANGUAGES CXX)
 
-file(GLOB_RECURSE THREAD_SOURCE_FILES
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-
-add_library("thread" STATIC
-	${THREAD_SOURCE_FILES})
 list(APPEND LINK_LIBS
 	PUBLIC "exception")
 
@@ -29,10 +24,5 @@ endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.in"
 	"${CMAKE_CURRENT_SOURCE_DIR}/thread/config.hpp")
-
-target_include_directories("thread"
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries("thread"
-	${LINK_LIBS})
-
-create_tests("thread")
+	
+create_library(STATIC ${LINK_LIBS})
