@@ -9,20 +9,21 @@ namespace bvm {
 class context
 {
 public:
-	context(gc::gc& g)
-	{
-		this->g = &g;
-	}
+	context(stack::stack& s, gc::gc& g) : s(s), g(g)
+	{}
 
 	stack::stack& stack() noexcept
-	{}
+	{
+		return s;
+	}
 	gc::gc& gc() noexcept
 	{
 		return g;
 	}
 
 private:
-	gc::gc* g;
+	stack::stack& s;
+	gc::gc& g;
 };
 
 } // namespace bvm
