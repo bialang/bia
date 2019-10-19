@@ -67,7 +67,7 @@ public:
 		 @param[out] dest defines the destination
 		 @param src defines the source
 		*/
-		void set_object_ptr(object_ptr& dest, object_ptr& src)
+		void set(object_ptr& dest, object_ptr& src)
 		{
 			thread::shared_lock<decltype(g->mutex)> lock(g->mutex);
 
@@ -83,7 +83,7 @@ public:
 		 @param[out] dest defines the destination
 		 @param src defines the source
 		*/
-		void set_object_ptr(object_ptr& dest, void* src)
+		void set(object_ptr& dest, void* src)
 		{
 			thread::shared_lock<decltype(g->mutex)> lock(g->mutex);
 
@@ -95,7 +95,7 @@ public:
 		}
 		void set(std::size_t root_index, std::size_t index, void* src)
 		{
-			set_object_ptr(roots[root_index][index], src);
+			set(roots[root_index][index], src);
 		}
 		root& root_at(std::size_t index) noexcept
 		{
