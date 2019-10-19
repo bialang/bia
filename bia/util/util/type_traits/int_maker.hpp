@@ -35,9 +35,17 @@ struct int_sequencer : int_sequencer<T, Counter + 1, Stop, Ints..., Counter>
 
 /* starter */
 template<typename T, T Start, T Stop>
-struct int_sequencer<T, Start, Stop>
+struct int_sequencer<T, Start, Stop> : int_sequencer<T, Start + 1, Stop, Start>
 {
 	constexpr static auto count = Stop - Start;
+	typedef T int_type;
+};
+
+template<typename T, T Stop>
+struct int_sequencer<T, Stop, Stop>
+{
+	constexpr static auto count = 0;
+	constexpr static int_container<T> values{};
 	typedef T int_type;
 };
 
