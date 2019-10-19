@@ -49,8 +49,8 @@ public:
 	{
 		this->allocator = allocator;
 		current_size	= 0;
-		max_size		= size / sizeof(buffer_type) * sizeof(buffer_type);
-		buffer			= static_cast<buffer_type*>(allocator->allocate(max_size, 0));
+		max_size		= size / sizeof(buffer_type);
+		buffer			= static_cast<buffer_type*>(allocator->allocate(max_size * sizeof(buffer_type), 0));
 	}
 	frame create_frame() noexcept
 	{

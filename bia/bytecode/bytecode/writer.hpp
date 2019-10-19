@@ -64,7 +64,7 @@ inline void write_end(stream::output_stream& output)
 {
 	forward_end(
 		output,
-		util::type_traits::int_maker<op_code_type, (max_instruction_size / sizeof(op_code_type) + sizeof(op_code_type)),
+		util::type_traits::int_filler<op_code_type, (max_instruction_size / sizeof(op_code_type) + sizeof(op_code_type)),
 									 OC_RETURN_VOID>::values);
 }
 
