@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cstdint>
-#include <gc/object.hpp>
+#include <gc/gc.hpp>
 #include <typeinfo>
+#include <stack/stack.hpp>
 
 namespace bia {
 namespace member {
@@ -13,7 +14,7 @@ namespace member {
 class member : public gc::object
 {
 public:
-	typedef unsigned int parameter_count_type;
+	typedef unsigned int param_count_type;
 	typedef int operator_type;
 	/* the flag type */
 	typedef int flag_type;
@@ -25,6 +26,7 @@ public:
 	*/
 	enum FLAG : flag_type
 	{
+		F_NONE = 0,
 		/* describes that this member can be mutated */
 		F_MUTABLE = 0x1,
 	};
@@ -49,6 +51,14 @@ public:
 	 @returns a deep copy
 	*/
 	virtual member* deep_copy() const = 0;
+	/*
+	 Calls this member with `param_count` parameters from the stack.
+
+	 @param[in] stack is the machine stack
+	 @param param_count the amount of parameters to pass
+	 @returns the return value of the function call
+	*/
+	virtual member* call(stack::stack* stack, std::int32_t param_count) = 0;
 	/*
 	 Tests this member.
 

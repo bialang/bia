@@ -2,6 +2,7 @@
 #include <bvm/instruction_pointer.hpp>
 #include <bytecode/op_code.hpp>
 #include <exception/invalid_op_code_exception.hpp>
+#include <member/member.hpp>
 
 namespace bia {
 namespace bvm {
@@ -58,16 +59,6 @@ void bvm::execute(context& context, const compiler::code& code)
 			instruction_ptr += test_register ? 0 : x0;
 			break;
 		}
-		case (OC_CALL - IIOCO_INT32): {
-			auto x0				   = instruction_ptr.read<std::int32_t>();
-			gc_token.root_at(0)[0] = gc_token.root_at(0)[0].get()->call(stack, x0);
-			break;
-		}
-		case (OC_CALL - IIOCO_INT8): {
-			auto x0				   = instruction_ptr.read<std::int8_t>();
-			gc_token.root_at(0)[0] = gc_token.root_at(0)[0].get()->call(stack, x0);
-			break;
-		}
 		case (OC_POP - IIOCO_INT32): {
 			auto x0 = instruction_ptr.read<std::int32_t>();
 			stack.pop(x0);
@@ -79,11 +70,6 @@ void bvm::execute(context& context, const compiler::code& code)
 			break;
 		}
 		/** I-Type */
-		case (OC_PUSH_IMMEDIATE - IOCO_ACCUMULATOR): {
-			auto& x0 = gc_token.root_at(0)[0];
-			stack.push(x0);
-			break;
-		}
 		case (OC_PUSH_IMMEDIATE - IOCO_STRING): {
 			auto x0 = "some placeholder";
 			stack.push(x0);
@@ -112,11 +98,6 @@ void bvm::execute(context& context, const compiler::code& code)
 		case (OC_PUSH_IMMEDIATE - IOCO_INT8): {
 			auto x0 = instruction_ptr.read<std::int8_t>();
 			stack.push(x0);
-			break;
-		}
-		case (OC_RETURN_IMMEDIATE - IOCO_ACCUMULATOR): {
-			auto& x0 = gc_token.root_at(0)[0];
-
 			break;
 		}
 		case (OC_RETURN_IMMEDIATE - IOCO_STRING): {
@@ -150,6 +131,197 @@ void bvm::execute(context& context, const compiler::code& code)
 			break;
 		}
 		/** M-Type */
+		case (OC_PUSH_MEMBER - MOCO_TEMP): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+
+			break;
+		}
+		case (OC_PUSH_MEMBER - MOCO_TINY_TEMP): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+
+			break;
+		}
+		case (OC_RETURN_MEMBER - MOCO_TEMP): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+
+			break;
+		}
+		case (OC_RETURN_MEMBER - MOCO_TINY_TEMP): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+
+			break;
+		}
+		case (OC_TEST - MOCO_TEMP): {
+			auto& x0	  = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			test_register = static_cast<bool>(x0.get<member::member>()->test());
+			break;
+		}
+		case (OC_TEST - MOCO_TINY_TEMP): {
+			auto& x0	  = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			test_register = static_cast<bool>(x0.get<member::member>()->test());
+			break;
+		}
+		/** MMintint-Type */
+		case (OC_CALL -
+			  (((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32) * IIOCO_COUNT + IIOCO_INT32)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto x2  = instruction_ptr.read<std::int32_t>();
+			auto x3  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32) * IIOCO_COUNT + IIOCO_INT8)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto x2  = instruction_ptr.read<std::int32_t>();
+			auto x3  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8) * IIOCO_COUNT + IIOCO_INT32)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto x2  = instruction_ptr.read<std::int8_t>();
+			auto x3  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8) * IIOCO_COUNT + IIOCO_INT8)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto x2  = instruction_ptr.read<std::int8_t>();
+			auto x3  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32) * IIOCO_COUNT + IIOCO_INT32)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto x2  = instruction_ptr.read<std::int32_t>();
+			auto x3  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32) * IIOCO_COUNT + IIOCO_INT8)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto x2  = instruction_ptr.read<std::int32_t>();
+			auto x3  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8) * IIOCO_COUNT + IIOCO_INT32)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto x2  = instruction_ptr.read<std::int8_t>();
+			auto x3  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8) * IIOCO_COUNT + IIOCO_INT8)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto x2  = instruction_ptr.read<std::int8_t>();
+			auto x3  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32) * IIOCO_COUNT + IIOCO_INT32)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto x2  = instruction_ptr.read<std::int32_t>();
+			auto x3  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT32) * IIOCO_COUNT + IIOCO_INT8)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto x2  = instruction_ptr.read<std::int32_t>();
+			auto x3  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8) * IIOCO_COUNT + IIOCO_INT32)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto x2  = instruction_ptr.read<std::int8_t>();
+			auto x3  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL -
+			  (((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP) * IIOCO_COUNT + IIOCO_INT8) * IIOCO_COUNT + IIOCO_INT8)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto x2  = instruction_ptr.read<std::int8_t>();
+			auto x3  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL - (((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32) * IIOCO_COUNT +
+						 IIOCO_INT32)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto x2  = instruction_ptr.read<std::int32_t>();
+			auto x3  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL - (((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT32) * IIOCO_COUNT +
+						 IIOCO_INT8)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto x2  = instruction_ptr.read<std::int32_t>();
+			auto x3  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL - (((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8) * IIOCO_COUNT +
+						 IIOCO_INT32)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto x2  = instruction_ptr.read<std::int8_t>();
+			auto x3  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
+		case (OC_CALL - (((MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP) * IIOCO_COUNT + IIOCO_INT8) * IIOCO_COUNT +
+						 IIOCO_INT8)): {
+			auto& x0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& x1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto x2  = instruction_ptr.read<std::int8_t>();
+			auto x3  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(x0, x1.get<member::member>()->call(&stack, x2));
+			stack.pop(x3);
+			break;
+		}
 		default: BIA_THROW(exception::invalid_op_code_exception, u"invalid op code");
 		}
 		/* auto-generated switch for evaluating byte code instructions */
