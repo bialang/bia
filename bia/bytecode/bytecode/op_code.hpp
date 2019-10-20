@@ -6,7 +6,7 @@ namespace bia {
 namespace bytecode {
 
 typedef std::uint8_t op_code_type;
-constexpr auto max_instruction_size = 2;
+constexpr auto max_instruction_size = sizeof(op_code_type) + 16;
 
 struct string_index
 {
@@ -70,19 +70,19 @@ enum OP_CODE : op_code_type
 	OC_RETURN_MEMBER = OC_PUSH_MEMBER + MOCO_COUNT,
 	OC_TEST			 = OC_RETURN_MEMBER + MOCO_COUNT,
 
-	/* member-member-immediate int-immediate int instructions */
-	OC_CALL = OC_TEST + MOCO_COUNT * MOCO_COUNT * IIOCO_COUNT *
-							IIOCO_COUNT, // calls the function stored at p1 with p2  parameters and then pops p3
-										 // elements from the stack and saves the result to p0
-
 	/* member-immeadiate instruction */
-	OC_INSTANTIATE = OC_CALL + MOCO_COUNT * IOCO_COUNT, // instantiates a member with the given immediate
+	OC_INSTANTIATE = OC_TEST + MOCO_COUNT * IOCO_COUNT, // instantiates a member with the given immediate
 
 	/* member-member instructions */
 	OC_SHALLOW_COPY =
-		OC_INSTANTIATE + MOCO_COUNT * MOCO_COUNT, // makes a shallow copy of the second object to the first one
+		OC_INSTANTIATE + MOCO_COUNT * MOCO_COUNT, // makes a shallow copy of p1 and stores it in p0
 	OC_DEEP_COPY = OC_SHALLOW_COPY + MOCO_COUNT * MOCO_COUNT, // makes a deep copy of the second object to the first one
 	OC_REFER	 = OC_DEEP_COPY + MOCO_COUNT * MOCO_COUNT,	// makes a references
+
+	/* member-member-immediate int-immediate int instructions */
+	OC_CALL = OC_REFER + MOCO_COUNT * MOCO_COUNT * IIOCO_COUNT *
+							IIOCO_COUNT, // calls the function stored at p1 with p2  parameters and then pops p3
+										 // elements from the stack and saves the result to p0
 };
 
 } // namespace bytecode
