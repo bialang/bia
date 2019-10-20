@@ -5,6 +5,8 @@
 #include <exception/stack_overflow_exception.hpp>
 #include <gc/memory_allocator.hpp>
 #include <type_traits>
+#include <util/type_traits/type_at.hpp>
+#include <util/type_traits/type_maker.hpp>
 
 namespace bia {
 namespace stack {
@@ -18,7 +20,7 @@ public:
 	{
 	public:
 		frame(const frame& copy) = delete;
-		frame(frame&& move)
+		frame(frame&& move) noexcept
 		{
 			s	  = move.s;
 			old	= move.old;
@@ -99,12 +101,51 @@ public:
 	{
 		return push(reinterpret_cast<std::intptr_t>(pointer));
 	}
+	template<typename... T>
+	typename util::type_traits::type_at<sizeof...(T) - 1, T...>::type get(util::type_traits::type_container<T...>)
+	{
+		typedef typename util::type_traits::type_at<sizeof...(T) - 1, T...>::type type;
+		constexpr auto size = size_of<T...>();
+
+		if (current_size < size) {
+			BIA_THROW(exception::stack_overflow_exception, u"cannot extract more elements from the stack (underflow)");
+		}
+
+		type value{};
+
+		std::memcpy(&value, buffer + current_size - size, sizeof(type));
+
+		return value;
+	}
 
 private:
 	gc::memory_allocator* allocator;
 	buffer_type* buffer;
 	std::size_t current_size;
 	std::size_t max_size;
+
+	template<typename T>
+	constexpr static typename std::enable_if<(sizeof(T) < sizeof(buffer_type)), std::size_t>::type size_of()
+	{
+		return 1;
+	}
+	template<typename T>
+	constexpr static typename std::enable_if<(sizeof(T) >= sizeof(buffer_type) && sizeof(T) % sizeof(buffer_type) == 0),
+											 std::size_t>::type
+		size_of()
+	{
+		return sizeof(T) / sizeof(buffer_type);
+	}
+	template<typename T, typename... Ts>
+	constexpr static typename std::enable_if<sizeof...(Ts) != 0, std::size_t>::type size_of()
+	{
+		return size_of<T>() + size_of<Ts...>();
+	}
+	template<typename... Ts>
+	constexpr static typename std::enable_if<sizeof...(Ts) == 0, std::size_t>::type size_of()
+	{
+		return 0;
+	}
 };
 
 } // namespace stack
