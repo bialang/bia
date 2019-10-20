@@ -3,11 +3,14 @@
 #include <bytecode/op_code.hpp>
 #include <exception/invalid_op_code_exception.hpp>
 #include <member/member.hpp>
+#include <util/objects.hpp>
 
 namespace bia {
 namespace bvm {
 
 using namespace bytecode;
+template<typename T>
+using rnn = util::objects::require_non_null<T>;
 
 void bvm::execute(context& context, const compiler::code& code)
 {

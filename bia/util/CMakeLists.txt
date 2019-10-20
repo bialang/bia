@@ -1,4 +1,5 @@
 project("util"
 		LANGUAGES CXX)
 
-create_library(INTERFACE)
+create_library(INTERFACE
+	INTERFACE "exception")
