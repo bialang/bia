@@ -1,67 +1,69 @@
 cmake_minimum_required(VERSION 3.1)
 
-# Project info
-project(Bia)
-set(Bia_VERSION_MAJOR 3)
-set(Bia_VERSION_MINOR 60)
-set(CMAKE_MODULE_PATH "${CMAKE_PROGRAM_PATH}/cmake_mod")
-set(CMAKE_MODULE_PATH "")
+project("bialang"
+	LANGUAGES CXX)
 
-# Set C++14
-if(CMAKE_VERSION VERSION_LESS "3.1")
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14")
-  endif()
-else()
-  set(CMAKE_CXX_STANDARD 14)
+function(download_submodule_library LIB_NAME)
+	if(NOT EXISTS "${CMAKE_SOURCE_DIR}/dependencies/${LIB_NAME}")
+		if(NOT GIT_FOUND)
+			find_package(Git REQUIRED)
+		endif()
+
+		message("Downloading ${LIB_NAME}...")
+
+		execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --depth 1 -- "dependencies/${LIB_NAME}"
+			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+	endif()
+endfunction()
+
+function(create_tests NAME PATH)
+	if(BIA_BUILD_TESTS)
+		file(GLOB_RECURSE TMP_SOURCE_FILES
+			"${PATH}/*.cpp")
+
+		add_executable("${NAME}_test"
+			${TMP_SOURCE_FILES})
+		target_link_libraries("${NAME}_test"
+			PUBLIC ${NAME})
+		target_include_directories("${NAME}_test"
+			PUBLIC ${CATCH_INCLUDE_DIRS})
+
+		if(BIA_BUILD_BENCHMARKS)
+			add_test(${NAME} "${NAME}_test")
+		else()
+			add_test(${NAME} "${NAME}_test" "~[benchmark]")
+		endif()
+	endif()
+endfunction()
+
+set(CMAKE_CXX_STANDARD 11)
+
+option(BIA_BUILD_BIA_TOOL "Builds the command line tool for Bia." OFF)
+option(BUILD_SHARED_LIBS "Builds the Bia library as a shared library." ON)
+option(BIA_BUILD_TESTS "Builds the tests for the Bia library." ON)
+option(BIA_GENERATE_DOCUMENTATION "Generate the documentatio with Doxygen." OFF)
+
+# Enable testing
+if(BIA_BUILD_TESTS)
+	include(CTest)
+	set(CATCH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Catch2")
+	enable_testing()
+	option(BIA_BUILD_BENCHMARKS "Build additional benchmark tests." OFF)
 endif()
 
-# Project
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared library.")
-set(BIA_USE_OWN_UNICODE OFF CACHE BOOL "Whether to use own Unicode implementation instead of ICU. Not recommended.")
-set(BIA_USE_STD_REGEX OFF CACHE BOOL "Whether to use std::regex instead of boost::regex. Not recommended.")
-set(BIA_SHARED_BUILD ${BUILD_SHARED_LIBS})
-set(BOOST_ROOT "" CACHE PATH "Boost library path.")
-set(Boost_USE_STATIC_LIBS OFF CACHE BOOL "Use static libs of boost.")
+# Add Bia library
+add_subdirectory("bia")
 
-# Dependencies
-find_path(MPIR_INCLUDE "mpir.h")
-find_library(MPIR_LIB mpir)
+if(BIA_BUILD_BIA_TOOL)
+	add_subdirectory("tools/bia")
+endif()
 
-set(BIA_INCLUDES ${MPIR_INCLUDE})
-set(BIA_LIBRARIES ${MPIR_LIB})
+# Generate documentary
+if(BIA_GENERATE_DOCUMENTATION)
+	find_package(Doxygen REQUIRED)
 
-# ICU
-if(NOT BIA_USE_OWN_UNICODE)
-  find_package(ICU REQUIRED COMPONENTS io i18n)
-  
-  list(APPEND BIA_INCLUDES ${ICU_INCLUDE_DIRS})
-  list(APPEND BIA_LIBRARIES ${ICU_LIBRARIES})
-endif(NOT BIA_USE_OWN_UNICODE)
-
-# Boost.Regex
-if(NOT BIA_USE_STD_REGEX)
-  find_package(Boost REQUIRED COMPONENTS regex)
-
-  list(APPEND BIA_INCLUDES ${Boost_INCLUDE_DIRS})
-  list(APPEND BIA_LIBRARIES ${Boost_REGEX_LIBRARY})
-endif(NOT BIA_USE_STD_REGEX)
-
-if(BUILD_SHARED_LIBS)
-  add_definitions(-DBIA_BUILDING)
-endif(BUILD_SHARED_LIBS)
-
-configure_file("${PROJECT_SOURCE_DIR}/Bia/config.in" "${PROJECT_SOURCE_DIR}/Bia/config.hpp")
-
-include_directories(Bia)
-add_subdirectory(Bia)
-
-# Tests
-include(CTest)
-
-if(BUILD_TESTING)
-  enable_testing()
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-  
-  add_subdirectory(tests)
+	add_custom_target("doc"
+		COMMAND ${DOXYGEN_EXECUTABLE} "Doxyfile"
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		COMMENT "Building documentation")
 endif()

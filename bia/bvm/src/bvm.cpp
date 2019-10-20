@@ -2,18 +2,12 @@
 #include <bvm/instruction_pointer.hpp>
 #include <bytecode/op_code.hpp>
 #include <exception/invalid_op_code_exception.hpp>
-#include <member/function/static_function_member.hpp>
 #include <member/member.hpp>
 
 namespace bia {
 namespace bvm {
 
 using namespace bytecode;
-int w = 0;
-inline void fu(long long a)
-{
-	printf("hello world, %lld|%d\n", a, ++w);
-}
 
 void bvm::execute(context& context, const compiler::code& code)
 {
@@ -24,16 +18,12 @@ void bvm::execute(context& context, const compiler::code& code)
 	auto test_register	 = false;
 
 	// register and allocate members
-	auto gc_token = gc.register_thread(code.temp_member_count() + 2 /* plus 1 because of the accumulator */,
-									   code.local_member_count());
-	member::function::static_function_member<void, long long> fun(&fu);
-	gc_token.set(0, 0, &fun);
+	auto gc_token = gc.register_thread(code.temp_member_count() + 1 /* plus 1 because of the accumulator */,
+										code.local_member_count());
 
 	while (instruction_ptr) {
-		printf("position at %zi\n", instruction_ptr.ptr());
-			/* auto-generated switch for evaluating byte code instructions */
-			switch (instruction_ptr.next_op_code())
-		{
+		/* auto-generated switch for evaluating byte code instructions */
+		switch (instruction_ptr.next_op_code()) {
 		/** P-Type */
 		case OC_RETURN_VOID: {
 			return;

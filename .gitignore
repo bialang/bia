@@ -5,6 +5,8 @@
 [Rr]elease/
 ReleaseDLL/
 x64/
+build/
+install/
 
 Makefile
 main
@@ -13,3 +15,6 @@ main
 *.generated
 *.bll
 Bia/config_cmake.hpp
+out/
+CMakeSettings.json
+doc/

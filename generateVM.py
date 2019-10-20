@@ -1,224 +1,102 @@
 import re
 
-ptype = [
-    ("OC_RETURN_VOID", "", "goto gt_return;", "", "ret"),
-    ("OC_PUSH_TEST", "", "_stack.push(_test_register);", "", "pusht")
-]
-inttype = [
-    ("OC_JUMP", "", "_cursor += _int;", "", "jmp"),
-    ("OC_JUMP_TRUE", "", "_cursor += _test_register ? _int : 0;", "", "jpt"),
-    ("OC_JUMP_FALSE", "", "_cursor += _test_register ? 0 : _int;", "", "jpf")
-]
-itype = [
-    ("OC_RETURN_IMMEDIATE", "", "framework::create_member(_return.get(), _immediate);\n\t\t\tgoto gt_return;", "", "ret"),
-    ("OC_PUSH_IMMEDIATE", "", "_stack.push(_immediate);", "", "push")
-]
-mtype = [
-    ("OC_RETURN", "", "_member->refer(_return.get());\n\t\t\tgoto gt_return;", "", "ret"),
-    ("OC_TEST", "", "_test_register = _member->test();", "", "test"),
-    ("OC_PUSH", "", "_stack.push(_member);", "", "push"),
-    ("OC_UNDEFINE", "", "_member->undefine();", "", "undf"),
-    ("OC_EXECUTE_VOID", "", "_member->execute(&_stack, nullptr);", "", "exec"),
-    ("OC_EXECUTE_COUNT_VOID", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member->execute_count(&_stack, nullptr, nullptr, _count);\n\t\t\t_stack.pop_count(_count);", "", "exec"),
-    ("OC_EXECUTE_FORMAT_VOID", "auto _count = read<framework::member::parameter_count_t>(_cursor);", 
-                                "if (_cursor + _count > _end) {\n\t\t\t\t"
-                                    "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
-                                "}\n\t\t\t_member->execute_format(&_stack, nullptr, reinterpret_cast<const char*>(_cursor), _count);\n\t\t\t_stack.pop_count(_count);", "_cursor += _count;", "exec")
-]
-minttype = [
-    ("OC_INSTANTIATE_REGEX", "", "_member->template replace_this<framework::native::regex_member>(_regexs[_int]);", "", "instreg"),
-    ("OC_INSTANTIATE_FUNCTION", "", "_member->template replace_this<framework::executable::bia_function>(_functions[_int]);", "", "instfun")
-]
-mmtype = [
-    ("OC_EXECUTE", "", "_member0->execute(&_stack, _member1);", "", "exec"),
-    ("OC_EXECUTE_COUNT", "auto _count = read<framework::member::parameter_count_t>(_cursor);", "_member0->execute_count(&_stack, _member1, nullptr, _count);\n\t\t\t_stack.pop_count(_count);", "", "exec"),
-    ("OC_EXECUTE_FORMAT", "auto _count = read<framework::member::parameter_count_t>(_cursor);",
-                            "if (_cursor + _count > _end) {\n\t\t\t\t"
-                                "BIA_IMPLEMENTATION_ERROR;\n\t\t\t"
-                            "}\n\t\t\t_member0->execute_format(&_stack, _member1, reinterpret_cast<const char*>(_cursor), _count);\n\t\t\t_stack.pop_count(_count);", "_cursor += _count;", "exec"),
-    ("OC_CLONE", "", "_member0->clone(_member1);", "", "cln"),
-    ("OC_REFER", "", "_member0->refer(_member1);", "", "ref"),
-    ("OC_COPY", "", "_member0->copy(_member1);", "", "cpy"),
-    ("OC_TEST_MEMBER", "auto _operator = read<framework::operator_t>(_cursor);", "_test_register = _member0->test_member(_operator, _member1);", "", "test"),
-    ("OC_OPERATOR_CALL_VOID", "auto _operator = read<framework::operator_t>(_cursor);", "_member0->operator_call(nullptr, _operator, _member1);", "", "opr")
-]
-mitype = [
-    ("OC_INSTANTIATE", "", "framework::create_member(_member, _immediate);", "", "inst"),
-    ("OC_TEST_IMMEDIATE", "auto _operator = read<framework::operator_t>(_cursor);", "_test_register = test(_member, _operator, _immediate);", "", "test"),
-    ("OC_TEST_IMMEDIATE_REVERSE", "auto _operator = read<framework::operator_t>(_cursor);", "_test_register = test_reverse(_member, _operator, _immediate);", "", "testr"),
-    ("OC_OPERATOR_CALL_IMMEDIATE_VOID", "auto _operator = read<framework::operator_t>(_cursor);", "operator_call(_member, nullptr, _operator, _immediate);", "", "opr"),
-    ("OC_OPERATOR_CALL_IMMEDIATE_REVERSE_VOID", "auto _operator = read<framework::operator_t>(_cursor);", "operator_call_reverse(_member, nullptr, _operator, _immediate);", "", "oprr")
-]
-mminttype = [
-    ("OC_OBJECT_MEMBER", "", "_member0->object_member(_member1, _names[_int]);", "", "membr")
-]
-mmmtype = [
-    ("OC_OPERATOR_CALL", "auto _operator = read<framework::operator_t>(_cursor);", "_member0->operator_call(_member1, _operator, _member2);", "", "opr")
-]
-mmitype = [
-    ("OC_OPERATOR_CALL_IMMEDIATE", "auto _operator = read<framework::operator_t>(_cursor);", "operator_call(_member0, _member1, _operator, _immediate);", "", "opr"),
-    ("OC_OPERATOR_CALL_IMMEDIATE_REVERSE", "auto _operator = read<framework::operator_t>(_cursor);", "operator_call_reverse(_member0, _member1, _operator, _immediate);", "", "oprr")
-]
+ptype = [("OC_RETURN_VOID", "return;", "ret")]
+inttype = [("OC_JUMP", "instruction_ptr += {};", "jmp"),
+	("OC_JUMP_TRUE", "instruction_ptr += test_register ? {} : 0;", "jpt"),
+	("OC_JUMP_FALSE", "instruction_ptr += test_register ? 0 : {};", "jpf"),
+	("OC_POP", "stack.pop({});", "pop")]
+itype = [("OC_PUSH_IMMEDIATE", 'stack.push({});', "push"),
+	("OC_RETURN_IMMEDIATE", "", "ret")]
+mtype = [("OC_PUSH_MEMBER", "stack.push({}.get<member::member>());", "push"),
+	("OC_RETURN_MEMBER", "", "ret"),
+	("OC_TEST", "test_register = static_cast<bool>({}.get<member::member>()->test());", "test")]
+mmtype = [("OC_SHALLOW_COPY", "gc_token.set({0}, {1}.get<member::member>()->shallow_copy());", "copy"),
+		  ("OC_DEEP_COPY", "gc_token.set({0}, {1}.get<member::member>()->deep_copy());", "deep_copy"),
+		  ("OC_REFER", "gc_token.set({0}, {1});", "refer")]
+mmintinttype = [("OC_CALL", "gc_token.set({0}, {1}.get<member::member>()->call(&stack, {2}));\nstack.pop({3});", "call")]
 
-mvars = [
-    ("MOCO_TINY_TEMPORARY", "auto {0} = _temps[read<tiny_member_index_t>(_cursor)];"),
-    ("MOCO_TINY_PERMANENT", "auto {0} = _globals[read<tiny_member_index_t>(_cursor)];"),
-    ("MOCO_TEMPORARY", "auto {0} = _temps[read<member_index_t>(_cursor)];"),
-    ("MOCO_PERMANENT", "auto {0} = _globals[read<member_index_t>(_cursor)];")
-]
-intvars = [
-    ("IIOCO_INT32", "auto _int = read<int32_t>(_cursor);"),
-    ("IIOCO_INT8", "auto _int = read<int8_t>(_cursor);")
-]
-ivars = [
-    ("IOCO_INT32", "auto _immediate = read<int32_t>(_cursor);"),
-    ("IOCO_INT8", "auto _immediate = read<int8_t>(_cursor);"),
-    ("IOCO_INT64", "auto _immediate = read<int64_t>(_cursor);"),
-    ("IOCO_FLOAT", "auto _immediate = read<double>(_cursor);"),
-    ("IOCO_STRING", "auto _immediate = _string_manager.string<char>(read<string_manager::index_t>(_cursor));")
-]
+mvars = [("MOCO_TEMP", "auto& {} = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];"),
+	("MOCO_TINY_TEMP", "auto& {} = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];"),]
+intvars = [("IIOCO_INT32", "auto {} = instruction_ptr.read<std::int32_t>();"),
+	("IIOCO_INT8", "auto {} = instruction_ptr.read<std::int8_t>();")]
+ivars = [("IOCO_STRING", "auto {} = \"some placeholder\";"),
+	("IOCO_TEST_REGISTER", "auto {} = test_register;"),
+	("IOCO_FLOAT", "auto {} = instruction_ptr.read</*placeholder*/std::int64_t>();"),
+	("IOCO_INT64", "auto {} = instruction_ptr.read<std::int64_t>();"),
+	("IOCO_INT32", "auto {} = instruction_ptr.read<std::int32_t>();"),
+	("IOCO_INT8", "auto {} = instruction_ptr.read<std::int8_t>();")]
+
 o = open("vmcode.generated", "w")
 d = open("dissassembler.generated", "w")
 
 def write(x):
-    o.write(x)
-    d.write(x)
+	o.write(x)
+	d.write(x)
 
-def format_var_decl(var):
-    if "_string_manager" in var:
-        return var
-    return re.match(r"^auto \w+ = ", var)[0] + re.search(r"read<\w+>\(_cursor\)", var)[0] + ";"
+def get_max(var):
+	return re.sub(r"^([^_]+_).*", "\\g<1>COUNT", var)
 
-def name_of_var(var):
-    tmp = re.search(r"auto(?:\s|&)*(\w+) = (.*?)read<", var)
-    
-    if tmp[1] == "_immediate" or tmp[1] == "_int":
-        return 'i", ' + tmp[1]
-    elif tmp[2] == "_globals[":
-        return 'm", ' + tmp[1]
-    elif tmp[2] == "_temps.from_front(":
-        return 't", ' + tmp[1]
-    elif tmp[2] == "_temps.from_back(":
-        return 'l", ' + tmp[1]
-    else:
-        return '", ' + tmp[1]
+def case_unravel(*args):
+	if len(args) > 1:
+		return "({} * {} + {})".format(case_unravel(*args[1:]), get_max(args[0][0]), args[0][0])
+	return args[0][0]
 
-def write_case(op_code, preparations, code, cleanup, name, xoffset=None, xmax=None, yoffset=None, ymax=None, zoffset=None, var0=None, var1=None, var2=None):
-    if xoffset is None:
-        offset = ""
-    else:
-        if xmax is None or yoffset is None:
-            offset = " - " + xoffset
-        else:
-            if zoffset is None or ymax is None:
-                offset = " - ({0} * {1} + {2})".format(yoffset, xmax, xoffset)
-            else:
-                offset = " - (({0} * {1} + {2}) * {3} + {4})".format(zoffset, ymax, yoffset, xmax, xoffset)
-    
-    tmp = "case ({op_code}{offset}):\n\t\t{{{{\n\t\t\t{{var0}}{{var1}}{{var2}}{prep}{{code}}\n\t\t\t{cleanup}break;\n\t\t}}}}\n\t\t".format(
-        op_code=op_code,
-        prep=preparations + "\n\t\t\t" if preparations else "",
-        cleanup=cleanup + "\n\t\t\t" if cleanup else "",
-        offset=offset
-    )
+def make_case(op_code, *args):
+	if len(args) > 0:
+		return "({} - {})".format(op_code, case_unravel(*args))
+	return op_code
 
-    o.write(tmp.format(
-        var0=var0 + "\n\t\t\t" if var0 else "",
-        var1=var1 + "\n\t\t\t" if var1 else "",
-        var2=var2 + "\n\t\t\t" if var2 else "",
-        code=code
-    ))
+def write_case(op_code, vmcode, name, *args):
+	names = []
+	code = ""
+	for i, v in enumerate(args):
+		names.append("p{}".format(i))
+		code += v[1].format(names[i]) + "\n"
 
-    param = "".join(((" " if i == var0 else ', " ') + name_of_var(i) if i else "") for i in [var0, var1, var2, preparations])
+	code += vmcode if vmcode == "return;" else vmcode.format(*names) + "\nbreak;"
 
-    d.write(tmp.format(
-        var0=format_var_decl(var0) + "\n\t\t\t" if var0 else "",
-        var1=format_var_decl(var1) + "\n\t\t\t" if var1 else "",
-        var2=format_var_decl(var2) + "\n\t\t\t" if var2 else "",
-        code="print_all(\"{name}{param});".format(name=name, param=param if param else '"')
-    ))
+	write("case {case}: {{\n{code}\n}}".format(case=make_case(op_code, *args[::-1]), code=code))
 
 
-write("switch (_operation) {\n\t\t/** P-Type */\n\t\t")
+write("switch (instruction_ptr.next_op_code()) {\n/** P-Type */\n")
 
 # Write P-Type
 for i in ptype:
-    write_case(*i)
+	write_case(*i)
 
-write("/** int-Type */\n\t\t")
+write("\n/** int-Type */\n")
 
 # Write int-Type
 for i in inttype:
-    for v in intvars:
-        write_case(*i, xoffset=v[0], var0=v[1])
+	for v in intvars:
+		write_case(*i, v)
 
-write("/** I-Type */\n\t\t")
+write("\n/** I-Type */\n")
 
 # Write I-Type
 for i in itype:
-    for v in ivars:
-        write_case(*i, xoffset=v[0], var0=v[1])
+	for v in ivars:
+		write_case(*i, v)
 
-write("/** M-Type */\n\t\t")
+write("\n/** M-Type */\n")
 
 # Write M-Type
 for i in mtype:
-    for v in mvars:
-        write_case(*i, xoffset=v[0], var0=v[1].format("_member"))
+	for v in mvars:
+		write_case(*i, v)
+		
+write("\n/** MMintint-Type */\n")
 
-write("/** Mint-Type */\n\t\t")
-
-# Write Mint-Type
-for i in minttype:
-    for v0 in mvars:
-        for v1 in intvars:
-            write_case(*i, xoffset=v1[0], yoffset=v0[0], xmax="IIOCO_COUNT", var0=v0[1].format("_member"), var1=v1[1])
-
-write("/** MM-Type */\n\t\t")
-
-# Write MM-Type
-for i in mmtype:
-    for v0 in mvars:
-        for v1 in mvars:
-            write_case(*i, xoffset=v1[0], yoffset=v0[0], xmax="MOCO_COUNT", var0=v0[1].format("_member0"), var1=v1[1].format("_member1"))
-
-write("/** MI-Type */\n\t\t")
-
-# Write MI-Type
-for i in mitype:
-    for v0 in mvars:
-        for v1 in ivars:
-            write_case(*i, xoffset=v1[0], yoffset=v0[0], xmax="IOCO_COUNT", var0=v0[1].format("_member"), var1=v1[1])
-
-write("/** MMint-Type */\n\t\t")
-
-# Write MMint-Type
-for i in mminttype:
-    for v0 in mvars:
-        for v1 in mvars:
-            for v2 in intvars:
-                write_case(*i, xoffset=v2[0], yoffset=v1[0], zoffset=v0[0], xmax="IIOCO_COUNT", ymax="MOCO_COUNT", var0=v0[1].format("_member0"), var1=v1[1].format("_member1"), var2=v2[1])
-
-write("/** MMM-Type */\n\t\t")
-
-# Write MMM-Type
-for i in mmmtype:
-    for v0 in mvars:
-        for v1 in mvars:
-            for v2 in mvars:
-                write_case(*i, xoffset=v2[0], yoffset=v1[0], zoffset=v0[0], xmax="MOCO_COUNT", ymax="MOCO_COUNT", var0=v0[1].format("_member0"), var1=v1[1].format("_member1"), var2=v2[1].format("_member2"))
-
-write("/** MMI-Type */\n\t\t")
-
-# Write MMI-Type
-for i in mmitype:
-    for v0 in mvars:
-        for v1 in mvars:
-            for v2 in ivars:
-                write_case(*i, xoffset=v2[0], yoffset=v1[0], zoffset=v0[0], xmax="IOCO_COUNT", ymax="MOCO_COUNT", var0=v0[1].format("_member0"), var1=v1[1].format("_member1"), var2=v2[1])
+# Write mmintint-Type
+for i in mmintinttype:
+	for y in mvars:
+		for e in mvars:
+			for v in intvars:
+				for x in intvars:
+					write_case(*i, y, e, v, x)
 
 # Finalize
-write("default:\n\t\t\tBIA_IMPLEMENTATION_ERROR;\n\t\t}")
+write('default:\nBIA_THROW(exception::invalid_op_code_exception, u"invalid op code");\n}')
 
 o.close()
 d.close()

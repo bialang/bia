@@ -1,0 +1,9 @@
+[submodule "ICU"]
+	path = dependencies/icu
+	url = https://github.com/unicode-org/icu.git
+[submodule "PCRE2"]
+	path = dependencies/PCRE2
+	url = https://github.com/terrakuh/PCRE2.git
+[submodule "MPIR"]
+	path = dependencies/mpir
+	url = https://github.com/BrianGladman/mpir.git

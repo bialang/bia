@@ -1,5 +1,5 @@
 # Bia
-Embedded C++14 Scripting Language
+Embeddable C++14 Scripting Language
 
 # Embedded Example
 
@@ -25,6 +25,15 @@ std::string _code = u8R"(
 // Execute
 _context.execute(_code.c_str(), _code.length());
 ```
+
+# Dependencies
+Bia can be built without any third-party dependencies! However, some are recommended for performance gains and more features:
+
+- [MPIR](http://mpir.org/): used for big integer math *(if not provided, the int value range is defined as follows: -2^63 to 2^63-1)*
+- [ICU](http://site.icu-project.org/): used for validating and converting string encodings *(if not provided, the internal (probably slower) implementation is used that only supports conversion between ASCII, UTF-8, UTF-16LE, UTF-16BE, UTF-32LE and UTF-32BE)*
+- [PCRE2](https://www.pcre.org/): used for the built-in regex support *(if not provided, std::regex can be used or the feature can be disabled)*
+- [{fmt}](https://fmt.dev/latest/index.html): used for string formatting *(if not provided, the feature will be disabled)*
+- [Catch2](https://github.com/catchorg/Catch2): used for testing the library *(if not provided, no tests will be build)*
 
 # Language Features
 ## Native types
@@ -157,9 +166,6 @@ _context.set_class<my_class>("my_class")
   .set_constructor<int>()
   .set_function("print_me", &my_class::print_me);
 ```
-
-# How It Works
-Bia compiles the script directly to memory before the first run and executes it as a normal C++ function. This technique allows very fast run times since the code is directly executed on the CPU.
 
 # Supported Platforms
 Currently the MSVC, GNU (>=4.9) and Clang (>=3.9) compiler on the x86 (32 and 64 Bit) architecture are supported. Additional support for the ARM architecture is planned.
