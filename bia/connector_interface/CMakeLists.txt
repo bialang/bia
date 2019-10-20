@@ -2,4 +2,4 @@ project("connector_interface"
 	LANGUAGES CXX)
 
 create_library(INTERFACE
-	INTERFACE "creator")
+	INTERFACE "member_interface")
