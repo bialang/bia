@@ -26,7 +26,7 @@ public:
 			old	= move.old;
 			move.s = nullptr;
 		}
-		~frame()
+		void destroy()
 		{
 			if (s) {
 				if (old > s->current_size) {
@@ -34,6 +34,14 @@ public:
 				}
 
 				s->current_size = old;
+			}
+		}
+		~frame()
+		{
+			try {
+				destroy();
+			} catch (...) {
+				// leave the stack corrupt instead of crashing
 			}
 		}
 

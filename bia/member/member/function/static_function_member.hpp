@@ -51,7 +51,7 @@ protected:
 	}
 
 private:
-	function_type function;
+	const function_type function;
 };
 
 } // namespace function

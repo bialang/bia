@@ -4,7 +4,9 @@
 #include <exception/invalid_op_code_exception.hpp>
 #include <member/function/static_function_member.hpp>
 #include <member/member.hpp>
+#include <util/finally.hpp>
 #include <util/objects.hpp>
+
 namespace bia {
 namespace bvm {
 
@@ -19,14 +21,16 @@ inline void testi(long long f)
 void bvm::execute(context& context, const compiler::code& code)
 {
 	instruction_pointer instruction_ptr(code.begin(), code.end());
-	auto& gc			   = context.gc();
-	auto& stack			   = context.stack();
-	const auto stack_frame = stack.create_frame();
-	auto test_register	 = false;
+	auto& gc		   = context.gc();
+	auto& stack		   = context.stack();
+	auto stack_frame   = stack.create_frame();
+	auto test_register = false;
 
 	// register and allocate members
-	auto gc_token = gc.register_thread(code.temp_member_count(),
-									   code.local_member_count());
+	auto gc_token = gc.register_thread(code.temp_member_count(), code.local_member_count());
+
+	// cleaner
+	auto cleaner = util::make_finally([&] { stack_frame.destroy(); });
 
 	while (instruction_ptr) {
 		printf("pos: %zi\n", instruction_ptr.ptr());

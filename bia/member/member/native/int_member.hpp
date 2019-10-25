@@ -5,7 +5,7 @@
 
 namespace bia {
 namespace member {
-namespace framework {
+namespace native {
 
 /*
  A simple int member capable of holding an int64. This member is always unmutable. If an integer overflow would occur,
