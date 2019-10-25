@@ -18,16 +18,14 @@ public:
 	{}
 
 	template<bool Optimize, OP_CODE Op_code>
-	typename std::enable_if<bia::util::type_traits::equals_any<OP_CODE, Op_code, OC_RETURN_VOID>::value != 0,
-							void>::type
+	typename std::enable_if<util::type_traits::equals_any<OP_CODE, Op_code, OC_RETURN_VOID>::value != 0>::type
 		write_instruction()
 	{
 		output.write_all(Op_code);
 	}
 	template<bool Optimize, OP_CODE Op_code, typename P0>
 	typename std::enable_if<
-		bia::util::type_traits::equals_any<OP_CODE, Op_code, OC_JUMP, OC_JUMP_TRUE, OC_JUMP_FALSE>::value != 0,
-		void>::type
+		util::type_traits::equals_any<OP_CODE, Op_code, OC_JUMP, OC_JUMP_TRUE, OC_JUMP_FALSE>::value != 0>::type
 		write_instruction(P0 p0)
 	{
 		output.write_all(static_cast<OP_CODE>(Op_code - index_of_immediate_int<Optimize>(p0)));
@@ -35,25 +33,43 @@ public:
 	}
 	template<bool Optimize, OP_CODE Op_code, typename P0>
 	typename std::enable_if<
-		bia::util::type_traits::equals_any<OP_CODE, Op_code, OC_PUSH_IMMEDIATE, OC_RETURN_IMMEDIATE>::value != 0,
-		void>::type
+		util::type_traits::equals_any<OP_CODE, Op_code, OC_PUSH_IMMEDIATE, OC_RETURN_IMMEDIATE>::value != 0>::type
 		write_instruction(P0 p0)
 	{
 		output.write_all(static_cast<OP_CODE>(Op_code - index_of_immediate<Optimize>(p0)));
 		optimize<Optimize>(p0);
 	}
+	template<bool Optimize, OP_CODE Op_code, typename P0>
+	typename std::enable_if<
+		util::type_traits::equals_any<OP_CODE, Op_code, OC_PUSH_MEMBER, OC_RETURN_MEMBER, OC_TEST>::value != 0>::type
+		write_instruction(P0 p0)
+	{
+		output.write_all(static_cast<OP_CODE>(Op_code - index_of_member<Optimize>(p0)));
+		optimize<Optimize>(p0.index);
+	}
 	template<bool Optimize, OP_CODE Op_code, typename P0, typename P1>
-	typename std::enable_if<bia::util::type_traits::equals_any<OP_CODE, Op_code, OC_SHALLOW_COPY, OC_DEEP_COPY, OC_REFER>::value != 0, void>::type
+	typename std::enable_if<util::type_traits::equals_any<OP_CODE, Op_code, OC_INSTANTIATE>::value != 0>::type
 		write_instruction(P0 p0, P1 p1)
 	{
-		auto offset = (index_of_member<Optimize>(p0) * MOCO_COUNT + index_of_member<Optimize>(p1);
+		auto offset = index_of_member<Optimize>(p0) * IOCO_COUNT + index_of_immediate<Optimize>(p1);
+
+		output.write_all(static_cast<OP_CODE>(Op_code - offset));
+		optimize<Optimize>(p0.index);
+		optimize<Optimize>(p1);
+	}
+	template<bool Optimize, OP_CODE Op_code, typename P0, typename P1>
+	typename std::enable_if<
+		util::type_traits::equals_any<OP_CODE, Op_code, OC_SHALLOW_COPY, OC_DEEP_COPY, OC_REFER>::value != 0>::type
+		write_instruction(P0 p0, P1 p1)
+	{
+		auto offset = index_of_member<Optimize>(p0) * MOCO_COUNT + index_of_member<Optimize>(p1);
 
 		output.write_all(static_cast<OP_CODE>(Op_code - offset));
 		optimize<Optimize>(p0.index);
 		optimize<Optimize>(p1.index);
 	}
 	template<bool Optimize, OP_CODE Op_code, typename P0, typename P1, typename P2, typename P3>
-	typename std::enable_if<bia::util::type_traits::equals_any<OP_CODE, Op_code, OC_CALL>::value != 0, void>::type
+	typename std::enable_if<util::type_traits::equals_any<OP_CODE, Op_code, OC_CALL>::value != 0>::type
 		write_instruction(P0 p0, P1 p1, P2 p2, P3 p3)
 	{
 		auto offset = ((index_of_member<Optimize>(p0) * MOCO_COUNT + index_of_member<Optimize>(p1)) * IIOCO_COUNT +
