@@ -9,11 +9,11 @@ itype = [("OC_PUSH_IMMEDIATE", 'stack.push({});', "push"),
 	("OC_RETURN_IMMEDIATE", "", "ret")]
 mtype = [("OC_PUSH_MEMBER", "stack.push({}.get<member::member>());", "push"),
 	("OC_RETURN_MEMBER", "", "ret"),
-	("OC_TEST", "test_register = static_cast<bool>(rnn({}.get<member::member>())->test());", "test")]
-mmtype = [("OC_SHALLOW_COPY", "gc_token.set({0}, rnn({1}.get<member::member>())->shallow_copy());", "copy"),
-		  ("OC_DEEP_COPY", "gc_token.set({0}, rnn({1}.get<member::member>())->deep_copy());", "deep_copy"),
+	("OC_TEST", "test_register = static_cast<bool>(objects::require_non_null({}.get<member::member>())->test());", "test")]
+mmtype = [("OC_SHALLOW_COPY", "gc_token.set({0}, objects::require_non_null({1}.get<member::member>())->shallow_copy());", "copy"),
+		  ("OC_DEEP_COPY", "gc_token.set({0}, objects::require_non_null({1}.get<member::member>())->deep_copy());", "deep_copy"),
 		  ("OC_REFER", "gc_token.set({0}, {1});", "refer")]
-mmintinttype = [("OC_CALL", "gc_token.set({0}, rnn({1}.get<member::member>())->call(&stack, {2}));\nstack.pop({3});", "call")]
+mmintinttype = [("OC_CALL", "gc_token.set({0}, objects::require_non_null({1}.get<member::member>())->call(&stack, {2}));\nstack.pop({3});", "call")]
 
 mvars = [("MOCO_TEMP", "auto& {} = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];"),
 	("MOCO_TINY_TEMP", "auto& {} = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];"),]

@@ -2,8 +2,8 @@
 
 #include <cstdint>
 #include <gc/gc.hpp>
-#include <typeinfo>
 #include <stack/stack.hpp>
+#include <typeinfo>
 
 namespace bia {
 namespace member {
@@ -58,7 +58,9 @@ public:
 	 @param param_count the amount of parameters to pass
 	 @returns the return value of the function call
 	*/
-	virtual member* call(stack::stack* stack, std::int32_t param_count) = 0;
+	virtual member* call(stack::stack* stack, std::int32_t param_count)								  = 0;
+	virtual member* bind(const std::type_info& type, void* instance, bool gc_collectible) const		  = 0;
+	virtual member* bind(const std::type_info& type, const void* instance, bool gc_collectible) const = 0;
 	/*
 	 Tests this member.
 

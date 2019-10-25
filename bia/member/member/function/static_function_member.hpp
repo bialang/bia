@@ -1,14 +1,15 @@
 #pragma once
 
+#include "function_base_member.hpp"
+
 #include <connector/connector.hpp>
-#include <member/member.hpp>
 
 namespace bia {
 namespace member {
 namespace function {
 
 template<typename Return, typename... Args>
-class static_function_member : public member
+class static_function_member : public function_base_member
 {
 public:
 	typedef Return (*function_type)(Args...);
@@ -40,14 +41,6 @@ public:
 protected:
 	virtual void gc_mark_children(bool mark) const noexcept override
 	{}
-	virtual bool int64_data(std::int64_t& data) const override
-	{
-		return false;
-	}
-	virtual bool double_data(double& data) const override
-	{
-		return false;
-	}
 	virtual bool other_data(const std::type_info& type, void*& data) override
 	{
 		return false;

@@ -24,19 +24,20 @@ int main(int argc, char** argv)
 		const void* b;
 		std::size_t s;
 
-		// write_instruction<OC_RETURN_VOID>(output);
-		//write_instruction<OC_CALL>(output, temp_member_index{ 0 }, temp_member_index{ 0 }, std::int32_t(0),
-		//						   std::int32_t(0));
-		write_instruction<OC_PUSH_IMMEDIATE, std::int64_t>(output, 1234567890);
-		output.write_all(OC_CALL, std::int8_t(1), std::int8_t(0), std::int8_t(1), std::int8_t(2));
-		write_instruction<OC_JUMP>(output, std::int8_t(-16));
-		write_end(output);
+		instruction_writer wi(output);
+		
+		wi.write_instruction<false, OC_PUSH_IMMEDIATE, std::int64_t>(0x0807060504030201LL);
+		wi.write_instruction<true, OC_CALL>(temp_member_index<std::uint32_t>{ 1 }, temp_member_index<std::uint32_t>{ 0 },
+											1,
+											2);
+		wi.write_instruction<true, OC_JUMP>(-16);
+		wi.write_end();
 
 		printf("printing code...");
 
 		std::tie(b, s, std::ignore) = output.take_buffer();
 
-		for (std::size_t i = 0; i < s; ++i) {
+		for (std::size_t i = 0; i < s - max_instruction_size - 1; ++i) {
 			if (!(i % 16)) {
 				puts("");
 			}
@@ -44,7 +45,7 @@ int main(int argc, char** argv)
 			printf("%02x ", static_cast<const unsigned char*>(b)[i]);
 		}
 
-		puts("\nstarting vm");
+		puts("\n(END)\nstarting vm");
 
 		machine.execute(context, compiler::code(b, static_cast<const std::int8_t*>(b) + s));
 	} catch (const exception::throwable& e) {
