@@ -21,13 +21,21 @@ public:
 	{
 		return gc->construct<member::native::int_member>(value);
 	}
+	return_type create_member(bool value)
+	{
+		return create_member(static_cast<int>(value));
+	}
+	return_type create_member(const char16_t* string)
+	{
+		BIA_IMPLEMENTATION_ERROR(u"not implemented");
+	}
 	template<typename Return, typename... Args>
 	return_type create_member(Return (*function)(Args...))
 	{
 		return gc->construct<member::function::static_function_member<Return, Args...>>(function);
 	}
 	template<typename Return, typename... Args>
-	return_type create_member(Return (function)(Args...))
+	return_type create_member(Return(function)(Args...))
 	{
 		return create_member(&function);
 	}

@@ -83,7 +83,7 @@ void bvm::execute(context& context, const compiler::code& code)
 		}
 		/** I-Type */
 		case (OC_PUSH_IMMEDIATE - IOCO_STRING): {
-			auto p0 = "some placeholder";
+			auto p0 = u"some placeholder";
 			stack.push(p0);
 			break;
 		}
@@ -113,7 +113,7 @@ void bvm::execute(context& context, const compiler::code& code)
 			break;
 		}
 		case (OC_RETURN_IMMEDIATE - IOCO_STRING): {
-			auto p0 = "some placeholder";
+			auto p0 = u"some placeholder";
 
 			break;
 		}
@@ -171,6 +171,152 @@ void bvm::execute(context& context, const compiler::code& code)
 		case (OC_TEST - MOCO_TINY_TEMP): {
 			auto& p0	  = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
 			test_register = static_cast<bool>(objects::require_non_null(p0.get<member::member>())->test());
+			break;
+		}
+		/** Mi-Type */
+		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_STRING)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto p1  = u"some placeholder";
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_TEST_REGISTER)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto p1  = test_register;
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_FLOAT)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto p1  = instruction_ptr.read</*placeholder*/ std::int64_t>();
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT64)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto p1  = instruction_ptr.read<std::int64_t>();
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT32)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto p1  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TEMP * IOCO_COUNT + IOCO_INT8)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto p1  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_STRING)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto p1  = u"some placeholder";
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_TEST_REGISTER)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto p1  = test_register;
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_FLOAT)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto p1  = instruction_ptr.read</*placeholder*/ std::int64_t>();
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT64)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto p1  = instruction_ptr.read<std::int64_t>();
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT32)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto p1  = instruction_ptr.read<std::int32_t>();
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		case (OC_INSTANTIATE - (MOCO_TINY_TEMP * IOCO_COUNT + IOCO_INT8)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto p1  = instruction_ptr.read<std::int8_t>();
+			gc_token.set(p0, creator::creator(&gc).create_member(p1));
+			break;
+		}
+		/** MM-Type */
+		case (OC_SHALLOW_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			gc_token.set(p0, objects::require_non_null(p1.get<member::member>())->shallow_copy());
+			break;
+		}
+		case (OC_SHALLOW_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			gc_token.set(p0, objects::require_non_null(p1.get<member::member>())->shallow_copy());
+			break;
+		}
+		case (OC_SHALLOW_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			gc_token.set(p0, objects::require_non_null(p1.get<member::member>())->shallow_copy());
+			break;
+		}
+		case (OC_SHALLOW_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			gc_token.set(p0, objects::require_non_null(p1.get<member::member>())->shallow_copy());
+			break;
+		}
+		case (OC_DEEP_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			gc_token.set(p0, objects::require_non_null(p1.get<member::member>())->deep_copy());
+			break;
+		}
+		case (OC_DEEP_COPY - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			gc_token.set(p0, objects::require_non_null(p1.get<member::member>())->deep_copy());
+			break;
+		}
+		case (OC_DEEP_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			gc_token.set(p0, objects::require_non_null(p1.get<member::member>())->deep_copy());
+			break;
+		}
+		case (OC_DEEP_COPY - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			gc_token.set(p0, objects::require_non_null(p1.get<member::member>())->deep_copy());
+			break;
+		}
+		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			gc_token.set(p0, p1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			gc_token.set(p0, p1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint32_t>()];
+			gc_token.set(p0, p1);
+			break;
+		}
+		case (OC_REFER - (MOCO_TINY_TEMP * MOCO_COUNT + MOCO_TINY_TEMP)): {
+			auto& p0 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			auto& p1 = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];
+			gc_token.set(p0, p1);
 			break;
 		}
 		/** MMintint-Type */

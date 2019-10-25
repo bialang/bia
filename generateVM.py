@@ -10,6 +10,7 @@ itype = [("OC_PUSH_IMMEDIATE", 'stack.push({});', "push"),
 mtype = [("OC_PUSH_MEMBER", "stack.push({}.get<member::member>());", "push"),
 	("OC_RETURN_MEMBER", "", "ret"),
 	("OC_TEST", "test_register = static_cast<bool>(objects::require_non_null({}.get<member::member>())->test());", "test")]
+mitype = [("OC_INSTANTIATE", "gc_token.set({0}, creator::creator(&gc).create_member({1}));", "inst")]
 mmtype = [("OC_SHALLOW_COPY", "gc_token.set({0}, objects::require_non_null({1}.get<member::member>())->shallow_copy());", "copy"),
 		  ("OC_DEEP_COPY", "gc_token.set({0}, objects::require_non_null({1}.get<member::member>())->deep_copy());", "deep_copy"),
 		  ("OC_REFER", "gc_token.set({0}, {1});", "refer")]
@@ -19,7 +20,7 @@ mvars = [("MOCO_TEMP", "auto& {} = gc_token.root_at(0)[instruction_ptr.read<std:
 	("MOCO_TINY_TEMP", "auto& {} = gc_token.root_at(0)[instruction_ptr.read<std::uint8_t>()];"),]
 intvars = [("IIOCO_INT32", "auto {} = instruction_ptr.read<std::int32_t>();"),
 	("IIOCO_INT8", "auto {} = instruction_ptr.read<std::int8_t>();")]
-ivars = [("IOCO_STRING", "auto {} = \"some placeholder\";"),
+ivars = [("IOCO_STRING", "auto {} = u\"some placeholder\";"),
 	("IOCO_TEST_REGISTER", "auto {} = test_register;"),
 	("IOCO_FLOAT", "auto {} = instruction_ptr.read</*placeholder*/std::int64_t>();"),
 	("IOCO_INT64", "auto {} = instruction_ptr.read<std::int64_t>();"),
@@ -85,6 +86,22 @@ for i in mtype:
 	for v in mvars:
 		write_case(*i, v)
 		
+write("\n/** Mi-Type */\n")
+
+# Write Mi-Type
+for i in mitype:
+	for v in mvars:
+		for x in ivars:
+			write_case(*i, v, x)
+
+write("\n/** MM-Type */\n")
+
+# Write MM-Type
+for i in mmtype:
+	for v in mvars:
+		for x in mvars:
+			write_case(*i, v, x)
+
 write("\n/** MMintint-Type */\n")
 
 # Write mmintint-Type
