@@ -34,11 +34,6 @@ public:
 	{
 		return gc->construct<member::function::static_function_member<Return, Args...>>(function);
 	}
-	template<typename Return, typename... Args>
-	return_type create_member(Return(function)(Args...))
-	{
-		return create_member(&function);
-	}
 
 private:
 	gc::gc* gc;

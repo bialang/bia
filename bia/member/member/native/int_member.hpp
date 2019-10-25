@@ -32,7 +32,22 @@ public:
 	}
 	virtual bool_type test() const override
 	{
+		printf("hello from the other side %lli\n", value);
+
 		return value ? 1 : 0;
+	}
+	virtual member* call(stack::stack* stack, std::int32_t param_count) override
+	{
+
+		BIA_IMPLEMENTATION_ERROR(u"");
+	}
+	virtual member* bind(const std::type_info& type, void* instance, bool gc_collectible) const override
+	{
+		BIA_IMPLEMENTATION_ERROR(u"");
+	}
+	virtual member* bind(const std::type_info& type, const void* instance, bool gc_collectible) const override
+	{
+		BIA_IMPLEMENTATION_ERROR(u"");
 	}
 
 protected:
@@ -65,6 +80,6 @@ private:
 	const int_type value;
 };
 
-} // namespace framework
+} // namespace native
 } // namespace member
 } // namespace bia

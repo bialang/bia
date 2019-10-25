@@ -26,11 +26,8 @@ int main(int argc, char** argv)
 
 		instruction_writer wi(output);
 		
-		wi.write_instruction<false, OC_PUSH_IMMEDIATE, std::int64_t>(0x0807060504030201LL);
-		wi.write_instruction<true, OC_CALL>(temp_member_index<std::uint32_t>{ 1 }, temp_member_index<std::uint32_t>{ 0 },
-											1,
-											2);
-		wi.write_instruction<true, OC_JUMP>(-16);
+		wi.write_instruction<false, OC_INSTANTIATE>(temp_member_index<std::uint8_t>{ 0 }, 61);
+		wi.write_instruction<false, OC_TEST>(temp_member_index<std::uint8_t>{ 0 });
 		wi.write_end();
 
 		printf("printing code...");
