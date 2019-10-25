@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <member_interface/member.hpp>
+#include <member/member.hpp>
 
 namespace bia {
 namespace member {
@@ -22,11 +22,11 @@ public:
 	{
 		return 0;
 	}
-	virtual member* shallow_copy() override
+	virtual member* shallow_copy() const override
 	{
 		return deep_copy();
 	}
-	virtual member* deep_copy() override
+	virtual member* deep_copy() const override
 	{
 		return gc::gc::active_gc()->construct<int_member>(*this);
 	}

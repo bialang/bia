@@ -1,12 +1,12 @@
 #pragma once
 
 #include <gc/gc.hpp>
-#include <member_interface/member.hpp>
+#include <member/member.hpp>
 #include <string/string.hpp>
 
 namespace bia {
 namespace member {
-namespace framework {
+namespace native {
 
 /*
  A member holding a single gc collected string. This member is always unmutable. Copying the string doesn't copy the
@@ -21,11 +21,11 @@ public:
 	{
 		return 0;
 	}
-	virtual member* shallow_copy() override
+	virtual member* shallow_copy() const override
 	{
 		return deep_copy();
 	}
-	virtual member* deep_copy() override
+	virtual member* deep_copy() const override
 	{
 		return gc::gc::active_gc()->construct<string_member>(*this);
 	}
