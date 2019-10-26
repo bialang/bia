@@ -7,7 +7,7 @@ namespace tokenizer {
 namespace lexer_token {
 
 template<rule::flag_type Flags = rule::F_NONE>
-inline TOKEN_ACTION string_token(stream::input_stream& input, rule_parameter& parameter)
+inline TOKEN_ACTION string_token(stream::input_stream& input, rule::parameter& param)
 {
 	constexpr auto error   = TOKEN_ACTION::FAILED;
 	constexpr auto success = TOKEN_ACTION::SUCCEEDED;

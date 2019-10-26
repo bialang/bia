@@ -19,7 +19,7 @@ inline buffer_input_stream make_stream(const char* text)
 TEST_CASE("bool_token", "[lexer_token][tokenizer]")
 {
 	auto enc = encoder::get_instance(encoder::STANDARD_ENCODING::ASCII);
-	rule_parameter parameter(*enc);
+	rule::parameter parameter(*enc);
 
 	auto stream = make_stream("true");
 
@@ -32,7 +32,7 @@ TEST_CASE("bool_token", "[lexer_token][tokenizer]")
 
 TEST_CASE("identifier_token", "[lexer_token][tokenizer]")
 {
-	rule_parameter parameter(*encoder::get_instance(encoder::STANDARD_ENCODING::UTF_8));
+	rule::parameter parameter(*encoder::get_instance(encoder::STANDARD_ENCODING::UTF_8));
 	buffer_input_stream stream(nullptr, nullptr);
 
 	SECTION("success")

@@ -9,15 +9,16 @@ using namespace bia::bytecode;
 
 TEST_CASE("instruction writer", "[bytecode]")
 {
-	stream::buffer_output_stream output;
+	/*stream::buffer_output_stream output;
 	instruction_writer wi(output);
 
 	SECTION("OC_RETURN")
 	{
+	//
 		wi.write_instruction<OC_RETURN>();
 	}
 
 	SECTION("immediate ints")
 	{
-	}
+	}*/
 }

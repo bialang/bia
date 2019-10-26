@@ -11,7 +11,7 @@ namespace tokenizer {
 namespace lexer_token {
 
 template<rule::flag_type Flags = rule::F_NONE>
-inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule_parameter& parameter)
+inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule::parameter& param)
 {
 	using namespace bia::string::encoding;
 
@@ -23,7 +23,7 @@ inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule_parameter
 	std::size_t length	 = 1;
 
 	// match first
-	if (!parameter.encoder.next(buffer.first, buffer.second, cp)) {
+	if (!param.encoder.next(buffer.first, buffer.second, cp)) {
 		return error;
 	}
 
@@ -41,7 +41,7 @@ inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule_parameter
 		auto tmp = buffer.first;
 
 		// skip and read again
-		if (!parameter.encoder.next(buffer.first, buffer.second, cp)) {
+		if (!param.encoder.next(buffer.first, buffer.second, cp)) {
 			if (!nextSucceeded) {
 				break;
 			}
@@ -81,7 +81,7 @@ inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule_parameter
 
 	tk.type = token::TYPE::IDENTIFIER;
 
-	parameter.bundle.add(tk);
+	param.bundle.add(tk);
 
 	return success;
 }

@@ -12,14 +12,14 @@ namespace tokenizer {
 namespace lexer_token {
 
 template<rule::flag_type Flags = rule::F_NONE>
-inline TOKEN_ACTION bool_token(stream::input_stream& input, rule_parameter& parameter)
+inline TOKEN_ACTION bool_token(stream::input_stream& input, rule::parameter& param)
 {
 	constexpr auto error   = TOKEN_ACTION::FAILED;
 	constexpr auto success = TOKEN_ACTION::SUCCEEDED;
 	auto buffer			   = input.bufferless_read();
 	const auto begin	   = buffer.first;
 	auto result =
-		util::iterator_starts_with(string::encoding::input_iterator(&parameter.encoder, buffer.first, buffer.second),
+		util::iterator_starts_with(string::encoding::input_iterator(&param.encoder, buffer.first, buffer.second),
 								   util::cstring_iterator<char>("true"), util::cstring_iterator<char>("false"),
 								   util::cstring_iterator<char>("null"));
 
@@ -29,7 +29,7 @@ inline TOKEN_ACTION bool_token(stream::input_stream& input, rule_parameter& para
 		tk.type			   = token::TYPE::KEYWORD;
 		tk.content.keyword = !result.first ? KEYWORD::TRUE : (result.first == 1 ? KEYWORD::FALSE : KEYWORD::NULL_VALUE);
 
-		parameter.bundle.add(tk);
+		param.bundle.add(tk);
 		input.skip(result.second.cursor() - begin);
 
 		return success;
@@ -39,7 +39,7 @@ inline TOKEN_ACTION bool_token(stream::input_stream& input, rule_parameter& para
 }
 
 template<rule::flag_type Flags = rule::F_NONE>
-inline TOKEN_ACTION constant_token(stream::input_stream& input, rule_parameter& parameter)
+inline TOKEN_ACTION constant_token(stream::input_stream& input, rule::parameter& param)
 {
 	constexpr auto error   = TOKEN_ACTION::FAILED;
 	constexpr auto success = TOKEN_ACTION::SUCCEEDED;

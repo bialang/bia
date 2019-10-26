@@ -1,6 +1,6 @@
 import re
 
-ptype = [("OC_RETURN_VOID", "return;", "ret")]
+ptype = [("OC_RETURN_VOID", "goto gt_cleanup;", "ret")]
 inttype = [("OC_JUMP", "instruction_ptr += {};", "jmp"),
 	("OC_JUMP_TRUE", "instruction_ptr += test_register ? {} : 0;", "jpt"),
 	("OC_JUMP_FALSE", "instruction_ptr += test_register ? 0 : {};", "jpf"),
@@ -54,7 +54,7 @@ def write_case(op_code, vmcode, name, *args):
 		names.append("p{}".format(i))
 		code += v[1].format(names[i]) + "\n"
 
-	code += vmcode if vmcode == "return;" else vmcode.format(*names) + "\nbreak;"
+	code += vmcode if vmcode == "goto gt_cleanup;" else vmcode.format(*names) + "\nbreak;"
 
 	write("case {case}: {{\n{code}\n}}".format(case=make_case(op_code, *args[::-1]), code=code))
 

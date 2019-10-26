@@ -3,17 +3,21 @@
 namespace bia {
 namespace tokenizer {
 
-void rule::run(stream::input_stream& input, rule_parameter& parameter)
-{/*
-	for (auto& r : rules) {
-		auto code = r(input, parameter);
+rule::rule() noexcept
+{
+	id	= RULE_ID::ROOT;
+	flags = 0;
+}
 
-		switch (code) {
-		case TOKEN_ACTION::SUCCEEDED:
-		case TOKEN_ACTION::FAILED:
-	
-		}
-	}*/
+rule::rule(RULE_ID id, flag_type flags, std::initializer_list<rule_function_type> steps)
+	: id(id), flags(flags), steps(steps)
+{}
+
+void rule::run(stream::input_stream& input, rule::parameter& param) const
+{
+	for (auto& step : steps) {
+		step(input, param);
+	}
 }
 
 } // namespace tokenizer

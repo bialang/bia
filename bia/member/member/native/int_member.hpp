@@ -32,8 +32,6 @@ public:
 	}
 	virtual bool_type test() const override
 	{
-		printf("hello from the other side %lli\n", value);
-
 		return value ? 1 : 0;
 	}
 	virtual member* call(stack::stack* stack, std::int32_t param_count) override
@@ -71,7 +69,7 @@ protected:
 	{
 		return false;
 	}
-	virtual void gc_mark_children(bool mark) const noexcept
+	virtual void gc_mark_children(bool mark) const noexcept override
 	{
 		// has no gc monitored children
 	}
