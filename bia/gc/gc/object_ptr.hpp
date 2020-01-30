@@ -16,12 +16,12 @@ public:
 	template<typename T = void>
 	T* get() noexcept
 	{
-		return static_cast<T*>(ptr.load(std::memory_order_acquire));
+		return static_cast<T*>(_ptr.load(std::memory_order_consume));
 	}
 	template<typename T = void>
 	const T* get() const noexcept
 	{
-		return static_cast<const T*>(ptr.load(std::memory_order_acquire));
+		return static_cast<const T*>(_ptr.load(std::memory_order_consume));
 	}
 	template<typename T = void>
 	operator T*() noexcept
@@ -37,18 +37,18 @@ public:
 private:
 	friend class gc;
 
-	std::atomic<void*> ptr;
+	std::atomic<void*> _ptr;
 
 	/*
 	 Constructor.
 	 
 	 @param ptr is the initial value
 	*/
-	object_ptr(void* ptr = nullptr) noexcept : ptr(ptr)
+	object_ptr(void* ptr = nullptr) noexcept : _ptr(ptr)
 	{}
 	void set(void* ptr) noexcept
 	{
-		this->ptr.store(ptr, std::memory_order_release);
+		_ptr.store(ptr, std::memory_order_release);
 	}
 };
 
