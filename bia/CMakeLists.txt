@@ -27,6 +27,11 @@ function(create_library LIB_TYPE)
 		set(VISIBILITY PUBLIC)
 	endif()
 
+	# config file
+	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in")
+		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/${LIB_NAME}/config.hpp")
+	endif()
+
 	add_library(${LIB_NAME} ${LIB_TYPE}
 		${SOURCE_FILES})
 
