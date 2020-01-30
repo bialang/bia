@@ -15,7 +15,7 @@ namespace util {
 class contract
 {
 public:
-	static void expect(bool condition)
+	static void expects(bool condition)
 	{
 #if defined(BIA_UTIL_CONTRACT_BEHAVIOR_THROW)
 		if (!condition) {
@@ -27,7 +27,7 @@ public:
 		}
 #endif
 	}
-	static void ensure(bool condition)
+	static void ensures(bool condition)
 	{
 #if defined(BIA_UTIL_CONTRACT_BEHAVIOR_THROW)
 		if (!condition) {
