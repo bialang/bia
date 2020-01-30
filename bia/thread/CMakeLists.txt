@@ -2,7 +2,8 @@ project("thread"
 		LANGUAGES CXX)
 
 list(APPEND LINK_LIBS
-	PUBLIC "exception")
+	PUBLIC "exception"
+	PUBLIC "log")
 
 # Thread backend
 set(BIA_THREAD_BACKEND "std::thread"
