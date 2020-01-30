@@ -4,6 +4,8 @@
 #include "object_ptr.hpp"
 
 #include <cstdint>
+#include <util/gsl.hpp>
+#include <utility>
 
 namespace bia {
 namespace gc {
@@ -12,7 +14,7 @@ namespace gc {
  This object must be implemented of all gc node object. Node objects are objects that must be destructed before
  deallocation and can contain references to other gc objects.
 */
-class object
+class alignas(object_alignment) object
 {
 public:
 	/*
@@ -33,14 +35,15 @@ protected:
 	 @param ptr that should be marked
 	 @param mark is the current mark
 	*/
-	static void gc_mark(const void* ptr, bool mark)
+	static void gc_mark(util::not_null<const object*> ptr, bool mark) noexcept
 	{
-		auto info = object_info(ptr);
+		auto info = _object_info(ptr);
 
 		if (info->leaf) {
-			info->marked.store(mark, std::memory_order_relaxed);
+			info->mark.store(mark, std::memory_order_relaxed);
 		} else {
-			if (info->marked.exchange(mark, std::memory_order_relaxed) != mark) {
+			// newly marked -> mark children
+			if (info->mark.exchange(mark, std::memory_order_relaxed) != mark) {
 				static_cast<const object*>(ptr)->gc_mark_children(mark);
 			}
 		}
@@ -49,14 +52,14 @@ protected:
 private:
 	friend class gc;
 
-	static void* inject_object_info(void* ptr)
+	static void _inject_object_info(util::not_null<void*> ptr, object_info&& info) noexcept
 	{
-		return nullptr;
+		new (static_cast<std::int8_t*>(ptr) - sizeof(object_info)) object_info(std::move(info));
 	}
-	static bia::gc::object_info* object_info(const void* ptr)
+	static util::not_null<object_info*> _object_info(util::not_null<const void*> ptr) noexcept
 	{
-		return reinterpret_cast<bia::gc::object_info*>(static_cast<int8_t*>(const_cast<void*>(ptr)) -
-		                                               sizeof(bia::gc::object_info));
+		return const_cast<object_info*>(
+		    reinterpret_cast<const object_info*>(static_cast<const std::int8_t*>(ptr) - sizeof(object_info)));
 	}
 };
 
