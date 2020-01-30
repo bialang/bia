@@ -1,0 +1,9 @@
+#ifndef BIA_LOG_CONFIG_HPP_
+#define BIA_LOG_CONFIG_HPP_
+
+#cmakedefine BIA_LOG_ENABLE_LOGGING
+#cmakedefine BIA_LOG_LEVEL "@BIA_LOG_LEVEL@"
+#cmakedefine BIA_LOG_PATTERN "@BIA_LOG_PATTERN@"
+#cmakedefine BIA_LOG_NAME "@BIA_LOG_NAME@"
+
+#endif
