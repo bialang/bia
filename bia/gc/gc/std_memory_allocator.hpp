@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <new>
+#include <util/gsl.hpp>
 #include <utility>
 
 namespace bia {
@@ -31,33 +32,33 @@ public:
 		typedef std_memory_allocator<U> other;
 	};
 
-	std_memory_allocator(memory_allocator* allocator) noexcept : allocator(allocator)
+	std_memory_allocator(util::not_null<memory_allocator*> allocator) noexcept : _allocator(allocator)
 	{}
 	template<typename U>
-	std_memory_allocator(const std_memory_allocator<U>& copy) noexcept : allocator(copy.allocator)
+	std_memory_allocator(const std_memory_allocator<U>& copy) noexcept : _allocator(copy._allocator)
 	{}
 	template<typename U, typename... Args>
-	void construct(U* ptr, Args&&... args)
+	void construct(util::not_null<U*> ptr, Args&&... args)
 	{
 		new (ptr) U(std::forward<Args>(args)...);
 	}
 	template<typename U>
-	void destroy(U* ptr)
+	void destroy(util::not_null<U*> ptr)
 	{
 		ptr->~U();
 	}
-	void deallocate(pointer ptr, size_type n)
+	void deallocate(pointer ptr, size_type)
 	{
-		allocator->deallocate(ptr, 0);
+		_allocator->deallocate(ptr);
 	}
 	pointer allocate(size_type n)
 	{
-		return static_cast<pointer>(allocator->allocate(n * sizeof(T), 0));
+		return static_cast<pointer>(_allocator->allocate(n * sizeof(T)));
 	}
 	template<typename U>
 	bool operator==(const std_memory_allocator<U>& other) noexcept
 	{
-		return allocator == other.allocator;
+		return _allocator == other._allocator;
 	}
 	template<typename U>
 	bool operator!=(const std_memory_allocator<U>& other) noexcept
@@ -69,7 +70,7 @@ private:
 	template<typename U>
 	friend class std_memory_allocator;
 
-	memory_allocator* const allocator;
+	memory_allocator* const _allocator;
 };
 
 } // namespace gc
