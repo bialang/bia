@@ -18,31 +18,21 @@ public:
 	typedef std::function<void*(std::size_t)> allocate_fun_type;
 	typedef std::function<void(void*)> free_fun_type;
 
-	simple_allocator(allocate_fun_type allocate_fun = &std::malloc, free_fun_type free_fun = &std::free) noexcept
+	simple_allocator(allocate_fun_type allocate_fun = std::malloc, free_fun_type free_fun = std::free) noexcept
+	    : _allocate_fun(std::move(allocate_fun)), _free_fun(std::move(free_fun))
+	{}
+	virtual void deallocate(void* ptr) override
 	{
-		this->allocate_fun = allocate_fun;
-		this->free_fun     = free_fun;
+		_free_fun(ptr);
 	}
-	virtual void deallocate(void* ptr, std::size_t previous_size) override
+	virtual void* allocate(std::size_t size) override
 	{
-		free_fun(static_cast<int8_t*>(ptr) - aligned(previous_size));
-	}
-	virtual void* allocate(std::size_t size, std::size_t previous_size) override
-	{
-		auto x = aligned(previous_size);
-
-		return static_cast<int8_t*>(allocate_fun(size + x)) + x;
+		return _allocate_fun(size);
 	}
 
 private:
-	allocate_fun_type allocate_fun;
-	free_fun_type free_fun;
-
-	static std::size_t aligned(std::size_t x)
-	{
-		return 0;
-		// return (x + alignment - 1) / alignment * alignment;
-	}
+	allocate_fun_type _allocate_fun;
+	free_fun_type _free_fun;
 };
 
 } // namespace gc
