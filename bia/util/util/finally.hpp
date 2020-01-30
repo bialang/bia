@@ -21,7 +21,7 @@ public:
 	finally(const finally& copy) = delete;
 	finally(finally&& move) : lambda(std::move(move.lambda))
 	{
-		run		 = move.run;
+		run      = move.run;
 		move.run = false;
 	}
 	~finally()

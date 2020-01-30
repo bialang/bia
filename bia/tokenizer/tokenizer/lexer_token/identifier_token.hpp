@@ -17,10 +17,10 @@ inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule::paramete
 
 	constexpr auto error   = TOKEN_ACTION::FAILED;
 	constexpr auto success = TOKEN_ACTION::SUCCEEDED;
-	auto buffer			   = input.bufferless_read();
-	auto begin			   = buffer.first;
-	code_point cp		   = 0;
-	std::size_t length	 = 1;
+	auto buffer            = input.bufferless_read();
+	auto begin             = buffer.first;
+	code_point cp          = 0;
+	std::size_t length     = 1;
 
 	// match first
 	if (!param.encoder.next(buffer.first, buffer.second, cp)) {
@@ -31,7 +31,7 @@ inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule::paramete
 
 	// first character cannot be a number
 	if (category != CATEGORY::Lu && category != CATEGORY::Ll && category != CATEGORY::Lt && category != CATEGORY::Lo &&
-		category != CATEGORY::Pc && category != CATEGORY::Nl) {
+	    category != CATEGORY::Pc && category != CATEGORY::Nl) {
 		return error;
 	}
 
@@ -48,8 +48,8 @@ inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule::paramete
 
 			input.skip(buffer.first - begin);
 
-			buffer		  = input.bufferless_read();
-			begin		  = buffer.first;
+			buffer        = input.bufferless_read();
+			begin         = buffer.first;
 			nextSucceeded = false;
 
 			continue;
@@ -59,8 +59,8 @@ inline TOKEN_ACTION identifier_token(stream::input_stream& input, rule::paramete
 
 		// reset
 		if (category != CATEGORY::Lu && category != CATEGORY::Ll && category != CATEGORY::Lt &&
-			category != CATEGORY::Lo && category != CATEGORY::Pc && category != CATEGORY::Nl &&
-			category != CATEGORY::Nd && category != CATEGORY::No) {
+		    category != CATEGORY::Lo && category != CATEGORY::Pc && category != CATEGORY::Nl &&
+		    category != CATEGORY::Nd && category != CATEGORY::No) {
 			buffer.first = tmp;
 
 			break;

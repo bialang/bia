@@ -6,12 +6,12 @@ namespace gc {
 thread_local gc* gc::active_gc_instance = nullptr;
 
 gc::gc(std::unique_ptr<memory_allocator> allocator, std::unique_ptr<bia::thread::thread_pool> thread_pool)
-	: mem_allocator(std::move(allocator)),
-		missed_objects(std::vector<void*, std_memory_allocator<void*>>(mem_allocator.get()))
+    : mem_allocator(std::move(allocator)),
+      missed_objects(std::vector<void*, std_memory_allocator<void*>>(mem_allocator.get()))
 {
 	// Start gc main thread
 	/*if (thread_pool && thread_pool->max_pool_size() > 0 && thread_pool->task_count() == 0) {
-		thread_pool->execute(std::bind(&gc::main_thread, this));
+	    thread_pool->execute(std::bind(&gc::main_thread, this));
 	}*/
 }
 
@@ -94,7 +94,7 @@ void gc::free_root(root obj)
 void gc::main_thread()
 {
 	mutex.lock();
-	is_active	= true;
+	is_active    = true;
 	current_mark = !current_mark;
 	mutex.unlock();
 
@@ -120,13 +120,13 @@ void gc::main_thread()
 	while (missed_objects.pop(missed)) {
 		object::gc_mark(missed, current_mark);
 	}
-printf("Size of roots: %zi\n", roots.size());
-printf("Size of allocated: %zi\n", allocated.size());
+	printf("Size of roots: %zi\n", roots.size());
+	printf("Size of allocated: %zi\n", allocated.size());
 	// sweep
 	{
 		std::unique_lock<decltype(allocated_mutex)> lock(allocated_mutex);
 
-		for (auto i = allocated.begin(); i != allocated.end(); ) {
+		for (auto i = allocated.begin(); i != allocated.end();) {
 			auto info = *i;
 
 			if (info->marked.load(std::memory_order_consume) != current_mark) {

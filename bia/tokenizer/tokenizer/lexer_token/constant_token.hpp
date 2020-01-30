@@ -16,17 +16,17 @@ inline TOKEN_ACTION bool_token(stream::input_stream& input, rule::parameter& par
 {
 	constexpr auto error   = TOKEN_ACTION::FAILED;
 	constexpr auto success = TOKEN_ACTION::SUCCEEDED;
-	auto buffer			   = input.bufferless_read();
-	const auto begin	   = buffer.first;
+	auto buffer            = input.bufferless_read();
+	const auto begin       = buffer.first;
 	auto result =
-		util::iterator_starts_with(string::encoding::input_iterator(&param.encoder, buffer.first, buffer.second),
-								   util::cstring_iterator<char>("true"), util::cstring_iterator<char>("false"),
-								   util::cstring_iterator<char>("null"));
+	    util::iterator_starts_with(string::encoding::input_iterator(&param.encoder, buffer.first, buffer.second),
+	                               util::cstring_iterator<char>("true"), util::cstring_iterator<char>("false"),
+	                               util::cstring_iterator<char>("null"));
 
 	if (result.first != 3) {
 		token tk{};
 
-		tk.type			   = token::TYPE::KEYWORD;
+		tk.type            = token::TYPE::KEYWORD;
 		tk.content.keyword = !result.first ? KEYWORD::TRUE : (result.first == 1 ? KEYWORD::FALSE : KEYWORD::NULL_VALUE);
 
 		param.bundle.add(tk);

@@ -17,7 +17,7 @@ public:
 	{
 		this->start = static_cast<buffer_type>(start);
 		this->end   = static_cast<buffer_type>(end);
-		cursor		= this->start;
+		cursor      = this->start;
 	}
 	/*
 	 Reads the given type from the current position. This method does not perform bounds checking.

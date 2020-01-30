@@ -109,9 +109,9 @@ protected:
 	*/
 	virtual std::size_t max_code_points(std::size_t size) const = 0;
 	virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output,
-								std::size_t output_len)			= 0;
+	                            std::size_t output_len)         = 0;
 	virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output,
-							   std::size_t output_len)			= 0;
+	                           std::size_t output_len)          = 0;
 };
 
 } // namespace encoding

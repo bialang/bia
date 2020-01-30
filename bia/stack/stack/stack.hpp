@@ -22,8 +22,8 @@ public:
 		frame(const frame& copy) = delete;
 		frame(frame&& move) noexcept
 		{
-			s	  = move.s;
-			old	= move.old;
+			s      = move.s;
+			old    = move.old;
 			move.s = nullptr;
 		}
 		void destroy()
@@ -58,9 +58,9 @@ public:
 	stack(gc::memory_allocator* allocator, std::size_t size) noexcept
 	{
 		this->allocator = allocator;
-		current_size	= 0;
-		max_size		= size / sizeof(buffer_type);
-		buffer			= static_cast<buffer_type*>(allocator->allocate(max_size * sizeof(buffer_type), 0));
+		current_size    = 0;
+		max_size        = size / sizeof(buffer_type);
+		buffer          = static_cast<buffer_type*>(allocator->allocate(max_size * sizeof(buffer_type), 0));
 	}
 	frame create_frame() noexcept
 	{
@@ -89,8 +89,8 @@ public:
 	}
 	template<typename T>
 	typename std::enable_if<(sizeof(T) >= sizeof(buffer_type) && sizeof(T) % sizeof(buffer_type) == 0),
-							std::size_t>::type
-		push(T value)
+	                        std::size_t>::type
+	    push(T value)
 	{
 		constexpr auto size = sizeof(T) / sizeof(buffer_type);
 
@@ -139,8 +139,8 @@ private:
 	}
 	template<typename T>
 	constexpr static typename std::enable_if<(sizeof(T) >= sizeof(buffer_type) && sizeof(T) % sizeof(buffer_type) == 0),
-											 std::size_t>::type
-		size_of()
+	                                         std::size_t>::type
+	    size_of()
 	{
 		return sizeof(T) / sizeof(buffer_type);
 	}

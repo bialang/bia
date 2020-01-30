@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 		std::size_t s;
 
 		instruction_writer wi(output);
-		
+
 		wi.write_instruction<false, OC_INSTANTIATE>(temp_member_index<std::uint8_t>{ 0 }, 61);
 		wi.write_instruction<false, OC_TEST>(temp_member_index<std::uint8_t>{ 0 });
 		wi.write_end();

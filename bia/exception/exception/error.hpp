@@ -3,8 +3,7 @@
 #include "throwable.hpp"
 
 namespace bia {
-namespace exception
-{
+namespace exception {
 
 class error : public throwable
 {
@@ -12,5 +11,5 @@ public:
 	using throwable::throwable;
 };
 
-}
+} // namespace exception
 } // namespace bia

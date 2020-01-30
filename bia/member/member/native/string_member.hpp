@@ -61,6 +61,6 @@ private:
 	string::string str;
 };
 
-} // namespace framework
+} // namespace native
 } // namespace member
 } // namespace bia

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <iostream>
-
 #include "encoder.hpp"
+
+#include <iostream>
 
 namespace bia {
 namespace string {
@@ -13,9 +13,9 @@ class input_iterator
 public:
 	input_iterator(encoder* enc, const std::int8_t* begin, const std::int8_t* end) noexcept
 	{
-		nt		  = true;
+		nt        = true;
 		this->enc = enc;
-		n		  = 0;
+		n         = 0;
 		current   = begin;
 		this->end = end;
 	}

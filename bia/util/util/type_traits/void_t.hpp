@@ -8,6 +8,6 @@ template<typename... T>
 struct void_t
 {};
 
-}
+} // namespace type_traits
 } // namespace util
 } // namespace bia

@@ -13,7 +13,7 @@ inline TOKEN_ACTION keyword_token(stream::input_stream& input, rule_parameter& p
 
 	auto buffer = input.bufferless_read();
 	auto begin  = Keyword::name();
-	auto end	= begin + Keyword::length();
+	auto end    = begin + Keyword::length();
 
 	while (begin < end) {
 		// cannot yield eof, because bufferless_read() has to return at least BIA_MIN_TOKENIZER_BUFFER

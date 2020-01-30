@@ -16,7 +16,7 @@ public:
 	typedef Return (Class::*method_type)(Args...);
 
 	functor_member(method_type method, Class* instance, bool gc_collectible) noexcept
-		: method(method), instance(instance), gc_collectible(gc_collectible)
+	    : method(method), instance(instance), gc_collectible(gc_collectible)
 	{}
 
 	virtual member* bind(const std::type_info& type, void* instance, bool gc_collectible) const override

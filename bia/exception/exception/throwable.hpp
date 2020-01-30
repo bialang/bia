@@ -11,7 +11,8 @@ namespace exception {
 class throwable : public std::exception
 {
 public:
-	throwable(const char16_t* message, const char* filename, int line) noexcept : u16message(message), filename(filename), line(line)
+	throwable(const char16_t* message, const char* filename, int line) noexcept
+	    : u16message(message), filename(filename), line(line)
 	{}
 	virtual const char* what() const noexcept final override
 	{

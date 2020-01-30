@@ -33,7 +33,8 @@ public:
 	*/
 	gc::memory_allocator& memory_allocator() noexcept;
 	/*
-	 Takes the buffer and transfers the ownership. The buffer must be manually deallocated after use with the given memory_allocator().
+	 Takes the buffer and transfers the ownership. The buffer must be manually deallocated after use with the given
+	 memory_allocator().
 
 	 @return (buffer, size, max_size)
 	*/
@@ -46,5 +47,5 @@ private:
 	gc::memory_allocator& allocator;
 };
 
-}
+} // namespace stream
 } // namespace bia

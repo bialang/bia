@@ -35,7 +35,7 @@ public:
 			// check low surrogate
 			if ((begin[i2] & 0xfc) == 0xdc) {
 				output =
-					(((begin[i0] & 0x03) << 18) | (begin[i1] << 10) | ((begin[i2] & 0x03) << 8) | begin[i3]) + 0x10000;
+				    (((begin[i0] & 0x03) << 18) | (begin[i1] << 10) | ((begin[i2] & 0x03) << 8) | begin[i3]) + 0x10000;
 				begin += 4;
 			} else {
 				BIA_THROW(exception::char_encoding_exception, u"missing UTF-16 low surrogate");
@@ -78,9 +78,9 @@ protected:
 		return size / 2;
 	}
 	virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output,
-								std::size_t output_len) override
+	                            std::size_t output_len) override
 	{
-		const auto end	= input + input_len;
+		const auto end    = input + input_len;
 		constexpr auto i0 = Big_endian ? 0 : 1;
 		constexpr auto i1 = Big_endian ? 1 : 0;
 		constexpr auto i2 = Big_endian ? 2 : 3;
@@ -115,9 +115,9 @@ protected:
 		return output;
 	}
 	virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output,
-							   std::size_t output_len) override
+	                           std::size_t output_len) override
 	{
-		const auto end	= input + input_len;
+		const auto end    = input + input_len;
 		constexpr auto i0 = Big_endian ? 0 : 1;
 		constexpr auto i1 = Big_endian ? 1 : 0;
 		constexpr auto i2 = Big_endian ? 2 : 3;
@@ -129,7 +129,7 @@ protected:
 				// check low surrogate
 				if (input + 3 < end && (input[i2] & 0xfc) == 0xdc) {
 					*output = (((input[i0] & 0x03) << 18) | (input[i1] << 10) | ((input[i2] & 0x03) << 8) | input[i3]) +
-							  0x10000;
+					          0x10000;
 					input += 4;
 				} else {
 					BIA_THROW(exception::char_encoding_exception, u"missing UTF-16 low surrogate");

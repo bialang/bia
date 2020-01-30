@@ -8,9 +8,9 @@ namespace tokenizer {
 class token_receiver
 {
 public:
-    virtual ~token_receiver() = default;
-    virtual void receive(const token* begin, const token* end) = 0;
+	virtual ~token_receiver()                                  = default;
+	virtual void receive(const token* begin, const token* end) = 0;
 };
 
-}
-}
+} // namespace tokenizer
+} // namespace bia

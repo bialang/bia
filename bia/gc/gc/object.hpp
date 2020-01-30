@@ -9,7 +9,8 @@ namespace bia {
 namespace gc {
 
 /*
- This object must be implemented of all gc node object. Node objects are objects that must be destructed before deallocation and can contain references to other gc objects.
+ This object must be implemented of all gc node object. Node objects are objects that must be destructed before
+ deallocation and can contain references to other gc objects.
 */
 class object
 {
@@ -39,8 +40,7 @@ protected:
 		if (info->leaf) {
 			info->marked.store(mark, std::memory_order_relaxed);
 		} else {
-			if (info->marked.exchange(mark, std::memory_order_relaxed) !=
-				mark) {
+			if (info->marked.exchange(mark, std::memory_order_relaxed) != mark) {
 				static_cast<const object*>(ptr)->gc_mark_children(mark);
 			}
 		}
@@ -55,7 +55,8 @@ private:
 	}
 	static bia::gc::object_info* object_info(const void* ptr)
 	{
-		return reinterpret_cast<bia::gc::object_info*>(static_cast<int8_t*>(const_cast<void*>(ptr)) - sizeof(bia::gc::object_info));
+		return reinterpret_cast<bia::gc::object_info*>(static_cast<int8_t*>(const_cast<void*>(ptr)) -
+		                                               sizeof(bia::gc::object_info));
 	}
 };
 

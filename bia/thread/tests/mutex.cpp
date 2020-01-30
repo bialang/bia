@@ -37,8 +37,8 @@ TEST_CASE("shared spin mutex", "[mutex][thread]")
 {
 	shared_spin_mutex mutex;
 	auto counter = 0;
-	auto tmp0	= 0;
-	auto tmp1	= 0;
+	auto tmp0    = 0;
+	auto tmp1    = 0;
 
 	mutex.lock();
 

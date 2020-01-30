@@ -18,8 +18,8 @@ inline TOKEN_ACTION whitespace_consumer(stream::input_stream& input, rule::param
 		COMMENT_CONTENT
 	};
 
-	STATE state						= STATE::START;
-	auto buffer						= input.bufferless_read();
+	STATE state                     = STATE::START;
+	auto buffer                     = input.bufferless_read();
 	string::encoding::code_point cp = 0;
 
 	while (true) {

@@ -5,23 +5,24 @@
 #include "object_ptr.hpp"
 #include "root.hpp"
 #include "std_memory_allocator.hpp"
-#include <cstdio>
+
 #include <array>
 #include <atomic>
 #include <condition_variable>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <cstring>
 #include <exception/implementation_error.hpp>
 #include <functional>
 #include <memory>
-#include <type_traits>
-#include <unordered_set>
 #include <thread/data/synchronized_stack.hpp>
 #include <thread/shared_lock.hpp>
 #include <thread/shared_spin_mutex.hpp>
 #include <thread/spin_mutex.hpp>
 #include <thread/thread_pool.hpp>
+#include <type_traits>
+#include <unordered_set>
 #include <util/type_traits/conjunction.hpp>
 #include <utility>
 #include <vector>
@@ -137,7 +138,9 @@ public:
 	 @tparam Counts must be integers describing how large each root should be
 	*/
 	template<typename... Counts>
-	typename std::enable_if<bia::util::type_traits::conjunction<std::is_unsigned<Counts>::value...>::value, token<sizeof...(Counts)>>::type register_thread(Counts... counts)
+	typename std::enable_if<bia::util::type_traits::conjunction<std::is_unsigned<Counts>::value...>::value,
+	                        token<sizeof...(Counts)>>::type
+	    register_thread(Counts... counts)
 	{
 		// There is already a registered instance
 		if (active_gc_instance) {
@@ -162,10 +165,10 @@ public:
 	typename std::enable_if<std::is_base_of<object, T>::value, T*>::type construct(Args&&... args)
 	{
 		static_assert(alignof(T) <= memory_allocator::alignment,
-					  "the alignement cannot be greater than the max alignment "
-					  "of the memory allocator");
+		              "the alignement cannot be greater than the max alignment "
+		              "of the memory allocator");
 		static_assert(alignof(object_info) <= memory_allocator::previous_data_alignment,
-					  "the required alignment of object info is not met");
+		              "the required alignment of object info is not met");
 
 		return new (allocate_impl(sizeof(T), false)) T(std::forward<Args>(args)...);
 	}
@@ -200,12 +203,12 @@ private:
 	/* a stack which stores all (potentially) missed objects while the gc was
 	 concurrently collecting */
 	thread::data::synchronized_stack<std::vector<void*, std_memory_allocator<void*>>, thread::spin_mutex>
-		missed_objects;
+	    missed_objects;
 
 	/* locks shared when allocating memory */
 	thread::shared_spin_mutex mutex;
 	/* the current gc mark; this is only set by the main gc thread and is locked by gc_mutex */
-	bool current_mark =false;
+	bool current_mark = false;
 	/* whether the gc is currently in the marking phase */
 	bool is_active = false;
 

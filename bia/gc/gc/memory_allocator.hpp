@@ -31,7 +31,8 @@ public:
 	*/
 	virtual void deallocate(void* ptr, std::size_t previous_size) = 0;
 	/*
-	 Allocates *size* bytes and returns the pointer to the first byte. This function is thread-safe to call. The memory is aligned according to memory_allocator::alignment.
+	 Allocates *size* bytes and returns the pointer to the first byte. This function is thread-safe to call. The memory
+	 is aligned according to memory_allocator::alignment.
 
 	 @param size is the amount of required bytes
 	 @param previous_size is the amount of bytes required before the first byte; this memory has an alignment of 1
@@ -66,7 +67,9 @@ public:
 		return !x && !(x & (x - 1));
 	}
 	/*
-	 Sets the default memory allocator. This allocator must be created by `new` and will be automatically deleted by `delete`. This function is not thread-safe and it is dangerous to change the allocator after a default allocator was already acquired.
+	 Sets the default memory allocator. This allocator must be created by `new` and will be automatically deleted by
+	 `delete`. This function is not thread-safe and it is dangerous to change the allocator after a default allocator
+	 was already acquired.
 
 	 @param[in] allocator is the new default allocator
 	*/

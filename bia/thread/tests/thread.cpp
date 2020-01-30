@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN
 
 #include <catch.hpp>
-#include <thread/thread.hpp>
 #include <exception/interrupt_exception.hpp>
+#include <thread/thread.hpp>
 
 using namespace bia::thread;
 

@@ -18,5 +18,5 @@ private:
 	static std::unique_ptr<lexer> default_lexer;
 };
 
-}
-}
+} // namespace tokenizer
+} // namespace bia

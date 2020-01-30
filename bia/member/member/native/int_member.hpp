@@ -36,7 +36,6 @@ public:
 	}
 	virtual member* call(stack::stack* stack, std::int32_t param_count) override
 	{
-
 		BIA_IMPLEMENTATION_ERROR(u"");
 	}
 	virtual member* bind(const std::type_info& type, void* instance, bool gc_collectible) const override

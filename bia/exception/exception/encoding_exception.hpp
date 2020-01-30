@@ -8,8 +8,8 @@ namespace exception {
 class encoding_exception : public exception
 {
 public:
-    using exception::exception;
+	using exception::exception;
 };
 
-}
-}
+} // namespace exception
+} // namespace bia

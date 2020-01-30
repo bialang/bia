@@ -20,7 +20,7 @@ public:
 	*/
 	explicit barrier(std::size_t thread_count)
 	{
-		arrive_count	   = 0;
+		arrive_count       = 0;
 		this->thread_count = thread_count;
 	}
 	void arrive_and_wait()

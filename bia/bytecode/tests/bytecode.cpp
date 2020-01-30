@@ -15,7 +15,7 @@ TEST_CASE("instruction writer", "[bytecode]")
 	SECTION("OC_RETURN")
 	{
 	//
-		wi.write_instruction<OC_RETURN>();
+	    wi.write_instruction<OC_RETURN>();
 	}
 
 	SECTION("immediate ints")

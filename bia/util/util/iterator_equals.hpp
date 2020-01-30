@@ -29,8 +29,7 @@ inline std::size_t iterator_starts_with_helper(bool* state, T&& value) noexcept
 }
 
 template<typename T, typename Iterator, typename... Others>
-inline std::size_t iterator_starts_with_helper(bool* state, T&& value, Iterator&& iterator,
-											   Others&&... others)
+inline std::size_t iterator_starts_with_helper(bool* state, T&& value, Iterator&& iterator, Others&&... others)
 {
 	std::size_t lost = 0;
 

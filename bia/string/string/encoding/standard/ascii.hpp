@@ -50,7 +50,7 @@ protected:
 		return size;
 	}
 	virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output,
-								std::size_t output_len) override
+	                            std::size_t output_len) override
 	{
 		const auto end = input + input_len;
 
@@ -66,7 +66,7 @@ protected:
 		return output;
 	}
 	virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output,
-							   std::size_t output_len) override
+	                           std::size_t output_len) override
 	{
 		const auto end = input + input_len;
 

@@ -3,10 +3,10 @@
 #include "rule_id.hpp"
 #include "token_bundle.hpp"
 
+#include <initializer_list>
 #include <stream/input_stream.hpp>
 #include <string/encoding/encoder.hpp>
 #include <vector>
-#include <initializer_list>
 
 namespace bia {
 namespace tokenizer {

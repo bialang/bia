@@ -15,7 +15,7 @@ class utf8 final : public encoder
 public:
 	virtual void read_start(const std::int8_t*& begin, const std::int8_t* end) const override
 	{
-		auto tmp	  = begin;
+		auto tmp      = begin;
 		code_point cp = 0;
 
 		if (next_unchecked(tmp, end, cp)) {
@@ -56,7 +56,7 @@ protected:
 		return size;
 	}
 	virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output,
-								std::size_t output_len) override
+	                            std::size_t output_len) override
 	{
 		const auto end   = input + input_len;
 		const auto o_end = output + output_len;
@@ -109,7 +109,7 @@ protected:
 		return output;
 	}
 	virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output,
-							   std::size_t output_len) override
+	                           std::size_t output_len) override
 	{
 		const auto end   = input + input_len;
 		const auto o_end = output + output_len;
@@ -141,7 +141,7 @@ protected:
 				}
 
 				*output = ((input[0] & 0x07) << 18) | ((input[1] & 0x3f) << 12) | ((input[2] & 0x3f) << 6) |
-						  (input[3] & 0x3f);
+				          (input[3] & 0x3f);
 				input += 4;
 			} else {
 				BIA_THROW(exception::char_encoding_exception, error_msg);
@@ -190,7 +190,7 @@ private:
 			}
 
 			output =
-				((begin[0] & 0x07) << 18) | ((begin[1] & 0x3f) << 12) | ((begin[2] & 0x3f) << 6) | (begin[3] & 0x3f);
+			    ((begin[0] & 0x07) << 18) | ((begin[1] & 0x3f) << 12) | ((begin[2] & 0x3f) << 6) | (begin[3] & 0x3f);
 			begin += 4;
 		} else {
 			BIA_THROW(exception::char_encoding_exception, error_msg);

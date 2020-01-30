@@ -13,7 +13,7 @@ using namespace bia::tokenizer::lexer_token;
 inline buffer_input_stream make_stream(const char* text)
 {
 	return buffer_input_stream(reinterpret_cast<const std::int8_t*>(text),
-							   reinterpret_cast<const std::int8_t*>(text) + std::char_traits<char>::length(text));
+	                           reinterpret_cast<const std::int8_t*>(text) + std::char_traits<char>::length(text));
 }
 
 TEST_CASE("bool_token", "[lexer_token][tokenizer]")

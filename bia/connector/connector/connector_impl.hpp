@@ -11,7 +11,7 @@ namespace connector {
 
 template<typename... Args, int... Indices>
 inline member::member* static_caller(void (*function)(Args...), stack::stack* stack,
-									 util::type_traits::int_container<int, Indices...>)
+                                     util::type_traits::int_container<int, Indices...>)
 {
 	function(stack->get(util::type_traits::type_select<Indices + 1, Args...>::values)...);
 
@@ -21,16 +21,16 @@ inline member::member* static_caller(void (*function)(Args...), stack::stack* st
 
 template<typename Return, typename... Args, int... Indices>
 inline member::member* static_caller(Return (*function)(Args...), stack::stack* stack,
-									 util::type_traits::int_container<int, Indices...>)
+                                     util::type_traits::int_container<int, Indices...>)
 {
 	// call and wrap return value
-	return creator::creator(gc::gc::active_gc()).create_member(
-		function(stack->get(util::type_traits::type_select<Indices + 1, Args...>::values)...));
+	return creator::creator(gc::gc::active_gc())
+	    .create_member(function(stack->get(util::type_traits::type_select<Indices + 1, Args...>::values)...));
 }
 
 template<typename Class, typename... Args, int... Indices>
 inline member::member* member_caller(void (Class::*function)(Args...), Class* instance, stack::stack* stack,
-									 util::type_traits::int_container<int, Indices...>)
+                                     util::type_traits::int_container<int, Indices...>)
 {
 	(instance->*function)(stack->get(util::type_traits::type_select<Indices + 1, Args...>::values)...);
 
@@ -40,11 +40,12 @@ inline member::member* member_caller(void (Class::*function)(Args...), Class* in
 
 template<typename Return, typename Class, typename... Args, int... Indices>
 inline member::member* member_caller(Return (Class::*function)(Args...), Class* instance, stack::stack* stack,
-									 util::type_traits::int_container<int, Indices...>)
+                                     util::type_traits::int_container<int, Indices...>)
 {
 	// call and wrap return value
-	return creator::creator(gc::gc::active_gc()).create_member(
-		(instance->*function)(stack->get(util::type_traits::type_select<Indices + 1, Args...>::values)...));
+	return creator::creator(gc::gc::active_gc())
+	    .create_member(
+	        (instance->*function)(stack->get(util::type_traits::type_select<Indices + 1, Args...>::values)...));
 }
 
 template<typename Return, typename... Args>
@@ -61,7 +62,7 @@ inline member::member* static_connector(Return (*function)(Args...), stack::stac
 
 template<typename Return, typename Class, typename... Args>
 inline member::member* member_connector(Return (Class::*function)(Args...), Class* instance, stack::stack* stack,
-										param_count_type param_count)
+                                        param_count_type param_count)
 {
 	// invalid amount of parameters
 	if (sizeof...(Args) != param_count) {

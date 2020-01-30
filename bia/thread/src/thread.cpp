@@ -32,9 +32,9 @@ struct thread::impl
 	impl(std::function<void()>&& target) : mutex(100), target(std::move(target))
 	{
 		interrupted = false;
-		alive		= false;
-		started		= false;
-		daemon		= false;
+		alive       = false;
+		started     = false;
+		daemon      = false;
 	}
 };
 
@@ -63,7 +63,7 @@ void thread::sleep(std::uintmax_t duration)
 
 	if (duration) {
 		was_interrupted = t.pimpl->cv.wait_for(lock, std::chrono::duration<std::uintmax_t, std::milli>(duration),
-											   [&t] { return t.pimpl->interrupted; });
+		                                       [&t] { return t.pimpl->interrupted; });
 	} else {
 		t.pimpl->cv.wait(lock, [&t] { return t.pimpl->interrupted; });
 	}

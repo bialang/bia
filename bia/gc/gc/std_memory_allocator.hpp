@@ -31,12 +31,10 @@ public:
 		typedef std_memory_allocator<U> other;
 	};
 
-	std_memory_allocator(memory_allocator* allocator) noexcept
-		: allocator(allocator)
+	std_memory_allocator(memory_allocator* allocator) noexcept : allocator(allocator)
 	{}
 	template<typename U>
-	std_memory_allocator(const std_memory_allocator<U>& copy) noexcept
-		: allocator(copy.allocator)
+	std_memory_allocator(const std_memory_allocator<U>& copy) noexcept : allocator(copy.allocator)
 	{}
 	template<typename U, typename... Args>
 	void construct(U* ptr, Args&&... args)

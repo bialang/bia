@@ -58,8 +58,8 @@ public:
 	 @param param_count the amount of parameters to pass
 	 @returns the return value of the function call
 	*/
-	virtual member* call(stack::stack* stack, std::int32_t param_count)								  = 0;
-	virtual member* bind(const std::type_info& type, void* instance, bool gc_collectible) const		  = 0;
+	virtual member* call(stack::stack* stack, std::int32_t param_count)                               = 0;
+	virtual member* bind(const std::type_info& type, void* instance, bool gc_collectible) const       = 0;
 	virtual member* bind(const std::type_info& type, const void* instance, bool gc_collectible) const = 0;
 	/*
 	 Tests this member.
@@ -71,9 +71,9 @@ public:
 	friend T cast(member* m);
 
 protected:
-	virtual bool int64_data(std::int64_t& data) const							 = 0;
-	virtual bool double_data(double& data) const								 = 0;
-	virtual bool other_data(const std::type_info& type, void*& data)			 = 0;
+	virtual bool int64_data(std::int64_t& data) const                            = 0;
+	virtual bool double_data(double& data) const                                 = 0;
+	virtual bool other_data(const std::type_info& type, void*& data)             = 0;
 	virtual bool other_data(const std::type_info& type, const void*& data) const = 0;
 };
 

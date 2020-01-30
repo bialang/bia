@@ -11,8 +11,8 @@ namespace exception {
 class char_encoding_exception : public encoding_exception
 {
 public:
-    using encoding_exception::encoding_exception;
+	using encoding_exception::encoding_exception;
 };
 
-}
-}
+} // namespace exception
+} // namespace bia

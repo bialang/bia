@@ -11,14 +11,14 @@ inline TOKEN_ACTION calling_token(stream::input_stream& input, rule::parameter& 
 {
 	constexpr auto error   = TOKEN_ACTION::FAILED;
 	constexpr auto success = TOKEN_ACTION::SUCCEEDED;
-	auto succeeded		   = false;
+	auto succeeded         = false;
 
 	while (identifier_token(input, param) == TOKEN_ACTION::SUCCEEDED) {
 		succeeded = true;
 
-		auto buffer = input.bufferless_read();
+		auto buffer                     = input.bufferless_read();
 		string::encoding::code_point cp = 0;
-	
+
 		if (!param.encoder.next(buffer.first, buffer.second, cp) || cp != '.') {
 			break;
 		}

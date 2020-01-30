@@ -8,8 +8,8 @@ namespace compiler {
 class compiler
 {
 public:
-    code finish();
+	code finish();
 };
 
-}
-}
+} // namespace compiler
+} // namespace bia

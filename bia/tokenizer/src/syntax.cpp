@@ -11,7 +11,7 @@ public:
 	virtual void lex(stream::input_stream& input, token_receiver& receiver) const override
 	{
 		rule::parameter param(
-			*string::encoding::encoder::get_instance(string::encoding::encoder::STANDARD_ENCODING::ASCII));
+		    *string::encoding::encoder::get_instance(string::encoding::encoder::STANDARD_ENCODING::ASCII));
 
 		rules[static_cast<std::size_t>(RULE_ID::ROOT)].run(input, param);
 	}

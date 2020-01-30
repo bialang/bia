@@ -1,6 +1,6 @@
-#include <stream/buffer_input_stream.hpp>
-#include <cstring>
 #include <algorithm>
+#include <cstring>
+#include <stream/buffer_input_stream.hpp>
 
 namespace bia {
 namespace stream {
@@ -9,7 +9,7 @@ buffer_input_stream::buffer_input_stream(const std::int8_t* begin, const std::in
 {
 	this->begin = begin;
 	this->end   = end;
-	cursor		= begin;
+	cursor      = begin;
 }
 
 void buffer_input_stream::reset_to_mark(mark_type mark)

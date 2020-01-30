@@ -21,7 +21,7 @@ public:
 	simple_allocator(allocate_fun_type allocate_fun = &std::malloc, free_fun_type free_fun = &std::free) noexcept
 	{
 		this->allocate_fun = allocate_fun;
-		this->free_fun	 = free_fun;
+		this->free_fun     = free_fun;
 	}
 	virtual void deallocate(void* ptr, std::size_t previous_size) override
 	{
@@ -41,7 +41,7 @@ private:
 	static std::size_t aligned(std::size_t x)
 	{
 		return 0;
-		//return (x + alignment - 1) / alignment * alignment;
+		// return (x + alignment - 1) / alignment * alignment;
 	}
 };
 

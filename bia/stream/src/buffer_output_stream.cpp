@@ -5,22 +5,22 @@ namespace bia {
 namespace stream {
 
 bia::stream::buffer_output_stream::buffer_output_stream(bia::gc::memory_allocator& allocator) noexcept
-	: allocator(allocator)
+    : allocator(allocator)
 {
 	current_size = 0;
-	max_size	 = 0;
-	buffer		 = nullptr;
+	max_size     = 0;
+	buffer       = nullptr;
 }
 
 buffer_output_stream::buffer_output_stream(buffer_output_stream&& move) noexcept : allocator(move.allocator)
 {
 	current_size = move.current_size;
-	max_size	 = move.max_size;
-	buffer		 = move.buffer;
+	max_size     = move.max_size;
+	buffer       = move.buffer;
 
 	move.current_size = 0;
-	move.max_size	 = 0;
-	move.buffer		  = nullptr;
+	move.max_size     = 0;
+	move.buffer       = nullptr;
 }
 
 buffer_output_stream::~buffer_output_stream()
@@ -74,9 +74,9 @@ std::tuple<void*, std::size_t, std::size_t> buffer_output_stream::take_buffer() 
 {
 	std::tuple<void*, std::size_t, std::size_t> tmp(buffer, current_size, max_size);
 
-	buffer		 = nullptr;
+	buffer       = nullptr;
 	current_size = 0;
-	max_size	 = 0;
+	max_size     = 0;
 
 	return tmp;
 }

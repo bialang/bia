@@ -23,15 +23,15 @@ string encoder::convert(const std::int8_t* input, std::size_t length)
 {
 	/*auto& to = get_instance(STANDARD_ENCODING::UTF_16);
 	auto buffer =
-		static_cast<std::int8_t*>(gc::gc::active_gc()->allocate(to.max_size(from.max_code_points(length) + 1)));
+	    static_cast<std::int8_t*>(gc::gc::active_gc()->allocate(to.max_size(from.max_code_points(length) + 1)));
 	const auto begin = buffer;
 	std::size_t size = 0;
 	code_point code_points[32];
 
 	while (length > 0) {
-		auto tmp = from.decode(input, length, code_points, 32);
+	    auto tmp = from.decode(input, length, code_points, 32);
 
-		buffer = to.encode(code_points, static_cast<std::size_t>(tmp - code_points), buffer, 0);
+	    buffer = to.encode(code_points, static_cast<std::size_t>(tmp - code_points), buffer, 0);
 	}*/
 	throw;
 	// return string(reinterpret_cast<const char_type*>(begin), size);

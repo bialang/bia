@@ -12,9 +12,9 @@ namespace thread {
 class spin_mutex
 {
 public:
-	spin_mutex()					   = default;
+	spin_mutex()                       = default;
 	spin_mutex(const spin_mutex& copy) = delete;
-	spin_mutex(spin_mutex&& move)	  = delete;
+	spin_mutex(spin_mutex&& move)      = delete;
 	/*
 	 Locks the mutex. If the mutex is already locked by another thread this method will block until it acquires the
 	 mutex.

@@ -13,14 +13,14 @@ struct equals_any_t;
 
 template<std::size_t Index, typename T, T Value, T Other>
 struct equals_any_t<Index, T, Value, Other>
-	: std::conditional<Value == Other, std::integral_constant<std::size_t, Index>,
-					   std::integral_constant<std::size_t, 0>>::type
+    : std::conditional<Value == Other, std::integral_constant<std::size_t, Index>,
+                       std::integral_constant<std::size_t, 0>>::type
 {};
 
 template<std::size_t Index, typename T, T Value, T Other, T... Others>
 struct equals_any_t<Index, T, Value, Other, Others...>
-	: std::conditional<Value == Other, std::integral_constant<std::size_t, Index>,
-					   equals_any_t<Index + 1, T, Value, Others...>>::type
+    : std::conditional<Value == Other, std::integral_constant<std::size_t, Index>,
+                       equals_any_t<Index + 1, T, Value, Others...>>::type
 {};
 
 template<typename T, T Value, T... Other>
@@ -32,14 +32,14 @@ struct equals_any_type_t;
 
 template<std::size_t Index, typename T, typename Other>
 struct equals_any_type_t<Index, T, Other>
-	: std::conditional<std::is_same<T, Other>::value, std::integral_constant<std::size_t, Index>,
-					   std::integral_constant<std::size_t, 0>>::type
+    : std::conditional<std::is_same<T, Other>::value, std::integral_constant<std::size_t, Index>,
+                       std::integral_constant<std::size_t, 0>>::type
 {};
 
 template<std::size_t Index, typename T, typename Other, typename... Others>
 struct equals_any_type_t<Index, T, Other, Others...>
-	: std::conditional<std::is_same<T, Other>::value, std::integral_constant<std::size_t, Index>,
-					   equals_any_type_t<Index + 1, T, Others...>>::type
+    : std::conditional<std::is_same<T, Other>::value, std::integral_constant<std::size_t, Index>,
+                       equals_any_type_t<Index + 1, T, Others...>>::type
 {};
 
 template<typename T, typename... Others>
