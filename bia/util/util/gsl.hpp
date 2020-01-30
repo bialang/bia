@@ -20,7 +20,7 @@ public:
 		contract::expects(_value != nullptr);
 	}
 	template<typename Ty>
-	not_null(const not_null<Ty>& other) : not_null(other.get())
+	not_null(const not_null<Ty>& other) noexcept : not_null(other.get())
 	{}
 	not_null(std::nullptr_t) = delete;
 	T get() const

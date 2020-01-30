@@ -54,12 +54,12 @@ private:
 
 	static void _inject_object_info(util::not_null<void*> ptr, object_info&& info) noexcept
 	{
-		new (static_cast<std::int8_t*>(ptr) - sizeof(object_info)) object_info(std::move(info));
+		new (static_cast<std::int8_t*>(ptr.get()) - sizeof(object_info)) object_info(std::move(info));
 	}
 	static util::not_null<object_info*> _object_info(util::not_null<const void*> ptr) noexcept
 	{
 		return const_cast<object_info*>(
-		    reinterpret_cast<const object_info*>(static_cast<const std::int8_t*>(ptr) - sizeof(object_info)));
+		    reinterpret_cast<const object_info*>(static_cast<const std::int8_t*>(ptr.get()) - sizeof(object_info)));
 	}
 };
 
