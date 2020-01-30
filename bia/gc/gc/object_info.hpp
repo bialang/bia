@@ -6,12 +6,16 @@
 namespace bia {
 namespace gc {
 
-struct object_info
+constexpr auto object_alignment = sizeof(std::intptr_t);
+
+struct alignas(object_alignment) object_info
 {
-	/* the current mark */
-	std::atomic_bool marked;
-	/* whether this object is a leaf or a node */
-	bool leaf;
+	/** an index for the garbage collector indicating if this value was missed */
+	std::atomic_uint32_t miss_index;
+	/** the current mark */
+	std::atomic_bool mark;
+	/** whether this object is a leaf or a node */
+	const bool leaf;
 };
 
 } // namespace gc
