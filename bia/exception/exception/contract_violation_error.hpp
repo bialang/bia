@@ -1,15 +1,18 @@
 #ifndef BIA_EXCEPTION_CONTRACT_VIOLATION_ERROR_HPP_
 #define BIA_EXCEPTION_CONTRACT_VIOLATION_ERROR_HPP_
 
-#include "error.hpp"
+#include "bia_error.hpp"
 
 namespace bia {
 namespace exception {
 
-class contract_violation_error : public error
+/**
+ * Thrown if a pre- or postcondition has been violated.
+*/
+class contract_violation_error : public bia_error
 {
 public:
-	using error::error;
+	using bia_error::bia_error;
 };
 
 } // namespace exception
