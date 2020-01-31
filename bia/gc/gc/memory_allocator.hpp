@@ -25,6 +25,8 @@ public:
 	/**
 	 * Deallocates the memory prior allocated by allocate(). This function is thread-safe to call.
 	 * 
+	 * @pre `ptr` was allocated by allocate() or checked_allocated() and not deallocated before
+	 * 
 	 * @param ptr is the memory that should be freed; if equal to `nullptr` this operation is a noop
 	 * @param previous_size must be the same as during allocation, otherwise undefined behavior
 	*/
@@ -49,7 +51,7 @@ public:
 		auto ptr = allocate(size);
 
 		if (!ptr) {
-			BIA_THROW(exception::memory_error, u"could not allocate more memory");
+			BIA_THROW(exception::memory_error, "could not allocate more memory");
 		}
 
 		return ptr;
