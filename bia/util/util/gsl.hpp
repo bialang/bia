@@ -12,7 +12,7 @@ template<typename T>
 class not_null
 {
 public:
-	static_assert(std::is_assignable<T, std::nullptr_t>::value, "invalid T");
+	static_assert(std::is_assignable<T&, std::nullptr_t>::value, "invalid T");
 
 	template<typename Ty>
 	not_null(Ty&& value) : _value(std::forward<Ty>(value))
