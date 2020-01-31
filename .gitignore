@@ -1,6 +1,6 @@
 .vscode/
 .vs/
-
+config.hpp
 [Dd]ebug/
 [Rr]elease/
 ReleaseDLL/
