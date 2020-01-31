@@ -21,7 +21,7 @@ public:
 	{
 	public:
 		token(const token& copy) = delete;
-		token(tokem&& move) noexcept
+		token(token&& move) noexcept
 		{
 			_container      = move._container;
 			move._container = nullptr;
