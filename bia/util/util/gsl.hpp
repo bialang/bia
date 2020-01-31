@@ -23,19 +23,21 @@ public:
 	not_null(const not_null<Ty>& other) noexcept : not_null(other.get())
 	{}
 	not_null(std::nullptr_t) = delete;
-	T get() const
+	T& get()
 	{
+		BIA_ENSURES(_value != nullptr);
+
 		return _value;
 	}
-	operator T() const
+	operator T&()
 	{
 		return get();
 	}
-	T operator->() const
+	T operator->()
 	{
 		return get();
 	}
-	decltype(*get()) operator*() const
+	auto operator*() -> decltype(*get())
 	{
 		return *get();
 	}
