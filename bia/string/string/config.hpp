@@ -1,4 +1,0 @@
-#pragma once
-
-/* #undef BIA_STRING_ENCODING_BACKEND_ICU */
-#define BIA_STRING_ENCODING_BACKEND_NONE
