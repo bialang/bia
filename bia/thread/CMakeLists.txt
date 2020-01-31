@@ -3,13 +3,14 @@ project(thread
 
 list(APPEND LINK_LIBS
 	PUBLIC exception
-	PUBLIC log)
+	PUBLIC log
+	PUBLIC util)
 
 # thread backend
 set(BIA_THREAD_BACKEND "std::thread"
 	CACHE STRING "The thread backend that should be used for creating threads in Bia and in its implementation.")
 set_property(CACHE BIA_THREAD_BACKEND
-	PROPERTY STRINGS "std::thread" "boost::thread" "none")
+	PROPERTY STRINGS "std::thread" "none")
 
 if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
 	set(BIA_THREAD_BACKEND_STD ON)
@@ -17,8 +18,6 @@ if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
 	find_package(Threads REQUIRED)
 	list(APPEND LINK_LIBS
 		PRIVATE ${CMAKE_THREAD_LIBS_INIT})
-elseif(${BIA_THREAD_BACKEND} STREQUAL "boost::thread")
-	set(BIA_THREAD_BACKEND_BOOST ON)
 else()
 	# disable threading
 	set(BIA_THREAD_BACKEND_NONE ON)

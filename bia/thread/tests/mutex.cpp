@@ -4,7 +4,7 @@
 #include <thread/thread.hpp>
 
 using namespace bia::thread;
-
+/*
 TEST_CASE("spin mutex", "[mutex][thread]")
 {
 	spin_mutex mutex;
@@ -72,3 +72,4 @@ TEST_CASE("shared spin mutex", "[mutex][thread]")
 	REQUIRE((tmp0 == 1 || tmp0 == 2));
 	REQUIRE((tmp1 == 1 || tmp1 == 2));
 }
+*/

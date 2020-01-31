@@ -5,9 +5,7 @@
 
 #if defined(BIA_THREAD_BACKEND_STD)
 #	include <condition_variable>
-#elif defined(BIA_THREAD_BACKEND_BOOST)
-#	include <boost/fiber/condition_variable.hpp>
-#else
+#elif defined(BIA_THREAD_BACKEND_NONE)
 #	include <chrono>
 #	include <exception/implementation_error.hpp>
 
@@ -19,13 +17,10 @@
 namespace bia {
 namespace thread {
 
-#if !defined(BIA_THREAD_BACKEND_STD)
+#if defined(BIA_THREAD_BACKEND_STD)
 using condition_variable     = std::condition_variable;
 using condition_variable_any = std::condition_variable_any;
-#elif defined(BIA_THREAD_BACKEND_BOOST)
-using condition_variable     = boost::fibers::condition_variable;
-using condition_variable_any = boost::fibers::condition_variable_any;
-#else
+#elif defined(BIA_THREAD_BACKEND_NONE)
 class condition_variable
 {
 public:

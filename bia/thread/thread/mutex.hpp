@@ -5,25 +5,23 @@
 
 #if defined(BIA_THREAD_BACKEND_STD)
 #	include <mutex>
-#elif defined(BIA_THREAD_BACKEND_BOOST)
-#	include <boost/fiber/mutex.hpp>
 #endif
 
 namespace bia {
 namespace thread {
 
-#if !defined(BIA_THREAD_BACKEND_STD)
+#if defined(BIA_THREAD_BACKEND_STD)
 using mutex = std::mutex;
-#elif defined(BIA_THREAD_BACKEND_BOOST)
-using mutex = boost::fibers::mutex;
-#else
+#elif defined(BIA_THREAD_BACKEND_NONE)
 class mutex
 {
 public:
 	void lock() noexcept
 	{}
 	bool try_lock() noexcept
-	{}
+	{
+		return true;
+	}
 	void unlock() noexcept
 	{}
 };

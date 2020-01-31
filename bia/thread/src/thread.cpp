@@ -1,48 +1,52 @@
-#include <chrono>
-#include <exception/interrupt_exception.hpp>
-#include <thread/config.hpp>
-#include <thread/hybrid_mutex.hpp>
-#include <thread/thread.hpp>
-#include <unordered_map>
-#include <utility>
+#include "thread/condition_variable.hpp"
+#include "thread/mutex.hpp"
+#include "thread/thread.hpp"
 
-#ifdef BIA_THREAD_BACKEND_STD
+#include <exception/interrupt_error.hpp>
+#include <exception/unsupported_error.hpp>
+#include <exception>
+#include <log/log.hpp>
+#include <util/gsl.hpp>
+
+#if defined(BIA_THREAD_BACKEND_STD)
 #	include <thread>
-#	include <condition_variable>
-#endif // BIA_THREAD_BACKEND_STD
+#elif defined(BIA_THREAD_BACKEND_NONE)
+#	if defined(BIA_THREAD_SLEEP_INCLUDE)
+#		include BIA_THREAD_SLEEP_INCLUDE
+#	endif
+#endif
 
 namespace bia {
 namespace thread {
 
 struct thread::impl
 {
-	volatile bool interrupted;
-	bool alive;
-	bool started;
-	bool daemon;
-	std::function<void()> target;
-	hybrid_mutex mutex;
-	std::exception_ptr exptr;
+	bool valid;
 #if defined(BIA_THREAD_BACKEND_STD)
-	std::thread t;
-	std::condition_variable_any cv;
-	static std::unordered_map<std::thread::id, thread> threads;
+	std::thread thread_backend;
 #endif
 
-	impl(std::function<void()>&& target) : mutex(100), target(std::move(target))
+	impl(std::function<void()> target)
 	{
-		interrupted = false;
-		alive       = false;
-		started     = false;
-		daemon      = false;
+		if (target) {
+			valid = true;
+
+#if defined(BIA_THREAD_BACKEND_STD)
+			thread_backend = std::thread(std::move(target));
+
+			BIA_LOG(INFO, "new thread launched");
+#elif defined(BIA_THREAD_BACKEND_NONE)
+			BIA_LOG(CRITICAL, "tried to launch thread; operation unsupported");
+
+			BIA_THROW(exception::unsupported_error, "threads are not supported");
+#endif
+		} else {
+			valid = false;
+		}
 	}
 };
 
-#if defined(BIA_THREAD_BACKEND_STD)
-std::unordered_map<std::thread::id, thread> thread::impl::threads;
-#endif
-
-thread::thread(std::function<void()> target) : pimpl(new impl(std::move(target)))
+thread::thread(std::function<void()> target) : _pimpl(new impl(std::move(target)))
 {}
 
 thread::~thread()
@@ -55,139 +59,40 @@ void thread::yield()
 #endif
 }
 
-void thread::sleep(std::uintmax_t duration)
-{
-	auto t = current_thread();
-	std::unique_lock<decltype(impl::mutex)> lock(t.pimpl->mutex);
-	auto was_interrupted = true;
-
-	if (duration) {
-		was_interrupted = t.pimpl->cv.wait_for(lock, std::chrono::duration<std::uintmax_t, std::milli>(duration),
-		                                       [&t] { return t.pimpl->interrupted; });
-	} else {
-		t.pimpl->cv.wait(lock, [&t] { return t.pimpl->interrupted; });
-	}
-
-	// sleep was interrupted
-	if (was_interrupted) {
-		// consume and throw
-		t.pimpl->interrupted = false;
-
-		BIA_THROW(exception::interrupt_exception, u"current sleep was interrupted");
-	}
-}
-
-thread thread::current_thread()
+void thread::sleep(std::chrono::milliseconds duration)
 {
 #if defined(BIA_THREAD_BACKEND_STD)
-	auto result = impl::threads.find(std::this_thread::get_id());
-
-	// create thread
-	if (result == impl::threads.end()) {
-		thread t;
-
-		impl::threads.insert({ std::this_thread::get_id(), t });
-
-		return t;
-	}
-
-	return result->second;
+	std::this_thread::sleep_for(duration);
+#elif defined(BIA_THREAD_BACKEND_NONE)
+	BIA_THREAD_SLEEP_FUNCTION(duration);
 #endif
 }
 
 void thread::join()
 {
-	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
-
 #if defined(BIA_THREAD_BACKEND_STD)
-	pimpl->t.join();
-#endif
+	BIA_EXPECTS(valid());
+#elif defined(BIA_THREAD_BACKEND_NOTHING)
 
-	// an exception occurred
-	if (pimpl->exptr) {
-		std::rethrow_exception(pimpl->exptr);
-	}
-}
-
-void thread::start()
-{
-	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
-
-	if (pimpl->started) {
-		throw;
-	}
-
-	pimpl->alive   = true;
-	pimpl->started = true;
-
-	auto target = [this] {
-		try {
-			pimpl->target();
-		} catch (...) {
-			pimpl->exptr = std::current_exception();
-		}
-
-		pimpl->alive = false;
-	};
-
-#if defined(BIA_THREAD_BACKEND_STD)
-	pimpl->t = std::thread(target);
-
-	impl::threads.insert({ std::this_thread::get_id(), *this });
-
-	// make daemon
-	if (pimpl->daemon) {
-		pimpl->t.detach();
-	}
 #endif
 }
 
-void thread::interrupt()
+bool thread::valid() const noexcept
 {
-	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
-
-	if (pimpl->started) {
-		pimpl->interrupted = true;
-		pimpl->cv.notify_one();
-	}
+#if defined(BIA_THREAD_BACKEND_STD)
+	return _pimpl->valid;
+#elif defined(BIA_THREAD_BACKEND_NOTHING)
+	return false;
+#endif
 }
 
-void thread::daemon(bool daemon)
+bool thread::supported() noexcept
 {
-	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
-
-	// thread was already started
-	if (pimpl->started) {
-		throw;
-	}
-
-	pimpl->daemon = daemon;
-}
-
-bool thread::daemon() const noexcept
-{
-	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
-
-	return pimpl->daemon;
-}
-
-bool thread::alive() const noexcept
-{
-	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
-
-	return pimpl->alive;
-}
-
-bool thread::interrupted() const noexcept
-{
-	std::unique_lock<decltype(impl::mutex)> lock(pimpl->mutex);
-
-	return pimpl->interrupted;
-}
-
-thread::thread() : pimpl(new impl({}))
-{
-	pimpl->started = true;
+#if defined(BIA_THREAD_BACKEND_STD)
+	return true;
+#elif defined(BIA_THREAD_BACKEND_NOTHING)
+	return false;
+#endif
 }
 
 } // namespace thread

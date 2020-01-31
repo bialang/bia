@@ -1,8 +1,11 @@
 #pragma once
 
+#include "config.hpp"
+
 #include <cstdint>
 #include <functional>
 #include <memory>
+#include <chrono>
 
 namespace bia {
 namespace thread {
@@ -10,33 +13,45 @@ namespace thread {
 class thread final
 {
 public:
-	thread(std::function<void()> target);
+	typedef std::function<void()> target_type;
+
+	/**
+	 * Initializes this thread with the function.
+	 *
+	 * @param target (optional) the function that should be run
+	 */
+	thread(target_type target = {});
 	~thread();
 	static void yield();
-	/*
-	 Blocks the execution of the current thread for `duration` milliseconds. If the thread is interrupted an exception
-	 is thrown.
-
-	 @param duration is the length of the sleep in milliseconds; passing `0` caueses the thread to block indefinitely
-	 until it is interrupted
-	 @throws exception::interrupt_exception if the thread was interrupted
-	*/
-	static void sleep(std::uintmax_t duration);
-	static thread current_thread();
+	/**
+	 * Blocks the execution of the current thread for the given duration. If the thread is interrupted, an exception
+	 * will be thrown.
+	 *
+	 * @post the interrupt flag will be cleared
+	 *
+	 * @param duration the duration in milliseconds; `0` causes the thread to block indefinitely
+	 * @throw exception::interrupt_error if this thread was interrupted
+	 */
+	static void sleep(std::chrono::milliseconds duration);
 	void join();
-	void start();
-	void interrupt();
-	void daemon(bool daemon);
-	bool daemon() const noexcept;
-	bool alive() const noexcept;
-	bool interrupted() const noexcept;
+	/**
+	 * Checks if this thread is valid. A thread is valid if it was initialized with a target and threading is supported.
+	 * See supported() for more information.
+	 *
+	 * @returns `true` if this thread is valid, otherwise `false`
+	 */
+	bool valid() const noexcept;
+	/**
+	 * Checks if threading is supported. This is done through the config file.
+	 * 
+	 * @returns `true` if threading is supported, otherwise `false`
+	*/
+	static bool supported() noexcept;
 
 private:
 	struct impl;
 
-	std::shared_ptr<impl> pimpl;
-
-	thread();
+	std::shared_ptr<impl> _pimpl;
 };
 
 } // namespace thread
