@@ -17,7 +17,7 @@ public:
 	template<typename Ty>
 	not_null(Ty&& value) : _value(std::forward<Ty>(value))
 	{
-		contract::expects(_value != nullptr);
+		BIA_EXPECTS(_value != nullptr);
 	}
 	template<typename Ty>
 	not_null(const not_null<Ty>& other) noexcept : not_null(other.get())

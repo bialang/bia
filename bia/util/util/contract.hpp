@@ -5,43 +5,17 @@
 
 #if defined(BIA_UTIL_CONTRACT_BEHAVIOR_THROW)
 #	include <exception/contract_violation_error.hpp>
+
+#define BIA_EXPECTS(cond) if (!(cond)) BIA_TRHOW(exception::contract_violation_error, "precondition (" #cond ") was violated")
+#define BIA_ENSURES(cond) if (!(cond)) BIA_TRHOW(exception::contract_violation_error, "postcondition (" #cond ") was violated")
 #elif defined(BIA_UTIL_CONTRACT_BEHAVIOR_ABORT)
 #	include <cstdlib>
-#endif
 
-namespace bia {
-namespace util {
-
-class contract
-{
-public:
-	static void expects(bool condition)
-	{
-#if defined(BIA_UTIL_CONTRACT_BEHAVIOR_THROW)
-		if (!condition) {
-			throw exception::contract_violation_error("precondition invalid");
-		}
-#elif defined(BIA_UTIL_CONTRACT_BEHAVIOR_ABORT)
-		if (!condition) {
-			std::abort();
-		}
+#define BIA_EXPECTS(cond) if (!(cond)) std::abort()
+#define BIA_ENSURES(cond) if (!(cond)) std::abort()
+#elif defined(BIA_UTIL_CONTRACT_BEHAVIOR_NOTHING)
+#define BIA_EXPECTS(cond) ((void)0)
+#define BIA_ENSURES(cond) ((void)0)
 #endif
-	}
-	static void ensures(bool condition)
-	{
-#if defined(BIA_UTIL_CONTRACT_BEHAVIOR_THROW)
-		if (!condition) {
-			throw exception::contract_violation_error("postcondition invalid");
-		}
-#elif defined(BIA_UTIL_CONTRACT_BEHAVIOR_ABORT)
-		if (!condition) {
-			std::abort();
-		}
-#endif
-	}
-};
-
-} // namespace util
-} // namespace bia
 
 #endif
