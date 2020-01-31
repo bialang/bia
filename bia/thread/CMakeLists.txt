@@ -1,11 +1,11 @@
-project("thread"
+project(thread
 		LANGUAGES CXX)
 
 list(APPEND LINK_LIBS
-	PUBLIC "exception"
-	PUBLIC "log")
+	PUBLIC exception
+	PUBLIC log)
 
-# Thread backend
+# thread backend
 set(BIA_THREAD_BACKEND "std::thread"
 	CACHE STRING "The thread backend that should be used for creating threads in Bia and in its implementation.")
 set_property(CACHE BIA_THREAD_BACKEND
@@ -20,10 +20,16 @@ if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
 elseif(${BIA_THREAD_BACKEND} STREQUAL "boost::thread")
 	set(BIA_THREAD_BACKEND_BOOST ON)
 else()
+	# disable threading
 	set(BIA_THREAD_BACKEND_NONE ON)
-endif()
+	set(BIA_THREAD_SLEEP_FUNCTION ""
+		CACHE STRING "The sleep function implementation. Takes a single std::chrono::duration<Rep, Period> argument.")
+	set(BIA_THREAD_SLEEP_INCLUDE ""
+		CACHE STRING "One additional include for the sleep function. For example <thread>")
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.in"
-	"${CMAKE_CURRENT_SOURCE_DIR}/thread/config.hpp")
+	if(NOT BIA_THREAD_SLEEP_FUNCTION)
+		message(FATAL_ERROR "BIA_THREAD_SLEEP_FUNCTION must be defined.")
+	endif()
+endif()
 	
 create_library(STATIC ${LINK_LIBS})
