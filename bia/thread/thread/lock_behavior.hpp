@@ -4,20 +4,22 @@
 #include "config.hpp"
 
 #if defined(BIA_THREAD_BACKEND_STD)
-#	include <thread>
+#	include <mutex>
 #endif
 
 namespace bia {
 namespace thread {
 
 #if defined(BIA_THREAD_BACKEND_STD)
+using try_to_lock_tag      = std::try_to_lock_t;
 constexpr auto try_to_lock = std::try_to_lock;
 #elif defined(BIA_THREAD_BACKEND_NONE)
-typedef struct
+struct try_to_lock_tag
 {
-} try_to_lock_type;
+	explicit try_to_lock_tag() = default;
+};
 
-constexpr try_to_lock_type try_to_lock{};
+constexpr try_to_lock_tag try_to_lock{};
 #endif
 
 } // namespace thread
