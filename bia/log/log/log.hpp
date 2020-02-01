@@ -6,14 +6,7 @@
 #include <memory>
 
 #if defined(BIA_LOG_ENABLE_LOGGING)
-
-#	if defined(SPDLOG_ACTIVE_LEVEL)
-#		include <spdlog/spdlog.h>
-#	else
-#		define SPDLOG_ACTIVE_LEVEL BIA_LOG_LEVEL
-#		include <spdlog/spdlog.h>
-#		undef SPDLOG_ACTIVE_LEVEL
-#	endif
+#	include <spdlog/spdlog.h>
 
 #	define BIA_LOG(level, ...) SPDLOG_LOGGER_##level(bia::log::get_default_logger(), __VA_ARGS__)
 #else
