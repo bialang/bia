@@ -13,6 +13,10 @@
 #	define BIA_LOG(...) ((void) 0)
 #endif
 
+#define BIA_LOG_ERROR(level, error)                                                                          \
+	BIA_LOG(level, "exception caught ({}, {}:{}): {}", error.name(), error.filename(), error.line(),         \
+	        error.what())
+
 namespace spdlog {
 
 class logger;
