@@ -1,7 +1,8 @@
 project(log
 	LANGUAGES CXX)
 
-list(APPEND LINK_LIBS)
+list(APPEND LINK_LIBS
+	PUBLIC exception)
 
 option(BIA_LOG_ENABLE_LOGGING "Whether the Bia library should make internal logs to the default logger." OFF)
 
