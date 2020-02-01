@@ -56,9 +56,10 @@ inline void* set_root_at(gc::token& token, gc& g, std::size_t index)
 	return ptr;
 }
 
-inline std::unique_ptr<gc> create_gc()
+inline std::unique_ptr<gc> create_gc(std::shared_ptr<memory_allocator> allocator = nullptr)
 {
-	return std::unique_ptr<gc>(new gc(std::shared_ptr<memory_allocator>(new tracking_allocator())));
+	return std::unique_ptr<gc>(
+	    new gc(allocator ? allocator : std::shared_ptr<memory_allocator>(new tracking_allocator())));
 }
 
 TEST_CASE("unmonitored memory allocation", "[gc]")
@@ -81,8 +82,8 @@ TEST_CASE("unmonitored memory allocation", "[gc]")
 
 TEST_CASE("garbage collection test", "[gc]")
 {
-	auto g         = create_gc();
-	auto allocator = static_cast<tracking_allocator*>(g->allocator());
+	auto allocator = std::make_shared<tracking_allocator>();
+	auto g         = create_gc(allocator);
 
 	SECTION("collection of leafs")
 	{
@@ -105,6 +106,11 @@ TEST_CASE("garbage collection test", "[gc]")
 		REQUIRE(allocator->has_object(p1));
 		REQUIRE(allocator->has_object(p2));
 	}
+
+	// free all memory
+	g = nullptr;
+
+	REQUIRE(allocator->allocation_count() == 0);
 }
 /*
 TEST_CASE("monitored memory allocation", "[gc]")

@@ -14,6 +14,17 @@ gc::gc(util::not_null<std::shared_ptr<memory_allocator>> allocator) noexcept
     : _mem_allocator(allocator.get()), _allocated(allocator), _roots(allocator)
 {}
 
+gc::~gc()
+{
+	try {
+		run_once();
+	} catch (const exception::bia_error& e) {
+		BIA_LOG_ERROR(CRITICAL, e);
+	}
+
+	//todo: free everything else
+}
+
 bool gc::run_once()
 {
 	BIA_LOG(INFO, "gc cycle requested");

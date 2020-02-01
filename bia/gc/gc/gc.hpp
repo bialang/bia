@@ -147,8 +147,8 @@ public:
 		/**
 		 * Starts monitoring this buffer.
 		 *
-		 * @warning if the pointer has not been successfully saved to root or one of its children the pointer could be
-		 * garbage collected
+		 * @warning if the pointer has not been successfully saved to root or one of its children the pointer
+		 * could be garbage collected
 		 *
 		 * @pre this object is valid
 		 * @post this object invalid
@@ -227,12 +227,16 @@ public:
 	 */
 	gc(util::not_null<std::shared_ptr<memory_allocator>> allocator) noexcept;
 	/**
+	 * Destructor.
+	 */
+	~gc();
+	/**
 	 *
 	 */
 	void thread_main();
 	/**
-	 * Blocks the current thread and runs the garbage collector. If an instance is already running, this function
-	 * returns.
+	 * Blocks the current thread and runs the garbage collector. If an instance is already running, this
+	 * function returns.
 	 *
 	 * @returns `true` if the gc was run, otherwise `false`
 	 */
@@ -281,8 +285,8 @@ public:
 		return { this, new (_allocate_impl(sizeof(T), false).get()) T(std::forward<Args>(args)...) };
 	}
 	/**
-	 * Returns the memory allocator of this garbage collector. Memory allocated through this allocator will not be
-	 * garbage collected.
+	 * Returns the memory allocator of this garbage collector. Memory allocated through this allocator will
+	 * not be garbage collected.
 	 *
 	 * @returns the internally used memory allocator
 	 */
@@ -303,7 +307,8 @@ private:
 	bool _current_mark = false;
 	/** the current miss index; this value is used to prevent misfreeing objects */
 	std::atomic_uint32_t _miss_index;
-	/** is for ensuring only one gc instance is running; using this because try_lock does not fail spuriously */
+	/** is for ensuring only one gc instance is running; using this because try_lock does not fail spuriously
+	 */
 	thread::spin_mutex _mutex;
 	/** holds every allocated element */
 	detail::container<object_info*> _allocated;
