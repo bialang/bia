@@ -1,149 +1,132 @@
-#include <gc/gc.hpp>
+#include "gc/gc.hpp"
+
+#include <cstring>
+#include <log/log.hpp>
+#include <thread/thread.hpp>
+#include <thread/unique_lock.hpp>
 
 namespace bia {
 namespace gc {
 
-thread_local gc* gc::active_gc_instance = nullptr;
+thread_local gc* gc::_active_gc_instance = nullptr;
 
-gc::gc(std::unique_ptr<memory_allocator> allocator, std::unique_ptr<bia::thread::thread_pool> thread_pool)
-    : mem_allocator(std::move(allocator)),
-      missed_objects(std::vector<void*, std_memory_allocator<void*>>(mem_allocator.get()))
+gc::gc(util::not_null<std::shared_ptr<memory_allocator>> allocator) noexcept
+    : _mem_allocator(allocator.get()), _allocated(allocator), _roots(allocator)
+{}
+
+bool gc::run_once()
 {
-	// Start gc main thread
-	/*if (thread_pool && thread_pool->max_pool_size() > 0 && thread_pool->task_count() == 0) {
-	    thread_pool->execute(std::bind(&gc::main_thread, this));
-	}*/
-}
+	thread::unique_lock<thread::spin_mutex> lock(_mutex, thread::try_to_lock);
 
-void gc::run_synchronously()
-{
-	main_thread();
-}
+	// an instance is already running
+	if (!lock) {
+		BIA_LOG(INFO, "gc instance already running");
 
-void* gc::allocate(std::size_t size, bool zero)
-{
-	auto ptr = allocate_impl(size, true);
-
-	if (zero) {
-		std::memset(ptr, 0, size);
+		return false;
 	}
 
-	return ptr;
+	_current_mark = !_current_mark;
+
+	auto miss_index      = _miss_index.fetch_add(1, std::memory_order_release) + 1;
+	auto allocated_token = _allocated.begin_operation();
+	auto roots_token     = _roots.begin_operation();
+
+	// go through all roots and mark the objects
+	for (auto& i : roots_token) {
+		for (auto& j : i) {
+			// mark
+			if (auto ptr = static_cast<const object_ptr*>(j.get())) {
+				object::gc_mark(ptr - 1, _current_mark);
+			}
+		}
+	}
+
+	// can only miss objects in multi thread environment
+	if (thread::thread::supported()) {
+		// go through all allocated objects and mark the missed ones
+		for (auto& i : allocated_token) {
+			// not marked
+			if (i->mark != _current_mark) {
+				// marked as miss
+				if (i->miss_index.load(std::memory_order_consume) == miss_index) {
+					object::gc_mark(&*i + 1, _current_mark);
+				}
+			}
+		}
+	}
+
+	// go through all allocated objects and free the unmarked
+	for (auto i = allocated_token.begin(); i != allocated_token.end();) {
+		// not marked
+		if ((*i)->mark != _current_mark) {
+			if (!(*i)->leaf) {
+				reinterpret_cast<object*>(*i + 1)->~object();
+			}
+			
+			// deallocate
+			(*i)->~object_info();
+
+			_mem_allocator->deallocate(*i);
+
+			i = allocated_token.erase(i);
+		} else {
+			++i;
+		}
+	}
+
+	return true;
+}
+
+gc::gcable<void> gc::allocate(std::size_t size, bool zero)
+{
+	auto ptr = _allocate_impl(size, true);
+
+	if (zero) {
+		std::memset(ptr.get(), 0, size);
+	}
+
+	return { this, ptr };
 }
 
 memory_allocator* gc::allocator() noexcept
 {
-	return mem_allocator.get();
+	return _mem_allocator.get();
 }
 
 gc* gc::active_gc() noexcept
 {
-	return active_gc_instance;
+	return _active_gc_instance;
 }
 
-void* gc::allocate_impl(std::size_t size, bool leaf)
+util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 {
-	auto ptr  = mem_allocator->checked_allocate(size + sizeof(object_info), sizeof(object_info));
-	auto info = new (ptr) object_info();
+	auto ptr  = static_cast<object_info*>(_mem_allocator->checked_allocate(size + sizeof(object_info)).get());
+	auto info = new (ptr) object_info(_current_mark, leaf);
 
-	info->leaf = leaf;
-
-	mutex.lock_shared();
-	info->marked.store(current_mark, std::memory_order_relaxed);
-	mutex.unlock_shared();
-
-	std::unique_lock<decltype(allocated_mutex)> lock(allocated_mutex);
-
-	allocated.insert(info);
-
-	return static_cast<int8_t*>(ptr) + sizeof(object_info);
+	return ptr + 1;
 }
 
-root gc::create_root(std::size_t ptr_count)
+void gc::_free(util::not_null<void*> ptr)
 {
-	auto ptr = static_cast<object_ptr*>(mem_allocator->checked_allocate(ptr_count * sizeof(object_ptr), 0));
+	auto info = static_cast<object_info*>(ptr.get()) - 1;
 
-	// Construct the pointer objects
-	for (std::size_t i = 0; i < ptr_count; ++i) {
-		new (ptr + i) object_ptr();
-	}
-
-	std::unique_lock<decltype(roots_mutex)> lock(roots_mutex);
-
-	roots.insert({ ptr, ptr_count });
-
-	return { ptr, ptr_count };
+	info->~object_info();
+	_mem_allocator->deallocate(info);
 }
 
-void gc::free_root(root obj)
+void gc::_register_gcable(util::not_null<void*> ptr)
 {
-	{
-		std::unique_lock<decltype(roots_mutex)> lock(roots_mutex);
-
-		roots.erase(obj);
-	}
-
-	// Destroy the pointer objects
-	for (std::size_t i = 0; i < obj.size(); ++i) {
-		obj.ptrs[i].~object_ptr();
-	}
-
-	mem_allocator->deallocate(obj.ptrs, 0);
+	_allocated.add(static_cast<object_info*>(ptr.get()) - 1);
 }
 
-void gc::main_thread()
+root gc::_create_root(std::size_t count)
 {
-	mutex.lock();
-	is_active    = true;
-	current_mark = !current_mark;
-	mutex.unlock();
+	BIA_IMPLEMENTATION_ERROR("not implemented");
+}
 
-	// mark
-	{
-		std::unique_lock<decltype(roots_mutex)> lock(roots_mutex);
-
-		for (auto r : roots) {
-			for (std::size_t i = r.size(); i-- > 0;) {
-				object::gc_mark(r[i], current_mark);
-			}
-		}
-	}
-
-	// finished
-	mutex.lock();
-	is_active = false;
-	mutex.unlock();
-
-	// mark missed
-	void* missed = nullptr;
-
-	while (missed_objects.pop(missed)) {
-		object::gc_mark(missed, current_mark);
-	}
-	printf("Size of roots: %zi\n", roots.size());
-	printf("Size of allocated: %zi\n", allocated.size());
-	// sweep
-	{
-		std::unique_lock<decltype(allocated_mutex)> lock(allocated_mutex);
-
-		for (auto i = allocated.begin(); i != allocated.end();) {
-			auto info = *i;
-
-			if (info->marked.load(std::memory_order_consume) != current_mark) {
-				if (!info->leaf) {
-					reinterpret_cast<object*>(info + 1)->~object();
-				}
-
-				printf("GCing %p\n", info + 1);
-
-				mem_allocator->deallocate(info, sizeof(object_info));
-				i = allocated.erase(i);
-			} else {
-				++i;
-				printf("Not marked %p\n", info + 1);
-			}
-		}
-	}
+void gc::_free_root(const root& root)
+{
+	BIA_IMPLEMENTATION_ERROR("not implemented");
 }
 
 } // namespace gc
