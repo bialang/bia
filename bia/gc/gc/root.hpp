@@ -3,69 +3,98 @@
 #include "object_ptr.hpp"
 
 #include <cstddef>
-#include <functional>
+#include <exception/bounds_error.hpp>
 
 namespace bia {
 namespace gc {
 
-/*
- The root array created by the gc where all gc monitored memory originates from.
-*/
+/**
+ * The root array created by the gc where all gc monitored memory originates from. This object is just a representation.
+ */
 class root
 {
 public:
-	root(object_ptr* ptrs, std::size_t size) noexcept : ptrs(ptrs), s(size)
+	/**
+	 * Constructor.
+	 *
+	 * @param[in] ptrs an array of @ref object_ptr
+	 * @param size the size of the array
+	 */
+	root(object_ptr* ptrs, std::size_t size) noexcept : _ptrs(ptrs), _size(size)
 	{}
-	/*
-	 Access the element at the specified index.
+	/**
+	 * Access the element at the specified index with bounds checking.
+	 *
+	 * @warning an invalid index results in undefined behavior
+	 *
+	 * @param index ranges between 0 and the size() inclusive
+	 * @returns a reference to the @ref object_ptr at the specified index
+	 * @throw exception::bounds_error if the index is out of bounds
+	 */
+	object_ptr& at(std::size_t index)
+	{
+		if (index >= _size) {
+			BIA_THROW(exception::bounds_error, "out of bounds");
+		}
 
-	 @param index ranges between 0 and the size() inclusive; if the index is invalid, the behavior is undefined
-	*/
+		return _ptrs[index];
+	}
+	/**
+	 * Access the element at the specified index without bounds checking.
+	 *
+	 * @warning an invalid index results in undefined behavior
+	 *
+	 * @param index ranges between 0 and the size() inclusive
+	 * @returns a reference to the @ref object_ptr at the specified index
+	 */
 	object_ptr& operator[](std::size_t index) noexcept
 	{
-		return ptrs[index];
-	}
-	const object_ptr& operator[](std::size_t index) const noexcept
-	{
-		return ptrs[index];
+		return _ptrs[index];
 	}
 	bool operator==(const root& other) const noexcept
 	{
-		return ptrs == other.ptrs;
+		return _ptrs == other._ptrs;
 	}
 	bool operator!=(const root& other) const noexcept
 	{
-		return ptrs != other.ptrs;
+		return _ptrs != other._ptrs;
 	}
-	bool operator<(const root& other) const noexcept
-	{
-		return ptrs < other.ptrs;
-	}
-	bool operator<=(const root& other) const noexcept
-	{
-		return ptrs <= other.ptrs;
-	}
-	bool operator>(const root& other) const noexcept
-	{
-		return ptrs > other.ptrs;
-	}
-	bool operator>=(const root& other) const noexcept
-	{
-		return ptrs >= other.ptrs;
-	}
+	/**
+	 * The size of the root.
+	 *
+	 * @returns the size
+	 */
 	std::size_t size() const noexcept
 	{
-		return s;
+		return _size;
+	}
+	/**
+	 * Returns the beginning iterator.
+	 *
+	 * @returns the beginning
+	 */
+	object_ptr* begin() noexcept
+	{
+		return _ptrs;
+	}
+	/**
+	 * Returns the end iterator.
+	 *
+	 * @returns the end
+	 */
+	object_ptr* end() noexcept
+	{
+		return _ptrs + _size;
 	}
 
 private:
 	friend class gc;
 	friend class ::std::hash<root>;
 
-	/* the array holding the memory addresses */
-	object_ptr* const ptrs;
-	/* the size of the array */
-	std::size_t const s;
+	/** the array holding the memory addresses */
+	object_ptr* const _ptrs;
+	/** the size of the array */
+	const std::size_t _size;
 };
 
 } // namespace gc
@@ -81,7 +110,7 @@ struct hash<bia::gc::root> : private hash<bia::gc::object_ptr*>
 
 	result_type operator()(const argument_type& s) const noexcept
 	{
-		return hash<bia::gc::object_ptr*>::operator()(s.ptrs);
+		return hash<bia::gc::object_ptr*>::operator()(s._ptrs);
 	}
 };
 
