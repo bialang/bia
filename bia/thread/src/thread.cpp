@@ -72,8 +72,6 @@ void thread::join()
 {
 #if defined(BIA_THREAD_BACKEND_STD)
 	BIA_EXPECTS(valid());
-#elif defined(BIA_THREAD_BACKEND_NOTHING)
-
 #endif
 }
 
@@ -81,7 +79,7 @@ bool thread::valid() const noexcept
 {
 #if defined(BIA_THREAD_BACKEND_STD)
 	return _pimpl->valid;
-#elif defined(BIA_THREAD_BACKEND_NOTHING)
+#elif defined(BIA_THREAD_BACKEND_NONE)
 	return false;
 #endif
 }
@@ -90,7 +88,7 @@ bool thread::supported() noexcept
 {
 #if defined(BIA_THREAD_BACKEND_STD)
 	return true;
-#elif defined(BIA_THREAD_BACKEND_NOTHING)
+#elif defined(BIA_THREAD_BACKEND_NONE)
 	return false;
 #endif
 }
