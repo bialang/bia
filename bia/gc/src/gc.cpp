@@ -16,6 +16,8 @@ gc::gc(util::not_null<std::shared_ptr<memory_allocator>> allocator) noexcept
 
 bool gc::run_once()
 {
+	BIA_LOG(INFO, "gc cycle requested");
+
 	thread::unique_lock<thread::spin_mutex> lock(_mutex, thread::try_to_lock);
 
 	// an instance is already running
@@ -24,12 +26,16 @@ bool gc::run_once()
 
 		return false;
 	}
+	
+	BIA_LOG(DEBUG, "preparing garbage collection");
 
 	_current_mark = !_current_mark;
 
 	auto miss_index      = _miss_index.fetch_add(1, std::memory_order_release) + 1;
 	auto allocated_token = _allocated.begin_operation();
 	auto roots_token     = _roots.begin_operation();
+
+	BIA_LOG(DEBUG, "traversing all registered roots");
 
 	// go through all roots and mark the objects
 	for (auto& i : roots_token) {
@@ -100,8 +106,13 @@ gc* gc::active_gc() noexcept
 
 util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 {
+	BIA_LOG(TRACE, "allocating {} bytes as {}", size, leaf ? "leaf" : "node");
+
 	auto ptr  = static_cast<object_info*>(_mem_allocator->checked_allocate(size + sizeof(object_info)).get());
-	auto info = new (ptr) object_info(_current_mark, leaf);
+	
+	new (ptr) object_info(_current_mark, leaf);
+
+	BIA_LOG(DEBUG, "allocated gcable memory at info={} with {} bytes", static_cast<void*>(ptr), size);
 
 	return ptr + 1;
 }

@@ -7,6 +7,7 @@
 #include <thread/shared_spin_mutex.hpp>
 #include <thread/spin_mutex.hpp>
 #include <thread/unique_lock.hpp>
+#include <log/log.hpp>
 #include <unordered_set>
 
 namespace bia {
@@ -35,6 +36,8 @@ public:
 		void end_operation()
 		{
 			if (_container) {
+				BIA_LOG(DEBUG, "ending operation");
+
 				// merge backlist with main list
 
 				_container->_mutex.unlock();
@@ -81,18 +84,24 @@ public:
 
 		// add directly to the main list
 		if (lock) {
+			BIA_LOG(TRACE, "mutex acquired; trying to put element to main container");
+
 			thread::unique_lock<thread::spin_mutex> _(_main_mutex);
 
 			_main.insert(std::move(element));
 		} // add to back list
 		else {
+			BIA_LOG(TRACE, "mutex not acquired; trying to put element to back container");
+
 			thread::unique_lock<thread::spin_mutex> _(_back_mutex);
 
 			_back.insert(std::move(element));
 		}
 	}
 	void remove(const T& element)
-	{}
+	{
+		BIA_LOG(TRACE, "removing element from container");
+	}
 
 private:
 	container_type _main;

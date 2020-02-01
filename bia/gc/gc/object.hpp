@@ -4,6 +4,7 @@
 #include "object_ptr.hpp"
 
 #include <cstdint>
+#include <log/log.hpp>
 #include <util/gsl.hpp>
 #include <utility>
 
@@ -33,12 +34,16 @@ public:
 	{
 		auto info = _object_info(ptr);
 
+		BIA_LOG(TRACE, "trying to mark info={}", static_cast<void*>(info));
+
 		if (info->leaf) {
 			info->mark = mark;
 		} else {
 			// newly marked -> mark children
 			if (info->mark != mark) {
 				info->mark = mark;
+
+				BIA_LOG(TRACE, "marking children of info={}", static_cast<void*>(info));
 
 				static_cast<const object*>(ptr.get())->gc_mark_children(mark);
 			}
@@ -56,8 +61,7 @@ protected:
 private:
 	static util::not_null<object_info*> _object_info(util::not_null<const void*> ptr) noexcept
 	{
-		return const_cast<object_info*>(
-		    reinterpret_cast<const object_info*>(static_cast<const std::int8_t*>(ptr.get()) - sizeof(object_info)));
+		return const_cast<object_info*>(static_cast<const object_info*>(ptr.get()) - 1);
 	}
 };
 
