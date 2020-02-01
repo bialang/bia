@@ -37,10 +37,6 @@ public:
 	{
 		return get();
 	}
-	auto operator*() -> decltype(*get())
-	{
-		return *get();
-	}
 
 private:
 	T _value;
