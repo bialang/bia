@@ -28,6 +28,8 @@ function(create_tests NAME PATH)
 		target_include_directories("${NAME}_test"
 			PUBLIC ${CATCH_INCLUDE_DIRS})
 
+		message(STATUS "Adding test - ${NAME}")
+
 		if(BIA_BUILD_BENCHMARKS)
 			add_test(${NAME} "${NAME}_test")
 		else()
