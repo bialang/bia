@@ -73,7 +73,7 @@ public:
 	 *
 	 * @returns the beginning
 	 */
-	object_ptr* begin() noexcept
+	const object_ptr* begin() const noexcept
 	{
 		return _ptrs;
 	}
@@ -82,7 +82,7 @@ public:
 	 *
 	 * @returns the end
 	 */
-	object_ptr* end() noexcept
+	const object_ptr* end() const noexcept
 	{
 		return _ptrs + _size;
 	}
