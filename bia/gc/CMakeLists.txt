@@ -1,6 +1,5 @@
-project("gc"
+project(gc
 	LANGUAGES CXX)
 	
 create_library(STATIC
-	PUBLIC "thread"
-	PUBLIC "util")
+	PUBLIC thread)
