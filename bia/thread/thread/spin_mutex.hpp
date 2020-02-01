@@ -1,49 +1,66 @@
-#pragma once
+#ifndef BIA_THREAD_SPING_MUTEX_HPP_
+#define BIA_THREAD_SPING_MUTEX_HPP_
 
-#include <atomic>
+#include "config.hpp"
+
+#if defined(BIA_THREAD_BACKEND_STD)
+#	include <atomic>
+#endif
 
 namespace bia {
 namespace thread {
 
-/*
- A simple mutex which uses the std::atomic_flag for simple locking. This mutex satisfies the requirements of C++
- *Mutex*.
-*/
+/**
+ * A simple mutex which uses the std::atomic_flag for simple locking. This mutex satisfies the requirements of C++
+ * `Mutex`.
+ */
 class spin_mutex
 {
 public:
 	spin_mutex()                       = default;
 	spin_mutex(const spin_mutex& copy) = delete;
 	spin_mutex(spin_mutex&& move)      = delete;
-	/*
-	 Locks the mutex. If the mutex is already locked by another thread this method will block until it acquires the
-	 mutex.
-	*/
+	/**
+	 * Locks the mutex. If the mutex is already locked by another thread this method will block until it acquires the
+	 * mutex.
+	 */
 	void lock() noexcept
 	{
-		while (flag.test_and_set(std::memory_order_acquire))
+#if defined(BIA_THREAD_BACKEND_STD)
+		while (_flag.test_and_set(std::memory_order_acquire))
 			;
+#endif
 	}
-	/*
-	 Tries to lock the mutex. If the mutex is already locked by another thread this method will return `false`.
-
-	 @returns `true` if the mutex was successfully locked, otherwise `false`
-	*/
+	/**
+	 * Tries to lock the mutex. If the mutex is already locked by another thread this method will return `false`.
+	 *
+	 * @returns `true` if the mutex was successfully locked, otherwise `false`
+	 */
 	bool try_lock() noexcept
 	{
-		return !flag.test_and_set(std::memory_order_acquire);
+#if defined(BIA_THREAD_BACKEND_STD)
+		return !_flag.test_and_set(std::memory_order_acquire);
+#elif defined(BIA_THREAD_BACKEND_NONE)
+		return true;
+#endif
 	}
-	/*
-	 Unlocks the mutex.
-	*/
+	/**
+	 * Unlocks the mutex.
+	 */
 	void unlock() noexcept
 	{
-		flag.clear(std::memory_order_release);
+#if defined(BIA_THREAD_BACKEND_STD)
+		_flag.clear(std::memory_order_release);
+#endif
 	}
 
 private:
-	std::atomic_flag flag = ATOMIC_FLAG_INIT;
+#if defined(BIA_THREAD_BACKEND_STD)
+	std::atomic_flag _flag = ATOMIC_FLAG_INIT;
+#endif
 };
 
 } // namespace thread
 } // namespace bia
+
+#endif
