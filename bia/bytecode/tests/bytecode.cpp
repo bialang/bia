@@ -2,7 +2,6 @@
 
 #include <bytecode/writer.hpp>
 #include <catch.hpp>
-#include <stream/buffer_output_stream.hpp>
 
 using namespace bia;
 using namespace bia::bytecode;

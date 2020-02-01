@@ -39,7 +39,7 @@ public:
 	typename std::enable_if<util::type_traits::equals_any<op_code, Op_code, oc_return_void>::value != 0>::type
 	    write_instruction()
 	{
-		_optimize_write<false>(_output, Op_code);
+		_optimize_write<false>(Op_code);
 	}
 	/**
 	 * Writes instructions with one parameter to the output. Valid @ref op_code: @ref oc_jump, @ref
@@ -56,7 +56,7 @@ public:
 	                                                      oc_jump_true>::value != 0>::type
 	    write_instruction(P0 p0)
 	{
-		_optimize_write<false>(_output, static_cast<op_code>(Op_code - _index_of_iioco<Optimize>(p0)));
+		_optimize_write<false>(static_cast<op_code>(Op_code - _index_of_iioco<Optimize>(p0)));
 		_optimize_write<Optimize>(p0);
 	}
 	/**
@@ -159,7 +159,7 @@ public:
 	    write_instruction(P0 p0, P1 p1, P2 p2, P3 p3)
 	{
 		auto offset =
-		    ((index_of_member<Optimize>(p0) * moco_count + index_of_member<Optimize>(p1)) * iioco_count +
+		    ((_index_of_moco<Optimize>(p0) * moco_count + _index_of_moco<Optimize>(p1)) * iioco_count +
 		     _index_of_iioco<Optimize>(p2)) *
 		        iioco_count +
 		    _index_of_iioco<Optimize>(p3);
