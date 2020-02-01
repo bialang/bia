@@ -4,6 +4,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <new>
 #include <util/gsl.hpp>
 #include <utility>
@@ -32,7 +33,8 @@ public:
 		typedef std_memory_allocator<U> other;
 	};
 
-	std_memory_allocator(util::not_null<memory_allocator*> allocator) noexcept : _allocator(allocator)
+	std_memory_allocator(util::not_null<std::shared_ptr<memory_allocator>> allocator) noexcept
+	    : _allocator(std::move(allocator.get()))
 	{}
 	template<typename U>
 	std_memory_allocator(const std_memory_allocator<U>& copy) noexcept : _allocator(copy._allocator)
@@ -70,7 +72,7 @@ private:
 	template<typename U>
 	friend class std_memory_allocator;
 
-	memory_allocator* const _allocator;
+	std::shared_ptr<memory_allocator> _allocator;
 };
 
 } // namespace gc
