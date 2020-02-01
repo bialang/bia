@@ -30,7 +30,7 @@ public:
 	 * @param ptr is the memory that should be freed; if equal to `nullptr` this operation is a noop
 	 * @param previous_size must be the same as during allocation, otherwise undefined behavior
 	*/
-	virtual void deallocate(void* ptr) noexcept = 0;
+	virtual void deallocate(void* ptr) = 0;
 	/**
 	 * Allocates *size* bytes and returns the pointer to the first byte. This function is thread-safe to call. The
 	 * memory is aligned according to memory_allocator::alignment.
@@ -38,7 +38,7 @@ public:
 	 * @param size is the amount of required bytes
 	 * @returns the pointer to the first byte if successful, otherwise `nullptr`
 	*/
-	virtual void* allocate(std::size_t size) noexcept = 0;
+	virtual void* allocate(std::size_t size) = 0;
 	/**
 	 * Calls allocate() and returns the non-null result. If allocate() returns `nullptr`, this function will fail.
 	 *
