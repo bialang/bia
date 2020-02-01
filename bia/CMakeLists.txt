@@ -4,18 +4,6 @@ project("bia"
 set(BIA_VERSION_MAJOR 4)
 set(BIA_VERSION_MINOR 0)
 
-# test endianess
-include(TestBigEndian)
-test_big_endian(BIA_BIG_ENDIAN)
-
-if(NOT BIA_BIG_ENDIAN)
-	set(BIA_LITTLE_ENDIAN ON)
-endif()
-
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.in"
-	"${CMAKE_CURRENT_SOURCE_DIR}/bia/config.hpp")
-set(BIA_BIA_CONFIG_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
 function(create_library LIB_TYPE)
 	get_filename_component(LIB_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
@@ -42,8 +30,7 @@ function(create_library LIB_TYPE)
 
 	# add includes
 	target_include_directories(${LIB_NAME}
-		${VISIBILITY} ${CMAKE_CURRENT_SOURCE_DIR}
-		${VISIBILITY} ${BIA_BIA_CONFIG_DIRECTORY})
+		${VISIBILITY} ${CMAKE_CURRENT_SOURCE_DIR})
 
 	# add libraries
 	foreach(i RANGE 1 ${ARGC} 2)
