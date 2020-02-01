@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_BYTECODE_OP_CODE_HPP_
+#define BIA_BYTECODE_OP_CODE_HPP_
 
 #include <cstdint>
 #include <type_traits>
@@ -11,7 +12,8 @@ typedef std::uint8_t op_code_type;
 constexpr auto max_instruction_size = sizeof(op_code_type) + 16;
 
 template<typename T,
-         typename = std::enable_if<util::type_traits::equals_any_type<T, std::uint8_t, std::uint32_t>::value != 0>>
+         typename =
+             std::enable_if<util::type_traits::equals_any_type<T, std::uint8_t, std::uint32_t>::value != 0>>
 struct temp_member_index
 {
 	T index;
@@ -23,75 +25,80 @@ struct string_index
 
 	const index_type index;
 
-	string_index(index_type index) : index(index)
+	string_index(index_type index) noexcept : index(index)
 	{}
 };
 
 struct test_register
 {};
 
-enum MEMBER_OP_CODE_OPTION
+enum member_op_code_option
 {
-	MOCO_TINY_TEMP,
-	MOCO_TEMP,
+	moco_tiny_temp,
+	moco_temp,
 
-	MOCO_COUNT
+	moco_count
 };
 
-enum IMMEDIATE_INT_OP_CODE_OPTION
+enum immediate_int_op_code_option
 {
-	IIOCO_INT8,
-	IIOCO_INT32,
+	iioco_int8,
+	iioco_int32,
 
-	IIOCO_COUNT
+	iioco_count
 };
 
-enum IMMEDIATE_OP_CODE_OPTION
+enum immediate_op_code_option
 {
-	IOCO_INT8,          // a constant 8 bit value
-	IOCO_INT32,         // a constant 32 bit value
-	IOCO_INT64,         // a constant 64 bit value
-	IOCO_FLOAT,         // a constant 64 bit double precision IEEE 754 floating point value
-	IOCO_TEST_REGISTER, // the current value in the test register
-	IOCO_STRING,        // a string
+	ioco_int8,          // a constant 8 bit value
+	ioco_int32,         // a constant 32 bit value
+	ioco_int64,         // a constant 64 bit value
+	ioco_float,         // a constant 64 bit double precision IEEE 754 floating point value
+	ioco_test_register, // the current value in the test register
+	ioco_string,        // a string
 
-	IOCO_COUNT
+	ioco_count
 };
 
-enum OP_CODE : op_code_type
+enum op_code : op_code_type
 {
 	/* parameter-less instructions */
-	OC_RETURN_VOID, // returns nothing from the BVM
+	oc_return_void, // returns nothing from the BVM
 
 	/* immediate int instructions */
-	OC_JUMP      = OC_RETURN_VOID + IIOCO_COUNT, // jumps to a relative location
-	OC_JUMP_TRUE = OC_JUMP + IIOCO_COUNT, // jumps to a relative location if the test register evaluates to `true`
-	OC_JUMP_FALSE =
-	    OC_JUMP_TRUE + IIOCO_COUNT,       // jumps to a relative location if the test register evaluates to `false`
-	OC_POP = OC_JUMP_FALSE + IIOCO_COUNT, // pops n elements from the stack
+	oc_jump = oc_return_void + iioco_count, // jumps to a relative location
+	oc_jump_true =
+	    oc_jump + iioco_count, // jumps to a relative location if the test register evaluates to `true`
+	oc_jump_false =
+	    oc_jump_true + iioco_count, // jumps to a relative location if the test register evaluates to `false`
+	oc_pop = oc_jump_false + iioco_count, // pops n elements from the stack
 
 	/* immediate instruction */
-	OC_PUSH_IMMEDIATE   = OC_POP + IOCO_COUNT,            // pushes an immediate value
-	OC_RETURN_IMMEDIATE = OC_PUSH_IMMEDIATE + IOCO_COUNT, // returns an immediate
+	oc_push_immediate   = oc_pop + ioco_count,            // pushes an immediate value
+	oc_return_immediate = oc_push_immediate + ioco_count, // returns an immediate
 
 	/* member instruction */
-	OC_PUSH_MEMBER   = OC_RETURN_IMMEDIATE + MOCO_COUNT,
-	OC_RETURN_MEMBER = OC_PUSH_MEMBER + MOCO_COUNT,
-	OC_TEST          = OC_RETURN_MEMBER + MOCO_COUNT,
+	oc_push_member   = oc_return_immediate + moco_count,
+	oc_return_member = oc_push_member + moco_count,
+	oc_test          = oc_return_member + moco_count,
 
 	/* member-immeadiate instruction */
-	OC_INSTANTIATE = OC_TEST + MOCO_COUNT * IOCO_COUNT, // instantiates a member with the given immediate
+	oc_instantiate = oc_test + moco_count * moco_count, // instantiates a member with the given immediate
 
 	/* member-member instructions */
-	OC_SHALLOW_COPY = OC_INSTANTIATE + MOCO_COUNT * MOCO_COUNT, // makes a shallow copy of p1 and stores it in p0
-	OC_DEEP_COPY = OC_SHALLOW_COPY + MOCO_COUNT * MOCO_COUNT, // makes a deep copy of the second object to the first one
-	OC_REFER     = OC_DEEP_COPY + MOCO_COUNT * MOCO_COUNT,    // makes a references
+	oc_shallow_copy =
+	    oc_instantiate + moco_count * moco_count, // makes a shallow copy of p1 and stores it in p0
+	oc_deep_copy =
+	    oc_shallow_copy + moco_count * moco_count, // makes a deep copy of the second object to the first one
+	oc_refer = oc_deep_copy + moco_count * moco_count, // makes a references
 
 	/* member-member-immediate int-immediate int instructions */
-	OC_CALL = OC_REFER + MOCO_COUNT * MOCO_COUNT * IIOCO_COUNT *
-	                         IIOCO_COUNT, // calls the function stored at p1 with p2  parameters and then pops p3
-	                                      // elements from the stack and saves the result to p0
+	oc_call = oc_refer + moco_count * moco_count * iioco_count *
+	                         iioco_count, // calls the function stored at p1 with p2  parameters and then pops
+	                                      // p3 elements from the stack and saves the result to p0
 };
 
 } // namespace bytecode
 } // namespace bia
+
+#endif
