@@ -3,10 +3,10 @@
 
 #include "../std_memory_allocator.hpp"
 
-#include <thread/hybrid_mutex.hpp>
 #include <thread/shared_lock.hpp>
 #include <thread/shared_spin_mutex.hpp>
 #include <thread/spin_mutex.hpp>
+#include <thread/unique_lock.hpp>
 #include <unordered_set>
 
 namespace bia {
@@ -17,6 +17,8 @@ template<typename T>
 class container
 {
 public:
+	typedef std::unordered_set<T, std::hash<T>, std::equal_to<T>, std_memory_allocator<T>> container_type;
+
 	class token
 	{
 	public:
@@ -40,31 +42,42 @@ public:
 				_container = nullptr;
 			}
 		}
-		container::container_type::iterator begin()
-		{}
-		container::container_type::iterator end()
-		{}
-		container::container_type::iterator erase(container::container_type::iterator it)
-		{}
+		typename container::container_type::iterator begin() noexcept
+		{
+			return _container->_main.begin();
+		}
+		typename container::container_type::iterator end() noexcept
+		{
+			return _container->_main.end();
+		}
+		typename container::container_type::iterator erase(typename container::container_type::iterator it)
+		{
+			return _container->_main.erase(it);
+		}
 
 	private:
+		friend container;
+
 		container* _container;
 
 		token(container* container) noexcept
 		{
 			_container = container;
 
-			_container->_main.lock();
+			_container->_mutex.lock();
 		}
 	};
 
+	container(util::not_null<std::shared_ptr<memory_allocator>> allocator)
+	    : _main(allocator), _back(allocator)
+	{}
 	token begin_operation()
 	{
 		return { this };
 	}
 	void add(T element)
 	{
-		thread::shared_lock<thread::hybrid_mutex> lock(_mutex, thread::try_lock);
+		thread::shared_lock<thread::shared_spin_mutex> lock(_mutex, thread::try_to_lock);
 
 		// add directly to the main list
 		if (lock) {
@@ -82,10 +95,8 @@ public:
 	{}
 
 private:
-	typedef std::unordered_set<T, std::hash<T>, std::equal_to<T>, std_memory_allocator<T>> container_type;
-
 	container_type _main;
-	thread::hybrid_mutex _mutex;
+	thread::shared_spin_mutex _mutex;
 	thread::spin_mutex _main_mutex;
 	container_type _back;
 	thread::spin_mutex _back_mutex;
