@@ -32,6 +32,10 @@ public:
 	{
 		return allocated.find(ptr) != allocated.end();
 	}
+	bool has_object(const void* ptr) const noexcept
+	{
+		return allocated.find(static_cast<const object_info*>(ptr) - 1) != allocated.end();
+	}
 	std::size_t allocation_count() const noexcept
 	{
 		return allocated.size();
@@ -41,7 +45,18 @@ private:
 	std::set<const void*> allocated;
 };
 
-std::unique_ptr<gc> create_gc()
+inline void* set_root_at(gc::token& token, gc& g, std::size_t index)
+{
+	auto p   = g.allocate(64);
+	auto ptr = p.peek();
+
+	token.set(index, ptr);
+	p.start_monitor();
+
+	return ptr;
+}
+
+inline std::unique_ptr<gc> create_gc()
 {
 	return std::unique_ptr<gc>(new gc(std::shared_ptr<memory_allocator>(new tracking_allocator())));
 }
@@ -63,42 +78,34 @@ TEST_CASE("unmonitored memory allocation", "[gc]")
 
 	REQUIRE(static_cast<tracking_allocator*>(g->allocator())->allocation_count() == 0);
 }
-/*
+
 TEST_CASE("garbage collection test", "[gc]")
 {
 	auto g         = create_gc();
 	auto allocator = static_cast<tracking_allocator*>(g->allocator());
-	void* p0;
-	void* p1;
-	void* p2;
 
 	SECTION("collection of leafs")
 	{
-		auto token = g->register_thread(2u);
+		auto token = g->register_thread(2);
 
-		token.set(0, 0, p0 = g->allocate(59));
-		token.set(0, 1, p1 = g->allocate(23));
-		token.set(0, 0, p2 = g->allocate(12));
+		auto p0 = set_root_at(token, *g, 0);
+		auto p1 = set_root_at(token, *g, 1);
 
-		REQUIRE(allocator->has(p0));
-		REQUIRE(allocator->has(p1));
-		REQUIRE(allocator->has(p2));
+		REQUIRE(allocator->has_object(p0));
+		REQUIRE(allocator->has_object(p1));
+
+		auto p2 = set_root_at(token, *g, 0);
+
+		REQUIRE(allocator->has_object(p2));
 
 		// collect p0
 		g->run_once();
 
-		REQUIRE(!allocator->has(p0));
-		REQUIRE(allocator->has(p1));
-		REQUIRE(allocator->has(p2));
+		REQUIRE(!allocator->has_object(p0));
+		REQUIRE(allocator->has_object(p1));
+		REQUIRE(allocator->has_object(p2));
 	}
-
-	// run garbage collector
-	g->run_synchronously();
-
-	REQUIRE(!allocator->has(p0));
-	REQUIRE(!allocator->has(p1));
-	REQUIRE(!allocator->has(p2));
-}*/
+}
 /*
 TEST_CASE("monitored memory allocation", "[gc]")
 {
