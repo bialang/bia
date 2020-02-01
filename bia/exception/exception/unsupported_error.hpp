@@ -13,6 +13,11 @@ class unsupported_error : public bia_error
 {
 public:
 	using bia_error::bia_error;
+
+	virtual const char* name() const noexcept override
+	{
+		return "unsupported_error";
+	}
 };
 
 } // namespace exception

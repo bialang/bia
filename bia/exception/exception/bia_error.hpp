@@ -27,6 +27,7 @@ public:
 		_filename = filename;
 		_line     = line;
 	}
+	virtual const char* name() const noexcept = 0;
 	/**
 	 * Returns the filename.
 	 * 

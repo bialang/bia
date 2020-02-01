@@ -10,6 +10,11 @@ class memory_error : public bia_error
 {
 public:
 	using bia_error::bia_error;
+
+	virtual const char* name() const noexcept override
+	{
+		return "memory_error";
+	}
 };
 
 } // namespace exception

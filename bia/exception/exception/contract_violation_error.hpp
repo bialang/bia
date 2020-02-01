@@ -13,6 +13,11 @@ class contract_violation_error : public bia_error
 {
 public:
 	using bia_error::bia_error;
+
+	virtual const char* name() const noexcept override
+	{
+		return "contract_violation_error";
+	}
 };
 
 } // namespace exception
