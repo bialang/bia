@@ -22,7 +22,7 @@ gc::~gc()
 		BIA_LOG_ERROR(CRITICAL, e);
 	}
 
-	//todo: free everything else
+	// todo: free everything else
 }
 
 bool gc::run_once()
@@ -94,6 +94,18 @@ bool gc::run_once()
 	return true;
 }
 
+gc::token gc::register_thread(std::size_t count)
+{
+	// there is already a registered instance in this thread
+	if (_active_gc_instance) {
+		BIA_IMPLEMENTATION_ERROR("active gc instance detected");
+	}
+
+	_active_gc_instance = this;
+
+	return { this, count };
+}
+
 gc::gcable<void> gc::allocate(std::size_t size, bool zero)
 {
 	auto ptr = _allocate_impl(size, true);
@@ -143,7 +155,8 @@ void gc::_register_gcable(util::not_null<void*> ptr)
 
 root gc::_create_root(std::size_t count)
 {
-	auto buffer = static_cast<object_ptr*>(_mem_allocator->checked_allocate(count * sizeof(object_ptr)).get());
+	auto buffer =
+	    static_cast<object_ptr*>(_mem_allocator->checked_allocate(count * sizeof(object_ptr)).get());
 
 	for (auto i = buffer, c = buffer + count; i < c; ++i) {
 		new (i) object_ptr();

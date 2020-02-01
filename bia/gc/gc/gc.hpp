@@ -247,17 +247,7 @@ public:
 	 * @param count how much space the root should have
 	 * @returns a token which deregisteres this thread upon destruction
 	 */
-	token register_thread(std::size_t count)
-	{
-		// there is already a registered instance in this thread
-		if (_active_gc_instance) {
-			BIA_IMPLEMENTATION_ERROR("active gc instance detected");
-		}
-
-		_active_gc_instance = this;
-
-		return { this, count };
-	}
+	token register_thread(std::size_t count);
 	/**
 	 * Allocates gc monitorable memory. In order for this memory to be monitored by the garbage collector
 	 * gcable::start_monitor() must be called.
