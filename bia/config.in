@@ -1,4 +1,0 @@
-#pragma once
-
-#cmakedefine BIA_BIG_ENDIAN
-#cmakedefine BIA_LITTLE_ENDIAN
