@@ -17,10 +17,33 @@ namespace gc {
 class alignas(object_alignment) object
 {
 public:
-	/*
-	 Destructor.
-	*/
+	/**
+	 * Destructor.
+	 */
 	virtual ~object() = default;
+	/**
+	 * Marks the given pointer for the gc cycle. If `ptr` was not allocated by a gc, the behavior is undefined.
+	 *
+	 * @warning this function should only be called inside of gc_mark_childred()
+	 *
+	 * @param ptr the pointer to mark
+	 * @param mark the mark provided by the gc
+	 */
+	static void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept
+	{
+		auto info = _object_info(ptr);
+
+		if (info->leaf) {
+			info->mark = mark;
+		} else {
+			// newly marked -> mark children
+			if (info->mark != mark) {
+				info->mark = mark;
+
+				static_cast<const object*>(ptr.get())->gc_mark_children(mark);
+			}
+		}
+	}
 
 protected:
 	/*
@@ -29,33 +52,8 @@ protected:
 	 @param mark is required by gc_mark()
 	*/
 	virtual void gc_mark_children(bool mark) const noexcept = 0;
-	/*
-	 Marks the given pointer. If this pointer was not allocated by a gc the behavior is undefined.
-
-	 @param ptr that should be marked
-	 @param mark is the current mark
-	*/
-	static void gc_mark(util::not_null<const object*> ptr, bool mark) noexcept
-	{
-		auto info = _object_info(ptr);
-
-		if (info->leaf) {
-			info->mark.store(mark, std::memory_order_relaxed);
-		} else {
-			// newly marked -> mark children
-			if (info->mark.exchange(mark, std::memory_order_relaxed) != mark) {
-				static_cast<const object*>(ptr)->gc_mark_children(mark);
-			}
-		}
-	}
 
 private:
-	friend class gc;
-
-	static void _inject_object_info(util::not_null<void*> ptr, object_info&& info) noexcept
-	{
-		new (static_cast<std::int8_t*>(ptr.get()) - sizeof(object_info)) object_info(std::move(info));
-	}
 	static util::not_null<object_info*> _object_info(util::not_null<const void*> ptr) noexcept
 	{
 		return const_cast<object_info*>(
