@@ -73,9 +73,27 @@ public:
 	 *
 	 * @returns the beginning
 	 */
+	object_ptr* begin() noexcept
+	{
+		return _ptrs;
+	}
+	/**
+	 * Returns the beginning iterator.
+	 *
+	 * @returns the beginning
+	 */
 	const object_ptr* begin() const noexcept
 	{
 		return _ptrs;
+	}
+	/**
+	 * Returns the end iterator.
+	 *
+	 * @returns the end
+	 */
+	object_ptr* end() noexcept
+	{
+		return _ptrs + _size;
 	}
 	/**
 	 * Returns the end iterator.

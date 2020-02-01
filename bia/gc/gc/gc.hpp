@@ -335,7 +335,7 @@ private:
 	 */
 	void _register_gcable(util::not_null<void*> ptr);
 	root _create_root(std::size_t count);
-	void _free_root(const root& root);
+	void _free_root(root root);
 };
 
 } // namespace gc

@@ -26,7 +26,7 @@ bool gc::run_once()
 
 		return false;
 	}
-	
+
 	BIA_LOG(DEBUG, "preparing garbage collection");
 
 	_current_mark = !_current_mark;
@@ -42,7 +42,7 @@ bool gc::run_once()
 		for (auto& j : i) {
 			// mark
 			if (auto ptr = static_cast<const object_ptr*>(j.get())) {
-				object::gc_mark(ptr - 1, _current_mark);
+				object::gc_mark(ptr, _current_mark);
 			}
 		}
 	}
@@ -68,7 +68,7 @@ bool gc::run_once()
 			if (!(*i)->leaf) {
 				reinterpret_cast<object*>(*i + 1)->~object();
 			}
-			
+
 			// deallocate
 			(*i)->~object_info();
 
@@ -108,8 +108,8 @@ util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 {
 	BIA_LOG(TRACE, "allocating {} bytes as {}", size, leaf ? "leaf" : "node");
 
-	auto ptr  = static_cast<object_info*>(_mem_allocator->checked_allocate(size + sizeof(object_info)).get());
-	
+	auto ptr = static_cast<object_info*>(_mem_allocator->checked_allocate(size + sizeof(object_info)).get());
+
 	new (ptr) object_info(_current_mark, leaf);
 
 	BIA_LOG(DEBUG, "allocated gcable memory at info={} with {} bytes", static_cast<void*>(ptr), size);
@@ -132,12 +132,28 @@ void gc::_register_gcable(util::not_null<void*> ptr)
 
 root gc::_create_root(std::size_t count)
 {
-	BIA_IMPLEMENTATION_ERROR("not implemented");
+	auto buffer = static_cast<object_ptr*>(_mem_allocator->checked_allocate(count * sizeof(object_ptr)).get());
+
+	for (auto i = buffer, c = buffer + count; i < c; ++i) {
+		new (i) object_ptr();
+	}
+
+	root r(buffer, count);
+
+	_roots.add(r);
+
+	return r;
 }
 
-void gc::_free_root(const root& root)
+void gc::_free_root(root root)
 {
-	BIA_IMPLEMENTATION_ERROR("not implemented");
+	_roots.remove(root);
+
+	for (auto& i : root) {
+		i.~object_ptr();
+	}
+
+	_mem_allocator->deallocate(root.begin());
 }
 
 } // namespace gc
