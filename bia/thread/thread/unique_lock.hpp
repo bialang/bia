@@ -19,8 +19,14 @@ template<typename Mutex>
 class unique_lock
 {
 public:
+	unique_lock(Mutex&) noexcept
+	{}
 	unique_lock(Mutex&, try_to_lock_tag) noexcept
 	{}
+	operator bool() const noexcept
+	{
+		return true;
+	}
 };
 #endif
 
