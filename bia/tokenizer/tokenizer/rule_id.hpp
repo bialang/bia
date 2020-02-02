@@ -1,16 +1,24 @@
-#pragma once
+#ifndef BIA_TOKENIZER_RULE_ID_HPP_
+#define BIA_TOKENIZER_RULE_ID_HPP_
 
 #include <cstddef>
 
 namespace bia {
 namespace tokenizer {
 
-enum class RULE_ID
+/**
+ * IDs for every rule.
+ */
+enum class rule_id
 {
-	ROOT
+	/** the root id */
+	root
 };
 
-constexpr auto rule_id_count = static_cast<std::size_t>(RULE_ID::ROOT);
+/** the amount of all rules */
+constexpr auto rule_id_count = static_cast<std::size_t>(rule_id::root);
 
 } // namespace tokenizer
 } // namespace bia
+
+#endif
