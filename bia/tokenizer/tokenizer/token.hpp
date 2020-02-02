@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_TOKENIZER_TOKEN_HPP_
+#define BIA_TOKENIZER_TOKEN_HPP_
 
 #include "keyword.hpp"
 #include "rule_id.hpp"
@@ -33,3 +34,5 @@ struct token
 
 } // namespace tokenizer
 } // namespace bia
+
+#endif
