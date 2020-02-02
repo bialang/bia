@@ -1,0 +1,18 @@
+single_comment ::= "#" any* ("#" | NEWLINE)?
+
+
+identifier_char ::= "{Ll}" | "{Lu}" | "{Lt}" | "{Lo}" | "{Pc}" | "{Nl}"
+identifier ::= identifier_char (identifier_char | "{Nd}" | "{No}")*
+
+
+string ::= normal_string
+
+escape_character ::= "\" ("n" | "r" | "t")
+normal_content ::= escape_character | [^"']
+normal_string ::= '"' ('\"' | "'" | normal_content)* '"' | "'" ("\'" | '"' | normal_content)* "'"
+
+
+number ::= integer | float
+
+integer ::= [1-9] [0-9]* | "0"
+float ::= integer "." [0-9]*

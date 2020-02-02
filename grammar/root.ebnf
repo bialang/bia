@@ -1,0 +1,4 @@
+root ::= single_stmt (";" single_stmt )* ";"? NEWLINE?
+single_stmt ::= (expression | decl_stmt)
+
+decl_stmt ::= "let" identifier "=" expression
