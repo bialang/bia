@@ -42,6 +42,9 @@ private:
 	T _value;
 };
 
+template<typename T>
+using owner = T;
+
 } // namespace util
 } // namespace bia
 
