@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-#define BIA_THROW(name, message) throw name(message, __FILE__, __LINE__)
+#define BIA_THROW(name, ...) throw name(__VA_ARGS__, __FILE__, __LINE__)
 
 namespace bia {
 namespace exception {
