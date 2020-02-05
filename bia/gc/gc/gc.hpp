@@ -280,7 +280,7 @@ public:
 	 *
 	 * @returns the internally used memory allocator
 	 */
-	memory_allocator* allocator() noexcept;
+	const std::shared_ptr<memory_allocator>& allocator() noexcept;
 	/**
 	 * Returns the active gc of the current thread.
 	 *

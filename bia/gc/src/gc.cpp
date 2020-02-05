@@ -117,9 +117,9 @@ gc::gcable<void> gc::allocate(std::size_t size, bool zero)
 	return { this, ptr };
 }
 
-memory_allocator* gc::allocator() noexcept
+const std::shared_ptr<memory_allocator>& gc::allocator() noexcept
 {
-	return _mem_allocator.get();
+	return _mem_allocator;
 }
 
 gc* gc::active_gc() noexcept
