@@ -15,6 +15,28 @@ namespace tokenizer {
 class resource_manager
 {
 public:
+	class state
+	{
+	public:
+		state()                  = default;
+		state(const state& copy) = default;
+		state(state&& move)      = default;
+		std::size_t page_index();
+		util::byte* cursor();
+
+	private:
+		friend resource_manager;
+
+		std::size_t _page_index = 0;
+		util::byte* _cursor     = nullptr;
+	};
+
+	struct size
+	{
+		std::uint16_t more : 1;
+		std::uint16_t size : 15;
+	};
+
 	class output_iterator
 	{
 	public:
@@ -24,6 +46,14 @@ public:
 		typedef value_type* pointer;
 		typedef value_type& reference;
 
+		/**
+		 * Advances the output iterator by one byte.
+		 *
+		 * @pre `valid() == true`
+		 *
+		 * @returns a reference to this object
+		 * @throw see resource_manager::_next_page()
+		 */
 		output_iterator& operator++()
 		{
 			BIA_EXPECTS(valid());
@@ -31,17 +61,34 @@ public:
 			_size->size++;
 
 			// reached page end
-			if (++_cursor >= _page_size) {
-				_size->more = 1;
-
+			if (++_cursor >= _page_end) {
 				// allocate new page
 				std::tie(_cursor, _page_end) = _resource_manager->_next_page();
+
+				// update size poiter
+				_size->more = 1;
+				_size       = reinterpret_cast<size*>(_cursor);
+
+				_cursor += sizeof(size);
 			}
 
 			return *this;
 		}
 		output_iterator operator++(int)
-		{}
+		{
+			output_iterator tmp(*this);
+
+			operator++();
+
+			return tmp;
+		}
+		/**
+		 * Dereferences the buffer at the current position.
+		 *
+		 * @pre `valid() == true`
+		 *
+		 * @returns a reference to the current byte
+		 */
 		reference operator*()
 		{
 			BIA_EXPECTS(valid());
@@ -61,6 +108,11 @@ public:
 			_resource_manager->_state.cursor = _cursor;
 			_resource_manager                = nullptr;
 		}
+		/**
+		 * Checks whether this iterator is valid.
+		 *
+		 * @returns `true` if valid, otherwise `false`
+		 */
 		bool valid() const noexcept
 		{
 			return _resource_manager != nullptr;
@@ -69,17 +121,23 @@ public:
 	private:
 		friend class resource_manager;
 
+		/** the parent resource manager */
 		class resource_manager* _resource_manager;
-		struct state _original_state;
-		struct size* _size;
+		/** the original resource manager state in case of a rollback */
+		state _original_state;
+		/** a pointer to the size location for this memory part; this pointer is updated when the page is
+		 * changed */
+		size* _size;
+		/** the current byte location */
 		util::byte* _cursor;
+		/** the end of the current page */
 		util::byte* _page_end;
 
 		output_iterator(resource_manager* resource_manager) noexcept
 		    : _original_state(resource_manager->_state)
 		{
 			_resource_manager = resource_manager;
-			_size = reinterpret_cast<size*>(_resource_manager);
+			_size             = reinterpret_cast<size*>(_resource_manager);
 		}
 	};
 
@@ -87,26 +145,19 @@ public:
 	    : _pages(gc::std_memory_allocator<util::byte*>(allocator)), _allocator(std::move(allocator.get()))
 	{
 		// allocate first page
-		_pages.push_back(_state.cursor = _allocator->checked_allocate(_page_size).get());
+		_page_size = page_size;
+
+		_pages.push_back(_state.cursor =
+		                     static_cast<util::byte*>(_allocator->checked_allocate(_page_size).get()));
 	}
-	output_iterator start_memory(bool avoid_duplicates)
+	output_streambuf start_memory(bool avoid_duplicates)
+	{}
+	state save_state() const noexcept
 	{
-		return {this};
+		return _state;
 	}
 
 private:
-	struct size
-	{
-		std::uint16_t more : 1;
-		std::uint16_t size : 15;
-	};
-
-	struct state
-	{
-		std::size_t page_index;
-		util::byte* cursor;
-	};
-
 	struct compare
 	{
 		bool operator()(const std::uint8_t* left, const std::uint8_t* right) const noexcept
@@ -131,8 +182,8 @@ private:
 	std::pair<util::byte*, util::byte*> _next_page()
 	{
 		// no more pages available
-		if (_state.page_index + 1 >= _page.size()) {
-			_pages.push_back(_allocator->checked_allocate(_page_size).get());
+		if (_state.page_index + 1 >= _pages.size()) {
+			_pages.push_back(static_cast<util::byte*>(_allocator->checked_allocate(_page_size).get()));
 		}
 
 		_state.page_index++;
