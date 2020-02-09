@@ -1,58 +1,58 @@
-#pragma once
+#ifndef BIA_STRING_ENCODING_ENCODER_HPP_
+#define BIA_STRING_ENCODING_ENCODER_HPP_
 
 #include "../string.hpp"
 
 #include <cstddef>
 #include <cstdint>
+#include <istream>
+#include <ostream>
 
 namespace bia {
 namespace string {
 namespace encoding {
 
-typedef std::uint32_t code_point;
+typedef std::int32_t code_point_type;
 
-/*
- Converts the from the specified encodig to the internal string encoding and vice versa.
-*/
+/**
+ * Interface for converting from and to a specific encoding.
+ */
 class encoder
 {
 public:
-	enum class STANDARD_ENCODING
+	/**
+	 * The standard supported encodings.
+	 */
+	enum class standard_encoding
 	{
-		ASCII,
-		UTF_8,
-		UTF_16,
-		UTF_16_LE,
-		UTF_16_BE,
-		UTF_32,
-		UTF_32_LE,
-		UTF_32_BE
+		/** normal 7 bit ascii encoding */
+		ascii,
+		/** default UTF-8 ecoding */
+		utf_8,
+		/** UTF-16 encoding in CPU endianness */
+		utf_16,
+		/** UTF-16 encoding in little endianness */
+		utf_16_le,
+		/** UTF-16 encoding in big endianness */
+		utf_16_be,
+		/** UTF-32 encoding in CPU endianness */
+		utf_32,
+		/** UTF-32 encoding in little endianness */
+		utf_32_le,
+		/** UTF-32 encoding in big endianness */
+		utf_32_be
 	};
 
-	/* the byte order mark */
-	constexpr static code_point bom = 0xfeff;
+	/** the byte order mark */
+	constexpr static code_point_type bom = 0xfeff;
 
+	/**
+	 * Destructor.
+	 */
 	virtual ~encoder() = default;
 
-	virtual void read_start(const std::int8_t*& begin, const std::int8_t* end) const = 0;
-	/*
-	 Reads the next code point from the buffer and advances the pointer.
-
-	 @param[in,out] begin is the start of the buffer; will be advanced on a successful read
-	 @param end is the end of the buffer
-	 @param[out] output is the read code point
-	 @return `true` if there were no errors and the code point was read to `output`, otherwise `false`
-	 @throws exception::char_encoding_exception if the read code point is invalid
-	*/
-	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const = 0;
-	/*
-	 Converts the buffer `input` to UTF-16 encoded string.
-
-	 @param input the input buffer
-	 @param length the length of the input buffer
-	 @return the UTF-16 encoded string
-	*/
-	string convert(const std::int8_t* input, std::size_t length);
+	virtual void put(std::ostream& output, code_point_type cp) const = 0;
+	virtual code_point_type read(std::istream& input) const          = 0;
 	/*
 	 Returns the standard encoder.
 
@@ -60,60 +60,12 @@ public:
 	 @return a pointer to the instance that can **ONLY** be used in the current thread
 	 @throws exception::unknown_encoder_exception if the standard type is not known
 	*/
-	static encoder* get_instance(STANDARD_ENCODING type);
-	/*
-	 Returns the encoder by name. This function can return more encoders than the one with standard encodings, depending
-	 on the backend encoding library.
-
-	 @param name is the name of the encoder
-	 @return a pointer to the instance that can **ONLY** be used in the current thread
-	 @throws exception::unknown_encoder_exception if the encoder is unknown
-	*/
-	static encoder* get_instance(string name);
-	/*
-	 Frees the instance returned by get_instance().
-
-	 @param[in] enc the encoder
-	*/
+	static encoder* get_instance(standard_encoding encoding);
 	static void free_instance(encoder* enc);
-
-protected:
-	/*
-	 Returns the minimum size when `count` many code points should be encoded.
-
-	 @param count the amount of code points
-	 @return the minimum size
-	*/
-	virtual std::size_t min_size(std::size_t count) const noexcept = 0;
-	/*
-	 Returns the maximum size when `count` many code points should be encoded.
-
-	 @param count the amount of code points
-	 @return the maximum size
-	*/
-	virtual std::size_t max_size(std::size_t count) const noexcept = 0;
-	/*
-	 Returns the minimum amount of resulting code points when decoding a buffer with the size of `size`.
-
-	 @param size the size of the buffer
-	 @return the minimum count
-	 @throws exception::char_encoding_exception if the size cannot be resolved into a valid output string
-	*/
-	virtual std::size_t min_code_points(std::size_t size) const = 0;
-	/*
-	 Returns the maximum amount of resulting code points when decoding a buffer with the size of `size`.
-
-	 @param size the size of the buffer
-	 @return the maximum count
-	 @throws exception::char_encoding_exception if the size cannot be resolved into a valid output string
-	*/
-	virtual std::size_t max_code_points(std::size_t size) const = 0;
-	virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output,
-	                            std::size_t output_len)         = 0;
-	virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output,
-	                           std::size_t output_len)          = 0;
 };
 
 } // namespace encoding
 } // namespace string
 } // namespace bia
+
+#endif
