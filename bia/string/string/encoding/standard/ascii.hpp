@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_STRING_ENCODING_STANDARD_ASCII_HPP_
+#define BIA_STRING_ENCODING_STANDARD_ASCII_HPP_
 
 #include "../encoder.hpp"
 
@@ -9,77 +10,34 @@ namespace string {
 namespace encoding {
 namespace standard {
 
-/*
- The standard encoder for ASCII without any state. This class is safe to use between threads.
-*/
+/**
+ * The standard encoder for ASCII without any state. This class is thread safe.
+ */
 class ascii final : public encoder
 {
 public:
-	virtual void read_start(const std::int8_t*& begin, const std::int8_t* end) const override
-	{}
-	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const override
+	virtual void put(std::ostream& output, code_point_type cp) const override
 	{
-		if (begin >= end) {
-			return false;
+		// invalid ascii
+		if (cp & ~0x7f) {
 		}
 
-		output = static_cast<code_point>(*begin++);
+		output.put(static_cast<char>(cp));
+	}
+	virtual code_point_type read(std::istream& input) const override
+	{
+		auto cp = input.get();
 
-		if (output & ~0x7f) {
-			BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");
+		// no more input
+		if (!input) {
+			return eof;
 		}
 
-		return true;
-	}
-
-protected:
-	virtual std::size_t min_size(std::size_t count) const noexcept override
-	{
-		return count;
-	}
-	virtual std::size_t max_size(std::size_t count) const noexcept override
-	{
-		return count;
-	}
-	virtual std::size_t min_code_points(std::size_t size) const noexcept override
-	{
-		return size;
-	}
-	virtual std::size_t max_code_points(std::size_t size) const noexcept override
-	{
-		return size;
-	}
-	virtual std::int8_t* encode(const code_point* input, std::size_t input_len, std::int8_t* output,
-	                            std::size_t output_len) override
-	{
-		const auto end = input + input_len;
-
-		while (input < end && output_len-- > 0) {
-			// check character
-			if (*input & ~0x7f) {
-				BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");
-			}
-
-			*output++ = static_cast<std::int8_t>(*input++);
+		// invalid ascii
+		if (cp & ~0x7f) {
 		}
 
-		return output;
-	}
-	virtual code_point* decode(const std::int8_t* input, std::size_t input_len, code_point* output,
-	                           std::size_t output_len) override
-	{
-		const auto end = input + input_len;
-
-		while (input < end && output_len-- > 0) {
-			// check character
-			if (*input & ~0x7f) {
-				BIA_THROW(exception::char_encoding_exception, u"invalid ASCII character");
-			}
-
-			*output++ = *input++;
-		}
-
-		return output;
+		return cp;
 	}
 };
 
@@ -87,3 +45,5 @@ protected:
 } // namespace encoding
 } // namespace string
 } // namespace bia
+
+#endif
