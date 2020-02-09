@@ -9,18 +9,21 @@ exception::syntax_details eat_whitespaces(std::istream& input, string::encoding:
 	auto eaten = false;
 
 	while (true) {
-		auto c = input.peek();
+		auto pos = input.tellg();
+		auto cp  = encoder.read(input);
 
-		switch (c) {
+		switch (cp) {
 		case ' ':
 		case '\t': {
-			input.get();
-
 			eaten = true;
 
 			break;
 		}
-		default: return { !eaten };
+		default: {
+			input.seekg(pos);
+
+			return { !eaten };
+		}
 		}
 	}
 }
