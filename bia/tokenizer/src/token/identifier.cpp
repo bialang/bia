@@ -1,43 +1,58 @@
 #include "tokenizer/token/identifier.hpp"
 
 #include <string/encoding/unicode.hpp>
+#include <util/finally.hpp>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
 
-exception::syntax_details identifier(std::istream& input, string::encoding::encoder& encoder)
+exception::syntax_details identifier(std::istream& input, string::encoding::encoder& encoder,
+                                     resource_manager& resource_manager)
 {
 	using namespace string::encoding;
 
-	auto first = true;
+	auto first     = true;
+	auto streambuf = resource_manager.start_memory(true);
+	auto outenc    = encoder::get_instance(encoder::standard_encoding::utf_8);
+	auto free      = util::make_finally([outenc] { encoder::free_instance(outenc); });
+
+	std::ostream output(&streambuf);
 
 	while (true) {
-		auto c = category_of(input.peek());
+		auto pos = input.tellg();
+		auto cp  = encoder.read(input);
 
-		switch (c) {
-		case CATEGORY::Ll:
-		case CATEGORY::Lu:
-		case CATEGORY::Lt:
-		case CATEGORY::Lo:
-		case CATEGORY::Pc:
-		case CATEGORY::Nl: {
-			first = false;
-
-			break;
-		}
-		case CATEGORY::Nd:
-		case CATEGORY::No: {
+		switch (category_of(cp)) {
+		case category::Ll:
+		case category::Lu:
+		case category::Lt:
+		case category::Lo:
+		case category::Pc:
+		case category::Nl: first = false;
+		case category::Nd:
+		case category::No: {
+			// add to output
 			if (!first) {
+				outenc->put(output, cp);
+
 				break;
 			}
 		}
 		default: {
+			// invalid char -> reset
+			input.seekg(pos);
+
+			// valid identifier
+			if (!first) {
+				// zero terminate
+				outenc->put(output, 0);
+				streambuf.commit_close();
+			}
+
 			return { !first };
 		}
 		}
-
-		input.get();
 	}
 }
 
