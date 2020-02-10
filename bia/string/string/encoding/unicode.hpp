@@ -8,9 +8,9 @@ namespace bia {
 namespace string {
 namespace encoding {
 
-enum class CATEGORY : std::int8_t
+enum class category : std::int8_t
 {
-	UNASSIGNED,
+	unassigned,
 	Cc,
 	Cf,
 	Co,
@@ -42,9 +42,9 @@ enum class CATEGORY : std::int8_t
 	Zs
 };
 
-CATEGORY category_of(code_point value) noexcept;
+category category_of(code_point_type value) noexcept;
 
-inline bool is_letter(code_point value) noexcept
+inline bool is_letter(code_point_type value) noexcept
 {
 	auto category = category_of(value);
 
@@ -52,14 +52,14 @@ inline bool is_letter(code_point value) noexcept
 	       category == CATEGORY::Lt || category == CATEGORY::Lu;
 }
 
-inline bool is_number(code_point value) noexcept
+inline bool is_number(code_point_type value) noexcept
 {
 	auto category = category_of(value);
 
 	return category == CATEGORY::Nd || category == CATEGORY::Nl || category == CATEGORY::No;
 }
 
-inline bool is_valid_unicode(code_point value)
+inline bool is_valid_unicode(code_point_type value)
 {
 	return value <= 0x10ffff && (value < 0xd800 || value > 0xdfff) && (value < 0xfdd0 || value > 0xfdef) &&
 	       (value & 0xfffe) != 0xfffe && value != 0xfeff;
