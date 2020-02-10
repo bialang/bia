@@ -22,7 +22,13 @@ exception::syntax_details eat_whitespaces(std::istream& input, string::encoding:
 		default: {
 			input.seekg(pos);
 
-			return { !eaten };
+			// expected whitespaces
+			if (!eaten) {
+				return { pos, "expected whitespaces" };
+			}
+
+			// no error
+			return {};
 		}
 		}
 	}
