@@ -1,7 +1,10 @@
 #ifndef BIA_TOKENIZER_TOKEN_STATEMENT_HPP_
 #define BIA_TOKENIZER_TOKEN_STATEMENT_HPP_
 
+#include "identifier.hpp"
+#include "keyword.hpp"
 #include "token_parameter.hpp"
+#include "whitespace_eater.hpp"
 
 #include <exception/syntax_error.hpp>
 
@@ -9,7 +12,7 @@ namespace bia {
 namespace tokenizer {
 namespace token {
 
-exception::syntax_details decl_stmt(token_parameter& token_parameter)
+inline exception::syntax_details decl_stmt(token_parameter& token_parameter)
 {
 	// compare let
 	if (auto err = keyword("let", token_parameter)) {
@@ -25,7 +28,7 @@ exception::syntax_details decl_stmt(token_parameter& token_parameter)
 
 	// optional whitespaces
 	eat_whitespaces(token_parameter);
-    
+
 	// compare '='
 	auto pos = token_parameter.input.tellg();
 
@@ -38,6 +41,11 @@ exception::syntax_details decl_stmt(token_parameter& token_parameter)
 
 	// read expression
 	return expression(token_parameter);
+}
+
+inline exception::syntax_details single_stmt(token_parameter& token_parameter)
+{
+	return decl_stmt(token_parameter);
 }
 
 } // namespace token
