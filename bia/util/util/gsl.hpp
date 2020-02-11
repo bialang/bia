@@ -48,7 +48,7 @@ using owner = T;
 
 enum class byte : std::uint8_t
 {
-}
+};
 
 } // namespace util
 } // namespace bia
