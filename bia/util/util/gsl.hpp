@@ -43,6 +43,8 @@ private:
 	T _value;
 };
 
+typedef const char* czstring;
+
 template<typename T>
 using owner = T;
 
