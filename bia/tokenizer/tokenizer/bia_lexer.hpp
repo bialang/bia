@@ -9,7 +9,7 @@ namespace tokenizer {
 class bia_lexer : public lexer
 {
 public:
-	virtual void lex(std::istream& input, string::encoding::encoder& encoder,
+	void lex(std::istream& input, string::encoding::encoder& encoder,
 	                 token_receiver& receiver) const override;
 private:
 };
