@@ -41,6 +41,10 @@ public:
 	syntax_error(const char* message, syntax_details details, const char* filename, int line)
 	    : bia_error(message, filename, line), _details(std::move(details))
 	{}
+	const char* name() const noexcept override
+	{
+		return "syntax_error";
+	}
 	const syntax_details& details() const noexcept
 	{
 		return _details;
