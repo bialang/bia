@@ -1,8 +1,9 @@
 #ifndef BIA_TOKENIZER_TOKEN_STATEMENT_HPP_
 #define BIA_TOKENIZER_TOKEN_STATEMENT_HPP_
 
+#include "any_of.hpp"
+#include "expression.hpp"
 #include "identifier.hpp"
-#include "keyword.hpp"
 #include "token_parameter.hpp"
 #include "whitespace_eater.hpp"
 
@@ -15,7 +16,7 @@ namespace token {
 inline exception::syntax_details decl_stmt(token_parameter& token_parameter)
 {
 	// compare let
-	if (auto err = keyword("let", token_parameter)) {
+	if (auto err = any_of(token_parameter, "invalid decl keyword", "let").second) {
 		return err;
 	}
 
