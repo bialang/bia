@@ -1,18 +1,27 @@
 #ifndef BIA_TOKENIZER_TOKEN_KEYWORD_HPP_
 #define BIA_TOKENIZER_TOKEN_KEYWORD_HPP_
 
-#include "../resource_manager.hpp"
+#include "token_parameter.hpp"
 
 #include <exception/syntax_error.hpp>
-#include <istream>
-#include <string/encoding/encoder.hpp>
+#include <util/gsl.hpp>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
 
-exception::syntax_details keyword(const char* keyword, std::istream& input, string::encoding::encoder& encoder,
-                                  resource_manager& resource_manager);
+inline exception::syntax_details keyword(util::czstring token, token_parameter& token_parameter)
+{
+	while (*keyword) {
+		auto pos = input.tellg();
+
+		if (encoder.read(input) != *keyword) {
+			return { pos, "invalid keyword" };
+		}
+	}
+
+	return {};
+}
 
 } // namespace token
 } // namespace tokenizer
