@@ -1,8 +1,6 @@
 #ifndef BIA_STRING_ENCODING_ENCODER_HPP_
 #define BIA_STRING_ENCODING_ENCODER_HPP_
 
-#include "../string.hpp"
-
 #include <cstddef>
 #include <cstdint>
 #include <istream>

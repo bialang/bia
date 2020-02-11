@@ -46,17 +46,16 @@ category category_of(code_point_type value) noexcept;
 
 inline bool is_letter(code_point_type value) noexcept
 {
-	auto category = category_of(value);
+	auto c = category_of(value);
 
-	return category == CATEGORY::Ll || category == CATEGORY::Lm || category == CATEGORY::Lo ||
-	       category == CATEGORY::Lt || category == CATEGORY::Lu;
+	return c >= category::Ll && c <= category::Lu;
 }
 
 inline bool is_number(code_point_type value) noexcept
 {
-	auto category = category_of(value);
+	auto c = category_of(value);
 
-	return category == CATEGORY::Nd || category == CATEGORY::Nl || category == CATEGORY::No;
+	return c >= category::Nd && c <= category::No;
 }
 
 inline bool is_valid_unicode(code_point_type value)
