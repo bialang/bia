@@ -43,6 +43,8 @@ public:
 
 	/** the byte order mark */
 	constexpr static code_point_type bom = 0xfeff;
+	/** the end of the input */
+	constexpr static code_point_type eof = -1;
 
 	/**
 	 * Destructor.

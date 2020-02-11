@@ -1,4 +1,4 @@
-﻿#include <catch.hpp>
+﻿/*#include <catch.hpp>
 #include <string/encoding/standard/ascii.hpp>
 
 using namespace bia::string::encoding;
@@ -57,13 +57,7 @@ TEST_CASE("standard utf8 encoder", "[string][encoder][standard]")
 
 	SECTION("invalid character")
 	{
-		/*const std::int8_t buffer[] = { static_cast<std::int8_t>(0xaa) };
-		code_point cp			   = 0;
-		auto begin				   = buffer;
-		auto end				   = buffer + sizeof(buffer);
-
-		REQUIRE_THROWS_AS(enc->next(begin, end, cp), bia::exception::char_encoding_exception);*/
 	}
 
 	encoder::free_instance(enc);
-}
+}*/

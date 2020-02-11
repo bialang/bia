@@ -37,6 +37,6 @@ TEST_CASE("standard unicode", "[string][encoding][benchmark]")
 		return category_of(0x10ffff);
 	};
 
-	REQUIRE(category_of('a') == CATEGORY::Ll);
-	REQUIRE(category_of('A') == CATEGORY::Lu);
+	REQUIRE(category_of('a') == category::Ll);
+	REQUIRE(category_of('A') == category::Lu);
 }

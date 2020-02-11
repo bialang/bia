@@ -3,7 +3,7 @@
 
 #include "../encoder.hpp"
 
-#include <exception/char_encoding_exception.hpp>
+//#include <exception/char_encoding_exception.hpp>
 
 namespace bia {
 namespace string {
