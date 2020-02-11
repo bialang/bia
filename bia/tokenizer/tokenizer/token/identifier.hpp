@@ -4,6 +4,7 @@
 #include "token_parameter.hpp"
 
 #include <exception/syntax_error.hpp>
+#include <string/encoding/unicode.hpp>
 #include <util/finally.hpp>
 
 namespace bia {
