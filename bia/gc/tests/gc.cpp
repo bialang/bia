@@ -77,7 +77,7 @@ TEST_CASE("unmonitored memory allocation", "[gc]")
 	g->allocator()->deallocate(ptr1);
 	g->allocator()->deallocate(ptr2);
 
-	REQUIRE(static_cast<tracking_allocator*>(g->allocator())->allocation_count() == 0);
+	REQUIRE(static_cast<tracking_allocator*>(g->allocator().get())->allocation_count() == 0);
 }
 
 TEST_CASE("garbage collection test", "[gc]")
