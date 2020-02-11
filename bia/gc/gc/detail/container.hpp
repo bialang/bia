@@ -101,6 +101,8 @@ public:
 	void remove(const T& element)
 	{
 		BIA_LOG(TRACE, "removing element from container");
+		//todo implement correctly
+		_main.erase(element);
 	}
 
 private:
