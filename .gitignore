@@ -1,5 +1,6 @@
 .vscode/
 .vs/
+/.devcontainer/
 config.hpp
 [Dd]ebug/
 [Rr]elease/

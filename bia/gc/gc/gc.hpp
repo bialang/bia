@@ -72,8 +72,14 @@ public:
 		{
 			// gc is active and dest could be possibly missed
 			if (auto ptr = dest.template get<object_info>()) {
-				(ptr - 1)->miss_index.store(_gc->_miss_index.load(std::memory_order_consume),
-				                            std::memory_order_release);
+				while (true) {
+					auto current_index = _gc->_miss_index.load(std::memory_order_consume);
+
+					if ((ptr - 1)->miss_index.exchange(current_index, std::memory_order_release) <=
+					    current_index) {
+						break;
+					}
+				}
 			}
 
 			dest.set(src);
