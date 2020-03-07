@@ -24,6 +24,7 @@ encoder* encoder::get_instance(standard_encoding type)
 #elif defined(BIA_STRING_ENCODING_BACKEND_NONE)
 	switch (type) {
 	case standard_encoding::ascii: return &ascii_encoder;
+	case standard_encoding::utf_8: return &ascii_encoder;
 	//default: BIA_THROW(exception::unknown_encoder_exception, u"unsupported string encoding");
 	}
 #endif

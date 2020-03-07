@@ -4,6 +4,7 @@
 #include "token_parameter.hpp"
 
 #include <exception/syntax_error.hpp>
+#include <log/log.hpp>
 #include <string/encoding/unicode.hpp>
 #include <util/finally.hpp>
 
@@ -11,20 +12,22 @@ namespace bia {
 namespace tokenizer {
 namespace token {
 
-inline exception::syntax_details identifier(token_parameter& token_parameter)
+inline exception::syntax_details identifier(token_parameter& tp)
 {
 	using namespace string::encoding;
 
-	auto first     = true;
-	auto streambuf = token_parameter.resource_manager.start_memory(true);
-	auto outenc    = encoder::get_instance(encoder::standard_encoding::utf_8);
-	auto free      = util::make_finally([outenc] { encoder::free_instance(outenc); });
+	auto first        = true;
+	auto streambuf    = tp.resource_manager.start_memory(true);
+	const auto outenc = encoder::get_instance(encoder::standard_encoding::utf_8);
+	const auto free   = util::make_finally([outenc] { encoder::free_instance(outenc); });
 
 	std::ostream output(&streambuf);
 
 	while (true) {
-		auto pos = token_parameter.input.tellg();
-		auto cp  = token_parameter.encoder.read(token_parameter.input);
+		const auto pos = tp.input.tellg();
+		const auto cp  = tp.encoder.read(tp.input);
+
+		BIA_LOG(TRACE, "read identifier {} category: {}", static_cast<char>(cp), (int)category_of(cp));
 
 		switch (category_of(cp)) {
 		case category::Ll:
@@ -44,13 +47,17 @@ inline exception::syntax_details identifier(token_parameter& token_parameter)
 		}
 		default: {
 			// invalid char -> reset
-			input.seekg(pos);
+			tp.input.seekg(pos);
 
 			// valid identifier
 			if (!first) {
 				// zero terminate
 				outenc->put(output, 0);
-				streambuf.commit_close();
+
+				if (streambuf.pubsync() != 0) {
+					throw;
+					// BIA_THROW(exception::bia_error, "");
+				}
 
 				return {};
 			}

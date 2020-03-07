@@ -47,6 +47,12 @@ public:
 	class output_streambuf : public std::streambuf
 	{
 	public:
+		output_streambuf(const output_streambuf& copy) = delete;
+		output_streambuf(output_streambuf&& move)
+		{
+			std::swap(_resource_manager, move._resource_manager);
+			std::swap(_size, move._size);
+		}
 	protected:
 		int_type sync() override
 		{
@@ -87,13 +93,12 @@ public:
 	private:
 		friend class resource_manager;
 
-		resource_manager* _resource_manager;
-		size* _size;
+		resource_manager* _resource_manager = nullptr;
+		size* _size = nullptr;
 
 		output_streambuf(util::not_null<resource_manager*> resource_manager)
 		{
 			_resource_manager = resource_manager.get();
-			_size             = nullptr;
 
 			if (sync() != 0) {
 				BIA_THROW(exception::memory_error, "cannot create page");
@@ -101,14 +106,18 @@ public:
 		}
 	};
 
-	resource_manager(util::not_null<std::shared_ptr<gc::memory_allocator>> allocator, std::size_t page_size)
+	/**
+	 * Constructor.
+	 *
+	 * @param allocator the memory allocator
+	 * @param page_size the size of each page
+	 */
+	resource_manager(util::not_null<std::shared_ptr<gc::memory_allocator>> allocator,
+	                 std::size_t page_size) noexcept
 	    : _pages(gc::std_memory_allocator<util::byte*>(allocator)), _allocator(std::move(allocator.get()))
 	{
 		// allocate first page
-		_page_size     = page_size;
-		_state._cursor = static_cast<util::byte*>(_allocator->checked_allocate(_page_size).get());
-
-		_pages.push_back(_state._cursor);
+		_page_size = page_size;
 	}
 	~resource_manager()
 	{

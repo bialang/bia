@@ -8,6 +8,7 @@
 #include "whitespace_eater.hpp"
 
 #include <exception/syntax_error.hpp>
+#include <log/log.hpp>
 
 namespace bia {
 namespace tokenizer {
@@ -20,12 +21,20 @@ inline exception::syntax_details decl_stmt(token_parameter& token_parameter)
 		return err;
 	}
 
+	BIA_LOG(TRACE, "matched 'let'");
+
 	// whitespaces are required
 	if (auto err = eat_whitespaces(token_parameter)) {
 		return err;
 	}
 
-	identifier(token_parameter);
+	BIA_LOG(TRACE, "matched whitespace");
+
+	if (auto err = identifier(token_parameter)) {
+		return err;
+	}
+
+	BIA_LOG(TRACE, "matched identifier");
 
 	// optional whitespaces
 	eat_whitespaces(token_parameter);
@@ -49,6 +58,7 @@ inline exception::syntax_details single_stmt(token_parameter& token_parameter)
 	auto old = token_parameter.backup();
 	
 	if (auto err = decl_stmt(token_parameter)) {
+		BIA_LOG(INFO, "no decl statement {}", err.message);
 		token_parameter.restore(old);
 
 		return expression(token_parameter);

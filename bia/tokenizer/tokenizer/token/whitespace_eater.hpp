@@ -14,8 +14,8 @@ inline exception::syntax_details eat_whitespaces(token_parameter& tp)
 	auto eaten = false;
 
 	while (true) {
-		auto pos = tp.input.tellg();
-		auto cp  = tp.encoder.read(tp.input);
+		const auto pos = tp.input.tellg();
+		const auto cp  = tp.encoder.read(tp.input);
 
 		switch (cp) {
 		case ' ':
