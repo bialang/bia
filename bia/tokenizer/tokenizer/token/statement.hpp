@@ -46,7 +46,15 @@ inline exception::syntax_details decl_stmt(token_parameter& token_parameter)
 
 inline exception::syntax_details single_stmt(token_parameter& token_parameter)
 {
-	return decl_stmt(token_parameter);
+	auto old = token_parameter.backup();
+	
+	if (auto err = decl_stmt(token_parameter)) {
+		token_parameter.restore(old);
+
+		return expression(token_parameter);
+	}
+
+	return {};
 }
 
 } // namespace token
