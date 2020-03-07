@@ -12,12 +12,12 @@ namespace tokenizer {
 namespace token {
 
 inline std::pair<std::size_t, exception::syntax_details>
-    any_of(token_parameter& token_parameter, util::czstring err_message, util::czstring token)
+    any_of(token_parameter& tp, util::czstring err_message, util::czstring token)
 {
 	while (*token) {
-		auto pos = token_parameter.input.tellg();
+		const auto pos = tp.input.tellg();
 
-		if (token_parameter.encoder.read(token_parameter.input) != *token) {
+		if (tp.encoder.read(tp.input) != *token++) {
 			return { 0, { pos, err_message } };
 		}
 	}
@@ -27,15 +27,18 @@ inline std::pair<std::size_t, exception::syntax_details>
 
 template<typename... Ts>
 inline std::pair<std::size_t, exception::syntax_details>
-    any_of(token_parameter& token_parameter, util::czstring err_message, util::czstring token, Ts&&... tokens)
+    any_of(token_parameter& tp, util::czstring err_message, util::czstring token, Ts&&... tokens)
 {
-	auto t = any_of(token_parameter, err_message, token);
+	const auto old = tp.input.tellg();
+	const auto t   = any_of(tp, err_message, token);
 
 	if (!t.second) {
 		return t;
 	}
 
-	return any_of(token_parameter, err_message, std::forward<Ts>(tokens)...);
+	tp.input.seekg(old);
+
+	return any_of(tp, err_message, std::forward<Ts>(tokens)...);
 }
 
 } // namespace token
