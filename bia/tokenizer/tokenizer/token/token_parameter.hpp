@@ -3,7 +3,7 @@
 
 #include "../resource_manager.hpp"
 
-#include <istream>
+#include <util/types.hpp>
 #include <string/encoding/encoder.hpp>
 
 namespace bia {
@@ -14,20 +14,22 @@ struct token_parameter
 {
 	struct state
 	{
-		std::istream::pos_type input_pos;
+		util::byte_istream_type::pos_type input_pos;
+		resource_manager::state rm_state;
 	};
 
-	std::istream& input;
+	util::byte_istream_type& input;
 	resource_manager& resource_manager;
 	string::encoding::encoder& encoder;
 
 	state backup() const
 	{
-		return { input.tellg() };
+		return { input.tellg(), resource_manager.save_state() };
 	}
 	void restore(const state& old)
 	{
 		input.seekg(old.input_pos);
+		resource_manager.restore_state(old.rm_state);
 	}
 };
 
