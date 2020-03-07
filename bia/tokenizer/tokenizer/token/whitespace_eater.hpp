@@ -9,13 +9,13 @@ namespace bia {
 namespace tokenizer {
 namespace token {
 
-inline exception::syntax_details eat_whitespaces(token_parameter& token_parameter)
+inline exception::syntax_details eat_whitespaces(token_parameter& tp)
 {
 	auto eaten = false;
 
 	while (true) {
-		auto pos = token_parameter.input.tellg();
-		auto cp  = token_parameter.encoder.read(token_paramter.input);
+		auto pos = tp.input.tellg();
+		auto cp  = tp.encoder.read(tp.input);
 
 		switch (cp) {
 		case ' ':
@@ -25,7 +25,7 @@ inline exception::syntax_details eat_whitespaces(token_parameter& token_paramete
 			break;
 		}
 		default: {
-			input.seekg(pos);
+			tp.input.seekg(pos);
 
 			// expected whitespaces
 			if (!eaten) {
