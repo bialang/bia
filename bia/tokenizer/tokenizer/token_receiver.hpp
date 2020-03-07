@@ -1,8 +1,6 @@
 #ifndef BIA_TOKENIZER_TOKEN_RECEIVER_HPP_
 #define BIA_TOKENIZER_TOKEN_RECEIVER_HPP_
 
-#include "token.hpp"
-
 namespace bia {
 namespace tokenizer {
 
@@ -12,6 +10,9 @@ namespace tokenizer {
 class token_receiver
 {
 public:
+	struct token
+	{};
+
 	/**
 	 * Destructor.
 	 */
