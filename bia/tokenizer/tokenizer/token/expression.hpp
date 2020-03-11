@@ -3,6 +3,7 @@
 
 #include "any_of.hpp"
 #include "identifier.hpp"
+#include "member.hpp"
 #include "operators.hpp"
 #include "token_parameter.hpp"
 
@@ -14,7 +15,7 @@ inline exception::syntax_details value(token_parameter& tp)
 {
 	// constant
 	const auto old = tp.backup();
-	auto t = any_of(tp, nullptr, "true", "false", "null");
+	auto t         = any_of(tp, nullptr, "true", "false", "null");
 
 	if (!t.second) {
 		return {};
@@ -23,7 +24,7 @@ inline exception::syntax_details value(token_parameter& tp)
 	tp.restore(old);
 
 	// member
-	if (auto err = identifier(tp)) {
+	if (auto err = member(tp)) {
 		return err;
 	}
 

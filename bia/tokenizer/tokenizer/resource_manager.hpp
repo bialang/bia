@@ -48,25 +48,33 @@ public:
 	{
 	public:
 		output_streambuf(const output_streambuf& copy) = delete;
-		output_streambuf(output_streambuf&& move)
+		output_streambuf(output_streambuf&& move) noexcept
 		{
 			std::swap(_resource_manager, move._resource_manager);
 			std::swap(_size, move._size);
 		}
+		~output_streambuf()
+		{
+			if (valid() && pptr()) {
+				_resource_manager->_state._cursor = reinterpret_cast<util::byte*>(pptr()) + _size->size;
+				
+				_update_size(nullptr);
+			}
+		}
+		bool valid() const noexcept
+		{
+			return _resource_manager;
+		}
+
 	protected:
 		int_type sync() override
 		{
 			// get next page
 			if (gptr() == egptr()) {
-				if (_size) {
-					_size->more = 1;
-				}
-
 				try {
 					auto page = _resource_manager->_next_page();
 
-					_size = new (page.first) size{};
-
+					_update_size(new (page.first) size{});
 					setp(reinterpret_cast<char*>(_size + 1), reinterpret_cast<char*>(page.second));
 				} catch (const exception::bia_error&) {
 					return -1;
@@ -94,7 +102,8 @@ public:
 		friend class resource_manager;
 
 		resource_manager* _resource_manager = nullptr;
-		size* _size = nullptr;
+		size* _size                         = nullptr;
+		size* _last_size                    = nullptr;
 
 		output_streambuf(util::not_null<resource_manager*> resource_manager)
 		{
@@ -103,6 +112,15 @@ public:
 			if (sync() != 0) {
 				BIA_THROW(exception::memory_error, "cannot create page");
 			}
+		}
+		void _update_size(size* s) noexcept
+		{
+			if (_last_size) {
+				_last_size->more = 1;
+			}
+
+			_last_size = _size;
+			_size      = s;
 		}
 	};
 
@@ -127,6 +145,10 @@ public:
 	}
 	output_streambuf start_memory(bool avoid_duplicates)
 	{
+		BIA_EXPECTS(!buf_active());
+
+		_buf_active = true;
+
 		return { this };
 	}
 	state save_state() const noexcept
@@ -135,8 +157,14 @@ public:
 	}
 	void restore_state(const state& old)
 	{}
+	bool buf_active() const noexcept
+	{
+		return _buf_active;
+	}
 
 private:
+	/** whether a streambuf is active */
+	bool _buf_active = false;
 	/** size of a single page */
 	std::size_t _page_size;
 	/** all currently allocated pages */
@@ -154,14 +182,18 @@ private:
 	 */
 	std::pair<util::byte*, util::byte*> _next_page()
 	{
-		// no more pages available
+		// current page can still store
+		if (!_pages.empty() && _state._cursor + 8 <= _pages[_state._page_index - 1]) {
+			return { _state._cursor, _pages[_state._page_index - 1] + _page_size };
+		}
+
+		// no more pages available: allocate new page
 		if (_state._page_index + 1 >= _pages.size()) {
 			_pages.push_back(static_cast<util::byte*>(_allocator->checked_allocate(_page_size).get()));
 		}
 
-		_state._page_index++;
-
-		_state._cursor = _pages[_state._page_index];
+		// return next page
+		_state._cursor = _pages[_state._page_index++];
 
 		return { _state._cursor, _state._cursor + _page_size };
 	}
