@@ -45,25 +45,34 @@ TEST_CASE("resource manager", "[tokenizer]")
 
 		SECTION("allocate memory")
 		{
-			auto initial = count;
-			auto buf     = rm.start_memory(false);
-			std::ostream(&buf) << "hallo" << std::flush;
+			SECTION("first")
+			{
+				const auto initial = count;
+				auto buf           = rm.start_memory(false);
+				std::ostream(&buf) << "hallo" << std::flush;
 
-			REQUIRE(count > initial);
+				REQUIRE(count > initial);
+			}
 
-			initial = count;
-			buf     = rm.start_memory(false);
-			std::ostream(&buf) << "12345678901" << std::flush;
+			SECTION("second")
+			{
+				const auto initial = count;
+				auto buf           = rm.start_memory(false);
+				std::ostream(&buf) << "12345678901";
 
-			REQUIRE(count > initial);
+				REQUIRE(count > initial);
+			}
 		}
 
 		SECTION("restore")
 		{
 			auto initial     = count;
 			const auto state = rm.save_state();
-			auto buf         = rm.start_memory(false);
-			std::ostream(&buf) << "hallo" << std::flush;
+
+			{
+				auto buf = rm.start_memory(false);
+				std::ostream(&buf) << "hallo";
+			}
 
 			REQUIRE(count > initial);
 
@@ -71,12 +80,17 @@ TEST_CASE("resource manager", "[tokenizer]")
 
 			rm.restore_state(state);
 
+			REQUIRE(count <= initial);
+
 			// allocate again
 			initial = count;
-			buf     = rm.start_memory(false);
-			std::ostream(&buf) << "12345678901" << std::flush;
 
-			REQUIRE(count == initial);
+			{
+				auto buf = rm.start_memory(false);
+				std::ostream(&buf) << "12345678901";
+			}
+
+			REQUIRE(count <= initial);
 		}
 	}
 

@@ -30,6 +30,12 @@ public:
 		{
 			return _cursor;
 		}
+		bool older(const state& other) const noexcept
+		{
+			return _page_index < other._page_index || (_page_index == other._page_index && _cursor < other._cursor);
+		}
+		state& operator=(const state& copy) = default;
+		state& operator=(state&& move) = default;
 
 	private:
 		friend class resource_manager;
@@ -57,7 +63,8 @@ public:
 		{
 			if (valid() && pptr()) {
 				_resource_manager->_state._cursor = reinterpret_cast<util::byte*>(pptr()) + _size->size;
-				
+				_resource_manager->_buf_active    = false;
+
 				_update_size(nullptr);
 			}
 		}
@@ -65,6 +72,7 @@ public:
 		{
 			return _resource_manager;
 		}
+		output_streambuf& operator=(output_streambuf&& move) = default;
 
 	protected:
 		int_type sync() override
@@ -156,7 +164,11 @@ public:
 		return _state;
 	}
 	void restore_state(const state& old)
-	{}
+	{
+		BIA_EXPECTS(!_state.older(old));
+
+		_state = old;
+	}
 	bool buf_active() const noexcept
 	{
 		return _buf_active;

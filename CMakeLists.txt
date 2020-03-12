@@ -27,8 +27,11 @@ function(create_tests NAME PATH)
 			PUBLIC ${NAME})
 		target_include_directories("${NAME}_test"
 			PUBLIC ${CATCH_INCLUDE_DIRS})
-		add_backward("${NAME}_test")
-
+		
+		if(BACKWARD_ENABLE)
+			add_backward("${NAME}_test")
+		endif()
+		
 		message(STATUS "Adding test - ${NAME}")
 
 		if(BIA_BUILD_BENCHMARKS)

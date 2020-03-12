@@ -6,7 +6,7 @@ parameter_list = "(" (expression ("," expression)*)? ")"
 
 arithmetic_operator ::= "*" | "/" | "%" | "+" | "-" | "//" | "**"
 bit_operator ::= "&" | "|" | "^"
-self_operator ::= "not" | "~"
+self_operator ::= "not" | "~" | "-"
 condition_chain_operator ::= "and" | "or"
 compare_operator ::= "<" | ">" | "<=" | ">=" | "==" | "!=" | "<=>" | "is" | "is not"
 
