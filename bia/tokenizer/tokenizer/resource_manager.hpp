@@ -44,6 +44,109 @@ public:
 		std::uint16_t size : 15;
 	};
 
+	class memory_iterator
+	{
+	public:
+		typedef std::random_access_iterator_tag iterator_category;
+		typedef util::byte value_type;
+		typedef std::ptrdiff_t difference_type;
+		typedef const value_type* pointer;
+		typedef const value_type& reference;
+
+		int compare(const memory_iterator& other) const noexcept
+		{
+			return 0;
+		}
+		bool operator==(const memory_iterator& other) const noexcept
+		{
+			return compare(other) == 0;
+		}
+		bool operator!=(const memory_iterator& other) const noexcept
+		{
+			return compare(other) != 0;
+		}
+		bool operator<(const memory_iterator& other) const noexcept
+		{
+			return compare(other) < 0;
+		}
+		bool operator>(const memory_iterator& other) const noexcept
+		{
+			return compare(other) > 0;
+		}
+		bool operator<=(const memory_iterator& other) const noexcept
+		{
+			return compare(other) <= 0;
+		}
+		bool operator>=(const memory_iterator& other) const noexcept
+		{
+			return compare(other) >= 0;
+		}
+		memory_iterator& operator++()
+		{
+			return *this;
+		}
+		memory_iterator operator++(int)
+		{
+			auto copy = *this;
+
+			this->operator++();
+
+			return copy;
+		}
+		memory_iterator& operator--()
+		{
+			return *this;
+		}
+		memory_iterator operator--(int)
+		{
+			auto copy = *this;
+
+			this->operator--();
+
+			return copy;
+		}
+		memory_iterator& operator+=(difference_type diff)
+		{
+			return *this;
+		}
+		memory_iterator& operator-=(difference_type diff)
+		{
+			return *this;
+		}
+		memory_iterator& operator+(difference_type diff)
+		{
+			return *this;
+		}
+		memory_iterator& operator-(difference_type diff)
+		{
+			return *this;
+		}
+		friend memory_iterator& operator+(difference_type diff, memory_iterator& right);
+		friend memory_iterator& operator-(difference_type diff, memory_iterator& right);
+		reference operator[](difference_type diff)
+		{
+			return this->operator*();
+		}
+		reference operator*() const
+		{
+			return static_cast<value_type>(0);
+		}
+	};
+
+	class memory
+	{
+	public:
+		memory()                   = default;
+		memory(const memory& copy) = default;
+		memory(memory&& move)      = default;
+
+		memory_iterator begin() const;
+		memory_iterator end() const;
+
+	private:
+		const size* _size;
+	};
+
 	class output_streambuf : public std::streambuf
 	{
 	public:
@@ -56,11 +159,37 @@ public:
 		~output_streambuf()
 		{
 			if (valid() && pptr()) {
+				close(true);
 				_resource_manager->_state._cursor = reinterpret_cast<util::byte*>(pptr()) + _size->size;
-				
+
 				_update_size(nullptr);
+
+				// if current size was not used remove more flag
+				if (_size->size)
 			}
 		}
+		/**
+		 * Closes this streambuf.
+		 *
+		 * @pre `valid() == true`
+		 * @post `valid() == false`
+		 *
+		 * @param discard if `true` discards the memory sequence and returns an invalid memory object
+		 * @returns the memory object
+		 */
+		memory close(bool discard)
+		{
+			BIA_EXPECTS(valid());
+
+			if (discard) {
+				return {};
+			}
+		}
+		/**
+		 * Checks whether this streambuf is valid.
+		 *
+		 * @returns `true` if valid, otherwise `false`
+		 */
 		bool valid() const noexcept
 		{
 			return _resource_manager;
@@ -70,7 +199,7 @@ public:
 		int_type sync() override
 		{
 			// get next page
-			if (gptr() == egptr()) {
+			if (pptr() == epptr()) {
 				try {
 					auto page = _resource_manager->_next_page();
 
@@ -101,10 +230,19 @@ public:
 	private:
 		friend class resource_manager;
 
+		/** if non-null the parent */
 		resource_manager* _resource_manager = nullptr;
-		size* _size                         = nullptr;
-		size* _last_size                    = nullptr;
+		/** the current size pointer */
+		size* _size = nullptr;
+		/** the last size pointer */
+		size* _last_size = nullptr;
 
+		/**
+		 * Constructor.
+		 *
+		 * @param resource_manager the parent resouce manager
+		 * @throw exception::memory_error if no memory could be allocated
+		 */
 		output_streambuf(util::not_null<resource_manager*> resource_manager)
 		{
 			_resource_manager = resource_manager.get();
@@ -113,6 +251,13 @@ public:
 				BIA_THROW(exception::memory_error, "cannot create page");
 			}
 		}
+		/**
+		 * Updates the current size pointer and the old size.
+		 *
+		 * @post `_size == s`
+		 *
+		 * @param[in] s the new pointer
+		 */
 		void _update_size(size* s) noexcept
 		{
 			if (_last_size) {
@@ -143,6 +288,14 @@ public:
 			_allocator->deallocate(page);
 		}
 	}
+	/**
+	 * Starts a new memory sequence.
+	 *
+	 * @pre buf_active() must return `false`
+	 *
+	 * @param avoid_duplicates if `true` removes this memory sequence if it is a duplicate
+	 * @throw
+	 */
 	output_streambuf start_memory(bool avoid_duplicates)
 	{
 		BIA_EXPECTS(!buf_active());
@@ -151,12 +304,31 @@ public:
 
 		return { this };
 	}
-	state save_state() const noexcept
+	/**
+	 * Saves the current state of the resource manager.
+	 *
+	 * @pre `buf_active() == false`
+	 *
+	 * @returns the current state
+	 */
+	state save_state() const
 	{
+		BIA_EXPECTS(!buf_active());
+
 		return _state;
 	}
+	/**
+	 * Restores an old state.
+	 *
+	 * @pre
+	 */
 	void restore_state(const state& old)
 	{}
+	/**
+	 * Checks whether a streambuf is currently active.
+	 *
+	 * @returns `true` if a streambuf is currently active
+	 */
 	bool buf_active() const noexcept
 	{
 		return _buf_active;
