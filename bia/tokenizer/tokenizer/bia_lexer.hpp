@@ -2,7 +2,7 @@
 #define BIA_TOKENIZER_BIA_LEXER_HPP_
 
 #include "lexer.hpp"
-#include "resource_manager.hpp"
+#include "resource/manager.hpp"
 
 namespace bia {
 namespace tokenizer {

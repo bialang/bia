@@ -1,9 +1,11 @@
 #ifndef BIA_TOKENIZER_RESOURCE_iterator_HPP_
 #define BIA_TOKENIZER_RESOURCE_iterator_HPP_
 
+#include "../size.hpp"
+
+#include <cstdint>
 #include <iterator>
 #include <util/gsl.hpp>
-#include <cstdint>
 
 namespace bia {
 namespace tokenizer {
@@ -97,6 +99,11 @@ public:
 	{
 		return static_cast<value_type>(0);
 	}
+
+private:
+	std::shared_ptr<page_container_type> _pages;
+	const util::byte* _current;
+	std::size_t _page_index;
 };
 
 } // namespace memory

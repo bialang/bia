@@ -22,18 +22,20 @@ streambuf::~streambuf()
 		close(true);
 
 		_manager->_state.cursor = reinterpret_cast<util::byte*>(pptr()) + _size->size;
-		_manager->_buf_active    = false;
+		_manager->_buf_active   = false;
 
 		_update_size(nullptr);
 
-		//todo if current size was not used remove more flag
-		//if (_size->size)
+		// todo if current size was not used remove more flag
+		// if (_size->size)
 	}
 }
 
 class memory streambuf::close(bool discard)
 {
 	BIA_EXPECTS(valid());
+
+	_manager->_buf_active = false;
 
 	if (discard) {
 		return {};
@@ -47,8 +49,8 @@ bool streambuf::valid() const noexcept
 
 streambuf::int_type streambuf::sync()
 {
-	// get next page
-	if (pptr() == epptr()) {
+	// get next page if no more space is available
+	if (!pptr() || pptr() == epptr()) {
 		try {
 			auto page = _manager->_next_page();
 
@@ -62,19 +64,17 @@ streambuf::int_type streambuf::sync()
 	return 0;
 }
 
-streambuf::int_type streambuf::overflow(int_type c)
+streambuf::int_type streambuf::overflow(int_type ch)
 {
-	if (sync() == 0) {
-		if (c != traits_type::eof()) {
-			sputc(traits_type::to_char_type(c));
-
-			return c;
-		}
-
-		return c;
+	// synchronize failed
+	if (sync() != 0) {
+		return traits_type::eof();
+	} // write character to output
+	else if (ch != traits_type::eof()) {
+		sputc(traits_type::to_char_type(ch));
 	}
 
-	return traits_type::eof();
+	return traits_type::eof() + 1;
 }
 
 streambuf::streambuf(util::not_null<manager*> manager)

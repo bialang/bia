@@ -15,6 +15,11 @@ class manager;
 
 namespace memory {
 
+/**
+ * An output streambuffer for the @ref manager.
+ *
+ * @see @ref manager, @ref memory
+ */
 class streambuf : public std::streambuf
 {
 public:
@@ -41,7 +46,7 @@ public:
 
 protected:
 	int_type sync() override;
-	int_type overflow(int_type c) override;
+	int_type overflow(int_type ch = traits_type::eof()) override;
 
 private:
 	friend manager;

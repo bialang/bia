@@ -11,7 +11,14 @@ class token_receiver
 {
 public:
 	struct token
-	{};
+	{
+		enum class type
+		{
+			identifier
+		};
+
+		type type;
+	};
 
 	/**
 	 * Destructor.

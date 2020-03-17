@@ -7,10 +7,8 @@
 
 #include <cstddef>
 #include <gc/memory_allocator.hpp>
-#include <gc/std_memory_allocator.hpp>
 #include <memory>
 #include <util/gsl.hpp>
-#include <vector>
 
 namespace bia {
 namespace tokenizer {
@@ -36,6 +34,7 @@ public:
 	 * @throw
 	 */
 	memory::streambuf start_memory(bool avoid_duplicates);
+	memory::memory stop_memory(bool discard);
 	/**
 	 * Saves the current state of the resource manager.
 	 *
@@ -65,7 +64,7 @@ private:
 	/** size of a single page */
 	std::size_t _page_size;
 	/** all currently allocated pages */
-	std::vector<util::byte*, gc::std_memory_allocator<util::byte*>> _pages;
+	std::shared_ptr<page_container_type> _pages;
 	/** the current state */
 	state _state;
 	/** the memory allocator */
