@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_UTIL_TYPE_TRATIS_SIZE_OF_HPP_
+#define BIA_UTIL_TYPE_TRATIS_SIZE_OF_HPP_
 
 #include <cstddef>
 #include <type_traits>
@@ -8,17 +9,18 @@ namespace util {
 namespace type_traits {
 
 template<typename... T>
-struct size_of : std::integral_constant<std::size_t, 0>
-{};
+struct size_of;
 
 template<typename T>
 struct size_of<T> : std::integral_constant<std::size_t, sizeof(T)>
 {};
 
-template<typename T0, typename... T>
-struct size_of<T0, T...> : std::integral_constant<std::size_t, sizeof(T0) + size_of<T...>::value>
+template<typename T, typename... Ts>
+struct size_of<T, Ts...> : std::integral_constant<std::size_t, sizeof(T) + size_of<Ts...>::value>
 {};
 
 } // namespace type_traits
 } // namespace util
 } // namespace bia
+
+#endif
