@@ -15,15 +15,15 @@ class bundle
 public:
 	typedef std::size_t state_type;
 
-	void add(token::token token);
+	void add(token token);
 	void clear();
 	state_type save();
 	void restore(state_type state);
-	const token::token* begin() const;
-	const token::token* end() const;
+	const token* begin() const;
+	const token* end() const;
 
 private:
-	std::vector<token::token> _tokens;
+	std::vector<token> _tokens;
 };
 
 } // namespace token

@@ -16,7 +16,7 @@ using namespace bia::string;
 class mock_receiver : public token::receiver
 {
 public:
-	void receive(const token* begin, const token* end) override
+	void receive(const token::token* begin, const token::token* end) override
 	{
 		while (begin != end) {
 			_tokens.push_back(*begin++);
@@ -24,7 +24,7 @@ public:
 	}
 
 private:
-	std::vector<token> _tokens;
+	std::vector<token::token> _tokens;
 };
 
 TEST_CASE("resource manager", "[tokenizer]")
