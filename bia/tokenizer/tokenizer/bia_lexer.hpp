@@ -12,10 +12,10 @@ class bia_lexer : public lexer
 public:
 	bia_lexer(util::not_null<std::shared_ptr<gc::memory_allocator>> allocator);
 	void lex(util::byte_istream_type& input, string::encoding::encoder& encoder,
-	         token_receiver& receiver) override;
+	         token::receiver& receiver) override;
 
 private:
-	resource_manager _resource_manager;
+	resource::manager _manager;
 };
 
 } // namespace tokenizer

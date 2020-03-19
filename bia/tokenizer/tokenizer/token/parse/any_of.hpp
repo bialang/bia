@@ -1,7 +1,7 @@
-#ifndef BIA_TOKENIZER_TOKEN_ANY_OF_HPP_
-#define BIA_TOKENIZER_TOKEN_ANY_OF_HPP_
+#ifndef BIA_TOKENIZER_TOKEN_PARSE_ANY_OF_HPP_
+#define BIA_TOKENIZER_TOKEN_PARSE_ANY_OF_HPP_
 
-#include "token_parameter.hpp"
+#include "../parameter.hpp"
 
 #include <exception/syntax_error.hpp>
 #include <util/gsl.hpp>
@@ -10,9 +10,10 @@
 namespace bia {
 namespace tokenizer {
 namespace token {
+namespace parse {
 
 inline std::pair<std::size_t, exception::syntax_details>
-    any_of(token_parameter& tp, util::czstring err_message, util::czstring token)
+    any_of(parameter& tp, util::czstring err_message, util::czstring token)
 {
 	while (*token) {
 		const auto pos = tp.input.tellg();
@@ -27,7 +28,7 @@ inline std::pair<std::size_t, exception::syntax_details>
 
 template<typename... Ts>
 inline std::pair<std::size_t, exception::syntax_details>
-    any_of(token_parameter& tp, util::czstring err_message, util::czstring token, Ts&&... tokens)
+    any_of(parameter& tp, util::czstring err_message, util::czstring token, Ts&&... tokens)
 {
 	const auto old = tp.input.tellg();
 	const auto t   = any_of(tp, err_message, token);
@@ -41,6 +42,7 @@ inline std::pair<std::size_t, exception::syntax_details>
 	return any_of(tp, err_message, std::forward<Ts>(tokens)...);
 }
 
+} // namespace parse
 } // namespace token
 } // namespace tokenizer
 } // namespace bia

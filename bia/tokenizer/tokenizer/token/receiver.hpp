@@ -1,29 +1,40 @@
 #ifndef BIA_TOKENIZER_TOKEN_RECEIVER_HPP_
 #define BIA_TOKENIZER_TOKEN_RECEIVER_HPP_
 
+#include "keyword.hpp"
+#include "../resource/memory/memory.hpp"
+
+#include <cstdint>
+#include <util/variant.hpp>
+
 namespace bia {
 namespace tokenizer {
+namespace token {
 
 /**
  * This interface receives the parsed input as tokens.
  */
-class token_receiver
+class receiver
 {
 public:
 	struct token
 	{
 		enum class type
 		{
-			identifier
+			cmd_end,
+			identifier,
+			keyword,
+			constant_int,
+			constant_float,
 		};
 
-		type type;
+		util::variant<int, resource::memory::memory, keyword, std::int64_t, double> value;
 	};
 
 	/**
 	 * Destructor.
 	 */
-	virtual ~token_receiver() = default;
+	virtual ~receiver() = default;
 	/**
 	 * This function is called when a new set of tokens is available. The token are not guaranteed to be
 	 * grouped.
@@ -34,6 +45,7 @@ public:
 	virtual void receive(const token* begin, const token* end) = 0;
 };
 
+} // namespace token
 } // namespace tokenizer
 } // namespace bia
 

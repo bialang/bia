@@ -1,7 +1,7 @@
-#ifndef BIA_TOKENZIER_TOKEN_IDENTIFIER_HPP_
-#define BIA_TOKENZIER_TOKEN_IDENTIFIER_HPP_
+#ifndef BIA_TOKENZIER_TOKEN_PARSE_IDENTIFIER_HPP_
+#define BIA_TOKENZIER_TOKEN_PARSE_IDENTIFIER_HPP_
 
-#include "token_parameter.hpp"
+#include "../parameter.hpp"
 
 #include <exception/syntax_error.hpp>
 #include <string/encoding/unicode.hpp>
@@ -10,8 +10,9 @@
 namespace bia {
 namespace tokenizer {
 namespace token {
+namespace parse {
 
-inline exception::syntax_details identifier(token_parameter& tp)
+inline exception::syntax_details identifier(parameter& tp)
 {
 	using namespace string::encoding;
 
@@ -50,8 +51,9 @@ inline exception::syntax_details identifier(token_parameter& tp)
 			if (!first) {
 				// zero terminate
 				outenc->put(output, 0);
-				
-				auto mem = tp.manager.stop_memory(false);
+
+				// todo: add to token output
+				auto mem = tp.manager.stop_memory(streambuf);
 
 				return {};
 			}
@@ -63,6 +65,7 @@ inline exception::syntax_details identifier(token_parameter& tp)
 	}
 }
 
+} // namespace parse
 } // namespace token
 } // namespace tokenizer
 } // namespace bia

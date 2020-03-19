@@ -13,7 +13,7 @@
 using namespace bia::tokenizer;
 using namespace bia::string;
 
-class mock_receiver : public token_receiver
+class mock_receiver : public token::receiver
 {
 public:
 	void receive(const token* begin, const token* end) override
@@ -32,7 +32,7 @@ TEST_CASE("resource manager", "[tokenizer]")
 	auto count = 0;
 
 	{
-		resource_manager rm(std::make_shared<bia::gc::simple_allocator>(
+		resource::manager rm(std::make_shared<bia::gc::simple_allocator>(
 		                        [&count](std::size_t s) {
 			                        ++count;
 			                        return std::malloc(s);

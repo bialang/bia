@@ -1,17 +1,18 @@
-#ifndef BIA_TOKENIZER_TOKEN_EXPRESSION_HPP_
-#define BIA_TOKENIZER_TOKEN_EXPRESSION_HPP_
+#ifndef BIA_TOKENIZER_TOKEN_PARSE_EXPRESSION_HPP_
+#define BIA_TOKENIZER_TOKEN_PARSE_EXPRESSION_HPP_
 
+#include "../parameter.hpp"
 #include "any_of.hpp"
 #include "identifier.hpp"
 #include "member.hpp"
 #include "operators.hpp"
-#include "token_parameter.hpp"
 
 namespace bia {
 namespace tokenizer {
 namespace token {
+namespace parse {
 
-inline exception::syntax_details value(token_parameter& tp)
+inline exception::syntax_details value(parameter& tp)
 {
 	// constant
 	const auto old = tp.backup();
@@ -31,33 +32,34 @@ inline exception::syntax_details value(token_parameter& tp)
 	return {};
 }
 
-inline exception::syntax_details term(token_parameter& token_parameter)
+inline exception::syntax_details term(parameter& parameter)
 {
 	// match optional self operator
-	auto t = any_of(token_parameter, nullptr, "not", "~", "-");
+	auto t = any_of(parameter, nullptr, "not", "~", "-");
 
 	// match value
-	return value(token_parameter);
+	return value(parameter);
 }
 
-inline exception::syntax_details expression(token_parameter& token_parameter)
+inline exception::syntax_details expression(parameter& parameter)
 {
-	if (auto err = term(token_parameter)) {
+	if (auto err = term(parameter)) {
 		return err;
 	}
 
 	// end of expression
-	if (auto err = operators(token_parameter)) {
+	if (auto err = operators(parameter)) {
 		return {};
 	}
 
-	if (auto err = term(token_parameter)) {
+	if (auto err = term(parameter)) {
 		return {};
 	}
 
 	return {};
 }
 
+} // namespace parse
 } // namespace token
 } // namespace tokenizer
 } // namespace bia

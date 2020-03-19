@@ -1,17 +1,17 @@
-#ifndef BIA_TOKENIZER_TOKEN_TOKEN_PARAMETER_HPP_
-#define BIA_TOKENIZER_TOKEN_TOKEN_PARAMETER_HPP_
+#ifndef BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
+#define BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
 
 #include "../resource/manager.hpp"
 #include "../resource/state.hpp"
 
-#include <util/types.hpp>
 #include <string/encoding/encoder.hpp>
+#include <util/types.hpp>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
 
-struct token_parameter
+struct parameter
 {
 	struct state
 	{

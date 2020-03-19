@@ -1,15 +1,16 @@
-#ifndef BIA_TOKENIZER_TOKEN_WHITESPACE_EATER_HPP_
-#define BIA_TOKENIZER_TOKEN_WHITESPACE_EATER_HPP_
+#ifndef BIA_TOKENIZER_TOKEN_PARSE_WHITESPACE_EATER_HPP_
+#define BIA_TOKENIZER_TOKEN_PARSE_WHITESPACE_EATER_HPP_
 
-#include "token_parameter.hpp"
+#include "../parameter.hpp"
 
 #include <exception/syntax_error.hpp>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
+namespace parse {
 
-inline exception::syntax_details eat_whitespaces(token_parameter& tp)
+inline exception::syntax_details eat_whitespaces(parameter& tp)
 {
 	auto eaten = false;
 
@@ -39,6 +40,7 @@ inline exception::syntax_details eat_whitespaces(token_parameter& tp)
 	}
 }
 
+} // namespace parse
 } // namespace token
 } // namespace tokenizer
 } // namespace bia
