@@ -8,8 +8,12 @@ namespace bia {
 namespace util {
 namespace type_traits {
 
-template<typename... T>
+template<typename...>
 struct align_of;
+
+template<>
+struct align_of<> : std::integral_constant<std::size_t, 0>
+{};
 
 template<typename T>
 struct align_of<T> : std::integral_constant<std::size_t, alignof(T)>
