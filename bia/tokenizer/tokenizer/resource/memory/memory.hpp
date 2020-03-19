@@ -14,7 +14,6 @@ namespace tokenizer {
 namespace resource {
 
 class manager;
-typedef std::vector<util::byte*, gc::std_memory_allocator<util::byte*>> page_container_type;
 
 namespace memory {
 

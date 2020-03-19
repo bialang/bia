@@ -26,6 +26,7 @@ public:
 	streambuf(const streambuf& copy) = delete;
 	streambuf(streambuf&& move) noexcept;
 	~streambuf();
+	void finish();
 	/**
 	 * Checks whether this streambuf is valid.
 	 *
@@ -46,6 +47,7 @@ private:
 	size* _size = nullptr;
 	/** the last size pointer */
 	size* _last_size = nullptr;
+	size* _begin     = nullptr;
 
 	/**
 	 * Constructor.
@@ -54,14 +56,6 @@ private:
 	 * @throw exception::memory_error if no memory could be allocated
 	 */
 	streambuf(util::not_null<manager*> manager);
-	/**
-	 * Updates the current size pointer and the old size.
-	 *
-	 * @post `_size == s`
-	 *
-	 * @param[in] s the new pointer
-	 */
-	void _update_size(size* s) noexcept;
 };
 
 } // namespace memory

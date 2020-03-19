@@ -31,10 +31,20 @@ public:
 	 * @pre buf_active() must return `false`
 	 *
 	 * @param avoid_duplicates if `true` removes this memory sequence if it is a duplicate
-	 * @throw
+	 * @throw																																
 	 */
 	memory::streambuf start_memory(bool avoid_duplicates);
-	memory::memory stop_memory(bool discard);
+	/**
+	 * Stops the currently active buffer.
+	 * 
+	 * @pre `buf_active() == true`
+	 * @post `buf_active() == false`
+	 * 
+	 * @param[in] discard whether to discard the memory
+	 * @returns the memory object describing the bytes
+	*/
+	memory::memory stop_memory(memory::streambuf& buf);
+	void discard_memory();
 	/**
 	 * Saves the current state of the resource manager.
 	 *
@@ -64,19 +74,13 @@ private:
 	/** size of a single page */
 	std::size_t _page_size;
 	/** all currently allocated pages */
-	std::shared_ptr<page_container_type> _pages;
-	/** the current state */
-	state _state;
+	std::shared_ptr<memory::page_container_type> _pages;
+	/** the current state; only updated when memory is stopped or a new page is allocated */
+	state _state{};
 	/** the memory allocator */
 	std::shared_ptr<gc::memory_allocator> _allocator;
 
-	/**
-	 * Allocates the next page if no more pages are available and returns its beginning and the end.
-	 *
-	 * @returns a pair with the beginning and the end for that page
-	 * @throw see gc::memory_allocator::checked_allocate()
-	 */
-	std::pair<util::byte*, util::byte*> _next_page();
+	std::pair<size*, util::byte*> _next_size();
 };
 
 } // namespace resource

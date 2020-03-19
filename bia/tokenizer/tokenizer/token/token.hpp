@@ -26,6 +26,15 @@ struct token
 		null,
 		true_,
 		false_,
+		not_,
+		and_,
+		or_
+	};
+
+	enum class operator_
+	{
+		tilde,
+		minus
 	};
 
 	enum class type
@@ -33,11 +42,12 @@ struct token
 		cmd_end,
 		identifier,
 		keyword,
+		operator_,
 		constant_int,
 		constant_float,
 	};
 
-	util::variant<cmd_end, identifier, keyword, std::int64_t, double> value;
+	util::variant<cmd_end, identifier, keyword, operator_, std::int64_t, double> value;
 };
 
 } // namespace token

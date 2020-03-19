@@ -52,8 +52,8 @@ inline exception::syntax_details identifier(parameter& tp)
 				// zero terminate
 				outenc->put(output, 0);
 
-				// todo: add to token output
-				auto mem = tp.manager.stop_memory(streambuf);
+				// add token
+				tp.bundle.add(token{ token::identifier{ tp.manager.stop_memory(streambuf) } });
 
 				return {};
 			}

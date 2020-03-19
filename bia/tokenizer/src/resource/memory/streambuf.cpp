@@ -23,6 +23,19 @@ streambuf::~streambuf()
 	}
 }
 
+void streambuf::finish()
+{
+	BIA_EXPECTS(valid());
+
+	_manager    = nullptr;
+	_size->size = epptr() - pptr();
+
+	// remove more flag is last exists and current is empty
+	if (_last_size && !_size->size) {
+		_last_size->more = 0;
+	}
+}
+
 bool streambuf::valid() const noexcept
 {
 	return _manager;
@@ -33,10 +46,19 @@ streambuf::int_type streambuf::sync()
 	// get next page if no more space is available
 	if (!pptr() || pptr() == epptr()) {
 		try {
-			auto page = _manager->_next_page();
+			auto size = _manager->_next_size();
 
-			_update_size(new (page.first) size{});
-			setp(reinterpret_cast<char*>(_size + 1), reinterpret_cast<char*>(page.second));
+			// set more flag
+			if (_last_size) {
+				_last_size->more = 1;
+				_last_size->size = epptr() - pptr();
+			}
+
+			_last_size = _size;
+			_size      = size.first;
+			_begin     = _begin ? _begin : _size;
+
+			setp(reinterpret_cast<char*>(size.first + 1), reinterpret_cast<char*>(size.second));
 		} catch (const exception::bia_error&) {
 			return -1;
 		}
@@ -61,20 +83,6 @@ streambuf::int_type streambuf::overflow(int_type ch)
 streambuf::streambuf(util::not_null<manager*> manager)
 {
 	_manager = manager.get();
-
-	if (sync() != 0) {
-		BIA_THROW(exception::memory_error, "cannot create page");
-	}
-}
-
-void streambuf::_update_size(size* s) noexcept
-{
-	if (_last_size) {
-		_last_size->more = 1;
-	}
-
-	_last_size = _size;
-	_size      = s;
 }
 
 } // namespace memory

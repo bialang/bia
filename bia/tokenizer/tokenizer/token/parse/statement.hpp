@@ -22,6 +22,8 @@ inline exception::syntax_details decl_stmt(parameter& parameter)
 		return err;
 	}
 
+	parameter.bundle.add(token{ token::keyword::let });
+
 	BIA_LOG(TRACE, "matched 'let'");
 
 	// whitespaces are required

@@ -33,28 +33,28 @@ TEST_CASE("resource manager", "[tokenizer]")
 
 	{
 		resource::manager rm(std::make_shared<bia::gc::simple_allocator>(
-		                        [&count](std::size_t s) {
-			                        ++count;
-			                        return std::malloc(s);
-		                        },
-		                        [&count](void* p) {
-			                        --count;
-			                        std::free(p);
-		                        }),
-		                    12);
+		                         [&count](std::size_t s) {
+			                         ++count;
+			                         return std::malloc(s);
+		                         },
+		                         [&count](void* p) {
+			                         --count;
+			                         std::free(p);
+		                         }),
+		                     12);
 
 		SECTION("allocate memory")
 		{
-			SECTION("first")
 			{
 				const auto initial = count;
 				auto buf           = rm.start_memory(false);
-				std::ostream(&buf) << "hallo" << std::flush;
+				std::ostream(&buf) << "hallo";
 
 				REQUIRE(count > initial);
+
+				rm.stop_memory(buf);
 			}
 
-			SECTION("second")
 			{
 				const auto initial = count;
 				auto buf           = rm.start_memory(false);
@@ -66,31 +66,29 @@ TEST_CASE("resource manager", "[tokenizer]")
 
 		SECTION("restore")
 		{
-			auto initial     = count;
-			const auto state = rm.save_state();
+			const auto initial = count;
+			const auto state   = rm.save_state();
 
 			{
 				auto buf = rm.start_memory(false);
 				std::ostream(&buf) << "hallo";
+
+				REQUIRE(count > initial);
 			}
 
-			REQUIRE(count > initial);
-
-			initial = count;
+			const auto next = count;
 
 			rm.restore_state(state);
 
-			REQUIRE(count <= initial);
-
-			// allocate again
-			initial = count;
+			REQUIRE(count <= next);
 
 			{
+				// allocate again
 				auto buf = rm.start_memory(false);
-				std::ostream(&buf) << "12345678901";
-			}
+				std::ostream(&buf) << "hallo";
 
-			REQUIRE(count <= initial);
+				REQUIRE(count == initial);
+			}
 		}
 	}
 

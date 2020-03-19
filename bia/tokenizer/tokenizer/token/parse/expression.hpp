@@ -7,25 +7,34 @@
 #include "member.hpp"
 #include "operators.hpp"
 
+#include <exception/implementation_error.hpp>
+
 namespace bia {
 namespace tokenizer {
 namespace token {
 namespace parse {
 
-inline exception::syntax_details value(parameter& tp)
+inline exception::syntax_details value(parameter& parameter)
 {
 	// constant
-	const auto old = tp.backup();
-	auto t         = any_of(tp, nullptr, "true", "false", "null");
+	const auto old = parameter.backup();
+	auto t         = any_of(parameter, nullptr, "true", "false", "null");
 
-	if (!t.second) {
+	if (!t.first) {
+		switch (t.first) {
+		case 1: parameter.bundle.add(token{ token::keyword::true_ }); break;
+		case 2: parameter.bundle.add(token{ token::keyword::false_ }); break;
+		case 3: parameter.bundle.add(token{ token::keyword::null }); break;
+		default: BIA_IMPLEMENTATION_ERROR("invalid keyword id");
+		}
+
 		return {};
 	}
 
-	tp.restore(old);
+	parameter.restore(old);
 
 	// member
-	if (auto err = member(tp)) {
+	if (auto err = member(parameter)) {
 		return err;
 	}
 
@@ -36,6 +45,15 @@ inline exception::syntax_details term(parameter& parameter)
 {
 	// match optional self operator
 	auto t = any_of(parameter, nullptr, "not", "~", "-");
+
+	if (!t.first) {
+		switch (t.first) {
+		case 1: parameter.bundle.add(token{ token::keyword::not_ }); break;
+		case 2: parameter.bundle.add(token{ token::operator_::tilde }); break;
+		case 3: parameter.bundle.add(token{ token::operator_::minus }); break;
+		default: BIA_IMPLEMENTATION_ERROR("invalid operator id");
+		}
+	}
 
 	// match value
 	return value(parameter);

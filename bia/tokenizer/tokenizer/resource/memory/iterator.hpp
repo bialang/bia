@@ -2,9 +2,11 @@
 #define BIA_TOKENIZER_RESOURCE_iterator_HPP_
 
 #include "../size.hpp"
+#include "page.hpp"
 
 #include <cstdint>
 #include <iterator>
+#include <memory>
 #include <util/gsl.hpp>
 
 namespace bia {
@@ -19,7 +21,7 @@ public:
 	typedef util::byte value_type;
 	typedef std::ptrdiff_t difference_type;
 	typedef const value_type* pointer;
-	typedef const value_type& reference;
+	typedef value_type reference;
 
 	int compare(const iterator& other) const noexcept
 	{
