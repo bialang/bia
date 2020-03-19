@@ -1,11 +1,7 @@
 #ifndef BIA_TOKENIZER_TOKEN_RECEIVER_HPP_
 #define BIA_TOKENIZER_TOKEN_RECEIVER_HPP_
 
-#include "keyword.hpp"
-#include "../resource/memory/memory.hpp"
-
-#include <cstdint>
-#include <util/variant.hpp>
+#include "token.hpp"
 
 namespace bia {
 namespace tokenizer {
@@ -17,20 +13,6 @@ namespace token {
 class receiver
 {
 public:
-	struct token
-	{
-		enum class type
-		{
-			cmd_end,
-			identifier,
-			keyword,
-			constant_int,
-			constant_float,
-		};
-
-		util::variant<int, resource::memory::memory, keyword, std::int64_t, double> value;
-	};
-
 	/**
 	 * Destructor.
 	 */
