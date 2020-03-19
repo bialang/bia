@@ -8,8 +8,12 @@ namespace bia {
 namespace util {
 namespace type_traits {
 
-template<typename... T>
+template<typename...>
 struct size_of;
+
+template<>
+struct size_of<> : std::integral_constant<std::size_t, 0>
+{};
 
 template<typename T>
 struct size_of<T> : std::integral_constant<std::size_t, sizeof(T)>
