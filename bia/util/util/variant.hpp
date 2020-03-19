@@ -25,6 +25,11 @@ public:
 	using index_of = type_traits::type_index<T, Ts...>;
 
 	variant() = default;
+	template<typename T>
+	variant(T&& value)
+	{
+		emplace<T>(std::forward<T>(value));
+	}
 	/**
 	 * Copy-Constructor. Only available if all variant types are copy constructible.
 	 *
@@ -83,6 +88,18 @@ public:
 
 		return *reinterpret_cast<const typename type_traits::type_at<Index, Ts...>::type*>(&_data);
 	}
+	template<std::size_t Index, typename... Args>
+	typename type_traits::type_at<Index, Ts...>::type& emplace(Args&&... args)
+	{
+		destroy();
+
+		// initialize
+		auto ptr = new (&_data) typename type_traits::type_at<Index, Ts...>::type(std::forward<Args>(args)...);
+
+		_index = Index;
+
+		return *ptr;
+	}
 	template<typename T, typename... Args>
 	typename std::enable_if<index_of<T>::value != npos, T&>::type emplace(Args&&... args)
 	{
@@ -99,7 +116,7 @@ public:
 	{
 		return _index;
 	}
-	template<typename = typename std::enable_if<type_traits::are_all_copy_assignable<Ts...>::value>::type>
+	/*template<typename = typename std::enable_if<type_traits::are_all_copy_assignable<Ts...>::value>::type>
 	variant& operator=(const variant& copy)
 	{
 		if (copy._index != npos) {
@@ -116,7 +133,7 @@ public:
 		}
 
 		return *this;
-	}
+	}*/
 
 private:
 	/** the current value */
