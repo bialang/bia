@@ -16,7 +16,7 @@ class manager;
 namespace memory {
 
 /**
- * An output streambuffer for the @ref manager.
+ * An output stream buffer for the @ref manager.
  *
  * @see @ref manager, @ref memory
  */
@@ -27,22 +27,11 @@ public:
 	streambuf(streambuf&& move) noexcept;
 	~streambuf();
 	/**
-	 * Closes this streambuf.
-	 *
-	 * @pre `valid() == true`
-	 * @post `valid() == false`
-	 *
-	 * @param discard if `true` discards the memory sequence and returns an invalid memory object
-	 * @returns the memory object
-	 */
-	class memory close(bool discard);
-	/**
 	 * Checks whether this streambuf is valid.
 	 *
 	 * @returns `true` if valid, otherwise `false`
 	 */
 	bool valid() const noexcept;
-	streambuf& operator=(streambuf&& move) = default;
 
 protected:
 	int_type sync() override;

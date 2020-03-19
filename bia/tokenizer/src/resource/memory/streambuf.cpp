@@ -18,27 +18,8 @@ streambuf::streambuf(streambuf&& move) noexcept
 
 streambuf::~streambuf()
 {
-	if (valid() && pptr()) {
-		close(true);
-
-		_manager->_state.cursor = reinterpret_cast<util::byte*>(pptr()) + _size->size;
-		_manager->_buf_active   = false;
-
-		_update_size(nullptr);
-
-		// todo if current size was not used remove more flag
-		// if (_size->size)
-	}
-}
-
-class memory streambuf::close(bool discard)
-{
-	BIA_EXPECTS(valid());
-
-	_manager->_buf_active = false;
-
-	if (discard) {
-		return {};
+	if (valid()) {
+		_manager->discard_memory();
 	}
 }
 
