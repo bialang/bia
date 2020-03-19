@@ -5,6 +5,7 @@
 #include <util/type_traits/conjunction.hpp>
 #include <util/type_traits/equals_any.hpp>
 #include <util/type_traits/size_of.hpp>
+#include <util/type_traits/type_index.hpp>
 
 using namespace bia::util;
 using namespace bia::util::type_traits;
@@ -59,4 +60,14 @@ TEST_CASE("equals_any", "[type_traits][util]")
 	REQUIRE(equals_any_type<void, int, float>::value == 0);
 	REQUIRE(equals_any_type<void, int, float, void>::value == 3);
 	REQUIRE(equals_any_type<void, int, float, void, int>::value == 3);
+}
+
+TEST_CASE("type_index", "[type_traits][util]")
+{
+	REQUIRE(type_index<int, int>::value == 0);
+	REQUIRE(type_index<int, int, float>::value == 0);
+	REQUIRE(type_index<int, float, int>::value == 1);
+	REQUIRE(type_index<int, float, int, double>::value == 1);
+	REQUIRE(type_index<int, float, double, int, int>::value == 2);
+	REQUIRE((type_index<int, float, double, short, char>::value == type_index<>::npos));
 }
