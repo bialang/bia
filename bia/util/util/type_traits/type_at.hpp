@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_UTIL_TYPE_TRAITS_TYPE_AT_HPP_
+#define BIA_UTIL_TYPE_TRAITS_TYPE_AT_HPP_
 
 #include <cstddef>
 
@@ -22,3 +23,5 @@ struct type_at<0, T, Ts...>
 } // namespace type_traits
 } // namespace util
 } // namespace bia
+
+#endif
