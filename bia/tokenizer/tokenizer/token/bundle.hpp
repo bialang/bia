@@ -3,7 +3,6 @@
 
 #include "receiver.hpp"
 
-#include <util/gsl.hpp>
 #include <vector>
 
 namespace bia {
