@@ -20,7 +20,7 @@ inline exception::syntax_details value(parameter& parameter)
 	const auto old = parameter.backup();
 	auto t         = any_of(parameter, nullptr, "true", "false", "null");
 
-	if (!t.first) {
+	if (t.first) {
 		switch (t.first) {
 		case 1: parameter.bundle.add(token{ token::keyword::true_ }); break;
 		case 2: parameter.bundle.add(token{ token::keyword::false_ }); break;
@@ -46,7 +46,7 @@ inline exception::syntax_details term(parameter& parameter)
 	// match optional self operator
 	auto t = any_of(parameter, nullptr, "not", "~", "-");
 
-	if (!t.first) {
+	if (t.first) {
 		switch (t.first) {
 		case 1: parameter.bundle.add(token{ token::keyword::not_ }); break;
 		case 2: parameter.bundle.add(token{ token::operator_::tilde }); break;
