@@ -30,6 +30,11 @@ struct parameter
 	{
 		return { input.tellg(), manager.save_state(), bundle.save() };
 	}
+	/**
+	 * Restores the state of all parameters.
+	 *
+	 * @param old the old states
+	 */
 	void restore(const state& old)
 	{
 		input.seekg(old.input_pos);

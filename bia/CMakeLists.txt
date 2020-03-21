@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.1)
+
 project("bia"
 	LANGUAGES CXX)
 
@@ -19,7 +21,7 @@ function(create_library LIB_TYPE)
 	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in")
 		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/${LIB_NAME}/config.hpp")
 	endif()
-
+	
 	add_library(${LIB_NAME} ${LIB_TYPE}
 		${SOURCE_FILES})
 

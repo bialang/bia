@@ -14,6 +14,11 @@ class bundle
 public:
 	typedef std::size_t state_type;
 
+	/**
+	 * Adds a new token to the bundle.
+	 *
+	 * @param token the new token
+	 */
 	void add(token token);
 	void clear();
 	state_type save();

@@ -87,7 +87,7 @@ TEST_CASE("resource manager", "[tokenizer]")
 				auto buf = rm.start_memory(false);
 				std::ostream(&buf) << "hallo";
 
-				REQUIRE(count == initial);
+				REQUIRE(count == next);
 			}
 		}
 	}

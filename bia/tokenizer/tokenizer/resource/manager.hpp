@@ -44,7 +44,7 @@ public:
 	 * @returns the memory object describing the bytes
 	*/
 	memory::memory stop_memory(memory::streambuf& buf);
-	void discard_memory();
+	void discard_memory(memory::streambuf& buf);
 	/**
 	 * Saves the current state of the resource manager.
 	 *
@@ -77,9 +77,14 @@ private:
 	std::shared_ptr<memory::page_container_type> _pages;
 	/** the current state; only updated when memory is stopped or a new page is allocated */
 	state _state{};
+	/** the state when a buffer was created; only valid if a buffer is active */
+	state _buf_state;
 	/** the memory allocator */
 	std::shared_ptr<gc::memory_allocator> _allocator;
 
+	/**
+	 * Returns the next size.
+	*/
 	std::pair<size*, util::byte*> _next_size();
 };
 

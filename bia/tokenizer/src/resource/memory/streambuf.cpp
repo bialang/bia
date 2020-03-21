@@ -19,7 +19,7 @@ streambuf::streambuf(streambuf&& move) noexcept
 streambuf::~streambuf()
 {
 	if (valid()) {
-		_manager->discard_memory();
+		_manager->discard_memory(*this);
 	}
 }
 
@@ -56,7 +56,6 @@ streambuf::int_type streambuf::sync()
 
 			_last_size = _size;
 			_size      = size.first;
-			_begin     = _begin ? _begin : _size;
 
 			setp(reinterpret_cast<char*>(size.first + 1), reinterpret_cast<char*>(size.second));
 		} catch (const exception::bia_error&) {

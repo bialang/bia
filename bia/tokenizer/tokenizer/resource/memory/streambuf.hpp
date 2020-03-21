@@ -47,7 +47,6 @@ private:
 	size* _size = nullptr;
 	/** the last size pointer */
 	size* _last_size = nullptr;
-	size* _begin     = nullptr;
 
 	/**
 	 * Constructor.
