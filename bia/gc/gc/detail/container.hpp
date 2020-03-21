@@ -1,13 +1,14 @@
 #ifndef BIA_GC_DETAIL_CONTAINER_HPP_
 #define BIA_GC_DETAIL_CONTAINER_HPP_
 
-#include "../std_memory_allocator.hpp"
+#include "../memory/allocator.hpp"
+#include "../memory/std_allocator.hpp"
 
+#include <log/log.hpp>
 #include <thread/shared_lock.hpp>
 #include <thread/shared_spin_mutex.hpp>
 #include <thread/spin_mutex.hpp>
 #include <thread/unique_lock.hpp>
-#include <log/log.hpp>
 #include <unordered_set>
 
 namespace bia {
@@ -18,7 +19,7 @@ template<typename T>
 class container
 {
 public:
-	typedef std::unordered_set<T, std::hash<T>, std::equal_to<T>, std_memory_allocator<T>> container_type;
+	typedef std::unordered_set<T, std::hash<T>, std::equal_to<T>, memory::std_allocator<T>> container_type;
 
 	class token
 	{
@@ -71,7 +72,7 @@ public:
 		}
 	};
 
-	container(util::not_null<std::shared_ptr<memory_allocator>> allocator)
+	container(util::not_null<std::shared_ptr<memory::allocator>> allocator)
 	    : _main(allocator), _back(allocator)
 	{}
 	token begin_operation()
@@ -101,7 +102,7 @@ public:
 	void remove(const T& element)
 	{
 		BIA_LOG(TRACE, "removing element from container");
-		//todo implement correctly
+		// todo implement correctly
 		_main.erase(element);
 	}
 

@@ -5,13 +5,13 @@
 #include <cstdlib>
 #include <gc/gc.hpp>
 #include <gc/object.hpp>
-#include <gc/simple_allocator.hpp>
+#include <gc/memory/simple_allocator.hpp>
 #include <memory>
 #include <set>
 
 using namespace bia::gc;
 
-class tracking_allocator : public simple_allocator
+class tracking_allocator : public memory::simple_allocator
 {
 public:
 	virtual void deallocate(void* ptr) override
@@ -56,10 +56,10 @@ inline void* set_root_at(gc::token& token, gc& g, std::size_t index)
 	return ptr;
 }
 
-inline std::unique_ptr<gc> create_gc(std::shared_ptr<memory_allocator> allocator = nullptr)
+inline std::unique_ptr<gc> create_gc(std::shared_ptr<memory::allocator> allocator = nullptr)
 {
 	return std::unique_ptr<gc>(
-	    new gc(allocator ? allocator : std::shared_ptr<memory_allocator>(new tracking_allocator())));
+	    new gc(allocator ? allocator : std::shared_ptr<memory::allocator>(new tracking_allocator())));
 }
 
 TEST_CASE("unmonitored memory allocation", "[gc]")

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "detail/container.hpp"
-#include "memory_allocator.hpp"
+#include "memory/allocator.hpp"
 #include "object.hpp"
 #include "object_info.hpp"
 #include "object_ptr.hpp"
@@ -25,7 +25,7 @@ namespace gc {
 /*
  A garbage collector highly optimized for the BVM. Using this collector for custom task is not recommended.
 
- @see memory_allocator
+ @see memory::allocator
 */
 class gc
 {
@@ -231,7 +231,7 @@ public:
 	 *
 	 * @param allocator provides the required memory for the allocations
 	 */
-	gc(util::not_null<std::shared_ptr<memory_allocator>> allocator) noexcept;
+	gc(util::not_null<std::shared_ptr<memory::allocator>> allocator) noexcept;
 	/**
 	 * Destructor.
 	 */
@@ -286,7 +286,7 @@ public:
 	 *
 	 * @returns the internally used memory allocator
 	 */
-	const std::shared_ptr<memory_allocator>& allocator() noexcept;
+	const std::shared_ptr<memory::allocator>& allocator() noexcept;
 	/**
 	 * Returns the active gc of the current thread.
 	 *
@@ -298,7 +298,7 @@ private:
 	/** the currently active instance */
 	static thread_local gc* _active_gc_instance;
 	/** the memory allocator */
-	std::shared_ptr<memory_allocator> _mem_allocator;
+	std::shared_ptr<memory::allocator> _mem_allocator;
 	/** the current gc mark */
 	bool _current_mark = false;
 	/** the current miss index; this value is used to prevent misfreeing objects */
@@ -317,14 +317,14 @@ private:
 	 * @param size the size of the memory region
 	 * @param leaf whether this gc object can have more gc monitored objects
 	 * @returns the memory buffer
-	 * @throw see memory_allocator::checked_allocate()
+	 * @throw see memory::allocator::checked_allocate()
 	 */
 	util::not_null<void*> _allocate_impl(std::size_t size, bool leaf);
 	/**
 	 * Deallocates the pointer allocated by _allocate_impl().
 	 *
 	 * @param ptr the pointer
-	 * @throw see memory_allocator::deallocate()
+	 * @throw see memory::allocator::deallocate()
 	 */
 	void _free(util::not_null<void*> ptr);
 	/**

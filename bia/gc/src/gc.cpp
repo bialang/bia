@@ -10,7 +10,7 @@ namespace gc {
 
 thread_local gc* gc::_active_gc_instance = nullptr;
 
-gc::gc(util::not_null<std::shared_ptr<memory_allocator>> allocator) noexcept
+gc::gc(util::not_null<std::shared_ptr<memory::allocator>> allocator) noexcept
     : _mem_allocator(allocator.get()), _allocated(allocator), _roots(allocator)
 {}
 
@@ -117,7 +117,7 @@ gc::gcable<void> gc::allocate(std::size_t size, bool zero)
 	return { this, ptr };
 }
 
-const std::shared_ptr<memory_allocator>& gc::allocator() noexcept
+const std::shared_ptr<memory::allocator>& gc::allocator() noexcept
 {
 	return _mem_allocator;
 }
