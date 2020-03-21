@@ -6,8 +6,8 @@
 #if defined(BIA_UTIL_CONTRACT_BEHAVIOR_THROW)
 #	include <exception/contract_violation_error.hpp>
 
-#define BIA_EXPECTS(cond) if (!(cond)) BIA_TRHOW(exception::contract_violation_error, "precondition (" #cond ") was violated")
-#define BIA_ENSURES(cond) if (!(cond)) BIA_TRHOW(exception::contract_violation_error, "postcondition (" #cond ") was violated")
+#define BIA_EXPECTS(cond) if (!(cond)) BIA_THROW(bia::exception::contract_violation_error, "precondition ( " #cond " ) was violated")
+#define BIA_ENSURES(cond) if (!(cond)) BIA_THROW(bia::exception::contract_violation_error, "postcondition ( " #cond " ) was violated")
 #elif defined(BIA_UTIL_CONTRACT_BEHAVIOR_ABORT)
 #	include <cstdlib>
 
