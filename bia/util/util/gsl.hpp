@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <type_traits>
+#include <exception/bad_variant_access.hpp>
 #include <utility>
 
 namespace bia {
@@ -66,7 +67,7 @@ public:
 	typedef T& reference;
 	typedef pointer iterator;
 
-	span() noexcept
+	span(std::nullptr_t = nullptr) noexcept
 	{
 		_data = nullptr;
 		_size = 0;
@@ -104,7 +105,7 @@ public:
 	}
 	span subspan(std::size_t offset, std::size_t count)
 	{
-		BIA_EX
+		BIA_EXPECTS(offset + count <= _size);
 
 		return { _data + offset, _data + offset + count };
 	}
@@ -117,6 +118,14 @@ public:
 		return _data[index];
 	}
 	span& operator=(const span& copy) = default;
+	bool operator==(std::nullptr_t) const noexcept
+	{
+		return _data == nullptr;
+	}
+	bool operator!=(std::nullptr_t) const noexcept
+	{
+		return _data != nullptr;
+	}
 
 private:
 	pointer _data;
