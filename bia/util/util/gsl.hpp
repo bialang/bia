@@ -2,11 +2,13 @@
 #define BIA_UTIL_GSL_HPP_
 
 #include "contract.hpp"
+#include "type_traits/is_null_comparable.hpp"
 
 #include <cstddef>
 #include <cstdint>
-#include <type_traits>
 #include <exception/bad_variant_access.hpp>
+#include <type_traits>
+#include <exception/bounds_error.hpp>
 #include <utility>
 
 namespace bia {
@@ -16,12 +18,12 @@ template<typename T>
 class not_null
 {
 public:
-	static_assert(std::is_assignable<T&, std::nullptr_t>::value, "invalid T");
+	static_assert(type_traits::is_equal_null_comparable<T>::value, "invalid T");
 
 	template<typename Ty>
 	not_null(Ty&& value) : _value(std::forward<Ty>(value))
 	{
-		BIA_EXPECTS(_value != nullptr);
+		BIA_EXPECTS(!(_value == nullptr));
 	}
 	template<typename Ty>
 	not_null(const not_null<Ty>& other) noexcept : not_null(other.get())
@@ -29,7 +31,7 @@ public:
 	not_null(std::nullptr_t) = delete;
 	T& get()
 	{
-		BIA_ENSURES(_value != nullptr);
+		BIA_ENSURES(!(_value == nullptr));
 
 		return _value;
 	}
@@ -113,18 +115,26 @@ public:
 	{
 		return _data;
 	}
+	reference at(size_type index) const
+	{
+		if (index >= _size) {
+			BIA_THROW(exception::bounds_error, "out of bounds");
+		}
+
+		return _data[index];
+	}
 	reference operator[](size_type index) const
 	{
 		return _data[index];
 	}
 	span& operator=(const span& copy) = default;
-	bool operator==(std::nullptr_t) const noexcept
+	bool operator==(pointer other) const noexcept
 	{
-		return _data == nullptr;
+		return _data == other;
 	}
-	bool operator!=(std::nullptr_t) const noexcept
+	bool operator!=(pointer other) const noexcept
 	{
-		return _data != nullptr;
+		return _data != other;
 	}
 
 private:
