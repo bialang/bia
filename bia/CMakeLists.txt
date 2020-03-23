@@ -6,6 +6,8 @@ project("bia"
 set(BIA_VERSION_MAJOR 4)
 set(BIA_VERSION_MINOR 0)
 
+set(BIA_BIALANG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
 function(create_library LIB_TYPE)
 	get_filename_component(LIB_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
@@ -32,7 +34,7 @@ function(create_library LIB_TYPE)
 
 	# add includes
 	target_include_directories(${LIB_NAME}
-		${VISIBILITY} ${CMAKE_CURRENT_SOURCE_DIR})
+		${VISIBILITY} "${CMAKE_CURRENT_SOURCE_DIR}" "${BIA_BIALANG_INCLUDE_DIR}")
 
 	# add libraries
 	foreach(i RANGE 1 ${ARGC} 2)
@@ -41,6 +43,9 @@ function(create_library LIB_TYPE)
 			${ARGV${i}} ${ARGV${j}})
 	endforeach()
 endfunction()
+
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/bia_config.hpp.in"
+				"${CMAKE_CURRENT_SOURCE_DIR}/bia_config.hpp")
 
 # add modules
 add_subdirectory("exception")
