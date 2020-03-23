@@ -32,14 +32,14 @@ bool space::valid() const noexcept
 	return _allocator != nullptr;
 }
 
-size_type space::size() const
+space::size_type space::size() const
 {
 	BIA_EXPECTS(valid());
 
 	return _offset + _index * _page_size;
 }
 
-size_type space::capacity() const
+space::size_type space::capacity() const
 {
 	BIA_EXPECTS(valid());
 
