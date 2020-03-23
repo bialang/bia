@@ -1,12 +1,13 @@
 #ifndef BIA_TOKENIZER_RESOURCE_MANAGER_HPP_
 #define BIA_TOKENIZER_RESOURCE_MANAGER_HPP_
 
-#include "memory/streambuf.hpp"
-#include "size.hpp"
-#include "state.hpp"
+#include "../config.hpp"
+#include "bia_config.hpp"
+#include "streambuf.hpp"
 
 #include <cstddef>
-#include <gc/memory_allocator.hpp>
+#include <gc/memory/space.hpp>
+#include <gc/memory/view.hpp>
 #include <memory>
 #include <util/gsl.hpp>
 
@@ -17,13 +18,16 @@ namespace resource {
 class manager
 {
 public:
+	typedef gc::memory::space::size_type state_type;
+
 	/**
 	 * Constructor.
 	 *
 	 * @param allocator the memory allocator
 	 * @param page_size the size of each page
 	 */
-	manager(util::not_null<std::shared_ptr<gc::memory_allocator>> allocator, std::size_t page_size) noexcept;
+	manager(util::not_null<std::shared_ptr<gc::memory::allocator>> allocator,
+	        std::size_t page_size = BIA_TOKENIZER_PAGE_SIZE) noexcept;
 	~manager();
 	/**
 	 * Starts a new memory sequence.
@@ -31,20 +35,22 @@ public:
 	 * @pre buf_active() must return `false`
 	 *
 	 * @param avoid_duplicates if `true` removes this memory sequence if it is a duplicate
-	 * @throw																																
+	 * @throw
 	 */
-	memory::streambuf start_memory(bool avoid_duplicates);
+	BIA_ATTR_NO_DISCARD
+	streambuf start_memory(bool avoid_duplicates);
 	/**
 	 * Stops the currently active buffer.
-	 * 
+	 *
 	 * @pre `buf_active() == true`
 	 * @post `buf_active() == false`
-	 * 
+	 *
 	 * @param[in] discard whether to discard the memory
 	 * @returns the memory object describing the bytes
-	*/
-	memory::memory stop_memory(memory::streambuf& buf);
-	void discard_memory(memory::streambuf& buf);
+	 */
+	BIA_ATTR_NO_DISCARD
+	gc::memory::view stop_memory(streambuf& buf);
+	void discard_memory(streambuf& buf);
 	/**
 	 * Saves the current state of the resource manager.
 	 *
@@ -52,13 +58,13 @@ public:
 	 *
 	 * @returns the current state
 	 */
-	state save_state() const;
+	state_type save_state() const;
 	/**
 	 * Restores an old state.
 	 *
 	 * @pre
 	 */
-	void restore_state(const state& old);
+	void restore_state(state_type old);
 	/**
 	 * Checks whether a streambuf is currently active.
 	 *
@@ -67,25 +73,12 @@ public:
 	bool buf_active() const noexcept;
 
 private:
-	friend memory::streambuf;
+	friend streambuf;
 
 	/** whether a streambuf is active */
 	bool _buf_active = false;
-	/** size of a single page */
-	std::size_t _page_size;
-	/** all currently allocated pages */
-	std::shared_ptr<memory::page_container_type> _pages;
-	/** the current state; only updated when memory is stopped or a new page is allocated */
-	state _state{};
-	/** the state when a buffer was created; only valid if a buffer is active */
-	state _buf_state;
-	/** the memory allocator */
-	std::shared_ptr<gc::memory_allocator> _allocator;
-
-	/**
-	 * Returns the next size.
-	*/
-	std::pair<size*, util::byte*> _next_size();
+	/** the space where to put all the data */
+	gc::memory::space _space;
 };
 
 } // namespace resource
