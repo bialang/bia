@@ -18,8 +18,10 @@ namespace memory {
 class space
 {
 public:
+	typedef std::size_t size_type;
+
 	/** describes the current position */
-	constexpr static std::size_t cpos = std::numeric_limits<std::size_t>::max();
+	constexpr static size_type cpos = std::numeric_limits<std::size_t>::max();
 
 	/**
 	 * Constructor.
@@ -33,14 +35,14 @@ public:
 	~space();
 
 	/**
-	 * Moves the cursor back by `offset` bytes making the space effectively smaller.
+	 * Truncates the space and making it effectively smaller.
 	 *
 	 * @pre valid()
-	 * @pre `offset <= size()`
+	 * @pre `s <= size()`
 	 *
-	 * @param offset the offset in bytes
+	 * @param s the new size in bytes
 	 */
-	void move_back(std::size_t offset);
+	void truncate(size_type s);
 	/**
 	 * Checks whether this space is valid.
 	 *
@@ -54,7 +56,7 @@ public:
 	 *
 	 * @returns the size in bytes
 	 */
-	std::size_t size() const;
+	size_type size() const;
 	/**
 	 * The capacity of this space. In other words the maximum size without more allocations.
 	 *
@@ -62,9 +64,9 @@ public:
 	 *
 	 * @returns the capacity in bytes
 	 */
-	std::size_t capacity() const;
-	util::not_null<util::span<util::byte>> next_region(std::size_t size);
-	iterator cursor(std::size_t pos = cpos) const;
+	size_type capacity() const;
+	util::not_null<util::span<util::byte>> next_region(size_type size);
+	iterator cursor(size_type pos = cpos) const;
 	space& operator=(space&& move) noexcept;
 
 private:
@@ -73,11 +75,11 @@ private:
 	/** all allocated pages */
 	std::shared_ptr<page_container_type> _pages;
 	/** size of every page */
-	std::size_t _page_size;
+	size_type _page_size;
 	/** current page index */
-	std::size_t _index = 0;
+	size_type _index = 0;
 	/** offset of the current page */
-	std::size_t _offset = 0;
+	size_type _offset = 0;
 };
 
 } // namespace memory
