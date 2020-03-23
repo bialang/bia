@@ -74,9 +74,13 @@ util::not_null<util::span<util::byte>> space::next_region(std::size_t size)
 	return util::span<util::byte>(cursor, size);
 }
 
-iterator space::cursor() const
+iterator space::cursor(std::size_t pos) const
 {
-	BIA_EXPECTS(valid());
+	if (pos == cpos) {
+		pos = size();
+	}
 
-	return { _pages, _page_size, _index, _offset };
+	BIA_EXPECTS(valid() && pos <= size());
+
+	return { _pages, _page_size, pos / _page_size, pos % _page_size };
 }

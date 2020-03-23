@@ -2,10 +2,11 @@
 #define BIA_GC_MEMORY_SPACE_HPP_
 
 #include "allocator.hpp"
-#include "std_allocator.hpp"
 #include "iterator.hpp"
+#include "std_allocator.hpp"
 
 #include <cstdint>
+#include <limits>
 #include <memory>
 #include <util/gsl.hpp>
 #include <vector>
@@ -17,6 +18,9 @@ namespace memory {
 class space
 {
 public:
+	/** describes the current position */
+	constexpr static std::size_t cpos = std::numeric_limits<std::size_t>::max();
+
 	/**
 	 * Constructor.
 	 *
@@ -60,7 +64,7 @@ public:
 	 */
 	std::size_t capacity() const;
 	util::not_null<util::span<util::byte>> next_region(std::size_t size);
-	iterator cursor() const;
+	iterator cursor(std::size_t pos = cpos) const;
 	space& operator=(space&& move) noexcept;
 
 private:
