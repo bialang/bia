@@ -1,19 +1,17 @@
-#include "tokenizer/resource/memory/streambuf.hpp"
+#include "tokenizer/resource/streambuf.hpp"
 
 #include "tokenizer/resource/manager.hpp"
 
-#include <exception/memory_error.hpp>
 #include <utility>
 
 namespace bia {
 namespace tokenizer {
 namespace resource {
-namespace memory {
 
 streambuf::streambuf(streambuf&& move) noexcept
 {
 	std::swap(_manager, move._manager);
-	std::swap(_size, move._size);
+	std::swap(_begin, move._begin);
 }
 
 streambuf::~streambuf()
@@ -23,17 +21,9 @@ streambuf::~streambuf()
 	}
 }
 
-void streambuf::finish()
+void streambuf::close() noexcept
 {
-	BIA_EXPECTS(valid());
-
-	_manager    = nullptr;
-	_size->size = epptr() - pptr();
-
-	// remove more flag is last exists and current is empty
-	if (_last_size && !_size->size) {
-		_last_size->more = 0;
-	}
+	_manager = nullptr;
 }
 
 bool streambuf::valid() const noexcept
@@ -46,18 +36,9 @@ streambuf::int_type streambuf::sync()
 	// get next page if no more space is available
 	if (!pptr() || pptr() == epptr()) {
 		try {
-			auto size = _manager->_next_size();
+			auto buf = _manager->_space.next_region(0);
 
-			// set more flag
-			if (_last_size) {
-				_last_size->more = 1;
-				_last_size->size = epptr() - pptr();
-			}
-
-			_last_size = _size;
-			_size      = size.first;
-
-			setp(reinterpret_cast<char*>(size.first + 1), reinterpret_cast<char*>(size.second));
+			setp(reinterpret_cast<char*>(buf.begin()), reinterpret_cast<char*>(buf.end()));
 		} catch (const exception::bia_error&) {
 			return -1;
 		}
@@ -82,9 +63,9 @@ streambuf::int_type streambuf::overflow(int_type ch)
 streambuf::streambuf(util::not_null<manager*> manager)
 {
 	_manager = manager.get();
+	_begin   = manager->_space.size();
 }
 
-} // namespace memory
 } // namespace resource
 } // namespace tokenizer
 } // namespace bia

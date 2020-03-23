@@ -1,9 +1,9 @@
-#ifndef BIA_TOKENIZER_RESOURCE_MEMORY_STREAMBUF_HPP_
-#define BIA_TOKENIZER_RESOURCE_MEMORY_STREAMBUF_HPP_
+#ifndef BIA_TOKENIZER_RESOURCE_STREAMBUF_HPP_
+#define BIA_TOKENIZER_RESOURCE_STREAMBUF_HPP_
 
 #include "../size.hpp"
-#include "memory.hpp"
 
+#include <gc/memory/space.hpp>
 #include <streambuf>
 #include <util/gsl.hpp>
 
@@ -13,12 +13,10 @@ namespace resource {
 
 class manager;
 
-namespace memory {
-
 /**
  * An output stream buffer for the @ref manager.
  *
- * @see @ref manager, @ref memory
+ * @see @ref manager
  */
 class streambuf : public std::streambuf
 {
@@ -26,7 +24,7 @@ public:
 	streambuf(const streambuf& copy) = delete;
 	streambuf(streambuf&& move) noexcept;
 	~streambuf();
-	void finish();
+	void close() noexcept;
 	/**
 	 * Checks whether this streambuf is valid.
 	 *
@@ -42,22 +40,17 @@ private:
 	friend manager;
 
 	/** if non-null the parent */
-	manager* _manager = nullptr;
-	/** the current size pointer */
-	size* _size = nullptr;
-	/** the last size pointer */
-	size* _last_size = nullptr;
+	manager* _manager  = nullptr;
+	std::size_t _begin = 0;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param manager the parent resouce manager
-	 * @throw exception::memory_error if no memory could be allocated
+	 * @param space the destination of the data
 	 */
 	streambuf(util::not_null<manager*> manager);
 };
 
-} // namespace memory
 } // namespace resource
 } // namespace tokenizer
 } // namespace bia
