@@ -2,6 +2,7 @@
 
 #include "tokenizer/resource/manager.hpp"
 
+#include <limits>
 #include <utility>
 
 namespace bia {
@@ -36,7 +37,8 @@ streambuf::int_type streambuf::sync()
 	// get next page if no more space is available
 	if (!pptr() || pptr() == epptr()) {
 		try {
-			auto buf = _manager->_space.next_region(0);
+			auto buf =
+			    _manager->_space.next_region(std::numeric_limits<gc::memory::space::size_type>::max()).get();
 
 			setp(reinterpret_cast<char*>(buf.begin()), reinterpret_cast<char*>(buf.end()));
 		} catch (const exception::bia_error&) {

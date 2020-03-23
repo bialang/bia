@@ -2,7 +2,7 @@
 
 #include <catch.hpp>
 #include <exception/syntax_error.hpp>
-#include <gc/simple_allocator.hpp>
+#include <gc/memory/simple_allocator.hpp>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -32,7 +32,7 @@ TEST_CASE("resource manager", "[tokenizer]")
 	auto count = 0;
 
 	{
-		resource::manager rm(std::make_shared<bia::gc::simple_allocator>(
+		resource::manager rm(std::make_shared<bia::gc::memory::simple_allocator>(
 		                         [&count](std::size_t s) {
 			                         ++count;
 			                         return std::malloc(s);
@@ -97,7 +97,7 @@ TEST_CASE("resource manager", "[tokenizer]")
 
 TEST_CASE("syntax", "[tokenizer]")
 {
-	bia_lexer lexer(std::make_shared<bia::gc::simple_allocator>());
+	bia_lexer lexer(std::make_shared<bia::gc::memory::simple_allocator>());
 	std::stringstream code;
 	auto encoder = encoding::encoder::get_instance(encoding::encoder::standard_encoding::utf_8);
 	auto finally = bia::util::make_finally([encoder] { encoding::encoder::free_instance(encoder); });

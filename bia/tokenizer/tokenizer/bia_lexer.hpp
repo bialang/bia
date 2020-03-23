@@ -10,7 +10,7 @@ namespace tokenizer {
 class bia_lexer : public lexer
 {
 public:
-	bia_lexer(util::not_null<std::shared_ptr<gc::memory_allocator>> allocator);
+	bia_lexer(util::not_null<std::shared_ptr<gc::memory::allocator>> allocator);
 	void lex(util::byte_istream_type& input, string::encoding::encoder& encoder,
 	         token::receiver& receiver) override;
 

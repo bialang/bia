@@ -1,8 +1,7 @@
 #ifndef BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 #define BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 
-#include "../resource/memory/memory.hpp"
-
+#include <gc/memory/view.hpp>
 #include <util/variant.hpp>
 #include <cstdint>
 
@@ -17,7 +16,7 @@ struct token
 
 	struct identifier
 	{
-		resource::memory::memory memory;
+		gc::memory::view memory;
 	};
 
 	enum class keyword

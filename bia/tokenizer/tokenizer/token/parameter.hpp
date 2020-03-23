@@ -2,7 +2,6 @@
 #define BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
 
 #include "../resource/manager.hpp"
-#include "../resource/state.hpp"
 #include "bundle.hpp"
 
 #include <string/encoding/encoder.hpp>
@@ -17,7 +16,7 @@ struct parameter
 	struct state
 	{
 		util::byte_istream_type::pos_type input_pos;
-		resource::state rm_state;
+		resource::manager::state_type rm_state;
 		bundle::state_type bundle_state;
 	};
 

@@ -1,8 +1,6 @@
 #ifndef BIA_TOKENIZER_RESOURCE_STREAMBUF_HPP_
 #define BIA_TOKENIZER_RESOURCE_STREAMBUF_HPP_
 
-#include "../size.hpp"
-
 #include <gc/memory/space.hpp>
 #include <streambuf>
 #include <util/gsl.hpp>
