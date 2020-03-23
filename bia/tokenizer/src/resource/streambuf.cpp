@@ -24,7 +24,13 @@ streambuf::~streambuf()
 
 void streambuf::close() noexcept
 {
-	_manager = nullptr;
+	if (valid()) {
+		if (pptr()) {
+			_manager->_space.truncate(_manager->_space.size() - (epptr() - pptr()));
+		}
+
+		_manager = nullptr;
+	}
 }
 
 bool streambuf::valid() const noexcept
