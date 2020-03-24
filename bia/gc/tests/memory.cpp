@@ -1,25 +1,51 @@
 #include <catch.hpp>
 #include <gc/memory/simple_allocator.hpp>
 #include <gc/memory/space.hpp>
+#include <iostream>
 
 using namespace bia::gc::memory;
 
 TEST_CASE("space", "[gc]")
 {
-	space sp(std::make_shared<simple_allocator>(), 32);
+	int count = 0;
 
-	REQUIRE(sp.size() == 0);
-
-	SECTION("simple writes")
 	{
-		auto buf = sp.next_region(16).get();
+		space sp(std::make_shared<simple_allocator>(
+		             [&count](std::size_t s) {
+			             ++count;
 
-		REQUIRE(buf.size() == 16);
+			             auto ptr = std::malloc(s);
 
-		// one byte should be on the next page
-		buf = sp.next_region(17).get();
+			             std::cout << "allocated " << s << " bytes at " << ptr << "\n";
 
-		REQUIRE(buf.size() == 16);
-		REQUIRE(sp.size() == 32);
+			             return ptr;
+		             },
+		             [&count](void* ptr) {
+			             if (ptr) {
+				             --count;
+
+				             std::free(ptr);
+
+				             std::cout << "freeing " << ptr << "\n";
+			             }
+		             }),
+		         32);
+
+		REQUIRE(sp.size() == 0);
+
+		SECTION("simple writes")
+		{
+			auto buf = sp.next_region(16).get();
+
+			REQUIRE(buf.size() == 16);
+
+			// one byte should be on the next page
+			buf = sp.next_region(17).get();
+
+			REQUIRE(buf.size() == 16);
+			REQUIRE(sp.size() == 32);
+		}
 	}
+
+	REQUIRE(count == 0);
 }
