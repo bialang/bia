@@ -29,7 +29,9 @@ public:
 		auto cp = input.get();
 
 		// no more input
-		if (!input) {
+		if (cp == std::istream::traits_type::eof()) {
+			input.clear();
+
 			return eof;
 		}
 
