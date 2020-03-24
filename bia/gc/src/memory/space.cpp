@@ -14,6 +14,8 @@ space::space(util::not_null<std::shared_ptr<allocator>> allocator, size_type pag
 		      for (auto page : *ptr) {
 				  allocator->deallocate(page);
 		      }
+
+			  delete ptr;
 	      };
       }())
 {

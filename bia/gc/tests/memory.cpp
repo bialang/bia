@@ -1,7 +1,6 @@
 #include <catch.hpp>
 #include <gc/memory/simple_allocator.hpp>
 #include <gc/memory/space.hpp>
-#include <iostream>
 
 using namespace bia::gc::memory;
 
@@ -16,8 +15,6 @@ TEST_CASE("space", "[gc]")
 
 			             auto ptr = std::malloc(s);
 
-			             std::cout << "allocated " << s << " bytes at " << ptr << "\n";
-
 			             return ptr;
 		             },
 		             [&count](void* ptr) {
@@ -25,8 +22,6 @@ TEST_CASE("space", "[gc]")
 				             --count;
 
 				             std::free(ptr);
-
-				             std::cout << "freeing " << ptr << "\n";
 			             }
 		             }),
 		         32);
