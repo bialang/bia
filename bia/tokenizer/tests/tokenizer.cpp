@@ -19,12 +19,11 @@ public:
 	void receive(const token::token* begin, const token::token* end) override
 	{
 		while (begin != end) {
-			_tokens.push_back(*begin++);
+			tokens.push_back(*begin++);
 		}
 	}
 
-private:
-	std::vector<token::token> _tokens;
+	std::vector<token::token> tokens;
 };
 
 TEST_CASE("resource manager", "[tokenizer]")
@@ -35,11 +34,15 @@ TEST_CASE("resource manager", "[tokenizer]")
 		resource::manager rm(std::make_shared<bia::gc::memory::simple_allocator>(
 		                         [&count](std::size_t s) {
 			                         ++count;
+
 			                         return std::malloc(s);
 		                         },
 		                         [&count](void* p) {
-			                         --count;
-			                         std::free(p);
+			                         if (p) {
+				                         --count;
+										 
+				                         std::free(p);
+			                         }
 		                         }),
 		                     12);
 
@@ -106,7 +109,12 @@ TEST_CASE("syntax", "[tokenizer]")
 	code << R"(let x=~y)";
 
 	try {
+		REQUIRE(code.tellg() == 0);
+
 		lexer.lex(code, *encoder, receiver);
+
+		REQUIRE(receiver.tokens.size() == 5);
+		REQUIRE(code.tellg() == 8);
 	} catch (const bia::exception::bia_error& e) {
 		std::cout << "exception (" << e.name() << "): " << e.what() << "\n";
 
@@ -122,5 +130,7 @@ TEST_CASE("syntax", "[tokenizer]")
 			}
 			std::cout << "\e[0;32m^\e[0;30m\n";
 		}
+
+		FAIL("invalid syntax");
 	}
 }
