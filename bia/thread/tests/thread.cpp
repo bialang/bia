@@ -6,7 +6,7 @@
 
 using namespace bia::thread;
 
-#if !defined(BIA_THREAD_BACKEND_NONE)
+#if BIA_THREAD_SUPPORTED
 
 TEST_CASE("testing thread", "[thread]")
 {

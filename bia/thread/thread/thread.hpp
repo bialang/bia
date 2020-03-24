@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_THREAD_THREAD_HPP_
+#define BIA_THREAD_THREAD_HPP_
 
 #include "config.hpp"
 
@@ -10,15 +11,20 @@
 namespace bia {
 namespace thread {
 
-class thread final
+/**
+ * A threading class with automatic joining.
+*/
+class thread
 {
 public:
+	/** the type of the function to run in the thread */
 	typedef std::function<void()> target_type;
 
 	/**
-	 * Initializes this thread with the function.
+	 * Initializes this thread with the function and runs it immediately if valid.
 	 *
 	 * @param target (optional) the function that should be run
+	 * @throw exception::unsupported_error if threading is not supported
 	 */
 	thread(target_type target = {});
 	~thread();
@@ -33,7 +39,13 @@ public:
 	 * @throw exception::interrupt_error if this thread was interrupted
 	 */
 	static void sleep(std::chrono::milliseconds duration);
+	/**
+	 * Blocks and waits for this running thread.
+	 * 
+	 * @pre must be valid()
+	*/
 	void join();
+	void detach();
 	/**
 	 * Checks if this thread is valid. A thread is valid if it was initialized with a target and threading is supported.
 	 * See supported() for more information.
@@ -42,7 +54,7 @@ public:
 	 */
 	bool valid() const noexcept;
 	/**
-	 * Checks if threading is supported. This is done through the config file.
+	 * Checks if threading is supported. This is done through the config file. See also BIA_THRAED_SUPPORTED.
 	 * 
 	 * @returns `true` if threading is supported, otherwise `false`
 	*/
@@ -56,3 +68,5 @@ private:
 
 } // namespace thread
 } // namespace bia
+
+#endif
