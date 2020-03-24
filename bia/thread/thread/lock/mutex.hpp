@@ -1,18 +1,19 @@
-#ifndef BIA_THREAD_MUTEX_HPP_
-#define BIA_THREAD_MUTEX_HPP_
+#ifndef BIA_THREAD_LOCK_MUTEX_HPP_
+#define BIA_THREAD_LOCK_MUTEX_HPP_
 
-#include "config.hpp"
+#include "../config.hpp"
 
-#if defined(BIA_THREAD_BACKEND_STD)
+#if BIA_THREAD_BACKEND_STD
 #	include <mutex>
 #endif
 
 namespace bia {
 namespace thread {
+namespace lock {
 
-#if defined(BIA_THREAD_BACKEND_STD)
+#if BIA_THREAD_BACKEND_STD
 using mutex = std::mutex;
-#elif defined(BIA_THREAD_BACKEND_NONE)
+#elif BIA_THREAD_BACKEND_NONE
 class mutex
 {
 public:
@@ -27,6 +28,7 @@ public:
 };
 #endif
 
+} // namespace lock
 } // namespace thread
 } // namespace bia
 
