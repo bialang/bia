@@ -32,7 +32,6 @@ public:
 	space(util::not_null<std::shared_ptr<allocator>> allocator, std::size_t page_size) noexcept;
 	space(const space& copy) = delete;
 	space(space&& move) noexcept;
-	~space();
 
 	/**
 	 * Truncates the space and making it effectively smaller.

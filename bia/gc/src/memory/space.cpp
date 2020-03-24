@@ -7,16 +7,17 @@ using namespace bia::gc::memory;
 
 space::space(util::not_null<std::shared_ptr<allocator>> allocator, size_type page_size) noexcept
     : _allocator(std::move(allocator.get())),
-      _pages(std::make_shared<page_container_type>(std_allocator<util::byte*>(_allocator)))
+      _pages(new page_container_type(std_allocator<util::byte*>(_allocator)), [this] {
+		  auto allocator = _allocator;
+
+	      return [allocator](page_container_type* ptr) {
+		      for (auto page : *ptr) {
+				  allocator->deallocate(page);
+		      }
+	      };
+      }())
 {
 	_page_size = page_size;
-}
-
-space::~space()
-{
-	for (auto page : *_pages) {
-		_allocator->deallocate(page);
-	}
 }
 
 void space::truncate(size_type s)
