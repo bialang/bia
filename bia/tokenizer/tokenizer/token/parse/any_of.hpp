@@ -12,8 +12,8 @@ namespace tokenizer {
 namespace token {
 namespace parse {
 
-inline std::pair<std::size_t, exception::syntax_details>
-    any_of(parameter& tp, util::czstring err_message, util::czstring token)
+inline std::pair<std::size_t, exception::syntax_details> any_of(parameter& tp, util::czstring err_message,
+                                                                util::czstring token)
 {
 	while (*token) {
 		const auto pos = tp.input.tellg();
@@ -27,8 +27,8 @@ inline std::pair<std::size_t, exception::syntax_details>
 }
 
 template<typename... Ts>
-inline std::pair<std::size_t, exception::syntax_details>
-    any_of(parameter& tp, util::czstring err_message, util::czstring token, Ts&&... tokens)
+inline std::pair<std::size_t, exception::syntax_details> any_of(parameter& tp, util::czstring err_message,
+                                                                util::czstring token, Ts&&... tokens)
 {
 	const auto old = tp.input.tellg();
 	const auto t   = any_of(tp, err_message, token);
@@ -39,7 +39,9 @@ inline std::pair<std::size_t, exception::syntax_details>
 
 	tp.input.seekg(old);
 
-	return any_of(tp, err_message, std::forward<Ts>(tokens)...);
+	const auto o = any_of(tp, err_message, std::forward<Ts>(tokens)...);
+
+	return { o.first + 1, o.second };
 }
 
 } // namespace parse
