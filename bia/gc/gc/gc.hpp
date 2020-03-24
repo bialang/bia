@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <exception/implementation_error.hpp>
 #include <memory>
-#include <thread/spin_mutex.hpp>
+#include <thread/lock/spin_mutex.hpp>
 #include <type_traits>
 #include <util/gsl.hpp>
 #include <util/type_traits/conjunction.hpp>
@@ -305,7 +305,7 @@ private:
 	std::atomic_uint32_t _miss_index;
 	/** is for ensuring only one gc instance is running; using this because try_lock does not fail spuriously
 	 */
-	thread::spin_mutex _mutex;
+	thread::lock::spin_mutex _mutex;
 	/** holds every allocated element */
 	detail::container<object_info*> _allocated;
 	/** holds every created root */

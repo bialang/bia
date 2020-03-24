@@ -5,11 +5,10 @@
 #include "../memory/std_allocator.hpp"
 
 #include <log/log.hpp>
-#include <thread/shared_lock.hpp>
-#include <thread/shared_spin_mutex.hpp>
-#include <thread/spin_mutex.hpp>
-#include <thread/unique_lock.hpp>
+#include <thread/lock/spin_mutex.hpp>
+#include <thread/lock/unique_lock.hpp>
 #include <unordered_set>
+#include <util/gsl.hpp>
 
 namespace bia {
 namespace gc {
@@ -24,11 +23,9 @@ public:
 	class token
 	{
 	public:
-		token(const token& copy) = delete;
 		token(token&& move) noexcept
 		{
-			_container      = move._container;
-			move._container = nullptr;
+			std::swap(_container, move._container);
 		}
 		~token()
 		{
@@ -39,36 +36,54 @@ public:
 			if (_container) {
 				BIA_LOG(DEBUG, "ending operation");
 
-				// merge backlist with main list
+				thread::lock::unique_lock<thread::lock::spin_mutex> lock(_container->_mutex);
 
-				_container->_mutex.unlock();
+				_container->_operation_active = false;
+
+				// merge backlist with main list
+				_container->_main.insert(_container->_back.begin(), _container->_back.end());
+				_container->_back.clear();
 
 				_container = nullptr;
 			}
 		}
-		typename container::container_type::iterator begin() noexcept
+		bool valid() const noexcept
 		{
+			return _container;
+		}
+		typename container::container_type::iterator begin()
+		{
+			BIA_EXPECTS(valid());
+
 			return _container->_main.begin();
 		}
-		typename container::container_type::iterator end() noexcept
+		typename container::container_type::iterator end()
 		{
+			BIA_EXPECTS(valid());
+
 			return _container->_main.end();
 		}
 		typename container::container_type::iterator erase(typename container::container_type::iterator it)
 		{
+			BIA_EXPECTS(valid());
+
 			return _container->_main.erase(it);
+		}
+		token& operator=(token&& move)
+		{
+			end_operation();
+
+			std::swap(_container, move._container);
 		}
 
 	private:
 		friend container;
 
-		container* _container;
+		container* _container = nullptr;
 
-		token(container* container) noexcept
+		token(util::not_null<container*> container) noexcept
 		{
-			_container = container;
-
-			_container->_mutex.lock();
+			_container = container.get();
 		}
 	};
 
@@ -77,41 +92,42 @@ public:
 	{}
 	token begin_operation()
 	{
+		thread::lock::unique_lock<thread::lock::spin_mutex> lock(_mutex);
+
+		BIA_EXPECTS(!_operation_active);
+
+		_operation_active = true;
+
 		return { this };
 	}
 	void add(T element)
 	{
-		thread::shared_lock<thread::shared_spin_mutex> lock(_mutex, thread::try_to_lock);
+		thread::lock::unique_lock<thread::lock::spin_mutex> lock(_mutex);
 
-		// add directly to the main list
-		if (lock) {
-			BIA_LOG(TRACE, "mutex acquired; trying to put element to main container");
-
-			thread::unique_lock<thread::spin_mutex> _(_main_mutex);
-
-			_main.insert(std::move(element));
-		} // add to back list
-		else {
-			BIA_LOG(TRACE, "mutex not acquired; trying to put element to back container");
-
-			thread::unique_lock<thread::spin_mutex> _(_back_mutex);
-
+		if (_operation_active) {
 			_back.insert(std::move(element));
+		} else {
+			_main.insert(std::move(element));
 		}
 	}
 	void remove(const T& element)
 	{
+		thread::lock::unique_lock<thread::lock::spin_mutex> lock(_mutex);
+
 		BIA_LOG(TRACE, "removing element from container");
-		// todo implement correctly
-		_main.erase(element);
+
+		if (!_main.erase(element)) {
+			BIA_EXPECTS(_back.erase(element) > 0);
+		}
 	}
 
 private:
+	bool _operation_active = false;
+	/** the main container type */
 	container_type _main;
-	thread::shared_spin_mutex _mutex;
-	thread::spin_mutex _main_mutex;
+	/** the main container during an active operation */
 	container_type _back;
-	thread::spin_mutex _back_mutex;
+	thread::lock::spin_mutex _mutex;
 };
 
 } // namespace detail

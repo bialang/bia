@@ -3,7 +3,7 @@
 #include <cstring>
 #include <log/log.hpp>
 #include <thread/thread.hpp>
-#include <thread/unique_lock.hpp>
+#include <thread/lock/unique_lock.hpp>
 
 namespace bia {
 namespace gc {
@@ -29,7 +29,7 @@ bool gc::run_once()
 {
 	BIA_LOG(INFO, "gc cycle requested");
 
-	thread::unique_lock<thread::spin_mutex> lock(_mutex, thread::try_to_lock);
+	thread::lock::unique_lock<thread::lock::spin_mutex> lock(_mutex, thread::lock::try_to_lock);
 
 	// an instance is already running
 	if (!lock) {
