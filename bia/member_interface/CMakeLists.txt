@@ -1,6 +1,5 @@
-project("member_interface"
+project(member_interface
 	LANGUAGES CXX)
 	
 create_library(INTERFACE
-	INTERFACE "string"
-	INTERFACE "stack")
+	INTERFACE string)
