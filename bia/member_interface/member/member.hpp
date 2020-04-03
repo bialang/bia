@@ -7,7 +7,7 @@
 namespace bia {
 namespace member {
 
-/*
+/**
  * The base type for all member types. All members are gc objects and must provide the following functions.
  */
 class member : public gc::object
