@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <ostream>
+#include <type_traits>
 #include <util/limit_checker.hpp>
 #include <util/portable/stream.hpp>
 #include <util/type_traits/equals_any.hpp>
@@ -22,12 +23,14 @@ public:
 	template<op_code Op_code, op_code... Op_codes>
 	using is_op_code = util::type_traits::equals_any<op_code, Op_code, Op_codes...>;
 	template<typename T>
-	using is_member = util::type_traits::equals_any_type<T, local_member, global_member>;
+	using is_member =
+	    util::type_traits::equals_any_type<typename std::decay<T>::type, local_member, global_member>;
 	template<typename T>
-	using is_constant =
-	    util::type_traits::equals_any_type<T, std::int8_t, std::int32_t, std::int64_t, double>;
+	using is_constant = util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t,
+	                                                       std::int32_t, std::int64_t, double>;
 	template<typename T>
-	using is_int_immediate = util::type_traits::equals_any_type<T, std::int8_t, std::int32_t>;
+	using is_int_immediate =
+	    util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t, std::int32_t>;
 
 	/**
 	 * Constructor.
@@ -119,15 +122,15 @@ private:
 	{
 		if (Optimize && !std::is_same<T, op_code>::value) {
 			if (std::is_unsigned<T>::value) {
-				if (util::limit_checker<std::uint8_t>::check(value)) {
+				if (util::limit_checker<std::uint8_t>::in_bounds(value)) {
 					util::portable::write(_output, static_cast<std::uint8_t>(value));
 				} else {
 					util::portable::write(_output, value);
 				}
 			} else {
-				if (util::limit_checker<std::int8_t>::check(value)) {
+				if (util::limit_checker<std::int8_t>::in_bounds(value)) {
 					util::portable::write(_output, static_cast<std::int8_t>(value));
-				} else if (util::limit_checker<std::int32_t>::check(value)) {
+				} else if (util::limit_checker<std::int32_t>::in_bounds(value)) {
 					util::portable::write(_output, static_cast<std::int32_t>(value));
 				} else {
 					util::portable::write(_output, value);

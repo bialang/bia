@@ -13,12 +13,12 @@ constexpr auto max_instruction_size = sizeof(op_code_type) + 4;
 
 struct local_member
 {
-	std::uint16_t index;
+	std::uint32_t index;
 };
 
 struct global_member
 {
-	std::uint16_t index;
+	std::uint32_t index;
 };
 
 enum immediate_size_flag
