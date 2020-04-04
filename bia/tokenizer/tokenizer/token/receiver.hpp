@@ -3,6 +3,8 @@
 
 #include "token.hpp"
 
+#include <util/gsl.hpp>
+
 namespace bia {
 namespace tokenizer {
 namespace token {
@@ -21,10 +23,10 @@ public:
 	 * This function is called when a new set of tokens is available. The token are not guaranteed to be
 	 * grouped.
 	 *
-	 * @param begin the beginning of the token set
-	 * @param end the end of the token set
+	 * @param first the beginning of the token set
+	 * @param last the end of the token set
 	 */
-	virtual void receive(const token* begin, const token* end) = 0;
+	virtual void receive(util::not_null<const token*> first, util::not_null<const token*> last) = 0;
 };
 
 } // namespace token
