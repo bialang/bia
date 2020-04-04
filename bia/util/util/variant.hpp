@@ -88,13 +88,30 @@ public:
 
 		return *reinterpret_cast<const typename type_traits::type_at<Index, Ts...>::type*>(&_data);
 	}
+	template<typename T>
+	typename std::enable_if<index_of<T>::value != npos, T&>::type get()
+	{
+		return const_cast<T&>(const_cast<const variant*>(this)->get<T>());
+	}
+	template<typename T>
+	typename std::enable_if<index_of<T>::value != npos, const T&>::type get() const
+	{
+		if (_index == npos) {
+			BIA_THROW(exception::bad_variant_access, "accessing empty variant");
+		} else if (_index != index_of<T>::value) {
+			BIA_THROW(exception::bad_variant_access, "wrong type given");
+		}
+
+		return *reinterpret_cast<const T*>(&_data);
+	}
 	template<std::size_t Index, typename... Args>
 	typename type_traits::type_at<Index, Ts...>::type& emplace(Args&&... args)
 	{
 		destroy();
 
 		// initialize
-		auto ptr = new (&_data) typename type_traits::type_at<Index, Ts...>::type(std::forward<Args>(args)...);
+		auto ptr =
+		    new (&_data) typename type_traits::type_at<Index, Ts...>::type(std::forward<Args>(args)...);
 
 		_index = Index;
 
@@ -119,20 +136,20 @@ public:
 	/*template<typename = typename std::enable_if<type_traits::are_all_copy_assignable<Ts...>::value>::type>
 	variant& operator=(const variant& copy)
 	{
-		if (copy._index != npos) {
-			_copy<0, Ts...>(copy);
-		}
+	    if (copy._index != npos) {
+	        _copy<0, Ts...>(copy);
+	    }
 
-		return *this;
+	    return *this;
 	}
 	template<typename = typename std::enable_if<type_traits::are_all_move_constructible<Ts...>::value>::type>
 	variant& operator=(variant&& move)
 	{
-		if (move._index != npos) {
-			_move<0, Ts...>(std::move(move));
-		}
+	    if (move._index != npos) {
+	        _move<0, Ts...>(std::move(move));
+	    }
 
-		return *this;
+	    return *this;
 	}*/
 
 private:
@@ -146,7 +163,7 @@ private:
 	{
 		if (Index == _index) {
 			reinterpret_cast<T*>(&_data)->~T();
-			
+
 			_index = npos;
 		} else {
 			_destroy<Index + 1, Vs...>();

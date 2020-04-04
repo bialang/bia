@@ -36,7 +36,9 @@ TEST_CASE("variant setting", "[util]")
 		REQUIRE(tester<char>::count == 0);
 
 		REQUIRE(v.get<0>().value == 5);
+		REQUIRE(v.get<tester<int>>().value == 5);
 		REQUIRE_THROWS_AS(v.get<1>(), bia::exception::bad_variant_access);
+		REQUIRE_THROWS_AS(v.get<tester<char>>(), bia::exception::bad_variant_access);
 
 		SECTION("overwrite")
 		{
@@ -46,7 +48,9 @@ TEST_CASE("variant setting", "[util]")
 			REQUIRE(tester<char>::count == 1);
 
 			REQUIRE(v.get<1>().value == 'b');
+			REQUIRE(v.get<tester<char>>().value == 'b');
 			REQUIRE_THROWS_AS(v.get<0>(), bia::exception::bad_variant_access);
+			REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::exception::bad_variant_access);
 		}
 
 		SECTION("destroy")
