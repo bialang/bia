@@ -19,6 +19,16 @@ namespace bytecode {
 class instruction_writer
 {
 public:
+	template<op_code Op_code, op_code... Op_codes>
+	using is_op_code = util::type_traits::equals_any<op_code, Op_code, Op_codes...>;
+	template<typename T>
+	using is_member = util::type_traits::equals_any_type<T, local_member, global_member>;
+	template<typename T>
+	using is_constant =
+	    util::type_traits::equals_any_type<T, std::int8_t, std::int32_t, std::int64_t, double>;
+	template<typename T>
+	using is_int_immediate = util::type_traits::equals_any_type<T, std::int8_t, std::int32_t>;
+
 	/**
 	 * Constructor.
 	 *
@@ -36,8 +46,7 @@ public:
 	 * @tparam Op_code the op code
 	 */
 	template<bool Optimize, op_code Op_code>
-	typename std::enable_if<util::type_traits::equals_any<op_code, Op_code, oc_return_void>::value != 0>::type
-	    write_instruction()
+	typename std::enable_if<is_op_code<Op_code, oc_return_void>::value>::type write_instruction()
 	{
 		_optimize_write<false>(Op_code);
 	}
@@ -51,12 +60,20 @@ public:
 	 * @tparam Op_code the op code
 	 */
 	template<bool Optimize, op_code Op_code>
-	typename std::enable_if<util::type_traits::equals_any<op_code, Op_code, oc_jump, oc_jump_false,
-	                                                      oc_jump_true>::value != 0>::type
+	typename std::enable_if<is_op_code<Op_code, oc_jump, oc_jump_false, oc_jump_true>::value>::type
 	    write_instruction(std::int32_t p0)
 	{
 		_optimize_write<false>(Op_code);
-		_optimize_write<false>(p0);
+		_optimize_write<Optimize>(p0);
+	}
+	template<bool Optimize, op_code Op_code, typename P0, typename P1>
+	typename std::enable_if<is_op_code<Op_code, oc_instantiate>::value && is_member<P0>::value &&
+	                        is_int_immediate<P1>::value>::type
+	    write_instruction(P0 p0, P1 p1)
+	{
+		_optimize_write<false>(Op_code);
+		_optimize_write<Optimize>(p0.index);
+		_optimize_write<Optimize>(p1);
 	}
 	/**
 	 * Writes the ending sequence.
