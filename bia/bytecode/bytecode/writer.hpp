@@ -71,7 +71,7 @@ public:
 	}
 	template<bool Optimize, op_code Op_code, typename P0, typename P1>
 	typename std::enable_if<is_op_code<Op_code, oc_instantiate>::value && is_member<P0>::value &&
-	                        is_int_immediate<P1>::value>::type
+	                        is_constant<P1>::value>::type
 	    write_instruction(P0 p0, P1 p1)
 	{
 		_optimize_write<false>(Op_code);
