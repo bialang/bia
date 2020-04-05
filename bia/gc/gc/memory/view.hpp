@@ -10,20 +10,20 @@ namespace memory {
 class view
 {
 public:
-	view(iterator begin, iterator end) noexcept : _begin(std::move(begin)), _end(std::move(end))
-	{}
-	iterator begin() const
-	{
-		return _begin;
-	}
-	iterator end() const
-	{
-		return _end;
-	}
+	view(iterator first, iterator last) noexcept;
+	iterator begin() const;
+	iterator end() const;
+	int compare(const view& other) const;
+	bool operator==(const view& other) const;
+	bool operator!=(const view& other) const;
+	bool operator<(const view& other) const;
+	bool operator>(const view& other) const;
+	bool operator<=(const view& other) const;
+	bool operator>=(const view& other) const;
 
 private:
-	iterator _begin;
-	iterator _end;
+	iterator _first;
+	iterator _last;
 };
 
 } // namespace memory
