@@ -18,13 +18,12 @@ inline exception::syntax_details value(parameter& parameter)
 {
 	// constant
 	const auto old = parameter.backup();
-	auto t         = any_of(parameter, nullptr, "true", "false", "null");
+	auto t         = any_of(parameter, nullptr, "true", "false");
 
 	if (!t.second) {
 		switch (t.first) {
 		case 0: parameter.bundle.add(token{ token::keyword::true_ }); break;
 		case 1: parameter.bundle.add(token{ token::keyword::false_ }); break;
-		case 2: parameter.bundle.add(token{ token::keyword::null }); break;
 		default: BIA_IMPLEMENTATION_ERROR("invalid keyword id");
 		}
 
