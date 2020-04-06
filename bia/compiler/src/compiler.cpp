@@ -25,6 +25,8 @@ void compiler::receive(util::not_null<const token*> first, util::not_null<const 
 			case token::keyword::let: i = _decl(i, c); break;
 			default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
 			}
+
+			break;
 		}
 		default: BIA_IMPLEMENTATION_ERROR("invalid token type");
 		}
@@ -63,5 +65,5 @@ std::pair<const compiler::token*,
 
 	data.emplace<std::int64_t>(first->value.get<token::keyword>() == token::keyword::true_ ? 1 : 0);
 
-	return { first + 1, std::move(data) };
+	return { first + 2, std::move(data) };
 }
