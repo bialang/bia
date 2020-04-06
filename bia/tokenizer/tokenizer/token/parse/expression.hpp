@@ -18,7 +18,7 @@ inline exception::syntax_details value(parameter& parameter)
 {
 	// constant
 	const auto old = parameter.backup();
-	auto t         = any_of(parameter, nullptr, "true", "false");
+	const auto t   = any_of(parameter, nullptr, "true", "false");
 
 	if (!t.second) {
 		switch (t.first) {
@@ -43,7 +43,8 @@ inline exception::syntax_details value(parameter& parameter)
 inline exception::syntax_details term(parameter& parameter)
 {
 	// match optional self operator
-	auto t = any_of(parameter, nullptr, "not", "~", "-");
+	const auto old = parameter.backup();
+	const auto t   = any_of(parameter, nullptr, "not", "~", "-");
 
 	if (!t.second) {
 		switch (t.first) {
@@ -52,6 +53,8 @@ inline exception::syntax_details term(parameter& parameter)
 		case 2: parameter.bundle.add(token{ token::operator_::minus }); break;
 		default: BIA_IMPLEMENTATION_ERROR("invalid operator id");
 		}
+	} else {
+		parameter.restore(old);
 	}
 
 	// match value
