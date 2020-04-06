@@ -37,7 +37,13 @@ public:
 	void close_scope();
 
 private:
-	std::vector<std::map<gc::memory::view, index_type>> _scopes;
+	struct scope
+	{
+		std::map<gc::memory::view, index_type> variables;
+		index_type index = 0;
+	};
+
+	std::vector<scope> _scopes;
 };
 
 } // namespace compiler

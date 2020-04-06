@@ -12,17 +12,19 @@ std::pair<variable_manager::scope_index_type, variable_manager::index_type>
 	// search for identifier
 	for (auto i = _scopes.size(); i--;) {
 		const auto& scope = _scopes[i];
-		const auto result = scope.find(identifier);
+		const auto result = scope.variables.find(identifier);
 
-		if (result != scope.end()) {
+		if (result != scope.variables.end()) {
 			return { i, result->second };
 		}
 	}
 
 	// add new variable
-	_scopes.back().insert({ std::move(identifier), 0 });
+	auto& scope = _scopes.back();
 
-	return { _scopes.size() - 1, 0 };
+	scope.variables.insert({ std::move(identifier), scope.index });
+
+	return { _scopes.size() - 1, scope.index++ };
 }
 
 variable_manager::scope_index_type variable_manager::current_scope() const
