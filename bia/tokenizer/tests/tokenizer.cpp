@@ -16,10 +16,11 @@ using namespace bia::string;
 class mock_receiver : public token::receiver
 {
 public:
-	void receive(const token::token* begin, const token::token* end) override
+	void receive(bia::util::not_null<const token::token*> first,
+	             bia::util::not_null<const token::token*> last) override
 	{
-		while (begin != end) {
-			tokens.push_back(*begin++);
+		for (auto i = first.get(), c = last.get(); i != c; ++i) {
+			tokens.push_back(*i);
 		}
 	}
 
@@ -40,7 +41,7 @@ TEST_CASE("resource manager", "[tokenizer]")
 		                         [&count](void* p) {
 			                         if (p) {
 				                         --count;
-										 
+
 				                         std::free(p);
 			                         }
 		                         }),
@@ -98,7 +99,7 @@ TEST_CASE("resource manager", "[tokenizer]")
 	REQUIRE(count == 0);
 }
 
-TEST_CASE("syntax", "[tokenizer]")
+TEST_CASE("tokenization", "[tokenizer]")
 {
 	bia_lexer lexer(std::make_shared<bia::gc::memory::simple_allocator>());
 	std::stringstream code;
@@ -106,7 +107,7 @@ TEST_CASE("syntax", "[tokenizer]")
 	auto finally = bia::util::make_finally([encoder] { encoding::encoder::free_instance(encoder); });
 	mock_receiver receiver;
 
-	code << R"(let x=~y)";
+	code << R"(let x=~false)";
 
 	try {
 		REQUIRE(code.tellg() == 0);
@@ -114,7 +115,15 @@ TEST_CASE("syntax", "[tokenizer]")
 		lexer.lex(code, *encoder, receiver);
 
 		REQUIRE(receiver.tokens.size() == 5);
-		REQUIRE(code.tellg() == 8);
+		REQUIRE(code.tellg() == 12);
+
+		using type = token::token::type;
+
+		REQUIRE(static_cast<type>(receiver.tokens[0].value.index()) == type::keyword);
+		REQUIRE(static_cast<type>(receiver.tokens[1].value.index()) == type::identifier);
+		REQUIRE(static_cast<type>(receiver.tokens[2].value.index()) == type::operator_);
+		REQUIRE(static_cast<type>(receiver.tokens[3].value.index()) == type::keyword);
+		REQUIRE(static_cast<type>(receiver.tokens[4].value.index()) == type::cmd_end);
 	} catch (const bia::exception::bia_error& e) {
 		std::cout << "exception (" << e.name() << "): " << e.what() << "\n";
 
@@ -133,4 +142,25 @@ TEST_CASE("syntax", "[tokenizer]")
 
 		FAIL("invalid syntax");
 	}
+}
+
+TEST_CASE("syntax", "[tokenizer]")
+{
+	bia_lexer lexer(std::make_shared<bia::gc::memory::simple_allocator>());
+	std::stringstream code;
+	auto encoder = encoding::encoder::get_instance(encoding::encoder::standard_encoding::utf_8);
+	auto finally = bia::util::make_finally([encoder] { encoding::encoder::free_instance(encoder); });
+	mock_receiver receiver;
+
+	constexpr char script[] = R"(
+let x = false
+let y=true
+
+)";
+
+	code << script;
+
+	lexer.lex(code, *encoder, receiver);
+
+	REQUIRE(code.tellg() == (sizeof(script) - 1));
 }
