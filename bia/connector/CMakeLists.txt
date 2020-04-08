@@ -1,5 +1,5 @@
-project("connector"
+project(connector
 	LANGUAGES CXX)
 	
 create_library(INTERFACE
-	INTERFACE "creator")
+	INTERFACE creator)
