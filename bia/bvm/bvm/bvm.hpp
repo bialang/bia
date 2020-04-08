@@ -1,9 +1,7 @@
-#pragma once
+#ifndef BIA_BVM_BVM_HPP_
+#define BIA_BVM_BVM_HPP_
 
-#include "context.hpp"
-
-#include <compiler/code.hpp>
-#include <connector/connector_impl.hpp>
+#include <util/gsl.hpp>
 
 namespace bia {
 namespace bvm {
@@ -11,14 +9,10 @@ namespace bvm {
 class bvm
 {
 public:
-	/*
-	 Executes the given code object.
-
-	 @param[in,out] context is the engine context
-	 @param code is the executable bia code
-	*/
-	void execute(context& context, const compiler::code& code);
+	void execute(const util::byte* first, const util::byte* last);
 };
 
 } // namespace bvm
 } // namespace bia
+
+#endif

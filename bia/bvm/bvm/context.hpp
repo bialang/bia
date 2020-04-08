@@ -1,7 +1,9 @@
-#pragma once
+#ifndef BIA_BVM_CONTEXT_HPP_
+#define BIA_BVM_CONTEXT_HPP_
 
-#include <gc/gc.hpp>
-#include <stack/stack.hpp>
+#include "instruction_pointer.hpp"
+
+#include <member/member.hpp>
 
 namespace bia {
 namespace bvm {
@@ -9,22 +11,12 @@ namespace bvm {
 class context
 {
 public:
-	context(stack::stack& s, gc::gc& g) : s(s), g(g)
-	{}
-
-	stack::stack& stack() noexcept
-	{
-		return s;
-	}
-	gc::gc& gc() noexcept
-	{
-		return g;
-	}
-
 private:
-	stack::stack& s;
-	gc::gc& g;
+	instruction_pointer _ip;
+	member::member::test_type _test_register;
 };
 
 } // namespace bvm
 } // namespace bia
+
+#endif
