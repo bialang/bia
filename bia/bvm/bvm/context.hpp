@@ -1,9 +1,9 @@
 #ifndef BIA_BVM_CONTEXT_HPP_
 #define BIA_BVM_CONTEXT_HPP_
 
-#include "instruction_pointer.hpp"
-
-#include <member/member.hpp>
+#include <gc/gc.hpp>
+#include <memory>
+#include <util/gsl.hpp>
 
 namespace bia {
 namespace bvm {
@@ -11,9 +11,15 @@ namespace bvm {
 class context
 {
 public:
+	context(util::not_null<std::shared_ptr<gc::gc>> gc) : _gc(std::move(gc.get()))
+	{}
+	gc::gc& gc()
+	{
+		return *_gc;
+	}
+
 private:
-	instruction_pointer _ip;
-	member::member::test_type _test_register;
+	std::shared_ptr<gc::gc> _gc;
 };
 
 } // namespace bvm
