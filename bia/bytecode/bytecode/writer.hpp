@@ -62,12 +62,13 @@ public:
 	 * @tparam Optimize whether the op code size should be optimized
 	 * @tparam Op_code the op code
 	 */
-	template<bool Optimize, op_code Op_code>
-	typename std::enable_if<is_op_code<Op_code, oc_jump, oc_jump_false, oc_jump_true>::value>::type
-	    write_instruction(std::int32_t p0)
+	template<bool Optimize, op_code Op_code, typename P0>
+	typename std::enable_if<is_op_code<Op_code, oc_jump, oc_jump_false, oc_jump_true>::value &&
+	                        is_int_immediate<P0>::value>::type
+	    write_instruction(P0 p0)
 	{
 		_optimize_write<false>(Op_code);
-		_optimize_write<false>(p0);
+		_optimize_write<false>(static_cast<std::int32_t>(p0));
 	}
 	template<bool Optimize, op_code Op_code, typename P0, typename P1>
 	typename std::enable_if<is_op_code<Op_code, oc_instantiate>::value && is_member<P0>::value &&
