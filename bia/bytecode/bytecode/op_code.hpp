@@ -55,6 +55,8 @@ enum op_code : op_code_type
 	oc_jump_true,
 	oc_jump_false,
 
+	oc_test, // (member): tests the member and sets the test register accordingly
+
 	oc_instantiate, // (member, constant): instantiates the given member to the constant value
 };
 

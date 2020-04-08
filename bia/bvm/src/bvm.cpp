@@ -40,7 +40,7 @@ void bvm::execute(context& context, const bia::util::byte* first, const bia::uti
 		case oc_jump_true: {
 			const auto offset = ip.read<std::int32_t>();
 
-			if (test_register--) {
+			if (test_register) {
 				ip += offset;
 			}
 
@@ -52,6 +52,18 @@ void bvm::execute(context& context, const bia::util::byte* first, const bia::uti
 			if (!test_register) {
 				ip += offset;
 			}
+
+			break;
+		}
+		case oc_test: {
+			const auto index = ip.read<std::uint32_t>();
+			const auto ptr   = stack.at(index).get<member::member>();
+
+			if (!ptr) {
+				throw;
+			}
+
+			test_register = ptr->test();
 
 			break;
 		}
