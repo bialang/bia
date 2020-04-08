@@ -1,9 +1,11 @@
-#pragma once
+#ifndef BIA_BVM_INSTRUCTION_POINTER_HPP_
+#define BIA_BVM_INSTRUCTION_POINTER_HPP_
 
 #include <bytecode/op_code.hpp>
 #include <cstddef>
 #include <cstdint>
-#include <util/endian.hpp>
+#include <util/gsl.hpp>
+#include <util/portable/memory.hpp>
 
 namespace bia {
 namespace bvm {
@@ -11,47 +13,34 @@ namespace bvm {
 class instruction_pointer
 {
 public:
-	typedef const std::int8_t* buffer_type;
+	typedef const util::byte* buffer_type;
 
-	instruction_pointer(const void* start, const void* end) noexcept
+	instruction_pointer(util::not_null<buffer_type> first, util::not_null<buffer_type> last) noexcept
 	{
-		this->start = static_cast<buffer_type>(start);
-		this->end   = static_cast<buffer_type>(end);
-		cursor      = this->start;
+		_first  = first.get();
+		_last   = last.get();
+		_cursor = _first;
 	}
-	/*
-	 Reads the given type from the current position. This method does not perform bounds checking.
-
-	 @return the value
-	*/
 	template<typename T>
-	T read() noexcept
+	T read()
 	{
-		auto tmp = util::from_little_endian<T>(cursor);
+		BIA_EXPECTS(*this);
 
-		cursor += sizeof(T);
+		const auto x = util::portable::read<T>(_cursor);
 
-		return tmp;
+		_cursor += sizeof(T);
+
+		return x;
 	}
-	std::size_t ptr()
-	{
-		return cursor - start;
-	}
-	/*
-	 Reads the next op code. This method does not perform bounds checking.
-
-	 @return the op code
-	*/
-	bytecode::op_code_type next_op_code() noexcept
+	bytecode::op_code_type next_op_code()
 	{
 		return read<bytecode::op_code_type>();
 	}
 	instruction_pointer& operator+=(std::int32_t offset)
 	{
-		cursor += offset;
+		_cursor += offset;
 
-		// bounds checking
-		if (cursor < start || cursor > end) {
+		if (_cursor < _first || _cursor > _last) {
 			throw;
 		}
 
@@ -59,14 +48,16 @@ public:
 	}
 	operator bool() const noexcept
 	{
-		return cursor + bytecode::max_instruction_size < end;
+		return _cursor + bytecode::max_instruction_size < _last;
 	}
 
 private:
-	buffer_type start;
-	buffer_type end;
-	buffer_type cursor;
+	buffer_type _first;
+	buffer_type _last;
+	buffer_type _cursor;
 };
 
 } // namespace bvm
 } // namespace bia
+
+#endif
