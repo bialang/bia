@@ -21,15 +21,18 @@ public:
 	 * 
 	 * @param value the initial value
 	*/
-	int_member(int_type value) noexcept : value(value)
+	int_member(int_type value) noexcept : _value(value)
 	{}
+	~int_member(){
+		printf("hi im getting destroyed: %ld\n", _value);
+	}
 	flag_type flags() const override
 	{
 		return flag_none;
 	}
 	test_type test() const override
 	{
-		return value ? 1 : 0;
+		return _value ? 1 : 0;
 	}
 
 protected:
@@ -37,7 +40,7 @@ protected:
 	{}
 
 private:
-	const int_type value;
+	const int_type _value;
 };
 
 } // namespace native
