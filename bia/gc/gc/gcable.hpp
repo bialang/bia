@@ -95,8 +95,7 @@ public:
 		_discard();
 
 		std::swap(_gc, move._gc);
-
-		_ptr = move._ptr;
+		std::swap(_ptr, move._ptr);
 
 		return *this;
 	}
