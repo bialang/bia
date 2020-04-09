@@ -1,17 +1,21 @@
 #include "gc/gc.hpp"
 
+#include "gc/token.hpp"
+#include "gc/gcable.hpp"
+#include "gc/stack.hpp"
+
 #include <cstring>
 #include <log/log.hpp>
-#include <thread/thread.hpp>
 #include <thread/lock/unique_lock.hpp>
+#include <thread/thread.hpp>
 
-namespace bia {
-namespace gc {
+
+using namespace bia::gc;
 
 thread_local gc* gc::_active_gc_instance = nullptr;
 
-gc::gc(util::not_null<std::shared_ptr<memory::allocator>> allocator) noexcept
-    : _mem_allocator(allocator.get()), _allocated(allocator), _roots(allocator)
+gc::gc(bia::util::not_null<std::shared_ptr<memory::allocator>> allocator) noexcept
+    : _allocator(allocator.get()), _allocated(allocator), _roots(allocator)
 {}
 
 gc::~gc()
@@ -52,8 +56,8 @@ bool gc::run_once()
 	for (auto& i : roots_token) {
 		for (auto& j : i) {
 			// mark
-			if (auto ptr = static_cast<const object_ptr*>(j.get())) {
-				object::gc_mark(ptr, _current_mark);
+			if (const auto ptr = j.get()) {
+				object::base::gc_mark(ptr, _current_mark);
 			}
 		}
 	}
@@ -66,7 +70,7 @@ bool gc::run_once()
 			if (i->mark != _current_mark) {
 				// marked as miss
 				if (i->miss_index.load(std::memory_order_consume) == miss_index) {
-					object::gc_mark(&*i + 1, _current_mark);
+					object::base::gc_mark(&*i + 1, _current_mark);
 				}
 			}
 		}
@@ -77,13 +81,13 @@ bool gc::run_once()
 		// not marked
 		if ((*i)->mark != _current_mark) {
 			if (!(*i)->leaf) {
-				reinterpret_cast<object*>(*i + 1)->~object();
+				reinterpret_cast<object::base*>(*i + 1)->~base();
 			}
 
 			// deallocate
-			(*i)->~object_info();
+			(*i)->~header();
 
-			_mem_allocator->deallocate(*i);
+			_allocator->deallocate(*i);
 
 			i = allocated_token.erase(i);
 		} else {
@@ -94,19 +98,16 @@ bool gc::run_once()
 	return true;
 }
 
-gc::token gc::register_thread(std::size_t count)
+token gc::register_thread(std::size_t count)
 {
-	// there is already a registered instance in this thread
-	if (_active_gc_instance) {
-		BIA_IMPLEMENTATION_ERROR("active gc instance detected");
-	}
+	BIA_EXPECTS(!_active_gc_instance);
 
 	_active_gc_instance = this;
 
 	return { this, count };
 }
 
-gc::gcable<void> gc::allocate(std::size_t size, bool zero)
+gcable<void> gc::allocate(std::size_t size, bool zero)
 {
 	auto ptr = _allocate_impl(size, true);
 
@@ -119,7 +120,7 @@ gc::gcable<void> gc::allocate(std::size_t size, bool zero)
 
 const std::shared_ptr<memory::allocator>& gc::allocator() noexcept
 {
-	return _mem_allocator;
+	return _allocator;
 }
 
 gc* gc::active_gc() noexcept
@@ -127,13 +128,14 @@ gc* gc::active_gc() noexcept
 	return _active_gc_instance;
 }
 
-util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
+bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 {
 	BIA_LOG(TRACE, "allocating {} bytes as {}", size, leaf ? "leaf" : "node");
 
-	auto ptr = static_cast<object_info*>(_mem_allocator->checked_allocate(size + sizeof(object_info)).get());
+	auto ptr =
+	    static_cast<object::header*>(_allocator->checked_allocate(size + sizeof(object::header)).get());
 
-	new (ptr) object_info(_current_mark, leaf);
+	new (ptr) object::header{ _current_mark, leaf };
 
 	BIA_LOG(DEBUG, "allocated gcable memory at info={} with {} bytes", static_cast<void*>(ptr), size);
 
@@ -142,43 +144,41 @@ util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 
 void gc::_free(util::not_null<void*> ptr)
 {
-	auto info = static_cast<object_info*>(ptr.get()) - 1;
+	auto info = static_cast<object::header*>(ptr.get()) - 1;
 
-	info->~object_info();
-	_mem_allocator->deallocate(info);
+	info->~header();
+	_allocator->deallocate(info);
 }
 
 void gc::_register_gcable(util::not_null<void*> ptr)
 {
-	_allocated.add(static_cast<object_info*>(ptr.get()) - 1);
+	_allocated.add(static_cast<object::header*>(ptr.get()) - 1);
 }
 
-root gc::_create_root(std::size_t count)
+stack gc::_create_stack(std::size_t count)
 {
-	auto buffer =
-	    static_cast<object_ptr*>(_mem_allocator->checked_allocate(count * sizeof(object_ptr)).get());
+	auto buffer = static_cast<stack::element_type*>(
+	    _allocator->checked_allocate(count * sizeof(stack::element_type)).get());
 
+	// initialize all elements
 	for (auto i = buffer, c = buffer + count; i < c; ++i) {
-		new (i) object_ptr();
+		new (i) stack::element_type{ nullptr };
 	}
 
-	root r(buffer, count);
+	stack s{ buffer, count };
 
-	_roots.add(r);
+	_roots.add(s);
 
-	return r;
+	return s;
 }
 
-void gc::_free_root(root root)
+void gc::_destroy_stack(stack stack)
 {
-	_roots.remove(root);
+	_roots.remove(stack);
 
-	for (auto& i : root) {
-		i.~object_ptr();
+	for (auto& i : stack) {
+		i.~pointer();
 	}
 
-	_mem_allocator->deallocate(root.begin());
+	_allocator->deallocate(stack.data());
 }
-
-} // namespace gc
-} // namespace bia

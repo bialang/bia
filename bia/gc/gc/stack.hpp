@@ -2,23 +2,19 @@
 #define BIA_GC_STACK_HPP_
 
 #include "object/pointer.hpp"
+#include "object/base.hpp"
 
 #include <exception/bounds_error.hpp>
+#include <functional>
 #include <memory>
 
 namespace bia {
-namespace member {
-
-class member;
-
-} // namespace member
-
 namespace gc {
 
 class stack
 {
 public:
-	typedef object::pointer<member::member> element_type;
+	typedef object::pointer<object::base> element_type;
 
 	stack(element_type* data, std::size_t size) noexcept
 	{
@@ -45,6 +41,18 @@ public:
 	{
 		return _data;
 	}
+	element_type* begin() const noexcept
+	{
+		return _data;
+	}
+	element_type* end() const noexcept
+	{
+		return _data + _max_size;
+	}
+	bool operator==(const stack& other) const noexcept
+	{
+		return _data == other._data;
+	}
 
 private:
 	friend class token;
@@ -56,5 +64,17 @@ private:
 
 } // namespace gc
 } // namespace bia
+
+template<>
+struct std::hash<bia::gc::stack> : private hash<bia::gc::stack::element_type*>
+{
+	typedef bia::gc::stack argument_type;
+	typedef result_type result_type;
+
+	result_type operator()(const argument_type& s) const noexcept
+	{
+		return hash<bia::gc::stack::element_type*>::operator()(s.data());
+	}
+};
 
 #endif

@@ -6,6 +6,7 @@
 namespace bia {
 namespace gc {
 
+class token;
 class gc;
 
 namespace object {
@@ -24,7 +25,8 @@ public:
 	}
 
 private:
-	friend class gc;
+	friend token;
+	friend gc;
 
 	std::atomic<T*> _ptr;
 

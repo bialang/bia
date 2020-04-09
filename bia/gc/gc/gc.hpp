@@ -1,26 +1,28 @@
-#pragma once
+#ifndef BIA_GC_GC_HPP_
+#define BIA_GC_GC_HPP_
 
 #include "detail/container.hpp"
 #include "memory/allocator.hpp"
-#include "object.hpp"
-#include "object_info.hpp"
-#include "object_ptr.hpp"
-#include "root.hpp"
+#include "object/base.hpp"
+#include "object/header.hpp"
+#include "stack.hpp"
 
-#include <array>
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
-#include <exception/implementation_error.hpp>
 #include <memory>
 #include <thread/lock/spin_mutex.hpp>
 #include <type_traits>
 #include <util/gsl.hpp>
-#include <util/type_traits/conjunction.hpp>
 #include <utility>
 
 namespace bia {
 namespace gc {
+
+template<typename>
+class gcable;
+
+class stack;
 
 class token;
 
@@ -56,6 +58,8 @@ public:
 	/**
 	 * Registeres the current thread. If this thread has already been registered, this function fails.
 	 *
+	 * @pre no active gc in the current thread
+	 *
 	 * @param count how much space the root should have
 	 * @returns a token which deregisteres this thread upon destruction
 	 */
@@ -80,9 +84,10 @@ public:
 	 * @tparam Args are the argument types for the constructor
 	 */
 	template<typename T, typename... Args>
-	typename std::enable_if<std::is_base_of<object, T>::value, gcable<T>>::type construct(Args&&... args)
+	typename std::enable_if<std::is_base_of<object::base, T>::value, gcable<T>>::type
+	    construct(Args&&... args)
 	{
-		static_assert(alignof(T) == object_alignment, "cannot have a different object alignment");
+		static_assert(alignof(T) == object::alignment, "cannot have a different object alignment");
 
 		return { this, new (_allocate_impl(sizeof(T), false).get()) T(std::forward<Args>(args)...) };
 	}
@@ -101,10 +106,14 @@ public:
 	static gc* active_gc() noexcept;
 
 private:
+	friend token;
+	template<typename T>
+	friend class gcable;
+
 	/** the currently active instance */
 	static thread_local gc* _active_gc_instance;
 	/** the memory allocator */
-	std::shared_ptr<memory::allocator> _mem_allocator;
+	std::shared_ptr<memory::allocator> _allocator;
 	/** the current gc mark */
 	bool _current_mark = false;
 	/** the current miss index; this value is used to prevent misfreeing objects */
@@ -113,9 +122,9 @@ private:
 	 */
 	thread::lock::spin_mutex _mutex;
 	/** holds every allocated element */
-	detail::container<object_info*> _allocated;
+	detail::container<object::header*> _allocated;
 	/** holds every created root */
-	detail::container<root> _roots;
+	detail::container<stack> _roots;
 
 	/**
 	 * Allocates gc monitorable memory.
@@ -141,9 +150,11 @@ private:
 	 * @param ptr the gcable pointer
 	 */
 	void _register_gcable(util::not_null<void*> ptr);
-	root _create_root(std::size_t count);
-	void _free_root(root root);
+	stack _create_stack(std::size_t count);
+	void _destroy_stack(stack stack);
 };
 
 } // namespace gc
 } // namespace bia
+
+#endif

@@ -8,11 +8,12 @@
 namespace bia {
 namespace gc {
 
+class gc;
+
 template<typename T>
 class gcable
 {
 public:
-	gcable(const gcable& copy) = delete;
 	/**
 	 * Move-Constructor.
 	 *
@@ -80,7 +81,7 @@ public:
 	}
 
 private:
-	friend class gc;
+	friend gc;
 
 	/** the parent gc */
 	gc* _gc = nullptr;
