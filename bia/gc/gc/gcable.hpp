@@ -4,16 +4,26 @@
 #include "gc.hpp"
 
 #include <util/gsl.hpp>
+#include <type_traits>
 
 namespace bia {
 namespace gc {
-
-class gc;
 
 template<typename T>
 class gcable
 {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * @param[in] gc the gc parent
+	 * @param[in] ptr the gcable pointer
+	 */
+	gcable(gc* gc, T* ptr) noexcept
+	{
+		_gc  = gc;
+		_ptr = ptr;
+	}
 	/**
 	 * Move-Constructor.
 	 *
@@ -69,6 +79,16 @@ public:
 	{
 		return _gc;
 	}
+	template<typename U>
+	typename std::enable_if<std::is_base_of<U, T>::value, gcable<U>>::type to()
+	{
+		gcable<U> r{ _gc, _ptr };
+
+		_gc  = nullptr;
+		_ptr = nullptr;
+
+		return r;
+	}
 	gcable& operator=(gcable&& move) noexcept
 	{
 		_discard();
@@ -81,29 +101,16 @@ public:
 	}
 
 private:
-	friend gc;
-
 	/** the parent gc */
 	gc* _gc = nullptr;
 	/** the actual gcable pointer */
 	T* _ptr = nullptr;
 
 	/**
-	 * Constructor.
-	 *
-	 * @param[in] gc the gc parent
-	 * @param[in] ptr the gcable pointer
-	 */
-	gcable(util::not_null<gc*> gc, util::not_null<T*> ptr) noexcept
-	{
-		_gc  = gc.get();
-		_ptr = ptr.get();
-	}
-	/**
 	 * Discards this gcable monitor. If already discarded, this is a noop.
-	 * 
+	 *
 	 * @post not valid()
-	*/
+	 */
 	void _discard() noexcept
 	{
 		if (_gc) {

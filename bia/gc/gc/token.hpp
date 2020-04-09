@@ -7,6 +7,8 @@
 #include "object/pointer.hpp"
 #include "stack.hpp"
 
+#include <type_traits>
+
 namespace bia {
 namespace gc {
 
@@ -20,9 +22,9 @@ class token
 public:
 	/**
 	 * Move-Constructor.
-	 * 
+	 *
 	 * @param[in,out] move the object that should be moved
-	*/
+	 */
 	token(token&& move) noexcept : _stack(std::move(move._stack))
 	{
 		std::swap(_gc, move._gc);
@@ -82,9 +84,10 @@ public:
 		set(_stack.at(index), src);
 	}
 	template<typename T>
-	void set(std::size_t index, gcable<T>&& src)
+	typename std::enable_if<std::is_base_of<object::base, T>::value>::type set(std::size_t index,
+	                                                                           gcable<T>&& src)
 	{
-		set(_stack.at(index), src.peek());
+		set(_stack.at(index), static_cast<object::base*>(src.peek()));
 		src.start_monitor();
 	}
 	/**

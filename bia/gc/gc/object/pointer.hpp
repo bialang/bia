@@ -7,7 +7,6 @@ namespace bia {
 namespace gc {
 
 class token;
-class gc;
 
 namespace object {
 
@@ -15,6 +14,8 @@ template<typename T>
 class pointer
 {
 public:
+	pointer(T* ptr) noexcept : _ptr{ ptr }
+	{}
 	T* get() noexcept
 	{
 		return _ptr.load(std::memory_order_consume);
@@ -26,12 +27,9 @@ public:
 
 private:
 	friend token;
-	friend gc;
 
 	std::atomic<T*> _ptr;
 
-	pointer(T* ptr) noexcept : _ptr{ ptr }
-	{}
 	void set(T* ptr) noexcept
 	{
 		_ptr.store(ptr, std::memory_order_release);

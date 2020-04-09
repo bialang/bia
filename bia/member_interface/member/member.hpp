@@ -2,7 +2,7 @@
 #define BIA_MEMBER_INTERFACE_MEMBER_HPP_
 
 #include <cstdint>
-#include <gc/gc.hpp>
+#include <gc/object/base.hpp>
 
 namespace bia {
 namespace member {
@@ -10,7 +10,7 @@ namespace member {
 /**
  * The base type for all member types. All members are gc objects and must provide the following functions.
  */
-class member : public gc::object
+class member : public gc::object::base
 {
 public:
 	/** the flag type */

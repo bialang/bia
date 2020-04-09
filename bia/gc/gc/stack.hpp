@@ -29,6 +29,14 @@ public:
 	{
 		return _max_size;
 	}
+	element_type& push()
+	{
+		if (_cursor >= _max_size) {
+			BIA_THROW(exception::bounds_error, "stack overflow");
+		}
+
+		return _data[_cursor++];
+	}
 	element_type& at(std::size_t index)
 	{
 		if (index >= _cursor) {
