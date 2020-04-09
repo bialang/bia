@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_UTIL_TYPE_TRAITS_EQUALS_ANY_HPP_
+#define BIA_UTIL_TYPE_TRAITS_EQUALS_ANY_HPP_
 
 #include <cstddef>
 #include <type_traits>
@@ -12,15 +13,12 @@ template<std::size_t Index, typename T, T Value, T... Others>
 struct equals_any_t;
 
 template<std::size_t Index, typename T, T Value, T Other>
-struct equals_any_t<Index, T, Value, Other>
-    : std::conditional<Value == Other, std::integral_constant<std::size_t, Index>,
-                       std::integral_constant<std::size_t, 0>>::type
+struct equals_any_t<Index, T, Value, Other> : std::integral_constant<bool, Value == Other>
 {};
 
 template<std::size_t Index, typename T, T Value, T Other, T... Others>
 struct equals_any_t<Index, T, Value, Other, Others...>
-    : std::conditional<Value == Other, std::integral_constant<std::size_t, Index>,
-                       equals_any_t<Index + 1, T, Value, Others...>>::type
+    : std::conditional<Value == Other, std::true_type, equals_any_t<Index + 1, T, Value, Others...>>::type
 {};
 
 template<typename T, T Value, T... Other>
@@ -31,14 +29,12 @@ template<std::size_t Index, typename T, typename... Others>
 struct equals_any_type_t;
 
 template<std::size_t Index, typename T, typename Other>
-struct equals_any_type_t<Index, T, Other>
-    : std::conditional<std::is_same<T, Other>::value, std::integral_constant<std::size_t, Index>,
-                       std::integral_constant<std::size_t, 0>>::type
+struct equals_any_type_t<Index, T, Other> : std::integral_constant<bool, std::is_same<T, Other>::value>
 {};
 
 template<std::size_t Index, typename T, typename Other, typename... Others>
 struct equals_any_type_t<Index, T, Other, Others...>
-    : std::conditional<std::is_same<T, Other>::value, std::integral_constant<std::size_t, Index>,
+    : std::conditional<std::is_same<T, Other>::value, std::true_type,
                        equals_any_type_t<Index + 1, T, Others...>>::type
 {};
 
@@ -48,3 +44,5 @@ using equals_any_type = equals_any_type_t<1, T, Others...>;
 } // namespace type_traits
 } // namespace util
 } // namespace bia
+
+#endif

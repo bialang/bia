@@ -45,7 +45,7 @@ const compiler::token* compiler::_decl(const token* first, const token* last)
 
 	switch (static_cast<expression_value>(pair.second.index())) {
 	case expression_value::integer:
-		_writer.write_instruction<true, bytecode::oc_instantiate>(bytecode::local_member{ variable.first },
+		_writer.write_instruction<true, bytecode::oc_instantiate>(/*bytecode::local_member{ variable.first },*/
 		                                                          pair.second.get<std::int64_t>());
 		break;
 	default: BIA_IMPLEMENTATION_ERROR("invaild expression type");

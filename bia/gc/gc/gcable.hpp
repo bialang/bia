@@ -3,8 +3,8 @@
 
 #include "gc.hpp"
 
-#include <util/gsl.hpp>
 #include <type_traits>
+#include <util/gsl.hpp>
 
 namespace bia {
 namespace gc {
@@ -114,7 +114,7 @@ private:
 	void _discard() noexcept
 	{
 		if (_gc) {
-			_destroy(_ptr);
+			_destroy(util::not_null<T*>{ _ptr });
 			_gc->_free(_ptr);
 
 			_gc  = nullptr;
@@ -124,18 +124,21 @@ private:
 	/**
 	 * Does nothing.
 	 */
-	static void _destroy(void*) noexcept
+	template<typename U>
+	static
+	    typename std::enable_if<!std::is_destructible<U>::value>::type _destroy(util::not_null<U*>) noexcept
 	{}
 	/**
 	 * Destroys the given object.
 	 *
 	 * @param ptr the pointer to the object
-	 * @tparam Ty the type of the object
+	 * @tparam U the type of the object
 	 */
-	template<typename Ty>
-	static void _destroy(util::not_null<Ty*> ptr) noexcept
+	template<typename U>
+	static typename std::enable_if<std::is_destructible<U>::value>::type
+	    _destroy(util::not_null<U*> ptr) noexcept
 	{
-		ptr->~Ty();
+		ptr->~U();
 	}
 };
 

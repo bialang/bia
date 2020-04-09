@@ -15,9 +15,10 @@ TEST_CASE("simple run", "[bvm]")
 	std::stringstream output;
 	bytecode::instruction_writer iw{ output };
 
-	iw.write_instruction<false, bytecode::oc_instantiate>(bytecode::local_member{ 0 }, 11);
-	iw.write_instruction<false, bytecode::oc_instantiate>(bytecode::local_member{ 0 }, 13);
-	iw.write_instruction<false, bytecode::oc_jump_true>(std::int32_t{-23});
+	iw.write_instruction<false, bytecode::oc_instantiate>(11);
+	iw.write_instruction<false, bytecode::oc_instantiate>(3);
+	iw.write_instruction<false, bytecode::oc_push>();
+	//iw.write_instruction<false, bytecode::oc_jump_true>(std::int32_t{-23});
 	iw.write_end();
 
 	const auto code = output.str();

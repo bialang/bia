@@ -50,6 +50,7 @@ enum constant_flag
 enum op_code : op_code_type
 {
 	oc_return_void, // ()
+	oc_push, // (): pushes the accumulator onto the stack
 
 	oc_jump, // (immediate_size): jumps to the relative address
 	oc_jump_true,
@@ -57,7 +58,7 @@ enum op_code : op_code_type
 
 	oc_test, // (member): tests the member and sets the test register accordingly
 
-	oc_instantiate, // (member, constant): instantiates the given member to the constant value
+	oc_instantiate, // (constant): instantiates the accumulator to the constant value
 };
 
 } // namespace bytecode

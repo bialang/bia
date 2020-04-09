@@ -10,6 +10,7 @@
 #include <member/native/int_member.hpp>
 #include <util/finally.hpp>
 
+
 using namespace bia::bvm;
 using namespace bia::bytecode;
 
@@ -33,6 +34,12 @@ void bvm::execute(context& context, const bia::util::byte* first, const bia::uti
 
 		switch (op_code) {
 		case oc_return_void: return;
+		case oc_push: {
+			token.set(stack.push(), static_cast<gc::object::base*>(accumulator.peek()));
+			accumulator.start_monitor();
+
+			break;
+		}
 		case oc_jump: {
 			const auto offset = ip.read<std::int32_t>();
 
@@ -71,7 +78,6 @@ void bvm::execute(context& context, const bia::util::byte* first, const bia::uti
 			break;
 		}
 		case oc_instantiate: {
-			const auto index    = ip.read<std::uint32_t>();
 			const auto constant = ip.read<std::int32_t>();
 
 			accumulator = gc.construct<member::native::int_member>(constant).to<member::member>();
