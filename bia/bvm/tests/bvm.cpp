@@ -17,8 +17,7 @@ TEST_CASE("simple run", "[bvm]")
 
 	iw.write_instruction<false, bytecode::oc_instantiate>(11);
 	iw.write_instruction<false, bytecode::oc_instantiate>(3);
-	iw.write_instruction<false, bytecode::oc_push>();
-	//iw.write_instruction<false, bytecode::oc_jump_true>(std::int32_t{-23});
+	//iw.write_instruction<false, bytecode::oc_jump_true>(std::int32_t{-6});
 	iw.write_end();
 
 	const auto code = output.str();

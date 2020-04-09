@@ -47,6 +47,12 @@ public:
 	{
 		set(dest, src.get());
 	}
+	template<typename T>
+	void set(object::pointer<T>& dest, gcable<T>&& src)
+	{
+		set(dest, src.peek());
+		src.start_monitor();
+	}
 	/**
 	 * Sets the destination pointer to the source pointer. If the gc is active, additional work is done.
 	 *
@@ -71,24 +77,6 @@ public:
 		}
 
 		dest.set(src);
-	}
-	/**
-	 * Sets the @ref object::pointer at `index` in the root to `src`.
-	 *
-	 * @param index the index of the @ref object::pointer
-	 * @param[in] src the source value
-	 * @throw exception::bounds_error if the index is out of bounds
-	 */
-	void set(std::size_t index, object::base* src)
-	{
-		set(_stack.at(index), src);
-	}
-	template<typename T>
-	typename std::enable_if<std::is_base_of<object::base, T>::value>::type set(std::size_t index,
-	                                                                           gcable<T>&& src)
-	{
-		set(_stack.at(index), static_cast<object::base*>(src.peek()));
-		src.start_monitor();
 	}
 	/**
 	 * Returns the internal root object.

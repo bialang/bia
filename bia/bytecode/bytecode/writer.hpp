@@ -11,6 +11,7 @@
 #include <util/type_traits/equals_any.hpp>
 #include <util/type_traits/int_maker.hpp>
 
+
 namespace bia {
 namespace bytecode {
 
@@ -42,15 +43,14 @@ public:
 	instruction_writer(std::ostream& output) noexcept : _output(output)
 	{}
 	/**
-	 * Writes parameterless instructions to the output. Valid @ref op_code: @ref oc_return_void and @ref
-	 * oc_push
+	 * Writes parameterless instructions to the output. Valid @ref op_code: @ref oc_return_void
 	 *
 	 * @throw see _optimize_write()
 	 * @tparam Optimize whether the op code size should be optimized
 	 * @tparam Op_code the op code
 	 */
 	template<bool Optimize, op_code Op_code>
-	typename std::enable_if<is_op_code<Op_code, oc_return_void, oc_push>::value>::type write_instruction()
+	typename std::enable_if<is_op_code<Op_code, oc_return_void>::value>::type write_instruction()
 	{
 		_optimize_write<false>(Op_code);
 	}
@@ -84,6 +84,15 @@ public:
 	{
 		_optimize_write<false>(Op_code);
 		_optimize_write<false>(static_cast<std::int32_t>(p0));
+	}
+	template<bool Optimize, op_code Op_code, typename P0, typename P1>
+	typename std::enable_if<is_op_code<Op_code, oc_instantiate>::value && is_member<P0>::value &&
+	                        is_constant<P1>::value>::type
+	    write_instruction(P0 p0, P1 p1)
+	{
+		_optimize_write<false>(Op_code);
+		_optimize_write<false>(static_cast<std::uint32_t>(p0.index));
+		_optimize_write<false>(static_cast<std::int32_t>(p1));
 	}
 	/**
 	 * Writes the ending sequence.
