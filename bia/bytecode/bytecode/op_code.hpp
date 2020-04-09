@@ -57,9 +57,11 @@ enum op_code : op_code_type
 
 	oc_test, // (member): tests the member and sets the test register accordingly
 
-	oc_instantiate, // (constant): instantiates the constant value and pushes it onto the stack
+	oc_push, // (constant): instantiates the constant value and pushes it onto the stack
 
-	oc_instantiate_at, // (member, constant): instantiates the given member to the constant value
+	oc_invoke, // (member, uint8): invokes the member and passes the parameter count
+
+	oc_instantiate, // (member, constant): instantiates the given member to the constant value
 };
 
 } // namespace bytecode

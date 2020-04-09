@@ -13,6 +13,7 @@ template<typename T>
 class gcable
 {
 public:
+	gcable() = default;
 	/**
 	 * Constructor.
 	 *

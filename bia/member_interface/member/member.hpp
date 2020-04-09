@@ -2,7 +2,9 @@
 #define BIA_MEMBER_INTERFACE_MEMBER_HPP_
 
 #include <cstdint>
+#include <gc/gcable.hpp>
 #include <gc/object/base.hpp>
+#include <gc/stack.hpp>
 
 namespace bia {
 namespace member {
@@ -17,6 +19,7 @@ public:
 	typedef int flag_type;
 	/** the type for testing operations */
 	typedef int test_type;
+	typedef std::uint8_t parameter_count_type;
 
 	/**
 	 * Additional flags describing the member and how its going to behave in certain situations.
@@ -34,11 +37,19 @@ public:
 	 */
 	virtual flag_type flags() const = 0;
 	/**
-	 *Tests this member.
+	 * Tests this member.
 	 *
 	 * @returns `1` if the test succeeded, otherwise `0`
 	 */
 	virtual test_type test() const = 0;
+	/**
+	 * Invokes this member.
+	 * 
+	 * @param[in] stack the parameter stack
+	 * @param count the count of parameters
+	 * @returns the result of the function call
+	 */
+	virtual gc::gcable<member> invoke(gc::stack& stack, parameter_count_type count) = 0;
 };
 
 } // namespace member

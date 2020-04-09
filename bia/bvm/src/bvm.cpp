@@ -21,12 +21,11 @@ void bvm::execute(context& context, const bia::util::byte* first, const bia::uti
 	auto token         = gc.register_thread(64);
 	auto& stack        = token.stack();
 	const auto finally = util::make_finally([&stack] {
-		puts("right before exiting:");
+		printf("right before exiting: ");
 		if (const auto ptr = dynamic_cast<member::native::int_member*>(stack.at(0).get())) {
 			printf("it is an int: %d\n", ptr->test());
 		}
 	});
-	gc::gcable<member::member> accumulator{ nullptr, nullptr };
 
 	while (ip) {
 		const auto op_code = ip.next_op_code();
@@ -70,7 +69,7 @@ void bvm::execute(context& context, const bia::util::byte* first, const bia::uti
 
 			break;
 		}
-		case oc_instantiate: {
+		case oc_push: {
 			const auto constant = ip.read<std::int32_t>();
 
 			token.set(stack.push(),
@@ -78,7 +77,20 @@ void bvm::execute(context& context, const bia::util::byte* first, const bia::uti
 
 			break;
 		}
-		case oc_instantiate_at: {
+		case oc_invoke: {
+			const auto index           = ip.read<std::uint32_t>();
+			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto ptr             = static_cast<member::member*>(stack.at(index).get());
+
+			if (!ptr) {
+				throw;
+			}
+
+			ptr->invoke(stack, parameter_count);
+
+			break;
+		}
+		case oc_instantiate: {
 			const auto index    = ip.read<std::uint32_t>();
 			const auto constant = ip.read<std::int32_t>();
 

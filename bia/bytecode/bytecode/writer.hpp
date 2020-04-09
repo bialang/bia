@@ -79,11 +79,19 @@ public:
 		_optimize_write<false>(static_cast<std::uint32_t>(p0.index));
 	}
 	template<bool Optimize, op_code Op_code, typename P0>
-	typename std::enable_if<is_op_code<Op_code, oc_instantiate>::value && is_constant<P0>::value>::type
+	typename std::enable_if<is_op_code<Op_code, oc_push>::value && is_constant<P0>::value>::type
 	    write_instruction(P0 p0)
 	{
 		_optimize_write<false>(Op_code);
 		_optimize_write<false>(static_cast<std::int32_t>(p0));
+	}
+	template<bool Optimize, op_code Op_code, typename P0>
+	typename std::enable_if<is_op_code<Op_code, oc_invoke>::value && is_member<P0>::value>::type
+	    write_instruction(P0 p0, std::uint8_t p1)
+	{
+		_optimize_write<false>(Op_code);
+		_optimize_write<false>(static_cast<std::uint32_t>(p0.index));
+		_optimize_write<false>(p1);
 	}
 	template<bool Optimize, op_code Op_code, typename P0, typename P1>
 	typename std::enable_if<is_op_code<Op_code, oc_instantiate>::value && is_member<P0>::value &&

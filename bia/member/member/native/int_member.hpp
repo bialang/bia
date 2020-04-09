@@ -18,12 +18,13 @@ public:
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param value the initial value
-	*/
+	 */
 	int_member(int_type value) noexcept : _value(value)
 	{}
-	~int_member(){
+	~int_member()
+	{
 		printf("hi im getting destroyed: %ld\n", _value);
 	}
 	flag_type flags() const override
@@ -33,6 +34,16 @@ public:
 	test_type test() const override
 	{
 		return _value ? 1 : 0;
+	}
+	gc::gcable<member> invoke(gc::stack& stack, parameter_count_type count) override
+	{
+		printf("calling int member (value=%ld) with %d parameter\n", _value, (int) count);
+
+		if (count) {
+			return static_cast<member*>(stack.at(count - 1).get())->invoke(stack, count - 1);
+		}
+
+		return {};
 	}
 
 protected:
