@@ -8,9 +8,9 @@ namespace bia {
 namespace gc {
 namespace object {
 
-constexpr auto object_alignment = sizeof(std::intptr_t);
+constexpr auto alignment = sizeof(std::intptr_t);
 
-struct alignas(object_alignment) header
+struct alignas(alignment) header
 {
 	/** an index for the garbage collector indicating if this value was missed */
 	std::atomic_uint32_t miss_index;

@@ -15,7 +15,7 @@ namespace object {
  * This object must be implemented ny all gc node objects. Node objects are objects that must be destructed
  * before deallocation and can contain references to other gc objects.
  */
-class alignas(object_alignment) base
+class alignas(alignment) base
 {
 public:
 	/**
