@@ -13,11 +13,27 @@ namespace util {
 namespace portable {
 
 template<typename T>
+void write(not_null<void*> memory, T value)
+{
+	typedef typename std::decay<T>::type type;
+
+	static_assert(std::is_trivial<type>::value, "must be a trivial type");
+
+	const auto ptr = static_cast<byte*>(memory.get());
+
+	std::memcpy(ptr, &value, sizeof(val));
+
+#if BIA_ENDIAN == BIA_BIG_ENDIAN
+	std::reverse(ptr, ptr + sizeof(val));
+#endif
+}
+
+template<typename T>
 typename std::decay<T>::type read(not_null<const void*> memory)
 {
 	typedef typename std::decay<T>::type type;
 
-	static_assert(std::is_pod<type>::value, "must be pod type");
+	static_assert(std::is_trivial<type>::value, "must be a trivial type");
 
 	type val{};
 	const auto ptr = memory.get();
