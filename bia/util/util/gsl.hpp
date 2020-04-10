@@ -97,15 +97,15 @@ public:
 	{
 		return _size * sizeof(value_type);
 	}
-	iterator begin()
+	iterator begin() const
 	{
 		return _data;
 	}
-	iterator end()
+	iterator end() const
 	{
 		return _data + _size;
 	}
-	span subspan(std::size_t offset, std::size_t count)
+	span subspan(std::size_t offset, std::size_t count) const
 	{
 		BIA_EXPECTS(offset + count <= _size);
 
