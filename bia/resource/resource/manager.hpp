@@ -1,7 +1,7 @@
-#ifndef BIA_TOKENIZER_RESOURCE_MANAGER_HPP_
-#define BIA_TOKENIZER_RESOURCE_MANAGER_HPP_
+#ifndef BIA_RESOURCE_MANAGER_HPP_
+#define BIA_RESOURCE_MANAGER_HPP_
 
-#include "../config.hpp"
+#include "config.hpp"
 #include "bia_config.hpp"
 #include "streambuf.hpp"
 
@@ -12,7 +12,6 @@
 #include <util/gsl.hpp>
 
 namespace bia {
-namespace tokenizer {
 namespace resource {
 
 class manager
@@ -27,7 +26,7 @@ public:
 	 * @param page_size the size of each page
 	 */
 	manager(util::not_null<std::shared_ptr<gc::memory::allocator>> allocator,
-	        std::size_t page_size = BIA_TOKENIZER_PAGE_SIZE) noexcept;
+	        std::size_t page_size = BIA_RESOURCE_PAGE_SIZE) noexcept;
 	~manager();
 	/**
 	 * Starts a new memory sequence.
@@ -39,18 +38,6 @@ public:
 	 */
 	BIA_ATTR_NO_DISCARD
 	streambuf start_memory(bool avoid_duplicates);
-	/**
-	 * Stops the currently active buffer.
-	 *
-	 * @pre `buf_active() == true`
-	 * @post `buf_active() == false`
-	 *
-	 * @param[in] discard whether to discard the memory
-	 * @returns the memory object describing the bytes
-	 */
-	BIA_ATTR_NO_DISCARD
-	gc::memory::view stop_memory(streambuf& buf);
-	void discard_memory(streambuf& buf);
 	/**
 	 * Saves the current state of the resource manager.
 	 *
@@ -82,7 +69,6 @@ private:
 };
 
 } // namespace resource
-} // namespace tokenizer
 } // namespace bia
 
 #endif
