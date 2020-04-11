@@ -60,7 +60,7 @@ inline typename std::enable_if<
 
 template<bool Optimize, typename T>
 inline typename std::enable_if<is_parameter_size<T>::value, parameter_size_option>::type
-    parameter_size_index(T value)
+    parameter_size_index(T value) noexcept
 {
 	typedef typename std::decay<T>::type type;
 
@@ -93,7 +93,7 @@ inline typename std::enable_if<is_parameter_size<T>::value, parameter_size_optio
 }
 
 template<bool Optimize, typename T>
-inline typename std::enable_if<is_constant<T>::value, constant_option>::type constant_index(T value)
+inline typename std::enable_if<is_constant<T>::value, constant_option>::type constant_index(T value) noexcept
 {
 	typedef typename std::decay<T>::type type;
 

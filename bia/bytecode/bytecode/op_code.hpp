@@ -15,18 +15,29 @@ constexpr auto member_bits          = 4;
 constexpr auto constant_bits        = 4;
 constexpr auto size_bits            = 2;
 
-enum member_option
+enum member_destination_option
 {
-	mo_tos,
-	mo_args,
-	mo_global_16,
-	mo_local_16,
-	mo_resource_16,
-	mo_global_8,
-	mo_local_8,
-	mo_resource_8,
+	mdo_tos,
+	mdo_global_16,
+	mdo_local_16,
+	mdo_global_8,
+	mdo_local_8,
 
-	mo_count
+	mdo_count
+};
+
+enum member_source_option
+{
+	mso_tos,
+	mso_args,
+	mso_global_16,
+	mso_local_16,
+	mso_resource_16,
+	mso_global_8,
+	mso_local_8,
+	mso_resource_8,
+
+	mso_count
 };
 
 namespace member {
@@ -89,17 +100,17 @@ enum parameter_size_option
 enum op_code : op_code_type
 {
 	/** 8 bit variants */
-	oc_instantiate = -1 + mo_count * co_count,             // (member, constant)
-	oc_refer       = oc_instantiate + mo_count * mo_count, // (member, member)
-	oc_copy        = oc_refer + mo_count * mo_count,       // (member, member)
-	oc_operator    = oc_copy + mo_count * mo_count,
+	oc_instantiate = -1 + mdo_count * co_count,             // (member, constant)
+	oc_refer       = oc_instantiate + mdo_count * mso_count, // (member, member)
+	oc_copy        = oc_refer + mdo_count * mso_count,       // (member, member)
+	oc_operator    = oc_copy + mdo_count * mso_count,
 
 	/** 6 bit variants */
-	oc_get = oc_operator + mo_count * ro_count, // (member, resource)
+	oc_get = oc_operator + mdo_count * ro_count, // (member, resource)
 
 	/** 4 bit variants */
-	oc_invoke = oc_get + mo_count,    // (member, uint8)
-	oc_test   = oc_invoke + mo_count, // (member)
+	oc_invoke = oc_get + mso_count,    // (member, uint8)
+	oc_test   = oc_invoke + mso_count, // (member)
 
 	/** 2 bit variants */
 	oc_jump       = oc_test + pso_count,      // (offset)

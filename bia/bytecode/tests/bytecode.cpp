@@ -91,25 +91,37 @@ TEST_CASE("member writer", "[bytecode]")
 {
 	SECTION("unoptimized")
 	{
-		REQUIRE(member_index<false>(member::tos{}) == mo_tos);
-		REQUIRE(member_index<false>(member::args{ 255 }) == mo_args);
-		REQUIRE(member_index<false>(member::global{ 25 }) == mo_global_16);
-		REQUIRE(member_index<false>(member::global{ 6531 }) == mo_global_16);
-		REQUIRE(member_index<false>(member::local{ 25 }) == mo_local_16);
-		REQUIRE(member_index<false>(member::local{ 6531 }) == mo_local_16);
-		REQUIRE(member_index<false>(member::resource{ 25 }) == mo_resource_16);
-		REQUIRE(member_index<false>(member::resource{ 6531 }) == mo_resource_16);
+		REQUIRE(member_source_index<false>(member::tos{}) == mso_tos);
+		REQUIRE(member_source_index<false>(member::args{ 255 }) == mso_args);
+		REQUIRE(member_source_index<false>(member::global{ 25 }) == mso_global_16);
+		REQUIRE(member_source_index<false>(member::global{ 6531 }) == mso_global_16);
+		REQUIRE(member_source_index<false>(member::local{ 25 }) == mso_local_16);
+		REQUIRE(member_source_index<false>(member::local{ 6531 }) == mso_local_16);
+		REQUIRE(member_source_index<false>(member::resource{ 25 }) == mso_resource_16);
+		REQUIRE(member_source_index<false>(member::resource{ 6531 }) == mso_resource_16);
+		
+		REQUIRE(member_destination_index<false>(member::tos{}) == mdo_tos);
+		REQUIRE(member_destination_index<false>(member::global{ 25 }) == mdo_global_16);
+		REQUIRE(member_destination_index<false>(member::global{ 6531 }) == mdo_global_16);
+		REQUIRE(member_destination_index<false>(member::local{ 25 }) == mdo_local_16);
+		REQUIRE(member_destination_index<false>(member::local{ 6531 }) == mdo_local_16);
 	}
 
 	SECTION("optimized")
 	{
-		REQUIRE(member_index<true>(member::tos{}) == mo_tos);
-		REQUIRE(member_index<true>(member::args{ 255 }) == mo_args);
-		REQUIRE(member_index<true>(member::global{ 25 }) == mo_global_8);
-		REQUIRE(member_index<true>(member::global{ 6531 }) == mo_global_16);
-		REQUIRE(member_index<true>(member::local{ 25 }) == mo_local_8);
-		REQUIRE(member_index<true>(member::local{ 6531 }) == mo_local_16);
-		REQUIRE(member_index<true>(member::resource{ 25 }) == mo_resource_8);
-		REQUIRE(member_index<true>(member::resource{ 6531 }) == mo_resource_16);
+		REQUIRE(member_source_index<true>(member::tos{}) == mso_tos);
+		REQUIRE(member_source_index<true>(member::args{ 255 }) == mso_args);
+		REQUIRE(member_source_index<true>(member::global{ 25 }) == mso_global_8);
+		REQUIRE(member_source_index<true>(member::global{ 6531 }) == mso_global_16);
+		REQUIRE(member_source_index<true>(member::local{ 25 }) == mso_local_8);
+		REQUIRE(member_source_index<true>(member::local{ 6531 }) == mso_local_16);
+		REQUIRE(member_source_index<true>(member::resource{ 25 }) == mso_resource_8);
+		REQUIRE(member_source_index<true>(member::resource{ 6531 }) == mso_resource_16);
+		
+		REQUIRE(member_destination_index<true>(member::tos{}) == mdo_tos);
+		REQUIRE(member_destination_index<true>(member::global{ 25 }) == mdo_global_8);
+		REQUIRE(member_destination_index<true>(member::global{ 6531 }) == mdo_global_16);
+		REQUIRE(member_destination_index<true>(member::local{ 25 }) == mdo_local_8);
+		REQUIRE(member_destination_index<true>(member::local{ 6531 }) == mdo_local_16);
 	}
 }
