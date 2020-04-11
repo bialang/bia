@@ -13,7 +13,7 @@ compiler::compiler(std::ostream& output) noexcept : _writer(output)
 
 void compiler::finish()
 {
-	_writer.write_end();
+	_writer.finish();
 }
 
 void compiler::receive(util::not_null<const token*> first, util::not_null<const token*> last)

@@ -42,7 +42,7 @@ inline typename std::enable_if<is_indexless_member<T>::value>::type optimized_me
 {}
 
 template<bool Optimize, typename T>
-constexpr inline typename std::enable_if<is_not_optimizeable_member<T>::value, member_option>::type
+inline typename std::enable_if<is_not_optimizeable_member<T>::value, member_option>::type
     member_index(T) noexcept
 {
 	return static_cast<member_option>(
@@ -50,13 +50,15 @@ constexpr inline typename std::enable_if<is_not_optimizeable_member<T>::value, m
 }
 
 template<bool Optimize, typename T>
-constexpr inline typename std::enable_if<is_optimizeable_member<T>::value, member_option>::type
+inline typename std::enable_if<is_optimizeable_member<T>::value, member_option>::type
     member_index(T member) noexcept
 {
+	constexpr auto index = util::type_traits::type_index<typename std::decay<T>::type, member::global,
+	                                                     member::local, member::resource>::value +
+	                       mo_global_16;
+
 	return static_cast<member_option>(
-	    util::type_traits::type_index<typename std::decay<T>::type, member::global, member::local,
-	                                  member::resource>::value +
-	    mo_global_16 + (Optimize && util::limit_checker<std::uint8_t>::in_bounds(member.index) ? 3 : 0));
+	    index + (Optimize && util::limit_checker<std::uint8_t>::in_bounds(member.index) ? 3 : 0));
 }
 
 } // namespace writer

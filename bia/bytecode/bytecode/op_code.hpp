@@ -19,12 +19,12 @@ enum member_option
 {
 	mo_tos,
 	mo_args,
-	mo_global_8,
 	mo_global_16,
-	mo_local_8,
 	mo_local_16,
-	mo_resource_8,
 	mo_resource_16,
+	mo_global_8,
+	mo_local_8,
+	mo_resource_8,
 
 	mo_count
 };
