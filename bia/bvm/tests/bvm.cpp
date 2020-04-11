@@ -19,7 +19,7 @@ TEST_CASE("simple run", "[bvm]")
 	iw.write<true, oc_instantiate>(member::tos{}, 61);
 	iw.write<true, oc_instantiate>(member::tos{}, 11);
 	iw.write<true, oc_instantiate>(member::tos{}, 3);
-	iw.write<true, oc_invoke>(member::local{ 0 }, 2);
+	iw.write<true, oc_invoke>(member::tos{}, member::local{ 0 }, 2);
 	// iw.write_instruction<false, bytecode::oc_jump_true>(std::int32_t{-6});
 	iw.finish();
 
