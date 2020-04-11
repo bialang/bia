@@ -1,9 +1,9 @@
 #ifndef BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
 #define BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
 
-#include "../resource/manager.hpp"
 #include "bundle.hpp"
 
+#include <resource/manager.hpp>
 #include <string/encoding/encoder.hpp>
 #include <util/types.hpp>
 
