@@ -8,60 +8,106 @@
 namespace bia {
 namespace bytecode {
 
-typedef std::uint8_t op_code_type;
-constexpr auto max_instruction_size = sizeof(op_code_type) + 4;
+typedef std::uint16_t op_code_type;
 
-struct local_member
+constexpr auto max_instruction_size = sizeof(op_code_type) + 10;
+constexpr auto member_bits          = 4;
+constexpr auto constant_bits        = 4;
+constexpr auto size_bits            = 2;
+
+enum member_option
 {
-	std::uint32_t index;
+	mo_tos,
+	mo_args,
+	mo_global_8,
+	mo_global_16,
+	mo_local_8,
+	mo_local_16,
+	mo_resource_8,
+	mo_resource_16,
+
+	mo_count
 };
 
-struct global_member
+namespace member {
+
+struct tos
+{};
+
+struct args
 {
-	std::uint32_t index;
+	std::uint8_t index;
 };
 
-enum immediate_size_flag
+struct global
 {
-	isf_8,
-	isf_32,
-
-	isf_mask = 0x1
+	std::uint16_t index;
 };
 
-enum member_flag
+struct local
 {
-	mf_local,
-	mf_global,
-
-	mf_mask = 0x1
+	std::uint16_t index;
 };
 
-enum constant_flag
+struct resource
 {
-	cf_int8,
-	cf_int32,
-	cf_int64,
-	cf_float,
+	std::uint16_t index;
+};
 
-	cf_mask = 0x3
+} // namespace member
+
+enum constant_option
+{
+	co_int_8,
+	co_int_32,
+	co_int_64,
+	co_double,
+
+	co_count
+};
+
+enum resource_option
+{
+	ro_8,
+	ro_16,
+	ro_24,
+	ro_32,
+
+	ro_count
+};
+
+enum parameter_size_option
+{
+	pso_8,
+	pso_16,
+	pso_24,
+	pso_32,
+
+	pso_count
 };
 
 enum op_code : op_code_type
 {
-	oc_return_void, // ()
+	/** 8 bit variants */
+	oc_instantiate = -1 + mo_count * co_count,             // (member, constant)
+	oc_refer       = oc_instantiate + mo_count * mo_count, // (member, member)
+	oc_copy        = oc_refer + mo_count * mo_count,       // (member, member)
+	oc_operator    = oc_copy + mo_count * mo_count,
 
-	oc_jump, // (immediate_size): jumps to the relative address
-	oc_jump_true,
-	oc_jump_false,
+	/** 6 bit variants */
+	oc_get = oc_operator + mo_count * ro_count, // (member, resource)
 
-	oc_test, // (member): tests the member and sets the test register accordingly
+	/** 4 bit variants */
+	oc_invoke = oc_get + mo_count,    // (member, uint8)
+	oc_test   = oc_invoke + mo_count, // (member)
 
-	oc_push, // (constant): instantiates the constant value and pushes it onto the stack
+	/** 2 bit variants */
+	oc_jump       = oc_test + pso_count,      // (offset)
+	oc_jump_true  = oc_jump + pso_count,      // (offset)
+	oc_jump_false = oc_jump_true + pso_count, // (offset)
 
-	oc_invoke, // (member, uint8): invokes the member and passes the parameter count
-
-	oc_instantiate, // (member, constant): instantiates the given member to the constant value
+	/** 0 bit variants */
+	oc_return_void
 };
 
 } // namespace bytecode

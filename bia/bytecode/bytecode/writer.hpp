@@ -11,7 +11,6 @@
 #include <util/type_traits/equals_any.hpp>
 #include <util/type_traits/int_maker.hpp>
 
-
 namespace bia {
 namespace bytecode {
 
@@ -25,13 +24,16 @@ public:
 	using is_op_code = util::type_traits::equals_any<op_code, Op_code, Op_codes...>;
 	template<typename T>
 	using is_member =
-	    util::type_traits::equals_any_type<typename std::decay<T>::type, local_member, global_member>;
+	    util::type_traits::equals_any_type<typename std::decay<T>::type, member::tos, member::args,
+	                                       member::global, member::local, member::resource>;
+	template<typename T>
+	using is_resource = std::is_same<typename std::decay<T>::type, member::resource>;
 	template<typename T>
 	using is_constant = util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t,
 	                                                       std::int32_t, std::int64_t, double>;
 	template<typename T>
-	using is_int_immediate =
-	    util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t, std::int32_t>;
+	using is_int_immediate = util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t,
+	                                                            std::int16_t, std::int32_t>;
 
 	/**
 	 * Constructor.
@@ -69,29 +71,22 @@ public:
 	    write_instruction(P0 p0)
 	{
 		_optimize_write<false>(Op_code);
-		_optimize_write<false>(static_cast<std::int32_t>(p0));
+		_optimize_write<Optimize>(p0);
 	}
 	template<bool Optimize, op_code Op_code, typename P0>
 	typename std::enable_if<is_op_code<Op_code, oc_test>::value && is_member<P0>::value>::type
 	    write_instruction(P0 p0)
 	{
 		_optimize_write<false>(Op_code);
-		_optimize_write<false>(static_cast<std::uint32_t>(p0.index));
-	}
-	template<bool Optimize, op_code Op_code, typename P0>
-	typename std::enable_if<is_op_code<Op_code, oc_push>::value && is_constant<P0>::value>::type
-	    write_instruction(P0 p0)
-	{
-		_optimize_write<false>(Op_code);
-		_optimize_write<false>(static_cast<std::int32_t>(p0));
+		_optimize_member<Optimize>(p0);
 	}
 	template<bool Optimize, op_code Op_code, typename P0>
 	typename std::enable_if<is_op_code<Op_code, oc_invoke>::value && is_member<P0>::value>::type
 	    write_instruction(P0 p0, std::uint8_t p1)
 	{
 		_optimize_write<false>(Op_code);
-		_optimize_write<false>(static_cast<std::uint32_t>(p0.index));
-		_optimize_write<false>(p1);
+		_optimize_member<Optimize>(p0);
+		_optimize_write<Optimize>(p1);
 	}
 	template<bool Optimize, op_code Op_code, typename P0, typename P1>
 	typename std::enable_if<is_op_code<Op_code, oc_instantiate>::value && is_member<P0>::value &&
@@ -99,8 +94,17 @@ public:
 	    write_instruction(P0 p0, P1 p1)
 	{
 		_optimize_write<false>(Op_code);
-		_optimize_write<false>(static_cast<std::uint32_t>(p0.index));
-		_optimize_write<false>(static_cast<std::int32_t>(p1));
+		_optimize_member<Optimize>(p0);
+		_optimize_write<Optimize>(p1);
+	}
+	template<bool Optimize, op_code Op_code, typename P0, typename P1>
+	typename std::enable_if<is_op_code<Op_code, oc_refer, oc_copy>::value && is_member<P0>::value &&
+	                        is_member<P1>::value>::type
+	    write_instruction(P0 p0, P1 p1)
+	{
+		_optimize_write<false>(Op_code);
+		_optimize_member<Optimize>(p0);
+		_optimize_member<Optimize>(p1);
 	}
 	/**
 	 * Writes the ending sequence.
@@ -115,6 +119,13 @@ public:
 	}
 
 private:
+	template<typename T>
+	using is_indexed_member =
+	    util::type_traits::equals_any_type<typename std::decay<T>::type, member::args, member::global,
+	                                       member::local, member::resource>;
+	template<typename T>
+	using is_indexless_member = util::type_traits::equals_any_type<typename std::decay<T>::type, member::tos>;
+
 	/** a reference to the output stream */
 	std::ostream& _output;
 
@@ -130,6 +141,14 @@ private:
 	{
 		util::portable::write(_output, Ints...);
 	}
+	template<bool Optimize, typename T>
+	typename std::enable_if<is_indexed_member<T>::value>::type _optimize_member(T member)
+	{
+		_optimize_write<Optimize>(member.index);
+	}
+	template<bool Optimize, typename T>
+	typename std::enable_if<is_indexless_member<T>::value>::type _optimize_member(T member)
+	{}
 	/**
 	 * Writes the value to the output stream (if needed optimized).
 	 *
@@ -140,20 +159,24 @@ private:
 	 */
 	template<bool Optimize, typename T>
 	typename std::enable_if<
-	    util::type_traits::equals_any_type<T, op_code, std::int8_t, std::int32_t, std::int64_t, std::uint8_t,
-	                                       std::uint32_t>::value != 0>::type
+	    util::type_traits::equals_any_type<T, op_code, std::int8_t, std::int16_t, std::int32_t, std::int64_t,
+	                                       std::uint8_t, std::uint16_t, std::uint32_t>::value != 0>::type
 	    _optimize_write(T value)
 	{
-		if (Optimize && !std::is_same<T, op_code>::value) {
+		if (Optimize) {
 			if (std::is_unsigned<T>::value) {
 				if (util::limit_checker<std::uint8_t>::in_bounds(value)) {
 					util::portable::write(_output, static_cast<std::uint8_t>(value));
+				} else if (util::limit_checker<std::uint16_t>::in_bounds(value)) {
+					util::portable::write(_output, static_cast<std::uint16_t>(value));
 				} else {
 					util::portable::write(_output, value);
 				}
 			} else {
 				if (util::limit_checker<std::int8_t>::in_bounds(value)) {
 					util::portable::write(_output, static_cast<std::int8_t>(value));
+				} else if (util::limit_checker<std::int16_t>::in_bounds(value)) {
+					util::portable::write(_output, static_cast<std::int16_t>(value));
 				} else if (util::limit_checker<std::int32_t>::in_bounds(value)) {
 					util::portable::write(_output, static_cast<std::int32_t>(value));
 				} else {
