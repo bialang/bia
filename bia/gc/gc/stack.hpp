@@ -81,6 +81,10 @@ public:
 	{
 		return _data + _max_size;
 	}
+	stack frame() const noexcept
+	{
+		return { _data + _cursor, _max_size - _cursor };
+	}
 	bool operator==(const stack& other) const noexcept
 	{
 		return _data == other._data;

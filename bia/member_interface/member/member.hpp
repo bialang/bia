@@ -45,11 +45,11 @@ public:
 	/**
 	 * Invokes this member.
 	 * 
-	 * @param[in] stack the parameter stack
+	 * @param stack the parameter stack
 	 * @param count the count of parameters
 	 * @returns the result of the function call
 	 */
-	virtual gc::gcable<member> invoke(gc::stack& stack, parameter_count_type count) = 0;
+	virtual gc::gcable<member> invoke(gc::stack stack, parameter_count_type count) = 0;
 };
 
 } // namespace member

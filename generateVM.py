@@ -30,13 +30,13 @@ arg_options = {
 opcodes = [
     ("oc_instantiate", ("mdo", "co"), "token.set({0}, creator::create({1}).to<gc::object::base>());"),
 	("oc_invoke", ("mdo", "mso"), """const auto parameter_count = ip.read<std::uint8_t>();
-token.set({0}, member_pointer({1})->invoke(stack, parameter_count).to<gc::object::base>());
+token.set({0}, member_pointer({1})->invoke(stack.frame(), parameter_count).to<gc::object::base>());
 stack.pop(parameter_count);"""),
 
     ("oc_refer", ("mdo", "mso"), "token.set({0}, {1});"),
 
 	("oc_invoke_void", ("mso",), """const auto parameter_count = ip.read<std::uint8_t>();
-member_pointer({0})->invoke(stack, parameter_count);
+member_pointer({0})->invoke(stack.frame(), parameter_count);
 stack.pop(parameter_count);"""),
 	("oc_test", ("mso",), "test_register = member_pointer({0})->test();"),
 

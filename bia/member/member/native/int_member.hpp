@@ -35,7 +35,7 @@ public:
 	{
 		return _value ? 1 : 0;
 	}
-	gc::gcable<member> invoke(gc::stack& stack, parameter_count_type count) override
+	gc::gcable<member> invoke(gc::stack stack, parameter_count_type count) override
 	{
 		printf("calling int member (value=%ld) with %d parameter\n", _value, (int) count);
 
