@@ -1,8 +1,8 @@
 #ifndef BIA_GC_STACK_HPP_
 #define BIA_GC_STACK_HPP_
 
-#include "object/pointer.hpp"
 #include "object/base.hpp"
+#include "object/pointer.hpp"
 
 #include <exception/bounds_error.hpp>
 #include <functional>
@@ -29,6 +29,22 @@ public:
 	{
 		return _max_size;
 	}
+	void pop(std::size_t count)
+	{
+		if (count > _cursor) {
+			BIA_THROW(exception::bounds_error, "stack underflow");
+		}
+
+		_cursor -= count;
+	}
+	element_type& tos()
+	{
+		if (!_cursor) {
+			BIA_THROW(exception::bounds_error, "empty stack");
+		}
+
+		return _data[_cursor - 1];
+	}
 	element_type& push()
 	{
 		if (_cursor >= _max_size) {
@@ -37,13 +53,21 @@ public:
 
 		return _data[_cursor++];
 	}
-	element_type& at(std::size_t index)
+	element_type& local_at(std::size_t index)
 	{
 		if (index >= _cursor) {
 			BIA_THROW(exception::bounds_error, "out of bounds");
 		}
 
 		return _data[index];
+	}
+	element_type& arg_at(std::size_t index)
+	{
+		if (index >= _cursor) {
+			BIA_THROW(exception::bounds_error, "out of bounds");
+		}
+
+		return _data[_cursor - index - 1];
 	}
 	element_type* data() const noexcept
 	{

@@ -16,6 +16,7 @@ TEST_CASE("simple run", "[bvm]")
 	std::stringstream output;
 	writer::instruction iw{ output };
 
+	iw.write<true, oc_instantiate>(member::tos{}, 61);
 	iw.write<true, oc_instantiate>(member::tos{}, 11);
 	iw.write<true, oc_instantiate>(member::tos{}, 3);
 	iw.write<true, oc_invoke>(member::local{ 0 }, 2);
