@@ -102,8 +102,9 @@ enum op_code : op_code_type
 	/** 8 bit variants */
 	oc_instantiate = -1 + mdo_count * co_count,              // (member, constant)
 	oc_invoke      = oc_instantiate + mdo_count * mso_count, // (destination member, source member, uint8)
-	oc_refer       = oc_invoke + mdo_count * mso_count, // (member, member)
-	oc_copy        = oc_refer + mdo_count * mso_count,       // (member, member)
+	oc_refer       = oc_invoke + mdo_count * mso_count,      // (member, member)
+	oc_clone       = oc_refer + mdo_count * mso_count,
+	oc_copy        = oc_clone + mdo_count * mso_count, // (member, member)
 	oc_operator    = oc_copy + mdo_count * mso_count,
 
 	/** 6 bit variants */

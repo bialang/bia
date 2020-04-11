@@ -9,12 +9,17 @@
 #include <memory>
 
 namespace bia {
+namespace member {
+
+class member;
+
+} // namespace member
 namespace gc {
 
 class stack
 {
 public:
-	typedef object::pointer<object::base> element_type;
+	typedef object::pointer<member::member> element_type;
 
 	stack(element_type* data, std::size_t size) noexcept
 	{

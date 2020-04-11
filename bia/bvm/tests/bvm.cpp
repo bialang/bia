@@ -6,13 +6,12 @@
 #include <gc/memory/simple_allocator.hpp>
 #include <sstream>
 
-using namespace bia;
 using namespace bia::bvm;
 using namespace bia::bytecode;
 
 TEST_CASE("simple run", "[bvm]")
 {
-	context ctx{ std::make_shared<gc::gc>(std::make_shared<gc::memory::simple_allocator>()) };
+	context ctx{ std::make_shared<bia::gc::gc>(std::make_shared<bia::gc::memory::simple_allocator>()) };
 	std::stringstream output;
 	writer::instruction iw{ output };
 
@@ -25,6 +24,6 @@ TEST_CASE("simple run", "[bvm]")
 
 	const auto code = output.str();
 
-	bia::bvm::bvm::execute(ctx, reinterpret_cast<const util::byte*>(code.data()),
-	                       reinterpret_cast<const util::byte*>(code.data() + code.length()));
+	bia::bvm::bvm::execute(ctx, reinterpret_cast<const bia::util::byte*>(code.data()),
+	                       reinterpret_cast<const bia::util::byte*>(code.data() + code.length()));
 }

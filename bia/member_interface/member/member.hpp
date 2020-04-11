@@ -27,6 +27,7 @@ public:
 	enum flag : flag_type
 	{
 		flag_none = 0,
+		flag_clone_is_copy = 0x1
 	};
 
 	virtual ~member() = default;
@@ -42,6 +43,12 @@ public:
 	 * @returns `1` if the test succeeded, otherwise `0`
 	 */
 	virtual test_type test() const = 0;
+	/**
+	 * Creates a new copy of this member.
+	 * 
+	 * @returns a fresh copy of this member
+	*/
+	virtual gc::gcable<member> copy() const = 0;
 	/**
 	 * Invokes this member.
 	 * 
