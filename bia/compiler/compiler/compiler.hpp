@@ -36,9 +36,9 @@ private:
 	variable_manager _variables;
 
 	const token* _decl(const token* first, const token* last);
-	std::pair<const token*,
+	/*std::pair<const token*,
 	          util::variant<bytecode::local_member, bytecode::global_member, std::int64_t, double>>
-	    _expression(const token* first, const token* last);
+	    _expression(const token* first, const token* last);*/
 };
 
 } // namespace compiler

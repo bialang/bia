@@ -1,3 +1,5 @@
+#ifndef BIA_RESOURCE_INFO_HPP_
+#define BIA_RESOURCE_INFO_HPP_
 
 namespace bia {
 namespace resource {
@@ -18,3 +20,5 @@ constexpr auto size_width_bits = 2;
 
 } // namespace resource
 } // namespace bia
+
+#endif

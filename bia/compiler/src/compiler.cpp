@@ -37,7 +37,7 @@ const compiler::token* compiler::_decl(const token* first, const token* last)
 {
 	BIA_EXPECTS(static_cast<token::type>(first->value.index()) == token::type::keyword);
 
-	const auto variable = _variables.index_of(first[1].value.get<token::identifier>().memory);
+	/*const auto variable = _variables.index_of(first[1].value.get<token::identifier>().memory);
 	const auto pair     = _expression(first + 2, last);
 
 	// capturing not implemented
@@ -46,14 +46,15 @@ const compiler::token* compiler::_decl(const token* first, const token* last)
 	switch (static_cast<expression_value>(pair.second.index())) {
 	case expression_value::integer:
 		/*_writer.write_instruction<true, bytecode::oc_instantiate>(bytecode::local_member{ variable.first },
-		                                                          pair.second.get<std::int64_t>());*/
+		                                                          pair.second.get<std::int64_t>());*
 		break;
 	default: BIA_IMPLEMENTATION_ERROR("invaild expression type");
 	}
 
-	return pair.first;
+	return pair.first;*/
+	return first;
 }
-
+/*
 std::pair<const compiler::token*,
           bia::util::variant<bia::bytecode::local_member, bia::bytecode::global_member, std::int64_t, double>>
     compiler::_expression(const token* first, const token* last)
@@ -66,4 +67,4 @@ std::pair<const compiler::token*,
 	data.emplace<std::int64_t>(first->value.get<token::keyword>() == token::keyword::true_ ? 1 : 0);
 
 	return { first + 2, std::move(data) };
-}
+}*/

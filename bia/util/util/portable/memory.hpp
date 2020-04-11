@@ -21,10 +21,10 @@ void write(not_null<void*> memory, T value)
 
 	const auto ptr = static_cast<byte*>(memory.get());
 
-	std::memcpy(ptr, &value, sizeof(val));
+	std::memcpy(ptr, &value, sizeof(value));
 
 #if BIA_ENDIAN == BIA_BIG_ENDIAN
-	std::reverse(ptr, ptr + sizeof(val));
+	std::reverse(ptr, ptr + sizeof(value));
 #endif
 }
 

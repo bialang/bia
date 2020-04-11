@@ -1,8 +1,8 @@
 #ifndef BIA_RESOURCE_MANAGER_HPP_
 #define BIA_RESOURCE_MANAGER_HPP_
 
-#include "config.hpp"
 #include "bia_config.hpp"
+#include "config.hpp"
 #include "streambuf.hpp"
 
 #include <cstddef>
@@ -45,6 +45,7 @@ public:
 	 *
 	 * @returns the current state
 	 */
+	BIA_ATTR_NO_DISCARD
 	state_type save_state() const;
 	/**
 	 * Restores an old state.

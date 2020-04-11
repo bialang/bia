@@ -53,7 +53,7 @@ inline exception::syntax_details identifier(parameter& tp)
 				outenc->put(output, 0);
 
 				// add token
-				tp.bundle.add(token{ token::identifier{ tp.manager.stop_memory(streambuf) } });
+				tp.bundle.add(token{ token::identifier{ streambuf.finish(resource::type::string) } });
 
 				return {};
 			}

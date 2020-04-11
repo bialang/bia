@@ -52,7 +52,7 @@ view streambuf::finish(type type)
 		}
 
 		// write size
-		const char_type buffer[4]{};
+		char_type buffer[4]{};
 
 		switch (sw) {
 		case size_width::_8: util::portable::write(buffer, static_cast<std::uint8_t>(size)); break;
