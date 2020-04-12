@@ -31,7 +31,8 @@ view streambuf::finish(type type)
 {
 	BIA_EXPECTS(valid());
 
-	const auto end     = _manager->_space.size();
+	const auto end     = _manager->_space.size() - (epptr() - pptr());
+	const auto size    = end - _initial_size;
 	const auto finally = util::make_finally([this] {
 		_manager->_buf_active = false;
 		_manager              = nullptr;
@@ -39,9 +40,8 @@ view streambuf::finish(type type)
 
 	if (pptr()) {
 		// write type and size
-		size_width sw   = size_width::_8;
-		auto width      = 1;
-		const auto size = end - (epptr() - pptr()) - _initial_size;
+		size_width sw = size_width::_8;
+		auto width    = 1;
 
 		if (size > std::numeric_limits<std::uint16_t>::max()) {
 			sw    = size_width::_32;
@@ -70,8 +70,7 @@ view streambuf::finish(type type)
 		_manager->_space.truncate(size + 1 + width);
 	}
 
-	return { type, end - _initial_size, _manager->_space.cursor(_initial_size),
-		     _manager->_space.cursor(end) };
+	return { type, size, _manager->_space.cursor(_initial_size), _manager->_space.cursor(end) };
 }
 
 bool streambuf::valid() const noexcept
