@@ -1,7 +1,7 @@
 #ifndef BIA_COMPILER_VARIABLE_MANAGER_HPP_
 #define BIA_COMPILER_VARIABLE_MANAGER_HPP_
 
-#include <gc/memory/view.hpp>
+#include <resource/view.hpp>
 #include <map>
 #include <utility>
 #include <vector>
@@ -24,22 +24,30 @@ public:
 	 * @param identifier the name of the variable
 	 * @returns the index of the scope and the variable
 	 */
-	std::pair<scope_index_type, index_type> index_of(gc::memory::view identifier);
+	std::pair<scope_index_type, index_type> index_of(resource::view identifier);
 	/**
-	 * Returns the index of the current scope.
+	 * Returns the index of the latest scope.
 	 *
 	 * @pre at least one active scope
 	 *
 	 * @returns the scope index
 	 */
-	scope_index_type current_scope() const;
+	scope_index_type latest_scope() const;
+	/**
+	 * Returns the index of the latest variable.
+	 * 
+	 * @pre at least one variable and a scope
+	 * 
+	 * @returns the variable index
+	*/
+	index_type latest_variable() const;
 	void open_scope();
 	void close_scope();
 
 private:
 	struct scope
 	{
-		std::map<gc::memory::view, index_type> variables;
+		std::map<resource::view, index_type> variables;
 		index_type index = 0;
 	};
 

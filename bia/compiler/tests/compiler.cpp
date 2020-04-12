@@ -14,7 +14,7 @@ TEST_CASE("simple compiling", "[compiler]")
 	std::stringstream code;
 	std::stringstream output;
 
-	code << u8R"(let x=false)";
+	code << u8R"(let x=5)";
 
 	compiler::compiler cp{ output };
 	auto encoder =

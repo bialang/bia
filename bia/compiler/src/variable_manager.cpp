@@ -5,7 +5,7 @@
 using namespace bia::compiler;
 
 std::pair<variable_manager::scope_index_type, variable_manager::index_type>
-    variable_manager::index_of(gc::memory::view identifier)
+    variable_manager::index_of(resource::view identifier)
 {
 	BIA_EXPECTS(!_scopes.empty());
 
@@ -27,11 +27,20 @@ std::pair<variable_manager::scope_index_type, variable_manager::index_type>
 	return { _scopes.size() - 1, scope.index++ };
 }
 
-variable_manager::scope_index_type variable_manager::current_scope() const
+variable_manager::scope_index_type variable_manager::latest_scope() const
 {
 	BIA_EXPECTS(!_scopes.empty());
 
 	return _scopes.size() - 1;
+}
+
+variable_manager::index_type variable_manager::latest_variable() const
+{
+	const auto& scope = _scopes[latest_scope()];
+
+	BIA_EXPECTS(!scope.variables.empty());
+
+	return scope.index - 1;
 }
 
 void variable_manager::open_scope()
