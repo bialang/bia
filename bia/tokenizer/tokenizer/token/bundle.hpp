@@ -23,8 +23,9 @@ public:
 	void clear();
 	state_type save();
 	void restore(state_type state);
-	const token* begin() const;
-	const token* end() const;
+	const token* begin() const noexcept;
+	const token* end() const noexcept;
+	std::size_t size() const noexcept;
 
 private:
 	std::vector<token> _tokens;

@@ -11,6 +11,8 @@ namespace token {
 
 struct token
 {
+	typedef std::int64_t int_type;
+
 	struct cmd_end
 	{};
 
@@ -46,7 +48,7 @@ struct token
 		constant_float,
 	};
 
-	util::variant<cmd_end, identifier, keyword, operator_, std::int64_t, double> value;
+	util::variant<cmd_end, identifier, keyword, operator_, int_type, double> value;
 };
 
 } // namespace token

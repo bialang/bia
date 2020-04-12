@@ -28,14 +28,19 @@ void bundle::restore(state_type state)
 	_tokens.resize(state);
 }
 
-const token* bundle::begin() const
+const token* bundle::begin() const noexcept
 {
 	return _tokens.begin().base();
 }
 
-const token* bundle::end() const
+const token* bundle::end() const noexcept
 {
 	return _tokens.end().base();
+}
+
+std::size_t bundle::size() const noexcept
+{
+	return _tokens.size();
 }
 
 } // namespace token
