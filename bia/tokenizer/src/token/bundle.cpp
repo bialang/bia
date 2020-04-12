@@ -1,14 +1,17 @@
 #include "tokenizer/token/bundle.hpp"
 
+#include <exception/bounds_error.hpp>
 #include <util/gsl.hpp>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
 
-void bundle::add(token token)
+std::size_t bundle::add(token token)
 {
 	_tokens.push_back(std::move(token));
+
+	return _tokens.size() - 1;
 }
 
 void bundle::clear()
@@ -26,6 +29,15 @@ void bundle::restore(state_type state)
 	BIA_EXPECTS(state <= _tokens.size());
 
 	_tokens.resize(state);
+}
+
+token& bundle::at(std::size_t index)
+{
+	if (index >= _tokens.size()) {
+		BIA_THROW(exception::bounds_error, "out of bounds");
+	}
+
+	return _tokens[index];
 }
 
 const token* bundle::begin() const noexcept
