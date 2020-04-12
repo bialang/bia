@@ -34,13 +34,21 @@ public:
 	{
 		return _max_size;
 	}
-	void pop(std::size_t count)
+	void drop(std::size_t count)
 	{
 		if (count > _cursor) {
 			BIA_THROW(exception::bounds_error, "stack underflow");
 		}
 
 		_cursor -= count;
+	}
+	element_type& pop()
+	{
+		if (!_cursor) {
+			BIA_THROW(exception::bounds_error, "stack underflow");
+		}
+
+		return _data[--_cursor];
 	}
 	element_type& tos()
 	{

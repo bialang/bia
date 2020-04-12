@@ -24,7 +24,7 @@ public:
 	instruction(std::ostream& output) noexcept : _output(output)
 	{}
 	template<bool Optimize, op_code Op_code>
-	typename std::enable_if<is_op_code<Op_code, oc_return_void>::value>::type write()
+	typename std::enable_if<is_op_code<Op_code, oc_return_void, oc_test_top>::value>::type write()
 	{
 		optimized_write<false>(_output, Op_code);
 	}

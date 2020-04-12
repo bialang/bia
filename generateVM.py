@@ -32,7 +32,7 @@ opcodes = [
      "token.set({0}, creator::create({1}).to<bia::member::member>());"),
     ("oc_invoke", ("mdo", "mso"), """const auto parameter_count = ip.read<std::uint8_t>();
 token.set({0}, member_pointer({1})->invoke(stack.frame(), parameter_count));
-stack.pop(parameter_count);"""),
+stack.drop(parameter_count);"""),
 
     ("oc_refer", ("mdo", "mso"), "token.set({0}, {1});"),
     ("oc_clone", ("mdo", "mso"), """const auto ptr = member_pointer({1});
@@ -41,13 +41,15 @@ if (ptr->flags() & flag::flag_clone_is_copy) {{
 }} else {{
     token.set({0}, ptr);
 }}"""),
+    ("oc_copy", ("mdo", "mso"), "token.set({0}, member_pointer({1})->copy());"),
 
     ("oc_invoke_void", ("mso",), """const auto parameter_count = ip.read<std::uint8_t>();
 member_pointer({0})->invoke(stack.frame(), parameter_count);
-stack.pop(parameter_count);"""),
+stack.drop(parameter_count);"""),
     ("oc_test", ("mso",), "test_register = member_pointer({0})->test();"),
 
-    ("oc_return_void", tuple(), "return;")
+    ("oc_return_void", tuple(), "return;"),
+    ("oc_test_top", tuple(), "test_register = member_pointer(stack.pop())->test();")
 ]
 
 for opcode in opcodes:

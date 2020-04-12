@@ -120,7 +120,8 @@ enum op_code : op_code_type
 	oc_jump_false = oc_jump_true + pso_count, // (offset)
 
 	/** 0 bit variants */
-	oc_return_void
+	oc_return_void,
+	oc_test_top
 };
 
 } // namespace bytecode
