@@ -3,18 +3,25 @@
 
 #include "../parameter.hpp"
 #include "identifier.hpp"
+#include "parameter_list.hpp"
+
+#include <exception/syntax_error.hpp>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
 namespace parse {
 
-exception::syntax_details expression(parameter& tp);
-
-inline exception::syntax_details member(parameter& tp)
+inline exception::syntax_details member(parameter& parameter)
 {
-	if (auto err = identifier(tp)) {
+	if (auto err = identifier(parameter)) {
 		return err;
+	}
+
+	const auto old = parameter.backup();
+
+	if (parameter_list(parameter)) {
+		parameter.restore(old);
 	}
 
 	return {};
