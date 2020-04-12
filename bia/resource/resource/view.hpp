@@ -23,6 +23,32 @@ struct view
 	{
 		return last;
 	}
+	int compare(const view& other) const noexcept
+	{
+		if (type < other.type) {
+			return -1;
+		} else if (type > other.type) {
+			return 1;
+		} else if (size < other.size) {
+			return -1;
+		} else if (size > other.size) {
+			return 1;
+		}
+
+		for (auto i = first, j = other.first; i != last; ++i, ++j) {
+			if (*i < *j) {
+				return -1;
+			} else if (*i > *j) {
+				return 1;
+			}
+		}
+
+		return 0;
+	}
+	bool operator<(const view& other) const noexcept
+	{
+		return compare(other) < 0;
+	}
 };
 
 } // namespace resource
