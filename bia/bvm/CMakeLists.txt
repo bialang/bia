@@ -3,4 +3,5 @@ project(bvm
 
 create_library(STATIC
 	PUBLIC connector
-	PUBLIC compiler)
+	PUBLIC bytecode
+	PUBLIC resource)
