@@ -6,6 +6,7 @@
 #include "identifier.hpp"
 #include "member.hpp"
 #include "operators.hpp"
+#include "number.hpp"
 
 #include <exception/implementation_error.hpp>
 
@@ -32,8 +33,17 @@ inline exception::syntax_details value(parameter& parameter)
 
 	parameter.restore(old);
 
+	// number
+	auto err = number(parameter);
+
+	if (!err) {
+		return {};
+	}
+
+	parameter.restore(old);
+
 	// member
-	if (auto err = member(parameter)) {
+	if ((err = member(parameter))) {
 		return err;
 	}
 
