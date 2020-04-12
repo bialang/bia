@@ -1,9 +1,9 @@
 #ifndef BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 #define BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 
+#include <cstdint>
 #include <resource/view.hpp>
 #include <util/variant.hpp>
-#include <cstdint>
 
 namespace bia {
 namespace tokenizer {
@@ -19,6 +19,19 @@ struct token
 	struct identifier
 	{
 		resource::view memory;
+	};
+
+	struct control
+	{
+		enum class type
+		{
+			bracket_open,
+			bracket_close,
+			comma
+		};
+
+		type type;
+		std::size_t value;
 	};
 
 	enum class keyword
@@ -42,13 +55,14 @@ struct token
 	{
 		cmd_end,
 		identifier,
+		control,
 		keyword,
 		operator_,
 		constant_int,
 		constant_float,
 	};
 
-	util::variant<cmd_end, identifier, keyword, operator_, int_type, double> value;
+	util::variant<cmd_end, identifier, control, keyword, operator_, int_type, double> value;
 };
 
 } // namespace token
