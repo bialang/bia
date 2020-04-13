@@ -47,11 +47,11 @@ inline exception::syntax_details parameter_list(parameter& parameter)
 		switch (parameter.encoder.read(parameter.input)) {
 		case ')': goto gt_success;
 		case ',': {
+			update_last(token::control::type::comma);
+
 			if (const auto err = expression(parameter)) {
 				return err;
 			}
-
-			update_last(token::control::type::comma);
 
 			break;
 		}
