@@ -26,7 +26,7 @@ public:
 	{}
 	~int_member()
 	{
-		printf("hi im getting destroyed: %ld\n", _value);
+		printf("bye im getting destroyed: %ld, %p\n", _value, this);
 	}
 	flag_type flags() const override
 	{
@@ -44,11 +44,11 @@ public:
 	{
 		printf("calling int member (value=%ld) with %d parameter\n", _value, (int) count);
 
-		if (count) {
-			return static_cast<member*>(stack.at(count - 1).get())->invoke(stack, count - 1);
+		for (parameter_count_type i = 0; i < count; ++i) {
+			printf("%d parameter: %ld\n", i, static_cast<int_member*>(stack.arg_at(i).get())->_value);
 		}
 
-		return {};
+		return gc::gc::active_gc()->construct<int_member>(616161).to<member>();
 	}
 
 protected:

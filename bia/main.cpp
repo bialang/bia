@@ -20,11 +20,15 @@ int main()
 	const auto finally =
 	    bia::util::make_finally([encoder] { bia::string::encoding::encoder::free_instance(encoder); });
 
-	code << u8R"(let print=65)";
+	code << u8R"(
+		
+let print = 65
+
+print(99, 5)
+
+)";
 
 	try {
-		lexer.lex(code, *encoder, compiler);
-		code << "print(99)";
 		lexer.lex(code, *encoder, compiler);
 	} catch (const bia::exception::bia_error& e) {
 		std::cout << "exception (" << e.name() << "; " << e.filename() << ":" << e.line() << "): " << e.what()
