@@ -20,7 +20,11 @@ void compiler::finish()
 
 void compiler::receive(util::not_null<const token*> first, util::not_null<const token*> last)
 {
-	for (auto i = first.get(), c = last.get(); i != c;) {
+	for (auto i = first.get(), c = last.get(); i < c; ++i) {
+		printf("token %zi\n", i->value.index());
+	}
+
+	for (auto i = first.get(), c = last.get(); i < c; ++i) {
 		switch (static_cast<token::type>(i->value.index())) {
 		case token::type::keyword: {
 			switch (i->value.get<token::keyword>()) {
@@ -30,8 +34,13 @@ void compiler::receive(util::not_null<const token*> first, util::not_null<const 
 
 			break;
 		}
-		default: BIA_IMPLEMENTATION_ERROR("invalid token type");
+		default:
+			// todo: remove destination
+			i = elve::expression({ _variables, _writer }, i, c, bytecode::member::tos{});
+			break;
 		}
+
+		BIA_EXPECTS(static_cast<token::type>(i->value.index()) == token::type::cmd_end);
 	}
 }
 
@@ -43,10 +52,10 @@ const compiler::token* compiler::_decl(const token* first, const token* last)
 
 	// push onto stack
 	if (variable.second == _variables.latest_variable()) {
-		return elve::expression(_writer, first + 2, last, bytecode::member::tos{});
+		return elve::expression({ _variables, _writer }, first + 2, last, bytecode::member::tos{});
 	}
 
 	// overwrite existing; todo: remove cast
-	return elve::expression(_writer, first + 2, last,
+	return elve::expression({ _variables, _writer }, first + 2, last,
 	                        bytecode::member::local{ (std::uint16_t) variable.second });
 }
