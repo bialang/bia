@@ -100,18 +100,18 @@ enum parameter_size_option
 enum op_code : op_code_type
 {
 	/** 8 bit variants */
-	oc_instantiate = -1 + mdo_count * co_count,              // (member, constant)
-	oc_invoke      = oc_instantiate + mdo_count * mso_count, // (destination member, source member, uint8)
-	oc_refer       = oc_invoke + mdo_count * mso_count,      // (member, member)
-	oc_clone       = oc_refer + mdo_count * mso_count,
-	oc_copy        = oc_clone + mdo_count * mso_count, // (member, member)
-	oc_operator    = oc_copy + mdo_count * mso_count,
+	oc_instantiate = -1 + co_count * mdo_count,              // (constant, member)
+	oc_invoke      = oc_instantiate + mso_count * mdo_count, // (uint8, source member, destination member)
+	oc_refer       = oc_invoke + mso_count * mdo_count,      // (member, member)
+	oc_clone       = oc_refer + mso_count * mdo_count,
+	oc_copy        = oc_clone + mso_count * mdo_count, // (member, member)
+	oc_operator    = oc_copy + mso_count * mdo_count,
 
 	/** 6 bit variants */
 	oc_get = oc_operator + mdo_count * ro_count, // (member, resource)
 
 	/** 4 bit variants */
-	oc_invoke_void = oc_get + mso_count,         // (member, uint8)
+	oc_invoke_void = oc_get + mso_count,         // (uint8, member)
 	oc_test        = oc_invoke_void + mso_count, // (member)
 
 	/** 2 bit variants */
