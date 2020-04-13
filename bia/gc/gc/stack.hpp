@@ -76,11 +76,11 @@ public:
 	}
 	element_type& arg_at(std::size_t index)
 	{
-		if (index >= _cursor) {
+		if (index >= _args) {
 			BIA_THROW(exception::bounds_error, "out of bounds");
 		}
 
-		return _data[_cursor - index - 1];
+		return _data[_args - index - 1];
 	}
 	element_type* data() const noexcept
 	{
@@ -94,9 +94,16 @@ public:
 	{
 		return _data + _max_size;
 	}
-	stack frame() const noexcept
+	stack frame(std::size_t offset) const
 	{
-		return { _data + _cursor, _max_size - _cursor };
+		BIA_EXPECTS(offset <= _cursor);
+
+		stack s{ _data + _cursor - offset, _max_size - _cursor + offset };
+
+		s._cursor = offset;
+		s._args   = offset;
+
+		return s;
 	}
 	bool operator==(const stack& other) const noexcept
 	{
@@ -109,6 +116,7 @@ private:
 	element_type* _data   = nullptr;
 	std::size_t _cursor   = 0;
 	std::size_t _max_size = 0;
+	std::size_t _args     = 0;
 };
 
 } // namespace gc
