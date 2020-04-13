@@ -2,6 +2,7 @@
 #define BIA_MEMBER_NATIVE_INT_MEMBER_HPP_
 
 #include <cstdint>
+#include <gc/gc.hpp>
 #include <member/member.hpp>
 
 namespace bia {
@@ -34,6 +35,10 @@ public:
 	test_type test() const override
 	{
 		return _value ? 1 : 0;
+	}
+	gc::gcable<member> copy() const override
+	{
+		return gc::gc::active_gc()->construct<int_member>(_value).to<member>();
 	}
 	gc::gcable<member> invoke(gc::stack stack, parameter_count_type count) override
 	{
