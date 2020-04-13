@@ -67,7 +67,7 @@ view streambuf::finish(type type)
 		sputc(static_cast<char_type>((static_cast<int>(type) << size_width_bits) | static_cast<int>(sw)));
 
 		// finalize
-		_manager->_space.truncate(size + 1 + width);
+		_manager->_space.truncate(end + 1 + width);
 	}
 
 	return { type, size, _manager->_space.cursor(_initial_size), _manager->_space.cursor(end) };
