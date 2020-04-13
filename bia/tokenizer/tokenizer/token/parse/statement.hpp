@@ -18,7 +18,7 @@ namespace parse {
 inline exception::syntax_details decl_stmt(parameter& parameter)
 {
 	// compare let
-	if (auto err = any_of(parameter, "invalid decl keyword", "let").second) {
+	if (const auto err = any_of(parameter, "invalid decl keyword", "let").second) {
 		return err;
 	}
 
@@ -27,13 +27,13 @@ inline exception::syntax_details decl_stmt(parameter& parameter)
 	BIA_LOG(TRACE, "matched 'let'");
 
 	// whitespaces are required
-	if (auto err = eat_whitespaces(parameter)) {
+	if (const auto err = eat_whitespaces(parameter)) {
 		return err;
 	}
 
 	BIA_LOG(TRACE, "matched whitespace");
 
-	if (auto err = identifier(parameter)) {
+	if (const auto err = identifier(parameter)) {
 		return err;
 	}
 
@@ -43,7 +43,7 @@ inline exception::syntax_details decl_stmt(parameter& parameter)
 	eat_whitespaces(parameter);
 
 	// compare '='
-	auto pos = parameter.input.tellg();
+	const auto pos = parameter.input.tellg();
 
 	if (parameter.encoder.read(parameter.input) != '=') {
 		return { pos, "expected assignment operator" };
@@ -58,10 +58,11 @@ inline exception::syntax_details decl_stmt(parameter& parameter)
 
 inline exception::syntax_details single_stmt(parameter& parameter)
 {
-	auto old = parameter.backup();
+	const auto old = parameter.backup();
 
-	if (auto err = decl_stmt(parameter)) {
+	if (const auto err = decl_stmt(parameter)) {
 		BIA_LOG(INFO, "no decl statement {}", err.message);
+		
 		parameter.restore(old);
 
 		return expression(parameter);

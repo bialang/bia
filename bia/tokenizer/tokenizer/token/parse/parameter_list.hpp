@@ -2,6 +2,7 @@
 #define BIA_TOKENIZER_TOKEN_PARSE_PARAMETER_LIST_HPP_
 
 #include "../parameter.hpp"
+#include "whitespace_eater.hpp"
 
 #include <exception/syntax_error.hpp>
 
@@ -19,6 +20,8 @@ inline exception::syntax_details parameter_list(parameter& parameter)
 	if (parameter.encoder.read(parameter.input) != '(') {
 		return { pos, "expected '('" };
 	}
+
+	eat_whitespaces(parameter);
 
 	// parse first parameter
 	auto last       = parameter.bundle.add({ token::control{ token::control::type::bracket_open, 0 } });
@@ -44,10 +47,13 @@ inline exception::syntax_details parameter_list(parameter& parameter)
 	}
 
 	while (true) {
+		eat_whitespaces(parameter);
+
 		switch (parameter.encoder.read(parameter.input)) {
 		case ')': goto gt_success;
 		case ',': {
 			update_last(token::control::type::comma);
+			eat_whitespaces(parameter);
 
 			if (const auto err = expression(parameter)) {
 				return err;

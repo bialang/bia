@@ -19,6 +19,8 @@ inline exception::syntax_details eat_whitespaces(parameter& tp)
 		const auto cp  = tp.encoder.read(tp.input);
 
 		switch (cp) {
+		case '\n':
+		case '\r':
 		case ' ':
 		case '\t': {
 			eaten = true;

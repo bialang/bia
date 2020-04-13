@@ -2,6 +2,7 @@
 
 #include "tokenizer/token/bundle.hpp"
 #include "tokenizer/token/parse/statement.hpp"
+#include "tokenizer/token/parse/whitespace_eater.hpp"
 
 #include <exception/syntax_error.hpp>
 
@@ -19,10 +20,14 @@ void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& e
 	token::parameter parameter{ input, _manager, encoder, bundle };
 
 	while (!(input.peek(), input.eof())) {
+		token::parse::eat_whitespaces(parameter);
+
 		// match single statements
-		if (auto err = token::parse::single_stmt(parameter)) {
+		if (const auto err = token::parse::single_stmt(parameter)) {
 			BIA_THROW(exception::syntax_error, "syntax error", err);
 		}
+
+		token::parse::eat_whitespaces(parameter);
 
 		const auto pos = input.tellg();
 
