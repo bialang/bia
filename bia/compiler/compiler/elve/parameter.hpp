@@ -31,21 +31,25 @@ inline std::pair<util::not_null<const tokenizer::token::token*>, std::uint8_t>
 
 	BIA_EXPECTS(static_cast<token::type>(first->value.index()) == token::type::control);
 
-	auto a             = begin;
-	auto b             = begin + a->value.get<token::control>().value;
 	std::uint8_t count = 0;
+	auto a             = begin + begin->value.get<token::control>().value;
+	auto b             = a;
 
-	for (auto a = begin, b = begin + a->value.get<token::control>().value; b - a > 1;
-	     b = a, a = begin + a->value.get<token::control>().value) {
-		// limit is 254
-		if (++count == std::numeric_limits<std::uint8_t>::max()) {
+	while (true) {
+		b = a;
+		a = begin + a->value.get<token::control>().value;
+
+		if (b - a <= 1) {
+			break;
+		} // limit is 254
+		else if (++count == std::numeric_limits<std::uint8_t>::max()) {
 			throw;
 		}
 
 		expression(present, a + 1, b, bytecode::member::tos{});
 	}
 
-	return { b + 1, count };
+	return { a + 1, count };
 }
 
 } // namespace elve
