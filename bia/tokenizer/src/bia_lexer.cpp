@@ -17,18 +17,26 @@ void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& e
 {
 	token::bundle bundle;
 	token::parameter parameter{ input, _manager, encoder, bundle };
-	auto state = parameter.backup();
 
-	// match single statements
-	if (auto err = token::parse::single_stmt(parameter)) {
-		BIA_THROW(exception::syntax_error, "syntax error", err);
+	while (!(input.peek(), input.eof())) {
+		// match single statements
+		if (auto err = token::parse::single_stmt(parameter)) {
+			BIA_THROW(exception::syntax_error, "syntax error", err);
+		}
+
+		const auto pos = input.tellg();
+
+		if (encoder.read(input) != ';') {
+			input.seekg(pos);
+		}
+
+		// add cmd_end token; make sure its a token
+		bundle.add(token::token{ token::token::cmd_end{} });
+
+		// give to receiver
+		receiver.receive(bundle.begin(), bundle.end());
+		bundle.clear();
 	}
-
-	// add cmd_end token; make sure its a token
-	bundle.add(token::token{ token::token::cmd_end{} });
-
-	// give to receiver
-	receiver.receive(bundle.begin(), bundle.end());
 }
 
 } // namespace tokenizer
