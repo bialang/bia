@@ -78,12 +78,16 @@ inline exception::syntax_details expression(parameter& parameter)
 	}
 
 	// end of expression
+	const auto old = parameter.backup();
+
 	if (auto err = operators(parameter)) {
+		parameter.restore(old);
+
 		return {};
 	}
 
 	if (auto err = term(parameter)) {
-		return {};
+		return err;
 	}
 
 	return {};
