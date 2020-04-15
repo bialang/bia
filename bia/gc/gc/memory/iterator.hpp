@@ -36,34 +36,36 @@ public:
 		_offset    = offset;
 	}
 	iterator(const iterator& copy) = default;
-	int compare(const iterator& other) const noexcept
+	int compare(const iterator& other) const
 	{
+		BIA_EXPECTS(_pages == other._pages);
+
 		const auto left  = _index * _page_size + _offset;
 		const auto right = other._index * other._page_size + other._offset;
 
 		return left < right ? -1 : (left > right ? 1 : 0);
 	}
-	bool operator==(const iterator& other) const noexcept
+	bool operator==(const iterator& other) const
 	{
 		return compare(other) == 0;
 	}
-	bool operator!=(const iterator& other) const noexcept
+	bool operator!=(const iterator& other) const
 	{
 		return compare(other) != 0;
 	}
-	bool operator<(const iterator& other) const noexcept
+	bool operator<(const iterator& other) const
 	{
 		return compare(other) < 0;
 	}
-	bool operator>(const iterator& other) const noexcept
+	bool operator>(const iterator& other) const
 	{
 		return compare(other) > 0;
 	}
-	bool operator<=(const iterator& other) const noexcept
+	bool operator<=(const iterator& other) const
 	{
 		return compare(other) <= 0;
 	}
-	bool operator>=(const iterator& other) const noexcept
+	bool operator>=(const iterator& other) const
 	{
 		return compare(other) >= 0;
 	}
