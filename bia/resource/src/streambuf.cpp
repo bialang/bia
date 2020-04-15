@@ -40,34 +40,25 @@ view streambuf::finish(type type)
 
 	if (pptr()) {
 		// write type and size
-		size_width sw = size_width::_8;
-		auto width    = 1;
-
-		if (size > std::numeric_limits<std::uint16_t>::max()) {
-			sw    = size_width::_32;
-			width = 4;
-		} else if (size > std::numeric_limits<std::uint8_t>::max()) {
-			sw    = size_width::_16;
-			width = 2;
-		}
-
+		const auto sw = size_width_of(size);
+		
 		// write size
 		char_type buffer[4]{};
 
-		switch (sw) {
+		switch (sw.first) {
 		case size_width::_8: util::portable::write(buffer, static_cast<std::uint8_t>(size)); break;
 		case size_width::_16: util::portable::write(buffer, static_cast<std::uint16_t>(size)); break;
 		case size_width::_32: util::portable::write(buffer, static_cast<std::uint32_t>(size)); break;
 		default: BIA_IMPLEMENTATION_ERROR("missing size_width case");
 		}
 
-		xsputn(buffer, width);
+		xsputn(buffer, sw.second);
 
 		// write info
-		sputc(static_cast<char_type>((static_cast<int>(type) << size_width_bits) | static_cast<int>(sw)));
-
+		sputc(info_to(type, sw.first));
+		
 		// finalize
-		_manager->_space.truncate(end + 1 + width);
+		_manager->_space.truncate(end + 1 + sw.second);
 	}
 
 	return { type, size, _manager->_space.cursor(_initial_size), _manager->_space.cursor(end) };
