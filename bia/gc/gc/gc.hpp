@@ -10,6 +10,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <thread/lock/guard.hpp>
 #include <thread/lock/spin_mutex.hpp>
 #include <type_traits>
 #include <util/gsl.hpp>
@@ -42,9 +43,11 @@ public:
 	 */
 	~gc();
 	/**
+	 * Locks the garbage collector, ensuring that no other thread starts to garbage collect.
 	 *
+	 * @returns the lock guard
 	 */
-	void thread_main();
+	thread::lock::guard<thread::lock::spin_mutex> lock();
 	/**
 	 * Blocks the current thread and runs the garbage collector. If an instance is already running, this
 	 * function returns.

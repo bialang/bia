@@ -27,6 +27,11 @@ gc::~gc()
 	// todo: free everything else
 }
 
+thread::lock::guard<thread::lock::spin_mutex> gc::lock()
+{
+	return { _mutex };
+}
+
 bool gc::run_once()
 {
 	BIA_LOG(INFO, "gc cycle requested");
