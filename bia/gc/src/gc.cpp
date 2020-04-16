@@ -1,14 +1,12 @@
 #include "gc/gc.hpp"
 
-#include "gc/token.hpp"
 #include "gc/gcable.hpp"
-#include "gc/stack.hpp"
+#include "gc/token.hpp"
 
 #include <cstring>
 #include <log/log.hpp>
 #include <thread/lock/unique_lock.hpp>
 #include <thread/thread.hpp>
-
 
 using namespace bia::gc;
 
@@ -53,13 +51,8 @@ bool gc::run_once()
 	BIA_LOG(DEBUG, "traversing all registered roots");
 
 	// go through all roots and mark the objects
-	for (auto& i : roots_token) {
-		for (auto& j : i) {
-			// mark
-			if (const auto ptr = j.get()) {
-				object::base::gc_mark(ptr, _current_mark);
-			}
-		}
+	for (auto i : roots_token) {
+		object::base::gc_mark(i, _current_mark);
 	}
 
 	// can only miss objects in multi thread environment
@@ -98,13 +91,9 @@ bool gc::run_once()
 	return true;
 }
 
-token gc::register_thread(std::size_t count)
+std::unique_ptr<token> gc::register_thread(std::size_t stack_size)
 {
-	BIA_EXPECTS(!_active_gc_instance);
-
-	_active_gc_instance = this;
-
-	return { this, count };
+	return std::unique_ptr<token>{ new token{ this, stack_size } };
 }
 
 gcable<void> gc::allocate(std::size_t size, bool zero)
@@ -153,32 +142,4 @@ void gc::_free(util::not_null<void*> ptr)
 void gc::_register_gcable(util::not_null<void*> ptr)
 {
 	_allocated.add(static_cast<object::header*>(ptr.get()) - 1);
-}
-
-stack gc::_create_stack(std::size_t count)
-{
-	auto buffer = static_cast<stack::element_type*>(
-	    _allocator->checked_allocate(count * sizeof(stack::element_type)).get());
-
-	// initialize all elements
-	for (auto i = buffer, c = buffer + count; i < c; ++i) {
-		new (i) stack::element_type{ nullptr };
-	}
-
-	stack s{ buffer, count };
-
-	_roots.add(s);
-
-	return s;
-}
-
-void gc::_destroy_stack(stack stack)
-{
-	_roots.remove(stack);
-
-	for (auto& i : stack) {
-		i.~pointer();
-	}
-
-	_allocator->deallocate(stack.data());
 }

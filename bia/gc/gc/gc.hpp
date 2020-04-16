@@ -5,7 +5,6 @@
 #include "memory/allocator.hpp"
 #include "object/base.hpp"
 #include "object/header.hpp"
-#include "stack.hpp"
 
 #include <atomic>
 #include <cstddef>
@@ -21,10 +20,8 @@ namespace gc {
 
 template<typename>
 class gcable;
-
-class stack;
-
 class token;
+class root;
 
 /*
  A garbage collector highly optimized for the BVM. Using this collector for custom task is not recommended.
@@ -60,10 +57,10 @@ public:
 	 *
 	 * @pre no active gc in the current thread
 	 *
-	 * @param count how much space the root should have
+	 * @param stack_size how much space the root should have
 	 * @returns a token which deregisteres this thread upon destruction
 	 */
-	token register_thread(std::size_t count);
+	std::unique_ptr<token> register_thread(std::size_t stack_size);
 	/**
 	 * Allocates gc monitorable memory. In order for this memory to be monitored by the garbage collector
 	 * gcable::start_monitor() must be called.
@@ -106,9 +103,10 @@ public:
 	static gc* active_gc() noexcept;
 
 private:
-	friend token;
 	template<typename T>
 	friend class gcable;
+	friend token;
+	friend root;
 
 	/** the currently active instance */
 	static thread_local gc* _active_gc_instance;
@@ -124,7 +122,7 @@ private:
 	/** holds every allocated element */
 	detail::container<object::header*> _allocated;
 	/** holds every created root */
-	detail::container<stack> _roots;
+	detail::container<object::base*> _roots;
 
 	/**
 	 * Allocates gc monitorable memory.
@@ -150,8 +148,6 @@ private:
 	 * @param ptr the gcable pointer
 	 */
 	void _register_gcable(util::not_null<void*> ptr);
-	stack _create_stack(std::size_t count);
-	void _destroy_stack(stack stack);
 };
 
 } // namespace gc
