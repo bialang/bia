@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <gc/gcable.hpp>
 #include <gc/object/base.hpp>
-#include <gc/stack.hpp>
+#include <gc/stack_view.hpp>
 
 namespace bia {
 namespace member {
@@ -26,7 +26,7 @@ public:
 	 */
 	enum flag : flag_type
 	{
-		flag_none = 0,
+		flag_none          = 0,
 		flag_clone_is_copy = 0x1
 	};
 
@@ -45,18 +45,18 @@ public:
 	virtual test_type test() const = 0;
 	/**
 	 * Creates a new copy of this member.
-	 * 
+	 *
 	 * @returns a fresh copy of this member
-	*/
+	 */
 	virtual gc::gcable<member> copy() const = 0;
 	/**
 	 * Invokes this member.
-	 * 
+	 *
 	 * @param stack the parameter stack
 	 * @param count the count of parameters
 	 * @returns the result of the function call
 	 */
-	virtual gc::gcable<member> invoke(gc::stack stack, parameter_count_type count) = 0;
+	virtual gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) = 0;
 };
 
 } // namespace member

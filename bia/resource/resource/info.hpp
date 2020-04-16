@@ -2,6 +2,7 @@
 #define BIA_RESOURCE_INFO_HPP_
 
 #include <cstddef>
+#include <cstdint>
 #include <limits>
 #include <util/limit_checker.hpp>
 #include <utility>

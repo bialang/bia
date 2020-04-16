@@ -40,7 +40,7 @@ public:
 	{
 		return gc::gc::active_gc()->construct<int_member>(_value).to<member>();
 	}
-	gc::gcable<member> invoke(gc::stack stack, parameter_count_type count) override
+	gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) override
 	{
 		printf("calling int member (value=%ld) with %d parameter\n", _value, (int) count);
 

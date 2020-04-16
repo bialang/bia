@@ -30,7 +30,7 @@ arg_options = {
 opcodes = [
     ("oc_instantiate", ("co", "mdo"), """const auto constant = {0};
 
-token.set({1}, creator::create(constant).to<bia::member::member>());
+token->set({1}, creator::create(constant).to<bia::member::member>());
 
 break;"""),
 
@@ -38,30 +38,30 @@ break;"""),
 auto result = member_pointer({0})->invoke(stack.frame(parameter_count), parameter_count);
 
 stack.drop(parameter_count);
-token.set({1}, std::move(result));
+token->set({1}, std::move(result));
 
 break;"""),
 
 
     ("oc_refer", ("mso", "mdo"), """auto& src = {0};
 
-token.set({1}, src);
+token->set({1}, src);
 
 break;"""),
 
     ("oc_clone", ("mso", "mdo"), """const auto src = member_pointer({0});
 
 if (src->flags() & flag::flag_clone_is_copy) {{
-    token.set({1}, src->copy());
+    token->set({1}, src->copy());
 }} else {{
-    token.set({1}, src);
+    token->set({1}, src);
 }}
 
 break;"""),
 
     ("oc_copy", ("mso", "mdo"),  """const auto src = member_pointer({0});
 
-token.set({1}, src->copy());
+token->set({1}, src->copy());
 
 break;"""),
 
