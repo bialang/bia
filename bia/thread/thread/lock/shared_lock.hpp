@@ -1,7 +1,7 @@
 #ifndef BIA_THREAD_LOCK_SHARED_LOCK_HPP_
 #define BIA_THREAD_LOCK_SHARED_LOCK_HPP_
 
-#include "lock_behavior.hpp"
+#include "behavior.hpp"
 
 namespace bia {
 namespace thread {

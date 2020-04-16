@@ -2,7 +2,7 @@
 #define BIA_THREAD_LOCK_UNIQUE_LOCK_HPP_
 
 #include "../config.hpp"
-#include "lock_behavior.hpp"
+#include "behavior.hpp"
 
 #if BIA_THREAD_BACKEND_STD
 #	include <mutex>
