@@ -27,7 +27,7 @@ gc::~gc()
 	// todo: free everything else
 }
 
-thread::lock::guard<thread::lock::spin_mutex> gc::lock()
+bia::thread::lock::guard<bia::thread::lock::spin_mutex> gc::lock()
 {
 	return { _mutex };
 }

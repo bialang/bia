@@ -4,6 +4,7 @@
 #include <gc/gc.hpp>
 #include <gc/memory/simple_allocator.hpp>
 #include <iostream>
+#include <resource/deserialize.hpp>
 #include <sstream>
 #include <tokenizer/bia_lexer.hpp>
 #include <util/finally.hpp>
@@ -13,8 +14,9 @@ int main()
 	auto allocator = std::make_shared<bia::gc::memory::simple_allocator>();
 	bia::tokenizer::bia_lexer lexer{ allocator };
 	std::stringstream output;
+	std::stringstream resources;
 	std::stringstream code;
-	bia::compiler::compiler compiler{ output };
+	bia::compiler::compiler compiler{ output, resources };
 	auto encoder = bia::string::encoding::encoder::get_instance(
 	    bia::string::encoding::encoder::standard_encoding::utf_8);
 	const auto finally =
@@ -22,7 +24,7 @@ int main()
 
 	code << u8R"(
 		
-let print = 65
+let print = "super"
 
 print(99, 5)
 
@@ -56,6 +58,7 @@ print(99, 5)
 	bia::bvm::context context{ gc };
 	const auto bytecode = output.str();
 
-	bia::bvm::bvm::execute(context, reinterpret_cast<const bia::util::byte*>(&bytecode[0]),
-	                       reinterpret_cast<const bia::util::byte*>(&bytecode[0] + bytecode.size()));
+	bia::bvm::bvm::execute(context,
+	                       { reinterpret_cast<const bia::util::byte*>(&bytecode[0]), bytecode.size() },
+	                       *bia::resource::deserialize(resources, *gc));
 }

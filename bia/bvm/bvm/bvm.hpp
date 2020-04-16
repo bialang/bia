@@ -3,6 +3,7 @@
 
 #include "context.hpp"
 
+#include <gc/root.hpp>
 #include <util/gsl.hpp>
 
 namespace bia {
@@ -11,7 +12,7 @@ namespace bvm {
 class bvm
 {
 public:
-	static void execute(context& context, const util::byte* first, const util::byte* last);
+	static void execute(context& context, util::span<const util::byte> instructions, gc::root& resources);
 };
 
 } // namespace bvm

@@ -42,6 +42,11 @@ public:
 		set(dest, src.get());
 	}
 	template<typename T>
+	void set(object::pointer<T>& dest, const object::immutable_pointer<T>& src) noexcept
+	{
+		set(dest, src.get());
+	}
+	template<typename T>
 	void set(object::pointer<T>& dest, gcable<T>&& src)
 	{
 		set(dest, src.peek());

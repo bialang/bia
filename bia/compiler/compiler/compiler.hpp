@@ -6,6 +6,7 @@
 #include <bytecode/writer/instruction.hpp>
 #include <ostream>
 #include <tokenizer/token/receiver.hpp>
+#include <resource/serializer.hpp>
 #include <util/variant.hpp>
 #include <utility>
 
@@ -17,12 +18,13 @@ class compiler : public tokenizer::token::receiver
 public:
 	using token = tokenizer::token::token;
 
-	compiler(std::ostream& output) noexcept;
+	compiler(std::ostream& instructions, std::ostream& resource) noexcept;
 	void finish();
 	void receive(util::not_null<const token*> first, util::not_null<const token*> last) override;
 
 private:
 	bytecode::writer::instruction _writer;
+	resource::serializer _resources;
 	variable_manager _variables;
 
 	const token* _decl(const token* first, const token* last);

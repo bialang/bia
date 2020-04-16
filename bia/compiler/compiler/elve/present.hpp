@@ -4,6 +4,7 @@
 #include "../variable_manager.hpp"
 
 #include <bytecode/writer/instruction.hpp>
+#include <resource/serializer.hpp>
 
 namespace bia {
 namespace compiler {
@@ -13,6 +14,7 @@ struct present
 {
 	variable_manager& variable_manager;
 	bytecode::writer::instruction& writer;
+	resource::serializer& resources;
 };
 
 } // namespace elve

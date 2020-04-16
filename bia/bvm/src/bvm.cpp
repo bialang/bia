@@ -5,14 +5,20 @@
 #include <bytecode/op_code.hpp>
 #include <creator/creator.hpp>
 #include <gc/gcable.hpp>
-#include <gc/stack.hpp>
+#include <gc/stack_view.hpp>
 #include <gc/token.hpp>
 #include <member/member.hpp>
+#include <type_traits>
 #include <util/finally.hpp>
 
 using namespace bia::bvm;
 
-inline bia::member::member* member_pointer(bia::gc::stack::element_type& element)
+template<typename Pointer>
+inline typename std::enable_if<
+    std::is_same<bia::gc::object::pointer<bia::member::member>, Pointer>::value ||
+        std::is_same<const bia::gc::object::immutable_pointer<bia::member::member>, Pointer>::value,
+    bia::member::member*>::type
+    member_pointer(Pointer& element)
 {
 	if (const auto ptr = element.get()) {
 		return static_cast<bia::member::member*>(ptr);
@@ -21,16 +27,16 @@ inline bia::member::member* member_pointer(bia::gc::stack::element_type& element
 	throw;
 }
 
-void bvm::execute(context& context, const bia::util::byte* first, const bia::util::byte* last)
+void bvm::execute(context& context, util::span<const util::byte> instructions, gc::root& resources)
 {
 	using namespace bytecode;
 	using flag = bia::member::member::flag;
 
-	instruction_pointer ip{ first, last };
+	instruction_pointer ip{ instructions.begin(), instructions.end() };
 	bia::member::member::test_type test_register{ 10 };
-	auto& gc           = context.gc();
-	auto token         = gc.register_thread(64);
-	auto& stack        = token.stack();
+	auto& gc   = context.gc();
+	auto token = gc.register_thread(64);
+	auto stack = token->stack_view();
 
 	while (ip) {
 		const auto op_code = ip.next_op_code();

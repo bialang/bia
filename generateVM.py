@@ -8,10 +8,10 @@ arg_options = {
         ("args", "stack.arg_at(ip.read<std::uint8_t>())"),
         ("global_16", "stack.local_at(ip.read<std::uint16_t>())"),
         ("local_16", "stack.local_at(ip.read<std::uint16_t>())"),
-        ("resource_16", "stack.local_at(ip.read<std::uint16_t>())"),
+        ("resource_16", "resources.at(ip.read<std::uint16_t>())"),
         ("global_8", "stack.local_at(ip.read<std::uint8_t>())"),
         ("local_8", "stack.local_at(ip.read<std::uint8_t>())"),
-        ("resource_8", "stack.local_at(ip.read<std::uint8_t>())")
+        ("resource_8", "resources.at(ip.read<std::uint8_t>())")
     ],
     "mdo": [
         ("tos", "stack.push()"),

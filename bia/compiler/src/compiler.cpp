@@ -7,7 +7,8 @@
 
 using namespace bia::compiler;
 
-compiler::compiler(std::ostream& output) noexcept : _writer(output)
+compiler::compiler(std::ostream& instructions, std::ostream& resource) noexcept
+    : _writer{ instructions }, _resources{ resource }
 {
 	// open the script scope
 	_variables.open_scope();
@@ -16,6 +17,7 @@ compiler::compiler(std::ostream& output) noexcept : _writer(output)
 void compiler::finish()
 {
 	_writer.finish();
+	_resources.finish();
 }
 
 void compiler::receive(util::not_null<const token*> first, util::not_null<const token*> last)
@@ -36,7 +38,7 @@ void compiler::receive(util::not_null<const token*> first, util::not_null<const 
 		}
 		default:
 			// todo: remove destination
-			i = elve::expression({ _variables, _writer }, i, c, bytecode::member::tos{});
+			i = elve::expression({ _variables, _writer, _resources }, i, c, bytecode::member::tos{});
 			break;
 		}
 
@@ -52,10 +54,11 @@ const compiler::token* compiler::_decl(const token* first, const token* last)
 
 	// push onto stack
 	if (variable.second == _variables.latest_variable()) {
-		return elve::expression({ _variables, _writer }, first + 2, last, bytecode::member::tos{});
+		return elve::expression({ _variables, _writer, _resources }, first + 2, last,
+		                        bytecode::member::tos{});
 	}
 
 	// overwrite existing; todo: remove cast
-	return elve::expression({ _variables, _writer }, first + 2, last,
+	return elve::expression({ _variables, _writer, _resources }, first + 2, last,
 	                        bytecode::member::local{ (std::uint16_t) variable.second });
 }
