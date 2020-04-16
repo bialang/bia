@@ -8,7 +8,6 @@
 #include <gc/stack.hpp>
 #include <gc/token.hpp>
 #include <member/member.hpp>
-#include <member/native/int_member.hpp>
 #include <util/finally.hpp>
 
 using namespace bia::bvm;
