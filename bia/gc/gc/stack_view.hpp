@@ -1,5 +1,5 @@
-#ifndef BIA_GC_STACK_HPP_
-#define BIA_GC_STACK_HPP_
+#ifndef BIA_GC_STACK_VIEW_HPP_
+#define BIA_GC_STACK_VIEW_HPP_
 
 #include "object/base.hpp"
 #include "object/pointer.hpp"
@@ -16,12 +16,12 @@ class member;
 } // namespace member
 namespace gc {
 
-class stack
+class stack_view
 {
 public:
 	typedef object::pointer<member::member> element_type;
 
-	stack(element_type* data, std::size_t size) noexcept
+	stack_view(element_type* data, std::size_t size) noexcept
 	{
 		_data     = data;
 		_max_size = size;
@@ -94,18 +94,18 @@ public:
 	{
 		return _data + _max_size;
 	}
-	stack frame(std::size_t offset) const
+	stack_view frame(std::size_t offset) const
 	{
 		BIA_EXPECTS(offset <= _cursor);
 
-		stack s{ _data + _cursor - offset, _max_size - _cursor + offset };
+		stack_view s{ _data + _cursor - offset, _max_size - _cursor + offset };
 
 		s._cursor = offset;
 		s._args   = offset;
 
 		return s;
 	}
-	bool operator==(const stack& other) const noexcept
+	bool operator==(const stack_view& other) const noexcept
 	{
 		return _data == other._data;
 	}
@@ -123,14 +123,14 @@ private:
 } // namespace bia
 
 template<>
-struct std::hash<bia::gc::stack> : private hash<bia::gc::stack::element_type*>
+struct std::hash<bia::gc::stack_view> : private hash<bia::gc::stack_view::element_type*>
 {
-	typedef bia::gc::stack argument_type;
+	typedef bia::gc::stack_view argument_type;
 	typedef result_type result_type;
 
 	result_type operator()(const argument_type& s) const noexcept
 	{
-		return hash<bia::gc::stack::element_type*>::operator()(s.data());
+		return hash<bia::gc::stack_view::element_type*>::operator()(s.data());
 	}
 };
 
