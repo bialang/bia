@@ -42,6 +42,9 @@ view streambuf::finish(type type)
 		// write type and size
 		const auto sw = size_width_of(size);
 		
+		// write info
+		sputc(info_to(type, sw.first));
+		
 		// write size
 		char_type buffer[4]{};
 
@@ -53,9 +56,6 @@ view streambuf::finish(type type)
 		}
 
 		xsputn(buffer, sw.second);
-
-		// write info
-		sputc(info_to(type, sw.first));
 		
 		// finalize
 		_manager->_space.truncate(end + 1 + sw.second);
