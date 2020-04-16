@@ -1,0 +1,49 @@
+#include "resource/serializer.hpp"
+
+#include <util/portable/stream.hpp>
+
+using namespace bia::resource;
+
+serializer::serializer(std::ostream& output) noexcept : _output{ output }, _start{ output.tellp() }
+{
+	util::portable::write(output, size_type{ 0 });
+}
+
+void serializer::finish()
+{
+	const auto current = _output.tellp();
+
+	_output.seekp(_start);
+	util::portable::write(_output, _index);
+	_output.seekp(current);
+}
+
+serializer::size_type serializer::index_of(view view)
+{
+	// alreay added
+	const auto it = _map.find(view);
+
+	if (it != _map.end()) {
+		return it->second;
+	}
+
+	// copy info
+	auto i = view.last;
+
+	for (auto k = 0, c = size_width_of(view.size).second + 1; k < c; ++k, ++i) {
+		const auto tmp = *i;
+
+		_output.put(*reinterpret_cast<const char*>(&tmp));
+	}
+
+	// copy data
+	for (i = view.first; i != view.last; ++i) {
+		const auto tmp = *i;
+
+		_output.put(*reinterpret_cast<const char*>(&tmp));
+	}
+
+	_map.insert({ std::move(view), _index });
+
+	return _index++;
+}
