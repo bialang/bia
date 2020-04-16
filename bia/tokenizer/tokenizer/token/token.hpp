@@ -21,6 +21,11 @@ struct token
 		resource::view memory;
 	};
 
+	struct string
+	{
+		resource::view memory;
+	};
+
 	struct control
 	{
 		enum class type
@@ -58,11 +63,12 @@ struct token
 		control,
 		keyword,
 		operator_,
+		constant_string,
 		constant_int,
 		constant_float,
 	};
 
-	util::variant<cmd_end, identifier, control, keyword, operator_, int_type, double> value;
+	util::variant<cmd_end, identifier, control, keyword, operator_, string, int_type, double> value;
 };
 
 } // namespace token

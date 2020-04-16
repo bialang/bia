@@ -39,6 +39,15 @@ inline util::not_null<const tokenizer::token::token*>
 		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
 		}
 	}
+	case token::type::constant_string: {
+		// todo
+		bytecode::member::resource src{ (std::uint16_t) present.resources.index_of(
+			first->value.get<token::string>().memory) };
+
+		present.writer.write<true, bytecode::oc_refer>(src, std::forward<T>(destination));
+
+		return first + 1;
+	}
 	case token::type::constant_int: {
 		present.writer.write<true, bytecode::oc_instantiate>(first->value.get<token::int_type>(),
 		                                                     std::forward<T>(destination));
