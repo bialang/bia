@@ -37,20 +37,18 @@ private:
 };
 
 template<typename T>
-class pointer<const T>
+class immutable_pointer
 {
 public:
-	pointer(const T* ptr) noexcept
-	{
-		_ptr = ptr;
-	}
-	const T* get() noexcept
+	immutable_pointer(T* ptr) noexcept : _ptr{ ptr }
+	{}
+	T* get() const noexcept
 	{
 		return _ptr;
 	}
 
 private:
-	const T* _ptr;
+	T* const _ptr;
 };
 
 } // namespace object
