@@ -10,6 +10,8 @@
 #include <member/member.hpp>
 #include <type_traits>
 #include <util/finally.hpp>
+#include <exception/nullpointer.hpp>
+#include <connector/connector-inl.hpp>
 
 using namespace bia::bvm;
 
@@ -24,19 +26,38 @@ inline typename std::enable_if<
 		return static_cast<bia::member::member*>(ptr);
 	}
 
-	throw;
+	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
+}
+
+bia::member::member* member_pointer(bia::member::member* element)
+{
+	if (element) {
+		return element;
+	}
+
+	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
+}
+
+inline bia::member::native::string*
+    string_pointer(bia::gc::object::immutable_pointer<bia::member::member> element)
+{
+	if (const auto ptr = dynamic_cast<bia::member::native::string*>(element.get())) {
+		return ptr;
+	}
+
+	BIA_THROW(bia::exception::nullpointer, "nullpointer string access");
 }
 
 void bvm::execute(context& context, util::span<const util::byte> instructions, gc::root& resources)
 {
 	using namespace bytecode;
 	using flag = bia::member::member::flag;
-
 	instruction_pointer ip{ instructions.begin(), instructions.end() };
 	bia::member::member::test_type test_register{ 10 };
-	auto& gc   = context.gc();
-	auto token = gc.register_thread(64);
-	auto stack = token->stack_view();
+	auto& gc      = context.gc();
+	auto& globals = context.symbols();
+	auto token    = gc.register_thread(64);
+	auto stack    = token->stack_view();
 
 	while (ip) {
 		const auto op_code = ip.next_op_code();
