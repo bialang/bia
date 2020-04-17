@@ -90,7 +90,7 @@ public:
 	{
 		_forward_end(
 		    util::type_traits::template int_filler<
-		        op_code, (max_instruction_size / sizeof(op_code) + sizeof(op_code)), oc_return_void>::values);
+		        op_code, (max_instruction_size / sizeof(op_code) + sizeof(op_code)), oc_return_void>::value);
 	}
 
 private:

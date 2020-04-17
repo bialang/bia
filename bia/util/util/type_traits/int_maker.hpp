@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_UTIL_TYPE_TRAITS_INT_MAKER_HPP_
+#define BIA_UTIL_TYPE_TRAITS_INT_MAKER_HPP_
 
 #include <cstdint>
 
@@ -26,7 +27,7 @@ struct int_filler<T, Count, Value> : int_filler<T, Count - 1, Value, Value>
 template<typename T, T Value, T... Ints>
 struct int_filler<T, 0, Value, Ints...>
 {
-	constexpr static int_container<T, Ints...> values{};
+	constexpr static int_container<T, Ints...> value{};
 };
 
 template<typename T, T Counter, T Stop, T... Ints>
@@ -45,7 +46,7 @@ template<typename T, T Stop>
 struct int_sequencer<T, Stop, Stop>
 {
 	constexpr static auto count = 0;
-	constexpr static int_container<T> values{};
+	constexpr static int_container<T> value{};
 	typedef T int_type;
 };
 
@@ -53,9 +54,11 @@ struct int_sequencer<T, Stop, Stop>
 template<typename T, T Stop, T... Ints>
 struct int_sequencer<T, Stop, Stop, Ints...>
 {
-	constexpr static int_container<T, Ints...> values{};
+	constexpr static int_container<T, Ints...> value{};
 };
 
 } // namespace type_traits
 } // namespace util
 } // namespace bia
+
+#endif
