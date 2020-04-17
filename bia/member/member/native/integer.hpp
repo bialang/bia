@@ -38,7 +38,7 @@ public:
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<integer>(_value).to<member>();
+		return gc::gc::active_gc()->construct<integer>(_value).template to<member>();
 	}
 	gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) override
 	{
@@ -48,7 +48,11 @@ public:
 			printf("%d parameter: %ld\n", i, static_cast<integer*>(stack.arg_at(i).get())->_value);
 		}
 
-		return gc::gc::active_gc()->construct<integer>(616161).to<member>();
+		return gc::gc::active_gc()->construct<integer>(616161).template to<member>();
+	}
+	member* get(const native::string& name) override
+	{
+		return nullptr;
 	}
 
 protected:

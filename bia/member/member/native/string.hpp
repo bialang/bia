@@ -35,11 +35,19 @@ public:
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<string>(_value).to<member>();
+		return gc::gc::active_gc()->construct<string>(_value).template to<member>();
 	}
 	gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) override
 	{
 		return copy();
+	}
+	member* get(const native::string& name) override
+	{
+		return nullptr;
+	}
+	int compare(const string& other) const noexcept
+	{
+		return std::strcmp(_value.get(), other._value.get());
 	}
 
 protected:
