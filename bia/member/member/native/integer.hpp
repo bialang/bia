@@ -1,9 +1,9 @@
 #ifndef BIA_MEMBER_NATIVE_INTEGER_HPP_
 #define BIA_MEMBER_NATIVE_INTEGER_HPP_
 
+#include "../member.hpp"
 #include <cstdint>
 #include <gc/gc.hpp>
-#include <member/member.hpp>
 
 namespace bia {
 namespace member {

@@ -1,10 +1,11 @@
 #ifndef BIA_MEMBER_NATIVE_STRING_HPP_
 #define BIA_MEMBER_NATIVE_STRING_HPP_
 
-#include <cstdint>
+#include "../member.hpp"
+
 #include <gc/gc.hpp>
 #include <gc/object/pointer.hpp>
-#include <member/member.hpp>
+#include <cstring>
 
 namespace bia {
 namespace member {

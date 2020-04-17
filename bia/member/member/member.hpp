@@ -1,5 +1,5 @@
-#ifndef BIA_MEMBER_INTERFACE_MEMBER_HPP_
-#define BIA_MEMBER_INTERFACE_MEMBER_HPP_
+#ifndef BIA_MEMBER_MEMBER_HPP_
+#define BIA_MEMBER_MEMBER_HPP_
 
 #include <cstdint>
 #include <gc/gcable.hpp>
@@ -8,6 +8,11 @@
 
 namespace bia {
 namespace member {
+namespace native {
+
+class string;
+
+} // namespace native
 
 /**
  * The base type for all member types. All members are gc objects and must provide the following functions.
@@ -57,6 +62,7 @@ public:
 	 * @returns the result of the function call
 	 */
 	virtual gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) = 0;
+	virtual member* get(const native::string& name)                                     = 0;
 };
 
 } // namespace member
