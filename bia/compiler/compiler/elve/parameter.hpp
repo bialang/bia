@@ -27,13 +27,13 @@ inline std::pair<util::not_null<const tokenizer::token::token*>, std::uint8_t>
 	using tokenizer::token::token;
 
 	const auto begin = first.get();
-	const auto end   = last.get();
+	const auto end   = begin + begin->value.get<token::control>().value;
 
 	BIA_EXPECTS(static_cast<token::type>(first->value.index()) == token::type::control);
 
 	std::uint8_t count = 0;
-	auto a             = begin + begin->value.get<token::control>().value;
-	auto b             = a;
+	auto a             = end;
+	auto b             = end;
 
 	while (true) {
 		b = a;
@@ -49,7 +49,7 @@ inline std::pair<util::not_null<const tokenizer::token::token*>, std::uint8_t>
 		expression(present, a + 1, b, bytecode::member::tos{});
 	}
 
-	return { a + 1, count };
+	return { end + 1, count };
 }
 
 } // namespace elve
