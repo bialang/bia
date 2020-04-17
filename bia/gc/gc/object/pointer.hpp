@@ -24,6 +24,30 @@ public:
 	{
 		return _ptr.load(std::memory_order_consume);
 	}
+	T& operator*() noexcept
+	{
+		return *get();
+	}
+	const T& operator*() const noexcept
+	{
+		return *get();
+	}
+	T* operator->() noexcept
+	{
+		return _ptr;
+	}
+	const T* operator->() const noexcept
+	{
+		return _ptr;
+	}
+	operator T*() noexcept
+	{
+		return get();
+	}
+	operator const T*() const noexcept
+	{
+		return get();
+	}
 
 private:
 	friend token;
@@ -43,6 +67,14 @@ public:
 	immutable_pointer(T* ptr) noexcept : _ptr{ ptr }
 	{}
 	T* get() const noexcept
+	{
+		return _ptr;
+	}
+	T& operator*() const noexcept
+	{
+		return *_ptr;
+	}
+	T* operator->() const noexcept
 	{
 		return _ptr;
 	}
