@@ -23,7 +23,7 @@ void compiler::finish()
 void compiler::receive(util::not_null<const token*> first, util::not_null<const token*> last)
 {
 	for (auto i = first.get(), c = last.get(); i < c; ++i) {
-		printf("token %zi\n", i->value.index());
+		printf("token %p = %zi\n", i, i->value.index());
 	}
 
 	for (auto i = first.get(), c = last.get(); i < c; ++i) {
@@ -38,7 +38,7 @@ void compiler::receive(util::not_null<const token*> first, util::not_null<const 
 		}
 		default:
 			// todo: remove destination
-			i = elve::expression({ _variables, _writer, _resources }, i, c, bytecode::member::tos{});
+			i = elve::expression(_create_present(), i, c, bytecode::member::tos{});
 			break;
 		}
 
@@ -50,15 +50,23 @@ const compiler::token* compiler::_decl(const token* first, const token* last)
 {
 	BIA_EXPECTS(static_cast<token::type>(first->value.index()) == token::type::keyword);
 
-	const auto variable = _variables.index_of(first[1].value.get<token::identifier>().memory);
+	const auto index = _variables.index_of(first[1].value.get<token::identifier>().memory);
 
-	// push onto stack
-	if (variable.second == _variables.latest_variable()) {
-		return elve::expression({ _variables, _writer, _resources }, first + 2, last,
-		                        bytecode::member::tos{});
+	// overwrite existing variable
+	if (index.second) {
+		// overwriting of other scopes not implemented
+		BIA_EXPECTS(index.first.scope_id == 0);
+
+		return elve::expression(_create_present(), first + 2, last,
+		                        bytecode::member::local{ index.first.id });
 	}
 
-	// overwrite existing; todo: remove cast
-	return elve::expression({ _variables, _writer, _resources }, first + 2, last,
-	                        bytecode::member::local{ (std::uint16_t) variable.second });
+	_variables.add(first[1].value.get<token::identifier>().memory);
+
+	return elve::expression(_create_present(), first + 2, last, bytecode::member::tos{});
+}
+
+elve::present compiler::_create_present() noexcept
+{
+	return { _variables, _writer, _resources };
 }

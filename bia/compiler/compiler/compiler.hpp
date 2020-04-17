@@ -5,13 +5,18 @@
 
 #include <bytecode/writer/instruction.hpp>
 #include <ostream>
-#include <tokenizer/token/receiver.hpp>
 #include <resource/serializer.hpp>
+#include <tokenizer/token/receiver.hpp>
 #include <util/variant.hpp>
 #include <utility>
 
 namespace bia {
 namespace compiler {
+namespace elve {
+
+class present;
+
+}
 
 class compiler : public tokenizer::token::receiver
 {
@@ -28,6 +33,7 @@ private:
 	variable_manager _variables;
 
 	const token* _decl(const token* first, const token* last);
+	elve::present _create_present() noexcept;
 };
 
 } // namespace compiler
