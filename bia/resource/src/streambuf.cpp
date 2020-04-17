@@ -38,28 +38,7 @@ view streambuf::finish(type type)
 		_manager              = nullptr;
 	});
 
-	if (pptr()) {
-		// write type and size
-		const auto sw = size_width_of(size);
-		
-		// write info
-		sputc(info_to(type, sw.first));
-		
-		// write size
-		char_type buffer[4]{};
-
-		switch (sw.first) {
-		case size_width::_8: util::portable::write(buffer, static_cast<std::uint8_t>(size)); break;
-		case size_width::_16: util::portable::write(buffer, static_cast<std::uint16_t>(size)); break;
-		case size_width::_32: util::portable::write(buffer, static_cast<std::uint32_t>(size)); break;
-		default: BIA_IMPLEMENTATION_ERROR("missing size_width case");
-		}
-
-		xsputn(buffer, sw.second);
-		
-		// finalize
-		_manager->_space.truncate(end + 1 + sw.second);
-	}
+	_manager->_space.truncate(end);
 
 	return { type, size, _manager->_space.cursor(_initial_size), _manager->_space.cursor(end) };
 }
