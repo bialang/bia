@@ -1,5 +1,6 @@
 #include "resource/serializer.hpp"
 
+#include <util/portable/memory.hpp>
 #include <util/portable/stream.hpp>
 
 using namespace bia::resource;
@@ -27,23 +28,32 @@ serializer::size_type serializer::index_of(view view)
 		return it->second;
 	}
 
-	// copy info
-	auto i = view.last;
+	// write info
+	const auto sw = size_width_of(view.size);
 
-	for (auto k = 0, c = size_width_of(view.size).second + 1; k < c; ++k, ++i) {
-		const auto tmp = *i;
+	// write info
+	_output.put(info_to(view.type, sw.first));
 
-		_output.put(*reinterpret_cast<const char*>(&tmp));
+	// write size
+	char buffer[4]{};
+
+	switch (sw.first) {
+	case size_width::_8: util::portable::write(buffer, static_cast<std::uint8_t>(view.size)); break;
+	case size_width::_16: util::portable::write(buffer, static_cast<std::uint16_t>(view.size)); break;
+	case size_width::_32: util::portable::write(buffer, static_cast<std::uint32_t>(view.size)); break;
+	default: BIA_IMPLEMENTATION_ERROR("missing size_width case");
 	}
+
+	_output.write(buffer, sw.second);
 
 	// copy data
-	for (i = view.first; i != view.last; ++i) {
+	for (auto i = view.first; i != view.last; ++i) {
 		const auto tmp = *i;
 
 		_output.put(*reinterpret_cast<const char*>(&tmp));
 	}
 
-	_map.insert({ std::move(view), _index });
+	_map.insert({ view, _index });
 
 	return _index++;
 }

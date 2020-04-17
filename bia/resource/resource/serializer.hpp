@@ -13,7 +13,7 @@ namespace resource {
 class serializer
 {
 public:
-	typedef std::uint32_t size_type;
+	typedef std::uint16_t size_type;
 
 	serializer(std::ostream& output) noexcept;
 

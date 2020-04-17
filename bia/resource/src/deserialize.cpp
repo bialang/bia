@@ -1,6 +1,7 @@
 #include "resource/deserialize.hpp"
 
 #include "resource/info.hpp"
+#include "resource/serializer.hpp"
 
 #include <cstdint>
 #include <member/native/string.hpp>
@@ -8,11 +9,11 @@
 
 std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, gc::gc& gc)
 {
-	const auto count = util::portable::read<std::uint32_t>(input);
+	const auto count = util::portable::read<serializer::size_type>(input);
 	const auto lock  = gc.lock();
 	gc::root::builder builder{ &gc, count };
 
-	for (std::uint32_t i = 0; i < count; ++i) {
+	for (serializer::size_type i = 0; i < count; ++i) {
 		const auto info    = info_from(input.get());
 		std::uint32_t size = 0;
 
