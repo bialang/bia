@@ -25,13 +25,13 @@ public:
 
 	~root()
 	{
-		_gc->_roots.remove(this);
+		_gc->deregister_root(this);
 
 		for (auto& i : _data) {
 			i.~immutable_pointer();
 		}
 
-		_gc->_allocator->deallocate(_data.data());
+		_gc->allocator()->deallocate(_data.data());
 	}
 	const element_type& at(std::size_t index) const
 	{
@@ -62,7 +62,7 @@ private:
 	{
 		_gc = gc;
 
-		_gc->_roots.add(this);
+		_gc->register_root(this);
 	}
 };
 
@@ -73,7 +73,7 @@ public:
 	{
 		if ((_gc = gc)) {
 			_cursor = static_cast<element_type*>(
-			    _gc->_allocator->checked_allocate(size * sizeof(element_type)).get());
+			    _gc->allocator()->checked_allocate(size * sizeof(element_type)).get());
 			_data = { _cursor, size };
 		}
 	}
@@ -124,8 +124,6 @@ public:
 	}
 
 private:
-	friend gc;
-
 	gc* _gc               = nullptr;
 	element_type* _cursor = nullptr;
 	util::span<element_type> _data;
@@ -133,7 +131,7 @@ private:
 	void _discard()
 	{
 		if (_gc) {
-			_gc->_allocator->deallocate(_data.data());
+			_gc->allocator()->deallocate(_data.data());
 		}
 	}
 };

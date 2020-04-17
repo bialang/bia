@@ -22,13 +22,12 @@ namespace gc {
 template<typename>
 class gcable;
 class token;
-class root;
 
-/*
- A garbage collector highly optimized for the BVM. Using this collector for custom task is not recommended.
-
- @see memory::allocator
-*/
+/**
+ * A garbage collector highly optimized for the BVM. Using this collector for custom task is not recommended.
+ *
+ * @see memory::allocator
+ */
 class gc
 {
 public:
@@ -48,6 +47,8 @@ public:
 	 * @returns the lock guard
 	 */
 	thread::lock::guard<thread::lock::spin_mutex> lock();
+	void register_root(util::not_null<object::base*> base);
+	void deregister_root(util::not_null<object::base*> base);
 	/**
 	 * Blocks the current thread and runs the garbage collector. If an instance is already running, this
 	 * function returns.
@@ -109,7 +110,6 @@ private:
 	template<typename T>
 	friend class gcable;
 	friend token;
-	friend root;
 
 	/** the currently active instance */
 	static thread_local gc* _active_gc_instance;

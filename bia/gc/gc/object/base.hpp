@@ -9,6 +9,9 @@
 
 namespace bia {
 namespace gc {
+
+class gc;
+
 namespace object {
 
 /**
@@ -52,6 +55,8 @@ public:
 	}
 
 protected:
+	friend gc;
+
 	/**
 	 * Marks all children that were allocated by the gc. This functions should only mark its children and
 	 * nothing more.

@@ -32,6 +32,16 @@ bia::thread::lock::guard<bia::thread::lock::spin_mutex> gc::lock()
 	return { _mutex };
 }
 
+void gc::register_root(util::not_null<object::base*> base)
+{
+	_roots.add(base);
+}
+
+void gc::deregister_root(util::not_null<object::base*> base)
+{
+	_roots.remove(base);
+}
+
 bool gc::run_once()
 {
 	BIA_LOG(INFO, "gc cycle requested");
@@ -55,9 +65,9 @@ bool gc::run_once()
 
 	BIA_LOG(DEBUG, "traversing all registered roots");
 
-	// go through all roots and mark the objects
+	// go through all roots and mark their children objects
 	for (auto i : roots_token) {
-		object::base::gc_mark(i, _current_mark);
+		i->gc_mark_children(_current_mark);
 	}
 
 	// can only miss objects in multi thread environment
