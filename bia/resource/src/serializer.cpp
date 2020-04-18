@@ -1,5 +1,7 @@
 #include "resource/serializer.hpp"
 
+#include <exception/implementation_error.hpp>
+#include <log/log.hpp>
 #include <util/portable/memory.hpp>
 #include <util/portable/stream.hpp>
 
@@ -27,6 +29,8 @@ serializer::size_type serializer::index_of(view view)
 	if (it != _map.end()) {
 		return it->second;
 	}
+
+	BIA_LOG(DEBUG, "serializing new entry with {} bytes", view.size);
 
 	// write info
 	const auto sw = size_width_of(view.size);

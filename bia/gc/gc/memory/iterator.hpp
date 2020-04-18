@@ -3,7 +3,6 @@
 
 #include "std_allocator.hpp"
 
-#include <exception/implementation_error.hpp>
 #include <cstdint>
 #include <iterator>
 #include <memory>
@@ -69,7 +68,7 @@ public:
 	{
 		return compare(other) >= 0;
 	}
-	iterator& operator++()
+	iterator& operator++() noexcept
 	{
 		if (++_offset == _page_size) {
 			_offset = 0;
@@ -79,7 +78,7 @@ public:
 
 		return *this;
 	}
-	iterator operator++(int)
+	iterator operator++(int) noexcept
 	{
 		auto copy = *this;
 
@@ -87,7 +86,7 @@ public:
 
 		return copy;
 	}
-	iterator& operator--()
+	iterator& operator--() noexcept
 	{
 		if (!_offset--) {
 			_offset = _page_size - 1;
@@ -97,7 +96,7 @@ public:
 
 		return *this;
 	}
-	iterator operator--(int)
+	iterator operator--(int) noexcept
 	{
 		auto copy = *this;
 
@@ -105,19 +104,25 @@ public:
 
 		return copy;
 	}
-	iterator& operator+=(difference_type diff)
+	iterator& operator+=(difference_type diff) noexcept
 	{
-		BIA_IMPLEMENTATION_ERROR("not implemented");
+		const auto pos = _index * _page_size + _offset + diff;
+
+		_index  = pos / _page_size;
+		_offset = pos % _page_size;
 
 		return *this;
 	}
-	iterator& operator-=(difference_type diff)
+	iterator& operator-=(difference_type diff) noexcept
 	{
-		BIA_IMPLEMENTATION_ERROR("not implemented");
-		
+		const auto pos = _index * _page_size + _offset - diff;
+
+		_index  = pos / _page_size;
+		_offset = pos % _page_size;
+
 		return *this;
 	}
-	iterator operator+(difference_type diff) const
+	iterator operator+(difference_type diff) const noexcept
 	{
 		auto copy = *this;
 
@@ -125,7 +130,7 @@ public:
 
 		return copy;
 	}
-	iterator operator-(difference_type diff) const
+	iterator operator-(difference_type diff) const noexcept
 	{
 		auto copy = *this;
 
@@ -133,20 +138,22 @@ public:
 
 		return copy;
 	}
-	difference_type operator-(const iterator& other) const
+	difference_type operator-(const iterator& other) const noexcept
 	{
 		return (_index * _page_size + _offset) - (other._index * other._page_size + other._offset);
 	}
-	friend iterator operator+(difference_type diff, const iterator& right)
+	friend iterator operator+(difference_type diff, const iterator& right) noexcept
 	{
 		return right + diff;
 	}
 	iterator& operator=(const iterator& copy) = default;
-	reference operator[](difference_type diff)
+	reference operator[](difference_type diff) const noexcept
 	{
-		return this->operator*();
+		const auto pos = _index * _page_size + _offset + diff;
+
+		return (*_pages)[pos / _page_size][pos % _page_size];
 	}
-	reference operator*() const
+	reference operator*() const noexcept
 	{
 		return (*_pages)[_index][_offset];
 	}
