@@ -47,8 +47,8 @@ serializer::size_type serializer::index_of(view view)
 	_output.write(buffer, sw.second);
 
 	// copy data
-	for (auto i = view.first; i != view.last; ++i) {
-		const auto tmp = *i;
+	for (; view.first != view.last; ++view.first) {
+		const auto tmp = *view.first;
 
 		_output.put(*reinterpret_cast<const char*>(&tmp));
 	}
