@@ -59,6 +59,12 @@ public:
 	}
 	bool as_data(const std::type_info& type, void* output) const override
 	{
+		if (type == typeid(const char*)) {
+			*static_cast<const char**>(output) = _value.get();
+
+			return true;
+		}
+
 		return false;
 	}
 	int compare(const string& other) const noexcept
@@ -73,6 +79,7 @@ protected:
 	}
 
 private:
+	/** the garbage collectible string */
 	gc::object::immutable_pointer<const char> _value;
 };
 

@@ -8,6 +8,7 @@
 #include <map>
 #include <thread/lock/guard.hpp>
 #include <thread/lock/mutex.hpp>
+#include <util/gsl.hpp>
 
 namespace bia {
 namespace member {
@@ -25,6 +26,12 @@ public:
 	{
 		printf("bye im getting destroyed: dict, %p\n", this);
 	}
+	void put(util::not_null<const string*> key, util::not_null<member*> value)
+	{
+		thread::lock::guard<thread::lock::mutex> lock{ _mutex };
+
+		_map.emplace(key.get(), value.get());
+	}
 	flag_type flags() const override
 	{
 		return flag_none;
@@ -32,7 +39,7 @@ public:
 	test_type test() const override
 	{
 		thread::lock::guard<thread::lock::mutex> lock{ _mutex };
-		
+
 		return !_map.empty();
 	}
 	gc::gcable<member> copy() const override

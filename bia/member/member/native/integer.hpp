@@ -66,9 +66,7 @@ public:
 	}
 	bool as_data(const std::type_info& type, void* output) const override
 	{
-		const auto hash = type.hash_code();
-
-		if (hash == typeid(int_type*).hash_code()) {
+		if (type == typeid(int_type*)) {
 			*static_cast<const int_type**>(output) = &_value;
 
 			return true;

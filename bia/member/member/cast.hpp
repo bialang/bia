@@ -5,9 +5,14 @@
 
 #include <type_traits>
 #include <typeinfo>
+#include <util/type_traits/conjunction.hpp>
 
 namespace bia {
 namespace member {
+
+template<typename T>
+using is_const_value =
+    std::is_const<typename std::remove_pointer<typename std::remove_reference<T>::type>::type>;
 
 template<typename T>
 inline typename std::enable_if<std::is_integral<T>::value, T>::type cast(member& m)
@@ -29,8 +34,9 @@ inline typename std::enable_if<std::is_floating_point<T>::value, T>::type cast(m
 	return static_cast<T>(m.as_float());
 }
 
-/*template<typename T>
-inline typename std::enable_if<!std::is_arithmetic<T>::value, T>::type cast(member& m)
+template<typename T>
+inline typename std::enable_if<!std::is_arithmetic<T>::value && !is_const_value<T>::value, T>::type
+    cast(member& m)
 {
 	T output{};
 
@@ -39,7 +45,20 @@ inline typename std::enable_if<!std::is_arithmetic<T>::value, T>::type cast(memb
 	}
 
 	return output;
-}*/
+}
+
+template<typename T>
+inline typename std::enable_if<!std::is_arithmetic<T>::value && is_const_value<T>::value, T>::type
+    cast(const member& m)
+{
+	T output{};
+
+	if (!m.as_data(typeid(T), &output)) {
+		throw;
+	}
+
+	return output;
+}
 
 } // namespace member
 } // namespace bia

@@ -13,10 +13,12 @@ template<typename Return, typename... Args>
 class static_ : public member
 {
 public:
+	typedef Return(*function_type)(Args...);
+
 	/**
 	 * Constructor.
 	 */
-	static_(Return (*function)(Args...)) noexcept : _function(function)
+	static_(function_type function) noexcept : _function(function)
 	{}
 	~static_()
 	{
@@ -52,10 +54,16 @@ public:
 	}
 	bool as_data(const std::type_info& type, void* output) override
 	{
-		return false;
+		return static_cast<const static_*>(this)->as_data(type, output);
 	}
 	bool as_data(const std::type_info& type, void* output) const override
 	{
+		if (type == typeid(function_type)) {
+			*static_cast<function_type*>(output) = _function;
+
+			return true;
+		}
+
 		return false;
 	}
 
@@ -64,7 +72,7 @@ protected:
 	{}
 
 private:
-	Return (*_function)(Args...);
+	function_type _function;
 };
 
 } // namespace function
