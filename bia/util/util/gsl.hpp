@@ -7,8 +7,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <exception/bad_variant_access.hpp>
-#include <type_traits>
 #include <exception/bounds_error.hpp>
+#include <type_traits>
 #include <utility>
 
 namespace bia {
@@ -53,9 +53,13 @@ typedef const char* czstring;
 template<typename T>
 using owner = T;
 
+#if __cplusplus >= 201703L
+typedef std::byte byte;
+#else
 enum class byte : std::uint8_t
 {
 };
+#endif
 
 template<typename T>
 class span
