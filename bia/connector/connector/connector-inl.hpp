@@ -3,9 +3,11 @@
 
 #include <connector/connector.hpp>
 #include <creator/creator.hpp>
-#include <util/type_traits/int_maker.hpp>
 #include <gc/gcable.hpp>
 #include <gc/stack_view.hpp>
+#include <member/cast.hpp>
+#include <util/type_traits/int_maker.hpp>
+#include <utility>
 
 namespace bia {
 namespace connector {
@@ -26,7 +28,7 @@ template<typename... Args, std::size_t... Indices>
 inline gc::gcable<member::member> connect_static(void (*function)(Args...), gc::stack_view& stack,
                                                  parameter_indices<Indices...>)
 {
-	function(stack.arg_at(Indices)...);
+	function(std::forward<Args>(member::cast<Args>(stack.arg_at(Indices)))...);
 
 	return {};
 }

@@ -36,7 +36,7 @@ void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& e
 		}
 
 		// add cmd_end token; make sure its a token
-		bundle.add(token::token{ token::token::cmd_end{} });
+		bundle.add({ token::token::cmd_end{} });
 
 		// give to receiver
 		receiver.receive(bundle.begin(), bundle.end());
