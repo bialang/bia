@@ -91,7 +91,9 @@ protected:
 	void gc_mark_children(bool mark) const noexcept override
 	{
 		for (auto i = _base, c = _base + _size; i != c; ++i) {
-			gc_mark(i->get(), mark);
+			if (const auto ptr = i->get()) {
+				gc_mark(ptr, mark);
+			}
 		}
 	}
 
