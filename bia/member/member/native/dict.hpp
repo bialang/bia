@@ -1,8 +1,8 @@
 #ifndef BIA_MEMBER_NATIVE_DICT_HPP_
 #define BIA_MEMBER_NATIVE_DICT_HPP_
 
-#include "../function/static_.hpp"
 #include "../member.hpp"
+#include "../native/string.hpp"
 
 #include <gc/object/pointer.hpp>
 #include <map>
@@ -31,6 +31,8 @@ public:
 	}
 	test_type test() const override
 	{
+		thread::lock::guard<thread::lock::mutex> lock{ _mutex };
+		
 		return !_map.empty();
 	}
 	gc::gcable<member> copy() const override
@@ -51,6 +53,22 @@ public:
 		}
 
 		return nullptr;
+	}
+	float_type as_float() const noexcept override
+	{
+		return {};
+	}
+	int_type as_int() const noexcept override
+	{
+		return {};
+	}
+	bool as_data(const std::type_info& type, void* output) override
+	{
+		return false;
+	}
+	bool as_data(const std::type_info& type, void* output) const override
+	{
+		return false;
 	}
 
 protected:

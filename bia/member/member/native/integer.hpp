@@ -15,8 +15,6 @@ namespace native {
 class integer : public member
 {
 public:
-	typedef std::int64_t int_type;
-
 	/**
 	 * Constructor.
 	 *
@@ -30,7 +28,7 @@ public:
 	}
 	flag_type flags() const override
 	{
-		return flag_none;
+		return flag_numeric;
 	}
 	test_type test() const override
 	{
@@ -53,6 +51,30 @@ public:
 	member* get(const native::string& name) override
 	{
 		return nullptr;
+	}
+	float_type as_float() const noexcept override
+	{
+		return static_cast<float_type>(_value);
+	}
+	int_type as_int() const noexcept override
+	{
+		return _value;
+	}
+	bool as_data(const std::type_info& type, void* output) override
+	{
+		return false;
+	}
+	bool as_data(const std::type_info& type, void* output) const override
+	{
+		const auto hash = type.hash_code();
+
+		if (hash == typeid(int_type*).hash_code()) {
+			*static_cast<const int_type**>(output) = &_value;
+
+			return true;
+		}
+
+		return false;
 	}
 
 protected:

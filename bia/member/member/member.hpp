@@ -5,6 +5,7 @@
 #include <gc/gcable.hpp>
 #include <gc/object/base.hpp>
 #include <gc/stack_view.hpp>
+#include <typeinfo>
 
 namespace bia {
 namespace member {
@@ -20,6 +21,8 @@ class string;
 class member : public gc::object::base
 {
 public:
+	typedef double float_type;
+	typedef std::int64_t int_type;
 	/** the flag type */
 	typedef int flag_type;
 	/** the type for testing operations */
@@ -31,8 +34,12 @@ public:
 	 */
 	enum flag : flag_type
 	{
-		flag_none          = 0,
-		flag_clone_is_copy = 0x1
+		flag_none = 0,
+		/** if set a clone operations should be a copy; this is intended for easy to copy and mutable members
+		 */
+		flag_clone_is_copy = 0x1,
+		/** if the member has a native numerical representaion */
+		flag_numeric = 0x2
 	};
 
 	virtual ~member() = default;
@@ -62,7 +69,17 @@ public:
 	 * @returns the result of the function call
 	 */
 	virtual gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) = 0;
-	virtual member* get(const native::string& name)                                     = 0;
+	/**
+	 * Returns the member with the specified name.
+	 *
+	 * @param name the name of the member
+	 * @returns the member or `nullptr` if it does not exist
+	 */
+	virtual member* get(const native::string& name)                      = 0;
+	virtual float_type as_float() const noexcept                         = 0;
+	virtual int_type as_int() const noexcept                             = 0;
+	virtual bool as_data(const std::type_info& type, void* output)       = 0;
+	virtual bool as_data(const std::type_info& type, void* output) const = 0;
 };
 
 } // namespace member

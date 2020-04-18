@@ -42,6 +42,22 @@ public:
 	{
 		return nullptr;
 	}
+	float_type as_float() const noexcept override
+	{
+		return {};
+	}
+	int_type as_int() const noexcept override
+	{
+		return {};
+	}
+	bool as_data(const std::type_info& type, void* output) override
+	{
+		return false;
+	}
+	bool as_data(const std::type_info& type, void* output) const override
+	{
+		return false;
+	}
 
 protected:
 	void gc_mark_children(bool mark) const noexcept override
