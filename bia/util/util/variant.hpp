@@ -12,6 +12,7 @@
 #include <type_traits>
 #include <utility>
 
+
 namespace bia {
 namespace util {
 
@@ -25,7 +26,10 @@ public:
 	using index_of = type_traits::type_index<T, Ts...>;
 
 	variant() = default;
-	template<typename T>
+	template<
+	    typename T,
+	    typename = typename std::enable_if<!std::is_same<
+	        typename std::remove_cv<typename std::remove_reference<T>::type>::type, variant>::value>::type>
 	variant(T&& value)
 	{
 		emplace<T>(std::forward<T>(value));
@@ -36,7 +40,6 @@ public:
 	 * @param copy the object to copy
 	 * @throw see the copy constructors of the types
 	 */
-	template<typename = typename std::enable_if<type_traits::are_all_copy_constructible<Ts...>::value>::type>
 	variant(const variant& copy)
 	{
 		if (copy._index != npos) {
@@ -49,7 +52,6 @@ public:
 	 * @param[in,out] move the object to move
 	 * @throw see the move constructors of the types
 	 */
-	template<typename = typename std::enable_if<type_traits::are_all_move_constructible<Ts...>::value>::type>
 	variant(variant&& move)
 	{
 		if (move._index != npos) {
@@ -180,8 +182,7 @@ private:
 
 			new (&_data) T(*reinterpret_cast<const T*>(&other._data));
 
-			_index       = other._index;
-			other._index = npos;
+			_index = other._index;
 		} else {
 			_copy<Index + 1, Vs...>(other);
 		}
@@ -197,8 +198,9 @@ private:
 
 			new (&_data) T(std::move(*reinterpret_cast<T*>(&other._data)));
 
-			_index       = other._index;
-			other._index = npos;
+			_index = other._index;
+
+			other.destroy();
 		} else {
 			_move<Index + 1, Vs...>(std::move(other));
 		}
