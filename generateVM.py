@@ -25,6 +25,11 @@ arg_options = {
         ("int_32", "ip.read<std::int32_t>()"),
         ("int_64", "ip.read<std::int64_t>()"),
         ("double", "ip.read<double>()")
+    ],
+    "ro": [
+        ("8", "resources.at(ip.read<std::uint8_t>())"),
+        ("16", "resources.at(ip.read<std::uint8_t>())"),
+        ("32", "resources.at(ip.read<std::uint8_t>())")
     ]
 }
 opcodes = [
@@ -38,7 +43,10 @@ break;"""),
 auto result = member_pointer({0})->invoke(stack.frame(parameter_count), parameter_count);
 
 stack.drop(parameter_count);
-token->set({1}, std::move(result));
+
+if (result.valid()) {{
+    token->set({1}, std::move(result));
+}}
 
 break;"""),
 
@@ -66,17 +74,22 @@ token->set({1}, src->copy());
 break;"""),
 
 
-    ("oc_invoke_void", ("mso",), """const auto parameter_count = ip.read<std::uint8_t>();
+    ("oc_get", ("mso", "ro", "mdo"), """const auto src = member_pointer({0});
+const auto name = {1};
 
-member_pointer({0})->invoke(stack.frame(parameter_count), parameter_count);
-stack.drop(parameter_count);
+token.set({2}, src->get(name));
 
 break;"""),
 
-    ("oc_test", ("mso",), "test_register = member_pointer({0})->test();"),
+
+    ("oc_test", ("mso",), """test_register = member_pointer({0})->test();
+
+break;"""),
 
     ("oc_return_void", tuple(), "return;"),
-    ("oc_test_top", tuple(), "test_register = member_pointer(stack.pop())->test();")
+    ("oc_drop", tuple(), """stack.drop(ip.read<std::uint8_t>());
+
+break;""")
 ]
 
 for opcode in opcodes:

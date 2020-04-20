@@ -108,11 +108,10 @@ enum op_code : op_code_type
 	oc_operator    = oc_copy + mso_count * mdo_count,
 
 	/** 6 bit variants */
-	oc_get = oc_operator + mdo_count * ro_count, // (member, resource)
+	oc_get = oc_operator + mso_count * ro_count * mdo_count, // (source member, resource, destination member)
 
 	/** 4 bit variants */
-	oc_invoke_void = oc_get + mso_count,         // (uint8, member)
-	oc_test        = oc_invoke_void + mso_count, // (member)
+	oc_test        = oc_get + mso_count, // (member)
 
 	/** 2 bit variants */
 	oc_jump       = oc_test + pso_count,      // (offset)
@@ -121,7 +120,7 @@ enum op_code : op_code_type
 
 	/** 0 bit variants */
 	oc_return_void,
-	oc_test_top
+	oc_drop, // (uint8)
 };
 
 } // namespace bytecode
