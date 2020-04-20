@@ -14,14 +14,33 @@ namespace parse {
 
 inline exception::syntax_details member(parameter& parameter)
 {
-	if (auto err = identifier(parameter)) {
-		return err;
-	}
+	goto gt_begin;
 
-	const auto old = parameter.backup();
+	while (true) {
+		{
+			const auto pos = parameter.input.tellg();
 
-	if (parameter_list(parameter)) {
-		parameter.restore(old);
+			if (parameter.encoder.read(parameter.input) != '.') {
+				parameter.input.seekg(pos);
+
+				break;
+			}
+		}
+
+	gt_begin:;
+		if (const auto err = identifier(parameter)) {
+			return err;
+		}
+
+		while (true) {
+			const auto old = parameter.backup();
+
+			if (parameter_list(parameter)) {
+				parameter.restore(old);
+
+				break;
+			}
+		}
 	}
 
 	return {};
