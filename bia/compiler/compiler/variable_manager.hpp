@@ -29,6 +29,9 @@ public:
 	 */
 	std::pair<variable, bool> index_of(const resource::view& identifier);
 	variable add(const resource::view& identifier);
+	variable add_tmp();
+	variable latest_variable() const;
+	void remove_tmp();
 	void open_scope();
 	void close_scope();
 

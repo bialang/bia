@@ -33,6 +33,33 @@ variable_manager::variable variable_manager::add(const resource::view& identifie
 	return { static_cast<scope_index_type>(_scopes.size() - 1), scope.index++ };
 }
 
+variable_manager::variable variable_manager::add_tmp()
+{
+	BIA_EXPECTS(!_scopes.empty());
+
+	auto& scope = _scopes.back();
+
+	BIA_EXPECTS(util::limit_checker<index_type>::in_bounds(scope.index + 1));
+
+	return { static_cast<scope_index_type>(_scopes.size() - 1), scope.index++ };
+}
+
+void variable_manager::remove_tmp()
+{
+	BIA_EXPECTS(!_scopes.empty());
+
+	--_scopes.back().index;
+}
+
+variable_manager::variable variable_manager::latest_variable() const
+{
+	BIA_EXPECTS(!_scopes.empty());
+
+	const auto& scope = _scopes.back();
+
+	return { static_cast<scope_index_type>(_scopes.size() - 1), scope.index };
+}
+
 void variable_manager::open_scope()
 {
 	BIA_EXPECTS(util::limit_checker<scope_index_type>::in_bounds(_scopes.size() + 1));
