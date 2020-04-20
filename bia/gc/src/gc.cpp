@@ -78,7 +78,7 @@ bool gc::run_once()
 			if (i->mark != _current_mark) {
 				// marked as miss
 				if (i->miss_index.load(std::memory_order_consume) == miss_index) {
-					object::base::gc_mark(&*i + 1, _current_mark);
+					object::gc_mark(&*i + 1, _current_mark);
 				}
 			}
 		}
@@ -132,6 +132,21 @@ gc* gc::active_gc() noexcept
 	return _active_gc_instance;
 }
 
+void gc::register_gcable(void* ptr)
+{
+	if (ptr) {
+		_allocated.add(static_cast<object::header*>(ptr) - 1);
+	}
+}
+
+void gc::register_gcable(object::base* ptr)
+{
+	if (ptr) {
+		_allocated.add(reinterpret_cast<object::header*>(ptr) - 1);
+		ptr->register_gcables(*this);
+	}
+}
+
 bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 {
 	BIA_LOG(TRACE, "allocating {} bytes as {}", size, leaf ? "leaf" : "node");
@@ -152,9 +167,4 @@ void gc::_free(util::not_null<void*> ptr)
 
 	info->~header();
 	_allocator->deallocate(info);
-}
-
-void gc::_register_gcable(util::not_null<void*> ptr)
-{
-	_allocated.add(static_cast<object::header*>(ptr.get()) - 1);
 }
