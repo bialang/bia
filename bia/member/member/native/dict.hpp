@@ -88,6 +88,8 @@ protected:
 			gc_mark(i.second.get(), mark);
 		}
 	}
+	void register_gcables(gc::gc& gc) const noexcept override
+	{}
 
 private:
 	struct compare

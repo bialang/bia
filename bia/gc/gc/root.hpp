@@ -50,9 +50,11 @@ protected:
 	void gc_mark_children(bool mark) const noexcept override
 	{
 		for (auto& i : _data) {
-			gc_mark(i.get(), mark);
+			object::gc_mark(i.get(), mark);
 		}
 	}
+	void register_gcables(gc& gc) const noexcept override
+	{}
 
 private:
 	gc* _gc;

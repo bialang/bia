@@ -34,25 +34,7 @@ public:
 	 * @param ptr the pointer to mark
 	 * @param mark the mark provided by the gc
 	 */
-	static void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept
-	{
-		auto info = _object_info(ptr);
-
-		BIA_LOG(TRACE, "trying to mark info={}", static_cast<void*>(info));
-
-		if (info->leaf) {
-			info->mark = mark;
-		} else {
-			// newly marked -> mark children
-			if (info->mark != mark) {
-				info->mark = mark;
-
-				BIA_LOG(TRACE, "marking children of info={}", static_cast<void*>(info));
-
-				static_cast<const base*>(ptr.get())->gc_mark_children(mark);
-			}
-		}
-	}
+	friend void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept;
 
 protected:
 	friend gc;
@@ -64,13 +46,28 @@ protected:
 	 * @param mark is required by gc_mark()
 	 */
 	virtual void gc_mark_children(bool mark) const noexcept = 0;
-
-private:
-	static util::not_null<header*> _object_info(util::not_null<const void*> ptr) noexcept
-	{
-		return const_cast<header*>(static_cast<const header*>(ptr.get()) - 1);
-	}
+	virtual void register_gcables(gc& gc) const noexcept    = 0;
 };
+
+inline void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept
+{
+	auto info = const_cast<header*>(static_cast<const header*>(ptr.get()) - 1);
+
+	BIA_LOG(TRACE, "trying to mark info={}", static_cast<void*>(info));
+
+	if (info->leaf) {
+		info->mark = mark;
+	} else {
+		// newly marked -> mark children
+		if (info->mark != mark) {
+			info->mark = mark;
+
+			BIA_LOG(TRACE, "marking children of info={}", static_cast<void*>(info));
+
+			static_cast<const base*>(ptr.get())->gc_mark_children(mark);
+		}
+	}
+}
 
 } // namespace object
 } // namespace gc

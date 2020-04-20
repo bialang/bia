@@ -105,6 +105,15 @@ public:
 	 * @returns the current gc if set, otherwise `nullptr`
 	 */
 	static gc* active_gc() noexcept;
+	/**
+	 * Starts monitoring for the given pointer.
+	 *
+	 * @pre `ptr` must come from gcable::release()
+	 *
+	 * @param ptr the gcable pointer
+	 */
+	void register_gcable(void* ptr);
+	void register_gcable(object::base* ptr);
 
 private:
 	template<typename T>
@@ -143,14 +152,6 @@ private:
 	 * @throw see memory::allocator::deallocate()
 	 */
 	void _free(util::not_null<void*> ptr);
-	/**
-	 * Starts monitoring this pointer.
-	 *
-	 * @pre `ptr` must be allocated by _allocate_impl() and not freed
-	 *
-	 * @param ptr the gcable pointer
-	 */
-	void _register_gcable(util::not_null<void*> ptr);
 };
 
 } // namespace gc

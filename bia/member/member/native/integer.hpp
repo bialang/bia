@@ -78,6 +78,8 @@ public:
 protected:
 	void gc_mark_children(bool mark) const noexcept override
 	{}
+	void register_gcables(gc::gc& gc) const noexcept override
+	{}
 
 private:
 	const int_type _value;

@@ -92,10 +92,12 @@ protected:
 	{
 		for (auto i = _base, c = _base + _size; i != c; ++i) {
 			if (const auto ptr = i->get()) {
-				gc_mark(ptr, mark);
+				object::gc_mark(ptr, mark);
 			}
 		}
 	}
+	void register_gcables(gc& gc) const noexcept override
+	{}
 
 private:
 	friend gc;

@@ -19,7 +19,7 @@ public:
 	 *
 	 * @param value the string
 	 */
-	string(gc::object::immutable_pointer<const char> value) noexcept : _value(value)
+	string(gc::object::immutable_pointer<char> value) noexcept : _value(value)
 	{}
 	~string()
 	{
@@ -75,12 +75,16 @@ public:
 protected:
 	void gc_mark_children(bool mark) const noexcept override
 	{
-		gc_mark(_value.get(), mark);
+		gc::object::gc_mark(_value.get(), mark);
+	}
+	void register_gcables(gc::gc& gc) const noexcept override
+	{
+		gc.register_gcable(_value.get());
 	}
 
 private:
 	/** the garbage collectible string */
-	gc::object::immutable_pointer<const char> _value;
+	gc::object::immutable_pointer<char> _value;
 };
 
 } // namespace native

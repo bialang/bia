@@ -55,12 +55,23 @@ public:
 	{
 		BIA_EXPECTS(valid());
 
-		_gc->_register_gcable(_ptr);
+		_gc->register_gcable(_ptr);
 
 		_gc  = nullptr;
 		_ptr = nullptr;
 
 		BIA_ENSURES(!valid());
+	}
+	T* release()
+	{
+		BIA_EXPECTS(valid());
+
+		const auto ptr = _ptr;
+
+		_gc  = nullptr;
+		_ptr = nullptr;
+
+		return ptr;
 	}
 	/**
 	 * Returns the gc pointer.
