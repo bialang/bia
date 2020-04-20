@@ -25,7 +25,7 @@ public:
 	{
 		BIA_EXPECTS(!(_value == nullptr));
 	}
-	template<typename Ty>
+	template<typename Ty, typename = typename std::enable_if<std::is_assignable<T, Ty>::value>::type>
 	not_null(const not_null<Ty>& other) noexcept : not_null(other.get())
 	{}
 	not_null(std::nullptr_t) = delete;
@@ -35,11 +35,25 @@ public:
 
 		return _value;
 	}
+	const T& get() const
+	{
+		BIA_ENSURES(!(_value == nullptr));
+
+		return _value;
+	}
 	operator T&()
 	{
 		return get();
 	}
+	operator const T&() const
+	{
+		return get();
+	}
 	T operator->()
+	{
+		return get();
+	}
+	const T operator->() const
 	{
 		return get();
 	}
