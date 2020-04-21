@@ -1,9 +1,11 @@
 #include <bvm/bvm.hpp>
 #include <compiler/compiler.hpp>
+#include <connector/connector-inl.hpp>
 #include <exception/syntax_error.hpp>
 #include <gc/gc.hpp>
 #include <gc/memory/simple_allocator.hpp>
 #include <iostream>
+#include <member/function/static_.hpp>
 #include <resource/deserialize.hpp>
 #include <sstream>
 #include <tokenizer/bia_lexer.hpp>
@@ -23,10 +25,12 @@ int main()
 	    bia::util::make_finally([encoder] { bia::string::encoding::encoder::free_instance(encoder); });
 
 	code << u8R"(
-		
-let print = "super"
 
-print(99, 5)
+let x = "99
+
+print(print(x)("
+
+print(print(io.puts(x))())
 
 )";
 
@@ -37,15 +41,15 @@ print(99, 5)
 		          << "\n";
 
 		if (dynamic_cast<const bia::exception::syntax_error*>(&e)) {
-			auto details = static_cast<const bia::exception::syntax_error&>(e).details();
+			const auto details = static_cast<const bia::exception::syntax_error&>(e).details();
 
-			std::cout << details.message << ":" << details.position.operator std::streamoff() << "\n\n";
-
-			std::cout << code.str() << "\n";
+			std::cout << details.message << ":" << details.position.operator std::streamoff() << "\n\n"
+			          << code.str() << "\n";
 
 			for (auto i = details.position.operator std::streamoff(); i--;) {
 				std::cout.put(' ');
 			}
+
 			std::cout << "\e[0;32m^\e[0;30m\n";
 		}
 
@@ -54,11 +58,76 @@ print(99, 5)
 
 	compiler.finish();
 
+	BIA_LOG(INFO, "compiling finished");
+
 	auto gc = std::make_shared<bia::gc::gc>(allocator);
 	bia::bvm::context context{ gc };
 	const auto bytecode = output.str();
 
+	{
+		const auto str = static_cast<char*>(gc->allocate(6).release());
+		auto name      = gc->construct<bia::member::native::string>(str);
+		auto fun = gc->construct<bia::member::function::static_<int (*)(), int>>([](int x) -> int (*)() {
+			std::cout << "calculating " << x << " squared\n";
+
+			return [] {
+				puts("nested call");
+
+				return 34;
+			};
+		});
+
+		std::memcpy(str, "print", 6);
+
+		context.symbols().put(name.peek(), fun.peek());
+		name.start_monitor();
+		fun.start_monitor();
+	}
+
+	{
+		const auto str = static_cast<char*>(gc->allocate(6).release());
+		auto name      = gc->construct<bia::member::native::string>(str);
+		auto fun       = gc->construct<bia::member::function::static_<void>>([] {
+            std::cout << "starting to collect some dust\n";
+
+            bia::gc::gc::active_gc()->run_once();
+
+            std::cout << "done collecting dust\n";
+        });
+
+		std::memcpy(str, "do_gc", 6);
+
+		context.symbols().put(name.peek(), fun.peek());
+		name.start_monitor();
+		fun.start_monitor();
+	}
+
+	{
+		auto str = static_cast<char*>(gc->allocate(3).release());
+		auto name      = gc->construct<bia::member::native::string>(str);
+		auto dict      = gc->construct<bia::member::native::dict>();
+
+		std::memcpy(str, "io", 3);
+
+		context.symbols().put(name.peek(), dict.peek());
+		name.start_monitor();
+		auto d =dict.peek();
+		dict.start_monitor();
+
+		str = static_cast<char*>(gc->allocate(5).release());
+		name      = gc->construct<bia::member::native::string>(str);
+		auto fun      = gc->construct<bia::member::function::static_<int, const char*>>(&puts);
+
+		std::memcpy(str, "puts", 5);
+
+		d->put(name.peek(), fun.peek());
+		name.start_monitor();
+		fun.start_monitor();
+	}
+
 	bia::bvm::bvm::execute(context,
 	                       { reinterpret_cast<const bia::util::byte*>(&bytecode[0]), bytecode.size() },
 	                       *bia::resource::deserialize(resources, *gc));
+
+	gc->run_once();
 }

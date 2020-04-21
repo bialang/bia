@@ -28,8 +28,8 @@ arg_options = {
     ],
     "ro": [
         ("8", "resources.at(ip.read<std::uint8_t>())"),
-        ("16", "resources.at(ip.read<std::uint8_t>())"),
-        ("32", "resources.at(ip.read<std::uint8_t>())")
+        ("16", "resources.at(ip.read<std::uint16_t>())"),
+        ("32", "resources.at(ip.read<std::uint32_t>())")
     ]
 }
 opcodes = [
@@ -75,9 +75,9 @@ break;"""),
 
 
     ("oc_get", ("mso", "ro", "mdo"), """const auto src = member_pointer({0});
-const auto name = {1};
+const auto name = string_pointer({1});
 
-token.set({2}, src->get(name));
+token->set({2}, src->get(*name));
 
 break;"""),
 
@@ -96,11 +96,7 @@ for opcode in opcodes:
     args_template = ""
 
     for i, arg in enumerate(opcode[ARGS]):
-        count = ""
-        try:
-            count = " * {}_count".format(opcode[ARGS][i+1])
-        except:
-            pass
+        count = "".join("*{}_count".format(j) for j in opcode[ARGS][i+1:])
         args_template += " - {}_{{}}{}".format(arg, count)
 
     def rec(rest, *args):

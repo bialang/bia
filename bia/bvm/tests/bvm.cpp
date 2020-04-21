@@ -24,6 +24,5 @@ TEST_CASE("simple run", "[bvm]")
 
 	const auto code = output.str();
 
-	bia::bvm::bvm::execute(ctx, reinterpret_cast<const bia::util::byte*>(code.data()),
-	                       reinterpret_cast<const bia::util::byte*>(code.data() + code.length()));
+	bia::bvm::bvm::execute(ctx, { reinterpret_cast<const bia::util::byte*>(code.data()), code.length() });
 }
