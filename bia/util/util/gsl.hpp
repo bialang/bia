@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <exception/bad_variant_access.hpp>
 #include <exception/bounds_error.hpp>
+#include <limits>
 #include <type_traits>
 #include <utility>
 
@@ -75,6 +76,8 @@ enum class byte : std::uint8_t
 };
 #endif
 
+constexpr std::size_t dynamic_extent = std::numeric_limits<std::size_t>::max();
+
 template<typename T>
 class span
 {
@@ -105,7 +108,7 @@ public:
 	span(const span& copy) = default;
 	bool empty() const noexcept
 	{
-		return _size;
+		return !_size;
 	}
 	size_type size() const noexcept
 	{
@@ -123,8 +126,12 @@ public:
 	{
 		return _data + _size;
 	}
-	span subspan(std::size_t offset, std::size_t count) const
+	span subspan(std::size_t offset, std::size_t count = dynamic_extent) const
 	{
+		if (count == dynamic_extent) {
+			count = _size - offset;
+		}
+		
 		BIA_EXPECTS(offset + count <= _size);
 
 		return { _data + offset, _data + offset + count };
