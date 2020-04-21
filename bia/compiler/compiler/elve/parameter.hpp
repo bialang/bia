@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <exception/implementation_error.hpp>
 #include <limits>
+#include <log/log.hpp>
 #include <tokenizer/token/token.hpp>
 #include <util/gsl.hpp>
 #include <utility>
@@ -16,28 +17,31 @@ namespace compiler {
 namespace elve {
 
 template<typename T>
-util::not_null<const tokenizer::token::token*>
-    expression(present present, util::not_null<const tokenizer::token::token*> first,
-               util::not_null<const tokenizer::token::token*> last, T&& destination);
+const tokenizer::token::token* expression(present present, util::span<const tokenizer::token::token> tokens,
+                                          T&& destination);
 
-inline std::pair<util::not_null<const tokenizer::token::token*>, std::uint8_t>
-    parameter(present present, util::not_null<const tokenizer::token::token*> first,
-              util::not_null<const tokenizer::token::token*> last)
+inline std::pair<const tokenizer::token::token*, std::uint8_t>
+    parameter(present present, util::span<const tokenizer::token::token> tokens)
 {
 	using tokenizer::token::token;
 
-	const auto begin = first.get();
-	const auto end   = begin + begin->value.get<token::control>().value;
+	const auto first = tokens.data();
+	const auto last  = first + first->value.get<token::control>().value;
 
 	BIA_EXPECTS(static_cast<token::type>(first->value.index()) == token::type::control);
 
+	BIA_LOG(INFO, "processing parameters {} - {}", static_cast<const void*>(first),
+	        static_cast<const void*>(last));
+
 	std::uint8_t count = 0;
-	auto a             = end;
-	auto b             = end;
+	auto a             = last;
+	auto b             = last;
 
 	while (true) {
 		b = a;
-		a = begin + a->value.get<token::control>().value;
+		a = first + a->value.get<token::control>().value;
+
+		BIA_EXPECTS(static_cast<token::type>(a->value.index()) == token::type::control);
 
 		if (b - a <= 1) {
 			break;
@@ -46,10 +50,10 @@ inline std::pair<util::not_null<const tokenizer::token::token*>, std::uint8_t>
 			throw;
 		}
 
-		expression(present, a + 1, b, bytecode::member::tos{});
+		expression(present, { a + 1, b }, bytecode::member::tos{});
 	}
 
-	return { end + 1, count };
+	return { last + 1, count };
 }
 
 } // namespace elve

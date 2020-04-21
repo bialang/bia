@@ -39,7 +39,7 @@ void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& e
 		bundle.add({ token::token::cmd_end{} });
 
 		// give to receiver
-		receiver.receive(bundle.begin(), bundle.end());
+		receiver.receive({ bundle.begin(), bundle.end() });
 		bundle.clear();
 	}
 }

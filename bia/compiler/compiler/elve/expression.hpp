@@ -15,47 +15,50 @@ namespace compiler {
 namespace elve {
 
 template<typename T>
-inline util::not_null<const tokenizer::token::token*>
-    expression(present present, util::not_null<const tokenizer::token::token*> first,
-               util::not_null<const tokenizer::token::token*> last, T&& destination)
+inline const tokenizer::token::token*
+    expression(present present, util::span<const tokenizer::token::token> tokens, T&& destination)
 {
 	using tokenizer::token::token;
 
-	BIA_EXPECTS(first < last);
+	BIA_EXPECTS(!tokens.empty());
 
 	// parse value
-	switch (static_cast<token::type>(first->value.index())) {
-	case token::type::identifier: return member(present, first, last, std::forward<T>(destination));
+	switch (static_cast<token::type>(tokens.data()->value.index())) {
+	case token::type::identifier: return member(present, tokens, std::forward<T>(destination));
 	case token::type::keyword: {
 		int val = 0;
 
-		switch (static_cast<token::keyword>(first->value.get<token::keyword>())) {
+		switch (static_cast<token::keyword>(tokens.data()->value.get<token::keyword>())) {
 		case token::keyword::true_: val = 1;
 		case token::keyword::false_: {
 			present.writer.write<true, bytecode::oc_instantiate>(val, std::forward<T>(destination));
 
-			return first + 1;
+			break;
 		}
 		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
 		}
+
+		break;
 	}
 	case token::type::constant_string: {
 		// todo
 		bytecode::member::resource src{ (std::uint16_t) present.resources.index_of(
-			first->value.get<token::string>().memory) };
+			tokens.data()->value.get<token::string>().memory) };
 
 		present.writer.write<true, bytecode::oc_refer>(src, std::forward<T>(destination));
 
-		return first + 1;
+		break;
 	}
 	case token::type::constant_int: {
-		present.writer.write<true, bytecode::oc_instantiate>(first->value.get<token::int_type>(),
+		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<token::int_type>(),
 		                                                     std::forward<T>(destination));
 
-		return first + 1;
+		break;
 	}
 	default: BIA_IMPLEMENTATION_ERROR("invalid token type");
 	}
+
+	return tokens.data() + 1;
 }
 
 } // namespace elve

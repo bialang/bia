@@ -8,6 +8,7 @@
 #include <resource/serializer.hpp>
 #include <tokenizer/token/receiver.hpp>
 #include <util/variant.hpp>
+#include <util/gsl.hpp>
 #include <utility>
 
 namespace bia {
@@ -25,14 +26,14 @@ public:
 
 	compiler(std::ostream& instructions, std::ostream& resource) noexcept;
 	void finish();
-	void receive(util::not_null<const token*> first, util::not_null<const token*> last) override;
+	void receive(util::span<const token> tokens) override;
 
 private:
 	bytecode::writer::instruction _writer;
 	resource::serializer _resources;
 	variable_manager _variables;
 
-	const token* _decl(const token* first, const token* last);
+	const token* _decl(util::span<const token> tokens);
 	elve::present _create_present() noexcept;
 };
 

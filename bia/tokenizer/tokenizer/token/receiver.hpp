@@ -23,10 +23,9 @@ public:
 	 * This function is called when a new set of tokens is available. The token are not guaranteed to be
 	 * grouped.
 	 *
-	 * @param first the beginning of the token set
-	 * @param last the end of the token set
+	 * @param tokens the parsed tokens
 	 */
-	virtual void receive(util::not_null<const token*> first, util::not_null<const token*> last) = 0;
+	virtual void receive(util::span<const token> tokens) = 0;
 };
 
 } // namespace token
