@@ -86,6 +86,16 @@ inline typename std::enable_if<is_member_destination<T>::value && is_optimizeabl
 	    index + (Optimize && util::limit_checker<std::uint8_t>::in_bounds(member.index) ? 2 : 0));
 }
 
+template<bool Optimize>
+inline resource_option resource_index(member::resource resource) noexcept
+{
+    if (util::limit_checker<std::uint8_t>::in_bounds(resource.index)) {
+        return ro_8;
+    }
+
+    return ro_16;
+}
+
 } // namespace writer
 } // namespace bytecode
 } // namespace bia
