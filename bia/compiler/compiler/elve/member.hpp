@@ -97,19 +97,12 @@ inline const tokenizer::token::token*
 		tokens = tokens.subspan(x - tokens.data());
 	}
 
-	const bytecode::member::local tmp_source{
-		std::is_same<typename std::decay<T>::type, bytecode::member::tos>::value
-		    ? present.variable_manager.latest_variable().id
-		    : present.variable_manager.add_tmp().id
-	};
+	const bytecode::member::local tmp_source{ present.variable_manager.add_tmp().id };
 	const auto finally = util::make_finally([&present, &destination] {
 		// remove tmp variable
-		if (!std::is_same<typename std::decay<T>::type, bytecode::member::tos>::value) {
-			present.variable_manager.remove_tmp();
-			present.writer.write<true, bytecode::oc_refer>(bytecode::member::tos{},
-			                                               std::forward<T>(destination));
-			present.writer.write<true, bytecode::oc_drop>(1);
-		}
+		present.variable_manager.remove_tmp();
+		present.writer.write<true, bytecode::oc_refer>(bytecode::member::tos{}, std::forward<T>(destination));
+		present.writer.write<true, bytecode::oc_drop>(1);
 	});
 
 	// chain
