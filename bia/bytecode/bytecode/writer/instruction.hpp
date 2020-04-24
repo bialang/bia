@@ -32,7 +32,7 @@ public:
 	typename std::enable_if<is_op_code<Op_code, oc_drop>::value>::type write(std::uint8_t count)
 	{
 		optimized_write<false>(_output, Op_code);
-		optimized_write<Optimize>(_output, count);
+		optimized_write<false>(_output, count);
 	}
 	template<bool Optimize, op_code Op_code, typename P0>
 	typename std::enable_if<is_op_code<Op_code, oc_jump, oc_jump_false, oc_jump_true>::value &&
@@ -49,6 +49,16 @@ public:
 	{
 		optimized_write<false>(_output, static_cast<op_code>(Op_code - member_source_index<Optimize>(p0)));
 		optimized_member<Optimize>(_output, p0);
+	}
+	template<bool Optimize, op_code Op_code, typename P1>
+	typename std::enable_if<is_op_code<Op_code, oc_import>::value && is_member_destination<P1>::value>::type
+	    write(member::resource name, P1 p1)
+	{
+		optimized_write<false>(_output,
+		                       static_cast<op_code>(Op_code - resource_index<Optimize>(name) * mdo_count -
+		                                            member_destination_index<Optimize>(p1)));
+		optimized_member<Optimize>(_output, name);
+		optimized_member<Optimize>(_output, p1);
 	}
 	template<bool Optimize, op_code Op_code, typename P0, typename P2>
 	typename std::enable_if<is_op_code<Op_code, oc_get>::value && is_member_source<P0>::value &&

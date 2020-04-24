@@ -109,9 +109,10 @@ enum op_code : op_code_type
 
 	/** 6 bit variants */
 	oc_get = oc_operator + mso_count * ro_count * mdo_count, // (source member, resource, destination member)
+	oc_import = oc_get + ro_count * mdo_count,               // (name)
 
 	/** 4 bit variants */
-	oc_test        = oc_get + mso_count, // (member)
+	oc_test = oc_import + mso_count, // (member)
 
 	/** 2 bit variants */
 	oc_jump       = oc_test + pso_count,      // (offset)

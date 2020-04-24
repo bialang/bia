@@ -44,8 +44,10 @@ auto result = member_pointer({0})->invoke(stack.frame(parameter_count), paramete
 
 stack.drop(parameter_count);
 
+auto& dest = {1};
+
 if (result.valid()) {{
-    token->set({1}, std::move(result));
+    token->set(dest, std::move(result));
 }}
 
 break;"""),
@@ -78,6 +80,12 @@ break;"""),
 const auto name = string_pointer({1});
 
 token->set({2}, src->get(*name));
+
+break;"""),
+
+    ("oc_import", ("ro", "mdo"), """auto name = string_pointer({0});
+
+token->set({1}, loader.load(name).get());
 
 break;"""),
 
