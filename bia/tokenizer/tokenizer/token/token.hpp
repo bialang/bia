@@ -42,6 +42,7 @@ struct token
 	enum class keyword
 	{
 		let,
+		import,
 		null,
 		true_,
 		false_,

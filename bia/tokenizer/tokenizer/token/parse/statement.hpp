@@ -56,19 +56,40 @@ inline exception::syntax_details decl_stmt(parameter& parameter)
 	return expression(parameter);
 }
 
+inline exception::syntax_details import_stmt(parameter& parameter)
+{
+	// compare import
+	if (const auto err = any_of(parameter, "invalid import statement", "import").second) {
+		return err;
+	}
+
+	// whitespaces are required
+	if (const auto err = eat_whitespaces(parameter)) {
+		return err;
+	}
+
+	parameter.bundle.add({ token::keyword::import });
+
+	return identifier(parameter);
+}
+
 inline exception::syntax_details single_stmt(parameter& parameter)
 {
 	const auto old = parameter.backup();
 
-	if (const auto err = decl_stmt(parameter)) {
-		BIA_LOG(INFO, "no decl statement {}", err.message);
-		
-		parameter.restore(old);
-
-		return expression(parameter);
+	if (!decl_stmt(parameter)) {
+		return {};
 	}
 
-	return {};
+	parameter.restore(old);
+
+	if (!import_stmt(parameter)) {
+		return {};
+	}
+
+	parameter.restore(old);
+
+	return expression(parameter);
 }
 
 } // namespace parse
