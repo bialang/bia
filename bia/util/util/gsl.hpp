@@ -68,6 +68,9 @@ typedef const char* czstring;
 template<typename T>
 using owner = T;
 
+template<typename T>
+using gcable = T;
+
 #if __cplusplus >= 201703L
 typedef std::byte byte;
 #else
