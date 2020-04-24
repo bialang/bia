@@ -63,9 +63,10 @@ add_subdirectory("creator")
 add_subdirectory("connector")
 add_subdirectory("compiler")
 add_subdirectory("bvm")
+add_subdirectory("bsl")
 
 
 add_executable(maindev "main.cpp")
 target_link_libraries(maindev
-	PUBLIC bvm
+	PUBLIC bsl
 	PUBLIC compiler)
