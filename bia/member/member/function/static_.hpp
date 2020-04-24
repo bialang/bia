@@ -66,10 +66,10 @@ public:
 
 		return false;
 	}
-
-protected:
 	void gc_mark_children(bool mark) const noexcept override
 	{}
+
+protected:
 	void register_gcables(gc::gc& gc) const noexcept override
 	{}
 

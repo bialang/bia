@@ -71,12 +71,12 @@ public:
 	{
 		return std::strcmp(_value.get(), other._value.get());
 	}
-
-protected:
 	void gc_mark_children(bool mark) const noexcept override
 	{
 		gc::object::gc_mark(_value.get(), mark);
 	}
+
+protected:
 	void register_gcables(gc::gc& gc) const noexcept override
 	{
 		gc.register_gcable(_value.get());

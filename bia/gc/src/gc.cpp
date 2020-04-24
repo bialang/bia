@@ -132,17 +132,17 @@ gc* gc::active_gc() noexcept
 	return _active_gc_instance;
 }
 
-void gc::register_gcable(void* ptr)
+void gc::register_gcable(const void* ptr)
 {
 	if (ptr) {
-		_allocated.add(static_cast<object::header*>(ptr) - 1);
+		_allocated.add(const_cast<object::header*>(static_cast<const object::header*>(ptr) - 1));
 	}
 }
 
-void gc::register_gcable(object::base* ptr)
+void gc::register_gcable(const object::base* ptr)
 {
 	if (ptr) {
-		_allocated.add(reinterpret_cast<object::header*>(ptr) - 1);
+		_allocated.add(const_cast<object::header*>(reinterpret_cast<const object::header*>(ptr) - 1));
 		ptr->register_gcables(*this);
 	}
 }

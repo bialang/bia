@@ -17,6 +17,18 @@ namespace native {
 class dict : public member
 {
 public:
+	struct compare
+	{
+		bool operator()(gc::object::immutable_pointer<const string> left,
+		                gc::object::immutable_pointer<const string> right) const noexcept
+		{
+			return left->compare(*right) < 0;
+		}
+	};
+
+	typedef std::map<gc::object::immutable_pointer<const string>, gc::object::pointer<member>, compare>
+	    map_type;
+
 	/**
 	 * Constructor.
 	 */
@@ -77,8 +89,6 @@ public:
 	{
 		return false;
 	}
-
-protected:
 	void gc_mark_children(bool mark) const noexcept override
 	{
 		thread::lock::guard<thread::lock::mutex> lock{ _mutex };
@@ -88,20 +98,17 @@ protected:
 			gc_mark(i.second.get(), mark);
 		}
 	}
+	const map_type& map() noexcept
+	{
+		return _map;
+	}
+
+protected:
 	void register_gcables(gc::gc& gc) const noexcept override
 	{}
 
 private:
-	struct compare
-	{
-		bool operator()(gc::object::immutable_pointer<const string> left,
-		                gc::object::immutable_pointer<const string> right) const noexcept
-		{
-			return left->compare(*right) < 0;
-		}
-	};
-
-	std::map<gc::object::immutable_pointer<const string>, gc::object::pointer<member>, compare> _map;
+	map_type _map;
 	mutable thread::lock::mutex _mutex;
 };
 

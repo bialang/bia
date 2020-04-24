@@ -26,29 +26,27 @@ public:
 	 */
 	virtual ~base() = default;
 	/**
-	 * Marks the given pointer for the gc cycle. If `ptr` was not allocated by a gc, the behavior is
-	 * undefined.
-	 *
-	 * @warning this function should only be called inside of gc_mark_childred()
-	 *
-	 * @param ptr the pointer to mark
-	 * @param mark the mark provided by the gc
-	 */
-	friend void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept;
-
-protected:
-	friend gc;
-
-	/**
 	 * Marks all children that were allocated by the gc. This functions should only mark its children and
 	 * nothing more.
 	 *
 	 * @param mark is required by gc_mark()
 	 */
 	virtual void gc_mark_children(bool mark) const noexcept = 0;
-	virtual void register_gcables(gc& gc) const noexcept    = 0;
+
+protected:
+	friend gc;
+	virtual void register_gcables(gc& gc) const noexcept = 0;
 };
 
+/**
+ * Marks the given pointer for the gc cycle. If `ptr` was not allocated by a gc, the behavior is
+ * undefined.
+ *
+ * @warning this function should only be called inside of gc_mark_childred()
+ *
+ * @param ptr the pointer to mark
+ * @param mark the mark provided by the gc
+ */
 inline void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept
 {
 	auto info = const_cast<header*>(static_cast<const header*>(ptr.get()) - 1);

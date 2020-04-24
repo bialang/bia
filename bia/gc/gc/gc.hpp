@@ -112,8 +112,8 @@ public:
 	 *
 	 * @param ptr the gcable pointer
 	 */
-	void register_gcable(void* ptr);
-	void register_gcable(object::base* ptr);
+	void register_gcable(const void* ptr);
+	void register_gcable(const object::base* ptr);
 
 private:
 	template<typename T>
