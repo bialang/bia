@@ -34,6 +34,7 @@ void compiler::receive(util::span<const token> tokens)
 		case token::type::keyword: {
 			switch (i->value.get<token::keyword>()) {
 			case token::keyword::let: i = _decl({ i, tokens.end() }); break;
+			case token::keyword::import: i = _import({ i, tokens.end() }); break;
 			default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
 			}
 
@@ -52,7 +53,7 @@ void compiler::receive(util::span<const token> tokens)
 
 const compiler::token* compiler::_decl(util::span<const token> tokens)
 {
-	BIA_EXPECTS(!tokens.empty() &&
+	BIA_EXPECTS(tokens.size() > 2 &&
 	            static_cast<token::type>(tokens.data()->value.index()) == token::type::keyword);
 
 	BIA_LOG(INFO, "processing declaration");
@@ -71,6 +72,30 @@ const compiler::token* compiler::_decl(util::span<const token> tokens)
 	_variables.add(tokens.data()[1].value.get<token::identifier>().memory);
 
 	return elve::expression(_create_present(), tokens.subspan(2), bytecode::member::tos{});
+}
+
+const compiler::token* compiler::_import(util::span<const token> tokens)
+{
+	BIA_EXPECTS(tokens.size() >= 2 &&
+	            static_cast<token::type>(tokens.data()->value.index()) == token::type::keyword);
+
+	const auto variable = _variables.index_of(tokens.data()[1].value.get<token::identifier>().memory);
+	const bytecode::member::resource name{ _resources.index_of(
+		tokens.data()[1].value.get<token::identifier>().memory) };
+
+	// overwrite existing variable
+	if (variable.second) {
+		// overwriting of other scopes not implemented
+		BIA_EXPECTS(variable.first.scope_id == 0);
+
+		_writer.write<true, bytecode::oc_import>(name, bytecode::member::local{ variable.first.id });
+	} else {
+		_variables.add(tokens.data()[1].value.get<token::identifier>().memory);
+
+		_writer.write<true, bytecode::oc_import>(name, bytecode::member::tos{});
+	}
+
+	return tokens.data() + 2;
 }
 
 elve::present compiler::_create_present() noexcept

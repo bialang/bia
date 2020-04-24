@@ -34,6 +34,7 @@ private:
 	variable_manager _variables;
 
 	const token* _decl(util::span<const token> tokens);
+	const token* _import(util::span<const token> tokens);
 	elve::present _create_present() noexcept;
 };
 
