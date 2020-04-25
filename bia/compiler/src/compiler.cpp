@@ -1,6 +1,7 @@
 #include "compiler/compiler.hpp"
 
 #include "compiler/elve/expression.hpp"
+#include "compiler/jump_manager.hpp"
 
 #include <exception/implementation_error.hpp>
 #include <log/log.hpp>
@@ -27,28 +28,42 @@ void compiler::receive(util::span<const token> tokens)
 		printf("token %p = %zi\n", &i, i.value.index());
 	}
 
-	for (auto i = tokens.begin(); i != tokens.end(); ++i) {
+	for (auto i = tokens.begin(); i != tokens.end();) {
 		BIA_LOG(INFO, "processing {} tokens", tokens.end() - i);
 
-		switch (static_cast<token::type>(i->value.index())) {
-		case token::type::keyword: {
-			switch (i->value.get<token::keyword>()) {
-			case token::keyword::let: i = _decl({ i, tokens.end() }); break;
-			case token::keyword::import: i = _import({ i, tokens.end() }); break;
-			default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
-			}
-
-			break;
-		}
-		default:
-			// todo: remove destination
-			i = elve::expression(_create_present(), { i, tokens.end() }, bytecode::member::tos{});
-
-			break;
-		}
-
-		BIA_EXPECTS(static_cast<token::type>(i->value.index()) == token::type::cmd_end);
+		i = _stmt({ i, tokens.end() });
 	}
+}
+
+const compiler::token* compiler::_stmt(util::span<const token> tokens)
+{
+	BIA_EXPECTS(!tokens.empty());
+
+	auto i = tokens.data();
+
+	switch (static_cast<token::type>(i->value.index())) {
+	case token::type::keyword: {
+		switch (i->value.get<token::keyword>()) {
+		case token::keyword::let: i = _decl({ i, tokens.end() }); break;
+		case token::keyword::import: i = _import({ i, tokens.end() }); break;
+		case token::keyword::while_: i = _while({ i, tokens.end() }); break;
+		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
+		}
+
+		break;
+	}
+	default:
+		// todo: remove destination
+		i = elve::expression(_create_present(), { i, tokens.end() }, bytecode::member::tos{});
+
+		_writer.write<true, bytecode::oc_drop>(1);
+
+		break;
+	}
+
+	BIA_EXPECTS(i != tokens.end() && static_cast<token::type>(i->value.index()) == token::type::cmd_end);
+
+	return i + 1;
 }
 
 const compiler::token* compiler::_decl(util::span<const token> tokens)
@@ -96,6 +111,31 @@ const compiler::token* compiler::_import(util::span<const token> tokens)
 	}
 
 	return tokens.data() + 2;
+}
+
+const compiler::token* compiler::_while(util::span<const token> tokens)
+{
+	jump_manager manager{ &_writer.output() };
+
+	manager.mark(jump_manager::destination::start);
+
+	tokens = tokens.subspan(elve::expression(_create_present(), tokens.subspan(1), bytecode::member::tos{}) -
+	                        tokens.data());
+
+	auto count = tokens.data()->value.get<token::batch>().count;
+
+	_writer.write<true, bytecode::oc_test>(bytecode::member::tos{});
+	_writer.write<true, bytecode::oc_drop>(1);
+	manager.jump(jump_manager::type::if_false, jump_manager::destination::end);
+
+	while (count--) {
+		tokens = tokens.subspan(_stmt(tokens.subspan(1)) - tokens.data());
+	}
+
+	manager.jump(jump_manager::type::unconditional, jump_manager::destination::start);
+	manager.mark(jump_manager::destination::end);
+
+	return tokens.data();
 }
 
 elve::present compiler::_create_present() noexcept
