@@ -22,32 +22,108 @@ namespace parse {
 template<bool RequireCmd = false>
 inline exception::syntax_details eat_whitespaces(parameter& parameter)
 {
+	enum class s
+	{
+		whitespace,
+		comment_start,
+		comment_single,
+		comment_single_ending,
+		comment_multi,
+		comment_multi_ending
+	};
+
+	auto state = s::whitespace;
 	auto eaten = false;
 	auto cmd   = false;
 
 	while (true) {
 		const auto pos = parameter.input.tellg();
+		const auto cp  = parameter.encoder.read(parameter.input);
 
-		switch (parameter.encoder.read(parameter.input)) {
-		case '\r':
-		case '\n': cmd = true;
-		case ' ':
-		case '\t':
-		case '\v':
-		case '\f': eaten = true; break;
-		case string::encoding::encoder::eof: cmd = true; eaten = true;
-		default: {
-			parameter.input.seekg(pos);
+		if (cp == string::encoding::encoder::eof) {
+			eaten = true;
+			cmd   = true;
 
-			if (!eaten) {
-				return { pos, "expected whitespace" };
-			} else if (RequireCmd && !cmd) {
-				return { pos, "expected cmd whitespace, like a line feed" };
+			goto gt_return;
+		}
+
+		switch (state) {
+		case s::whitespace: {
+			switch (cp) {
+			case '/': state = s::comment_start; break;
+			case '\r':
+			case '\n': cmd = true;
+			case ' ':
+			case '\t':
+			case '\v':
+			case '\f': eaten = true; break;
+			default: goto gt_return;
 			}
 
-			return {};
+			break;
+		}
+		case s::comment_start: {
+			switch (cp) {
+			case '/': state = s::comment_single; break;
+			case '*': state = s::comment_multi; break;
+			default: goto gt_return;
+			}
+
+			break;
+		}
+		case s::comment_single: {
+			if (cp == '\r' || cp == '\n') {
+				cmd   = true;
+				state = s::comment_single_ending;
+			}
+
+			break;
+		}
+		case s::comment_single_ending: {
+			switch (cp) {
+			case '\r':
+			case '\n': break;
+			default: {
+				parameter.input.seekg(pos);
+
+				state = s::whitespace;
+
+				break;
+			}
+			}
+
+			break;
+		}
+		case s::comment_multi: {
+			if (cp == '*') {
+				state = s::comment_multi_ending;
+			}
+
+			break;
+		}
+		case s::comment_multi_ending: {
+			if (cp == '/') {
+				state = s::whitespace;
+			} else if (cp != '*') {
+				state = s::comment_multi;
+			}
+
+			break;
 		}
 		}
+
+		continue;
+
+	gt_return:;
+		parameter.input.seekg(pos);
+
+		if (!eaten) {
+			return { pos, "expected whitespace" };
+		} else if (RequireCmd && !cmd) {
+			return { pos, "expected cmd whitespace, like a line feed" };
+		}
+
+		return {};
 	}
 }
 

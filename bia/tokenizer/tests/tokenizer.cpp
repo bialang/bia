@@ -16,11 +16,10 @@ using namespace bia::string;
 class mock_receiver : public token::receiver
 {
 public:
-	void receive(bia::util::not_null<const token::token*> first,
-	             bia::util::not_null<const token::token*> last) override
+	void receive(bia::util::span<const token::token> tokens) override
 	{
-		for (auto i = first.get(), c = last.get(); i != c; ++i) {
-			tokens.push_back(*i);
+		for (const auto& i : tokens) {
+			this->tokens.push_back(i);
 		}
 	}
 

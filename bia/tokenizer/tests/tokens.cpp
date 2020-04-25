@@ -6,6 +6,7 @@
 #include <tokenizer/token/parse/any_of.hpp>
 #include <tokenizer/token/parse/number.hpp>
 #include <tokenizer/token/parse/string.hpp>
+#include <tokenizer/token/parse/whitespace_eater.hpp>
 #include <util/finally.hpp>
 #include <utility>
 
@@ -80,4 +81,19 @@ TEST_CASE("string", "[tokenizer]")
 	parse(R"("hello world!")", "hello world!");
 	parse(R"("hi\aasd\bqwe\vasd\tasd\fasdw\bqwe\nwqd\rdasd\\awd\"ad\"")",
 	      "hi\aasd\bqwe\vasd\tasd\fasdw\bqwe\nwqd\rdasd\\awd\"ad\"");
+}
+
+TEST_CASE("whitespaces", "[tokenizer]")
+{
+	const auto consumed = [](const char* str, bool expect_error) -> std::streamoff {
+		const auto param = create_parameter(str);
+
+		REQUIRE(eat_whitespaces(*param).valid == expect_error);
+
+		return expect_error ? -1 : static_cast<std::streamoff>(param->input.tellg());
+	};
+
+	REQUIRE(consumed(" \t\f\v", false) == 4);
+	consumed("asd \r\f", true);
+	REQUIRE(consumed(" /* kartoffel */asd", false) == 16);
 }
