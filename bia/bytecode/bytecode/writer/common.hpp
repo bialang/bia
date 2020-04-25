@@ -16,9 +16,8 @@ namespace bytecode {
 namespace writer {
 
 template<typename T>
-using is_parameter_size =
-    util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t, std::int16_t, std::int32_t,
-                                       std::uint8_t, std::uint16_t, std::uint32_t>;
+using is_offset =
+    util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t, std::int16_t, std::int32_t>;
 template<typename T>
 using is_constant = util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t,
                                                        std::int32_t, std::int64_t, double>;
@@ -59,36 +58,24 @@ inline typename std::enable_if<
 }
 
 template<bool Optimize, typename T>
-inline typename std::enable_if<is_parameter_size<T>::value, parameter_size_option>::type
-    parameter_size_index(T value) noexcept
+inline typename std::enable_if<is_offset<T>::value, offset_option>::type offset_index(T value) noexcept
 {
 	typedef typename std::decay<T>::type type;
 
 	if (Optimize) {
-		if (std::is_unsigned<type>::value) {
-			if (util::limit_checker<std::uint8_t>::in_bounds(value)) {
-				return pso_8;
-			} else if (util::limit_checker<std::uint16_t>::in_bounds(value)) {
-				return pso_16;
-			}
-
-			return pso_32;
-		}
-
-		// signed
 		if (util::limit_checker<std::int8_t>::in_bounds(value)) {
-			return pso_8;
+			return oo_8;
 		} else if (util::limit_checker<std::int16_t>::in_bounds(value)) {
-			return pso_16;
+			return oo_16;
 		}
 
-		return pso_32;
+		return oo_32;
 	}
 
 	switch (sizeof(type)) {
-	case 1: return pso_8;
-	case 2: return pso_16;
-	case 4: return pso_32;
+	case 1: return oo_8;
+	case 2: return oo_16;
+	case 4: return oo_32;
 	}
 }
 

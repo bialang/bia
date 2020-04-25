@@ -36,11 +36,11 @@ public:
 	}
 	template<bool Optimize, op_code Op_code, typename P0>
 	typename std::enable_if<is_op_code<Op_code, oc_jump, oc_jump_false, oc_jump_true>::value &&
-	                        is_parameter_size<P0>::value &&
+	                        is_offset<P0>::value &&
 	                        std::is_signed<typename std::decay<P0>::type>::value>::type
 	    write(P0 p0)
 	{
-		optimized_write<false>(_output, static_cast<op_code>(Op_code - parameter_size_index<Optimize>(p0)));
+		optimized_write<false>(_output, static_cast<op_code>(Op_code - offset_index<Optimize>(p0)));
 		optimized_write<Optimize>(_output, p0);
 	}
 	template<bool Optimize, op_code Op_code, typename P0>
@@ -112,6 +112,10 @@ public:
 		_forward_end(
 		    util::type_traits::template int_filler<
 		        op_code, (max_instruction_size / sizeof(op_code) + sizeof(op_code)), oc_return_void>::value);
+	}
+	std::ostream& output() noexcept
+	{
+		return _output;
 	}
 
 private:

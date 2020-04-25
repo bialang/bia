@@ -87,14 +87,14 @@ enum resource_option
 	ro_count
 };
 
-enum parameter_size_option
+enum offset_option
 {
-	pso_8,
-	pso_16,
-	pso_24,
-	pso_32,
+	oo_8,
+	oo_16,
+	oo_24,
+	oo_32,
 
-	pso_count
+	oo_count
 };
 
 enum op_code : op_code_type
@@ -115,9 +115,9 @@ enum op_code : op_code_type
 	oc_test = oc_import + mso_count, // (member)
 
 	/** 2 bit variants */
-	oc_jump       = oc_test + pso_count,      // (offset)
-	oc_jump_true  = oc_jump + pso_count,      // (offset)
-	oc_jump_false = oc_jump_true + pso_count, // (offset)
+	oc_jump       = oc_test + oo_count,      // (offset)
+	oc_jump_true  = oc_jump + oo_count,      // (offset)
+	oc_jump_false = oc_jump_true + oo_count, // (offset)
 
 	/** 0 bit variants */
 	oc_return_void,

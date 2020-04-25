@@ -30,7 +30,12 @@ arg_options = {
         ("8", "resources.at(ip.read<std::uint8_t>())"),
         ("16", "resources.at(ip.read<std::uint16_t>())"),
         ("32", "resources.at(ip.read<std::uint32_t>())")
-    ]
+    ],
+	"oo": [
+		("8", "ip.read<std::int8_t>()"),
+		("16", "ip.read<std::int16_t>()"),
+		("32", "ip.read<std::int32_t>()")
+	]
 }
 opcodes = [
     ("oc_instantiate", ("co", "mdo"), """const auto constant = {0};
@@ -93,6 +98,30 @@ break;"""),
     ("oc_test", ("mso",), """test_register = member_pointer({0})->test();
 
 break;"""),
+
+
+	("oc_jump", ("oo",), """const auto offset = {0};
+
+ip += offset;
+
+break;"""),
+
+	("oc_jump_true", ("oo",), """const auto offset = {0};
+
+if (test_register) {{
+	ip += offset;
+}}
+
+break;"""),
+
+	("oc_jump_false", ("oo",), """const auto offset = {0};
+
+if (!test_register) {{
+	ip += offset;
+}}
+
+break;"""),
+
 
     ("oc_return_void", tuple(), "return;"),
     ("oc_drop", tuple(), """stack.drop(ip.read<std::uint8_t>());
