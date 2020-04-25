@@ -27,16 +27,9 @@ void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& e
 			BIA_THROW(exception::syntax_error, "syntax error", err);
 		}
 
-		token::parse::eat_whitespaces(parameter);
-
-		const auto pos = input.tellg();
-
-		if (encoder.read(input) != ';') {
-			input.seekg(pos);
+		if (const auto err = token::parse::cmd_end(parameter)) {
+			BIA_THROW(exception::syntax_error, "syntax error", err);
 		}
-
-		// add cmd_end token; make sure its a token
-		bundle.add({ token::token::cmd_end{} });
 
 		// give to receiver
 		receiver.receive({ bundle.begin(), bundle.end() });

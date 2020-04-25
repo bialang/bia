@@ -26,6 +26,11 @@ struct token
 		resource::view memory;
 	};
 
+	struct batch
+	{
+		std::size_t count;
+	};
+
 	struct control
 	{
 		enum class type
@@ -43,6 +48,7 @@ struct token
 	{
 		let,
 		import,
+		while_,
 		null,
 		true_,
 		false_,
@@ -61,6 +67,7 @@ struct token
 	{
 		cmd_end,
 		identifier,
+		batch,
 		control,
 		keyword,
 		operator_,
@@ -69,7 +76,7 @@ struct token
 		constant_float,
 	};
 
-	util::variant<cmd_end, identifier, control, keyword, operator_, string, int_type, double> value;
+	util::variant<cmd_end, identifier, batch, control, keyword, operator_, string, int_type, double> value;
 };
 
 } // namespace token

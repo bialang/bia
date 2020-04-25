@@ -5,6 +5,7 @@
 #include "any_of.hpp"
 #include "expression.hpp"
 #include "identifier.hpp"
+#include "while_.hpp"
 #include "whitespace_eater.hpp"
 
 #include <exception/syntax_error.hpp>
@@ -89,7 +90,29 @@ inline exception::syntax_details single_stmt(parameter& parameter)
 
 	parameter.restore(old);
 
+	if (!while_(parameter)) {
+		return {};
+	}
+
+	parameter.restore(old);
+
 	return expression(parameter);
+}
+
+inline exception::syntax_details cmd_end(parameter& parameter)
+{
+	eat_whitespaces(parameter);
+
+	const auto pos = parameter.input.tellg();
+
+	if (parameter.encoder.read(parameter.input) != ';') {
+		parameter.input.seekg(pos);
+	}
+
+	// add cmd_end token; make sure its a token
+	parameter.bundle.add({ token::token::cmd_end{} });
+
+	return {};
 }
 
 } // namespace parse
