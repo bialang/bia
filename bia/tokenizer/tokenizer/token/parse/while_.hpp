@@ -4,6 +4,7 @@
 #include "../parameter.hpp"
 #include "any_of.hpp"
 #include "expression.hpp"
+#include "flow_control.hpp"
 #include "whitespace_eater.hpp"
 
 namespace bia {
@@ -41,14 +42,18 @@ inline exception::syntax_details while_(parameter& parameter)
 	std::size_t count     = 0;
 
 	while (true) {
-		const auto old = parameter.backup();
-
 		eat_whitespaces(parameter);
 
-		if (single_stmt(parameter)) {
+		const auto old = parameter.backup();
+
+		if (loop_flow_control(parameter)) {
 			parameter.restore(old);
 
-			break;
+			if (single_stmt(parameter)) {
+				parameter.restore(old);
+
+				break;
+			}
 		}
 
 		if (const auto err = cmd_end(parameter)) {
@@ -57,8 +62,6 @@ inline exception::syntax_details while_(parameter& parameter)
 
 		++count;
 	}
-
-	eat_whitespaces(parameter);
 
 	if (parameter.encoder.read(parameter.input) != '}') {
 		return { parameter.input.tellg(), "expected '}'" };

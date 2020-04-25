@@ -128,8 +128,29 @@ const compiler::token* compiler::_while(util::span<const token> tokens)
 	_writer.write<true, bytecode::oc_drop>(1);
 	manager.jump(jump_manager::type::if_false, jump_manager::destination::end);
 
+	tokens = tokens.subspan(1);
+
 	while (count--) {
-		tokens = tokens.subspan(_stmt(tokens.subspan(1)) - tokens.data());
+		// flow control
+		if (static_cast<token::type>(tokens.data()->value.index()) == token::type::keyword) {
+			switch (tokens.data()->value.get<token::keyword>()) {
+			case token::keyword::break_:
+				manager.jump(jump_manager::type::unconditional, jump_manager::destination::end);
+				break;
+			case token::keyword::continue_:
+				manager.jump(jump_manager::type::unconditional, jump_manager::destination::start);
+				break;
+			default: goto gt_continue;
+			}
+
+			BIA_EXPECTS(tokens.size() >= 2 &&
+			            static_cast<token::type>(tokens.data()[1].value.index()) == token::type::cmd_end);
+
+			tokens = tokens.subspan(2);
+		} else {
+		gt_continue:;
+			tokens = tokens.subspan(_stmt(tokens) - tokens.data());
+		}
 	}
 
 	manager.jump(jump_manager::type::unconditional, jump_manager::destination::start);

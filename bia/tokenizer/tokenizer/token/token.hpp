@@ -49,6 +49,8 @@ struct token
 		let,
 		import,
 		while_,
+		break_,
+		continue_,
 		null,
 		true_,
 		false_,
