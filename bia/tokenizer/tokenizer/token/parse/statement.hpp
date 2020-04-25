@@ -99,14 +99,23 @@ inline exception::syntax_details single_stmt(parameter& parameter)
 	return expression(parameter);
 }
 
+/**
+ * Parses for a cmd end token.
+ *
+ * @param[in,out] parameter the required parameters
+ * @returns an error if no cmd end is found
+ */
 inline exception::syntax_details cmd_end(parameter& parameter)
 {
-	eat_whitespaces(parameter);
-
+	const auto err = eat_whitespaces<true>(parameter);
 	const auto pos = parameter.input.tellg();
 
 	if (parameter.encoder.read(parameter.input) != ';') {
 		parameter.input.seekg(pos);
+
+		if (err) {
+			return { pos, "expected ';' or a line feed" };
+		}
 	}
 
 	// add cmd_end token; make sure its a token

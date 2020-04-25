@@ -10,32 +10,41 @@ namespace tokenizer {
 namespace token {
 namespace parse {
 
-inline exception::syntax_details eat_whitespaces(parameter& tp)
+/**
+ * Eats all the whitespaces this function encounters.
+ *
+ * @note this function always consumes all whitespaces, even if an error is returned
+ *
+ * @param[in,out] parameter the required parameters
+ * @returns an error if no whitespaces are found
+ * @tparam RequireCmd if `true`, this function fails if no whitespace cmd_end character is found
+ */
+template<bool RequireCmd = false>
+inline exception::syntax_details eat_whitespaces(parameter& parameter)
 {
 	auto eaten = false;
+	auto cmd   = false;
 
 	while (true) {
-		const auto pos = tp.input.tellg();
-		const auto cp  = tp.encoder.read(tp.input);
+		const auto pos = parameter.input.tellg();
 
-		switch (cp) {
-		case '\n':
+		switch (parameter.encoder.read(parameter.input)) {
 		case '\r':
+		case '\n': cmd = true;
 		case ' ':
-		case '\t': {
-			eaten = true;
-
-			break;
-		}
+		case '\t':
+		case '\v':
+		case '\f': eaten = true; break;
+		case string::encoding::encoder::eof: cmd = true; eaten = true;
 		default: {
-			tp.input.seekg(pos);
+			parameter.input.seekg(pos);
 
-			// expected whitespaces
 			if (!eaten) {
-				return { pos, "expected whitespaces" };
+				return { pos, "expected whitespace" };
+			} else if (RequireCmd && !cmd) {
+				return { pos, "expected cmd whitespace, like a line feed" };
 			}
 
-			// no error
 			return {};
 		}
 		}
