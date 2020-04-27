@@ -56,6 +56,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 	bia::member::member::test_type test_register{ 10 };
 	auto& gc      = context.gc();
 	auto& globals = context.symbols();
+	auto& loader  = context.loader();
 	auto token    = gc.register_thread(64);
 	auto stack    = token->stack_view();
 
@@ -226,8 +227,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -239,8 +242,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -252,8 +257,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -265,8 +272,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -278,8 +287,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.push();
+
 			if (result.valid()) {
-				token->set(stack.push(), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -291,8 +302,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -304,8 +317,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -317,8 +332,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -330,8 +347,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -343,8 +362,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.push();
+
 			if (result.valid()) {
-				token->set(stack.push(), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -356,8 +377,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -369,8 +392,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -382,8 +407,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -395,8 +422,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -408,8 +437,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.push();
+
 			if (result.valid()) {
-				token->set(stack.push(), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -421,8 +452,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -434,8 +467,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -447,8 +482,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -460,8 +497,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -473,8 +512,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.push();
+
 			if (result.valid()) {
-				token->set(stack.push(), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -486,8 +527,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -499,8 +542,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -512,8 +557,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -525,8 +572,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -538,8 +587,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.push();
+
 			if (result.valid()) {
-				token->set(stack.push(), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -551,8 +602,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -564,8 +617,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -577,8 +632,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -590,8 +647,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -603,8 +662,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.push();
+
 			if (result.valid()) {
-				token->set(stack.push(), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -616,8 +677,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -629,8 +692,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -642,8 +707,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -655,8 +722,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -668,8 +737,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.push();
+
 			if (result.valid()) {
-				token->set(stack.push(), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -680,8 +751,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -692,8 +765,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -704,8 +779,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -716,8 +793,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
+
 			if (result.valid()) {
-				token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -728,8 +807,10 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			stack.drop(parameter_count);
 
+			auto& dest = stack.push();
+
 			if (result.valid()) {
-				token->set(stack.push(), std::move(result));
+				token->set(dest, std::move(result));
 			}
 
 			break;
@@ -2744,6 +2825,111 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			break;
 		}
+		case (oc_import - ro_32 * mdo_count - mdo_local_8): {
+			auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_32 * mdo_count - mdo_global_8): {
+			auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_32 * mdo_count - mdo_local_16): {
+			auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_32 * mdo_count - mdo_global_16): {
+			auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_32 * mdo_count - mdo_tos): {
+			auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.push(), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_16 * mdo_count - mdo_local_8): {
+			auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_16 * mdo_count - mdo_global_8): {
+			auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_16 * mdo_count - mdo_local_16): {
+			auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_16 * mdo_count - mdo_global_16): {
+			auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_16 * mdo_count - mdo_tos): {
+			auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.push(), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_8 * mdo_count - mdo_local_8): {
+			auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_8 * mdo_count - mdo_global_8): {
+			auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_8 * mdo_count - mdo_local_16): {
+			auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_8 * mdo_count - mdo_global_16): {
+			auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), loader.load(name).get());
+
+			break;
+		}
+		case (oc_import - ro_8 * mdo_count - mdo_tos): {
+			auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.push(), loader.load(name).get());
+
+			break;
+		}
 		case (oc_test - mso_resource_8): {
 			test_register = member_pointer(resources.at(ip.read<std::uint8_t>()))->test();
 
@@ -2783,6 +2969,81 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 		}
 		case (oc_test - mso_tos): {
 			test_register = member_pointer(stack.tos())->test();
+
+			break;
+		}
+		case (oc_jump - oo_32): {
+			const auto offset = ip.read<std::int32_t>();
+
+			ip += offset;
+
+			break;
+		}
+		case (oc_jump - oo_16): {
+			const auto offset = ip.read<std::int16_t>();
+
+			ip += offset;
+
+			break;
+		}
+		case (oc_jump - oo_8): {
+			const auto offset = ip.read<std::int8_t>();
+
+			ip += offset;
+
+			break;
+		}
+		case (oc_jump_true - oo_32): {
+			const auto offset = ip.read<std::int32_t>();
+
+			if (test_register) {
+				ip += offset;
+			}
+
+			break;
+		}
+		case (oc_jump_true - oo_16): {
+			const auto offset = ip.read<std::int16_t>();
+
+			if (test_register) {
+				ip += offset;
+			}
+
+			break;
+		}
+		case (oc_jump_true - oo_8): {
+			const auto offset = ip.read<std::int8_t>();
+
+			if (test_register) {
+				ip += offset;
+			}
+
+			break;
+		}
+		case (oc_jump_false - oo_32): {
+			const auto offset = ip.read<std::int32_t>();
+
+			if (!test_register) {
+				ip += offset;
+			}
+
+			break;
+		}
+		case (oc_jump_false - oo_16): {
+			const auto offset = ip.read<std::int16_t>();
+
+			if (!test_register) {
+				ip += offset;
+			}
+
+			break;
+		}
+		case (oc_jump_false - oo_8): {
+			const auto offset = ip.read<std::int8_t>();
+
+			if (!test_register) {
+				ip += offset;
+			}
 
 			break;
 		}
