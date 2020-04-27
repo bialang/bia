@@ -76,7 +76,17 @@ public:
 	 * @returns the member or `nullptr` if it does not exist
 	 */
 	virtual member* get(const native::string& name)                      = 0;
+	/**
+	 * Returns a representation of this object as a floating point number.
+	 * 
+	 * @returns a floating point representation
+	*/
 	virtual float_type as_float() const noexcept                         = 0;
+	/**
+	 * Returns a representation of this object as an integer.
+	 * 
+	 * @returns an integer representation
+	*/
 	virtual int_type as_int() const noexcept                             = 0;
 	virtual bool as_data(const std::type_info& type, void* output)       = 0;
 	virtual bool as_data(const std::type_info& type, void* output) const = 0;
