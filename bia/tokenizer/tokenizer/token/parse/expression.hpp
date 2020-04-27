@@ -5,9 +5,10 @@
 #include "any_of.hpp"
 #include "identifier.hpp"
 #include "member.hpp"
+#include "number.hpp"
 #include "operators.hpp"
 #include "string.hpp"
-#include "number.hpp"
+#include "whitespace_eater.hpp"
 
 #include <exception/implementation_error.hpp>
 
@@ -66,9 +67,9 @@ inline exception::syntax_details term(parameter& parameter)
 
 	if (!t.second) {
 		switch (t.first) {
-		case 0: parameter.bundle.add(token{ token::keyword::not_ }); break;
-		case 1: parameter.bundle.add(token{ token::operator_::tilde }); break;
-		case 2: parameter.bundle.add(token{ token::operator_::minus }); break;
+		case 0: parameter.bundle.add(token{ operator_::logical_not }); break;
+		case 1: parameter.bundle.add(token{ operator_::bitwise_not }); break;
+		case 2: parameter.bundle.add(token{ operator_::unary_minus }); break;
 		default: BIA_IMPLEMENTATION_ERROR("invalid operator id");
 		}
 	} else {
@@ -81,21 +82,39 @@ inline exception::syntax_details term(parameter& parameter)
 
 inline exception::syntax_details expression(parameter& parameter)
 {
-	if (auto err = term(parameter)) {
+	if (const auto err = term(parameter)) {
 		return err;
 	}
 
-	// end of expression
-	const auto old = parameter.backup();
+	// more
+	while (true) {
+		const auto old = parameter.backup();
 
-	if (auto err = operators(parameter)) {
-		parameter.restore(old);
+		if (const auto err = eat_whitespaces(parameter)) {
+			break;
+		}
 
-		return {};
-	}
+		if (const auto err = operators(parameter)) {
+			parameter.restore(old);
 
-	if (auto err = term(parameter)) {
-		return err;
+			break;
+		}
+
+		// only if operator is infix
+		const auto op = parameter.bundle.last().value.get<operator_>();
+
+		if (type_of(op) == operator_type::infix) {
+			if (const auto err = eat_whitespaces(parameter)) {
+				// whitespaces are required
+				if (op == operator_::in || op == operator_::logical_and || op == operator_::logical_or) {
+					return err;
+				}
+			}
+
+			if (const auto err = term(parameter)) {
+				return err;
+			}
+		}
 	}
 
 	return {};

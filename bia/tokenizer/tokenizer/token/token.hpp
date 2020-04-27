@@ -1,6 +1,8 @@
 #ifndef BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 #define BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 
+#include "operator_.hpp"
+
 #include <cstdint>
 #include <resource/view.hpp>
 #include <util/variant.hpp>
@@ -57,12 +59,6 @@ struct token
 		not_,
 		and_,
 		or_
-	};
-
-	enum class operator_
-	{
-		tilde,
-		minus
 	};
 
 	enum class type

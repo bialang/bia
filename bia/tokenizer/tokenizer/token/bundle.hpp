@@ -27,6 +27,8 @@ public:
 	token& at(std::size_t index);
 	const token* begin() const noexcept;
 	const token* end() const noexcept;
+	const token& first() const noexcept;
+	const token& last() const noexcept;
 	std::size_t size() const noexcept;
 
 private:
