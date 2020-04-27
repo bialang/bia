@@ -1,3 +1,4 @@
+#include <bsl/io.hpp>
 #include <bvm/bvm.hpp>
 #include <compiler/compiler.hpp>
 #include <connector/connector-inl.hpp>
@@ -26,11 +27,7 @@ int main()
 
 	code << u8R"(
 
-let x = "99
-
-print(print(x)("
-
-print(print(io.puts(x))())
+let x = 1 + 2 + 5
 
 )";
 
@@ -103,26 +100,12 @@ print(print(io.puts(x))())
 	}
 
 	{
-		auto str = static_cast<char*>(gc->allocate(3).release());
-		auto name      = gc->construct<bia::member::native::string>(str);
-		auto dict      = gc->construct<bia::member::native::dict>();
+		const auto str = static_cast<char*>(gc->allocate(3).release());
 
 		std::memcpy(str, "io", 3);
 
-		context.symbols().put(name.peek(), dict.peek());
-		name.start_monitor();
-		auto d =dict.peek();
-		dict.start_monitor();
-
-		str = static_cast<char*>(gc->allocate(5).release());
-		name      = gc->construct<bia::member::native::string>(str);
-		auto fun      = gc->construct<bia::member::function::static_<int, const char*>>(&puts);
-
-		std::memcpy(str, "puts", 5);
-
-		d->put(name.peek(), fun.peek());
-		name.start_monitor();
-		fun.start_monitor();
+		context.loader().add_module(gc->construct<bia::member::native::string>(str).release(),
+		                            gc->construct<bia::bsl::io>(*gc).release());
 	}
 
 	bia::bvm::bvm::execute(context,
