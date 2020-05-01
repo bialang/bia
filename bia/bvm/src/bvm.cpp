@@ -6,6 +6,7 @@
 #include <connector/connector-inl.hpp>
 #include <creator/creator.hpp>
 #include <exception/nullpointer.hpp>
+#include <exception/opcode.hpp>
 #include <gc/gcable.hpp>
 #include <gc/stack_view.hpp>
 #include <gc/token.hpp>

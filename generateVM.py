@@ -148,4 +148,4 @@ for opcode in opcodes:
     rec(opcode[ARGS])
     #case = "case ({}{}):".format(opcode[NAME], args_template.format([i() for i in args]))
 
-print("default: throw;")
+print("default: BIA_THROW(exception::opcode, \"invalid opcode\");")
