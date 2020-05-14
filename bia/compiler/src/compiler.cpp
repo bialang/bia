@@ -4,6 +4,7 @@
 #include "compiler/jump_manager.hpp"
 
 #include <exception/implementation_error.hpp>
+#include <initializer_list>
 #include <log/log.hpp>
 #include <util/gsl.hpp>
 
@@ -24,8 +25,20 @@ void compiler::finish()
 
 void compiler::receive(util::span<const token> tokens)
 {
-	for (auto& i : tokens) {
-		printf("token %p = %zi\n", &i, i.value.index());
+	for (const auto& i : tokens) {
+		BIA_LOG(TRACE, "token {} is a {}", static_cast<const void*>(&i),
+		        std::initializer_list<const char*>{
+		            "cmd_end",
+		            "identifier",
+		            "batch",
+		            "control",
+		            "keyword",
+		            "operator_",
+		            "constant_string",
+		            "constant_int",
+		            "constant_float",
+		        }
+		            .begin()[i.value.index()]);
 	}
 
 	for (auto i = tokens.begin(); i != tokens.end();) {
