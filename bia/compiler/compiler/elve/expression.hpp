@@ -14,24 +14,23 @@ namespace bia {
 namespace compiler {
 namespace elve {
 
-template<typename T>
-inline const tokenizer::token::token*
-    expression(present present, util::span<const tokenizer::token::token> tokens, T&& destination)
+template<typename Destination>
+inline const tokenizer::token::token* value(present present, util::span<const tokenizer::token::token> tokens,
+                                            Destination&& destination)
 {
 	using tokenizer::token::token;
 
 	BIA_EXPECTS(!tokens.empty());
 
-	// parse value
 	switch (static_cast<token::type>(tokens.data()->value.index())) {
-	case token::type::identifier: return member(present, tokens, std::forward<T>(destination));
+	case token::type::identifier: return member(present, tokens, std::forward<Destination>(destination));
 	case token::type::keyword: {
 		int val = 0;
 
 		switch (static_cast<token::keyword>(tokens.data()->value.get<token::keyword>())) {
 		case token::keyword::true_: val = 1;
 		case token::keyword::false_: {
-			present.writer.write<true, bytecode::oc_instantiate>(val, std::forward<T>(destination));
+			present.writer.write<true, bytecode::oc_instantiate>(val, std::forward<Destination>(destination));
 
 			break;
 		}
@@ -45,13 +44,13 @@ inline const tokenizer::token::token*
 		bytecode::member::resource src{ (std::uint16_t) present.resources.index_of(
 			tokens.data()->value.get<token::string>().memory) };
 
-		present.writer.write<true, bytecode::oc_refer>(src, std::forward<T>(destination));
+		present.writer.write<true, bytecode::oc_refer>(src, std::forward<Destination>(destination));
 
 		break;
 	}
 	case token::type::constant_int: {
 		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<token::int_type>(),
-		                                                     std::forward<T>(destination));
+		                                                     std::forward<Destination>(destination));
 
 		break;
 	}
@@ -59,6 +58,14 @@ inline const tokenizer::token::token*
 	}
 
 	return tokens.data() + 1;
+}
+
+template<typename Destination>
+inline const tokenizer::token::token*
+    expression(present present, util::span<const tokenizer::token::token> tokens, Destination&& destination)
+{
+	// parse value
+	return value(present, tokens, std::forward<Destination>(destination));
 }
 
 } // namespace elve
