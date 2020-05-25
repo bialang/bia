@@ -66,7 +66,9 @@ add_subdirectory("bvm")
 add_subdirectory("bsl")
 
 
-add_executable(maindev "main.cpp")
+add_executable(maindev "main.cpp" ${BACKWARD_ENABLE})
 target_link_libraries(maindev
 	PUBLIC bsl
 	PUBLIC compiler)
+
+add_backward(maindev)
