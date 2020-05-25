@@ -49,12 +49,9 @@ TEST_CASE("common writer", "[bytecode]")
 		REQUIRE(constant_index<false>(std::int64_t{ 127 }) == co_int_64);
 		REQUIRE(constant_index<false>(34.5) == co_double);
 
-		REQUIRE(parameter_size_index<false>(std::int8_t{ 127 }) == pso_8);
-		REQUIRE(parameter_size_index<false>(std::int16_t{ 127 }) == pso_16);
-		REQUIRE(parameter_size_index<false>(std::int32_t{ 127 }) == pso_32);
-		REQUIRE(parameter_size_index<false>(std::uint8_t{ 255 }) == pso_8);
-		REQUIRE(parameter_size_index<false>(std::uint16_t{ 255 }) == pso_16);
-		REQUIRE(parameter_size_index<false>(std::uint32_t{ 255 }) == pso_32);
+		REQUIRE(offset_index<false>(std::int8_t{ 127 }) == oo_8);
+		REQUIRE(offset_index<false>(std::int16_t{ 127 }) == oo_16);
+		REQUIRE(offset_index<false>(std::int32_t{ 127 }) == oo_32);
 	}
 
 	SECTION("optimized")
@@ -76,14 +73,10 @@ TEST_CASE("common writer", "[bytecode]")
 		REQUIRE(constant_index<true>(std::int64_t{ 127 }) == co_int_8);
 		REQUIRE(constant_index<true>(34.5) == co_double);
 
-		REQUIRE(parameter_size_index<true>(std::int8_t{ 127 }) == pso_8);
-		REQUIRE(parameter_size_index<true>(std::int16_t{ 127 }) == pso_8);
-		REQUIRE(parameter_size_index<true>(std::int32_t{ -128 }) == pso_8);
-		REQUIRE(parameter_size_index<true>(std::int32_t{ -129 }) == pso_16);
-		REQUIRE(parameter_size_index<true>(std::uint8_t{ 255 }) == pso_8);
-		REQUIRE(parameter_size_index<true>(std::uint16_t{ 255 }) == pso_8);
-		REQUIRE(parameter_size_index<true>(std::uint32_t{ 255 }) == pso_8);
-		REQUIRE(parameter_size_index<true>(std::uint32_t{ 256 }) == pso_16);
+		REQUIRE(offset_index<true>(std::int8_t{ 127 }) == oo_8);
+		REQUIRE(offset_index<true>(std::int16_t{ 127 }) == oo_8);
+		REQUIRE(offset_index<true>(std::int32_t{ -128 }) == oo_8);
+		REQUIRE(offset_index<true>(std::int32_t{ -129 }) == oo_16);
 	}
 }
 
