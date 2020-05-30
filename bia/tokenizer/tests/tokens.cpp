@@ -18,7 +18,7 @@ template<typename... T>
 inline std::shared_ptr<token::parameter> create_parameter(T&&... values)
 {
 	auto input = std::make_shared<std::stringstream>();
-	auto enc   = encoder::get_instance(encoder::standard_encoding::utf_8);
+	auto enc   = get_encoder(standard_encoding::utf_8);
 	auto bndl  = std::make_shared<token::bundle>();
 	auto manager =
 	    std::make_shared<bia::resource::manager>(std::make_shared<bia::gc::memory::simple_allocator>());
@@ -28,7 +28,7 @@ inline std::shared_ptr<token::parameter> create_parameter(T&&... values)
 	return { new token::parameter{ *input, *manager, *enc, *bndl },
 		     [input, manager, enc, bndl](token::parameter* ptr) {
 		         delete ptr;
-		         encoder::free_instance(enc);
+		         free_encoder(enc);
 		     } };
 }
 

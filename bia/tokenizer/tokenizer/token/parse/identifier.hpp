@@ -18,8 +18,8 @@ inline exception::syntax_details identifier(parameter& tp)
 
 	auto first        = true;
 	auto streambuf    = tp.manager.start_memory(true);
-	const auto outenc = encoder::get_instance(encoder::standard_encoding::utf_8);
-	const auto free   = util::make_finally([outenc] { encoder::free_instance(outenc); });
+	const auto outenc = get_encoder(standard_encoding::utf_8);
+	const auto free   = util::make_finally([outenc] { free_encoder(outenc); });
 
 	std::ostream output(&streambuf);
 

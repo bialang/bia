@@ -21,8 +21,8 @@ inline exception::syntax_details string(parameter& parameter)
 	}
 
 	auto streambuf    = parameter.manager.start_memory(true);
-	const auto outenc = encoder::get_instance(encoder::standard_encoding::utf_8);
-	const auto free   = util::make_finally([outenc] { encoder::free_instance(outenc); });
+	const auto outenc = get_encoder(standard_encoding::utf_8);
+	const auto free   = util::make_finally([outenc] { free_encoder(outenc); });
 	auto escape       = false;
 	std::ostream output(&streambuf);
 

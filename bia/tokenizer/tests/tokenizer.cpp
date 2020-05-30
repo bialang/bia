@@ -102,8 +102,8 @@ TEST_CASE("tokenization", "[tokenizer]")
 {
 	bia_lexer lexer(std::make_shared<bia::gc::memory::simple_allocator>());
 	std::stringstream code;
-	auto encoder = encoding::encoder::get_instance(encoding::encoder::standard_encoding::utf_8);
-	auto finally = bia::util::make_finally([encoder] { encoding::encoder::free_instance(encoder); });
+	auto encoder = encoding::get_encoder(encoding::standard_encoding::utf_8);
+	auto finally = bia::util::make_finally([encoder] { encoding::free_encoder(encoder); });
 	mock_receiver receiver;
 
 	code << R"(let x=~false)";
@@ -147,8 +147,8 @@ TEST_CASE("syntax", "[tokenizer]")
 {
 	bia_lexer lexer(std::make_shared<bia::gc::memory::simple_allocator>());
 	std::stringstream code;
-	auto encoder = encoding::encoder::get_instance(encoding::encoder::standard_encoding::utf_8);
-	auto finally = bia::util::make_finally([encoder] { encoding::encoder::free_instance(encoder); });
+	auto encoder = encoding::get_encoder(encoding::standard_encoding::utf_8);
+	auto finally = bia::util::make_finally([encoder] { encoding::free_encoder(encoder); });
 	mock_receiver receiver;
 
 	constexpr char script[] = R"(

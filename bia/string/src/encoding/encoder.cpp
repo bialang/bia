@@ -1,44 +1,36 @@
 #include "string/encoding/encoder.hpp"
+
 #include "string/encoding/standard/ascii.hpp"
 
-#include <gc/gc.hpp>
+#include <exception/implementation_error.hpp>
 
-namespace bia {
-namespace string {
-namespace encoding {
+using namespace bia::string::encoding;
 
 #define BIA_STRING_ENCODING_BACKEND_NONE
 #if defined(BIA_STRING_ENCODING_BACKEND_ICU)
 
 #elif defined(BIA_STRING_ENCODING_BACKEND_NONE)
-standard::ascii ascii_encoder;
-//standard::utf8 utf8_encoder;
-// standard::utf16<false> utf16le_encoder;
-// standard::utf16<true> utf16be_encoder;
+static standard::ascii ascii_encoder;
 #endif
 
-encoder* encoder::get_instance(standard_encoding type)
+encoder* bia::string::encoding::get_encoder(standard_encoding encoding)
 {
 #if defined(BIA_STRING_ENCODING_BACKEND_ICU)
 
 #elif defined(BIA_STRING_ENCODING_BACKEND_NONE)
-	switch (type) {
+	switch (encoding) {
 	case standard_encoding::ascii: return &ascii_encoder;
 	case standard_encoding::utf_8: return &ascii_encoder;
-	//default: BIA_THROW(exception::unknown_encoder_exception, u"unsupported string encoding");
+	case standard_encoding::utf_16:
+	case standard_encoding::utf_16_le:
+	case standard_encoding::utf_16_be:
+	case standard_encoding::utf_32:
+	case standard_encoding::utf_32_le:
+	case standard_encoding::utf_32_be:
+	default: BIA_IMPLEMENTATION_ERROR("not implemented");
 	}
 #endif
 }
 
-void encoder::free_instance(encoder* enc)
-{
-#if defined(BIA_STRING_ENCODING_BACKEND_ICU)
-
-#elif defined(BIA_STRING_ENCODING_BACKEND_NONE)
-	// these instances are static
-#endif
-}
-
-} // namespace encoding
-} // namespace string
-} // namespace bia
+void bia::string::encoding::free_encoder(encoder* encoder)
+{}

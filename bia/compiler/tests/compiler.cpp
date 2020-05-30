@@ -18,8 +18,8 @@ TEST_CASE("simple compiling", "[compiler]")
 
 	compiler::compiler cp{ output };
 	auto encoder =
-	    string::encoding::encoder::get_instance(string::encoding::encoder::standard_encoding::utf_8);
-	auto finally = util::make_finally([encoder] { string::encoding::encoder::free_instance(encoder); });
+	    string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
+	auto finally = util::make_finally([encoder] { string::encoding::free_encoder(encoder); });
 	tokenizer::bia_lexer lexer{ std::make_shared<gc::memory::simple_allocator>() };
 
 	lexer.lex(code, *encoder, cp);

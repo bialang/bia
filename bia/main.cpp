@@ -20,10 +20,9 @@ int main()
 	std::stringstream resources;
 	std::stringstream code;
 	bia::compiler::compiler compiler{ output, resources };
-	auto encoder = bia::string::encoding::encoder::get_instance(
-	    bia::string::encoding::encoder::standard_encoding::utf_8);
+	auto encoder = bia::string::encoding::get_encoder(bia::string::encoding::standard_encoding::utf_8);
 	const auto finally =
-	    bia::util::make_finally([encoder] { bia::string::encoding::encoder::free_instance(encoder); });
+	    bia::util::make_finally([encoder] { bia::string::encoding::free_encoder(encoder); });
 
 	code << u8R"(
 
