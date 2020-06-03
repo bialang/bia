@@ -92,18 +92,17 @@ inline const tokenizer::token::token*
 		// left hand
 		value(present, tokens.subspan(0, 1), bytecode::member::tos{});
 
-		const auto left_id = present.variable_manager.add_tmp().id;
+		const bytecode::member::local left{ present.variable_manager.add_tmp().id };
 
 		while (is_valid(tokens = tokens.subspan(2))) {
 			// right hand
 			tokens = tokens.subspan(expression(present, tokens, bytecode::member::tos{}, precedence_of(op)) -
 			                        tokens.data());
 
-			const auto right_id = present.variable_manager.add_tmp().id;
+			const bytecode::member::local right{ present.variable_manager.add_tmp().id };
 
 			// call operator
-			/*present.writer.write<true, bytecode::oc_operator>(bytecode::member::local{ left_id },
-			                                                  bytecode::member::local{ right_id }, op);*/
+			present.writer.write<true, bytecode::oc_operator>(left, right, unique_id_of(op), left);
 			present.variable_manager.remove_tmp();
 			present.writer.write<true, bytecode::oc_drop>(1);
 		}
@@ -112,8 +111,7 @@ inline const tokenizer::token::token*
 
 		// destination was not tos
 		if (!std::is_same<typename std::decay<Destination>::type, bytecode::member::tos>::value) {
-			present.writer.write<true, bytecode::oc_refer>(bytecode::member::local{ left_id },
-			                                               std::forward<Destination>(destination));
+			present.writer.write<true, bytecode::oc_refer>(left, std::forward<Destination>(destination));
 			present.writer.write<true, bytecode::oc_drop>(1);
 		}
 

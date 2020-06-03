@@ -65,6 +65,11 @@ inline operator_type type_of(operator_ op) noexcept
 	return static_cast<operator_type>(static_cast<std::uint16_t>(op) & 0x3);
 }
 
+inline std::uint8_t unique_id_of(operator_ op) noexcept
+{
+	return static_cast<std::uint8_t>((static_cast<std::uint16_t>(op) >> 2) & 0xff);
+}
+
 } // namespace token
 } // namespace tokenizer
 } // namespace bia
