@@ -62,6 +62,10 @@ public:
 	{
 		return copy();
 	}
+	gc::gcable<member> operation(const member& right, std::uint8_t op) override
+	{
+		return {};
+	}
 	member* get(const native::string& name) override
 	{
 		thread::lock::guard<thread::lock::mutex> lock{ _mutex };

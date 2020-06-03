@@ -69,6 +69,7 @@ public:
 	 * @returns the result of the function call
 	 */
 	virtual gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) = 0;
+	virtual gc::gcable<member> operation(const member& right, std::uint8_t op) = 0;
 	/**
 	 * Returns the member with the specified name.
 	 *

@@ -48,6 +48,12 @@ public:
 
 		return gc::gc::active_gc()->construct<integer>(616161).template to<member>();
 	}
+	gc::gcable<member> operation(const member& right, std::uint8_t op) override
+	{
+		puts("calling operator...");
+
+		return {};
+	}
 	member* get(const native::string& name) override
 	{
 		return nullptr;
