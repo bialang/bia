@@ -26,7 +26,7 @@ int main()
 
 	code << u8R"(
 
-let x = 1 + 2 + 5
+let x = 1 + 2 * 5
 
 )";
 

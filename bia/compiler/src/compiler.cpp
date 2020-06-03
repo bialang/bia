@@ -97,9 +97,11 @@ const compiler::token* compiler::_decl(util::span<const token> tokens)
 		                        bytecode::member::local{ index.first.id });
 	}
 
+	const auto ret = elve::expression(_create_present(), tokens.subspan(2), bytecode::member::tos{});
+
 	_variables.add(tokens.data()[1].value.get<token::identifier>().memory);
 
-	return elve::expression(_create_present(), tokens.subspan(2), bytecode::member::tos{});
+	return ret;
 }
 
 const compiler::token* compiler::_import(util::span<const token> tokens)

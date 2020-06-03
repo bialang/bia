@@ -38,6 +38,18 @@ arg_options = {
 	]
 }
 opcodes = [
+    ("oc_operator", ("mso", "mso", "mdo"), """const auto left = member_pointer({0});
+const auto right = member_pointer({1});
+const auto op = ip.read<std::uint8_t>();
+auto result = left->operation(*right, op);
+auto& dest = {2};
+
+if (result.valid()) {{
+    token->set(dest, std::move(result));
+}}
+
+break;"""),
+
     ("oc_instantiate", ("co", "mdo"), """const auto constant = {0};
 
 token->set({1}, creator::create(constant).to<bia::member::member>());

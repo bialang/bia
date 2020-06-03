@@ -90,11 +90,11 @@ inline const tokenizer::token::token*
 	// only if we have higher precedence
 	if (precedence_of(op) > precedence) {
 		// left hand
-		value(present, tokens.subspan(0, 1), bytecode::member::tos{});
+		value(present, tokens, bytecode::member::tos{});
 
 		const bytecode::member::local left{ present.variable_manager.add_tmp().id };
 
-		while (is_valid(tokens = tokens.subspan(2))) {
+		while (tokens.size() > 2 && is_valid(tokens = tokens.subspan(2))) {
 			// right hand
 			tokens = tokens.subspan(expression(present, tokens, bytecode::member::tos{}, precedence_of(op)) -
 			                        tokens.data());
@@ -103,11 +103,9 @@ inline const tokenizer::token::token*
 
 			// call operator
 			present.writer.write<true, bytecode::oc_operator>(left, right, unique_id_of(op), left);
-			present.variable_manager.remove_tmp();
 			present.writer.write<true, bytecode::oc_drop>(1);
+			present.variable_manager.remove_tmp();
 		}
-
-		present.variable_manager.remove_tmp();
 
 		// destination was not tos
 		if (!std::is_same<typename std::decay<Destination>::type, bytecode::member::tos>::value) {
@@ -115,11 +113,13 @@ inline const tokenizer::token::token*
 			present.writer.write<true, bytecode::oc_drop>(1);
 		}
 
+		present.variable_manager.remove_tmp();
+
 		return tokens.data();
 	}
 
 	// caller has higher precedence
-	return value(present, tokens.subspan(0, 1), std::forward<Destination>(destination));
+	return value(present, tokens, std::forward<Destination>(destination));
 }
 
 } // namespace elve
