@@ -7,6 +7,8 @@ namespace bia {
 namespace tokenizer {
 namespace token {
 
+typedef std::int8_t precedence_type;
+
 enum class operator_type
 {
 	infix,
@@ -14,10 +16,10 @@ enum class operator_type
 	postfix
 };
 
-template<std::uint8_t Precedence, std::uint8_t Variant, operator_type Type>
+template<precedence_type Precedence, std::uint8_t Variant, operator_type Type>
 constexpr inline std::uint16_t make()
 {
-	static_assert(Precedence <= 0xf, "too high precedence");
+	static_assert(Precedence >= 0 && Precedence <= 0xe, "invalid precedence");
 	static_assert(Variant <= 0xf, "too high variant");
 
 	return (Variant << 6) | (Precedence << 2) | static_cast<int>(Type);
@@ -49,16 +51,23 @@ enum class operator_ : std::uint16_t
 	bitwise_not         = make<10, 1, operator_type::prefix>(),
 	exponentation       = make<11, 0, operator_type::infix>(),
 	member_access       = make<12, 0, operator_type::infix>(),
+	function_call_open  = make<12, 1, operator_type::prefix>(),
+	function_call_close = make<12, 2, operator_type::postfix>(),
 };
 
-inline std::uint8_t precedence_of(operator_ op) noexcept
+inline precedence_type precedence_of(operator_ op) noexcept
 {
-	return static_cast<std::uint8_t>((static_cast<std::uint16_t>(op) >> 2) & 0xf);
+	return static_cast<precedence_type>((static_cast<std::uint16_t>(op) >> 2) & 0xf);
 }
 
 inline operator_type type_of(operator_ op) noexcept
 {
 	return static_cast<operator_type>(static_cast<std::uint16_t>(op) & 0x3);
+}
+
+inline std::uint8_t unique_id_of(operator_ op) noexcept
+{
+	return static_cast<std::uint8_t>((static_cast<std::uint16_t>(op) >> 2) & 0xff);
 }
 
 } // namespace token

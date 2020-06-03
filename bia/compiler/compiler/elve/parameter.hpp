@@ -16,9 +16,10 @@ namespace bia {
 namespace compiler {
 namespace elve {
 
-template<typename T>
+template<typename Destination>
 const tokenizer::token::token* expression(present present, util::span<const tokenizer::token::token> tokens,
-                                          T&& destination);
+                                          Destination&& destination,
+                                          tokenizer::token::precedence_type precedence = -1);
 
 inline std::pair<const tokenizer::token::token*, std::uint8_t>
     parameter(present present, util::span<const tokenizer::token::token> tokens)

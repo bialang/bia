@@ -107,6 +107,21 @@ public:
 		optimized_member<Optimize>(_output, p1);
 		optimized_member<Optimize>(_output, p2);
 	}
+	template<bool Optimize, op_code Op_code, typename P0, typename P1, typename P3>
+	typename std::enable_if<is_op_code<Op_code, oc_operator>::value && is_member_source<P0>::value &&
+	                        is_member_source<P1>::value && is_member_destination<P3>::value>::type
+	    write(P0 p0, P1 p1, std::uint8_t p2, P3 p3)
+	{
+		optimized_write<false>(
+		    _output,
+		    static_cast<op_code>(Op_code - member_source_index<Optimize>(p0) * mso_count * mdo_count -
+		                         member_source_index<Optimize>(p1) * mdo_count -
+		                         member_destination_index<Optimize>(p3)));
+		optimized_member<Optimize>(_output, p0);
+		optimized_member<Optimize>(_output, p1);
+		optimized_write<false>(_output, p2);
+		optimized_member<Optimize>(_output, p3);
+	}
 	void finish()
 	{
 		_forward_end(

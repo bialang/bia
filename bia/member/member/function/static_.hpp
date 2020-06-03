@@ -40,6 +40,10 @@ public:
 	{
 		return connector::connect_static(_function, stack, count);
 	}
+	gc::gcable<member> operation(const member& right, std::uint8_t op) override
+	{
+		return {};
+	}
 	member* get(const native::string& name) override
 	{
 		return nullptr;
