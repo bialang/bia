@@ -28,6 +28,14 @@ int main()
 
 let x = 1 + 2 * 5
 
+if x {
+	print(x)
+} else if 2 {
+	print(33)
+}else {
+	print("hi")
+}
+
 )";
 
 	try {

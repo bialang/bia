@@ -3,6 +3,7 @@
 
 #include "../parameter.hpp"
 #include "any_of.hpp"
+#include "batch.hpp"
 #include "expression.hpp"
 #include "flow_control.hpp"
 #include "whitespace_eater.hpp"
@@ -11,9 +12,6 @@ namespace bia {
 namespace tokenizer {
 namespace token {
 namespace parse {
-
-exception::syntax_details single_stmt(parameter& parameter);
-exception::syntax_details cmd_end(parameter& parameter);
 
 inline exception::syntax_details while_(parameter& parameter)
 {
@@ -34,42 +32,7 @@ inline exception::syntax_details while_(parameter& parameter)
 
 	eat_whitespaces(parameter);
 
-	if (parameter.encoder.read(parameter.input) != '{') {
-		return { parameter.input.tellg(), "expected '{'" };
-	}
-
-	const auto open_index = parameter.bundle.add({ token::batch{ 0 } });
-	std::size_t count     = 0;
-
-	while (true) {
-		eat_whitespaces(parameter);
-
-		const auto old = parameter.backup();
-
-		if (loop_flow_control(parameter)) {
-			parameter.restore(old);
-
-			if (single_stmt(parameter)) {
-				parameter.restore(old);
-
-				break;
-			}
-		}
-
-		if (const auto err = cmd_end(parameter)) {
-			return err;
-		}
-
-		++count;
-	}
-
-	if (parameter.encoder.read(parameter.input) != '}') {
-		return { parameter.input.tellg(), "expected '}'" };
-	}
-
-	parameter.bundle.at(open_index).value.get<token::batch>().count = count;
-
-	return {};
+	return batch(parameter, [&parameter] { return loop_flow_control(parameter); });
 }
 
 } // namespace parse

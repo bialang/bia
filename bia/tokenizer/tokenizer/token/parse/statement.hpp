@@ -5,6 +5,7 @@
 #include "any_of.hpp"
 #include "expression.hpp"
 #include "identifier.hpp"
+#include "if_.hpp"
 #include "while_.hpp"
 #include "whitespace_eater.hpp"
 
@@ -91,6 +92,12 @@ inline exception::syntax_details single_stmt(parameter& parameter)
 	parameter.restore(old);
 
 	if (!while_(parameter)) {
+		return {};
+	}
+
+	parameter.restore(old);
+
+	if (!if_(parameter)) {
 		return {};
 	}
 

@@ -58,7 +58,10 @@ struct token
 		false_,
 		not_,
 		and_,
-		or_
+		or_,
+		if_,
+		else_if,
+		else_
 	};
 
 	enum class type
