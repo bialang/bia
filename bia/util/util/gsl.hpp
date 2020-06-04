@@ -139,6 +139,10 @@ public:
 
 		return { _data + offset, _data + offset + count };
 	}
+	span subspan(pointer from, std::size_t count = dynamic_extent) const
+	{
+		return subspan(from - _data, dynamic_extent);
+	}
 	pointer data() const noexcept
 	{
 		return _data;
