@@ -36,6 +36,15 @@ void jump_manager::mark(destination destination)
 	_output.seekp(cpos);
 }
 
+void jump_manager::clear(destination destination)
+{
+	switch (destination) {
+	case destination::next: _last = { -1 }; break;
+	case destination::end: _end_jumps.clear(); break;
+	case destination::start: _start = { -1 }; break;
+	}
+}
+
 void jump_manager::jump(type type, destination destination)
 {
 	const pos_type cpos = _output.tellp();

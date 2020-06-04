@@ -41,6 +41,15 @@ public:
 	 */
 	void mark(destination destination);
 	/**
+	 * Clears the stored jumps.
+	 *
+	 * @warning this does not delete the jumps, but only deregistering them from updating when
+	 * jump_manager::mark() is called
+	 * 
+	 * @param destination the type of the destination
+	 */
+	void clear(destination destination);
+	/**
 	 * Writes a jump to a specific destination.
 	 *
 	 * @param type the type of the jump

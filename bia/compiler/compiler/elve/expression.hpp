@@ -69,7 +69,7 @@ inline bool valid_right_hand(util::span<const tokenizer::token::token> tokens)
 
 template<typename Destination>
 inline tokens_type expression_impl(present present, tokens_type tokens, Destination&& destination,
-                              tokenizer::token::precedence_type precedence, jump_manager& jumper)
+                                   tokenizer::token::precedence_type precedence, jump_manager& jumper)
 {
 	using namespace tokenizer::token;
 
@@ -85,6 +85,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 	tokens = value(present, tokens, bytecode::member::tos{});
 
 	const bytecode::member::local left{ present.variable_manager.add_tmp().id };
+	auto last_logical_and = false;
 
 	while (valid_right_hand(tokens)) {
 		const auto op = tokens.data()->value.get<operator_>();
@@ -94,8 +95,30 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 			break;
 		}
 
+		// logical chaining
+		if (op == operator_::logical_and || op == operator_::logical_or) {
+			if (last_logical_and && op == operator_::logical_or) {
+				jumper.mark(jump_manager::destination::end);
+				jumper.clear(jump_manager::destination::end);
+
+				last_logical_and = false;
+			} else if (op == operator_::logical_and) {
+				last_logical_and = true;
+			}
+
+			present.writer.write<true, bytecode::oc_test>(left);
+			jumper.jump(op == operator_::logical_and ? jump_manager::type::if_false
+			                                         : jump_manager::type::if_true,
+			            jump_manager::destination::end);
+
+			tokens = expression_impl(present, tokens.subspan(1), left, precedence_of(op), jumper);
+
+			continue;
+		}
+
 		// right hand
-		tokens = expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, precedence_of(op), jumper);
+		tokens =
+		    expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, precedence_of(op), jumper);
 
 		const bytecode::member::local right{ present.variable_manager.add_tmp().id };
 
@@ -104,6 +127,8 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		present.writer.write<true, bytecode::oc_drop>(1);
 		present.variable_manager.remove_tmp();
 	}
+	
+	jumper.mark(jump_manager::destination::end);
 
 	// destination was not tos
 	if (!std::is_same<typename std::decay<Destination>::type, bytecode::member::tos>::value) {

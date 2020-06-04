@@ -26,14 +26,9 @@ int main()
 
 	code << u8R"(
 
-let x = 1 + 0 * 5 
+let x = 3 and 0 and 14 or 11
 
-if x {
-	print(x)
-} else {
-	let x = 99
-}
-print(x)()
+print(x)
 )";
 
 	try {
