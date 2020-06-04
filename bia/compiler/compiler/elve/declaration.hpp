@@ -23,10 +23,10 @@ inline tokens_type declaration(present present, tokens_type tokens)
 		// overwriting of other scopes not implemented
 		BIA_EXPECTS(index.first.scope_id == 0);
 
-		return elve::expression(present, tokens.subspan(2), bytecode::member::local{ index.first.id }, -1);
+		return expression(present, tokens.subspan(2), bytecode::member::local{ index.first.id });
 	}
 
-	const auto ret = elve::expression(present, tokens.subspan(2), bytecode::member::tos{}, -1);
+	const auto ret = expression(present, tokens.subspan(2), bytecode::member::tos{});
 
 	present.variable_manager.add(tokens.data()[1].value.get<token::identifier>().memory);
 

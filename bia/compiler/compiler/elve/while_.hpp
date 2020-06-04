@@ -19,7 +19,7 @@ inline tokens_type while_(present present, tokens_type tokens)
 
 	manager.mark(jump_manager::destination::start);
 
-	tokens = expression(present, tokens.subspan(1), bytecode::member::tos{}, -1);
+	tokens = expression(present, tokens.subspan(1), bytecode::member::tos{});
 
 	auto count = tokens.data()->value.get<token::batch>().count;
 

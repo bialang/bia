@@ -13,8 +13,7 @@ namespace compiler {
 namespace elve {
 
 template<typename Destination>
-tokens_type expression(present present, tokens_type tokens, Destination&& destination,
-                       tokenizer::token::precedence_type precedence);
+tokens_type expression(present present, tokens_type tokens, Destination&& destination);
 
 inline std::pair<tokens_type, std::uint8_t> parameter(present present, tokens_type tokens)
 {
@@ -45,7 +44,7 @@ inline std::pair<tokens_type, std::uint8_t> parameter(present present, tokens_ty
 			throw;
 		}
 
-		expression(present, { a + 1, b }, bytecode::member::tos{}, -1);
+		expression(present, { a + 1, b }, bytecode::member::tos{});
 	}
 
 	return { tokens.subspan(last + 1), count };

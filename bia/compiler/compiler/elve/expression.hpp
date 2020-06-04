@@ -1,6 +1,7 @@
 #ifndef BIA_COMPILER_ELVE_EXPRESSION_HPP_
 #define BIA_COMPILER_ELVE_EXPRESSION_HPP_
 
+#include "../jump_manager.hpp"
 #include "member.hpp"
 #include "present.hpp"
 
@@ -60,17 +61,15 @@ inline tokens_type value(present present, tokens_type tokens, Destination&& dest
 	return tokens.subspan(1);
 }
 
-bool valid_right_hand(util::span<const tokenizer::token::token> tokens)
+inline bool valid_right_hand(util::span<const tokenizer::token::token> tokens)
 {
 	// todo:
 	return tokens.size() > 1;
 }
 
-} // namespace detail
-
 template<typename Destination>
-inline tokens_type expression(present present, tokens_type tokens, Destination&& destination,
-                              tokenizer::token::precedence_type precedence)
+inline tokens_type expression_impl(present present, tokens_type tokens, Destination&& destination,
+                              tokenizer::token::precedence_type precedence, jump_manager& jumper)
 {
 	using namespace tokenizer::token;
 
@@ -80,14 +79,14 @@ inline tokens_type expression(present present, tokens_type tokens, Destination&&
 	if (tokens.size() == 1 ||
 	    static_cast<token::type>(tokens.data()[1].value.index()) != token::type::operator_ ||
 	    type_of(tokens.data()[1].value.get<operator_>()) == operator_type::prefix) {
-		return detail::value(present, tokens, std::forward<Destination>(destination));
+		return value(present, tokens, std::forward<Destination>(destination));
 	}
 
-	tokens = detail::value(present, tokens, bytecode::member::tos{});
+	tokens = value(present, tokens, bytecode::member::tos{});
 
 	const bytecode::member::local left{ present.variable_manager.add_tmp().id };
 
-	while (detail::valid_right_hand(tokens)) {
+	while (valid_right_hand(tokens)) {
 		const auto op = tokens.data()->value.get<operator_>();
 
 		// only if we have higher precedence
@@ -96,7 +95,7 @@ inline tokens_type expression(present present, tokens_type tokens, Destination&&
 		}
 
 		// right hand
-		tokens = expression(present, tokens.subspan(1), bytecode::member::tos{}, precedence_of(op));
+		tokens = expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, precedence_of(op), jumper);
 
 		const bytecode::member::local right{ present.variable_manager.add_tmp().id };
 
@@ -115,6 +114,16 @@ inline tokens_type expression(present present, tokens_type tokens, Destination&&
 	present.variable_manager.remove_tmp();
 
 	return tokens;
+}
+
+} // namespace detail
+
+template<typename Destination>
+inline tokens_type expression(present present, tokens_type tokens, Destination&& destination)
+{
+	jump_manager jumper{ &present.writer.output() };
+
+	return detail::expression_impl(present, tokens, std::forward<Destination>(destination), -1, jumper);
 }
 
 } // namespace elve

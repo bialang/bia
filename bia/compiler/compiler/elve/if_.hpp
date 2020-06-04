@@ -18,7 +18,7 @@ inline tokens_type if_(present present, tokens_type tokens)
 
 	jump_manager jumper{ &present.writer.output() };
 
-	tokens = expression(present, tokens.subspan(1), bytecode::member::tos{}, -1);
+	tokens = expression(present, tokens.subspan(1), bytecode::member::tos{});
 
 	present.writer.write<true, bytecode::oc_test>(bytecode::member::tos{});
 	present.writer.write<true, bytecode::oc_drop>(1);
@@ -32,7 +32,7 @@ inline tokens_type if_(present present, tokens_type tokens)
 
 	// do all else if
 	while (!tokens.empty() && is_keyword(tokens.data(), token::keyword::else_if)) {
-		tokens = expression(present, tokens.subspan(1), bytecode::member::tos{}, -1);
+		tokens = expression(present, tokens.subspan(1), bytecode::member::tos{});
 
 		present.writer.write<true, bytecode::oc_test>(bytecode::member::tos{});
 		present.writer.write<true, bytecode::oc_drop>(1);
