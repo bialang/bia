@@ -9,6 +9,7 @@
 #include <exception/implementation_error.hpp>
 #include <tokenizer/token/token.hpp>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 
 namespace bia {
@@ -123,11 +124,14 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		const bytecode::member::local right{ present.variable_manager.add_tmp().id };
 
 		// call operator
-		present.writer.write<true, bytecode::oc_operator>(left, right, unique_id_of(op), left);
+		present.writer.write<true, bytecode::oc_operator>(
+		    left, right,
+		    static_cast<typename std::underlying_type<member::infix_operator>::type>(to_infix_operator(op)),
+		    left);
 		present.writer.write<true, bytecode::oc_drop>(1);
 		present.variable_manager.remove_tmp();
 	}
-	
+
 	jumper.mark(jump_manager::destination::end);
 
 	// destination was not tos

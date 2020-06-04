@@ -2,6 +2,8 @@
 #define BIA_MEMBER_NATIVE_INTEGER_HPP_
 
 #include "../member.hpp"
+#include "detail/operations.hpp"
+
 #include <cstdint>
 #include <gc/gc.hpp>
 
@@ -48,13 +50,11 @@ public:
 
 		return gc::gc::active_gc()->construct<integer>(616161).template to<member>();
 	}
-	gc::gcable<member> operation(const member& right, std::uint8_t op) override
+	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
-		if (op == 9) {
-			return gc::gc::active_gc()->construct<integer>(_value * right.as_int()).template to<member>();
-		}
-
-		return gc::gc::active_gc()->construct<integer>(_value + right.as_int()).template to<member>();
+		return gc::gc::active_gc()
+		    ->construct<integer>(detail::operation(_value, op, right.as_int()))
+		    .template to<member>();
 	}
 	member* get(const native::string& name) override
 	{

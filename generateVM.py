@@ -40,7 +40,7 @@ arg_options = {
 opcodes = [
     ("oc_operator", ("mso", "mso", "mdo"), """const auto left = member_pointer({0});
 const auto right = member_pointer({1});
-const auto op = ip.read<std::uint8_t>();
+const auto op = ip.read<infix_operator>();
 auto result = left->operation(*right, op);
 auto& dest = {2};
 

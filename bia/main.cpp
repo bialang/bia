@@ -26,7 +26,7 @@ int main()
 
 	code << u8R"(
 
-let x = 3 and 0 and 14 or 11
+let x = 56 * 98 - 56 * 98 or 61
 
 print(x)
 )";

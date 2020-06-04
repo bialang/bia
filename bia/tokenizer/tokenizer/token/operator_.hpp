@@ -2,6 +2,8 @@
 #define BIA_TOKENIZER_TOKEN_OPERATOR_HPP_
 
 #include <cstdint>
+#include <exception/implementation_error.hpp>
+#include <member/operator_.hpp>
 
 namespace bia {
 namespace tokenizer {
@@ -65,9 +67,29 @@ inline operator_type type_of(operator_ op) noexcept
 	return static_cast<operator_type>(static_cast<std::uint16_t>(op) & 0x3);
 }
 
-inline std::uint8_t unique_id_of(operator_ op) noexcept
+inline member::infix_operator to_infix_operator(operator_ op)
 {
-	return static_cast<std::uint8_t>((static_cast<std::uint16_t>(op) >> 2) & 0xff);
+	switch (op) {
+	case operator_::bitwise_or: return member::infix_operator::bitwise_or;
+	case operator_::bitwise_xor: return member::infix_operator::bitwise_xor;
+	case operator_::bitwise_and: return member::infix_operator::bitwise_and;
+	case operator_::equal: return member::infix_operator::equal;
+	case operator_::not_equal: return member::infix_operator::not_equal;
+	case operator_::less: return member::infix_operator::less;
+	case operator_::less_equal: return member::infix_operator::less_equal;
+	case operator_::greater: return member::infix_operator::greater;
+	case operator_::greater_equal: return member::infix_operator::greater_equal;
+	case operator_::in: return member::infix_operator::in;
+	case operator_::bitwise_left_shift: return member::infix_operator::bitwise_left_shift;
+	case operator_::bitwise_right_shift: return member::infix_operator::bitwise_right_shift;
+	case operator_::addition: return member::infix_operator::addition;
+	case operator_::subtraction: return member::infix_operator::subtraction;
+	case operator_::multiplication: return member::infix_operator::multiplication;
+	case operator_::division: return member::infix_operator::division;
+	case operator_::remainder: return member::infix_operator::remainder;
+	case operator_::exponentation: return member::infix_operator::exponentation;
+	default: BIA_IMPLEMENTATION_ERROR("invalid operator conversion");
+	}
 }
 
 } // namespace token

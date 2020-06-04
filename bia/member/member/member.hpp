@@ -1,6 +1,8 @@
 #ifndef BIA_MEMBER_MEMBER_HPP_
 #define BIA_MEMBER_MEMBER_HPP_
 
+#include "operator_.hpp"
+
 #include <cstdint>
 #include <gc/gcable.hpp>
 #include <gc/object/base.hpp>
@@ -69,25 +71,32 @@ public:
 	 * @returns the result of the function call
 	 */
 	virtual gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) = 0;
-	virtual gc::gcable<member> operation(const member& right, std::uint8_t op) = 0;
+	/**
+	 * Executes an infix operation on this member.
+	 *
+	 * @param right the right hand side of the operation
+	 * @param op the operation type
+	 * @returns the result of this operation
+	 */
+	virtual gc::gcable<member> operation(const member& right, infix_operator op) = 0;
 	/**
 	 * Returns the member with the specified name.
 	 *
 	 * @param name the name of the member
 	 * @returns the member or `nullptr` if it does not exist
 	 */
-	virtual member* get(const native::string& name)                      = 0;
+	virtual member* get(const native::string& name) = 0;
 	/**
 	 * Returns a representation of this object as a floating point number.
-	 * 
+	 *
 	 * @returns a floating point representation
-	*/
-	virtual float_type as_float() const noexcept                         = 0;
+	 */
+	virtual float_type as_float() const noexcept = 0;
 	/**
 	 * Returns a representation of this object as an integer.
-	 * 
+	 *
 	 * @returns an integer representation
-	*/
+	 */
 	virtual int_type as_int() const noexcept                             = 0;
 	virtual bool as_data(const std::type_info& type, void* output)       = 0;
 	virtual bool as_data(const std::type_info& type, void* output) const = 0;

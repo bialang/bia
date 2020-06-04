@@ -40,7 +40,7 @@ public:
 	{
 		return connector::connect_static(_function, stack, count);
 	}
-	gc::gcable<member> operation(const member& right, std::uint8_t op) override
+	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
 		return {};
 	}

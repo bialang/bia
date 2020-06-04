@@ -6,8 +6,11 @@
 namespace bia {
 namespace member {
 
-enum class operator_ : std::uint8_t
+enum class infix_operator : std::uint8_t
 {
+	bitwise_or,
+	bitwise_xor,
+	bitwise_and,
 	equal,
 	not_equal,
 	less,
@@ -15,17 +18,14 @@ enum class operator_ : std::uint8_t
 	greater,
 	greater_equal,
 	in,
-	plus,
-	minus,
-	times,
-	divide,
-	power,
-	modulo,
-	bitwise_or,
-	bitwise_and,
-	bitwise_xor,
-	bitwise_not,
-	unary_minus,
+	bitwise_left_shift,
+	bitwise_right_shift,
+	addition,
+	subtraction,
+	multiplication,
+	division,
+	remainder,
+	exponentation,
 };
 
 } // namespace member

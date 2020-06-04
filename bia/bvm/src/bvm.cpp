@@ -53,6 +53,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 {
 	using namespace bytecode;
 	using flag = bia::member::member::flag;
+	using bia::member::infix_operator;
+
 	instruction_pointer ip{ instructions.begin(), instructions.end() };
 	bia::member::member::test_type test_register{ 10 };
 	auto& gc      = context.gc();
