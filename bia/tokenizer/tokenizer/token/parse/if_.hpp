@@ -75,21 +75,27 @@ inline exception::syntax_details if_(parameter& parameter)
 		return err;
 	}
 
-	eat_whitespaces(parameter);
-
 	while (true) {
 		const auto old = parameter.backup();
+
+		eat_whitespaces(parameter);
 
 		if (const auto err = else_if(parameter)) {
 			parameter.restore(old);
 
 			break;
 		}
-
-		eat_whitespaces(parameter);
 	}
 
-	return else_(parameter);
+	const auto old = parameter.backup();
+
+	eat_whitespaces(parameter);
+
+	if (else_(parameter)) {
+		parameter.restore(old);
+	}
+
+	return {};
 }
 
 } // namespace parse

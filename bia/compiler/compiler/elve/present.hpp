@@ -5,6 +5,8 @@
 
 #include <bytecode/writer/instruction.hpp>
 #include <resource/serializer.hpp>
+#include <tokenizer/token/token.hpp>
+#include <util/gsl.hpp>
 
 namespace bia {
 namespace compiler {
@@ -16,6 +18,8 @@ struct present
 	bytecode::writer::instruction& writer;
 	resource::serializer& resources;
 };
+
+typedef util::span<const tokenizer::token::token> tokens_type;
 
 } // namespace elve
 } // namespace compiler

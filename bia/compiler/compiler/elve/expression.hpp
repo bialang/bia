@@ -8,7 +8,6 @@
 #include <exception/implementation_error.hpp>
 #include <tokenizer/token/token.hpp>
 #include <tuple>
-#include <util/gsl.hpp>
 #include <utility>
 
 namespace bia {
@@ -16,8 +15,7 @@ namespace compiler {
 namespace elve {
 
 template<typename Destination>
-inline const tokenizer::token::token* value(present present, util::span<const tokenizer::token::token> tokens,
-                                            Destination&& destination)
+inline tokens_type value(present present, tokens_type tokens, Destination&& destination)
 {
 	using tokenizer::token::token;
 
@@ -58,7 +56,7 @@ inline const tokenizer::token::token* value(present present, util::span<const to
 	default: BIA_IMPLEMENTATION_ERROR("invalid token type");
 	}
 
-	return tokens.data() + 1;
+	return tokens.subspan(1);
 }
 
 bool is_valid(util::span<const tokenizer::token::token> tokens)
@@ -68,9 +66,8 @@ bool is_valid(util::span<const tokenizer::token::token> tokens)
 }
 
 template<typename Destination>
-inline const tokenizer::token::token*
-    expression(present present, util::span<const tokenizer::token::token> tokens, Destination&& destination,
-               tokenizer::token::precedence_type precedence)
+inline tokens_type expression(present present, tokens_type tokens, Destination&& destination,
+                              tokenizer::token::precedence_type precedence)
 {
 	using namespace tokenizer::token;
 
@@ -96,8 +93,7 @@ inline const tokenizer::token::token*
 
 		while (tokens.size() > 2 && is_valid(tokens = tokens.subspan(2))) {
 			// right hand
-			tokens = tokens.subspan(expression(present, tokens, bytecode::member::tos{}, precedence_of(op)) -
-			                        tokens.data());
+			tokens = expression(present, tokens, bytecode::member::tos{}, precedence_of(op));
 
 			const bytecode::member::local right{ present.variable_manager.add_tmp().id };
 
@@ -115,7 +111,7 @@ inline const tokenizer::token::token*
 
 		present.variable_manager.remove_tmp();
 
-		return tokens.data();
+		return tokens;
 	}
 
 	// caller has higher precedence

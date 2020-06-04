@@ -13,11 +13,6 @@
 
 namespace bia {
 namespace compiler {
-namespace elve {
-
-class present;
-
-}
 
 class compiler : public tokenizer::token::receiver
 {
@@ -32,12 +27,6 @@ private:
 	bytecode::writer::instruction _writer;
 	resource::serializer _resources;
 	variable_manager _variables;
-
-	const token* _stmt(util::span<const token> tokens);
-	const token* _decl(util::span<const token> tokens);
-	const token* _import(util::span<const token> tokens);
-	const token* _while(util::span<const token> tokens);
-	elve::present _create_present() noexcept;
 };
 
 } // namespace compiler

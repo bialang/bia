@@ -17,14 +17,13 @@ namespace compiler {
 namespace elve {
 
 template<typename Source, typename Destination>
-inline const tokenizer::token::token* member_step(present present,
-                                                  util::span<const tokenizer::token::token> tokens,
-                                                  Source&& source, Destination&& destination)
+inline tokens_type member_step(present present, tokens_type tokens, Source&& source,
+                               Destination&& destination)
 {
 	using tokenizer::token::token;
 
 	if (tokens.empty()) {
-		return tokens.data();
+		return tokens;
 	}
 
 	switch (static_cast<token::type>(tokens.data()->value.index())) {
@@ -45,15 +44,14 @@ inline const tokenizer::token::token* member_step(present present,
 		present.writer.write<true, bytecode::oc_get>(std::forward<Source>(source), name,
 		                                             std::forward<Destination>(destination));
 
-		return tokens.data() + 1;
+		return tokens.subspan(1);
 	}
-	default: return tokens.data();
+	default: return tokens;
 	}
 }
 
 template<typename T>
-inline const tokenizer::token::token*
-    member(present present, util::span<const tokenizer::token::token> tokens, T&& destination)
+inline tokens_type member(present present, tokens_type tokens, T&& destination)
 {
 	using tokenizer::token::token;
 
@@ -73,28 +71,28 @@ inline const tokenizer::token::token*
 		    member_step(present, tokens, bytecode::member::local{ index.first.id }, bytecode::member::tos{});
 
 		// just one
-		if (x == tokens.data()) {
+		if (tokens.size() == x.size()) {
 			present.writer.write<true, bytecode::oc_clone>(bytecode::member::local{ index.first.id },
 			                                               std::forward<T>(destination));
 
-			return tokens.data();
+			return tokens;
 		}
 
-		tokens = tokens.subspan(x - tokens.data());
+		tokens = x;
 	} // global source
 	else {
 		const auto id = present.resources.index_of(tokens.data()[-1].value.get<token::identifier>().memory);
 		const auto x  = member_step(present, tokens, bytecode::member::global{ id }, bytecode::member::tos{});
 
 		// just one
-		if (x == tokens.data()) {
+		if (tokens.size() == x.size()) {
 			present.writer.write<true, bytecode::oc_clone>(bytecode::member::global{ id },
 			                                               std::forward<T>(destination));
 
-			return tokens.data();
+			return tokens;
 		}
 
-		tokens = tokens.subspan(x - tokens.data());
+		tokens = x;
 	}
 
 	const bytecode::member::local tmp_source{ present.variable_manager.add_tmp().id };
@@ -106,19 +104,19 @@ inline const tokenizer::token::token*
 	});
 
 	// chain
-	for (auto i = tokens.begin(); i != tokens.end();) {
+	while (!tokens.empty()) {
 		BIA_LOG(INFO, "processing member chain");
 
-		const auto x = member_step(present, { i, tokens.end() }, tmp_source, tmp_source);
+		const auto x = member_step(present, tokens, tmp_source, tmp_source);
 
-		if (x == i) {
-			return i;
+		if (tokens.size() == x.size()) {
+			return tokens;
 		}
 
-		i = x;
+		tokens = x;
 	}
 
-	return tokens.end();
+	return tokens.subspan(tokens.end());
 }
 
 } // namespace elve

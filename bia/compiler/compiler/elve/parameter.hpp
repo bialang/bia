@@ -3,13 +3,9 @@
 
 #include "present.hpp"
 
-#include <bytecode/writer/instruction.hpp>
 #include <cstdint>
-#include <exception/implementation_error.hpp>
 #include <limits>
 #include <log/log.hpp>
-#include <tokenizer/token/token.hpp>
-#include <util/gsl.hpp>
 #include <utility>
 
 namespace bia {
@@ -17,12 +13,10 @@ namespace compiler {
 namespace elve {
 
 template<typename Destination>
-const tokenizer::token::token* expression(present present, util::span<const tokenizer::token::token> tokens,
-                                          Destination&& destination,
-                                          tokenizer::token::precedence_type precedence = -1);
+tokens_type expression(present present, tokens_type tokens, Destination&& destination,
+                       tokenizer::token::precedence_type precedence);
 
-inline std::pair<const tokenizer::token::token*, std::uint8_t>
-    parameter(present present, util::span<const tokenizer::token::token> tokens)
+inline std::pair<tokens_type, std::uint8_t> parameter(present present, tokens_type tokens)
 {
 	using tokenizer::token::token;
 
@@ -51,10 +45,10 @@ inline std::pair<const tokenizer::token::token*, std::uint8_t>
 			throw;
 		}
 
-		expression(present, { a + 1, b }, bytecode::member::tos{});
+		expression(present, { a + 1, b }, bytecode::member::tos{}, -1);
 	}
 
-	return { last + 1, count };
+	return { tokens.subspan(last + 1), count };
 }
 
 } // namespace elve
