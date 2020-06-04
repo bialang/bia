@@ -26,16 +26,14 @@ int main()
 
 	code << u8R"(
 
-let x = 1 + 2 * 5
+let x = 1 + 0 * 5 
 
 if x {
 	print(x)
-} else if 2 {
-	print(33)
-}else {
-	print("hi")
+} else {
+	let x = 99
 }
-
+print(x)()
 )";
 
 	try {

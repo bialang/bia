@@ -50,9 +50,11 @@ public:
 	}
 	gc::gcable<member> operation(const member& right, std::uint8_t op) override
 	{
-		puts("calling operator...");
+		if (op == 9) {
+			return gc::gc::active_gc()->construct<integer>(_value * right.as_int()).template to<member>();
+		}
 
-		return {};
+		return gc::gc::active_gc()->construct<integer>(_value + right.as_int()).template to<member>();
 	}
 	member* get(const native::string& name) override
 	{

@@ -65,6 +65,4427 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 		const auto op_code = ip.next_op_code();
 
 		switch (op_code) {
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_local_8): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_16): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_8 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_local_8): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_16): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_16): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_16): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_16): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(stack.tos());
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			const auto op = ip.read<std::uint8_t>();
+			auto result   = left->operation(*right, op);
+			auto& dest    = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<std::uint8_t>();
+			auto result      = left->operation(*right, op);
+			auto& dest       = stack.push();
+
+			if (result.valid()) {
+				token->set(dest, std::move(result));
+			}
+
+			break;
+		}
 		case (oc_instantiate - co_double * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<double>();
 
@@ -3056,7 +7477,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			break;
 		}
-		default: throw;
+		default: BIA_THROW(exception::opcode, "invalid opcode");
 		}
 	}
 }

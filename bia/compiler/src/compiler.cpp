@@ -25,7 +25,7 @@ void compiler::finish()
 void compiler::receive(util::span<const token> tokens)
 {
 	for (const auto& i : tokens) {
-		BIA_LOG(TRACE, "token {} is a {}", static_cast<const void*>(&i),
+		BIA_LOG(INFO, "token {} is a {}", static_cast<const void*>(&i),
 		        std::initializer_list<const char*>{
 		            "cmd_end",
 		            "identifier",

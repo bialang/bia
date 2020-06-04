@@ -1,10 +1,10 @@
-#ifndef BIA_DETAIL_OPERATOR_HPP_
-#define BIA_DETAIL_OPERATOR_HPP_
+#ifndef BIA_MEMBER_OPERATOR_HPP_
+#define BIA_MEMBER_OPERATOR_HPP_
 
 #include <cstdint>
 
 namespace bia {
-namespace detail {
+namespace member {
 
 enum class operator_ : std::uint8_t
 {
@@ -28,7 +28,7 @@ enum class operator_ : std::uint8_t
 	unary_minus,
 };
 
-} // namespace detail
+} // namespace member
 } // namespace bia
 
 #endif
