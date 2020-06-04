@@ -13,6 +13,7 @@
 namespace bia {
 namespace compiler {
 namespace elve {
+namespace detail {
 
 template<typename Destination>
 inline tokens_type value(present present, tokens_type tokens, Destination&& destination)
@@ -59,11 +60,13 @@ inline tokens_type value(present present, tokens_type tokens, Destination&& dest
 	return tokens.subspan(1);
 }
 
-bool is_valid(util::span<const tokenizer::token::token> tokens)
+bool valid_right_hand(util::span<const tokenizer::token::token> tokens)
 {
 	// todo:
 	return tokens.size() > 1;
 }
+
+} // namespace detail
 
 template<typename Destination>
 inline tokens_type expression(present present, tokens_type tokens, Destination&& destination,
@@ -77,45 +80,41 @@ inline tokens_type expression(present present, tokens_type tokens, Destination&&
 	if (tokens.size() == 1 ||
 	    static_cast<token::type>(tokens.data()[1].value.index()) != token::type::operator_ ||
 	    type_of(tokens.data()[1].value.get<operator_>()) == operator_type::prefix) {
-		return value(present, tokens, std::forward<Destination>(destination));
+		return detail::value(present, tokens, std::forward<Destination>(destination));
 	}
 
-	BIA_EXPECTS(static_cast<token::type>(tokens.data()[1].value.index()) == token::type::operator_);
+	tokens = detail::value(present, tokens, bytecode::member::tos{});
 
-	const auto op = tokens.data()[1].value.get<operator_>();
+	const bytecode::member::local left{ present.variable_manager.add_tmp().id };
 
-	// only if we have higher precedence
-	if (precedence_of(op) > precedence) {
-		// left hand
-		value(present, tokens, bytecode::member::tos{});
+	while (detail::valid_right_hand(tokens)) {
+		const auto op = tokens.data()->value.get<operator_>();
 
-		const bytecode::member::local left{ present.variable_manager.add_tmp().id };
-
-		while (tokens.size() > 2 && is_valid(tokens = tokens.subspan(2))) {
-			// right hand
-			tokens = expression(present, tokens, bytecode::member::tos{}, precedence_of(op));
-
-			const bytecode::member::local right{ present.variable_manager.add_tmp().id };
-
-			// call operator
-			present.writer.write<true, bytecode::oc_operator>(left, right, unique_id_of(op), left);
-			present.writer.write<true, bytecode::oc_drop>(1);
-			present.variable_manager.remove_tmp();
+		// only if we have higher precedence
+		if (precedence_of(op) <= precedence) {
+			break;
 		}
 
-		// destination was not tos
-		if (!std::is_same<typename std::decay<Destination>::type, bytecode::member::tos>::value) {
-			present.writer.write<true, bytecode::oc_refer>(left, std::forward<Destination>(destination));
-			present.writer.write<true, bytecode::oc_drop>(1);
-		}
+		// right hand
+		tokens = expression(present, tokens.subspan(1), bytecode::member::tos{}, precedence_of(op));
 
+		const bytecode::member::local right{ present.variable_manager.add_tmp().id };
+
+		// call operator
+		present.writer.write<true, bytecode::oc_operator>(left, right, unique_id_of(op), left);
+		present.writer.write<true, bytecode::oc_drop>(1);
 		present.variable_manager.remove_tmp();
-
-		return tokens;
 	}
 
-	// caller has higher precedence
-	return value(present, tokens, std::forward<Destination>(destination));
+	// destination was not tos
+	if (!std::is_same<typename std::decay<Destination>::type, bytecode::member::tos>::value) {
+		present.writer.write<true, bytecode::oc_refer>(left, std::forward<Destination>(destination));
+		present.writer.write<true, bytecode::oc_drop>(1);
+	}
+
+	present.variable_manager.remove_tmp();
+
+	return tokens;
 }
 
 } // namespace elve
