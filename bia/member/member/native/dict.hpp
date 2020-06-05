@@ -66,6 +66,10 @@ public:
 	{
 		return {};
 	}
+	gc::gcable<member> self_operation(self_operator op) override
+	{
+		return {};
+	}
 	member* get(const native::string& name) override
 	{
 		thread::lock::guard<thread::lock::mutex> lock{ _mutex };

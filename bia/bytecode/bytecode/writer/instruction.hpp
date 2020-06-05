@@ -96,8 +96,8 @@ public:
 		optimized_member<Optimize>(_output, p1);
 	}
 	template<bool Optimize, op_code Op_code, typename P1, typename P2>
-	typename std::enable_if<is_op_code<Op_code, oc_invoke>::value && is_member_source<P1>::value &&
-	                        is_member_destination<P2>::value>::type
+	typename std::enable_if<is_op_code<Op_code, oc_invoke, oc_self_operator>::value &&
+	                        is_member_source<P1>::value && is_member_destination<P2>::value>::type
 	    write(std::uint8_t p0, P1 p1, P2 p2)
 	{
 		optimized_write<false>(_output,

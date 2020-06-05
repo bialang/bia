@@ -44,6 +44,10 @@ public:
 	{
 		return {};
 	}
+	gc::gcable<member> self_operation(self_operator op) override
+	{
+		return {};
+	}
 	member* get(const native::string& name) override
 	{
 		return nullptr;

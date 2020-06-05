@@ -41,8 +41,8 @@ opcodes = [
     ("oc_operator", ("mso", "mso", "mdo"), """const auto left = member_pointer({0});
 const auto right = member_pointer({1});
 const auto op = ip.read<infix_operator>();
-auto result = left->operation(*right, op);
 auto& dest = {2};
+auto result = left->operation(*right, op);
 
 if (result.valid()) {{
     token->set(dest, std::move(result));
@@ -69,7 +69,6 @@ if (result.valid()) {{
 
 break;"""),
 
-
     ("oc_refer", ("mso", "mdo"), """auto& src = {0};
 
 token->set({1}, src);
@@ -89,6 +88,17 @@ break;"""),
     ("oc_copy", ("mso", "mdo"),  """const auto src = member_pointer({0});
 
 token->set({1}, src->copy());
+
+break;"""),
+
+    ("oc_self_operator", ("mso", "mdo"), """const auto op = ip.read<self_operator>();
+const auto src = member_pointer({0});
+auto& dest = {1};
+auto result = src->self_operation(op);
+
+if (result.valid()) {{
+    token->set(dest, std::move(result));
+}}
 
 break;"""),
 

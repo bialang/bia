@@ -92,6 +92,15 @@ inline member::infix_operator to_infix_operator(operator_ op)
 	}
 }
 
+inline member::self_operator to_self_operator(operator_ op)
+{
+	switch (op) {
+	case operator_::unary_minus: return member::self_operator::unary_minus;
+	case operator_::bitwise_not: return member::self_operator::bitwise_not;
+	default: BIA_IMPLEMENTATION_ERROR("invalid operator conversion");
+	}
+}
+
 } // namespace token
 } // namespace tokenizer
 } // namespace bia

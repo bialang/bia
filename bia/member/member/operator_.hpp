@@ -28,6 +28,12 @@ enum class infix_operator : std::uint8_t
 	exponentation,
 };
 
+enum class self_operator : std::uint8_t
+{
+	unary_minus,
+	bitwise_not,
+};
+
 } // namespace member
 } // namespace bia
 

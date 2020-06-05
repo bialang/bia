@@ -10,6 +10,7 @@
 #include <tokenizer/token/token.hpp>
 #include <tuple>
 #include <type_traits>
+#include <util/aggregate.hpp>
 #include <utility>
 
 namespace bia {
@@ -76,11 +77,16 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 
 	BIA_EXPECTS(!tokens.empty());
 
-	// parse value single value
-	if (tokens.size() == 1 ||
-	    static_cast<token::type>(tokens.data()[1].value.index()) != token::type::operator_ ||
-	    type_of(tokens.data()[1].value.get<operator_>()) == operator_type::prefix) {
-		return value(present, tokens, std::forward<Destination>(destination));
+	std::pair<bool, operator_> self_operator{ false, operator_::unary_minus };
+
+	// has self operator
+	if (static_cast<token::type>(tokens.data()->value.index()) == token::type::operator_) {
+		self_operator.first  = true;
+		self_operator.second = tokens.data()->value.get<operator_>();
+		tokens               = tokens.subspan(1);
+		precedence           = util::max(precedence, precedence_of(self_operator.second));
+
+		BIA_EXPECTS(!tokens.empty());
 	}
 
 	tokens = value(present, tokens, bytecode::member::tos{});
@@ -133,6 +139,14 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 	}
 
 	jumper.mark(jump_manager::destination::end);
+
+	// apply self operator
+	if (self_operator.first) {
+		present.writer.write<true, bytecode::oc_self_operator>(
+		    static_cast<typename std::underlying_type<member::infix_operator>::type>(
+		        to_self_operator(self_operator.second)),
+		    left, left);
+	}
 
 	// destination was not tos
 	if (!std::is_same<typename std::decay<Destination>::type, bytecode::member::tos>::value) {

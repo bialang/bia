@@ -65,11 +65,12 @@ inline exception::syntax_details term(parameter& parameter)
 	const auto old = parameter.backup();
 	const auto t   = any_of(parameter, nullptr, "not", "~", "-");
 
-	if (!t.second) {
+	// match self operator, but whitespace required if operator is 'not'
+	if (!t.second && !(eat_whitespaces(parameter) && t.first == 0)) {
 		switch (t.first) {
-		case 0: parameter.bundle.add(token{ operator_::logical_not }); break;
-		case 1: parameter.bundle.add(token{ operator_::bitwise_not }); break;
-		case 2: parameter.bundle.add(token{ operator_::unary_minus }); break;
+		case 0: parameter.bundle.add({ operator_::logical_not }); break;
+		case 1: parameter.bundle.add({ operator_::bitwise_not }); break;
+		case 2: parameter.bundle.add({ operator_::unary_minus }); break;
 		default: BIA_IMPLEMENTATION_ERROR("invalid operator id");
 		}
 	} else {

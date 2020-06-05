@@ -72,13 +72,20 @@ public:
 	 */
 	virtual gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) = 0;
 	/**
-	 * Executes an infix operation on this member.
+	 * Executes an infix operation on this member and returns the result.
 	 *
 	 * @param right the right hand side of the operation
 	 * @param op the operation type
 	 * @returns the result of this operation
 	 */
 	virtual gc::gcable<member> operation(const member& right, infix_operator op) = 0;
+	/**
+	 * Executes a self operation on this member and returns the result.
+	 *
+	 * @param op the operation type
+	 * @returns the result of this operation
+	 */
+	virtual gc::gcable<member> self_operation(self_operator op) = 0;
 	/**
 	 * Returns the member with the specified name.
 	 *

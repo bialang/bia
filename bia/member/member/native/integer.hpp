@@ -56,6 +56,17 @@ public:
 		    ->construct<integer>(detail::operation(_value, op, right.as_int()))
 		    .template to<member>();
 	}
+	gc::gcable<member> self_operation(self_operator op) override
+	{
+		switch (op) {
+		case self_operator::unary_minus:
+			return gc::gc::active_gc()->construct<integer>(-_value).template to<member>();
+		case self_operator::bitwise_not:
+			return gc::gc::active_gc()->construct<integer>(~_value).template to<member>();
+		}
+
+		return {};
+	}
 	member* get(const native::string& name) override
 	{
 		return nullptr;
