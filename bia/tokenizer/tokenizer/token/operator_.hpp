@@ -29,9 +29,9 @@ constexpr inline std::uint16_t make()
 
 enum class operator_ : std::uint16_t
 {
-	logical_not         = make<0, 0, operator_type::prefix>(),
-	logical_or          = make<1, 0, operator_type::infix>(),
-	logical_and         = make<2, 0, operator_type::infix>(),
+	logical_or          = make<0, 0, operator_type::infix>(),
+	logical_and         = make<1, 0, operator_type::infix>(),
+	logical_not         = make<2, 0, operator_type::prefix>(),
 	bitwise_or          = make<3, 0, operator_type::infix>(),
 	bitwise_xor         = make<4, 0, operator_type::infix>(),
 	bitwise_and         = make<5, 0, operator_type::infix>(),
