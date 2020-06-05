@@ -1,0 +1,12 @@
+set(BIA_VERSION @PROJECT_VERSION@)
+
+@PACKAGE_INIT@
+
+set_and_check(BIA_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+foreach(module @BIA_MODULES@)
+	include("${CMAKE_CURRENT_LIST_DIR}/bia-${module}-targets.cmake")
+	set(bia_${module}_FOUND TRUE)
+endforeach()
+
+check_required_components(bia)

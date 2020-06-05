@@ -2,7 +2,7 @@
 .vs/
 /.devcontainer/
 config.hpp
-/bia/bia_config.hpp
+/bia/config.hpp
 [Dd]ebug/
 [Rr]elease/
 ReleaseDLL/

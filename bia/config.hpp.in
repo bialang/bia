@@ -1,0 +1,22 @@
+#ifndef BIA_CONFIG_HPP_
+#define BIA_CONFIG_HPP_
+
+#if __cplusplus > 201103L
+#define BIA_ATTR_NO_RETURN [[noreturn]]
+#else
+#define BIA_ATTR_NO_RETURN
+#endif
+
+#if __cplusplus > 201402L
+#define BIA_ATTR_DEPRECATED [[deprecated]]
+#else
+#define BIA_ATTR_DEPRECATED
+#endif
+
+#if __cplusplus > 201703L
+#define BIA_ATTR_NO_DISCARD [[nodiscard]]
+#else
+#define BIA_ATTR_NO_DISCARD
+#endif
+
+#endif

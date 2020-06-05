@@ -1,16 +1,16 @@
-#include <bsl/io.hpp>
-#include <bvm/bvm.hpp>
-#include <compiler/compiler.hpp>
-#include <connector/connector-inl.hpp>
-#include <exception/syntax_error.hpp>
-#include <gc/gc.hpp>
-#include <gc/memory/simple_allocator.hpp>
+#include <bia/bsl/io.hpp>
+#include <bia/bvm/bvm.hpp>
+#include <bia/compiler/compiler.hpp>
+#include <bia/connector/connector-inl.hpp>
+#include <bia/exception/syntax_error.hpp>
+#include <bia/gc/gc.hpp>
+#include <bia/gc/memory/simple_allocator.hpp>
 #include <iostream>
-#include <member/function/static_.hpp>
-#include <resource/deserialize.hpp>
+#include <bia/member/function/static_.hpp>
+#include <bia/resource/deserialize.hpp>
 #include <sstream>
-#include <tokenizer/bia_lexer.hpp>
-#include <util/finally.hpp>
+#include <bia/tokenizer/bia_lexer.hpp>
+#include <bia/util/finally.hpp>
 
 int main()
 {
