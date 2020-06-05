@@ -25,10 +25,12 @@ int main()
 	    bia::util::make_finally([encoder] { bia::string::encoding::free_encoder(encoder); });
 
 	code << u8R"(
+let x = 34
 
-let x = 56 * 98 - 56 * 98 or 61
+if not x or 2 {
+	print(x)
+}
 
-print(x)
 )";
 
 	try {
