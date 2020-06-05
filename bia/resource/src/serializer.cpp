@@ -4,6 +4,7 @@
 #include <log/log.hpp>
 #include <util/portable/memory.hpp>
 #include <util/portable/stream.hpp>
+#include <algorithm>
 
 using namespace bia::resource;
 
@@ -51,10 +52,8 @@ serializer::size_type serializer::index_of(view view)
 	_output.write(buffer, sw.second);
 
 	// copy data
-	for (; view.first != view.last; ++view.first) {
-		const auto tmp = *view.first;
-
-		_output.put(*reinterpret_cast<const char*>(&tmp));
+	for (auto i : view) {
+		_output.put(*reinterpret_cast<const char*>(&i));
 	}
 
 	_map.insert({ view, _index });
