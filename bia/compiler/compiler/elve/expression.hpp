@@ -10,7 +10,6 @@
 #include <tokenizer/token/token.hpp>
 #include <tuple>
 #include <type_traits>
-#include <util/aggregate.hpp>
 #include <utility>
 
 namespace bia {
@@ -65,8 +64,28 @@ inline tokens_type value(present present, tokens_type tokens, Destination&& dest
 
 inline bool valid_right_hand(util::span<const tokenizer::token::token> tokens)
 {
+	using namespace tokenizer::token;
+
 	// todo:
-	return tokens.size() > 1;
+	return tokens.size() > 1 &&
+	       static_cast<token::type>(tokens.data()->value.index()) == token::type::operator_;
+}
+
+template<typename Member>
+inline void apply_self_operator(present present, tokenizer::token::operator_ op, Member&& mem)
+{
+	using namespace tokenizer::token;
+
+	if (op == operator_::logical_not) {
+		present.writer.write<true, bytecode::oc_test>(std::forward<Member>(mem));
+		present.writer.write<true, bytecode::oc_invert>();
+		present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{},
+		                                                     std::forward<Member>(mem));
+	} else {
+		present.writer.write<true, bytecode::oc_self_operator>(
+		    static_cast<typename std::underlying_type<member::infix_operator>::type>(to_self_operator(op)),
+		    std::forward<Member>(mem), std::forward<Member>(mem));
+	}
 }
 
 template<typename Destination>
@@ -84,7 +103,6 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		self_operator.first  = true;
 		self_operator.second = tokens.data()->value.get<operator_>();
 		tokens               = tokens.subspan(1);
-		precedence           = util::max(precedence, precedence_of(self_operator.second));
 
 		BIA_EXPECTS(!tokens.empty());
 	}
@@ -95,11 +113,19 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 	auto last_logical_and = false;
 
 	while (valid_right_hand(tokens)) {
-		const auto op = tokens.data()->value.get<operator_>();
+		const auto op            = tokens.data()->value.get<operator_>();
+		const auto op_precedence = precedence_of(op);
 
 		// only if we have higher precedence
-		if (precedence_of(op) <= precedence) {
+		if (op_precedence <= precedence) {
 			break;
+		}
+
+		// prefix operator is stronger
+		if (self_operator.first && op_precedence <= precedence_of(self_operator.second)) {
+			apply_self_operator(present, self_operator.second, left);
+
+			self_operator.first = false;
 		}
 
 		// logical chaining
@@ -118,14 +144,13 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 			                                         : jump_manager::type::if_true,
 			            jump_manager::destination::end);
 
-			tokens = expression_impl(present, tokens.subspan(1), left, precedence_of(op), jumper);
+			tokens = expression_impl(present, tokens.subspan(1), left, op_precedence, jumper);
 
 			continue;
 		}
 
 		// right hand
-		tokens =
-		    expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, precedence_of(op), jumper);
+		tokens = expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, op_precedence, jumper);
 
 		const bytecode::member::local right{ present.variable_manager.add_tmp().id };
 
@@ -142,10 +167,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 
 	// apply self operator
 	if (self_operator.first) {
-		present.writer.write<true, bytecode::oc_self_operator>(
-		    static_cast<typename std::underlying_type<member::infix_operator>::type>(
-		        to_self_operator(self_operator.second)),
-		    left, left);
+		apply_self_operator(present, self_operator.second, left);
 	}
 
 	// destination was not tos
