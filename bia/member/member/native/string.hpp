@@ -3,9 +3,9 @@
 
 #include "../member.hpp"
 
+#include <cstring>
 #include <gc/gc.hpp>
 #include <gc/object/pointer.hpp>
-#include <cstring>
 
 namespace bia {
 namespace member {
@@ -43,6 +43,21 @@ public:
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
+		if (op == infix_operator::addition && dynamic_cast<const string*>(&right)) {
+			const auto len0 = std::char_traits<char>::length(_value.get());
+			const auto len1 =
+			    std::char_traits<char>::length(static_cast<const string*>(&right)->_value.get());
+			auto mem = gc::gc::active_gc()->allocate(len0 + len1 + 1);
+
+			std::memcpy(mem.peek(), _value.get(), len0);
+			std::memcpy(static_cast<char*>(mem.peek()) + len0,
+			            static_cast<const string*>(&right)->_value.get(), len1);
+
+			static_cast<char*>(mem.peek())[len0 + len1] = 0;
+
+			return gc::gc::active_gc()->construct<string>(static_cast<char*>(mem.release())).template to<member>();
+		}
+
 		return {};
 	}
 	member* get(const native::string& name) override
