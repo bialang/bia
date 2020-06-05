@@ -67,12 +67,16 @@ struct resource
 
 } // namespace member
 
+struct test_register
+{};
+
 enum constant_option
 {
 	co_int_8,
 	co_int_32,
 	co_int_64,
 	co_double,
+	co_test_register,
 
 	co_count
 };
@@ -108,11 +112,12 @@ enum op_code : op_code_type
 	oc_refer         = oc_invoke + mso_count * mdo_count,      // (member, member)
 	oc_clone         = oc_refer + mso_count * mdo_count,
 	oc_copy          = oc_clone + mso_count * mdo_count, // (member, member)
-	oc_self_operator = oc_copy + mso_count * mso_count, // (operator, source, destination)
+	oc_self_operator = oc_copy + mso_count * mso_count,  // (operator, source, destination)
 
 	/** 6 bit variants */
-	oc_get    = oc_self_operator + mso_count * ro_count * mdo_count, // (source member, resource, destination member)
-	oc_import = oc_get + ro_count * mdo_count,              // (name)
+	oc_get =
+	    oc_self_operator + mso_count * ro_count * mdo_count, // (source member, resource, destination member)
+	oc_import = oc_get + ro_count * mdo_count,               // (name)
 
 	/** 4 bit variants */
 	oc_test = oc_import + mso_count, // (member)
@@ -124,6 +129,7 @@ enum op_code : op_code_type
 
 	/** 0 bit variants */
 	oc_return_void,
+	oc_invert,
 	oc_drop, // (uint8)
 };
 

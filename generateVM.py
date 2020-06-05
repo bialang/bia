@@ -24,7 +24,8 @@ arg_options = {
         ("int_8", "ip.read<std::int8_t>()"),
         ("int_32", "ip.read<std::int32_t>()"),
         ("int_64", "ip.read<std::int64_t>()"),
-        ("double", "ip.read<double>()")
+        ("double", "ip.read<double>()"),
+        ("test_register", "test_register")
     ],
     "ro": [
         ("8", "resources.at(ip.read<std::uint8_t>())"),
@@ -146,6 +147,9 @@ break;"""),
 
 
     ("oc_return_void", tuple(), "return;"),
+    ("oc_invert", tuple(), """test_register = !test_register;
+
+break;"""),
     ("oc_drop", tuple(), """stack.drop(ip.read<std::uint8_t>());
 
 break;""")

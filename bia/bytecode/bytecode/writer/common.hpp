@@ -20,7 +20,14 @@ using is_offset =
     util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t, std::int16_t, std::int32_t>;
 template<typename T>
 using is_constant = util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t,
-                                                       std::int32_t, std::int64_t, double>;
+                                                       std::int32_t, std::int64_t, double, test_register>;
+template<typename T>
+using is_empty_constant = util::type_traits::equals_any_type<typename std::decay<T>::type, test_register>;
+
+template<bool Optimize, typename T>
+inline typename std::enable_if<is_empty_constant<T>::value>::type optimized_write(std::ostream& output,
+                                                                                  T value)
+{}
 
 template<bool Optimize, typename T>
 inline typename std::enable_if<
@@ -79,8 +86,15 @@ inline typename std::enable_if<is_offset<T>::value, offset_option>::type offset_
 	}
 }
 
+template<bool Optimize>
+inline constant_option constant_index(test_register value) noexcept
+{
+	return constant_option::co_test_register;
+}
+
 template<bool Optimize, typename T>
-inline typename std::enable_if<is_constant<T>::value, constant_option>::type constant_index(T value) noexcept
+inline typename std::enable_if<is_constant<T>::value && !is_empty_constant<T>::value, constant_option>::type
+    constant_index(T value) noexcept
 {
 	typedef typename std::decay<T>::type type;
 
