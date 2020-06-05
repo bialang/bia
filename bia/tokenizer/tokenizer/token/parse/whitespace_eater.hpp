@@ -32,13 +32,14 @@ inline exception::syntax_details eat_whitespaces(parameter& parameter)
 		comment_multi_ending
 	};
 
-	auto state = s::whitespace;
-	auto eaten = false;
-	auto cmd   = false;
+	auto state    = s::whitespace;
+	auto eaten    = false;
+	auto cmd      = false;
+	auto last_pos = parameter.input.tellg();
 
 	while (true) {
-		const auto pos = parameter.input.tellg();
-		const auto cp  = parameter.encoder.read(parameter.input);
+		auto pos      = parameter.input.tellg();
+		const auto cp = parameter.encoder.read(parameter.input);
 
 		if (cp == string::encoding::encoder::eof) {
 			eaten = true;
@@ -66,7 +67,7 @@ inline exception::syntax_details eat_whitespaces(parameter& parameter)
 			switch (cp) {
 			case '/': state = s::comment_single; break;
 			case '*': state = s::comment_multi; break;
-			default: goto gt_return;
+			default: pos = last_pos; goto gt_return; // rollback one character more
 			}
 
 			break;
@@ -111,6 +112,9 @@ inline exception::syntax_details eat_whitespaces(parameter& parameter)
 			break;
 		}
 		}
+
+		// consume
+		last_pos = pos;
 
 		continue;
 
