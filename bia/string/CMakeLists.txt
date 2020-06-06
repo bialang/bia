@@ -1,5 +1,4 @@
-project(string
-		LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.1)
 
 list(APPEND LINK_LIBS
 	PUBLIC $<TARGET_OBJECTS:gc>)
@@ -30,4 +29,4 @@ else()
 	set(BIA_STRING_ENCODING_BACKEND_NONE ON)
 endif()
 	
-create_library(gc)
+create_library("${CMAKE_CURRENT_SOURCE_DIR}")

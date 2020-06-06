@@ -1,5 +1,4 @@
-project(log
-	LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.1)
 
 option(BIA_LOG_ENABLE_LOGGING "Whether the Bia library should make internal logs to the default logger." OFF)
 
@@ -18,4 +17,4 @@ if(BIA_LOG_ENABLE_LOGGING)
 		PUBLIC spdlog::spdlog)
 endif()
 
-create_library()
+create_library("${CMAKE_CURRENT_SOURCE_DIR}")

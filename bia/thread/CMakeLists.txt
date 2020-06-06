@@ -1,5 +1,4 @@
-project(thread
-		LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.1)
 
 list(APPEND LINK_LIBS
 	PUBLIC exception
@@ -31,4 +30,4 @@ else()
 	endif()
 endif()
 	
-create_library(log)
+create_library("${CMAKE_CURRENT_SOURCE_DIR}")

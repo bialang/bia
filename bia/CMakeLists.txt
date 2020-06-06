@@ -6,29 +6,21 @@ project(bia
 
 set(BIA_BIALANG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
-function(create_library)
-	get_filename_component(LIB_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+function(create_library DIRECTORY)
+	get_filename_component(LIB_NAME ${DIRECTORY} NAME)
 
 	file(GLOB_RECURSE SOURCE_FILES
-		"${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+		"${DIRECTORY}/*.cpp")
 
 	if(SOURCE_FILES)
-		set(LIB_NAME ${LIB_NAME}-obj)
-
-		# add dependencies
-#		foreach(dep ${ARGV})
-#			message(STATUS "adding ${dep}")
-#			list(APPEND SOURCE_FILES $<TARGET_OBJECTS:${dep}-obj>)
-#		endforeach()
-
-		add_library(${LIB_NAME} OBJECT ${SOURCE_FILES})
-		target_include_directories(${LIB_NAME}
+		add_library(${LIB_NAME}-obj OBJECT ${SOURCE_FILES})
+		target_include_directories(${LIB_NAME}-obj
 			PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
 	endif()
 
 	# config file
-	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in")
-		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/config.hpp")
+	if(EXISTS "${DIRECTORY}/config.hpp.in")
+		configure_file("${DIRECTORY}/config.hpp.in" "${DIRECTORY}/config.hpp")
 	endif()
 
 #	install(TARGETS ${LIB_NAME}
@@ -50,7 +42,12 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in"
 set(BIA_MODULES "")
 
 foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "compiler" "bsl")
-	add_subdirectory("${module}")
+	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
+		add_subdirectory("${module}")
+	else()
+		create_library("${CMAKE_CURRENT_SOURCE_DIR}/${module}")
+	endif()
+
 	list(APPEND BIA_MODULES "${module}")
 	
 	install(DIRECTORY "${module}"
