@@ -9,13 +9,11 @@ set(BIA_BIALANG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
 function(create_library DIRECTORY)
 	get_filename_component(LIB_NAME ${DIRECTORY} NAME)
 
-	file(GLOB_RECURSE SOURCE_FILES
-		"${DIRECTORY}/*.cpp")
+	file(GLOB_RECURSE SOURCE_FILES "${DIRECTORY}/*.cpp")
 
 	if(SOURCE_FILES)
 		add_library(${LIB_NAME}-obj OBJECT ${SOURCE_FILES})
-		target_include_directories(${LIB_NAME}-obj
-			PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
+		target_include_directories(${LIB_NAME}-obj PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
 		
 		if(BUILD_SHARED_LIBS)
 			set_property(TARGET ${LIB_NAME}-obj PROPERTY POSITION_INDEPENDENT_CODE ON)
@@ -48,35 +46,44 @@ foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator
 			FILES_MATCHING PATTERN "*.hpp")
 endforeach()
 
+
+# dependency function
+function(link_dependency TARGET NAME ITEM)
+	if(BIA_DEPENDENCY_${NAME})
+		find_package(${NAME} REQUIRED)
+		target_link_libraries(${TARGET} PUBLIC ${ITEM})
+		list(APPEND BIA_DEPENDENCIES ${NAME})
+		set(BIA_DEPENDENCIES ${BIA_DEPENDENCIES} PARENT_SCOPE)
+	endif()
+endfunction()
+
+
+
 # build exportable libraries
 list(APPEND BIA_COMPONENTS base bvm bsl compiler)
 
 # base
 add_library(base $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:resource-obj>)
-target_link_libraries(base
-	PRIVATE thread-deps log-deps)
-target_include_directories(base
-	PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
+target_include_directories(base PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
+
+link_dependency(base spdlog spdlog::spdlog)
+link_dependency(base Threads Threads::Threads)
 
 # bvm
 add_library(bvm $<TARGET_OBJECTS:bvm-obj>)
-target_link_libraries(bvm
-	PUBLIC base)
+target_link_libraries(bvm PUBLIC base)
 
 # bsl
 add_library(bsl $<TARGET_OBJECTS:bsl-obj>)
-target_link_libraries(bsl
-	PUBLIC bvm)
+target_link_libraries(bsl PUBLIC bvm)
 
 # compiler
 add_library(compiler $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
-target_link_libraries(compiler
-	PUBLIC base)
+target_link_libraries(compiler PUBLIC base)
 
 
 add_executable(maindev "main.cpp" ${BACKWARD_ENABLE})
-target_link_libraries(maindev
-	PUBLIC bsl compiler)
+target_link_libraries(maindev PUBLIC bsl compiler)
 
 #add_backward(maindev)
 
@@ -97,20 +104,19 @@ write_basic_package_version_file(
 	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY SameMajorVersion)
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake"
-	DESTINATION "lib/bia/cmake")
-install(FILES "config.hpp"
-	DESTINATION "include/bia")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake" DESTINATION "lib/bia/cmake")
+install(FILES "config.hpp" DESTINATION "include/bia")
 
 foreach(component ${BIA_COMPONENTS})
 	install(TARGETS ${component}
-		EXPORT ${component}-targets
-		ARCHIVE DESTINATION "lib/bia"
-		LIBRARY DESTINATION "lib/bia"
-		INCLUDES DESTINATION "include/")
+			EXPORT ${component}-targets
+			ARCHIVE DESTINATION "lib/bia"
+			LIBRARY DESTINATION "lib/bia"
+			INCLUDES DESTINATION "include/")
 	install(EXPORT ${component}-targets
-		DESTINATION "lib/bia/cmake"
-		NAMESPACE bia::
-		FILE "bia-${component}-targets.cmake"
-		COMPONENT ${component})
+			DESTINATION "lib/bia/cmake"
+			NAMESPACE bia::
+			EXPORT_LINK_INTERFACE_LIBRARIES
+			FILE "bia-${component}-targets.cmake"
+			COMPONENT ${component})
 endforeach()

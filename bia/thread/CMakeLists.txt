@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 
-add_library(thread-deps INTERFACE IMPORTED GLOBAL)
-
 # thread backend
 set(BIA_THREAD_BACKEND "std::thread"
 	CACHE STRING "The thread backend that should be used for creating threads in Bia and in its implementation.")
@@ -9,10 +7,8 @@ set_property(CACHE BIA_THREAD_BACKEND
 	PROPERTY STRINGS "std::thread" "none")
 
 if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
+	set(BIA_DEPENDENCY_Threads TRUE PARENT_SCOPE)
 	set(BIA_THREAD_BACKEND_STD ON)
-
-	find_package(Threads REQUIRED)
-	target_link_libraries(thread-deps INTERFACE Threads::Threads)
 else()
 	# disable threading
 	set(BIA_THREAD_BACKEND_NONE ON)
