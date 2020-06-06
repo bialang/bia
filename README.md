@@ -16,7 +16,7 @@ Embeddable C++11 Scripting Language
 bia::engine eng;
 
 // register a function and the io module
-eng.function("hello_world", [] { std::cout << "Hello, World - C++\n"; });
+eng.function("hello_world", +[] { std::cout << "Hello, World - C++\n"; });
 eng.module<bia::bsl::io>("io", eng.gc());
 
 // bia script
