@@ -95,15 +95,3 @@ write_basic_package_version_file(
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake"
 		DESTINATION "lib/bia/cmake")
-
-
-
-
-# CPack
-set(CPACK_PACKAGE_NAME "Bia")
-set(CPACK_PACKAGE_DESCRIPTION "Embedded scripting language")
-set(CPACK_PACKAGE_VENDOR "Bialang")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Bia/${PROJECT_VERSION}")
-set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-
-include(CPack)
