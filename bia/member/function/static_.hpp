@@ -5,6 +5,7 @@
 #include "../member.hpp"
 
 #include <bia/gc/gc.hpp>
+#include <bia/log/log.hpp>
 
 namespace bia {
 namespace member {
@@ -23,7 +24,7 @@ public:
 	{}
 	~static_()
 	{
-		printf("bye im getting destroyed: static, %p\n", this);
+		BIA_LOG(DEBUG, "destroying static function: {}", static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{

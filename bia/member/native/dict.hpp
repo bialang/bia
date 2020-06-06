@@ -5,10 +5,11 @@
 #include "../native/string.hpp"
 
 #include <bia/gc/object/pointer.hpp>
-#include <map>
+#include <bia/log/log.hpp>
 #include <bia/thread/lock/guard.hpp>
 #include <bia/thread/lock/mutex.hpp>
 #include <bia/util/gsl.hpp>
+#include <map>
 
 namespace bia {
 namespace member {
@@ -36,7 +37,7 @@ public:
 	{}
 	~dict()
 	{
-		printf("bye im getting destroyed: dict, %p\n", this);
+		BIA_LOG(DEBUG, "destroying dict: {}", static_cast<void*>(this));
 	}
 	void put(util::not_null<const string*> key, util::not_null<member*> value)
 	{

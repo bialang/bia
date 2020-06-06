@@ -4,8 +4,9 @@
 #include "../member.hpp"
 #include "detail/operations.hpp"
 
-#include <cstdint>
 #include <bia/gc/gc.hpp>
+#include <bia/log/log.hpp>
+#include <cstdint>
 
 namespace bia {
 namespace member {
@@ -26,7 +27,7 @@ public:
 	{}
 	~integer()
 	{
-		printf("bye im getting destroyed: %ld, %p\n", _value, this);
+		BIA_LOG(DEBUG, "destroying int={}: {}", _value, static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{

@@ -3,9 +3,10 @@
 
 #include "../member.hpp"
 
-#include <cstring>
 #include <bia/gc/gc.hpp>
 #include <bia/gc/object/pointer.hpp>
+#include <bia/log/log.hpp>
+#include <cstring>
 
 namespace bia {
 namespace member {
@@ -23,7 +24,7 @@ public:
 	{}
 	~string()
 	{
-		printf("bye im getting destroyed: %s, %p\n", _value.get(), this);
+		BIA_LOG(DEBUG, "destroying string='{}': {}", _value.get(), static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{
@@ -55,7 +56,9 @@ public:
 
 			static_cast<char*>(mem.peek())[len0 + len1] = 0;
 
-			return gc::gc::active_gc()->construct<string>(static_cast<char*>(mem.release())).template to<member>();
+			return gc::gc::active_gc()
+			    ->construct<string>(static_cast<char*>(mem.release()))
+			    .template to<member>();
 		}
 
 		return {};
