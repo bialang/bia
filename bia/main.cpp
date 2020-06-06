@@ -1,40 +1,24 @@
-#include <bsl/io.hpp>
-#include <bvm/bvm.hpp>
-#include <compiler/compiler.hpp>
-#include <connector/connector-inl.hpp>
-#include <exception/syntax_error.hpp>
-#include <gc/gc.hpp>
-#include <gc/memory/simple_allocator.hpp>
+#include <bia/bia.hpp>
+#include <bia/exception/syntax_error.hpp>
 #include <iostream>
-#include <member/function/static_.hpp>
-#include <resource/deserialize.hpp>
 #include <sstream>
-#include <tokenizer/bia_lexer.hpp>
-#include <util/finally.hpp>
 
 int main()
 {
-	auto allocator = std::make_shared<bia::gc::memory::simple_allocator>();
-	bia::tokenizer::bia_lexer lexer{ allocator };
-	std::stringstream output;
-	std::stringstream resources;
+	bia::engine engine{};
+
+	engine.function("hello_world", static_cast<void (*)()>([] { std::cout << "Hello, World! - C++\n"; }));
+
 	std::stringstream code;
-	bia::compiler::compiler compiler{ output, resources };
-	auto encoder = bia::string::encoding::get_encoder(bia::string::encoding::standard_encoding::utf_8);
-	const auto finally =
-	    bia::util::make_finally([encoder] { bia::string::encoding::free_encoder(encoder); });
 
 	code << u8R"(
-let x = 34
+		
+		hello_world()
 
-if not x or 2 {
-	print(x)
-}
-
-)";
+	)";
 
 	try {
-		lexer.lex(code, *encoder, compiler);
+		engine.execute(code);
 	} catch (const bia::exception::bia_error& e) {
 		std::cout << "exception (" << e.name() << "; " << e.filename() << ":" << e.line() << "): " << e.what()
 		          << "\n";
@@ -54,65 +38,4 @@ if not x or 2 {
 
 		return 1;
 	}
-
-	compiler.finish();
-
-	BIA_LOG(INFO, "compiling finished");
-
-	auto gc = std::make_shared<bia::gc::gc>(allocator);
-	bia::bvm::context context{ gc };
-	const auto bytecode = output.str();
-
-	{
-		const auto str = static_cast<char*>(gc->allocate(6).release());
-		auto name      = gc->construct<bia::member::native::string>(str);
-		auto fun = gc->construct<bia::member::function::static_<int (*)(), int>>([](int x) -> int (*)() {
-			std::cout << "calculating " << x << " squared\n";
-
-			return [] {
-				puts("nested call");
-
-				return 34;
-			};
-		});
-
-		std::memcpy(str, "print", 6);
-
-		context.symbols().put(name.peek(), fun.peek());
-		name.start_monitor();
-		fun.start_monitor();
-	}
-
-	{
-		const auto str = static_cast<char*>(gc->allocate(6).release());
-		auto name      = gc->construct<bia::member::native::string>(str);
-		auto fun       = gc->construct<bia::member::function::static_<void>>([] {
-            std::cout << "starting to collect some dust\n";
-
-            bia::gc::gc::active_gc()->run_once();
-
-            std::cout << "done collecting dust\n";
-        });
-
-		std::memcpy(str, "do_gc", 6);
-
-		context.symbols().put(name.peek(), fun.peek());
-		name.start_monitor();
-		fun.start_monitor();
-	}
-
-	{
-		const auto str = static_cast<char*>(gc->allocate(3).release());
-
-		std::memcpy(str, "io", 3);
-
-		context.loader().add_module(gc->construct<bia::member::native::string>(str).release(),
-		                            gc->construct<bia::bsl::io>(*gc).release());
-	}
-
-	bia::bvm::bvm::execute(context,
-	                       { reinterpret_cast<const bia::util::byte*>(&bytecode[0]), bytecode.size() },
-	                       *bia::resource::deserialize(resources, *gc));
-
-	gc->run_once();
 }

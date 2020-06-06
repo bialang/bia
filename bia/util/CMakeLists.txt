@@ -1,5 +1,4 @@
-project("util"
-		LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.1)
 
 # test endianess
 include(TestBigEndian)
@@ -22,5 +21,4 @@ else()
 	set(BIA_UTIL_CONTRACT_BEHAVIOR_NOTHING ON)
 endif()
 
-create_library(INTERFACE
-	INTERFACE "exception")
+create_library("${CMAKE_CURRENT_SOURCE_DIR}")

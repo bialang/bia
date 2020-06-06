@@ -1,12 +1,9 @@
-project(log
-	LANGUAGES CXX)
-
-list(APPEND LINK_LIBS
-	PUBLIC exception)
+cmake_minimum_required(VERSION 3.1)
 
 option(BIA_LOG_ENABLE_LOGGING "Whether the Bia library should make internal logs to the default logger." OFF)
 
 if(BIA_LOG_ENABLE_LOGGING)
+	set(BIA_DEPENDENCY_spdlog TRUE PARENT_SCOPE)
 	set(BIA_LOG_NAME "bialang-logger"
 		CACHE STRING "The name of the default logger.")
 	set(BIA_LOG_PATTERN "[%T.%e | %=5t | %-20s at %-3# (%-20!)] [%n: %^%8l%$]\\n\\t%v"
@@ -15,11 +12,6 @@ if(BIA_LOG_ENABLE_LOGGING)
 		CACHE STRING "The logging level (CIRITICAL, ERROR, WARN, INFO, DEBUG, TRACE)")
 	set_property(CACHE BIA_LOG_LEVEL
 		PROPERTY STRINGS "CRITICAL" "ERROR" "WARN" "INFO" "DEBUG" "TRACE")
-
-	find_package(spdlog REQUIRED)
-	list(APPEND LINK_LIBS
-		PUBLIC spdlog::spdlog)
 endif()
 
-create_library(STATIC
-	${LINK_LIBS})
+create_library("${CMAKE_CURRENT_SOURCE_DIR}")
