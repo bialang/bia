@@ -16,6 +16,10 @@ function(create_library DIRECTORY)
 		add_library(${LIB_NAME}-obj OBJECT ${SOURCE_FILES})
 		target_include_directories(${LIB_NAME}-obj
 			PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
+		
+		if(BUILD_SHARED_LIBS)
+			set_property(TARGET ${LIB_NAME}-obj PROPERTY POSITION_INDEPENDENT_CODE ON)
+		endif()
 	endif()
 
 	# config file
@@ -51,24 +55,24 @@ list(APPEND BIA_COMPONENTS base bvm bsl compiler)
 find_package(Threads REQUIRED)
 
 # base
-add_library(base STATIC $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:resource-obj>)
+add_library(base $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:resource-obj>)
 target_link_libraries(base
 	PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(base
 	PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
 
 # bvm
-add_library(bvm STATIC $<TARGET_OBJECTS:bvm-obj>)
+add_library(bvm $<TARGET_OBJECTS:bvm-obj>)
 target_link_libraries(bvm
 	PUBLIC base)
 
 # bsl
-add_library(bsl STATIC $<TARGET_OBJECTS:bsl-obj>)
+add_library(bsl $<TARGET_OBJECTS:bsl-obj>)
 target_link_libraries(bsl
 	PUBLIC bvm)
 
 # compiler
-add_library(compiler STATIC $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
+add_library(compiler $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
 target_link_libraries(compiler
 	PUBLIC base)
 
