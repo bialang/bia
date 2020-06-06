@@ -2,6 +2,8 @@
 
 Embeddable C++11 Scripting Language
 
+:construction: This project is premature and not ready for production user :construction:
+
 - [Embedded Example](#embedded-example)
 - [Building](#building)
 	- [Prerequisites](#prerequisites)
