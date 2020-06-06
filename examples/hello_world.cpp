@@ -19,7 +19,7 @@ int main()
 
 		// calls the C++ function and print 'Hello, World - C++' to the console
 		hello_world()
-)";
+	)";
 
 	engine.execute(code);
 }
