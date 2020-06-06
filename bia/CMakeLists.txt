@@ -45,12 +45,11 @@ function(create_library LIB_TYPE)
 
 	install(TARGETS ${LIB_NAME}
 		EXPORT ${LIB_NAME}-targets
-		ARCHIVE DESTINATION "lib"
-		LIBRARY DESTINATION "lib"
-		RUNTIME DESTINATION "bin"
+		ARCHIVE DESTINATION "lib/bia"
+		LIBRARY DESTINATION "lib/bia"
 		INCLUDES DESTINATION "include")
 	install(EXPORT ${LIB_NAME}-targets
-			DESTINATION "share/bia"
+			DESTINATION "lib/bia/cmake"
 			NAMESPACE bia::
 			FILE "bia-${LIB_NAME}-targets.cmake"
 			COMPONENT ${LIB_NAME})
@@ -87,11 +86,12 @@ target_link_libraries(maindev
 include(CMakePackageConfigHelpers)
 
 set(INCLUDE_INSTALL_DIR "include/")
+set(LIBRARY_INSTALL_DIR "lib/bia")
 
 configure_package_config_file("bia-config.cmake.in"
 	"${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake"
-	INSTALL_DESTINATION "share/bia"
-	PATH_VARS INCLUDE_INSTALL_DIR)
+	INSTALL_DESTINATION "lib/bia/cmake"
+	PATH_VARS INCLUDE_INSTALL_DIR LIBRARY_INSTALL_DIR)
 
 write_basic_package_version_file(
 	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
@@ -99,6 +99,16 @@ write_basic_package_version_file(
 	COMPATIBILITY SameMajorVersion)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake"
-		DESTINATION "share/bia")
+		DESTINATION "lib/bia/cmake")
+
+
+
+
+# CPack
+set(CPACK_PACKAGE_NAME "Bia")
+set(CPACK_PACKAGE_DESCRIPTION "Embedded scripting language")
+set(CPACK_PACKAGE_VENDOR "Bialang")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Bia/${PROJECT_VERSION}")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 
 include(CPack)
