@@ -1,5 +1,4 @@
 project(member
 	LANGUAGES CXX)
 	
-create_library(INTERFACE
-	INTERFACE string)
+create_library(string)

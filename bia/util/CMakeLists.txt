@@ -22,5 +22,4 @@ else()
 	set(BIA_UTIL_CONTRACT_BEHAVIOR_NOTHING ON)
 endif()
 
-create_library(INTERFACE
-	INTERFACE "exception")
+create_library()

@@ -1,6 +1,4 @@
 project(compiler
 	LANGUAGES CXX)
 	
-create_library(STATIC
-	PUBLIC bytecode
-	PUBLIC tokenizer)
+create_library(tokenizer)

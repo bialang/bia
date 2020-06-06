@@ -1,4 +1,4 @@
-#include "token/bundle.hpp"
+#include "bundle.hpp"
 
 #include <bia/exception/bounds_error.hpp>
 #include <bia/util/gsl.hpp>

@@ -1,4 +1,4 @@
-#include "memory/view.hpp"
+#include "view.hpp"
 
 using namespace bia::gc::memory;
 

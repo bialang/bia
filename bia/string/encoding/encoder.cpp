@@ -1,6 +1,6 @@
-#include "encoding/encoder.hpp"
+#include "encoder.hpp"
 
-#include "encoding/standard/ascii.hpp"
+#include "standard/ascii.hpp"
 
 #include <bia/exception/implementation_error.hpp>
 

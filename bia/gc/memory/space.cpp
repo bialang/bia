@@ -1,4 +1,4 @@
-#include "memory/space.hpp"
+#include "space.hpp"
 
 #include <algorithm>
 

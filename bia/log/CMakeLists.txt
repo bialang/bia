@@ -1,9 +1,6 @@
 project(log
 	LANGUAGES CXX)
 
-list(APPEND LINK_LIBS
-	PUBLIC exception)
-
 option(BIA_LOG_ENABLE_LOGGING "Whether the Bia library should make internal logs to the default logger." OFF)
 
 if(BIA_LOG_ENABLE_LOGGING)
@@ -21,5 +18,4 @@ if(BIA_LOG_ENABLE_LOGGING)
 		PUBLIC spdlog::spdlog)
 endif()
 
-create_library(STATIC
-	${LINK_LIBS})
+create_library()

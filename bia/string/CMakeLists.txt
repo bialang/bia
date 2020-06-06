@@ -2,7 +2,7 @@ project(string
 		LANGUAGES CXX)
 
 list(APPEND LINK_LIBS
-	PUBLIC gc)
+	PUBLIC $<TARGET_OBJECTS:gc>)
 
 # String encoding conversion dependency
 set(BIA_STRING_ENCODING_BACKEND "none"
@@ -30,4 +30,4 @@ else()
 	set(BIA_STRING_ENCODING_BACKEND_NONE ON)
 endif()
 	
-create_library(STATIC ${LINK_LIBS})
+create_library(gc)

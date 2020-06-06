@@ -3,7 +3,7 @@ project(thread
 
 list(APPEND LINK_LIBS
 	PUBLIC exception
-	PUBLIC log
+	PUBLIC $<TARGET_OBJECTS:log>
 	PUBLIC util)
 
 # thread backend
@@ -31,4 +31,4 @@ else()
 	endif()
 endif()
 	
-create_library(STATIC ${LINK_LIBS})
+create_library(log)
