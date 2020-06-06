@@ -15,13 +15,14 @@ Embeddable C++11 Scripting Language
 // create a simple engine with the default settings and allocator
 bia::engine eng;
 
-// register a lambda
-eng.lambda("hello_world", [] {
-  std::cout << "Hello, World - C++\n";
-});
+// register a function and the io module
+eng.function("hello_world", [] { std::cout << "Hello, World - C++\n"; });
+eng.module<bia::bsl::io>("io", eng.gc());
 
 // bia script
-std::string code = u8R"(
+std::stringstream code;
+
+code << u8R"(
   // prints 'Hello, World' to the console
   import io
   io.print("Hello, World! - Bia")
@@ -31,7 +32,7 @@ std::string code = u8R"(
 )";
 
 // execute
-eng.execute({ code.c_str(), code.length() });
+eng.execute(code);
 ```
 
 ## Building

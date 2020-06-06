@@ -3,6 +3,7 @@
 
 #include <bia/bvm/bvm.hpp>
 #include <bia/bvm/context.hpp>
+#include <bia/bvm/module/module.hpp>
 #include <bia/compiler/compiler.hpp>
 #include <bia/connector/connector-inl.hpp>
 #include <bia/gc/gc.hpp>
@@ -18,6 +19,8 @@
 #include <istream>
 #include <sstream>
 #include <string>
+#include <type_traits>
+#include <utility>
 
 namespace bia {
 namespace detail {
@@ -45,6 +48,25 @@ public:
 		name_member.start_monitor();
 		func_member.start_monitor();
 	}
+	template<typename Module, typename... Args>
+	void module(util::not_null<util::czstring> name, Args&&... args)
+	{
+		static_assert(std::is_base_of<bvm::module::module, Module>::value,
+		              "module type must inherit bia::module::module");
+
+		const auto length  = std::char_traits<char>::length(name.get());
+		const auto str     = static_cast<char*>(_gc.allocate(length + 1).release());
+		auto name_member   = _gc.construct<member::native::string>(str);
+		auto module_member = _gc.construct<Module>(std::forward<Args>(args)...);
+
+		std::memcpy(str, name.get(), length);
+
+		str[length] = 0;
+
+		_context.loader().add_module(name_member.peek(), module_member.peek());
+		name_member.start_monitor();
+		module_member.start_monitor();
+	}
 	void execute(std::istream& code)
 	{
 		tokenizer::bia_lexer lexer{ _gc.allocator() };
@@ -63,6 +85,14 @@ public:
 		bia::bvm::bvm::execute(_context,
 		                       { reinterpret_cast<const bia::util::byte*>(&bytecode[0]), bytecode.size() },
 		                       *bia::resource::deserialize(resources, _gc));
+	}
+	gc::gc& gc() noexcept
+	{
+		return _gc;
+	}
+	bvm::context& context() noexcept
+	{
+		return _context;
 	}
 
 private:

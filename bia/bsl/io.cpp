@@ -4,6 +4,7 @@
 #include <bia/member/function/static_.hpp>
 #include <bia/member/native/dict.hpp>
 #include <bia/member/native/string.hpp>
+#include <iostream>
 
 using namespace bia::bsl;
 
@@ -40,9 +41,23 @@ bia::member::native::dict* io::_init(gc::gc& gc)
 	const auto dict = gc.construct<member::native::dict>().release();
 	const auto str  = static_cast<char*>(gc.allocate(6).release());
 	const auto name = gc.construct<member::native::string>(str).release();
-	const auto fun  = gc.construct<member::function::static_<void, const char*>>([](const char* str) {
-                           puts(str);
-                       }).release();
+	const auto fun  = gc.construct<member::function::static_<void, connector::parameters>>(
+                           [](connector::parameters params) {
+                               for (std::size_t i = 0; i < params.size(); ++i) {
+                                   if (const auto ptr = params[i]) {
+                                       if (dynamic_cast<const bia::member::native::string*>(ptr)) {
+                                           std::cout << bia::member::cast<const char*>(*ptr) << " ";
+                                       } else {
+                                           std::cout << bia::member::cast<int>(*ptr) << " ";
+                                       }
+                                   } else {
+                                       std::cout << "<null> ";
+                                   }
+                               }
+
+                               std::cout << "\n";
+                           })
+	                     .release();
 
 	std::memcpy(str, "print", 6);
 

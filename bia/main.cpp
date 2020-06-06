@@ -1,4 +1,5 @@
 #include <bia/bia.hpp>
+#include <bia/bsl/io.hpp>
 #include <bia/exception/syntax_error.hpp>
 #include <iostream>
 #include <sstream>
@@ -7,29 +8,14 @@ int main()
 {
 	bia::engine engine{};
 
-	engine.function("print",
-	                static_cast<void (*)(bia::connector::parameters)>([](bia::connector::parameters params) {
-		                for (std::size_t i = 0; i < params.size(); ++i) {
-			                if (const auto ptr = params[i]) {
-				                if (dynamic_cast<const bia::member::native::string*>(ptr)) {
-					                std::cout << bia::member::cast<const char*>(*ptr) << " ";
-				                } else {
-					                std::cout << bia::member::cast<int>(*ptr) << " ";
-				                }
-			                } else {
-				                std::cout << "<null> ";
-			                }
-		                }
-
-		                std::cout << "\n";
-	                }));
+	engine.module<bia::bsl::io>("io", engine.gc());
 
 	std::stringstream code;
 
 	code << u8R"(
 
-
-print(128)
+import io
+io.print(128)
 
 )";
 
