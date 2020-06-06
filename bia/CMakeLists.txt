@@ -85,7 +85,9 @@ target_link_libraries(compiler PUBLIC base)
 add_executable(maindev "main.cpp" ${BACKWARD_ENABLE})
 target_link_libraries(maindev PUBLIC bsl compiler)
 
-#add_backward(maindev)
+if(BACKWARD_ENABLE)
+	add_backward(maindev)
+endif()
 
 
 # install

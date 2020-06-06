@@ -50,7 +50,7 @@ public:
 
 		return _data[--_cursor];
 	}
-	element_type& tos()
+	element_type& tos() const
 	{
 		if (!_cursor) {
 			BIA_THROW(exception::bounds_error, "empty stack");
@@ -66,7 +66,7 @@ public:
 
 		return _data[_cursor++];
 	}
-	element_type& local_at(std::size_t index)
+	element_type& local_at(std::size_t index) const
 	{
 		if (index >= _cursor) {
 			BIA_THROW(exception::bounds_error, "out of bounds");
@@ -74,7 +74,7 @@ public:
 
 		return _data[index];
 	}
-	element_type& arg_at(std::size_t index)
+	element_type& arg_at(std::size_t index) const
 	{
 		if (index >= _args) {
 			BIA_THROW(exception::bounds_error, "out of bounds");

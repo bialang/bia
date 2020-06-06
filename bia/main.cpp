@@ -7,13 +7,20 @@ int main()
 {
 	bia::engine engine{};
 
-	engine.function("hello_world", static_cast<void (*)()>([] { std::cout << "Hello, World! - C++\n"; }));
+	engine.function("print",
+	                static_cast<void (*)(bia::connector::parameters)>([](bia::connector::parameters params) {
+						for(std::size_t i = 0; i < params.size(); ++i) {
+							std::cout << bia::member::cast<int>(*params[i]) << " ";
+						}
+
+						std::cout << "\n";
+	                }));
 
 	std::stringstream code;
 
 	code << u8R"(
 		
-		hello_world()
+		print(12, 12 ,3, 65)
 
 	)";
 

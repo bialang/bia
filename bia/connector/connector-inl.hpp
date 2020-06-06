@@ -1,6 +1,8 @@
 #ifndef BIA_CONNECTOR_CONNECTOR_INL_HPP_
 #define BIA_CONNECTOR_CONNECTOR_INL_HPP_
 
+#include "parameters.hpp"
+
 #include <bia/creator/creator.hpp>
 #include <bia/exception/nullpointer.hpp>
 #include <bia/gc/gcable.hpp>
@@ -8,6 +10,7 @@
 #include <bia/member/cast.hpp>
 #include <bia/member/connector.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
+#include <bia/util/type_traits/type_maker.hpp>
 #include <utility>
 
 namespace bia {
@@ -27,9 +30,20 @@ inline member::member& not_null(gc::stack_view::element_type& element)
 	BIA_THROW(exception::nullpointer, "nullpointer argument");
 }
 
+inline void assert_parameters(std::size_t count, util::type_traits::type_container<parameters>)
+{}
+
+template<typename... Args>
+inline void assert_parameters(std::size_t count, util::type_traits::type_container<Args...>)
+{
+	if (sizeof...(Args) != count) {
+		throw;
+	}
+}
+
 template<typename Return, typename... Args, std::size_t... Indices>
 inline gc::gcable<member::member> connect_static(Return (*function)(Args...), gc::stack_view& stack,
-                                                 parameter_indices<Indices...>)
+                                                 std::size_t parameter_count, parameter_indices<Indices...>)
 {
 	return creator::create(
 	           function(std::forward<Args>(member::cast<Args>(not_null(stack.arg_at(Indices))))...))
@@ -38,9 +52,24 @@ inline gc::gcable<member::member> connect_static(Return (*function)(Args...), gc
 
 template<typename... Args, std::size_t... Indices>
 inline gc::gcable<member::member> connect_static(void (*function)(Args...), gc::stack_view& stack,
-                                                 parameter_indices<Indices...>)
+                                                 std::size_t parameter_count, parameter_indices<Indices...>)
 {
 	function(std::forward<Args>(member::cast<Args>(not_null(stack.arg_at(Indices))))...);
+
+	return {};
+}
+
+template<typename Return>
+inline gc::gcable<member::member> connect_static(Return (*function)(parameters), gc::stack_view& stack,
+                                                 std::size_t parameter_count, parameter_indices<0>)
+{
+	return creator::create(function(parameters{ stack, parameter_count })).template to<member::member>();
+}
+
+inline gc::gcable<member::member> connect_static(void (*function)(parameters), gc::stack_view& stack,
+                                                 std::size_t parameter_count, parameter_indices<0>)
+{
+	function(parameters{ stack, parameter_count });
 
 	return {};
 }
@@ -49,11 +78,9 @@ template<typename Return, typename... Args>
 inline gc::gcable<member::member> connect_static(Return (*function)(Args...), gc::stack_view& stack,
                                                  std::size_t parameter_count)
 {
-	if (parameter_count != sizeof...(Args)) {
-		throw;
-	}
+	assert_parameters(parameter_count, util::type_traits::type_container<Args...>{});
 
-	return connect_static(function, stack, parameter_index_maker<sizeof...(Args)>::value);
+	return connect_static(function, stack, parameter_count, parameter_index_maker<sizeof...(Args)>::value);
 }
 
 } // namespace connector
