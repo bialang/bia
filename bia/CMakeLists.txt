@@ -48,16 +48,13 @@ foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator
 			FILES_MATCHING PATTERN "*.hpp")
 endforeach()
 
-
 # build exportable libraries
 list(APPEND BIA_COMPONENTS base bvm bsl compiler)
-
-find_package(Threads REQUIRED)
 
 # base
 add_library(base $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:resource-obj>)
 target_link_libraries(base
-	PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+	PRIVATE thread-deps log-deps)
 target_include_directories(base
 	PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
 

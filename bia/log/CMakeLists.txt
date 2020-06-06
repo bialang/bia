@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
+add_library(log-deps INTERFACE IMPORTED GLOBAL)
+
 option(BIA_LOG_ENABLE_LOGGING "Whether the Bia library should make internal logs to the default logger." OFF)
 
 if(BIA_LOG_ENABLE_LOGGING)
@@ -13,8 +15,7 @@ if(BIA_LOG_ENABLE_LOGGING)
 		PROPERTY STRINGS "CRITICAL" "ERROR" "WARN" "INFO" "DEBUG" "TRACE")
 
 	find_package(spdlog REQUIRED)
-	list(APPEND LINK_LIBS
-		PUBLIC spdlog::spdlog)
+	target_link_libraries(log-deps INTERFACE spdlog::spdlog)
 endif()
 
 create_library("${CMAKE_CURRENT_SOURCE_DIR}")

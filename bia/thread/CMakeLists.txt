@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-list(APPEND LINK_LIBS
-	PUBLIC exception
-	PUBLIC $<TARGET_OBJECTS:log>
-	PUBLIC util)
+add_library(thread-deps INTERFACE IMPORTED GLOBAL)
 
 # thread backend
 set(BIA_THREAD_BACKEND "std::thread"
@@ -15,8 +12,7 @@ if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
 	set(BIA_THREAD_BACKEND_STD ON)
 
 	find_package(Threads REQUIRED)
-	list(APPEND LINK_LIBS
-		PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+	target_link_libraries(thread-deps INTERFACE Threads::Threads)
 else()
 	# disable threading
 	set(BIA_THREAD_BACKEND_NONE ON)
@@ -29,5 +25,5 @@ else()
 		message(FATAL_ERROR "BIA_THREAD_SLEEP_FUNCTION must be defined.")
 	endif()
 endif()
-	
+
 create_library("${CMAKE_CURRENT_SOURCE_DIR}")
