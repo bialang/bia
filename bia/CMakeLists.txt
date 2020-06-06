@@ -32,7 +32,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in"
 # add modules
 set(BIA_MODULES "")
 
-foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "compiler" "bsl")
+foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "compiler" "bsl" "detail")
 	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
 		add_subdirectory("${module}")
 	else()
@@ -105,7 +105,7 @@ write_basic_package_version_file(
 	COMPATIBILITY SameMajorVersion)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake" DESTINATION "lib/bia/cmake")
-install(FILES "config.hpp" DESTINATION "include/bia")
+install(FILES "config.hpp" "bia.hpp" DESTINATION "include/bia")
 
 foreach(component ${BIA_COMPONENTS})
 	install(TARGETS ${component}
