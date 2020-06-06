@@ -163,12 +163,12 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		present.variable_manager.remove_tmp();
 	}
 
-	jumper.mark(jump_manager::destination::end);
-
 	// apply self operator
 	if (self_operator.first) {
 		apply_self_operator(present, self_operator.second, left);
 	}
+
+	jumper.mark(jump_manager::destination::end);
 
 	// destination was not tos
 	if (!std::is_same<typename std::decay<Destination>::type, bytecode::member::tos>::value) {

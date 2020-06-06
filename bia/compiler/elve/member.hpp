@@ -33,6 +33,10 @@ inline tokens_type member_step(present present, tokens_type tokens, Source&& sou
 		present.writer.write<true, bytecode::oc_invoke>(pair.second, std::forward<Source>(source),
 		                                                std::forward<Destination>(destination));
 
+		for (auto i = pair.second; i--;) {
+			present.variable_manager.remove_tmp();
+		}
+
 		return pair.first;
 	}
 	case token::type::identifier: { // member access
