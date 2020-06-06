@@ -1,11 +1,12 @@
 #ifndef BIA_CREATOR_CREATOR_HPP_
 #define BIA_CREATOR_CREATOR_HPP_
 
-#include <cstring>
 #include <bia/gc/gc.hpp>
 #include <bia/member/function/static_.hpp>
 #include <bia/member/native/integer.hpp>
 #include <bia/member/native/string.hpp>
+#include <cstddef>
+#include <cstring>
 #include <string>
 #include <type_traits>
 
@@ -46,6 +47,11 @@ inline gc::gcable<member::native::string> create(const std::string& value)
 	std::memcpy(str, value.c_str(), value.size() + 1);
 
 	return mem;
+}
+
+inline gc::gcable<member::member> create(std::nullptr_t) noexcept
+{
+	return {};
 }
 
 } // namespace creator

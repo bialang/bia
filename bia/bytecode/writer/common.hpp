@@ -3,13 +3,14 @@
 
 #include "../op_code.hpp"
 
-#include <cstdint>
-#include <ostream>
-#include <type_traits>
 #include <bia/util/limit_checker.hpp>
 #include <bia/util/portable/stream.hpp>
 #include <bia/util/type_traits/equals_any.hpp>
 #include <bia/util/type_traits/type_index.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <ostream>
+#include <type_traits>
 
 namespace bia {
 namespace bytecode {
@@ -19,10 +20,12 @@ template<typename T>
 using is_offset =
     util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t, std::int16_t, std::int32_t>;
 template<typename T>
-using is_constant = util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t,
-                                                       std::int32_t, std::int64_t, double, test_register>;
+using is_constant =
+    util::type_traits::equals_any_type<typename std::decay<T>::type, std::int8_t, std::int32_t, std::int64_t,
+                                       double, test_register, std::nullptr_t>;
 template<typename T>
-using is_empty_constant = util::type_traits::equals_any_type<typename std::decay<T>::type, test_register>;
+using is_empty_constant =
+    util::type_traits::equals_any_type<typename std::decay<T>::type, test_register, std::nullptr_t>;
 
 template<bool Optimize, typename T>
 inline typename std::enable_if<is_empty_constant<T>::value>::type optimized_write(std::ostream& output,
@@ -86,10 +89,13 @@ inline typename std::enable_if<is_offset<T>::value, offset_option>::type offset_
 	}
 }
 
-template<bool Optimize>
-inline constant_option constant_index(test_register value) noexcept
+template<bool Optimize, typename T>
+inline typename std::enable_if<is_empty_constant<T>::value, constant_option>::type
+    constant_index(T value) noexcept
 {
-	return constant_option::co_test_register;
+	return static_cast<constant_option>(
+	    constant_option::co_test_register +
+	    util::type_traits::type_index<typename std::decay<T>::type, test_register, std::nullptr_t>::value);
 }
 
 template<bool Optimize, typename T>

@@ -25,7 +25,8 @@ arg_options = {
         ("int_32", "ip.read<std::int32_t>()"),
         ("int_64", "ip.read<std::int64_t>()"),
         ("double", "ip.read<double>()"),
-        ("test_register", "test_register")
+        ("test_register", "test_register"),
+        ("null", "nullptr")
     ],
     "ro": [
         ("8", "resources.at(ip.read<std::uint8_t>())"),
@@ -43,11 +44,8 @@ opcodes = [
 const auto right = member_pointer({1});
 const auto op = ip.read<infix_operator>();
 auto& dest = {2};
-auto result = left->operation(*right, op);
 
-if (result.valid()) {{
-    token->set(dest, std::move(result));
-}}
+token->set(dest, left->operation(*right, op));
 
 break;"""),
 
@@ -61,12 +59,7 @@ break;"""),
 auto result = member_pointer({0})->invoke(stack.frame(parameter_count), parameter_count);
 
 stack.drop(parameter_count);
-
-auto& dest = {1};
-
-if (result.valid()) {{
-    token->set(dest, std::move(result));
-}}
+token->set({1}, std::move(result));
 
 break;"""),
 
@@ -95,11 +88,8 @@ break;"""),
     ("oc_self_operator", ("mso", "mdo"), """const auto op = ip.read<self_operator>();
 const auto src = member_pointer({0});
 auto& dest = {1};
-auto result = src->self_operation(op);
 
-if (result.valid()) {{
-    token->set(dest, std::move(result));
-}}
+token->set(dest, src->self_operation(op));
 
 break;"""),
 

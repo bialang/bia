@@ -36,6 +36,11 @@ inline tokens_type value(present present, tokens_type tokens, Destination&& dest
 
 			break;
 		}
+		case token::keyword::null: {
+			present.writer.write<true, bytecode::oc_instantiate>(nullptr, std::forward<Destination>(destination));
+
+			break;
+		}
 		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
 		}
 

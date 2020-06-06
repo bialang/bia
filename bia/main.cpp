@@ -9,20 +9,24 @@ int main()
 
 	engine.function("print",
 	                static_cast<void (*)(bia::connector::parameters)>([](bia::connector::parameters params) {
-						for(std::size_t i = 0; i < params.size(); ++i) {
-							std::cout << bia::member::cast<int>(*params[i]) << " ";
-						}
+		                for (std::size_t i = 0; i < params.size(); ++i) {
+			                if (const auto ptr = params[i]) {
+				                std::cout << bia::member::cast<int>(*ptr) << " ";
+			                } else {
+				                std::cout << "<null> ";
+			                }
+		                }
 
-						std::cout << "\n";
+		                std::cout << "\n";
 	                }));
 
 	std::stringstream code;
 
 	code << u8R"(
-		
-		print(12, 12 ,3, 65)
 
-	)";
+print(1, 2, null)
+
+)";
 
 	try {
 		engine.execute(code);

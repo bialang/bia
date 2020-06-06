@@ -34,7 +34,6 @@ inline tokens_type statement(present present, tokens_type tokens)
 		break;
 	}
 	default: {
-		// todo: remove destination
 		tokens = expression(present, tokens, bytecode::member::tos{});
 
 		present.writer.write<true, bytecode::oc_drop>(1);

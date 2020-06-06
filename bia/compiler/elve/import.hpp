@@ -1,7 +1,6 @@
 #ifndef BIA_COMPILER_ELVE_IMPORT_HPP_
 #define BIA_COMPILER_ELVE_IMPORT_HPP_
 
-#include "expression.hpp"
 #include "present.hpp"
 
 namespace bia {

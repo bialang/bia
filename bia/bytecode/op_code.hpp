@@ -77,6 +77,7 @@ enum constant_option
 	co_int_64,
 	co_double,
 	co_test_register,
+	co_null,
 
 	co_count
 };

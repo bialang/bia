@@ -9,8 +9,8 @@
 #include "root.hpp"
 #include "stack_view.hpp"
 
-#include <type_traits>
 #include <bia/util/gsl.hpp>
+#include <type_traits>
 
 namespace bia {
 namespace gc {
@@ -50,7 +50,10 @@ public:
 	void set(object::pointer<T>& dest, gcable<T>&& src)
 	{
 		set(dest, src.peek());
-		src.start_monitor();
+
+		if (src.valid()) {
+			src.start_monitor();
+		}
 	}
 	/**
 	 * Sets the destination pointer to the source pointer. If the gc is active, additional work is done.

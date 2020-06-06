@@ -11,8 +11,8 @@
 #include <bia/gc/stack_view.hpp>
 #include <bia/gc/token.hpp>
 #include <bia/member/member.hpp>
-#include <type_traits>
 #include <bia/util/finally.hpp>
+#include <type_traits>
 
 using namespace bia::bvm;
 
@@ -74,11 +74,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -88,11 +85,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -102,11 +96,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -116,11 +107,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -129,11 +117,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -142,11 +127,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -156,11 +138,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -170,11 +149,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -184,11 +160,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -197,11 +170,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -212,11 +182,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -227,11 +194,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -242,11 +206,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -257,11 +218,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -271,11 +229,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -285,11 +240,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -299,11 +251,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -313,11 +262,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -327,11 +273,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -340,11 +283,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -354,11 +294,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -368,11 +305,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -382,11 +316,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -396,11 +327,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -409,11 +337,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -424,11 +349,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -439,11 +361,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -454,11 +373,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -469,11 +385,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -483,11 +396,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -496,11 +406,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -509,11 +416,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -522,11 +426,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -535,11 +436,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -548,11 +446,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -561,11 +456,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -574,11 +466,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -587,11 +476,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -600,11 +486,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -613,11 +496,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -626,11 +506,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -640,11 +517,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -654,11 +528,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -668,11 +539,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -681,11 +549,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -694,11 +559,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -707,11 +569,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -720,11 +579,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -733,11 +589,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -746,11 +599,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -760,11 +610,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -774,11 +621,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -788,11 +632,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -802,11 +643,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -816,11 +654,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -830,11 +665,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -844,11 +676,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -858,11 +687,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -872,11 +698,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -885,11 +708,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -898,11 +718,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -911,11 +728,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -924,11 +738,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -937,11 +748,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -950,11 +758,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -964,11 +769,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -978,11 +780,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -992,11 +791,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1007,11 +803,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1021,11 +814,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1034,11 +824,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1047,11 +834,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1060,11 +844,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1073,11 +854,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1086,11 +864,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1099,11 +874,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1112,11 +884,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1125,11 +894,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1138,11 +904,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1151,11 +914,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1166,11 +926,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1181,11 +938,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1196,11 +950,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1211,11 +962,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1225,11 +973,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1239,11 +984,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1253,11 +995,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1267,11 +1006,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1281,11 +1017,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1295,11 +1028,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1310,11 +1040,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1325,11 +1052,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1340,11 +1064,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1356,11 +1077,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1371,11 +1089,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1386,11 +1101,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1401,11 +1113,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1416,11 +1125,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1431,11 +1137,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1445,11 +1148,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1459,11 +1159,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1473,11 +1170,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1487,11 +1181,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1502,11 +1193,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1516,11 +1204,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1531,11 +1216,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1547,11 +1229,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1563,11 +1242,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1579,11 +1255,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1594,11 +1267,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1608,11 +1278,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1622,11 +1289,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1636,11 +1300,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1650,11 +1311,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1664,11 +1322,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1678,11 +1333,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1692,11 +1344,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1706,11 +1355,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1720,11 +1366,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1734,11 +1377,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1748,11 +1388,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1762,11 +1399,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1776,11 +1410,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1790,11 +1421,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1803,11 +1431,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1817,11 +1442,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1831,11 +1453,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1845,11 +1464,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1859,11 +1475,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1872,11 +1485,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1887,11 +1497,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1902,11 +1509,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1917,11 +1521,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1932,11 +1533,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1946,11 +1544,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1960,11 +1555,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1974,11 +1566,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -1988,11 +1577,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2002,11 +1588,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2016,11 +1599,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2030,11 +1610,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2044,11 +1621,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2058,11 +1632,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2072,11 +1643,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2085,11 +1653,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2100,11 +1665,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2115,11 +1677,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2130,11 +1689,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2145,11 +1701,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2159,11 +1712,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2172,11 +1722,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2185,11 +1732,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2198,11 +1742,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2211,11 +1752,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2224,11 +1762,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2237,11 +1772,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2250,11 +1782,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2263,11 +1792,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2276,11 +1802,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2289,11 +1812,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2303,11 +1823,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2317,11 +1834,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2331,11 +1845,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2345,11 +1856,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2358,11 +1866,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2371,11 +1876,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2384,11 +1886,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2397,11 +1896,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2410,11 +1906,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2423,11 +1916,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2437,11 +1927,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2451,11 +1938,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2465,11 +1949,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2480,11 +1961,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2494,11 +1972,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2508,11 +1983,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2522,11 +1994,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2536,11 +2005,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2550,11 +2016,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2563,11 +2026,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2576,11 +2036,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2589,11 +2046,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2602,11 +2056,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2616,11 +2067,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2629,11 +2077,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2643,11 +2088,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2658,11 +2100,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2673,11 +2112,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2688,11 +2124,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2702,11 +2135,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2715,11 +2145,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2728,11 +2155,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2741,11 +2165,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2754,11 +2175,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2767,11 +2185,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2780,11 +2195,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2793,11 +2205,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2806,11 +2215,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2819,11 +2225,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2832,11 +2235,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2847,11 +2247,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2862,11 +2259,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2877,11 +2271,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2892,11 +2283,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2906,11 +2294,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2920,11 +2305,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2934,11 +2316,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2948,11 +2327,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2963,11 +2339,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2977,11 +2350,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -2992,11 +2362,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3008,11 +2375,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3024,11 +2388,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3040,11 +2401,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3055,11 +2413,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3070,11 +2425,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3085,11 +2437,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3100,11 +2449,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3115,11 +2461,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3129,11 +2472,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3143,11 +2483,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3158,11 +2495,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3173,11 +2507,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3188,11 +2519,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3202,11 +2530,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3218,11 +2543,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3234,11 +2556,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3250,11 +2569,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3266,11 +2582,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3281,11 +2594,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3295,11 +2605,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3309,11 +2616,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3323,11 +2627,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3337,11 +2638,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3351,11 +2649,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3365,11 +2660,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3379,11 +2671,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3393,11 +2682,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3407,11 +2693,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3421,11 +2704,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3434,11 +2714,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3447,11 +2724,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3460,11 +2734,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3473,11 +2744,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3486,11 +2754,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3499,11 +2764,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3512,11 +2774,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3525,11 +2784,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3538,11 +2794,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3551,11 +2804,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3565,11 +2815,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3579,11 +2826,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3593,11 +2837,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3607,11 +2848,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3621,11 +2859,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3634,11 +2869,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3647,11 +2879,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3660,11 +2889,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3673,11 +2899,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3686,11 +2909,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3699,11 +2919,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3712,11 +2929,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3725,11 +2939,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3738,11 +2949,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3751,11 +2959,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3765,11 +2970,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3779,11 +2981,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3793,11 +2992,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3807,11 +3003,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3821,11 +3014,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3834,11 +3024,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3847,11 +3034,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3860,11 +3044,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3873,11 +3054,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3886,11 +3064,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3899,11 +3074,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3912,11 +3084,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3925,11 +3094,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3938,11 +3104,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3951,11 +3114,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3964,11 +3124,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3977,11 +3134,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -3990,11 +3144,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4003,11 +3154,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4016,11 +3164,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4029,11 +3174,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4042,11 +3184,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4055,11 +3194,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4068,11 +3204,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4081,11 +3214,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4095,11 +3225,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4109,11 +3236,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4123,11 +3247,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4137,11 +3258,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4151,11 +3269,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4164,11 +3279,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4177,11 +3289,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4190,11 +3299,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4203,11 +3309,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4216,11 +3319,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4229,11 +3329,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4242,11 +3339,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4255,11 +3349,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4268,11 +3359,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4281,11 +3369,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4295,11 +3380,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4309,11 +3391,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4323,11 +3402,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4337,11 +3413,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4351,11 +3424,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
-			auto result   = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4364,11 +3434,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4377,11 +3444,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4390,11 +3454,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4403,11 +3464,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4416,11 +3474,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4429,11 +3484,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4442,11 +3494,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4455,11 +3504,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4468,11 +3514,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
 
 			break;
 		}
@@ -4481,11 +3524,47 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
-			auto result      = left->operation(*right, op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_instantiate - co_null * mdo_count - mdo_local_8): {
+			const auto constant = nullptr;
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()),
+			           creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
+		case (oc_instantiate - co_null * mdo_count - mdo_global_8): {
+			const auto constant = nullptr;
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()),
+			           creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
+		case (oc_instantiate - co_null * mdo_count - mdo_local_16): {
+			const auto constant = nullptr;
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()),
+			           creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
+		case (oc_instantiate - co_null * mdo_count - mdo_global_16): {
+			const auto constant = nullptr;
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()),
+			           creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
+		case (oc_instantiate - co_null * mdo_count - mdo_tos): {
+			const auto constant = nullptr;
+
+			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
 
 			break;
 		}
@@ -4690,12 +3769,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -4705,12 +3779,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -4720,12 +3789,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -4735,12 +3799,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -4750,12 +3809,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.push();
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.push(), std::move(result));
 
 			break;
 		}
@@ -4765,12 +3819,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -4780,12 +3829,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -4795,12 +3839,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -4810,12 +3849,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -4825,12 +3859,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.push();
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.push(), std::move(result));
 
 			break;
 		}
@@ -4840,12 +3869,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -4855,12 +3879,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -4870,12 +3889,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -4885,12 +3899,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -4900,12 +3909,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.push();
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.push(), std::move(result));
 
 			break;
 		}
@@ -4915,12 +3919,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -4930,12 +3929,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -4945,12 +3939,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -4960,12 +3949,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -4975,12 +3959,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.push();
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.push(), std::move(result));
 
 			break;
 		}
@@ -4990,12 +3969,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -5005,12 +3979,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -5020,12 +3989,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -5035,12 +3999,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -5050,12 +4009,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.push();
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.push(), std::move(result));
 
 			break;
 		}
@@ -5065,12 +4019,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -5080,12 +4029,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -5095,12 +4039,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -5110,12 +4049,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -5125,12 +4059,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.push();
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.push(), std::move(result));
 
 			break;
 		}
@@ -5140,12 +4069,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -5155,12 +4079,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -5170,12 +4089,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -5185,12 +4099,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -5200,12 +4109,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			                  ->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.push();
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.push(), std::move(result));
 
 			break;
 		}
@@ -5214,12 +4118,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -5228,12 +4127,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint8_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
@@ -5242,12 +4136,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -5256,12 +4145,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.local_at(ip.read<std::uint16_t>());
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
@@ -5270,12 +4154,7 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
 
 			stack.drop(parameter_count);
-
-			auto& dest = stack.push();
-
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(stack.push(), std::move(result));
 
 			break;
 		}
@@ -6303,11 +5182,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6315,11 +5191,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6327,11 +5200,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6339,11 +5209,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6351,11 +5218,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.push();
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6363,11 +5227,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6375,11 +5236,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6387,11 +5245,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6399,11 +5254,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6411,11 +5263,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.push();
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6423,12 +5272,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
-			auto& dest  = stack.local_at(ip.read<std::uint8_t>());
-			auto result = src->self_operation(op);
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6436,12 +5282,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
-			auto& dest  = stack.local_at(ip.read<std::uint8_t>());
-			auto result = src->self_operation(op);
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6449,12 +5292,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
-			auto& dest  = stack.local_at(ip.read<std::uint16_t>());
-			auto result = src->self_operation(op);
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6462,12 +5302,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
-			auto& dest  = stack.local_at(ip.read<std::uint16_t>());
-			auto result = src->self_operation(op);
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6475,12 +5312,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
-			auto& dest  = stack.push();
-			auto result = src->self_operation(op);
+			auto& dest = stack.push();
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6488,11 +5322,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6500,11 +5331,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6512,11 +5340,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6524,11 +5349,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6536,11 +5358,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.push();
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6548,11 +5367,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6560,11 +5376,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6572,11 +5385,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6584,11 +5394,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6596,11 +5403,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			auto& dest     = stack.push();
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6608,12 +5412,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
-			auto& dest  = stack.local_at(ip.read<std::uint8_t>());
-			auto result = src->self_operation(op);
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6621,12 +5422,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
-			auto& dest  = stack.local_at(ip.read<std::uint8_t>());
-			auto result = src->self_operation(op);
+			auto& dest = stack.local_at(ip.read<std::uint8_t>());
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6634,12 +5432,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
-			auto& dest  = stack.local_at(ip.read<std::uint16_t>());
-			auto result = src->self_operation(op);
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6647,12 +5442,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
-			auto& dest  = stack.local_at(ip.read<std::uint16_t>());
-			auto result = src->self_operation(op);
+			auto& dest = stack.local_at(ip.read<std::uint16_t>());
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6660,12 +5452,9 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op = ip.read<self_operator>();
 			const auto src =
 			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
-			auto& dest  = stack.push();
-			auto result = src->self_operation(op);
+			auto& dest = stack.push();
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6673,11 +5462,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6685,11 +5471,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6697,11 +5480,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6709,11 +5489,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6721,11 +5498,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			auto& dest     = stack.push();
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6733,11 +5507,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.tos());
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6745,11 +5516,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.tos());
 			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6757,11 +5525,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.tos());
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6769,11 +5534,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.tos());
 			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -6781,11 +5543,8 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer(stack.tos());
 			auto& dest     = stack.push();
-			auto result    = src->self_operation(op);
 
-			if (result.valid()) {
-				token->set(dest, std::move(result));
-			}
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
