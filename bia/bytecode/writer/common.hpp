@@ -107,6 +107,8 @@ inline typename std::enable_if<is_constant<T>::value && !is_empty_constant<T>::v
 	if (Optimize && std::is_integral<type>::value) {
 		if (util::limit_checker<std::int8_t>::in_bounds(value)) {
 			return co_int_8;
+		} else if (util::limit_checker<std::int16_t>::in_bounds(value)) {
+			return co_int_16;
 		} else if (util::limit_checker<std::int32_t>::in_bounds(value)) {
 			return co_int_32;
 		}

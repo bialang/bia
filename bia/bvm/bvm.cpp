@@ -3724,6 +3724,45 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 
 			break;
 		}
+		case (oc_instantiate - co_int_16 * mdo_count - mdo_local_8): {
+			const auto constant = ip.read<std::int16_t>();
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()),
+			           creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
+		case (oc_instantiate - co_int_16 * mdo_count - mdo_global_8): {
+			const auto constant = ip.read<std::int16_t>();
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()),
+			           creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
+		case (oc_instantiate - co_int_16 * mdo_count - mdo_local_16): {
+			const auto constant = ip.read<std::int16_t>();
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()),
+			           creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
+		case (oc_instantiate - co_int_16 * mdo_count - mdo_global_16): {
+			const auto constant = ip.read<std::int16_t>();
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()),
+			           creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
+		case (oc_instantiate - co_int_16 * mdo_count - mdo_tos): {
+			const auto constant = ip.read<std::int16_t>();
+
+			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+
+			break;
+		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int8_t>();
 

@@ -11,7 +11,11 @@ int main()
 	                static_cast<void (*)(bia::connector::parameters)>([](bia::connector::parameters params) {
 		                for (std::size_t i = 0; i < params.size(); ++i) {
 			                if (const auto ptr = params[i]) {
-				                std::cout << bia::member::cast<int>(*ptr) << " ";
+				                if (dynamic_cast<const bia::member::native::string*>(ptr)) {
+					                std::cout << bia::member::cast<const char*>(*ptr) << " ";
+				                } else {
+					                std::cout << bia::member::cast<int>(*ptr) << " ";
+				                }
 			                } else {
 				                std::cout << "<null> ";
 			                }
@@ -24,7 +28,8 @@ int main()
 
 	code << u8R"(
 
-print(1, 2, null)
+
+print(128)
 
 )";
 

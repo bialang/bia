@@ -73,6 +73,7 @@ struct test_register
 enum constant_option
 {
 	co_int_8,
+	co_int_16,
 	co_int_32,
 	co_int_64,
 	co_double,
