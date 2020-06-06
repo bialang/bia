@@ -22,17 +22,6 @@ function(create_library DIRECTORY)
 	if(EXISTS "${DIRECTORY}/config.hpp.in")
 		configure_file("${DIRECTORY}/config.hpp.in" "${DIRECTORY}/config.hpp")
 	endif()
-
-#	install(TARGETS ${LIB_NAME}
-#		EXPORT ${LIB_NAME}-targets
-#		ARCHIVE DESTINATION "lib/bia"
-#		LIBRARY DESTINATION "lib/bia"
-#		INCLUDES DESTINATION "include")
-#	install(EXPORT ${LIB_NAME}-targets
-#			DESTINATION "lib/bia/cmake"
-#			NAMESPACE bia::
-#			FILE "bia-${LIB_NAME}-targets.cmake"
-#			COMPONENT ${LIB_NAME})
 endfunction()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in"
@@ -49,35 +38,49 @@ foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator
 	endif()
 
 	list(APPEND BIA_MODULES "${module}")
-	
+
 	install(DIRECTORY "${module}"
 			DESTINATION "include/bia"
 			FILES_MATCHING PATTERN "*.hpp")
 endforeach()
 
 
-install(FILES "config.hpp"
-		DESTINATION "include/bia")
+# build exportable libraries
+list(APPEND BIA_COMPONENTS base bvm bsl compiler)
 
 find_package(Threads REQUIRED)
+
+# base
 add_library(base STATIC $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:resource-obj>)
 target_link_libraries(base
 	PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(base
 	PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
 
-add_library(bsl STATIC $<TARGET_OBJECTS:bsl-obj> $<TARGET_OBJECTS:bvm-obj>)
-target_link_libraries(bsl
+# bvm
+add_library(bvm STATIC $<TARGET_OBJECTS:bvm-obj>)
+target_link_libraries(bvm
 	PUBLIC base)
+
+# bsl
+add_library(bsl STATIC $<TARGET_OBJECTS:bsl-obj>)
+target_link_libraries(bsl
+	PUBLIC bvm)
+
+# compiler
 add_library(compiler STATIC $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
 target_link_libraries(compiler
 	PUBLIC base)
+
 
 add_executable(maindev "main.cpp" ${BACKWARD_ENABLE})
 target_link_libraries(maindev
 	PUBLIC bsl compiler)
 
 #add_backward(maindev)
+
+
+# install
 include(CMakePackageConfigHelpers)
 
 set(INCLUDE_INSTALL_DIR "include/")
@@ -94,4 +97,19 @@ write_basic_package_version_file(
 	COMPATIBILITY SameMajorVersion)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake"
-		DESTINATION "lib/bia/cmake")
+	DESTINATION "lib/bia/cmake")
+install(FILES "config.hpp"
+	DESTINATION "include/bia")
+
+foreach(component ${BIA_COMPONENTS})
+	install(TARGETS ${component}
+		EXPORT ${component}-targets
+		ARCHIVE DESTINATION "lib/bia"
+		LIBRARY DESTINATION "lib/bia"
+		INCLUDES DESTINATION "include/")
+	install(EXPORT ${component}-targets
+		DESTINATION "lib/bia/cmake"
+		NAMESPACE bia::
+		FILE "bia-${component}-targets.cmake"
+		COMPONENT ${component})
+endforeach()
