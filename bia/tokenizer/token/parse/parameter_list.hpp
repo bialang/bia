@@ -49,6 +49,8 @@ inline exception::syntax_details parameter_list(parameter& parameter)
 	while (true) {
 		eat_whitespaces(parameter);
 
+		pos = parameter.input.tellg();
+
 		switch (parameter.encoder.read(parameter.input)) {
 		case ')': goto gt_success;
 		case ',': {
@@ -61,6 +63,7 @@ inline exception::syntax_details parameter_list(parameter& parameter)
 
 			break;
 		}
+		default: return { pos, "unexcepted character" };
 		}
 	}
 
