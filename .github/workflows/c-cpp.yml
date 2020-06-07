@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ master, dev ]
 
+defaults:
+  run:
+    working-directory: ./build
+
 jobs:
   build:
 
@@ -17,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: cmake .. -DBIA_BUILD_EXAMPLES=OFF
+      run: ls -la && pwd && cmake .. -DBIA_BUILD_EXAMPLES=OFF
     - name: make
       run: cmake --build . -- -j
     - name: test
