@@ -1,7 +1,6 @@
 #ifndef BIA_MEMBER_FUNCTION_STATIC_HPP_
 #define BIA_MEMBER_FUNCTION_STATIC_HPP_
 
-#include "../connector.hpp"
 #include "../member.hpp"
 
 #include <bia/gc/gc.hpp>
@@ -38,9 +37,9 @@ public:
 	{
 		return gc::gc::active_gc()->construct<static_>(_function).template to<member>();
 	}
-	gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) override
+	gc::gcable<member> invoke(parameters_type params) override
 	{
-		return connector::connect_static(_function, stack, count);
+		return connector::connect_static(_function, params);
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{

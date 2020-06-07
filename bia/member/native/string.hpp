@@ -38,9 +38,9 @@ public:
 	{
 		return gc::gc::active_gc()->construct<string>(_value).template to<member>();
 	}
-	gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) override
+	gc::gcable<member> invoke(parameters_type params) override
 	{
-		return copy();
+		return {};
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{

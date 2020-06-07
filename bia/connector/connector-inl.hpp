@@ -21,66 +21,65 @@ using parameter_indices = util::type_traits::int_container<std::size_t, Indices.
 template<std::size_t Count>
 using parameter_index_maker = util::type_traits::int_sequencer<std::size_t, 0, Count>;
 
-inline member::member& not_null(gc::stack_view::element_type& element)
+inline member::member& not_null(member::member* element)
 {
-	if (const auto ptr = element.get()) {
-		return *ptr;
+	if (element) {
+		return *element;
 	}
 
 	BIA_THROW(exception::nullpointer, "nullpointer argument");
 }
 
-inline void assert_parameters(std::size_t count, util::type_traits::type_container<parameters>)
+inline void assert_parameters(parameters_type params, util::type_traits::type_container<parameters_type>)
 {}
 
 template<typename... Args>
-inline void assert_parameters(std::size_t count, util::type_traits::type_container<Args...>)
+inline void assert_parameters(parameters_type params, util::type_traits::type_container<Args...>)
 {
-	if (sizeof...(Args) != count) {
+	if (sizeof...(Args) != params.size()) {
 		throw;
 	}
 }
 
 template<typename Return, typename... Args, std::size_t... Indices>
-inline gc::gcable<member::member> connect_static(Return (*function)(Args...), gc::stack_view& stack,
-                                                 std::size_t parameter_count, parameter_indices<Indices...>)
+inline gc::gcable<member::member> connect_static(Return (*function)(Args...), parameters_type params,
+                                                 parameter_indices<Indices...>)
 {
 	return creator::create(
-	           function(std::forward<Args>(member::cast::cast<Args>(not_null(stack.arg_at(Indices))))...))
+	           function(std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...))
 	    .template to<member::member>();
 }
 
 template<typename... Args, std::size_t... Indices>
-inline gc::gcable<member::member> connect_static(void (*function)(Args...), gc::stack_view& stack,
-                                                 std::size_t parameter_count, parameter_indices<Indices...>)
+inline gc::gcable<member::member> connect_static(void (*function)(Args...), parameters_type params,
+                                                 parameter_indices<Indices...>)
 {
-	function(std::forward<Args>(member::cast::cast<Args>(not_null(stack.arg_at(Indices))))...);
+	function(std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...);
 
 	return {};
 }
 
 template<typename Return>
-inline gc::gcable<member::member> connect_static(Return (*function)(parameters), gc::stack_view& stack,
-                                                 std::size_t parameter_count, parameter_indices<0>)
+inline gc::gcable<member::member> connect_static(Return (*function)(parameters_type), parameters_type params,
+                                                 parameter_indices<0>)
 {
-	return creator::create(function(parameters{ stack, parameter_count })).template to<member::member>();
+	return creator::create(function(params)).template to<member::member>();
 }
 
-inline gc::gcable<member::member> connect_static(void (*function)(parameters), gc::stack_view& stack,
-                                                 std::size_t parameter_count, parameter_indices<0>)
+inline gc::gcable<member::member> connect_static(void (*function)(parameters_type), parameters_type params,
+                                                 parameter_indices<0>)
 {
-	function(parameters{ stack, parameter_count });
+	function(params);
 
 	return {};
 }
 
 template<typename Return, typename... Args>
-inline gc::gcable<member::member> connect_static(Return (*function)(Args...), gc::stack_view& stack,
-                                                 std::size_t parameter_count)
+inline gc::gcable<member::member> connect_static(Return (*function)(Args...), parameters_type params)
 {
-	assert_parameters(parameter_count, util::type_traits::type_container<Args...>{});
+	assert_parameters(params, util::type_traits::type_container<Args...>{});
 
-	return connect_static(function, stack, parameter_count, parameter_index_maker<sizeof...(Args)>::value);
+	return connect_static(function, params, parameter_index_maker<sizeof...(Args)>::value);
 }
 
 } // namespace connector

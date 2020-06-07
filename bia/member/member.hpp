@@ -1,12 +1,13 @@
 #ifndef BIA_MEMBER_MEMBER_HPP_
 #define BIA_MEMBER_MEMBER_HPP_
 
+#include "connector.hpp"
 #include "operator_.hpp"
 
-#include <cstdint>
 #include <bia/gc/gcable.hpp>
 #include <bia/gc/object/base.hpp>
 #include <bia/gc/stack_view.hpp>
+#include <cstdint>
 #include <typeinfo>
 
 namespace bia {
@@ -29,6 +30,7 @@ public:
 	typedef int flag_type;
 	/** the type for testing operations */
 	typedef int test_type;
+	typedef connector::parameters_type parameters_type;
 	typedef std::uint8_t parameter_count_type;
 
 	/**
@@ -66,11 +68,10 @@ public:
 	/**
 	 * Invokes this member.
 	 *
-	 * @param stack the parameter stack
-	 * @param count the count of parameters
+	 * @param params the parameter manager
 	 * @returns the result of the function call
 	 */
-	virtual gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) = 0;
+	virtual gc::gcable<member> invoke(parameters_type params) = 0;
 	/**
 	 * Executes an infix operation on this member and returns the result.
 	 *

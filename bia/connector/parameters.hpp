@@ -11,7 +11,7 @@ namespace connector {
 class parameters
 {
 public:
-	parameters(gc::stack_view& stack, std::size_t size) : _stack{ stack }
+	parameters(gc::stack_view stack, std::size_t size, std::size_t kwargs) : _stack{ std::move(stack) }
 	{
 		_size = size;
 	}
@@ -30,7 +30,7 @@ public:
 	}
 
 private:
-	gc::stack_view& _stack;
+	gc::stack_view _stack;
 	std::size_t _size;
 };
 

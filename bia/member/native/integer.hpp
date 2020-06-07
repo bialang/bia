@@ -41,15 +41,9 @@ public:
 	{
 		return gc::gc::active_gc()->construct<integer>(_value).template to<member>();
 	}
-	gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) override
+	gc::gcable<member> invoke(parameters_type params) override
 	{
-		printf("calling int member (value=%ld) with %d parameter\n", _value, (int) count);
-
-		for (parameter_count_type i = 0; i < count; ++i) {
-			printf("%d parameter: %ld\n", i, static_cast<integer*>(stack.arg_at(i).get())->_value);
-		}
-
-		return gc::gc::active_gc()->construct<integer>(616161).template to<member>();
+		return {};
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
