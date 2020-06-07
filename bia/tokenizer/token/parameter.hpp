@@ -23,7 +23,7 @@ struct parameter
 	util::byte_istream_type& input;
 	resource::manager& manager;
 	string::encoding::encoder& encoder;
-	bundle& bundle;
+	class bundle& bundle;
 
 	state backup() const
 	{

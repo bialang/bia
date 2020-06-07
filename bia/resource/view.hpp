@@ -10,7 +10,7 @@ namespace resource {
 
 struct view
 {
-	type type;
+	enum type type;
 	std::size_t size;
 	gc::memory::iterator first;
 	gc::memory::iterator last;

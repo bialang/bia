@@ -85,7 +85,7 @@ public:
 	 *
 	 * @returns a reference to the root
 	 */
-	stack_view stack_view() noexcept
+	class stack_view stack_view() noexcept
 	{
 		return { _base, _size };
 	}

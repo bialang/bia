@@ -61,7 +61,7 @@ private:
 	struct info
 	{
 		pos_type pos;
-		type type;
+		enum type type;
 	};
 
 	constexpr static auto _jump_size = sizeof(bytecode::op_code) + sizeof(offset_type);
