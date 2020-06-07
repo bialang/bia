@@ -18,6 +18,7 @@ enum class infix_operator : std::uint8_t
 	greater,
 	greater_equal,
 	in,
+	three_way_comparison,
 	bitwise_left_shift,
 	bitwise_right_shift,
 	addition,

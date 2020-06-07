@@ -1,9 +1,9 @@
 #ifndef BIA_TOKENIZER_TOKEN_OPERATOR_HPP_
 #define BIA_TOKENIZER_TOKEN_OPERATOR_HPP_
 
-#include <cstdint>
 #include <bia/exception/implementation_error.hpp>
 #include <bia/member/operator_.hpp>
+#include <cstdint>
 
 namespace bia {
 namespace tokenizer {
@@ -29,32 +29,33 @@ constexpr inline std::uint16_t make()
 
 enum class operator_ : std::uint16_t
 {
-	logical_or          = make<0, 0, operator_type::infix>(),
-	logical_and         = make<1, 0, operator_type::infix>(),
-	logical_not         = make<2, 0, operator_type::prefix>(),
-	bitwise_or          = make<3, 0, operator_type::infix>(),
-	bitwise_xor         = make<4, 0, operator_type::infix>(),
-	bitwise_and         = make<5, 0, operator_type::infix>(),
-	equal               = make<6, 0, operator_type::infix>(),
-	not_equal           = make<6, 1, operator_type::infix>(),
-	less                = make<6, 2, operator_type::infix>(),
-	less_equal          = make<6, 3, operator_type::infix>(),
-	greater             = make<6, 4, operator_type::infix>(),
-	greater_equal       = make<6, 5, operator_type::infix>(),
-	in                  = make<6, 6, operator_type::infix>(),
-	bitwise_left_shift  = make<7, 0, operator_type::infix>(),
-	bitwise_right_shift = make<7, 1, operator_type::infix>(),
-	addition            = make<8, 0, operator_type::infix>(),
-	subtraction         = make<8, 1, operator_type::infix>(),
-	multiplication      = make<9, 0, operator_type::infix>(),
-	division            = make<9, 1, operator_type::infix>(),
-	remainder           = make<9, 2, operator_type::infix>(),
-	unary_minus         = make<10, 0, operator_type::prefix>(),
-	bitwise_not         = make<10, 1, operator_type::prefix>(),
-	exponentation       = make<11, 0, operator_type::infix>(),
-	member_access       = make<12, 0, operator_type::infix>(),
-	function_call_open  = make<12, 1, operator_type::prefix>(),
-	function_call_close = make<12, 2, operator_type::postfix>(),
+	logical_or           = make<0, 0, operator_type::infix>(),
+	logical_and          = make<1, 0, operator_type::infix>(),
+	logical_not          = make<2, 0, operator_type::prefix>(),
+	bitwise_or           = make<3, 0, operator_type::infix>(),
+	bitwise_xor          = make<4, 0, operator_type::infix>(),
+	bitwise_and          = make<5, 0, operator_type::infix>(),
+	equal                = make<6, 0, operator_type::infix>(),
+	not_equal            = make<6, 1, operator_type::infix>(),
+	less                 = make<6, 2, operator_type::infix>(),
+	less_equal           = make<6, 3, operator_type::infix>(),
+	greater              = make<6, 4, operator_type::infix>(),
+	greater_equal        = make<6, 5, operator_type::infix>(),
+	in                   = make<6, 6, operator_type::infix>(),
+	three_way_comparison = make<7, 0, operator_type::infix>(),
+	bitwise_left_shift   = make<8, 0, operator_type::infix>(),
+	bitwise_right_shift  = make<8, 1, operator_type::infix>(),
+	addition             = make<9, 0, operator_type::infix>(),
+	subtraction          = make<9, 1, operator_type::infix>(),
+	multiplication       = make<10, 0, operator_type::infix>(),
+	division             = make<10, 1, operator_type::infix>(),
+	remainder            = make<10, 2, operator_type::infix>(),
+	unary_minus          = make<11, 0, operator_type::prefix>(),
+	bitwise_not          = make<11, 1, operator_type::prefix>(),
+	exponentation        = make<12, 0, operator_type::infix>(),
+	member_access        = make<13, 0, operator_type::infix>(),
+	function_call_open   = make<13, 1, operator_type::prefix>(),
+	function_call_close  = make<13, 2, operator_type::postfix>(),
 };
 
 inline precedence_type precedence_of(operator_ op) noexcept
@@ -80,6 +81,7 @@ inline member::infix_operator to_infix_operator(operator_ op)
 	case operator_::greater: return member::infix_operator::greater;
 	case operator_::greater_equal: return member::infix_operator::greater_equal;
 	case operator_::in: return member::infix_operator::in;
+	case operator_::three_way_comparison: return member::infix_operator::three_way_comparison;
 	case operator_::bitwise_left_shift: return member::infix_operator::bitwise_left_shift;
 	case operator_::bitwise_right_shift: return member::infix_operator::bitwise_right_shift;
 	case operator_::addition: return member::infix_operator::addition;
