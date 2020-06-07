@@ -1,5 +1,7 @@
 # Bia
 
+![C/C++ CI](https://github.com/bialang/bia/workflows/C/C++%20CI/badge.svg?branch=master)
+
 Embeddable C++11 Scripting Language
 
 :construction: This project is premature and not ready for production user :construction:
