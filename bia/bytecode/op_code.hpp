@@ -1,9 +1,9 @@
 #ifndef BIA_BYTECODE_OP_CODE_HPP_
 #define BIA_BYTECODE_OP_CODE_HPP_
 
+#include <bia/util/type_traits/equals_any.hpp>
 #include <cstdint>
 #include <type_traits>
-#include <bia/util/type_traits/equals_any.hpp>
 
 namespace bia {
 namespace bytecode {
@@ -128,6 +128,7 @@ enum op_code : op_code_type
 	oc_jump       = oc_test + oo_count,      // (offset)
 	oc_jump_true  = oc_jump + oo_count,      // (offset)
 	oc_jump_false = oc_jump_true + oo_count, // (offset)
+	oc_name       = oc_jump_false + ro_count,
 
 	/** 0 bit variants */
 	oc_return_void,
