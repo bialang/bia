@@ -6,23 +6,16 @@ on:
   pull_request:
     branches: [ master, dev ]
 
-defaults:
-  run:
-    working-directory: ./build
-
 jobs:
   build:
 
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: build
 
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: ls -la && pwd && cmake .. -DBIA_BUILD_EXAMPLES=OFF
+      run: mkdir build && cd build && cmake .. -DBIA_BUILD_EXAMPLES=OFF
     - name: make
-      run: cmake --build . -- -j
+      run: cd build && cmake --build . -- -j
     - name: test
-      run: ctest
+      run: cd build && ctest
