@@ -16,17 +16,13 @@ function(download_submodule_library LIB_NAME)
 	endif()
 endfunction()
 
-function(create_tests NAME PATH)
+function(create_test NAME PATH)
 	if(BIA_BUILD_TESTS)
-		file(GLOB_RECURSE TMP_SOURCE_FILES
-			"${PATH}/*.cpp")
+		file(GLOB_RECURSE TMP_SOURCE_FILES "${PATH}/*.cpp")
 
-		add_executable("${NAME}_test"
-			${TMP_SOURCE_FILES} ${BACKWARD_ENABLE})
-		target_link_libraries("${NAME}_test"
-			PUBLIC ${NAME})
-		target_include_directories("${NAME}_test"
-			PUBLIC ${CATCH_INCLUDE_DIRS})
+		add_executable("${NAME}_test" ${TMP_SOURCE_FILES} ${BACKWARD_ENABLE})
+		target_link_libraries("${NAME}_test" PUBLIC bvm bsl compiler)
+		target_include_directories("${NAME}_test" PUBLIC ${CATCH_INCLUDE_DIRS})
 		
 		if(BACKWARD_ENABLE)
 			add_backward("${NAME}_test")

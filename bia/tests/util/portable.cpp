@@ -1,7 +1,7 @@
+#include <bia/util/portable/stream.hpp>
 #include <catch.hpp>
 #include <cstdint>
 #include <sstream>
-#include <util/portable/stream.hpp>
 
 using namespace bia::util;
 

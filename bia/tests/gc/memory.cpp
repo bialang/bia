@@ -1,6 +1,6 @@
+#include <bia/gc/memory/simple_allocator.hpp>
+#include <bia/gc/memory/space.hpp>
 #include <catch.hpp>
-#include <gc/memory/simple_allocator.hpp>
-#include <gc/memory/space.hpp>
 
 using namespace bia::gc::memory;
 

@@ -117,7 +117,8 @@ inline typename std::enable_if<is_constant<T>::value && !is_empty_constant<T>::v
 	}
 
 	return static_cast<constant_option>(
-	    util::type_traits::type_index<type, std::int8_t, std::int32_t, std::int64_t, double>::value);
+	    util::type_traits::type_index<type, std::int8_t, std::int16_t, std::int32_t, std::int64_t,
+	                                  double>::value);
 }
 
 } // namespace writer

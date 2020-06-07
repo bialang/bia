@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 
-#include <bytecode/writer/common.hpp>
-#include <bytecode/writer/member.hpp>
+#include <bia/bytecode/writer/common.hpp>
+#include <bia/bytecode/writer/member.hpp>
 #include <catch.hpp>
 #include <sstream>
 #include <utility>
@@ -69,7 +69,7 @@ TEST_CASE("common writer", "[bytecode]")
 
 		REQUIRE(constant_index<true>(std::int8_t{ 127 }) == co_int_8);
 		REQUIRE(constant_index<true>(std::int32_t{ 127 }) == co_int_8);
-		REQUIRE(constant_index<true>(std::int64_t{ 6565 }) == co_int_32);
+		REQUIRE(constant_index<true>(std::int64_t{ 6565 }) == co_int_16);
 		REQUIRE(constant_index<true>(std::int64_t{ 127 }) == co_int_8);
 		REQUIRE(constant_index<true>(34.5) == co_double);
 
@@ -92,7 +92,7 @@ TEST_CASE("member writer", "[bytecode]")
 		REQUIRE(member_source_index<false>(member::local{ 6531 }) == mso_local_16);
 		REQUIRE(member_source_index<false>(member::resource{ 25 }) == mso_resource_16);
 		REQUIRE(member_source_index<false>(member::resource{ 6531 }) == mso_resource_16);
-		
+
 		REQUIRE(member_destination_index<false>(member::tos{}) == mdo_tos);
 		REQUIRE(member_destination_index<false>(member::global{ 25 }) == mdo_global_16);
 		REQUIRE(member_destination_index<false>(member::global{ 6531 }) == mdo_global_16);
@@ -110,7 +110,7 @@ TEST_CASE("member writer", "[bytecode]")
 		REQUIRE(member_source_index<true>(member::local{ 6531 }) == mso_local_16);
 		REQUIRE(member_source_index<true>(member::resource{ 25 }) == mso_resource_8);
 		REQUIRE(member_source_index<true>(member::resource{ 6531 }) == mso_resource_16);
-		
+
 		REQUIRE(member_destination_index<true>(member::tos{}) == mdo_tos);
 		REQUIRE(member_destination_index<true>(member::global{ 25 }) == mdo_global_8);
 		REQUIRE(member_destination_index<true>(member::global{ 6531 }) == mdo_global_16);

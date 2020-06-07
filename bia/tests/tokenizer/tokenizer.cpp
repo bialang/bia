@@ -1,13 +1,13 @@
 #define CATCH_CONFIG_MAIN
 
+#include <bia/exception/syntax_error.hpp>
+#include <bia/gc/memory/simple_allocator.hpp>
+#include <bia/tokenizer/bia_lexer.hpp>
+#include <bia/util/finally.hpp>
 #include <catch.hpp>
-#include <exception/syntax_error.hpp>
-#include <gc/memory/simple_allocator.hpp>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <tokenizer/bia_lexer.hpp>
-#include <util/finally.hpp>
 #include <vector>
 
 using namespace bia::tokenizer;
@@ -28,74 +28,74 @@ public:
 
 /*TEST_CASE("resource manager", "[tokenizer]")
 {
-	auto count = 0;
+    auto count = 0;
 
-	{
-		resource::manager rm(std::make_shared<bia::gc::memory::simple_allocator>(
-		                         [&count](std::size_t s) {
-			                         ++count;
+    {
+        resource::manager rm(std::make_shared<bia::gc::memory::simple_allocator>(
+                                 [&count](std::size_t s) {
+                                     ++count;
 
-			                         return std::malloc(s);
-		                         },
-		                         [&count](void* p) {
-			                         if (p) {
-				                         --count;
+                                     return std::malloc(s);
+                                 },
+                                 [&count](void* p) {
+                                     if (p) {
+                                         --count;
 
-				                         std::free(p);
-			                         }
-		                         }),
-		                     12);
+                                         std::free(p);
+                                     }
+                                 }),
+                             12);
 
-		SECTION("allocate memory")
-		{
-			{
-				const auto initial = count;
-				auto buf           = rm.start_memory(false);
-				std::ostream(&buf) << "hallo";
+        SECTION("allocate memory")
+        {
+            {
+                const auto initial = count;
+                auto buf           = rm.start_memory(false);
+                std::ostream(&buf) << "hallo";
 
-				REQUIRE(count > initial);
+                REQUIRE(count > initial);
 
-				rm.stop_memory(buf);
-			}
+                rm.stop_memory(buf);
+            }
 
-			{
-				const auto initial = count;
-				auto buf           = rm.start_memory(false);
-				std::ostream(&buf) << "12345678901";
+            {
+                const auto initial = count;
+                auto buf           = rm.start_memory(false);
+                std::ostream(&buf) << "12345678901";
 
-				REQUIRE(count > initial);
-			}
-		}
+                REQUIRE(count > initial);
+            }
+        }
 
-		SECTION("restore")
-		{
-			const auto initial = count;
-			const auto state   = rm.save_state();
+        SECTION("restore")
+        {
+            const auto initial = count;
+            const auto state   = rm.save_state();
 
-			{
-				auto buf = rm.start_memory(false);
-				std::ostream(&buf) << "hallo";
+            {
+                auto buf = rm.start_memory(false);
+                std::ostream(&buf) << "hallo";
 
-				REQUIRE(count > initial);
-			}
+                REQUIRE(count > initial);
+            }
 
-			const auto next = count;
+            const auto next = count;
 
-			rm.restore_state(state);
+            rm.restore_state(state);
 
-			REQUIRE(count <= next);
+            REQUIRE(count <= next);
 
-			{
-				// allocate again
-				auto buf = rm.start_memory(false);
-				std::ostream(&buf) << "hallo";
+            {
+                // allocate again
+                auto buf = rm.start_memory(false);
+                std::ostream(&buf) << "hallo";
 
-				REQUIRE(count == next);
-			}
-		}
-	}
+                REQUIRE(count == next);
+            }
+        }
+    }
 
-	REQUIRE(count == 0);
+    REQUIRE(count == 0);
 }*/
 
 TEST_CASE("tokenization", "[tokenizer]")
@@ -114,7 +114,7 @@ TEST_CASE("tokenization", "[tokenizer]")
 		lexer.lex(code, *encoder, receiver);
 
 		REQUIRE(receiver.tokens.size() == 5);
-		REQUIRE(code.tellg() == 12);
+		REQUIRE(code.eof());
 
 		using type = token::token::type;
 
@@ -159,7 +159,7 @@ let y=true
 
 	code << script;
 
-	//lexer.lex(code, *encoder, receiver);
+	// lexer.lex(code, *encoder, receiver);
 
-	//REQUIRE(code.tellg() == (sizeof(script) - 1));
+	// REQUIRE(code.tellg() == (sizeof(script) - 1));
 }
