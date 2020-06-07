@@ -10,11 +10,14 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: build
 
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: cmake . -DBIA_BUILD_EXAMPLES=OFF
+      run: cmake .. -DBIA_BUILD_EXAMPLES=OFF
     - name: make
       run: cmake --build . -- -j
     - name: test
