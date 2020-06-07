@@ -114,7 +114,7 @@ TEST_CASE("tokenization", "[tokenizer]")
 		lexer.lex(code, *encoder, receiver);
 
 		REQUIRE(receiver.tokens.size() == 5);
-		REQUIRE(code.tellg() == 12);
+		REQUIRE(code.eof());
 
 		using type = token::token::type;
 
