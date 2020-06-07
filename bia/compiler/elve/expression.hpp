@@ -114,7 +114,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 
 	tokens = value(present, tokens, bytecode::member::tos{});
 
-	const bytecode::member::local left{ present.variable_manager.add_tmp().id };
+	const bytecode::member::local left{ present.variables.add_tmp().id };
 	auto last_logical_and = false;
 
 	while (valid_right_hand(tokens)) {
@@ -157,7 +157,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		// right hand
 		tokens = expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, op_precedence, jumper);
 
-		const bytecode::member::local right{ present.variable_manager.add_tmp().id };
+		const bytecode::member::local right{ present.variables.add_tmp().id };
 
 		// call operator
 		present.writer.write<true, bytecode::oc_operator>(
@@ -165,7 +165,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		    static_cast<typename std::underlying_type<member::infix_operator>::type>(to_infix_operator(op)),
 		    left);
 		present.writer.write<true, bytecode::oc_drop>(1);
-		present.variable_manager.remove_tmp();
+		present.variables.remove_tmp();
 	}
 
 	// apply self operator
@@ -181,7 +181,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		present.writer.write<true, bytecode::oc_drop>(1);
 	}
 
-	present.variable_manager.remove_tmp();
+	present.variables.remove_tmp();
 
 	return tokens;
 }

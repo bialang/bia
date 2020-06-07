@@ -45,7 +45,7 @@ inline std::pair<tokens_type, std::uint8_t> parameter(present present, tokens_ty
 		}
 
 		expression(present, { a + 1, b }, bytecode::member::tos{});
-		present.variable_manager.add_tmp();
+		present.variables.add_tmp();
 	}
 
 	return { tokens.subspan(last + 1), count };

@@ -34,7 +34,7 @@ inline tokens_type member_step(present present, tokens_type tokens, Source&& sou
 		                                                std::forward<Destination>(destination));
 
 		for (auto i = pair.second; i--;) {
-			present.variable_manager.remove_tmp();
+			present.variables.remove_tmp();
 		}
 
 		return pair.first;
@@ -63,7 +63,7 @@ inline tokens_type member(present present, tokens_type tokens, T&& destination)
 	            static_cast<token::type>(tokens.data()->value.index()) == token::type::identifier);
 
 	const auto index =
-	    present.variable_manager.index_of(tokens.data()->value.get<token::identifier>().memory);
+	    present.variables.index_of(tokens.data()->value.get<token::identifier>().memory);
 
 	tokens = tokens.subspan(1);
 
@@ -99,10 +99,10 @@ inline tokens_type member(present present, tokens_type tokens, T&& destination)
 		tokens = x;
 	}
 
-	const bytecode::member::local tmp_source{ present.variable_manager.add_tmp().id };
+	const bytecode::member::local tmp_source{ present.variables.add_tmp().id };
 	const auto finally = util::make_finally([&present, &destination] {
 		// remove tmp variable
-		present.variable_manager.remove_tmp();
+		present.variables.remove_tmp();
 		present.writer.write<true, bytecode::oc_refer>(bytecode::member::tos{}, std::forward<T>(destination));
 		present.writer.write<true, bytecode::oc_drop>(1);
 	});

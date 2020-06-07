@@ -16,7 +16,7 @@ inline tokens_type declaration(present present, tokens_type tokens)
 	            static_cast<token::type>(tokens.data()->value.index()) == token::type::keyword);
 
 	const auto index =
-	    present.variable_manager.index_of(tokens.data()[1].value.get<token::identifier>().memory);
+	    present.variables.index_of(tokens.data()[1].value.get<token::identifier>().memory);
 
 	// overwrite existing variable
 	if (index.second) {
@@ -28,7 +28,7 @@ inline tokens_type declaration(present present, tokens_type tokens)
 
 	const auto ret = expression(present, tokens.subspan(2), bytecode::member::tos{});
 
-	present.variable_manager.add(tokens.data()[1].value.get<token::identifier>().memory);
+	present.variables.add(tokens.data()[1].value.get<token::identifier>().memory);
 
 	return ret;
 }

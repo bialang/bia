@@ -14,7 +14,7 @@ namespace elve {
 
 struct present
 {
-	variable_manager& variable_manager;
+	variable_manager& variables;
 	bytecode::writer::instruction& writer;
 	resource::serializer& resources;
 };
