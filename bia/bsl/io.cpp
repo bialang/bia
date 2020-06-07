@@ -46,9 +46,9 @@ bia::member::native::dict* io::_init(gc::gc& gc)
                                for (std::size_t i = 0; i < params.size(); ++i) {
                                    if (const auto ptr = params[i]) {
                                        if (dynamic_cast<const bia::member::native::string*>(ptr)) {
-                                           std::cout << bia::member::cast<const char*>(*ptr) << " ";
+                                           std::cout << bia::member::cast::cast<const char*>(*ptr) << " ";
                                        } else {
-                                           std::cout << bia::member::cast<int>(*ptr) << " ";
+                                           std::cout << bia::member::cast::cast<int>(*ptr) << " ";
                                        }
                                    } else {
                                        std::cout << "<null> ";

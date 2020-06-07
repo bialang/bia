@@ -1,14 +1,15 @@
-#ifndef BIA_MEMBER_CAST_HPP_
-#define BIA_MEMBER_CAST_HPP_
+#ifndef BIA_MEMBER_CAST_CAST_HPP_
+#define BIA_MEMBER_CAST_CAST_HPP_
 
-#include "member.hpp"
+#include "../member.hpp"
 
+#include <bia/util/type_traits/conjunction.hpp>
 #include <type_traits>
 #include <typeinfo>
-#include <bia/util/type_traits/conjunction.hpp>
 
 namespace bia {
 namespace member {
+namespace cast {
 
 template<typename T>
 using is_const_value =
@@ -60,6 +61,7 @@ inline typename std::enable_if<!std::is_arithmetic<T>::value && is_const_value<T
 	return output;
 }
 
+} // namespace cast
 } // namespace member
 } // namespace bia
 

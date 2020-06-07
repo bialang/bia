@@ -2,14 +2,14 @@
 #define BIA_HPP_
 
 #include "detail/engine.hpp"
-#include "member/cast.hpp"
+#include "member/cast/cast.hpp"
 
 namespace bia {
 
 using engine     = detail::engine;
 using parameters = connector::parameters;
-template<typename T>
-using cast = member::cast<T>;
+
+using namespace member::cast;
 
 } // namespace bia
 

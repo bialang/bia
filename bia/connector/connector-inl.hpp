@@ -7,7 +7,7 @@
 #include <bia/exception/nullpointer.hpp>
 #include <bia/gc/gcable.hpp>
 #include <bia/gc/stack_view.hpp>
-#include <bia/member/cast.hpp>
+#include <bia/member/cast/cast.hpp>
 #include <bia/member/connector.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
 #include <bia/util/type_traits/type_maker.hpp>
@@ -46,7 +46,7 @@ inline gc::gcable<member::member> connect_static(Return (*function)(Args...), gc
                                                  std::size_t parameter_count, parameter_indices<Indices...>)
 {
 	return creator::create(
-	           function(std::forward<Args>(member::cast<Args>(not_null(stack.arg_at(Indices))))...))
+	           function(std::forward<Args>(member::cast::cast<Args>(not_null(stack.arg_at(Indices))))...))
 	    .template to<member::member>();
 }
 
@@ -54,7 +54,7 @@ template<typename... Args, std::size_t... Indices>
 inline gc::gcable<member::member> connect_static(void (*function)(Args...), gc::stack_view& stack,
                                                  std::size_t parameter_count, parameter_indices<Indices...>)
 {
-	function(std::forward<Args>(member::cast<Args>(not_null(stack.arg_at(Indices))))...);
+	function(std::forward<Args>(member::cast::cast<Args>(not_null(stack.arg_at(Indices))))...);
 
 	return {};
 }

@@ -3,6 +3,7 @@
 
 #include "../../operator_.hpp"
 
+#include <bia/exception/implementation_error.hpp>
 #include <cmath>
 
 namespace bia {
@@ -23,7 +24,6 @@ inline Left operation(Left left, infix_operator op, Right right)
 	case infix_operator::less_equal: return left <= right;
 	case infix_operator::greater: return left > right;
 	case infix_operator::greater_equal: return left >= right;
-	case infix_operator::in: return 0;
 	case infix_operator::bitwise_left_shift: return left << right;
 	case infix_operator::bitwise_right_shift: return left >> right;
 	case infix_operator::addition: return left + right;
@@ -32,6 +32,7 @@ inline Left operation(Left left, infix_operator op, Right right)
 	case infix_operator::division: return left / right;
 	case infix_operator::remainder: return left % right;
 	case infix_operator::exponentation: return static_cast<Left>(pow(left, right));
+	default: BIA_IMPLEMENTATION_ERROR("not implemented");
 	}
 }
 
