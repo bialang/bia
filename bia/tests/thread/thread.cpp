@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN
 
+#include <bia/thread/config.hpp>
+#include <bia/thread/thread.hpp>
 #include <catch.hpp>
-#include <thread/config.hpp>
-#include <thread/thread.hpp>
 
 using namespace bia::thread;
 

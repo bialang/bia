@@ -1,13 +1,13 @@
 #include <algorithm>
+#include <bia/gc/memory/simple_allocator.hpp>
+#include <bia/tokenizer/token/parse/any_of.hpp>
+#include <bia/tokenizer/token/parse/number.hpp>
+#include <bia/tokenizer/token/parse/string.hpp>
+#include <bia/tokenizer/token/parse/whitespace_eater.hpp>
+#include <bia/util/finally.hpp>
 #include <catch.hpp>
-#include <gc/memory/simple_allocator.hpp>
 #include <memory>
 #include <sstream>
-#include <tokenizer/token/parse/any_of.hpp>
-#include <tokenizer/token/parse/number.hpp>
-#include <tokenizer/token/parse/string.hpp>
-#include <tokenizer/token/parse/whitespace_eater.hpp>
-#include <util/finally.hpp>
 #include <utility>
 
 using namespace bia::tokenizer;

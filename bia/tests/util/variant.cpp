@@ -1,5 +1,5 @@
+#include <bia/util/variant.hpp>
 #include <catch.hpp>
-#include <util/variant.hpp>
 
 using namespace bia::util;
 

@@ -82,6 +82,12 @@ add_library(compiler $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-o
 target_link_libraries(compiler PUBLIC base)
 
 
+# test
+if(BIA_BUILD_TESTS)
+	add_subdirectory("tests")
+endif()
+
+
 add_executable(maindev "main.cpp" ${BACKWARD_ENABLE})
 target_link_libraries(maindev PUBLIC bsl compiler)
 
