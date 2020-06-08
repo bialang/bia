@@ -6,11 +6,13 @@ Embeddable C++11 Scripting Language
 
 :construction: This project is premature and not ready for production user :construction:
 
+The roadmap for this project can be found on [Trello](https://trello.com/b/PFVmLl37).
+
 - [Embedded Example](#embedded-example)
 - [Building](#building)
-	- [Prerequisites](#prerequisites)
-	- [Dependencies](#dependencies)
-	- [Compilation](#compilation)
+  - [Prerequisites](#prerequisites)
+  - [Dependencies](#dependencies)
+  - [Compilation](#compilation)
 - [License](#license)
 
 ## Embedded Example
