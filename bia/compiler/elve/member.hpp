@@ -28,16 +28,17 @@ inline tokens_type member_step(present present, tokens_type tokens, Source&& sou
 
 	switch (static_cast<token::type>(tokens.data()->value.index())) {
 	case token::type::control: { // function call
-		const auto pair = parameter(present, tokens);
+		const auto tuple = parameter(present, tokens);
 
-		present.writer.write<true, bytecode::oc_invoke>(pair.second, std::forward<Source>(source),
+		present.writer.write<true, bytecode::oc_invoke>(std::get<1>(tuple), std::get<2>(tuple),
+		                                                std::forward<Source>(source),
 		                                                std::forward<Destination>(destination));
 
-		for (auto i = pair.second; i--;) {
+		for (auto i = std::get<1>(tuple); i--;) {
 			present.variables.remove_tmp();
 		}
 
-		return pair.first;
+		return std::get<0>(tuple);
 	}
 	case token::type::identifier: { // member access
 		const bytecode::member::resource name{ present.resources.index_of(
@@ -62,8 +63,7 @@ inline tokens_type member(present present, tokens_type tokens, T&& destination)
 	BIA_EXPECTS(!tokens.empty() &&
 	            static_cast<token::type>(tokens.data()->value.index()) == token::type::identifier);
 
-	const auto index =
-	    present.variables.index_of(tokens.data()->value.get<token::identifier>().memory);
+	const auto index = present.variables.index_of(tokens.data()->value.get<token::identifier>().memory);
 
 	tokens = tokens.subspan(1);
 

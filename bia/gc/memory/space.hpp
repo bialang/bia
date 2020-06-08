@@ -63,7 +63,7 @@ public:
 	 * @returns the capacity in bytes
 	 */
 	size_type capacity() const;
-	util::not_null<util::span<util::byte>> next_region(size_type size);
+	util::not_null<util::span<util::byte*>> next_region(size_type size);
 	iterator cursor(size_type pos = cpos) const;
 	space& operator=(space&& move) noexcept;
 

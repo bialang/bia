@@ -1,11 +1,11 @@
 #define CATCH_CONFIG_MAIN
 
+#include <bia/compiler/compiler.hpp>
+#include <bia/gc/memory/simple_allocator.hpp>
+#include <bia/tokenizer/bia_lexer.hpp>
+#include <bia/util/finally.hpp>
 #include <catch.hpp>
-#include <compiler/compiler.hpp>
-#include <gc/memory/simple_allocator.hpp>
 #include <sstream>
-#include <tokenizer/bia_lexer.hpp>
-#include <util/finally.hpp>
 
 using namespace bia;
 

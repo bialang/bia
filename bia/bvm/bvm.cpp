@@ -11,6 +11,7 @@
 #include <bia/gc/stack_view.hpp>
 #include <bia/gc/token.hpp>
 #include <bia/member/member.hpp>
+#include <bia/member/native/key_value_pair.hpp>
 #include <bia/util/finally.hpp>
 #include <type_traits>
 
@@ -30,7 +31,7 @@ inline typename std::enable_if<
 	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
 }
 
-bia::member::member* member_pointer(bia::member::member* element)
+inline bia::member::member* member_pointer(bia::member::member* element)
 {
 	if (element) {
 		return element;
@@ -49,7 +50,15 @@ inline bia::member::native::string*
 	BIA_THROW(bia::exception::nullpointer, "nullpointer string access");
 }
 
-void bvm::execute(context& context, util::span<const util::byte> instructions, gc::root& resources)
+inline bia::gc::gcable<bia::member::member> make_key_value_pair(bia::member::native::string* key,
+                                                                bia::member::member* value)
+{
+	return bia::gc::gc::active_gc()
+	    ->construct<bia::member::native::key_value_pair>(key, value)
+	    .template to<bia::member::member>();
+}
+
+void bvm::execute(context& context, util::span<const util::byte*> instructions, gc::root& resources)
 {
 	using namespace bytecode;
 	using flag = bia::member::member::flag;
@@ -3803,396 +3812,441 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			break;
 		}
 		case (oc_invoke - mso_resource_8 * mdo_count - mdo_local_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_8 * mdo_count - mdo_global_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_8 * mdo_count - mdo_local_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_8 * mdo_count - mdo_global_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_8 * mdo_count - mdo_tos): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.push(), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_8 * mdo_count - mdo_local_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_8 * mdo_count - mdo_global_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_8 * mdo_count - mdo_local_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_8 * mdo_count - mdo_global_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_8 * mdo_count - mdo_tos): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.push(), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_local_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_global_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_local_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_global_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_tos): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.push(), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_16 * mdo_count - mdo_local_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_16 * mdo_count - mdo_global_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_16 * mdo_count - mdo_local_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_16 * mdo_count - mdo_global_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_resource_16 * mdo_count - mdo_tos): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(resources.at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(resources.at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.push(), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_16 * mdo_count - mdo_local_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_16 * mdo_count - mdo_global_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_16 * mdo_count - mdo_local_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_16 * mdo_count - mdo_global_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_local_16 * mdo_count - mdo_tos): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.local_at(ip.read<std::uint16_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.push(), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_local_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_global_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_local_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_global_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_tos): {
-			const auto parameter_count = ip.read<std::uint8_t>();
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
 			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.push(), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_args * mdo_count - mdo_local_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_args * mdo_count - mdo_global_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_args * mdo_count - mdo_local_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_args * mdo_count - mdo_global_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_args * mdo_count - mdo_tos): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result                = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
-			                  ->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.push(), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_tos * mdo_count - mdo_local_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.tos())
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_tos * mdo_count - mdo_global_8): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.tos())
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_tos * mdo_count - mdo_local_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.tos())
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_tos * mdo_count - mdo_global_16): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.tos())
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
 
 			break;
 		}
 		case (oc_invoke - mso_tos * mdo_count - mdo_tos): {
-			const auto parameter_count = ip.read<std::uint8_t>();
-			auto result = member_pointer(stack.tos())->invoke(stack.frame(parameter_count), parameter_count);
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(stack.tos())
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
-			stack.drop(parameter_count);
+			stack.drop(count);
 			token->set(stack.push(), std::move(result));
 
 			break;
@@ -6796,6 +6850,26 @@ void bvm::execute(context& context, util::span<const util::byte> instructions, g
 			if (!test_register) {
 				ip += offset;
 			}
+
+			break;
+		}
+		case (oc_name - ro_32): {
+			token->set(stack.tos(),
+			           make_key_value_pair(string_pointer(resources.at(ip.read<std::uint32_t>())),
+			                               member_pointer(stack.tos())));
+
+			break;
+		}
+		case (oc_name - ro_16): {
+			token->set(stack.tos(),
+			           make_key_value_pair(string_pointer(resources.at(ip.read<std::uint16_t>())),
+			                               member_pointer(stack.tos())));
+
+			break;
+		}
+		case (oc_name - ro_8): {
+			token->set(stack.tos(), make_key_value_pair(string_pointer(resources.at(ip.read<std::uint8_t>())),
+			                                            member_pointer(stack.tos())));
 
 			break;
 		}

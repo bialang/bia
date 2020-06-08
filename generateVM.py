@@ -56,10 +56,11 @@ token->set({1}, creator::create(constant).to<bia::member::member>());
 
 break;"""),
 
-    ("oc_invoke", ("mso", "mdo"), """const auto parameter_count = ip.read<std::uint8_t>();
-auto result = member_pointer({0})->invoke(stack.frame(parameter_count), parameter_count);
+    ("oc_invoke", ("mso", "mdo"), """const auto count = ip.read<std::uint8_t>();
+const auto kwargs = ip.read<std::uint8_t>();
+auto result = member_pointer({0})->invoke(connector::parameters{{ stack.frame(count), count, kwargs }});
 
-stack.drop(parameter_count);
+stack.drop(count);
 token->set({1}, std::move(result));
 
 break;"""),
@@ -133,6 +134,10 @@ break;"""),
 if (!test_register) {{
 	ip += offset;
 }}
+
+break;"""),
+
+    ("oc_name", ("ro",), """token->set(stack.tos(), make_key_value_pair(string_pointer({0}), member_pointer(stack.tos())));
 
 break;"""),
 

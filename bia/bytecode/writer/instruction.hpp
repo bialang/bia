@@ -5,11 +5,11 @@
 #include "common.hpp"
 #include "member.hpp"
 
-#include <ostream>
-#include <type_traits>
 #include <bia/util/portable/stream.hpp>
 #include <bia/util/type_traits/equals_any.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
+#include <ostream>
+#include <type_traits>
 
 namespace bia {
 namespace bytecode {
@@ -49,6 +49,12 @@ public:
 	{
 		optimized_write<false>(_output, static_cast<op_code>(Op_code - member_source_index<Optimize>(p0)));
 		optimized_member<Optimize>(_output, p0);
+	}
+	template<bool Optimize, op_code Op_code>
+	typename std::enable_if<is_op_code<Op_code, oc_name>::value>::type write(member::resource name)
+	{
+		optimized_write<false>(_output, static_cast<op_code>(Op_code - resource_index<Optimize>(name)));
+		optimized_member<Optimize>(_output, name);
 	}
 	template<bool Optimize, op_code Op_code, typename P1>
 	typename std::enable_if<is_op_code<Op_code, oc_import>::value && is_member_destination<P1>::value>::type
@@ -95,9 +101,22 @@ public:
 		optimized_member<Optimize>(_output, p0);
 		optimized_member<Optimize>(_output, p1);
 	}
+	template<bool Optimize, op_code Op_code, typename P2, typename P3>
+	typename std::enable_if<is_op_code<Op_code, oc_invoke>::value && is_member_source<P2>::value &&
+	                        is_member_destination<P3>::value>::type
+	    write(std::uint8_t p0, std::uint8_t p1, P2 p2, P3 p3)
+	{
+		optimized_write<false>(_output,
+		                       static_cast<op_code>(Op_code - member_source_index<Optimize>(p2) * mdo_count -
+		                                            member_destination_index<Optimize>(p3)));
+		optimized_write<false>(_output, p0);
+		optimized_write<false>(_output, p1);
+		optimized_member<Optimize>(_output, p2);
+		optimized_member<Optimize>(_output, p3);
+	}
 	template<bool Optimize, op_code Op_code, typename P1, typename P2>
-	typename std::enable_if<is_op_code<Op_code, oc_invoke, oc_self_operator>::value &&
-	                        is_member_source<P1>::value && is_member_destination<P2>::value>::type
+	typename std::enable_if<is_op_code<Op_code, oc_self_operator>::value && is_member_source<P1>::value &&
+	                        is_member_destination<P2>::value>::type
 	    write(std::uint8_t p0, P1 p1, P2 p2)
 	{
 		optimized_write<false>(_output,

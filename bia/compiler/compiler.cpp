@@ -22,7 +22,7 @@ void compiler::finish()
 	_resources.finish();
 }
 
-void compiler::receive(util::span<const token> tokens)
+void compiler::receive(util::span<const token*> tokens)
 {
 	for (const auto& i : tokens) {
 		BIA_LOG(INFO, "token {} is a {}", static_cast<const void*>(&i),

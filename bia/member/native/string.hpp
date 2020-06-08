@@ -6,6 +6,7 @@
 #include <bia/gc/gc.hpp>
 #include <bia/gc/object/pointer.hpp>
 #include <bia/log/log.hpp>
+#include <bia/util/gsl.hpp>
 #include <cstring>
 
 namespace bia {
@@ -38,9 +39,9 @@ public:
 	{
 		return gc::gc::active_gc()->construct<string>(_value).template to<member>();
 	}
-	gc::gcable<member> invoke(gc::stack_view stack, parameter_count_type count) override
+	gc::gcable<member> invoke(parameters_type params) override
 	{
-		return copy();
+		return {};
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
@@ -96,6 +97,10 @@ public:
 	int compare(const string& other) const noexcept
 	{
 		return std::strcmp(_value.get(), other._value.get());
+	}
+	int compare(util::czstring other) const noexcept
+	{
+		return std::strcmp(_value.get(), other);
 	}
 	void gc_mark_children(bool mark) const noexcept override
 	{

@@ -11,6 +11,7 @@
 #include <limits>
 #include <type_traits>
 #include <utility>
+#include <iterator>
 
 namespace bia {
 namespace util {
@@ -81,32 +82,30 @@ enum class byte : std::uint8_t
 
 constexpr std::size_t dynamic_extent = std::numeric_limits<std::size_t>::max();
 
-template<typename T>
+template<typename Iterable>
 class span
 {
 public:
-	typedef T element_type;
-	typedef typename std::remove_cv<T>::type value_type;
+	typedef typename std::iterator_traits<Iterable>::value_type value_type;
 	typedef std::size_t size_type;
-	typedef std::ptrdiff_t difference_type;
-	typedef T* pointer;
-	typedef T& reference;
-	typedef pointer iterator;
+	typedef typename std::iterator_traits<Iterable>::difference_type difference_type;
+	typedef typename std::iterator_traits<Iterable>::pointer pointer;
+	typedef typename std::iterator_traits<Iterable>::reference reference;
 
 	span(std::nullptr_t = nullptr) noexcept
 	{
 		_data = nullptr;
 		_size = 0;
 	}
-	span(pointer begin, size_type count)
+	span(Iterable begin, size_type count)
 	{
 		_data = begin;
 		_size = count;
 	}
-	span(pointer begin, pointer end)
+	span(Iterable begin, Iterable end)
 	{
 		_data = begin;
-		_size = static_cast<size_type>(end - begin);
+		_size = std::distance(begin, end);
 	}
 	span(const span& copy) = default;
 	bool empty() const noexcept
@@ -121,11 +120,11 @@ public:
 	{
 		return _size * sizeof(value_type);
 	}
-	iterator begin() const
+	Iterable begin() const
 	{
 		return _data;
 	}
-	iterator end() const
+	Iterable end() const
 	{
 		return _data + _size;
 	}
@@ -139,11 +138,11 @@ public:
 
 		return { _data + offset, _data + offset + count };
 	}
-	span subspan(pointer from, std::size_t count = dynamic_extent) const
+	span subspan(Iterable from, std::size_t count = dynamic_extent) const
 	{
 		return subspan(from - _data, dynamic_extent);
 	}
-	pointer data() const noexcept
+	Iterable data() const noexcept
 	{
 		return _data;
 	}
@@ -160,17 +159,17 @@ public:
 		return _data[index];
 	}
 	span& operator=(const span& copy) = default;
-	bool operator==(pointer other) const noexcept
+	bool operator==(Iterable other) const noexcept
 	{
 		return _data == other;
 	}
-	bool operator!=(pointer other) const noexcept
+	bool operator!=(Iterable other) const noexcept
 	{
 		return _data != other;
 	}
 
 private:
-	pointer _data;
+	Iterable _data;
 	size_type _size;
 };
 

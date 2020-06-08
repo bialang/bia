@@ -1,29 +1,32 @@
-#ifndef BIA_MEMBER_FUNCTION_STATIC_HPP_
-#define BIA_MEMBER_FUNCTION_STATIC_HPP_
+#ifndef BIA_MEMBER_NATIVE_KEY_VALUE_PAIR_HPP_
+#define BIA_MEMBER_NATIVE_KEY_VALUE_PAIR_HPP_
 
 #include "../member.hpp"
+#include "string.hpp"
 
 #include <bia/gc/gc.hpp>
+#include <bia/gc/object/pointer.hpp>
 #include <bia/log/log.hpp>
+#include <cstring>
 
 namespace bia {
 namespace member {
-namespace function {
+namespace native {
 
-template<typename Return, typename... Args>
-class static_ : public member
+class key_value_pair : public member
 {
 public:
-	typedef Return (*function_type)(Args...);
-
 	/**
 	 * Constructor.
+	 *
+	 * @param key the key part
+	 * @param value the value part
 	 */
-	static_(function_type function) noexcept : _function(function)
+	key_value_pair(string* key, member* value) noexcept : _key{ key }, _value{ value }
 	{}
-	~static_()
+	~key_value_pair()
 	{
-		BIA_LOG(DEBUG, "destroying static function: {}", static_cast<void*>(this));
+		BIA_LOG(DEBUG, "destroying key_value={}: {}: {}", _key.get(), _value.get(), static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{
@@ -31,15 +34,15 @@ public:
 	}
 	test_type test() const override
 	{
-		return 1;
+		return 0;
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<static_>(_function).template to<member>();
+		return gc::gc::active_gc()->construct<key_value_pair>(_key.get(), _value.get()).template to<member>();
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{
-		return connector::connect_static(_function, params);
+		return {};
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
@@ -63,30 +66,41 @@ public:
 	}
 	bool as_data(const std::type_info& type, void* output) override
 	{
-		return static_cast<const static_*>(this)->as_data(type, output);
+		return false;
 	}
 	bool as_data(const std::type_info& type, void* output) const override
 	{
-		if (type == typeid(function_type)) {
-			*static_cast<function_type*>(output) = _function;
-
-			return true;
-		}
-
 		return false;
 	}
+	string* key() const noexcept
+	{
+		return _key.get();
+	}
+	member* value() const noexcept
+	{
+		return _value.get();
+	}
 	void gc_mark_children(bool mark) const noexcept override
-	{}
+	{
+		if (_key.get()) {
+			gc::object::gc_mark(_key.get(), mark);
+		}
+
+		if (_value.get()) {
+			gc::object::gc_mark(_value.get(), mark);
+		}
+	}
 
 protected:
 	void register_gcables(gc::gc& gc) const noexcept override
 	{}
 
 private:
-	function_type _function;
+	gc::object::immutable_pointer<string> _key;
+	gc::object::immutable_pointer<member> _value;
 };
 
-} // namespace function
+} // namespace native
 } // namespace member
 } // namespace bia
 

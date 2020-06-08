@@ -12,7 +12,7 @@ namespace bvm {
 class bvm
 {
 public:
-	static void execute(context& context, util::span<const util::byte> instructions, gc::root& resources);
+	static void execute(context& context, util::span<const util::byte*> instructions, gc::root& resources);
 };
 
 } // namespace bvm

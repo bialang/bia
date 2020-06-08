@@ -1,6 +1,6 @@
-#include <catch.hpp>
 #include <bia/thread/lock/spin_mutex.hpp>
 #include <bia/thread/thread.hpp>
+#include <catch.hpp>
 
 using namespace bia::thread;
 

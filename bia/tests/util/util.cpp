@@ -1,11 +1,11 @@
 #define CATCH_CONFIG_MAIN
 
+#include <bia/util/finally.hpp>
+#include <bia/util/type_traits/conjunction.hpp>
+#include <bia/util/type_traits/equals_any.hpp>
+#include <bia/util/type_traits/size_of.hpp>
+#include <bia/util/type_traits/type_index.hpp>
 #include <catch.hpp>
-#include <util/finally.hpp>
-#include <util/type_traits/conjunction.hpp>
-#include <util/type_traits/equals_any.hpp>
-#include <util/type_traits/size_of.hpp>
-#include <util/type_traits/type_index.hpp>
 
 using namespace bia::util;
 using namespace bia::util::type_traits;

@@ -21,7 +21,7 @@ public:
 
 	compiler(std::ostream& instructions, std::ostream& resource) noexcept;
 	void finish();
-	void receive(util::span<const token> tokens) override;
+	void receive(util::span<const token*> tokens) override;
 
 private:
 	bytecode::writer::instruction _writer;

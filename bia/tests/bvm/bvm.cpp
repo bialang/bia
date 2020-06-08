@@ -1,9 +1,9 @@
 #define CATCH_CONFIG_MAIN
 
-#include <bvm/bvm.hpp>
-#include <bytecode/writer/instruction.hpp>
+#include <bia/bvm/bvm.hpp>
+#include <bia/bytecode/writer/instruction.hpp>
+#include <bia/gc/memory/simple_allocator.hpp>
 #include <catch.hpp>
-#include <gc/memory/simple_allocator.hpp>
 #include <sstream>
 
 using namespace bia::bvm;
@@ -18,11 +18,11 @@ TEST_CASE("simple run", "[bvm]")
 	iw.write<true, oc_instantiate>(61, member::tos{});
 	iw.write<true, oc_instantiate>(11, member::tos{});
 	iw.write<true, oc_instantiate>(3, member::tos{});
-	iw.write<true, oc_invoke>(2, member::local{ 0 }, member::tos{});
+	iw.write<true, oc_invoke>(2, 0, member::local{ 0 }, member::tos{});
 	// iw.write_instruction<false, bytecode::oc_jump_true>(std::int32_t{-6});
 	iw.finish();
 
 	const auto code = output.str();
 
-	//bia::bvm::bvm::execute(ctx, { reinterpret_cast<const bia::util::byte*>(code.data()), code.length() });
+	// bia::bvm::bvm::execute(ctx, { reinterpret_cast<const bia::util::byte*>(code.data()), code.length() });
 }
