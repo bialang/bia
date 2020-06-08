@@ -7,6 +7,7 @@
 #include <bia/gc/gc.hpp>
 #include <bia/gc/object/pointer.hpp>
 #include <bia/log/log.hpp>
+#include <cstring>
 
 namespace bia {
 namespace member {
@@ -70,6 +71,14 @@ public:
 	bool as_data(const std::type_info& type, void* output) const override
 	{
 		return false;
+	}
+	string* key() const noexcept
+	{
+		return _key.get();
+	}
+	member* value() const noexcept
+	{
+		return _value.get();
 	}
 	void gc_mark_children(bool mark) const noexcept override
 	{

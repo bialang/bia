@@ -80,7 +80,7 @@ public:
 			BIA_THROW(exception::bounds_error, "out of bounds");
 		}
 
-		return _data[_args - index - 1];
+		return *(_data - _args + index);
 	}
 	element_type* data() const noexcept
 	{
@@ -94,14 +94,13 @@ public:
 	{
 		return _data + _max_size;
 	}
-	stack_view frame(std::size_t offset) const
+	stack_view frame(std::size_t arg_count) const
 	{
-		BIA_EXPECTS(offset <= _cursor);
+		BIA_EXPECTS(arg_count <= _cursor);
 
-		stack_view s{ _data + _cursor - offset, _max_size - _cursor + offset };
+		stack_view s{ _data + _cursor, _max_size - _cursor };
 
-		s._cursor = offset;
-		s._args   = offset;
+		s._args = arg_count;
 
 		return s;
 	}

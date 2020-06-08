@@ -3,9 +3,9 @@
 
 #include "operator_.hpp"
 
-#include <cstdint>
 #include <bia/resource/view.hpp>
 #include <bia/util/variant.hpp>
+#include <cstdint>
 
 namespace bia {
 namespace tokenizer {
@@ -39,7 +39,8 @@ struct token
 		{
 			bracket_open,
 			bracket_close,
-			comma
+			comma,
+			key
 		};
 
 		type type;

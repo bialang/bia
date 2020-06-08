@@ -3,9 +3,11 @@
 
 #include "present.hpp"
 
+#include <bia/log/log.hpp>
 #include <cstdint>
 #include <limits>
-#include <bia/log/log.hpp>
+#include <map>
+#include <tuple>
 #include <utility>
 
 namespace bia {
@@ -15,40 +17,65 @@ namespace elve {
 template<typename Destination>
 tokens_type expression(present present, tokens_type tokens, Destination&& destination);
 
-inline std::pair<tokens_type, std::uint8_t> parameter(present present, tokens_type tokens)
+inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present present, tokens_type tokens)
 {
-	using tokenizer::token::token;
+	using namespace tokenizer::token;
 
-	const auto first = tokens.data();
-	const auto last  = first + first->value.get<token::control>().value;
-
-	BIA_EXPECTS(static_cast<token::type>(first->value.index()) == token::type::control);
+	BIA_EXPECTS(!tokens.empty() &&
+	            static_cast<token::type>(tokens.data()->value.index()) == token::type::control);
 
 	BIA_LOG(INFO, "processing parameters {} - {}", static_cast<const void*>(first),
 	        static_cast<const void*>(last));
 
+	std::map<resource::view, tokens_type> kwargs;
 	std::uint8_t count = 0;
-	auto a             = last;
-	auto b             = last;
 
 	while (true) {
-		b = a;
-		a = first + a->value.get<token::control>().value;
+		BIA_EXPECTS(!tokens.empty() &&
+		            static_cast<token::type>(tokens.data()->value.index()) == token::type::control);
 
-		BIA_EXPECTS(static_cast<token::type>(a->value.index()) == token::type::control);
+		const auto offset = tokens.data()->value.get<token::control>().value;
 
-		if (b - a <= 1) {
+		if (offset <= 1) {
+			tokens = tokens.subspan(offset + 1);
+
 			break;
-		} // limit is 254
-		else if (++count == std::numeric_limits<std::uint8_t>::max()) {
-			throw;
 		}
 
-		expression(present, { a + 1, b }, bytecode::member::tos{});
-		present.variables.add_tmp();
+		const auto expr = tokens.subspan(1, offset - 1);
+
+		// limit is 254
+		if (++count == std::numeric_limits<std::uint8_t>::max()) {
+			throw;
+		}
+		// kwarg
+		if (static_cast<token::type>(expr.data()->value.index()) == token::type::control) {
+			const auto& name = expr.data()[1].value.get<token::identifier>().memory;
+
+			// redeclaration of same name
+			if (kwargs.find(name) != kwargs.end()) {
+				throw;
+			}
+
+			kwargs.insert({ name, expr.subspan(2) });
+		} else {
+			expression(present, expr, bytecode::member::tos{});
+			present.variables.add_tmp();
+		}
+
+		tokens = tokens.subspan(expr.end());
 	}
 
-	return { tokens.subspan(last + 1), count };
+	// push kwargs
+	for (const auto& i : kwargs) {
+		expression(present, i.second, bytecode::member::tos{});
+
+		present.variables.add_tmp();
+		present.writer.write<true, bytecode::oc_name>(
+		    bytecode::member::resource{ present.resources.index_of(i.first) });
+	}
+
+	return { tokens, count, static_cast<std::uint8_t>(kwargs.size()) };
 }
 
 } // namespace elve

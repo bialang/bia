@@ -6,6 +6,7 @@
 #include <bia/gc/gc.hpp>
 #include <bia/gc/object/pointer.hpp>
 #include <bia/log/log.hpp>
+#include <bia/util/gsl.hpp>
 #include <cstring>
 
 namespace bia {
@@ -96,6 +97,10 @@ public:
 	int compare(const string& other) const noexcept
 	{
 		return std::strcmp(_value.get(), other._value.get());
+	}
+	int compare(util::czstring other) const noexcept
+	{
+		return std::strcmp(_value.get(), other);
 	}
 	void gc_mark_children(bool mark) const noexcept override
 	{
