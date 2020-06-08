@@ -49,7 +49,7 @@ space::size_type space::capacity() const
 	return _pages->size() * _page_size;
 }
 
-util::not_null<util::span<util::byte>> space::next_region(size_type size)
+util::not_null<util::span<util::byte*>> space::next_region(size_type size)
 {
 	BIA_EXPECTS(valid());
 
@@ -70,7 +70,7 @@ util::not_null<util::span<util::byte>> space::next_region(size_type size)
 	size = std::min(_page_size - _offset, size);
 	_offset += size;
 
-	return util::span<util::byte>(cursor, size);
+	return util::span<util::byte*>(cursor, size);
 }
 
 iterator space::cursor(size_type pos) const

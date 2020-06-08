@@ -19,7 +19,7 @@ struct present
 	resource::serializer& resources;
 };
 
-typedef util::span<const tokenizer::token::token> tokens_type;
+typedef util::span<const tokenizer::token::token*> tokens_type;
 
 inline bool is_keyword(util::not_null<const tokenizer::token::token*> token,
                        tokenizer::token::token::keyword keyword) noexcept

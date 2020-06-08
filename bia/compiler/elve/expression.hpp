@@ -37,7 +37,8 @@ inline tokens_type value(present present, tokens_type tokens, Destination&& dest
 			break;
 		}
 		case token::keyword::null: {
-			present.writer.write<true, bytecode::oc_instantiate>(nullptr, std::forward<Destination>(destination));
+			present.writer.write<true, bytecode::oc_instantiate>(nullptr,
+			                                                     std::forward<Destination>(destination));
 
 			break;
 		}
@@ -67,7 +68,7 @@ inline tokens_type value(present present, tokens_type tokens, Destination&& dest
 	return tokens.subspan(1);
 }
 
-inline bool valid_right_hand(util::span<const tokenizer::token::token> tokens)
+inline bool valid_right_hand(tokens_type tokens)
 {
 	using namespace tokenizer::token;
 

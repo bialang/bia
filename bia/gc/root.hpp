@@ -58,9 +58,9 @@ protected:
 
 private:
 	gc* _gc;
-	util::span<element_type> _data;
+	util::span<element_type*> _data;
 
-	root(gc* gc, util::owner<util::span<element_type>> data) : _data{ std::move(data) }
+	root(gc* gc, util::owner<util::span<element_type*>> data) : _data{ std::move(data) }
 	{
 		_gc = gc;
 
@@ -128,7 +128,7 @@ public:
 private:
 	gc* _gc               = nullptr;
 	element_type* _cursor = nullptr;
-	util::span<element_type> _data;
+	util::span<element_type*> _data;
 
 	void _discard()
 	{

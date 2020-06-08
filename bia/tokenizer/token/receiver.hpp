@@ -25,7 +25,7 @@ public:
 	 *
 	 * @param tokens the parsed tokens
 	 */
-	virtual void receive(util::span<const token> tokens) = 0;
+	virtual void receive(util::span<const token*> tokens) = 0;
 };
 
 } // namespace token
