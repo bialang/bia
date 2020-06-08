@@ -13,7 +13,7 @@ function(create_library DIRECTORY)
 
 	if(SOURCE_FILES)
 		add_library(${LIB_NAME}-obj OBJECT ${SOURCE_FILES})
-		target_include_directories(${LIB_NAME}-obj PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
+		target_include_directories(${LIB_NAME}-obj PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>" "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>")
 		
 		if(BUILD_SHARED_LIBS)
 			set_property(TARGET ${LIB_NAME}-obj PROPERTY POSITION_INDEPENDENT_CODE ON)

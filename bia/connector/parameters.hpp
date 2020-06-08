@@ -1,6 +1,8 @@
 #ifndef BIA_CONNECTOR_PARAMETERS_HPP_
 #define BIA_CONNECTOR_PARAMETERS_HPP_
 
+#include "stack_iterator.hpp"
+
 #include <algorithm>
 #include <bia/gc/stack_view.hpp>
 #include <bia/member/member.hpp>
@@ -33,7 +35,29 @@ public:
 	{
 		return _size;
 	}
-	member::member* operator[](util::not_null<util::czstring> name) const
+	stack_iterator<member::member> begin() const noexcept
+	{
+		return _size ? &_stack.arg_at(0) : nullptr;
+	}
+	stack_iterator<member::member> end() const noexcept
+	{
+		return _size ? &_stack.arg_at(_size - 1) + 1 : nullptr;
+	}
+	util::span<stack_iterator<member::member>> positionals() const noexcept
+	{
+		const auto end = static_cast<std::size_t>(_size - (_kwargs.second - _kwargs.first));
+
+		if (!end) {
+			return { {}, 0 };
+		}
+
+		return { { &_stack.arg_at(0) }, end };
+	}
+	util::span<stack_iterator<member::native::key_value_pair>> kwargs() const noexcept
+	{
+		return { { _kwargs.first }, { _kwargs.second } };
+	}
+	std::pair<member::member*, bool> operator[](util::not_null<util::czstring> name) const noexcept
 	{
 		const auto result = std::lower_bound(
 		    _kwargs.first, _kwargs.second, name.get(),
@@ -45,10 +69,10 @@ public:
 		if (result == _kwargs.second ||
 		    static_cast<const member::native::key_value_pair*>(result->get())->key()->compare(name.get()) !=
 		        0) {
-			throw;
+			return { nullptr, false };
 		}
 
-		return static_cast<const member::native::key_value_pair*>(result->get())->value();
+		return { static_cast<const member::native::key_value_pair*>(result->get())->value(), true };
 	}
 	member::member* operator[](std::size_t index) const
 	{
