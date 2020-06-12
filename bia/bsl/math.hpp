@@ -1,5 +1,5 @@
-#ifndef BIA_BSL_IO_HPP_
-#define BIA_BSL_IO_HPP_
+#ifndef BIA_BSL_MATH_HPP_
+#define BIA_BSL_MATH_HPP_
 
 #include <bia/bvm/module/module.hpp>
 #include <bia/gc/gc.hpp>
@@ -9,10 +9,10 @@
 namespace bia {
 namespace bsl {
 
-class io : public bvm::module::module
+class math : public bvm::module::module
 {
 public:
-	io(gc::gc& gc);
+	math(gc::gc& gc);
 	version_type version() const noexcept override;
 	util::not_null<member::member*> create(gc::gc& gc) override;
 	void gc_mark_children(bool mark) const noexcept override;

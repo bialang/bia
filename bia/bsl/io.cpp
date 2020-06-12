@@ -3,10 +3,8 @@
 #include "helper.hpp"
 
 #include <bia/connector/connector-inl.hpp>
-#include <bia/member/function/static_.hpp>
-#include <bia/member/native/dict.hpp>
-#include <bia/member/native/string.hpp>
 #include <iostream>
+#include <string>
 
 using namespace bia::bsl;
 
@@ -48,6 +46,15 @@ inline void print(bia::connector::parameters_type params)
 	std::cout << end;
 }
 
+inline std::string read(bia::connector::parameters_type params)
+{
+	std::string input;
+
+	std::getline(std::cin, input);
+
+	return input;
+}
+
 io::io(gc::gc& gc) : _symbols{ _init(gc) }
 {}
 
@@ -81,6 +88,7 @@ bia::member::native::dict* io::_init(gc::gc& gc)
 	const auto dict = gc.construct<member::native::dict>().release();
 
 	put_function(gc, *dict, "print", &print);
+	put_function(gc, *dict, "read", &read);
 
 	return dict;
 }
