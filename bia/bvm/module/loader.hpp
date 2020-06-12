@@ -35,7 +35,7 @@ private:
 
 		bool operator()(arg_type left, arg_type right) const noexcept
 		{
-			return left->compare(*right);
+			return left->compare(*right) < 0;
 		}
 	};
 
