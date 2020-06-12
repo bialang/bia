@@ -110,7 +110,9 @@ token->set({1}, loader.load(name).get());
 break;"""),
 
 
-    ("oc_test", ("mso",), """test_register = member_pointer({0})->test();
+    ("oc_test", ("mso",), """const auto src = member_pointer({0});
+
+test_register = src->test(test_operator::self, *src);
 
 break;"""),
 

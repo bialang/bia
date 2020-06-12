@@ -28,7 +28,7 @@ public:
 	typedef std::int64_t int_type;
 	/** the flag type */
 	typedef int flag_type;
-	/** the type for testing operations */
+	/** the type for testing operations; is able to hold at least: -1, 0 and 1 */
 	typedef int test_type;
 	typedef connector::parameters_type parameters_type;
 	typedef std::uint8_t parameter_count_type;
@@ -55,10 +55,14 @@ public:
 	virtual flag_type flags() const = 0;
 	/**
 	 * Tests this member.
+	 * 
+	 * @note if the operation type is `test_operator::self`, right must be `*this`
 	 *
+	 * @param op the operation type
+	 * @param right the right-hand side
 	 * @returns `1` if the test succeeded, otherwise `0`
 	 */
-	virtual test_type test() const = 0;
+	virtual test_type test(test_operator op, const member& right) const = 0;
 	/**
 	 * Creates a new copy of this member.
 	 *

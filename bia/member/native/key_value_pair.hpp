@@ -32,7 +32,7 @@ public:
 	{
 		return flag_none;
 	}
-	test_type test() const override
+	test_type test(test_operator op, const member& right) const override
 	{
 		return 0;
 	}

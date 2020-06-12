@@ -15,7 +15,13 @@ int main()
 	code << u8R"(
 
 import io
-io.print(128 and 99, 2, sep="heyho", 4)
+
+let i = 0
+
+while i < 10 {
+	io.print("hi")
+	let i = i + 1
+}
 
 )";
 

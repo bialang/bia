@@ -74,14 +74,6 @@ inline member::infix_operator to_infix_operator(operator_ op)
 	case operator_::bitwise_or: return member::infix_operator::bitwise_or;
 	case operator_::bitwise_xor: return member::infix_operator::bitwise_xor;
 	case operator_::bitwise_and: return member::infix_operator::bitwise_and;
-	case operator_::equal: return member::infix_operator::equal;
-	case operator_::not_equal: return member::infix_operator::not_equal;
-	case operator_::less: return member::infix_operator::less;
-	case operator_::less_equal: return member::infix_operator::less_equal;
-	case operator_::greater: return member::infix_operator::greater;
-	case operator_::greater_equal: return member::infix_operator::greater_equal;
-	case operator_::in: return member::infix_operator::in;
-	case operator_::three_way_comparison: return member::infix_operator::three_way_comparison;
 	case operator_::bitwise_left_shift: return member::infix_operator::bitwise_left_shift;
 	case operator_::bitwise_right_shift: return member::infix_operator::bitwise_right_shift;
 	case operator_::addition: return member::infix_operator::addition;
@@ -90,6 +82,21 @@ inline member::infix_operator to_infix_operator(operator_ op)
 	case operator_::division: return member::infix_operator::division;
 	case operator_::remainder: return member::infix_operator::remainder;
 	case operator_::exponentation: return member::infix_operator::exponentation;
+	default: BIA_IMPLEMENTATION_ERROR("invalid operator conversion");
+	}
+}
+
+inline member::test_operator to_test_operator(operator_ op)
+{
+	switch (op) {
+	case operator_::equal: return member::test_operator::equal;
+	case operator_::not_equal: return member::test_operator::not_equal;
+	case operator_::less: return member::test_operator::less;
+	case operator_::less_equal: return member::test_operator::less_equal;
+	case operator_::greater: return member::test_operator::greater;
+	case operator_::greater_equal: return member::test_operator::greater_equal;
+	case operator_::in: return member::test_operator::in;
+	case operator_::three_way_comparison: return member::test_operator::three_way_comparison;
 	default: BIA_IMPLEMENTATION_ERROR("invalid operator conversion");
 	}
 }
