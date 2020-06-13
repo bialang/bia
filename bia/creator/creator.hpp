@@ -1,6 +1,7 @@
 #ifndef BIA_CREATOR_CREATOR_HPP_
 #define BIA_CREATOR_CREATOR_HPP_
 
+#include <bia/exception/implementation_error.hpp>
 #include <bia/gc/gc.hpp>
 #include <bia/member/function/static_.hpp>
 #include <bia/member/native/floating_point.hpp>
@@ -8,6 +9,8 @@
 #include <bia/member/native/list.hpp>
 #include <bia/member/native/string.hpp>
 #include <bia/util/type_traits/is_gcable.hpp>
+#include <bia/util/type_traits/is_variant.hpp>
+#include <bia/util/variant.hpp>
 #include <cstddef>
 #include <cstring>
 #include <string>
@@ -38,6 +41,34 @@ template<typename Return, typename... Args>
 inline gc::gcable<member::function::static_<Return, Args...>> create(Return (*function)(Args...))
 {
 	return gc::gc::active_gc()->construct<member::function::static_<Return, Args...>>(function);
+}
+
+template<typename Type, std::size_t Index = 0>
+inline typename std::enable_if<Index + 1 == Type::type_count && util::type_traits::is_variant<Type>::value,
+                               gc::gcable<member::member>>::type
+    create(Type&& value)
+{
+	if (!Index && value.index() == value.npos) {
+		return {};
+	} else if (value.index() == Index) {
+		return create(value.template get<Index>()).template to<member::member>();
+	}
+
+	BIA_IMPLEMENTATION_ERROR("this should not have happened");
+}
+
+template<typename Type, std::size_t Index = 0>
+inline typename std::enable_if<Index + 1 != Type::type_count && util::type_traits::is_variant<Type>::value,
+                               gc::gcable<member::member>>::type
+    create(Type&& value)
+{
+	if (!Index && value.index() == value.npos) {
+		return {};
+	} else if (value.index() == Index) {
+		return create(value.template get<Index>()).template to<member::member>();
+	}
+
+	return create<Type, Index + 1>(std::forward<Type>(value));
 }
 
 inline gc::gcable<member::native::string> create(const char* value)

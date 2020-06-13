@@ -8,7 +8,7 @@
 
 int main()
 {
-	bia::engine engine{};
+	bia::engine engine;
 
 	engine.module<bia::bsl::io>("io", engine.gc());
 

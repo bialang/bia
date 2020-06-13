@@ -12,7 +12,6 @@
 #include <type_traits>
 #include <utility>
 
-
 namespace bia {
 namespace util {
 
@@ -20,7 +19,8 @@ template<typename... Ts>
 class variant
 {
 public:
-	constexpr static std::size_t npos = type_traits::type_index<>::npos;
+	constexpr static std::size_t npos       = type_traits::type_index<>::npos;
+	constexpr static std::size_t type_count = sizeof...(Ts);
 
 	template<typename T>
 	using index_of = type_traits::type_index<T, Ts...>;
