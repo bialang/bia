@@ -35,6 +35,10 @@ public:
 	}
 	test_type test(test_operator op, const member& right) const override
 	{
+		if (op == test_operator::self) {
+			return _value ? 1 : 0;
+		}
+
 		return detail::test_operation(_value, op, right.as_int());
 	}
 	gc::gcable<member> copy() const override
