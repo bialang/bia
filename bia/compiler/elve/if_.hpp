@@ -20,7 +20,9 @@ inline tokens_type if_(present present, tokens_type tokens)
 
 	tokens = expression(present, tokens.subspan(1), bytecode::member::tos{});
 
-	present.writer.write<true, bytecode::oc_test>(bytecode::member::tos{});
+	present.writer.write<true, bytecode::oc_test>(
+	    static_cast<typename std::underlying_type<member::test_operator>::type>(member::test_operator::self),
+	    bytecode::member::tos{}, bytecode::member::tos{});
 	present.writer.write<true, bytecode::oc_drop>(1);
 	jumper.jump(jump_manager::type::if_false, jump_manager::destination::next);
 
@@ -34,7 +36,10 @@ inline tokens_type if_(present present, tokens_type tokens)
 	while (!tokens.empty() && is_keyword(tokens.data(), token::keyword::else_if)) {
 		tokens = expression(present, tokens.subspan(1), bytecode::member::tos{});
 
-		present.writer.write<true, bytecode::oc_test>(bytecode::member::tos{});
+		present.writer.write<true, bytecode::oc_test>(
+		    static_cast<typename std::underlying_type<member::test_operator>::type>(
+		        member::test_operator::self),
+		    bytecode::member::tos{}, bytecode::member::tos{});
 		present.writer.write<true, bytecode::oc_drop>(1);
 		jumper.jump(jump_manager::type::if_false, jump_manager::destination::next);
 

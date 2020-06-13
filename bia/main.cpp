@@ -19,7 +19,7 @@ import io
 let i = 0
 
 while i < 10 {
-	io.print("hi")
+	io.print("hi", i)
 	let i = i + 1
 }
 

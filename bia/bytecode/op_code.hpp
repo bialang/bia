@@ -113,19 +113,18 @@ enum op_code : op_code_type
 	oc_invoke        = oc_instantiate + mso_count * mdo_count, // (uint8, source member, destination member)
 	oc_refer         = oc_invoke + mso_count * mdo_count,      // (member, member)
 	oc_clone         = oc_refer + mso_count * mdo_count,
-	oc_copy          = oc_clone + mso_count * mdo_count, // (member, member)
-	oc_self_operator = oc_copy + mso_count * mso_count,  // (operator, source, destination)
+	oc_copy          = oc_clone + mso_count * mdo_count,         // (member, member)
+	oc_self_operator = oc_copy + mso_count * mdo_count,          // (operator, source, destination)
+	oc_test          = oc_self_operator + mso_count * mso_count, // (operator, left, right)
 
 	/** 6 bit variants */
-	oc_get =
-	    oc_self_operator + mso_count * ro_count * mdo_count, // (source member, resource, destination member)
-	oc_import = oc_get + ro_count * mdo_count,               // (name)
+	oc_get    = oc_test + mso_count * ro_count * mdo_count, // (source member, resource, destination member)
+	oc_import = oc_get + ro_count * mdo_count,              // (name)
 
 	/** 4 bit variants */
-	oc_test = oc_import + mso_count, // (member)
 
 	/** 2 bit variants */
-	oc_jump       = oc_test + oo_count,      // (offset)
+	oc_jump       = oc_import + oo_count,    // (offset)
 	oc_jump_true  = oc_jump + oo_count,      // (offset)
 	oc_jump_false = oc_jump_true + oo_count, // (offset)
 	oc_name       = oc_jump_false + ro_count,

@@ -5,7 +5,6 @@
 #include <bia/member/function/static_.hpp>
 #include <bia/member/native/integer.hpp>
 #include <bia/member/native/string.hpp>
-#include <bia/member/object/raw.hpp>
 #include <cstddef>
 #include <cstring>
 #include <string>
