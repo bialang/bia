@@ -38,12 +38,6 @@ inline typename std::enable_if<std::is_floating_point<Type>::value, Type>::type
     operation(Type left, infix_operator op, Type right)
 {
 	switch (op) {
-	case infix_operator::equal: return left == right;
-	case infix_operator::not_equal: return left != right;
-	case infix_operator::less: return left < right;
-	case infix_operator::less_equal: return left <= right;
-	case infix_operator::greater: return left > right;
-	case infix_operator::greater_equal: return left >= right;
 	case infix_operator::addition: return left + right;
 	case infix_operator::subtraction: return left - right;
 	case infix_operator::multiplication: return left * right;
