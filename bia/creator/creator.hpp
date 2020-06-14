@@ -3,6 +3,7 @@
 
 #include <bia/gc/gc.hpp>
 #include <bia/member/function/static_.hpp>
+#include <bia/member/native/floating_point.hpp>
 #include <bia/member/native/integer.hpp>
 #include <bia/member/native/string.hpp>
 #include <cstddef>
@@ -25,11 +26,10 @@ inline typename std::enable_if<std::is_integral<typename std::decay<T>::type>::v
 template<typename T>
 inline typename std::enable_if<std::is_floating_point<typename std::decay<T>::type>::value &&
                                    (sizeof(typename std::decay<T>::type) <= 8),
-                               gc::gcable<member::native::integer>>::type
+                               gc::gcable<member::native::floating_point>>::type
     create(T&& value)
 {
-	return {};
-	// return gc::gc::active_gc()->construct<member::native::int_member>(std::forward<T>(value));
+	return gc::gc::active_gc()->construct<member::native::floating_point>(std::forward<T>(value));
 }
 
 template<typename Return, typename... Args>
