@@ -16,9 +16,12 @@ int main()
 
 import io
 
-let x = 34.43 * 56
+let i = 0
 
-io.print(x)
+while i < 10 {
+	io.print("hi", i)
+	let i = i + 1
+}
 
 )";
 

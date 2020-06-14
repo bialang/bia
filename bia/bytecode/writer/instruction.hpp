@@ -43,13 +43,6 @@ public:
 		optimized_write<false>(_output, static_cast<op_code>(Op_code - offset_index<Optimize>(p0)));
 		optimized_write<Optimize>(_output, p0);
 	}
-	template<bool Optimize, op_code Op_code, typename P0>
-	typename std::enable_if<is_op_code<Op_code, oc_test>::value && is_member_source<P0>::value>::type
-	    write(P0 p0)
-	{
-		optimized_write<false>(_output, static_cast<op_code>(Op_code - member_source_index<Optimize>(p0)));
-		optimized_member<Optimize>(_output, p0);
-	}
 	template<bool Optimize, op_code Op_code>
 	typename std::enable_if<is_op_code<Op_code, oc_name>::value>::type write(member::resource name)
 	{
@@ -122,6 +115,18 @@ public:
 		optimized_write<false>(_output,
 		                       static_cast<op_code>(Op_code - member_source_index<Optimize>(p1) * mdo_count -
 		                                            member_destination_index<Optimize>(p2)));
+		optimized_write<false>(_output, p0);
+		optimized_member<Optimize>(_output, p1);
+		optimized_member<Optimize>(_output, p2);
+	}
+	template<bool Optimize, op_code Op_code, typename P1, typename P2>
+	typename std::enable_if<is_op_code<Op_code, oc_test>::value && is_member_source<P1>::value &&
+	                        is_member_source<P2>::value>::type
+	    write(std::uint8_t p0, P1 p1, P2 p2)
+	{
+		optimized_write<false>(_output,
+		                       static_cast<op_code>(Op_code - member_source_index<Optimize>(p1) * mso_count -
+		                                            member_source_index<Optimize>(p2)));
 		optimized_write<false>(_output, p0);
 		optimized_member<Optimize>(_output, p1);
 		optimized_member<Optimize>(_output, p2);

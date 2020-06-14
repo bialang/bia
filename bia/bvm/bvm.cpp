@@ -64,6 +64,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 	using flag = bia::member::member::flag;
 	using bia::member::infix_operator;
 	using bia::member::self_operator;
+	using bia::member::test_operator;
 
 	instruction_pointer ip{ instructions.begin(), instructions.end() };
 	bia::member::member::test_type test_register{ 10 };
@@ -5641,6 +5642,550 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_test - mso_resource_8 * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_resource_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_local_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_global_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_resource_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_local_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_global_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_args): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_tos): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_resource_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_local_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_global_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_resource_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_local_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_global_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_args): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_tos): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(
+			    op, *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
 		case (oc_get - mso_resource_8 * ro_count * mdo_count - ro_32 * mdo_count - mdo_local_8): {
 			const auto src  = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
@@ -6733,48 +7278,6 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.push(), loader.load(name).get());
-
-			break;
-		}
-		case (oc_test - mso_resource_8): {
-			test_register = member_pointer(resources.at(ip.read<std::uint8_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_local_8): {
-			test_register = member_pointer(stack.local_at(ip.read<std::uint8_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_global_8): {
-			test_register =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))->test();
-
-			break;
-		}
-		case (oc_test - mso_resource_16): {
-			test_register = member_pointer(resources.at(ip.read<std::uint16_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_local_16): {
-			test_register = member_pointer(stack.local_at(ip.read<std::uint16_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_global_16): {
-			test_register =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))->test();
-
-			break;
-		}
-		case (oc_test - mso_args): {
-			test_register = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_tos): {
-			test_register = member_pointer(stack.tos())->test();
 
 			break;
 		}

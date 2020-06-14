@@ -49,7 +49,7 @@ public:
 	{
 		return flag_none;
 	}
-	test_type test() const override
+	test_type test(test_operator op, const member& right) const override
 	{
 		thread::lock::guard<thread::lock::mutex> lock{ _mutex };
 

@@ -31,7 +31,7 @@ public:
 	{
 		return flag_none;
 	}
-	test_type test() const override
+	test_type test(test_operator op, const member& right) const override
 	{
 		return _value.get()[0] ? 1 : 0;
 	}

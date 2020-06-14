@@ -23,7 +23,9 @@ inline tokens_type while_(present present, tokens_type tokens)
 
 	auto count = tokens.data()->value.get<token::batch>().count;
 
-	present.writer.write<true, bytecode::oc_test>(bytecode::member::tos{});
+	present.writer.write<true, bytecode::oc_test>(
+	    static_cast<typename std::underlying_type<member::test_operator>::type>(member::test_operator::self),
+	    bytecode::member::tos{}, bytecode::member::tos{});
 	present.writer.write<true, bytecode::oc_drop>(1);
 	manager.jump(jump_manager::type::if_false, jump_manager::destination::end);
 

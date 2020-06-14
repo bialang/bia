@@ -17,6 +17,15 @@ namespace compiler {
 namespace elve {
 namespace detail {
 
+inline bool is_test_operator(tokenizer::token::operator_ op)
+{
+	using namespace tokenizer::token;
+
+	return op == operator_::equal || op == operator_::not_equal || op == operator_::less ||
+	       op == operator_::less_equal || op == operator_::greater || op == operator_::greater_equal ||
+	       op == operator_::in || op == operator_::three_way_comparison;
+}
+
 template<typename Destination>
 inline tokens_type value(present present, tokens_type tokens, Destination&& destination)
 {
@@ -89,7 +98,10 @@ inline void apply_self_operator(present present, tokenizer::token::operator_ op,
 	using namespace tokenizer::token;
 
 	if (op == operator_::logical_not) {
-		present.writer.write<true, bytecode::oc_test>(std::forward<Member>(mem));
+		present.writer.write<true, bytecode::oc_test>(
+		    static_cast<typename std::underlying_type<member::test_operator>::type>(
+		        member::test_operator::self),
+		    std::forward<Member>(mem), std::forward<Member>(mem));
 		present.writer.write<true, bytecode::oc_invert>();
 		present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{},
 		                                                     std::forward<Member>(mem));
@@ -151,7 +163,10 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 				last_logical_and = true;
 			}
 
-			present.writer.write<true, bytecode::oc_test>(left);
+			present.writer.write<true, bytecode::oc_test>(
+			    static_cast<typename std::underlying_type<member::test_operator>::type>(
+			        member::test_operator::self),
+			    left, left);
 			jumper.jump(op == operator_::logical_and ? jump_manager::type::if_false
 			                                         : jump_manager::type::if_true,
 			            jump_manager::destination::end);
@@ -167,10 +182,18 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		const bytecode::member::local right{ present.variables.add_tmp().id };
 
 		// call operator
-		present.writer.write<true, bytecode::oc_operator>(
-		    left, right,
-		    static_cast<typename std::underlying_type<member::infix_operator>::type>(to_infix_operator(op)),
-		    left);
+		if (detail::is_test_operator(op)) {
+			present.writer.write<true, bytecode::oc_test>(
+			    static_cast<typename std::underlying_type<member::test_operator>::type>(to_test_operator(op)),
+			    left, right);
+			present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, left);
+		} else {
+			present.writer.write<true, bytecode::oc_operator>(
+			    left, right,
+			    static_cast<typename std::underlying_type<member::infix_operator>::type>(
+			        to_infix_operator(op)),
+			    left);
+		}
 		present.writer.write<true, bytecode::oc_drop>(1);
 		present.variables.remove_tmp();
 	}

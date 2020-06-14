@@ -33,9 +33,13 @@ public:
 	{
 		return flag_numeric;
 	}
-	test_type test() const override
+	test_type test(test_operator op, const member& right) const override
 	{
-		return _value ? 1 : 0;
+		if (op == test_operator::self) {
+			return _value ? 1 : 0;
+		}
+
+		return detail::test_operation(_value, op, right.as_int());
 	}
 	gc::gcable<member> copy() const override
 	{

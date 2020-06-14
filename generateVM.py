@@ -95,6 +95,13 @@ token->set(dest, src->self_operation(op));
 
 break;"""),
 
+    ("oc_test", ("mso", "mso"), """const auto op = ip.read<test_operator>();
+const auto src = member_pointer({0});
+
+test_register = src->test(op, *member_pointer({1}));
+
+break;"""),
+
 
     ("oc_get", ("mso", "ro", "mdo"), """const auto src = member_pointer({0});
 const auto name = string_pointer({1});
@@ -106,11 +113,6 @@ break;"""),
     ("oc_import", ("ro", "mdo"), """auto name = string_pointer({0});
 
 token->set({1}, loader.load(name).get());
-
-break;"""),
-
-
-    ("oc_test", ("mso",), """test_register = member_pointer({0})->test();
 
 break;"""),
 
