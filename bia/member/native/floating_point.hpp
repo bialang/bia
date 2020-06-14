@@ -28,7 +28,7 @@ public:
 	}
 	flag_type flags() const override
 	{
-		return flag_numeric;
+		return flag_floating_point;
 	}
 	test_type test() const override
 	{
