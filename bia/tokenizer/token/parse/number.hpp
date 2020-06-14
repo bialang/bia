@@ -4,8 +4,8 @@
 #include "../parameter.hpp"
 
 #include <bia/exception/syntax_error.hpp>
-#include <bia/util/variant.hpp>
 #include <limits>
+#include <string>
 
 namespace bia {
 namespace tokenizer {
@@ -47,15 +47,13 @@ inline exception::syntax_details number(parameter& parameter)
 		decimal,
 		zero,
 		octal,
-		hex_begin,
 		hex,
-		binary_begin,
 		binary,
 		floating_point,
 	};
 
 	auto s = state::start;
-	util::variant<token::int_type, double> value{ 0 };
+	std::string number;
 
 	while (true) {
 		const auto pos = parameter.input.tellg();
@@ -71,78 +69,102 @@ inline exception::syntax_details number(parameter& parameter)
 			if (cp == '0') {
 				s = state::zero;
 			} else if (cp >= '1' && cp <= '9') {
-				s              = state::decimal;
-				value.get<0>() = cp - '0';
+				s = state::decimal;
 			} else {
 				return { pos, "unexpected start of number" };
 			}
 
+			number.push_back(static_cast<char>(cp));
+
 			break;
 		}
 		case state::decimal: {
-			if (cp >= '0' && cp <= '9') {
-				if (!detail::integer_add(value.get<0>(), cp, 10)) {
-					return { pos, "integer overflow" };
-				}
-			} else if (cp == '.') {
+			if (cp == '.') {
 				s = state::floating_point;
-
-				value.emplace<1>(value.get<0>());
-			} else {
+			} else if (cp < '0' || cp > '9') {
 				goto gt_end;
 			}
+
+			number.push_back(static_cast<char>(cp));
 
 			break;
 		}
 		case state::zero: {
 			if (cp == 'x' || cp == 'X') {
-				s = state::hex_begin;
+				s = state::hex;
 			} else if (cp == 'b' || cp == 'B') {
-				s = state::binary_begin;
+				s = state::binary;
 			} else if (cp >= '0' && cp <= '7') {
-				s              = state::octal;
-				value.get<0>() = cp - '0';
+				s = state::octal;
 			} else if (cp == '.') {
 				s = state::floating_point;
-
-				value.emplace<1>(value.get<0>());
 			} else {
 				goto gt_end;
 			}
+
+			number.push_back(static_cast<char>(cp));
 
 			break;
 		}
 		case state::octal: {
-			if (cp >= '0' && cp <= '7') {
-				if (!detail::integer_add(value.get<0>(), cp, 7)) {
-					return { pos, "integer overflow" };
-				}
-			} else {
+			if (cp < '0' || cp > '7') {
 				goto gt_end;
 			}
+
+			number.push_back(static_cast<char>(cp));
+
+			break;
+		}
+		case state::hex: {
+			if ((cp < '0' || cp > '9') && (cp < 'a' || cp > 'f') && (cp < 'A' && cp > 'F')) {
+				goto gt_end;
+			}
+
+			number.push_back(static_cast<char>(cp));
+
+			break;
+		}
+		case state::binary: {
+			if (cp != '0' && cp != '1') {
+				goto gt_end;
+			}
+
+			number.push_back(static_cast<char>(cp));
 
 			break;
 		}
 		case state::floating_point: {
-			if (cp >= '0' && cp <= '9') {
-				if (!detail::floating_point_add(value.get<1>(), cp, 10)) {
-					return { pos, "floating point overflow" };
-				}
+			if (cp < '0' || cp > '9') {
+				goto gt_end;
 			}
+
+			number.push_back(static_cast<char>(cp));
 
 			break;
 		}
 		default: BIA_IMPLEMENTATION_ERROR("not implemented");
 		}
 
+		continue;
+
 	gt_end:;
 		parameter.input.seekg(pos);
 
+		std::size_t tmp = 0;
+
 		// double value
-		if (value.index()) {
-			parameter.bundle.add({ value.get<1>() });
+		if (s == state::floating_point) {
+			try {
+				parameter.bundle.add({ std::stod(number) });
+			} catch (const std::exception& e) {
+				return { pos, e.what() };
+			}
 		} else {
-			parameter.bundle.add({ value.get<0>() });
+			try {
+				parameter.bundle.add({ static_cast<token::int_type>(std::stoll(number, nullptr, 0)) });
+			} catch (const std::exception& e) {
+				return { pos, e.what() };
+			}
 		}
 
 		return {};
