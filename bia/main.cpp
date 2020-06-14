@@ -15,7 +15,10 @@ int main()
 	code << u8R"(
 
 import io
-io.print(128 and 99, 2, sep="heyho", 4)
+
+let x = 34.43 * 56
+
+io.print(x)
 
 )";
 

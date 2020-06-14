@@ -67,6 +67,14 @@ inline typename std::enable_if<
 	}
 }
 
+template<bool Optimize>
+inline void optimized_write(std::ostream& output, double value)
+{
+	static_assert(sizeof(value) == sizeof(std::int64_t), "invalid double write");
+
+	optimized_write<false>(output, *reinterpret_cast<std::int64_t*>(&value));
+}
+
 template<bool Optimize, typename T>
 inline typename std::enable_if<is_offset<T>::value, offset_option>::type offset_index(T value) noexcept
 {
