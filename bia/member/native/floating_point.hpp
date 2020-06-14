@@ -44,10 +44,9 @@ public:
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
-		return {};
-		/*return gc::gc::active_gc()
+		return gc::gc::active_gc()
 		    ->construct<floating_point>(detail::operation(_value, op, right.as_float()))
-		    .template to<member>();*/
+		    .template to<member>();
 	}
 	gc::gcable<member> self_operation(self_operator op) override
 	{

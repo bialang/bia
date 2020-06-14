@@ -16,7 +16,7 @@ int main()
 
 import io
 
-let x = 34.43
+let x = 34.43 * 56
 
 io.print(x)
 

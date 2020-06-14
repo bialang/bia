@@ -5,14 +5,16 @@
 
 #include <bia/exception/implementation_error.hpp>
 #include <cmath>
+#include <type_traits>
 
 namespace bia {
 namespace member {
 namespace native {
 namespace detail {
 
-template<typename Left, typename Right>
-inline Left operation(Left left, infix_operator op, Right right)
+template<typename Type>
+inline typename std::enable_if<std::is_integral<Type>::value, Type>::type
+    operation(Type left, infix_operator op, Type right)
 {
 	switch (op) {
 	case infix_operator::bitwise_or: return left | right;
@@ -31,7 +33,28 @@ inline Left operation(Left left, infix_operator op, Right right)
 	case infix_operator::multiplication: return left * right;
 	case infix_operator::division: return left / right;
 	case infix_operator::remainder: return left % right;
-	case infix_operator::exponentation: return static_cast<Left>(pow(left, right));
+	case infix_operator::exponentation: return static_cast<Type>(std::pow(left, right));
+	default: BIA_IMPLEMENTATION_ERROR("not implemented");
+	}
+}
+
+template<typename Type>
+inline typename std::enable_if<std::is_floating_point<Type>::value, Type>::type
+    operation(Type left, infix_operator op, Type right)
+{
+	switch (op) {
+	case infix_operator::equal: return left == right;
+	case infix_operator::not_equal: return left != right;
+	case infix_operator::less: return left < right;
+	case infix_operator::less_equal: return left <= right;
+	case infix_operator::greater: return left > right;
+	case infix_operator::greater_equal: return left >= right;
+	case infix_operator::addition: return left + right;
+	case infix_operator::subtraction: return left - right;
+	case infix_operator::multiplication: return left * right;
+	case infix_operator::division: return left / right;
+	case infix_operator::remainder: return std::fmod(left, right);
+	case infix_operator::exponentation: return std::pow(left, right);
 	default: BIA_IMPLEMENTATION_ERROR("not implemented");
 	}
 }
