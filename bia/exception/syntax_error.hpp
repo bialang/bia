@@ -4,6 +4,7 @@
 #include "bia_error.hpp"
 
 #include <istream>
+#include <string>
 
 namespace bia {
 namespace exception {
@@ -14,20 +15,19 @@ struct syntax_details
 	bool valid;
 	/** the position in the stream where the error occurred */
 	std::istream::pos_type position;
-	/** a static error message */
-	const char* message;
+	/** the error message */
+	std::string message;
 
 	syntax_details() noexcept
 	{
 		valid    = false;
 		position = -1;
-		message  = nullptr;
 	}
 	syntax_details(std::istream::pos_type position, const char* message) noexcept
+	    : message(message ? message : "")
 	{
 		valid          = true;
 		this->position = position;
-		this->message  = message;
 	}
 	operator bool() const noexcept
 	{

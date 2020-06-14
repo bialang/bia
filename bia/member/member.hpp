@@ -43,7 +43,8 @@ public:
 		 */
 		flag_clone_is_copy = 0x1,
 		/** if the member has a native numerical representaion */
-		flag_numeric = 0x2
+		flag_numeric = 0x2,
+		flag_floating_point = flag_numeric | 0x4
 	};
 
 	virtual ~member() = default;

@@ -71,6 +71,12 @@ inline tokens_type value(present present, tokens_type tokens, Destination&& dest
 
 		break;
 	}
+	case token::type::constant_float: {
+		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<double>(),
+		                                                     std::forward<Destination>(destination));
+
+		break;
+	}
 	default: BIA_IMPLEMENTATION_ERROR("invalid token type");
 	}
 
