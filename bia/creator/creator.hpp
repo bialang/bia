@@ -38,15 +38,21 @@ inline gc::gcable<member::function::static_<Return, Args...>> create(Return (*fu
 	return gc::gc::active_gc()->construct<member::function::static_<Return, Args...>>(function);
 }
 
-inline gc::gcable<member::native::string> create(const std::string& value)
+inline gc::gcable<member::native::string> create(const char* value)
 {
-	const auto gc  = gc::gc::active_gc();
-	const auto str = static_cast<char*>(gc->allocate(value.size() + 1).release());
-	auto mem       = gc->construct<member::native::string>(str);
+	const auto gc     = gc::gc::active_gc();
+	const auto length = std::char_traits<char>::length(value);
+	const auto str    = static_cast<char*>(gc->allocate(length + 1).release());
+	auto mem          = gc->construct<member::native::string>(str);
 
-	std::memcpy(str, value.c_str(), value.size() + 1);
+	std::memcpy(str, value, length + 1);
 
 	return mem;
+}
+
+inline gc::gcable<member::native::string> create(const std::string& value)
+{
+	return create(value.c_str());
 }
 
 inline gc::gcable<member::member> create(std::nullptr_t) noexcept
