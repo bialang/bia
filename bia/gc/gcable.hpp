@@ -3,13 +3,18 @@
 
 #include "gc.hpp"
 
-#include <type_traits>
 #include <bia/util/gsl.hpp>
+#include <type_traits>
 
 namespace bia {
 namespace gc {
 
-template<typename T>
+/**
+ * Contains a gc monitored pointer. This pointer can already be active.
+ *
+ * @tparam Type the type of the pointer
+ */
+template<typename Type>
 class gcable
 {
 public:
@@ -20,7 +25,7 @@ public:
 	 * @param[in] gc the gc parent
 	 * @param[in] ptr the gcable pointer
 	 */
-	gcable(gc* gc, T* ptr) noexcept
+	gcable(gc* gc, Type* ptr) noexcept
 	{
 		_gc  = gc;
 		_ptr = ptr;
@@ -36,6 +41,22 @@ public:
 	{
 		std::swap(_gc, move._gc);
 		std::swap(_ptr, move._ptr);
+	}
+	/**
+	 * Move-Constructor.
+	 *
+	 * @post `move` will be invalid
+	 *
+	 * @param[in, out] move the move object
+	 * @tparam T must be a parent of `Type`
+	 */
+	template<typename T, typename = typename std::enable_if<std::is_base_of<Type, T>::value>::type>
+	gcable(gcable<T>&& move) noexcept
+	{
+		std::swap(_gc, move._gc);
+
+		_ptr      = static_cast<Type*>(move._ptr);
+		move._ptr = nullptr;
 	}
 	~gcable()
 	{
@@ -57,41 +78,42 @@ public:
 
 		_gc->register_gcable(_ptr);
 
-		_gc  = nullptr;
-		_ptr = nullptr;
-
-		BIA_ENSURES(!valid());
+		_gc = nullptr;
 	}
-	T* release()
+	/**
+	 * Returns the pointer and releases it without starting to monitor.
+	 *
+	 * @pre this object is valid
+	 * @post this object is invalid
+	 */
+	Type* release()
 	{
 		BIA_EXPECTS(valid());
 
-		const auto ptr = _ptr;
+		_gc = nullptr;
 
-		_gc  = nullptr;
-		_ptr = nullptr;
-
-		return ptr;
+		return _ptr;
 	}
 	/**
-	 * Returns the gc pointer.
+	 * Returns the pointer.
 	 *
-	 * @returns the pointer if this object is valid, otherwise `nullptr`
+	 * @returns the pointer if this object
 	 */
-	T* peek() const noexcept
+	Type* peek() const noexcept
 	{
 		return _ptr;
 	}
 	/**
-	 * Checks if this object is valid. If so the pointer can be retrieved and/or monitored.
+	 * Checks if this object is valid. An object is only valid if the pointer is not `nullptr` and monitoring
+	 * has not started yet.
 	 *
 	 * @returns `true` if valid, otherwise `false`
 	 */
 	bool valid() const noexcept
 	{
-		return _gc;
+		return _gc && _ptr;
 	}
-	template<typename U>
+	/*template<typename U>
 	typename std::enable_if<std::is_base_of<U, T>::value, gcable<U>>::type to()
 	{
 		gcable<U> r{ _gc, _ptr };
@@ -100,7 +122,7 @@ public:
 		_ptr = nullptr;
 
 		return r;
-	}
+	}*/
 	gcable& operator=(gcable&& move) noexcept
 	{
 		_discard();
@@ -110,12 +132,27 @@ public:
 
 		return *this;
 	}
+	template<typename T>
+	gcable& operator=(gcable<T>&& move) noexcept
+	{
+		_discard();
+
+		std::swap(_gc, move._gc);
+
+		_ptr      = static_cast<Type*>(move._ptr);
+		move._ptr = nullptr;
+
+		return *this;
+	}
 
 private:
+	template<typename T>
+	friend class gcable;
+
 	/** the parent gc */
 	gc* _gc = nullptr;
 	/** the actual gcable pointer */
-	T* _ptr = nullptr;
+	Type* _ptr = nullptr;
 
 	/**
 	 * Discards this gcable monitor. If already discarded, this is a noop.
@@ -125,7 +162,7 @@ private:
 	void _discard() noexcept
 	{
 		if (_gc) {
-			_destroy(util::not_null<T*>{ _ptr });
+			_destroy(util::not_null<Type*>{ _ptr });
 			_gc->_free(_ptr);
 
 			_gc  = nullptr;

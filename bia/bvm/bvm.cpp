@@ -53,9 +53,7 @@ inline bia::member::native::string*
 inline bia::gc::gcable<bia::member::member> make_key_value_pair(bia::member::native::string* key,
                                                                 bia::member::member* value)
 {
-	return bia::gc::gc::active_gc()
-	    ->construct<bia::member::native::key_value_pair>(key, value)
-	    .template to<bia::member::member>();
+	return bia::gc::gc::active_gc()->construct<bia::member::native::key_value_pair>(key, value);
 }
 
 void bvm::execute(context& context, util::span<const util::byte*> instructions, gc::root& resources)
@@ -3542,273 +3540,273 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_instantiate - co_null * mdo_count - mdo_local_8): {
 			const auto constant = nullptr;
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_null * mdo_count - mdo_global_8): {
 			const auto constant = nullptr;
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_null * mdo_count - mdo_local_16): {
 			const auto constant = nullptr;
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_null * mdo_count - mdo_global_16): {
 			const auto constant = nullptr;
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_null * mdo_count - mdo_tos): {
 			const auto constant = nullptr;
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_local_8): {
 			const auto constant = test_register;
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_global_8): {
 			const auto constant = test_register;
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_local_16): {
 			const auto constant = test_register;
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_global_16): {
 			const auto constant = test_register;
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_tos): {
 			const auto constant = test_register;
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_tos): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_tos): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_tos): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_tos): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_tos): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}

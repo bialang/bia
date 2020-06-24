@@ -24,7 +24,7 @@ regex::test_type regex::test(test_operator op, const member& right) const
 
 bia::gc::gcable<bia::member::member> regex::copy() const
 {
-	return gc::gc::active_gc()->construct<regex>(*this).template to<member>();
+	return gc::gc::active_gc()->construct<regex>(*this);
 }
 
 bia::gc::gcable<bia::member::member> regex::invoke(parameters_type params)

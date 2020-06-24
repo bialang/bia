@@ -52,7 +52,7 @@ break;"""),
 
     ("oc_instantiate", ("co", "mdo"), """const auto constant = {0};
 
-token->set({1}, creator::create(constant).to<bia::member::member>());
+token->template set<bia::member::member>({1}, creator::create(constant));
 
 break;"""),
 

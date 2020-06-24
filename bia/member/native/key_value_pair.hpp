@@ -38,7 +38,7 @@ public:
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<key_value_pair>(_key.get(), _value.get()).template to<member>();
+		return gc::gc::active_gc()->construct<key_value_pair>(_key.get(), _value.get());
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{

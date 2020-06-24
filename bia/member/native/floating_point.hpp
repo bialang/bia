@@ -40,7 +40,7 @@ public:
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<floating_point>(_value).template to<member>();
+		return gc::gc::active_gc()->construct<floating_point>(_value);
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{
@@ -48,15 +48,13 @@ public:
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
-		return gc::gc::active_gc()
-		    ->construct<floating_point>(detail::operation(_value, op, right.as_float()))
-		    .template to<member>();
+		return gc::gc::active_gc()->construct<floating_point>(
+		    detail::operation(_value, op, right.as_float()));
 	}
 	gc::gcable<member> self_operation(self_operator op) override
 	{
 		switch (op) {
-		case self_operator::unary_minus:
-			return gc::gc::active_gc()->construct<floating_point>(-_value).template to<member>();
+		case self_operator::unary_minus: return gc::gc::active_gc()->construct<floating_point>(-_value);
 		default: break;
 		}
 
