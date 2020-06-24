@@ -16,12 +16,11 @@ int main()
 
 import io
 
-let i = 0
+let i = /asd/
 
-while i < 10 {
-	io.print("hi", i)
-	let i = i + 1
-}
+let x = i == "hi yunus, ich bins yunus"
+
+io.print(x)
 
 )";
 
