@@ -35,7 +35,7 @@ public:
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<static_>(_function).template to<member>();
+		return gc::gc::active_gc()->construct<static_>(_function);
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{
@@ -49,7 +49,7 @@ public:
 	{
 		return {};
 	}
-	member* get(const native::string& name) override
+	gc::gcable<member> get(const native::string& name) override
 	{
 		return nullptr;
 	}

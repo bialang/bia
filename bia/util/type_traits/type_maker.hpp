@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_UTIL_TYPE_TRAITS_TYPE_MAKER_HPP_
+#define BIA_UTIL_TYPE_TRAITS_TYPE_MAKER_HPP_
 
 #include <cstddef>
 #include <type_traits>
@@ -37,3 +38,5 @@ struct type_select<Count, type_container<T...>, type_container<>>
 } // namespace type_traits
 } // namespace util
 } // namespace bia
+
+#endif

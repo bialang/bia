@@ -119,7 +119,7 @@ gcable<void> gc::allocate(std::size_t size, bool zero)
 		std::memset(ptr.get(), 0, size);
 	}
 
-	return { this, ptr };
+	return { ptr, this };
 }
 
 const std::shared_ptr<memory::allocator>& gc::allocator() noexcept

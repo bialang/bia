@@ -6,10 +6,10 @@ arg_options = {
     "mso": [
         ("tos", "stack.tos()"),
         ("args", "stack.arg_at(ip.read<std::uint8_t>())"),
-        ("global_16", "globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))"),
+        ("global_16", "globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()"),
         ("local_16", "stack.local_at(ip.read<std::uint16_t>())"),
         ("resource_16", "resources.at(ip.read<std::uint16_t>())"),
-        ("global_8", "globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))"),
+        ("global_8", "globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()"),
         ("local_8", "stack.local_at(ip.read<std::uint8_t>())"),
         ("resource_8", "resources.at(ip.read<std::uint8_t>())")
     ],
@@ -52,7 +52,7 @@ break;"""),
 
     ("oc_instantiate", ("co", "mdo"), """const auto constant = {0};
 
-token->set({1}, creator::create(constant).to<bia::member::member>());
+token->template set<bia::member::member>({1}, creator::create(constant));
 
 break;"""),
 

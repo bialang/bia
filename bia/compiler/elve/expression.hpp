@@ -65,6 +65,15 @@ inline tokens_type value(present present, tokens_type tokens, Destination&& dest
 
 		break;
 	}
+	case token::type::constant_regex: {
+		// todo
+		bytecode::member::resource src{ (std::uint16_t) present.resources.index_of(
+			tokens.data()->value.get<token::regex>().memory) };
+
+		present.writer.write<true, bytecode::oc_refer>(src, std::forward<Destination>(destination));
+
+		break;
+	}
 	case token::type::constant_int: {
 		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<token::int_type>(),
 		                                                     std::forward<Destination>(destination));

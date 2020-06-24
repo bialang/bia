@@ -59,6 +59,44 @@ inline gc::gcable<member::member> connect_static(void (*function)(Args...), para
 	return {};
 }
 
+template<typename Class, typename Return, typename... Args, std::size_t... Indices>
+inline gc::gcable<member::member> connect_method(Class& instance, Return (Class::*function)(Args...),
+                                                 parameters_type params, parameter_indices<Indices...>)
+{
+	return creator::create((instance.*function)(
+	                           std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...))
+	    .template to<member::member>();
+}
+
+template<typename Class, typename... Args, std::size_t... Indices>
+inline gc::gcable<member::member> connect_method(Class& instance, void (Class::*function)(Args...),
+                                                 parameters_type params, parameter_indices<Indices...>)
+{
+	(instance.*function)(std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...);
+
+	return {};
+}
+
+template<typename Class, typename Return, typename... Args, std::size_t... Indices>
+inline gc::gcable<member::member> connect_method(const Class& instance,
+                                                 Return (Class::*function)(Args...) const,
+                                                 parameters_type params, parameter_indices<Indices...>)
+{
+	return creator::create((instance.*function)(
+	                           std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...))
+	    .template to<member::member>();
+}
+
+template<typename Class, typename... Args, std::size_t... Indices>
+inline gc::gcable<member::member> connect_method(const Class& instance,
+                                                 void (Class::*function)(Args...) const,
+                                                 parameters_type params, parameter_indices<Indices...>)
+{
+	(instance.*function)(std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...);
+
+	return {};
+}
+
 template<typename Return>
 inline gc::gcable<member::member> connect_static(Return (*function)(parameters_type), parameters_type params,
                                                  parameter_indices<0>)
@@ -80,6 +118,24 @@ inline gc::gcable<member::member> connect_static(Return (*function)(Args...), pa
 	assert_parameters(params, util::type_traits::type_container<Args...>{});
 
 	return connect_static(function, params, parameter_index_maker<sizeof...(Args)>::value);
+}
+
+template<typename Class, typename Return, typename... Args>
+inline gc::gcable<member::member> connect_method(Class& instance, Return (Class::*function)(Args...),
+                                                 parameters_type params)
+{
+	assert_parameters(params, util::type_traits::type_container<Args...>{});
+
+	return connect_method(instance, function, params, parameter_index_maker<sizeof...(Args)>::value);
+}
+
+template<typename Class, typename Return, typename... Args>
+inline gc::gcable<member::member>
+    connect_method(const Class& instance, Return (Class::*function)(Args...) const, parameters_type params)
+{
+	assert_parameters(params, util::type_traits::type_container<Args...>{});
+
+	return connect_method(instance, function, params, parameter_index_maker<sizeof...(Args)>::value);
 }
 
 } // namespace connector

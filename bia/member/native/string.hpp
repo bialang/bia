@@ -37,7 +37,7 @@ public:
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<string>(_value).template to<member>();
+		return gc::gc::active_gc()->construct<string>(_value);
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{
@@ -57,9 +57,7 @@ public:
 
 			static_cast<char*>(mem.peek())[len0 + len1] = 0;
 
-			return gc::gc::active_gc()
-			    ->construct<string>(static_cast<char*>(mem.release()))
-			    .template to<member>();
+			return gc::gc::active_gc()->construct<string>(static_cast<char*>(mem.release()));
 		}
 
 		return {};
@@ -68,7 +66,7 @@ public:
 	{
 		return {};
 	}
-	member* get(const native::string& name) override
+	gc::gcable<member> get(const native::string& name) override
 	{
 		return nullptr;
 	}

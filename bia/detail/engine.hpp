@@ -8,6 +8,7 @@
 #include <bia/connector/connector-inl.hpp>
 #include <bia/gc/gc.hpp>
 #include <bia/gc/memory/simple_allocator.hpp>
+#include <bia/member/function/method.hpp>
 #include <bia/member/function/static_.hpp>
 #include <bia/member/native/string.hpp>
 #include <bia/resource/deserialize.hpp>
@@ -15,6 +16,7 @@
 #include <bia/tokenizer/bia_lexer.hpp>
 #include <bia/util/finally.hpp>
 #include <bia/util/gsl.hpp>
+#include <bia/util/type_traits/method_info.hpp>
 #include <cstring>
 #include <istream>
 #include <sstream>
@@ -39,6 +41,28 @@ public:
 		const auto str    = static_cast<char*>(_gc.allocate(length + 1).release());
 		auto name_member  = _gc.construct<member::native::string>(str);
 		auto func_member  = _gc.construct<member::function::static_<Return, Args...>>(func);
+
+		std::memcpy(str, name.get(), length);
+
+		str[length] = 0;
+
+		_context.symbols().put(name_member.peek(), func_member.peek());
+		name_member.start_monitor();
+		func_member.start_monitor();
+	}
+	template<typename Functor>
+	void function(util::not_null<util::czstring> name, Functor&& functor)
+	{
+		typedef typename std::remove_const<typename std::decay<Functor>::type>::type functor_type;
+
+		static_assert(util::type_traits::functor_info<functor_type>::is_functor, "must be a functor");
+
+		const auto length = std::char_traits<char>::length(name.get());
+		const auto str    = static_cast<char*>(_gc.allocate(length + 1).release());
+		auto name_member  = _gc.construct<member::native::string>(str);
+		auto func_member =
+		    _gc.construct<member::function::method<false, decltype(&functor_type::operator())>>(
+		        std::forward<Functor>(functor), &functor_type::operator());
 
 		std::memcpy(str, name.get(), length);
 
