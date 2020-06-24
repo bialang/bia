@@ -2,26 +2,9 @@
 
 #include "../cast/cast.hpp"
 
-#include <regex>
-
 using namespace bia::member::native;
 
-struct regex::impl : public gc::object::base
-{
-	std::regex pattern;
-
-	impl(util::not_null<util::czstring> pattern) : pattern(pattern.get())
-	{}
-	void gc_mark_children(bool mark) const noexcept override
-	{}
-
-protected:
-	void register_gcables(gc::gc& gc) const noexcept override
-	{}
-};
-
-regex::regex(util::not_null<util::czstring> pattern)
-    : _pimpl(gc::gc::active_gc()->construct<impl>(pattern).release())
+regex::regex(std::regex pattern) : _pattern{ std::move(pattern) }
 {}
 
 regex::flag_type regex::flags() const
@@ -32,9 +15,9 @@ regex::flag_type regex::flags() const
 regex::test_type regex::test(test_operator op, const member& right) const
 {
 	switch (op) {
-	case test_operator::in: return std::regex_search(cast::cast<const char*>(right), _pimpl->pattern);
-	case test_operator::equal: return std::regex_match(cast::cast<const char*>(right), _pimpl->pattern);
-	case test_operator::not_equal: return !std::regex_match(cast::cast<const char*>(right), _pimpl->pattern);
+	case test_operator::in: return std::regex_search(cast::cast<const char*>(right), _pattern);
+	case test_operator::equal: return std::regex_match(cast::cast<const char*>(right), _pattern);
+	case test_operator::not_equal: return !std::regex_match(cast::cast<const char*>(right), _pattern);
 	default: return 0;
 	}
 }
@@ -85,11 +68,7 @@ bool regex::as_data(const std::type_info& type, void* output) const
 }
 
 void regex::gc_mark_children(bool mark) const noexcept
-{
-	gc::object::gc_mark(_pimpl.get(), mark);
-}
+{}
 
 void regex::register_gcables(gc::gc& gc) const noexcept
-{
-	gc.register_gcable(_pimpl.get());
-}
+{}

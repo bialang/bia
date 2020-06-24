@@ -3,8 +3,7 @@
 
 #include "../member.hpp"
 
-#include <bia/gc/object/pointer.hpp>
-#include <bia/util/gsl.hpp>
+#include <regex>
 
 namespace bia {
 namespace member {
@@ -13,7 +12,7 @@ namespace native {
 class regex : public member
 {
 public:
-	regex(util::not_null<util::czstring> pattern);
+	regex(std::regex pattern);
 	flag_type flags() const override;
 	test_type test(test_operator op, const member& right) const override;
 	gc::gcable<member> copy() const override;
@@ -31,8 +30,7 @@ protected:
 	void register_gcables(gc::gc& gc) const noexcept override;
 
 private:
-	struct impl;
-	gc::object::immutable_pointer<impl> _pimpl;
+	std::regex _pattern;
 };
 
 } // namespace native

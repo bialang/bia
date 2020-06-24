@@ -45,7 +45,8 @@ std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, g
 
 			input.read(static_cast<char*>(pattern), size);
 
-			auto gcable = gc.construct<member::native::regex>(static_cast<const char*>(pattern));
+			auto gcable =
+			    gc.construct<member::native::regex>(std::regex{ static_cast<const char*>(pattern) });
 
 			builder.add(gcable.peek());
 			gcable.start_monitor();
