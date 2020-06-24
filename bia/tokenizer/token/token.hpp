@@ -28,6 +28,11 @@ struct token
 		resource::view memory;
 	};
 
+	struct regex
+	{
+		resource::view memory;
+	};
+
 	struct batch
 	{
 		std::size_t count;
@@ -74,11 +79,12 @@ struct token
 		keyword,
 		operator_,
 		constant_string,
+		constant_regex,
 		constant_int,
 		constant_float,
 	};
 
-	util::variant<cmd_end, identifier, batch, control, keyword, operator_, string, int_type, double> value;
+	util::variant<cmd_end, identifier, batch, control, keyword, operator_, string, regex, int_type, double> value;
 };
 
 } // namespace token
