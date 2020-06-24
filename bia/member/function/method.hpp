@@ -4,6 +4,7 @@
 #include "../member.hpp"
 
 #include <bia/log/log.hpp>
+#include <type_traits>
 
 namespace bia {
 namespace member {
@@ -66,7 +67,9 @@ public:
 		return false;
 	}
 	void gc_mark_children(bool mark) const noexcept override
-	{}
+	{
+		_mark(_instance, mark);
+	}
 
 protected:
 	void register_gcables(gc::gc& gc) const noexcept override
@@ -75,6 +78,16 @@ protected:
 private:
 	Class& _instance;
 	function_type _function;
+
+	template<typename T>
+	static typename std::enable_if<std::is_base_of<gc::object::base, T>::value>::type _mark(T& ptr, bool mark)
+	{
+		gc::object::gc_mark(&ptr, mark);
+	}
+	template<typename T>
+	static typename std::enable_if<!std::is_base_of<gc::object::base, T>::value>::type _mark(T& ptr,
+	                                                                                         bool mark)
+	{}
 };
 
 } // namespace function
