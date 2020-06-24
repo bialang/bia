@@ -52,7 +52,7 @@ public:
 	{
 		return {};
 	}
-	member* get(const native::string& name) override
+	gc::gcable<member> get(const native::string& name) override
 	{
 		return nullptr;
 	}

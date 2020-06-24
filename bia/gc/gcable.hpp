@@ -22,10 +22,10 @@ public:
 	/**
 	 * Constructor.
 	 *
-	 * @param[in] gc the gc parent
 	 * @param[in] ptr the gcable pointer
+	 * @param[in] gc the gc parent
 	 */
-	gcable(gc* gc, Type* ptr) noexcept
+	gcable(Type* ptr, gc* gc = nullptr) noexcept
 	{
 		_gc  = gc;
 		_ptr = ptr;
@@ -116,12 +116,12 @@ public:
 	/*template<typename U>
 	typename std::enable_if<std::is_base_of<U, T>::value, gcable<U>>::type to()
 	{
-		gcable<U> r{ _gc, _ptr };
+	    gcable<U> r{ _gc, _ptr };
 
-		_gc  = nullptr;
-		_ptr = nullptr;
+	    _gc  = nullptr;
+	    _ptr = nullptr;
 
-		return r;
+	    return r;
 	}*/
 	gcable& operator=(gcable&& move) noexcept
 	{

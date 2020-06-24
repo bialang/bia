@@ -42,7 +42,7 @@ bia::gc::gcable<bia::member::member> regex::self_operation(self_operator op)
 	return {};
 }
 
-bia::member::member* regex::get(const native::string& name)
+bia::gc::gcable<bia::member::member> regex::get(const native::string& name)
 {
 	return nullptr;
 }

@@ -71,13 +71,13 @@ public:
 	{
 		return {};
 	}
-	member* get(const native::string& name) override
+	gc::gcable<member> get(const native::string& name) override
 	{
 		thread::lock::guard<thread::lock::mutex> lock{ _mutex };
 		const auto result = _map.find({ &name });
 
 		if (result != _map.end()) {
-			return result->second;
+			return result->second.get();
 		}
 
 		return nullptr;

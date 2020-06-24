@@ -7,13 +7,13 @@
 #include "object/header.hpp"
 
 #include <atomic>
+#include <bia/thread/lock/guard.hpp>
+#include <bia/thread/lock/spin_mutex.hpp>
+#include <bia/util/gsl.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-#include <bia/thread/lock/guard.hpp>
-#include <bia/thread/lock/spin_mutex.hpp>
 #include <type_traits>
-#include <bia/util/gsl.hpp>
 #include <utility>
 
 namespace bia {
@@ -90,7 +90,7 @@ public:
 	{
 		static_assert(alignof(T) == object::alignment, "cannot have a different object alignment");
 
-		return { this, new (_allocate_impl(sizeof(T), false).get()) T(std::forward<Args>(args)...) };
+		return { new (_allocate_impl(sizeof(T), false).get()) T(std::forward<Args>(args)...), this };
 	}
 	/**
 	 * Returns the memory allocator of this garbage collector. Memory allocated through this allocator will

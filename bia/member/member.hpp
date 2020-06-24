@@ -43,7 +43,7 @@ public:
 		 */
 		flag_clone_is_copy = 0x1,
 		/** if the member has a native numerical representaion */
-		flag_numeric = 0x2,
+		flag_numeric        = 0x2,
 		flag_floating_point = flag_numeric | 0x4
 	};
 
@@ -56,7 +56,7 @@ public:
 	virtual flag_type flags() const = 0;
 	/**
 	 * Tests this member.
-	 * 
+	 *
 	 * @note if the operation type is `test_operator::self`, right must be `*this`
 	 *
 	 * @param op the operation type
@@ -98,7 +98,7 @@ public:
 	 * @param name the name of the member
 	 * @returns the member or `nullptr` if it does not exist
 	 */
-	virtual member* get(const native::string& name) = 0;
+	virtual gc::gcable<member> get(const native::string& name) = 0;
 	/**
 	 * Returns a representation of this object as a floating point number.
 	 *
