@@ -47,6 +47,22 @@ inline gc::gcable<member::member> connect_method(const Class& instance,
 }
 
 template<typename Class, typename Return>
+inline gc::gcable<member::member> connect_method(Class& instance, Return (Class::*function)(parameters_type),
+                                                 parameters_type params, parameter_indices<0>)
+{
+	return creator::create((instance.*function)(params));
+}
+
+template<typename Class>
+inline gc::gcable<member::member> connect_method(Class& instance, void (Class::*function)(parameters_type),
+                                                 parameters_type params, parameter_indices<0>)
+{
+	(instance.*function)(params);
+
+	return {};
+}
+
+template<typename Class, typename Return>
 inline gc::gcable<member::member> connect_method(const Class& instance,
                                                  Return (Class::*function)(parameters_type) const,
                                                  parameters_type params, parameter_indices<0>)

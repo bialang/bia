@@ -104,6 +104,10 @@ public:
 	{
 		gc::object::gc_mark(_value.get(), mark);
 	}
+	gc::object::immutable_pointer<char> value() const
+	{
+		return _value;
+	}
 
 protected:
 	void register_gcables(gc::gc& gc) const noexcept override

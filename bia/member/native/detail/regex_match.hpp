@@ -1,19 +1,20 @@
-#ifndef BIA_MEMBER_NATIVE_REGEX_HPP_
-#define BIA_MEMBER_NATIVE_REGEX_HPP_
+#ifndef BIA_MEMBER_NATIVE_DETAIL_REGEX_MATCH_HPP_
+#define BIA_MEMBER_NATIVE_DETAIL_REGEX_MATCH_HPP_
 
-#include "../member.hpp"
-#include "detail/regex_match.hpp"
+#include "../../member.hpp"
 
+#include <bia/gc/object/pointer.hpp>
 #include <regex>
 
 namespace bia {
 namespace member {
 namespace native {
+namespace detail {
 
-class regex : public member
+class regex_match : public member
 {
 public:
-	regex(std::regex pattern);
+	regex_match(gc::object::immutable_pointer<char> string, std::cmatch match);
 	flag_type flags() const override;
 	test_type test(test_operator op, const member& right) const override;
 	gc::gcable<member> copy() const override;
@@ -31,11 +32,13 @@ protected:
 	void register_gcables(gc::gc& gc) const noexcept override;
 
 private:
-	std::regex _pattern;
+	gc::object::immutable_pointer<char> _string;
+	std::cmatch _match;
 
-	gc::gcable<detail::regex_match> _match(connector::parameters_type params);
+	gc::gcable<string> _group(std::size_t index) const;
 };
 
+} // namespace detail
 } // namespace native
 } // namespace member
 } // namespace bia
