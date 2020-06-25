@@ -56,7 +56,7 @@ inline exception::syntax_details regex(parameter& parameter)
 
 		// had no special meaning
 		if (escape) {
-			outenc->put(output, '/');
+			outenc->put(output, '\\');
 		}
 
 		escape = false;
