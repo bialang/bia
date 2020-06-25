@@ -1,12 +1,15 @@
 #include "list.hpp"
 
+#include "../function/method.hpp"
 #include "string.hpp"
 
-#include <bia/creator/creator.hpp>
+#include <bia/connector/connector-inl.hpp>
 #include <bia/thread/lock/guard.hpp>
-#include <bia/thread/lock/shared_lock.hpp>
 
 using namespace bia::member::native;
+
+list::list(std::vector<member*> data) noexcept : _data{ std::move(data) }
+{}
 
 list::flag_type list::flags() const
 {
@@ -24,7 +27,8 @@ list::test_type list::test(test_operator op, const member& right) const
 
 bia::gc::gcable<bia::member::member> list::copy() const
 {
-	return gc::gc::active_gc()->template construct<list>(*this);
+	return {};
+	// return gc::gc::active_gc()->template construct<list>(*this);
 }
 
 bia::gc::gcable<bia::member::member> list::invoke(parameters_type params)
@@ -45,9 +49,14 @@ bia::gc::gcable<bia::member::member> list::self_operation(self_operator op)
 bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 {
 	if (!name.compare("size")) {
-		thread::lock::shared_lock<decltype(_mutex)> lock{ _mutex };
-
-		return creator::create(_data.size());
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_size)>>(
+		    *this, &list::_size);
+	} else if (!name.compare("capacity")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_size)>>(
+		    *this, &list::_size);
+	} else if (!name.compare("push")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_push)>>(
+		    *this, &list::_push);
 	}
 
 	return {};
@@ -92,3 +101,28 @@ void list::gc_mark_children(bool mark) const noexcept
 
 void list::register_gcables(gc::gc& gc) const noexcept
 {}
+
+std::size_t list::_size() const
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	return _data.size();
+}
+
+std::size_t list::_capacity() const
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	return _data.capacity();
+}
+
+void list::_push(connector::parameters_type params)
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	_data.reserve(_data.size() + params.size());
+
+	for (auto i : params) {
+		_data.push_back(i);
+	}
+}

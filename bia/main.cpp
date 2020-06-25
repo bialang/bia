@@ -9,6 +9,17 @@ int main()
 	bia::engine engine{};
 
 	engine.module<bia::bsl::io>("io", engine.gc());
+	engine.function("list", [](bia::connector::parameters_type params) {
+		std::vector<bia::member::member*> list;
+
+		list.reserve(params.size());
+
+		for (auto i : params) {
+			list.push_back(i);
+		}
+
+		return list;
+	});
 
 	std::stringstream code;
 
@@ -16,11 +27,15 @@ int main()
 
 import io
 
-let i = /asd/
+let l = list(123, 232)
 
-let x = i == "hi yunus, ich bins yunus"
+l.push("hi")
+l.push("bye")
+l.push(0, 1, 2, 3, 4)
+l.push(99)
 
-io.print(x)
+io.print(l.size())
+io.print(l.capacity())
 
 )";
 

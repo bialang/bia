@@ -3,8 +3,8 @@
 
 #include "../member.hpp"
 
-#include <vector>
 #include <bia/thread/lock/spin_mutex.hpp>
+#include <vector>
 
 namespace bia {
 namespace member {
@@ -13,6 +13,7 @@ namespace native {
 class list : public member
 {
 public:
+	list(std::vector<member*> data) noexcept;
 	flag_type flags() const override;
 	test_type test(test_operator op, const member& right) const override;
 	gc::gcable<member> copy() const override;
@@ -32,6 +33,10 @@ protected:
 private:
 	std::vector<member*> _data;
 	mutable thread::lock::spin_mutex _mutex;
+
+	std::size_t _size() const;
+	std::size_t _capacity() const;
+	void _push(connector::parameters_type params);
 };
 
 } // namespace native
