@@ -34,6 +34,7 @@ private:
 	std::regex _pattern;
 
 	gc::gcable<detail::regex_match> _match(connector::parameters_type params);
+	gc::gcable<detail::regex_match> _search(connector::parameters_type params);
 };
 
 } // namespace native
