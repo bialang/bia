@@ -1,8 +1,14 @@
 #include "string.hpp"
 
+#include "../function/method.hpp"
+
+#include <algorithm>
+#include <bia/connector/connector-inl.hpp>
 #include <bia/gc/gc.hpp>
 #include <bia/log/log.hpp>
+#include <cctype>
 #include <cstring>
+
 using namespace bia::member::native;
 
 string::string(gc::object::immutable_pointer<char> value) noexcept : _value(value)
@@ -59,6 +65,14 @@ bia::gc::gcable<bia::member::member> string::self_operation(self_operator op)
 
 bia::gc::gcable<bia::member::member> string::get(const native::string& name)
 {
+	if (!name.compare("lower")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&string::_lower)>>(
+		    *this, &string::_lower);
+	} else if (!name.compare("upper")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&string::_upper)>>(
+		    *this, &string::_upper);
+	}
+
 	return {};
 }
 
@@ -111,4 +125,26 @@ bia::gc::object::immutable_pointer<char> string::value() const
 void string::register_gcables(gc::gc& gc) const noexcept
 {
 	gc.register_gcable(_value.get());
+}
+
+bia::gc::gcable<string> string::_lower() const
+{
+	const auto gc     = gc::gc::active_gc();
+	const auto length = std::char_traits<char>::length(_value.get());
+	const auto mem    = static_cast<char*>(gc->allocate(length + 1).release());
+
+	std::transform(_value.get(), _value.get() + length + 1, mem, [](char c) { return std::tolower(c); });
+
+	return gc->template construct<string>(mem);
+}
+
+bia::gc::gcable<string> string::_upper() const
+{
+	const auto gc     = gc::gc::active_gc();
+	const auto length = std::char_traits<char>::length(_value.get());
+	const auto mem    = static_cast<char*>(gc->allocate(length + 1).release());
+
+	std::transform(_value.get(), _value.get() + length + 1, mem, [](char c) { return std::toupper(c); });
+
+	return gc->template construct<string>(mem);
 }

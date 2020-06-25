@@ -42,6 +42,9 @@ protected:
 private:
 	/** the garbage collectible string */
 	gc::object::immutable_pointer<char> _value;
+
+	gc::gcable<string> _lower() const;
+	gc::gcable<string> _upper() const;
 };
 
 } // namespace native
