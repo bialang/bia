@@ -6,6 +6,7 @@
 #include <bia/member/native/floating_point.hpp>
 #include <bia/member/native/integer.hpp>
 #include <bia/member/native/string.hpp>
+#include <bia/util/type_traits/is_gcable.hpp>
 #include <cstddef>
 #include <cstring>
 #include <string>
@@ -48,6 +49,17 @@ inline gc::gcable<member::native::string> create(const char* value)
 	std::memcpy(str, value, length + 1);
 
 	return mem;
+}
+
+template<typename Type>
+inline typename std::enable_if<
+    util::type_traits::is_gcable<typename std::decay<Type>::type>::value &&
+        std::is_base_of<member::member,
+                        typename util::type_traits::is_gcable<typename std::decay<Type>::type>::type>::value,
+    Type>::type
+    create(Type&& value)
+{
+	return std::forward<Type>(value);
 }
 
 inline gc::gcable<member::native::string> create(const std::string& value)

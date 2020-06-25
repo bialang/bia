@@ -1,9 +1,9 @@
 #ifndef BIA_MEMBER_MEMBER_HPP_
 #define BIA_MEMBER_MEMBER_HPP_
 
-#include "connector.hpp"
 #include "operator_.hpp"
 
+#include <bia/connector/connector.hpp>
 #include <bia/gc/gcable.hpp>
 #include <bia/gc/object/base.hpp>
 #include <bia/gc/stack_view.hpp>
