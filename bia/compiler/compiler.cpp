@@ -34,6 +34,7 @@ void compiler::receive(util::span<const token*> tokens)
 		            "keyword",
 		            "operator_",
 		            "constant_string",
+					"constant_regex",
 		            "constant_int",
 		            "constant_float",
 		        }

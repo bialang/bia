@@ -63,7 +63,7 @@ endfunction()
 list(APPEND BIA_COMPONENTS base bvm bsl compiler)
 
 # base
-add_library(base $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:resource-obj>)
+add_library(base $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:member-obj> $<TARGET_OBJECTS:resource-obj>)
 target_include_directories(base PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
 
 link_dependency(base spdlog spdlog::spdlog)

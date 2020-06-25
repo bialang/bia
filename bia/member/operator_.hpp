@@ -11,14 +11,6 @@ enum class infix_operator : std::uint8_t
 	bitwise_or,
 	bitwise_xor,
 	bitwise_and,
-	equal,
-	not_equal,
-	less,
-	less_equal,
-	greater,
-	greater_equal,
-	in,
-	three_way_comparison,
 	bitwise_left_shift,
 	bitwise_right_shift,
 	addition,
@@ -27,6 +19,19 @@ enum class infix_operator : std::uint8_t
 	division,
 	remainder,
 	exponentation,
+};
+
+enum class test_operator : std::uint8_t
+{
+	self,
+	equal,
+	not_equal,
+	less,
+	less_equal,
+	greater,
+	greater_equal,
+	in,
+	three_way_comparison,
 };
 
 enum class self_operator : std::uint8_t

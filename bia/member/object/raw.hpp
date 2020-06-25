@@ -1,45 +1,42 @@
-#ifndef BIA_MEMBER_FUNCTION_STATIC_HPP_
-#define BIA_MEMBER_FUNCTION_STATIC_HPP_
+#ifndef BIA_MEMBER_OBJECT_RAW_HPP_
+#define BIA_MEMBER_OBJECT_RAW_HPP_
 
 #include "../member.hpp"
 
 #include <bia/gc/gc.hpp>
 #include <bia/log/log.hpp>
+#include <bia/util/gsl.hpp>
+#include <cstring>
+#include <utility>
 
 namespace bia {
 namespace member {
-namespace function {
+namespace object {
 
-template<typename Return, typename... Args>
-class static_ : public member
+template<typename Type>
+class raw : public member
 {
 public:
-	typedef Return (*function_type)(Args...);
-
-	/**
-	 * Constructor.
-	 */
-	static_(function_type function) noexcept : _function(function)
+	template<typename T>
+	raw(T&& value) noexcept : _value{ std::forward<T>(value) }
 	{}
-	~static_()
-	{
-		BIA_LOG(DEBUG, "destroying static function: {}", static_cast<void*>(this));
-	}
+	~raw()
+	{}
 	flag_type flags() const override
 	{
 		return flag_none;
 	}
-	test_type test(test_operator op, const member& right) const override
+	test_type test() const override
 	{
-		return 1;
+		return false;
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<static_>(_function);
+		return {};
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{
-		return connector::connect_static(_function, params);
+		return {};
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
@@ -63,12 +60,12 @@ public:
 	}
 	bool as_data(const std::type_info& type, void* output) override
 	{
-		return static_cast<const static_*>(this)->as_data(type, output);
+		return false;
 	}
 	bool as_data(const std::type_info& type, void* output) const override
 	{
-		if (type == typeid(function_type)) {
-			*static_cast<function_type*>(output) = _function;
+		if (type == typeid(Type*)) {
+			*static_cast<Type**>(output) = &_value;
 
 			return true;
 		}
@@ -83,10 +80,10 @@ protected:
 	{}
 
 private:
-	function_type _function;
+	Type _value;
 };
 
-} // namespace function
+} // namespace object
 } // namespace member
 } // namespace bia
 

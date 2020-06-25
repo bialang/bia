@@ -31,13 +31,13 @@ public:
 	{
 		return flag_none;
 	}
-	test_type test() const override
+	test_type test(test_operator op, const member& right) const override
 	{
 		return _value.get()[0] ? 1 : 0;
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<string>(_value).template to<member>();
+		return gc::gc::active_gc()->construct<string>(_value);
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{
@@ -57,9 +57,7 @@ public:
 
 			static_cast<char*>(mem.peek())[len0 + len1] = 0;
 
-			return gc::gc::active_gc()
-			    ->construct<string>(static_cast<char*>(mem.release()))
-			    .template to<member>();
+			return gc::gc::active_gc()->construct<string>(static_cast<char*>(mem.release()));
 		}
 
 		return {};
@@ -68,7 +66,7 @@ public:
 	{
 		return {};
 	}
-	member* get(const native::string& name) override
+	gc::gcable<member> get(const native::string& name) override
 	{
 		return nullptr;
 	}
@@ -105,6 +103,10 @@ public:
 	void gc_mark_children(bool mark) const noexcept override
 	{
 		gc::object::gc_mark(_value.get(), mark);
+	}
+	gc::object::immutable_pointer<char> value() const
+	{
+		return _value;
 	}
 
 protected:

@@ -26,6 +26,14 @@ typedef const parameters& parameters_type;
 template<typename Return, typename... Args>
 gc::gcable<member::member> connect_static(Return (*function)(Args...), parameters_type params);
 
+template<typename Class, typename Return, typename... Args>
+gc::gcable<member::member> connect_method(Class& instance, Return (Class::*function)(Args...),
+                                          parameters_type params);
+
+template<typename Class, typename Return, typename... Args>
+gc::gcable<member::member> connect_method(const Class& instance, Return (Class::*function)(Args...) const,
+                                          parameters_type params);
+
 } // namespace connector
 } // namespace bia
 

@@ -7,6 +7,7 @@
 #include "member.hpp"
 #include "number.hpp"
 #include "operators.hpp"
+#include "regex.hpp"
 #include "string.hpp"
 #include "whitespace_eater.hpp"
 
@@ -47,6 +48,13 @@ inline exception::syntax_details value(parameter& parameter)
 
 	// string
 	if (!string(parameter)) {
+		return {};
+	}
+
+	parameter.restore(old);
+
+	// regex
+	if (!regex(parameter)) {
 		return {};
 	}
 

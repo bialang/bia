@@ -6,10 +6,10 @@ arg_options = {
     "mso": [
         ("tos", "stack.tos()"),
         ("args", "stack.arg_at(ip.read<std::uint8_t>())"),
-        ("global_16", "globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())))"),
+        ("global_16", "globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()"),
         ("local_16", "stack.local_at(ip.read<std::uint16_t>())"),
         ("resource_16", "resources.at(ip.read<std::uint16_t>())"),
-        ("global_8", "globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())))"),
+        ("global_8", "globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()"),
         ("local_8", "stack.local_at(ip.read<std::uint8_t>())"),
         ("resource_8", "resources.at(ip.read<std::uint8_t>())")
     ],
@@ -52,7 +52,7 @@ break;"""),
 
     ("oc_instantiate", ("co", "mdo"), """const auto constant = {0};
 
-token->set({1}, creator::create(constant).to<bia::member::member>());
+token->template set<bia::member::member>({1}, creator::create(constant));
 
 break;"""),
 
@@ -95,6 +95,13 @@ token->set(dest, src->self_operation(op));
 
 break;"""),
 
+    ("oc_test", ("mso", "mso"), """const auto op = ip.read<test_operator>();
+const auto src = member_pointer({0});
+
+test_register = src->test(op, *member_pointer({1}));
+
+break;"""),
+
 
     ("oc_get", ("mso", "ro", "mdo"), """const auto src = member_pointer({0});
 const auto name = string_pointer({1});
@@ -106,11 +113,6 @@ break;"""),
     ("oc_import", ("ro", "mdo"), """auto name = string_pointer({0});
 
 token->set({1}, loader.load(name).get());
-
-break;"""),
-
-
-    ("oc_test", ("mso",), """test_register = member_pointer({0})->test();
 
 break;"""),
 

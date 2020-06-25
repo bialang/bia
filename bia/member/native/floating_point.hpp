@@ -1,5 +1,5 @@
-#ifndef BIA_MEMBER_NATIVE_INTEGER_HPP_
-#define BIA_MEMBER_NATIVE_INTEGER_HPP_
+#ifndef BIA_MEMBER_NATIVE_FLOATING_POINT_HPP_
+#define BIA_MEMBER_NATIVE_FLOATING_POINT_HPP_
 
 #include "../member.hpp"
 #include "detail/operations.hpp"
@@ -12,10 +12,7 @@ namespace bia {
 namespace member {
 namespace native {
 
-/**
- * A simple int member capable of holding an int64. This member is always unmutable.
- */
-class integer : public member
+class floating_point : public member
 {
 public:
 	/**
@@ -23,15 +20,15 @@ public:
 	 *
 	 * @param value the initial value
 	 */
-	integer(int_type value) noexcept : _value(value)
+	floating_point(float_type value) noexcept : _value(value)
 	{}
-	~integer()
+	~floating_point()
 	{
-		BIA_LOG(DEBUG, "destroying int={}: {}", _value, static_cast<void*>(this));
+		BIA_LOG(DEBUG, "destroying floating point={}: {}", _value, static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{
-		return flag_numeric;
+		return flag_floating_point;
 	}
 	test_type test(test_operator op, const member& right) const override
 	{
@@ -39,11 +36,11 @@ public:
 			return _value ? 1 : 0;
 		}
 
-		return detail::test_operation(_value, op, right.as_int());
+		return detail::test_operation(_value, op, right.as_float());
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<integer>(_value);
+		return gc::gc::active_gc()->construct<floating_point>(_value);
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{
@@ -51,13 +48,14 @@ public:
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
-		return gc::gc::active_gc()->construct<integer>(detail::operation(_value, op, right.as_int()));
+		return gc::gc::active_gc()->construct<floating_point>(
+		    detail::operation(_value, op, right.as_float()));
 	}
 	gc::gcable<member> self_operation(self_operator op) override
 	{
 		switch (op) {
-		case self_operator::unary_minus: return gc::gc::active_gc()->construct<integer>(-_value);
-		case self_operator::bitwise_not: return gc::gc::active_gc()->construct<integer>(~_value);
+		case self_operator::unary_minus: return gc::gc::active_gc()->construct<floating_point>(-_value);
+		default: break;
 		}
 
 		return {};
@@ -68,11 +66,11 @@ public:
 	}
 	float_type as_float() const noexcept override
 	{
-		return static_cast<float_type>(_value);
+		return _value;
 	}
 	int_type as_int() const noexcept override
 	{
-		return _value;
+		return static_cast<int_type>(_value);
 	}
 	bool as_data(const std::type_info& type, void* output) override
 	{
@@ -80,8 +78,8 @@ public:
 	}
 	bool as_data(const std::type_info& type, void* output) const override
 	{
-		if (type == typeid(int_type*)) {
-			*static_cast<const int_type**>(output) = &_value;
+		if (type == typeid(float_type*)) {
+			*static_cast<const float_type**>(output) = &_value;
 
 			return true;
 		}
@@ -96,7 +94,7 @@ protected:
 	{}
 
 private:
-	const int_type _value;
+	const float_type _value;
 };
 
 } // namespace native

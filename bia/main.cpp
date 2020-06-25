@@ -15,7 +15,12 @@ int main()
 	code << u8R"(
 
 import io
-io.print(128 and 99, 2, sep="heyho", 4)
+
+let i = /asd/
+
+let x = i == "hi yunus, ich bins yunus"
+
+io.print(x)
 
 )";
 

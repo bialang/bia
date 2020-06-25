@@ -53,9 +53,7 @@ inline bia::member::native::string*
 inline bia::gc::gcable<bia::member::member> make_key_value_pair(bia::member::native::string* key,
                                                                 bia::member::member* value)
 {
-	return bia::gc::gc::active_gc()
-	    ->construct<bia::member::native::key_value_pair>(key, value)
-	    .template to<bia::member::member>();
+	return bia::gc::gc::active_gc()->construct<bia::member::native::key_value_pair>(key, value);
 }
 
 void bvm::execute(context& context, util::span<const util::byte*> instructions, gc::root& resources)
@@ -64,6 +62,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 	using flag = bia::member::member::flag;
 	using bia::member::infix_operator;
 	using bia::member::self_operator;
+	using bia::member::test_operator;
 
 	instruction_pointer ip{ instructions.begin(), instructions.end() };
 	bia::member::member::test_type test_register{ 10 };
@@ -188,7 +187,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_8): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -200,7 +199,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_8): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -212,7 +211,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_16): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -224,7 +223,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_16): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -235,7 +234,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -355,7 +354,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_8): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -367,7 +366,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_8): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -379,7 +378,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_16): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -391,7 +390,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_16): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -402,7 +401,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -616,7 +615,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -627,7 +626,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -638,7 +637,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -649,7 +648,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_16): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -660,7 +659,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -775,7 +774,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -786,7 +785,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_8): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -797,7 +796,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_16): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -809,7 +808,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_16): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -820,7 +819,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -931,7 +930,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -943,7 +942,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -955,7 +954,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -967,7 +966,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -978,7 +977,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -989,7 +988,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1000,7 +999,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1011,7 +1010,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1022,7 +1021,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1033,7 +1032,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -1044,9 +1043,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1056,9 +1055,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1068,9 +1067,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1081,9 +1080,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1093,9 +1092,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -1106,7 +1105,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
 		      mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1118,7 +1117,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
 		      mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1130,7 +1129,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
 		      mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1142,7 +1141,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1153,7 +1152,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -1164,7 +1163,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1175,7 +1174,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1186,7 +1185,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1198,7 +1197,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1209,7 +1208,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -1220,9 +1219,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1233,9 +1232,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
 		      mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1246,9 +1245,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
 		      mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1259,9 +1258,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1271,9 +1270,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -1283,7 +1282,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1294,7 +1293,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1305,7 +1304,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1316,7 +1315,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1327,7 +1326,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -1338,7 +1337,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1349,7 +1348,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -1360,7 +1359,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1371,7 +1370,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -1382,7 +1381,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -1503,7 +1502,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_8): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1515,7 +1514,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_8): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1527,7 +1526,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_16): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1539,7 +1538,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_16): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1550,7 +1549,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -1671,7 +1670,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_8): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1683,7 +1682,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_8): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1695,7 +1694,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_16): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1707,7 +1706,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_16): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1718,7 +1717,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -1933,7 +1932,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1944,7 +1943,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -1955,7 +1954,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1967,7 +1966,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_16): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -1978,7 +1977,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -2094,7 +2093,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2106,7 +2105,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_8): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2118,7 +2117,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_local_16): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -2130,7 +2129,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		      mdo_global_16): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -2141,7 +2140,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -2252,7 +2251,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2264,7 +2263,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2276,7 +2275,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2288,7 +2287,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2299,7 +2298,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -2310,7 +2309,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2321,7 +2320,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2332,7 +2331,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2344,7 +2343,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2355,7 +2354,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -2366,9 +2365,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2379,9 +2378,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
 		      mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2392,9 +2391,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
 		      mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -2405,9 +2404,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -2417,9 +2416,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -2430,7 +2429,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
 		      mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2442,7 +2441,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
 		      mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2454,7 +2453,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
 		      mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2466,7 +2465,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2477,7 +2476,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -2488,7 +2487,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2500,7 +2499,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
 		      mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2512,7 +2511,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
 		      mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2524,7 +2523,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2535,7 +2534,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -2547,9 +2546,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
 		      mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2560,9 +2559,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
 		      mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2573,9 +2572,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
 		      mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -2586,9 +2585,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count -
 		      mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -2598,9 +2597,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -2610,7 +2609,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2621,7 +2620,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2632,7 +2631,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2643,7 +2642,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2654,7 +2653,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -2665,7 +2664,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2676,7 +2675,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
@@ -2687,7 +2686,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2698,7 +2697,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
@@ -2709,7 +2708,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
 			const auto left =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto right = member_pointer(stack.tos());
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
@@ -2821,7 +2820,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2832,7 +2831,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2843,7 +2842,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -2854,7 +2853,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_16): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -2865,7 +2864,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -2976,7 +2975,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2987,7 +2986,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_8): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -2998,7 +2997,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_16): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -3009,7 +3008,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_16): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -3020,7 +3019,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -3231,7 +3230,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -3242,7 +3241,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -3253,7 +3252,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -3264,7 +3263,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_16): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -3275,7 +3274,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -3386,7 +3385,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -3397,7 +3396,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_8): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
 
@@ -3408,7 +3407,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_16): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -3419,7 +3418,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_16): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
 
@@ -3430,7 +3429,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_tos * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
 			const auto left = member_pointer(stack.tos());
 			const auto right =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto op = ip.read<infix_operator>();
 			auto& dest    = stack.push();
 
@@ -3541,273 +3540,273 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_instantiate - co_null * mdo_count - mdo_local_8): {
 			const auto constant = nullptr;
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_null * mdo_count - mdo_global_8): {
 			const auto constant = nullptr;
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_null * mdo_count - mdo_local_16): {
 			const auto constant = nullptr;
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_null * mdo_count - mdo_global_16): {
 			const auto constant = nullptr;
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_null * mdo_count - mdo_tos): {
 			const auto constant = nullptr;
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_local_8): {
 			const auto constant = test_register;
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_global_8): {
 			const auto constant = test_register;
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_local_16): {
 			const auto constant = test_register;
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_global_16): {
 			const auto constant = test_register;
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_test_register * mdo_count - mdo_tos): {
 			const auto constant = test_register;
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_double * mdo_count - mdo_tos): {
 			const auto constant = ip.read<double>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_64 * mdo_count - mdo_tos): {
 			const auto constant = ip.read<std::int64_t>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_32 * mdo_count - mdo_tos): {
 			const auto constant = ip.read<std::int32_t>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_16 * mdo_count - mdo_tos): {
 			const auto constant = ip.read<std::int16_t>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_local_8): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_global_8): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.local_at(ip.read<std::uint8_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint8_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_local_16): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_global_16): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.local_at(ip.read<std::uint16_t>()),
-			           creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.local_at(ip.read<std::uint16_t>()),
+			                                         creator::create(constant));
 
 			break;
 		}
 		case (oc_instantiate - co_int_8 * mdo_count - mdo_tos): {
 			const auto constant = ip.read<std::int8_t>();
 
-			token->set(stack.push(), creator::create(constant).to<bia::member::member>());
+			token->template set<bia::member::member>(stack.push(), creator::create(constant));
 
 			break;
 		}
@@ -3924,8 +3923,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
@@ -3935,8 +3935,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
@@ -3946,8 +3947,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
@@ -3957,8 +3959,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_global_16): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
@@ -3968,8 +3971,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_8 * mdo_count - mdo_tos): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.push(), std::move(result));
@@ -4089,8 +4093,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
@@ -4100,8 +4105,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_global_8): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
@@ -4111,8 +4117,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_local_16): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
@@ -4122,8 +4129,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_global_16): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
@@ -4133,8 +4141,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_invoke - mso_global_16 * mdo_count - mdo_tos): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
-			auto result = member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))
-			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+			auto result =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek())
+			        ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
 
 			stack.drop(count);
 			token->set(stack.push(), std::move(result));
@@ -4322,35 +4331,35 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			break;
 		}
 		case (oc_refer - mso_global_8 * mdo_count - mdo_local_8): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek();
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src);
 
 			break;
 		}
 		case (oc_refer - mso_global_8 * mdo_count - mdo_global_8): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek();
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src);
 
 			break;
 		}
 		case (oc_refer - mso_global_8 * mdo_count - mdo_local_16): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek();
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src);
 
 			break;
 		}
 		case (oc_refer - mso_global_8 * mdo_count - mdo_global_16): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek();
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src);
 
 			break;
 		}
 		case (oc_refer - mso_global_8 * mdo_count - mdo_tos): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek();
 
 			token->set(stack.push(), src);
 
@@ -4427,35 +4436,35 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			break;
 		}
 		case (oc_refer - mso_global_16 * mdo_count - mdo_local_8): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek();
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src);
 
 			break;
 		}
 		case (oc_refer - mso_global_16 * mdo_count - mdo_global_8): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek();
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src);
 
 			break;
 		}
 		case (oc_refer - mso_global_16 * mdo_count - mdo_local_16): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek();
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src);
 
 			break;
 		}
 		case (oc_refer - mso_global_16 * mdo_count - mdo_global_16): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek();
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src);
 
 			break;
 		}
 		case (oc_refer - mso_global_16 * mdo_count - mdo_tos): {
-			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>())));
+			auto src = globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek();
 
 			token->set(stack.push(), src);
 
@@ -4643,7 +4652,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
@@ -4655,7 +4664,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
@@ -4667,7 +4676,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
@@ -4679,7 +4688,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_8 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
@@ -4691,7 +4700,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_8 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.push(), src->copy());
@@ -4813,7 +4822,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
@@ -4825,7 +4834,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_16 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
@@ -4837,7 +4846,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_16 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
@@ -4849,7 +4858,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_16 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
@@ -4861,7 +4870,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_clone - mso_global_16 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			if (src->flags() & flag::flag_clone_is_copy) {
 				token->set(stack.push(), src->copy());
@@ -5053,7 +5062,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
 
@@ -5061,7 +5070,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
 
@@ -5069,7 +5078,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
 
@@ -5077,7 +5086,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_8 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
 
@@ -5085,7 +5094,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_8 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 
 			token->set(stack.push(), src->copy());
 
@@ -5163,7 +5172,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
 
@@ -5171,7 +5180,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_16 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
 
@@ -5179,7 +5188,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_16 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
 
@@ -5187,7 +5196,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_16 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
 
@@ -5195,7 +5204,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_copy - mso_global_16 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 
 			token->set(stack.push(), src->copy());
 
@@ -5364,7 +5373,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_8 * mdo_count - mdo_local_8): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			auto& dest = stack.local_at(ip.read<std::uint8_t>());
 
 			token->set(dest, src->self_operation(op));
@@ -5374,7 +5383,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_8 * mdo_count - mdo_global_8): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			auto& dest = stack.local_at(ip.read<std::uint8_t>());
 
 			token->set(dest, src->self_operation(op));
@@ -5384,7 +5393,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_8 * mdo_count - mdo_local_16): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			auto& dest = stack.local_at(ip.read<std::uint16_t>());
 
 			token->set(dest, src->self_operation(op));
@@ -5394,7 +5403,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_8 * mdo_count - mdo_global_16): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			auto& dest = stack.local_at(ip.read<std::uint16_t>());
 
 			token->set(dest, src->self_operation(op));
@@ -5404,7 +5413,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_8 * mdo_count - mdo_tos): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			auto& dest = stack.push();
 
 			token->set(dest, src->self_operation(op));
@@ -5504,7 +5513,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_16 * mdo_count - mdo_local_8): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			auto& dest = stack.local_at(ip.read<std::uint8_t>());
 
 			token->set(dest, src->self_operation(op));
@@ -5514,7 +5523,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_16 * mdo_count - mdo_global_8): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			auto& dest = stack.local_at(ip.read<std::uint8_t>());
 
 			token->set(dest, src->self_operation(op));
@@ -5524,7 +5533,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_16 * mdo_count - mdo_local_16): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			auto& dest = stack.local_at(ip.read<std::uint16_t>());
 
 			token->set(dest, src->self_operation(op));
@@ -5534,7 +5543,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_16 * mdo_count - mdo_global_16): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			auto& dest = stack.local_at(ip.read<std::uint16_t>());
 
 			token->set(dest, src->self_operation(op));
@@ -5544,7 +5553,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_self_operator - mso_global_16 * mdo_count - mdo_tos): {
 			const auto op = ip.read<self_operator>();
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			auto& dest = stack.push();
 
 			token->set(dest, src->self_operation(op));
@@ -5638,6 +5647,566 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			auto& dest     = stack.push();
 
 			token->set(dest, src->self_operation(op));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_8 * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_resource_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_local_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_global_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_resource_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_local_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_global_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_args): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_tos): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_resource_16 * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_local_16 * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_resource_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_local_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_global_8): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_resource_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_local_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_global_16): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_args): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_tos): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_args * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_tos * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
 
 			break;
 		}
@@ -5883,7 +6452,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_32 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -5892,7 +6461,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_32 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -5901,7 +6470,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_32 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -5910,7 +6479,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_32 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -5919,7 +6488,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_32 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.push(), src->get(*name));
@@ -5928,7 +6497,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_16 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -5937,7 +6506,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_16 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -5946,7 +6515,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_16 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -5955,7 +6524,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_16 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -5964,7 +6533,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_16 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.push(), src->get(*name));
@@ -5973,7 +6542,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_8 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -5982,7 +6551,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_8 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -5991,7 +6560,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_8 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -6000,7 +6569,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_8 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -6009,7 +6578,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_8 * ro_count * mdo_count - ro_8 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.push(), src->get(*name));
@@ -6258,7 +6827,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_32 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -6267,7 +6836,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_32 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -6276,7 +6845,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_32 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -6285,7 +6854,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_32 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -6294,7 +6863,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_32 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
 
 			token->set(stack.push(), src->get(*name));
@@ -6303,7 +6872,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_16 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -6312,7 +6881,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_16 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -6321,7 +6890,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_16 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -6330,7 +6899,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_16 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -6339,7 +6908,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_16 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
 
 			token->set(stack.push(), src->get(*name));
@@ -6348,7 +6917,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_8 * mdo_count - mdo_local_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -6357,7 +6926,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_8 * mdo_count - mdo_global_8): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
@@ -6366,7 +6935,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_8 * mdo_count - mdo_local_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -6375,7 +6944,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_8 * mdo_count - mdo_global_16): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
@@ -6384,7 +6953,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case (oc_get - mso_global_16 * ro_count * mdo_count - ro_8 * mdo_count - mdo_tos): {
 			const auto src =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))));
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
 			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.push(), src->get(*name));
@@ -6733,48 +7302,6 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
 
 			token->set(stack.push(), loader.load(name).get());
-
-			break;
-		}
-		case (oc_test - mso_resource_8): {
-			test_register = member_pointer(resources.at(ip.read<std::uint8_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_local_8): {
-			test_register = member_pointer(stack.local_at(ip.read<std::uint8_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_global_8): {
-			test_register =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))))->test();
-
-			break;
-		}
-		case (oc_test - mso_resource_16): {
-			test_register = member_pointer(resources.at(ip.read<std::uint16_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_local_16): {
-			test_register = member_pointer(stack.local_at(ip.read<std::uint16_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_global_16): {
-			test_register =
-			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))))->test();
-
-			break;
-		}
-		case (oc_test - mso_args): {
-			test_register = member_pointer(stack.arg_at(ip.read<std::uint8_t>()))->test();
-
-			break;
-		}
-		case (oc_test - mso_tos): {
-			test_register = member_pointer(stack.tos())->test();
 
 			break;
 		}

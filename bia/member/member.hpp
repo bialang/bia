@@ -1,9 +1,9 @@
 #ifndef BIA_MEMBER_MEMBER_HPP_
 #define BIA_MEMBER_MEMBER_HPP_
 
-#include "connector.hpp"
 #include "operator_.hpp"
 
+#include <bia/connector/connector.hpp>
 #include <bia/gc/gcable.hpp>
 #include <bia/gc/object/base.hpp>
 #include <bia/gc/stack_view.hpp>
@@ -28,7 +28,7 @@ public:
 	typedef std::int64_t int_type;
 	/** the flag type */
 	typedef int flag_type;
-	/** the type for testing operations */
+	/** the type for testing operations; is able to hold at least: -1, 0 and 1 */
 	typedef int test_type;
 	typedef connector::parameters_type parameters_type;
 	typedef std::uint8_t parameter_count_type;
@@ -43,7 +43,8 @@ public:
 		 */
 		flag_clone_is_copy = 0x1,
 		/** if the member has a native numerical representaion */
-		flag_numeric = 0x2
+		flag_numeric        = 0x2,
+		flag_floating_point = flag_numeric | 0x4
 	};
 
 	virtual ~member() = default;
@@ -56,9 +57,13 @@ public:
 	/**
 	 * Tests this member.
 	 *
+	 * @note if the operation type is `test_operator::self`, right must be `*this`
+	 *
+	 * @param op the operation type
+	 * @param right the right-hand side
 	 * @returns `1` if the test succeeded, otherwise `0`
 	 */
-	virtual test_type test() const = 0;
+	virtual test_type test(test_operator op, const member& right) const = 0;
 	/**
 	 * Creates a new copy of this member.
 	 *
@@ -93,7 +98,7 @@ public:
 	 * @param name the name of the member
 	 * @returns the member or `nullptr` if it does not exist
 	 */
-	virtual member* get(const native::string& name) = 0;
+	virtual gc::gcable<member> get(const native::string& name) = 0;
 	/**
 	 * Returns a representation of this object as a floating point number.
 	 *

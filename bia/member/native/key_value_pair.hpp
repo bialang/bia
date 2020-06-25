@@ -32,13 +32,13 @@ public:
 	{
 		return flag_none;
 	}
-	test_type test() const override
+	test_type test(test_operator op, const member& right) const override
 	{
 		return 0;
 	}
 	gc::gcable<member> copy() const override
 	{
-		return gc::gc::active_gc()->construct<key_value_pair>(_key.get(), _value.get()).template to<member>();
+		return gc::gc::active_gc()->construct<key_value_pair>(_key.get(), _value.get());
 	}
 	gc::gcable<member> invoke(parameters_type params) override
 	{
@@ -52,7 +52,7 @@ public:
 	{
 		return {};
 	}
-	member* get(const native::string& name) override
+	gc::gcable<member> get(const native::string& name) override
 	{
 		return nullptr;
 	}
