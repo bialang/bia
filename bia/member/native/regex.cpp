@@ -5,6 +5,7 @@
 #include "string.hpp"
 
 #include <bia/connector/connector-inl.hpp>
+#include <bia/creator/creator.hpp>
 
 using namespace bia::member::native;
 
@@ -54,6 +55,8 @@ bia::gc::gcable<bia::member::member> regex::get(const native::string& name)
 	} else if (!name.compare("search")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&regex::_search)>>(
 		    *this, &regex::_search);
+	} else if (!name.compare("name")) {
+		return creator::create("std::regex");
 	}
 
 	return {};

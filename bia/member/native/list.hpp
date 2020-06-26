@@ -37,6 +37,11 @@ private:
 	std::size_t _size() const;
 	std::size_t _capacity() const;
 	void _push(connector::parameters_type params);
+	void _pop(connector::parameters_type params);
+	void _reserve(std::size_t size);
+	void _shrink_to_fit();
+	bool _empty();
+	void _clear();
 };
 
 } // namespace native

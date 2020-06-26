@@ -1,10 +1,12 @@
 #include "list.hpp"
 
+#include "../cast/cast.hpp"
 #include "../function/method.hpp"
 #include "string.hpp"
 
 #include <bia/connector/connector-inl.hpp>
 #include <bia/thread/lock/guard.hpp>
+#include <bia/util/aggregate.hpp>
 
 using namespace bia::member::native;
 
@@ -52,11 +54,27 @@ bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_size)>>(
 		    *this, &list::_size);
 	} else if (!name.compare("capacity")) {
-		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_size)>>(
-		    *this, &list::_size);
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_capacity)>>(
+		    *this, &list::_capacity);
 	} else if (!name.compare("push")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_push)>>(
 		    *this, &list::_push);
+	} else if (!name.compare("pop")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_pop)>>(
+		    *this, &list::_pop);
+	} else if (!name.compare("reserve")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_reserve)>>(
+		    *this, &list::_reserve);
+	} else if (!name.compare("shrink_to_fit")) {
+		return gc::gc::active_gc()
+		    ->template construct<function::method<true, decltype(&list::_shrink_to_fit)>>(
+		        *this, &list::_shrink_to_fit);
+	} else if (!name.compare("empty")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_empty)>>(
+		    *this, &list::_empty);
+	} else if (!name.compare("clear")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_clear)>>(
+		    *this, &list::_clear);
 	}
 
 	return {};
@@ -125,4 +143,41 @@ void list::_push(connector::parameters_type params)
 	for (auto i : params) {
 		_data.push_back(i);
 	}
+}
+
+void list::_pop(connector::parameters_type params)
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	const auto count = params.size() == 1 ? util::min(cast::cast<std::size_t>(*params[0]), _data.size()) : 1;
+
+	_data.erase(_data.end() - count, _data.end());
+}
+
+void list::_reserve(std::size_t size)
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	_data.reserve(size);
+}
+
+void list::_shrink_to_fit()
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	_data.shrink_to_fit();
+}
+
+bool list::_empty()
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	return _data.empty();
+}
+
+void list::_clear()
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	_data.clear();
 }
