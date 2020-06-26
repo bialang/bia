@@ -18,14 +18,13 @@ import io
 
 let l = list(123, 232)
 
-l.push("hi")
-l.push("bye")
-l.push(0, 1, 2, 3, 4)
-l.push(99)
+io.print(l.front(), l.size())
 
-let x = l.size()
-io.print(x)
-io.print(l.capacity())
+l.insert(0, "hi", "bye")
+io.print(l.front(), l.size())
+
+l.reverse()
+io.print(l.front(), l.size())
 
 )";
 

@@ -40,8 +40,13 @@ private:
 	void _pop(connector::parameters_type params);
 	void _reserve(std::size_t size);
 	void _shrink_to_fit();
-	bool _empty();
+	bool _empty() const;
 	void _clear();
+	member* _front() const;
+	member* _back() const;
+	void _insert(connector::parameters_type params);
+	void _erase(connector::parameters_type params);
+	void _reverse();
 };
 
 } // namespace native

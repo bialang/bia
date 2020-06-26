@@ -63,6 +63,11 @@ inline typename std::enable_if<
 	return std::forward<Type>(value);
 }
 
+inline gc::gcable<member::member> create(member::member* value) noexcept
+{
+	return { value };
+}
+
 inline gc::gcable<member::native::string> create(const std::string& value)
 {
 	return create(value.c_str());

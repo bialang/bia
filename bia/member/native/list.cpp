@@ -75,6 +75,21 @@ bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 	} else if (!name.compare("clear")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_clear)>>(
 		    *this, &list::_clear);
+	} else if (!name.compare("front")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_front)>>(
+		    *this, &list::_front);
+	} else if (!name.compare("back")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_back)>>(
+		    *this, &list::_back);
+	} else if (!name.compare("insert")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_insert)>>(
+		    *this, &list::_insert);
+	} else if (!name.compare("erase")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_erase)>>(
+		    *this, &list::_erase);
+	} else if (!name.compare("reverse")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_reverse)>>(
+		    *this, &list::_reverse);
 	}
 
 	return {};
@@ -168,7 +183,7 @@ void list::_shrink_to_fit()
 	_data.shrink_to_fit();
 }
 
-bool list::_empty()
+bool list::_empty() const
 {
 	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
@@ -180,4 +195,54 @@ void list::_clear()
 	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
 	_data.clear();
+}
+
+bia::member::member* list::_front() const
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	if (_data.empty()) {
+		throw;
+	}
+
+	return _data.front();
+}
+
+bia::member::member* list::_back() const
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	if (_data.empty()) {
+		throw;
+	}
+
+	return _data.back();
+}
+
+void list::_insert(connector::parameters_type params)
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	const auto index = util::min(cast::cast<std::size_t>(*params[0]), _data.size());
+
+	_data.reserve(_data.size() + params.size() - 1);
+	_data.insert(_data.begin() + index, params.begin() + 1, params.end());
+}
+
+void list::_erase(connector::parameters_type params)
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	const auto index = util::min(cast::cast<std::size_t>(*params[0]), _data.size());
+	const auto count =
+	    params.size() > 1 ? util::min(cast::cast<std::size_t>(*params[1]), _data.size() - index) : 1;
+
+	_data.erase(_data.begin() + index, _data.begin() + index + count);
+}
+
+void list::_reverse()
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	std::reverse(_data.begin(), _data.end());
 }
