@@ -13,17 +13,31 @@ namespace parse {
 
 inline exception::syntax_details operators(parameter& parameter)
 {
-	constexpr operator_ ops[] = {
-		operator_::exponentation, operator_::multiplication, operator_::division,
-		operator_::remainder,     operator_::addition,       operator_::subtraction,
-		operator_::equal,         operator_::not_equal,      operator_::three_way_comparison,
-		operator_::less_equal,    operator_::greater_equal,  operator_::less,
-		operator_::greater,       operator_::logical_and,    operator_::logical_and,
-		operator_::logical_or,    operator_::logical_or,     operator_::in,
-		operator_::bitwise_and,   operator_::bitwise_or,     operator_::bitwise_xor
-	};
-	const auto x = any_of(parameter, "invalid operator", "**", "*", "/", "%", "+", "-", "==", "!=", "<=>",
-	                      "<=", ">=", "<", ">", "and", "&&", "or", "||", "in", "&", "|", "^");
+	constexpr operator_ ops[] = { operator_::member_access,
+		                          operator_::exponentation,
+		                          operator_::multiplication,
+		                          operator_::division,
+		                          operator_::remainder,
+		                          operator_::addition,
+		                          operator_::subtraction,
+		                          operator_::equal,
+		                          operator_::not_equal,
+		                          operator_::three_way_comparison,
+		                          operator_::less_equal,
+		                          operator_::greater_equal,
+		                          operator_::less,
+		                          operator_::greater,
+		                          operator_::logical_and,
+		                          operator_::logical_and,
+		                          operator_::logical_or,
+		                          operator_::logical_or,
+		                          operator_::in,
+		                          operator_::bitwise_and,
+		                          operator_::bitwise_or,
+		                          operator_::bitwise_xor };
+	const auto x =
+	    any_of(parameter, "invalid operator", ".", "**", "*", "/", "%", "+", "-", "==", "!=", "<=>",
+	           "<=", ">=", "<", ">", "and", "&&", "or", "||", "in", "&", "|", "^");
 
 	if (x.second) {
 		return x.second;

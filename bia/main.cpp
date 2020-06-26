@@ -16,11 +16,15 @@ int main()
 
 import io
 
-let i = /asd/
+let l = list(123, 232)
 
-let x = i == "hi yunus, ich bins yunus"
+io.print(l.front(), l.size())
 
-io.print(x)
+l.insert(0, "hi", "bye")
+io.print(l.front(), l.size())
+
+l.reverse()
+io.print(l.front(), l.size())
 
 )";
 

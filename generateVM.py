@@ -11,7 +11,8 @@ arg_options = {
         ("resource_16", "resources.at(ip.read<std::uint16_t>())"),
         ("global_8", "globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()"),
         ("local_8", "stack.local_at(ip.read<std::uint8_t>())"),
-        ("resource_8", "resources.at(ip.read<std::uint8_t>())")
+        ("resource_8", "resources.at(ip.read<std::uint8_t>())"),
+        ("builtin", "context.builtin(ip.read<member::builtin>())")
     ],
     "mdo": [
         ("tos", "stack.push()"),
@@ -34,11 +35,11 @@ arg_options = {
         ("16", "resources.at(ip.read<std::uint16_t>())"),
         ("32", "resources.at(ip.read<std::uint32_t>())")
     ],
-	"oo": [
-		("8", "ip.read<std::int8_t>()"),
-		("16", "ip.read<std::int16_t>()"),
-		("32", "ip.read<std::int32_t>()")
-	]
+    "oo": [
+        ("8", "ip.read<std::int8_t>()"),
+        ("16", "ip.read<std::int16_t>()"),
+        ("32", "ip.read<std::int32_t>()")
+    ]
 }
 opcodes = [
     ("oc_operator", ("mso", "mso", "mdo"), """const auto left = member_pointer({0});
@@ -117,13 +118,13 @@ token->set({1}, loader.load(name).get());
 break;"""),
 
 
-	("oc_jump", ("oo",), """const auto offset = {0};
+    ("oc_jump", ("oo",), """const auto offset = {0};
 
 ip += offset;
 
 break;"""),
 
-	("oc_jump_true", ("oo",), """const auto offset = {0};
+    ("oc_jump_true", ("oo",), """const auto offset = {0};
 
 if (test_register) {{
 	ip += offset;
@@ -131,7 +132,7 @@ if (test_register) {{
 
 break;"""),
 
-	("oc_jump_false", ("oo",), """const auto offset = {0};
+    ("oc_jump_false", ("oo",), """const auto offset = {0};
 
 if (!test_register) {{
 	ip += offset;

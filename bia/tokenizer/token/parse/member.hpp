@@ -14,23 +14,14 @@ namespace parse {
 
 inline exception::syntax_details member(parameter& parameter)
 {
-	goto gt_begin;
+	auto once = false;
 
 	while (true) {
-		{
-			const auto pos = parameter.input.tellg();
-
-			if (parameter.encoder.read(parameter.input) != '.') {
-				parameter.input.seekg(pos);
-
-				break;
-			}
-		}
-
-	gt_begin:;
 		if (const auto err = identifier(parameter)) {
-			return err;
+			return once ? exception::syntax_details{} : err;
 		}
+
+		once = true;
 
 		while (true) {
 			const auto old = parameter.backup();
@@ -42,8 +33,6 @@ inline exception::syntax_details member(parameter& parameter)
 			}
 		}
 	}
-
-	return {};
 }
 
 } // namespace parse

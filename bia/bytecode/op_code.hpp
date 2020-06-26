@@ -36,6 +36,7 @@ enum member_source_option
 	mso_global_8,
 	mso_local_8,
 	mso_resource_8,
+	mso_builtin,
 
 	mso_count
 };
@@ -63,6 +64,11 @@ struct local
 struct resource
 {
 	std::uint16_t index;
+};
+
+enum class builtin : std::uint8_t
+{
+	list
 };
 
 } // namespace member

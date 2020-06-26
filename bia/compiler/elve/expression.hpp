@@ -27,27 +27,26 @@ inline bool is_test_operator(tokenizer::token::operator_ op)
 }
 
 template<typename Destination>
-inline tokens_type value(present present, tokens_type tokens, Destination&& destination)
+inline tokens_type value(present present, tokens_type tokens, Destination destination)
 {
 	using tokenizer::token::token;
 
 	BIA_EXPECTS(!tokens.empty());
 
 	switch (static_cast<token::type>(tokens.data()->value.index())) {
-	case token::type::identifier: return member(present, tokens, std::forward<Destination>(destination));
+	case token::type::identifier: return member(present, tokens, destination);
 	case token::type::keyword: {
 		int val = 0;
 
-		switch (static_cast<token::keyword>(tokens.data()->value.get<token::keyword>())) {
+		switch (tokens.data()->value.get<token::keyword>()) {
 		case token::keyword::true_: val = 1;
 		case token::keyword::false_: {
-			present.writer.write<true, bytecode::oc_instantiate>(val, std::forward<Destination>(destination));
+			present.writer.write<true, bytecode::oc_instantiate>(val, destination);
 
 			break;
 		}
 		case token::keyword::null: {
-			present.writer.write<true, bytecode::oc_instantiate>(nullptr,
-			                                                     std::forward<Destination>(destination));
+			present.writer.write<true, bytecode::oc_instantiate>(nullptr, destination);
 
 			break;
 		}
@@ -185,26 +184,39 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 			continue;
 		}
 
-		// right hand
-		tokens = expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, op_precedence, jumper);
-
-		const bytecode::member::local right{ present.variables.add_tmp().id };
-
-		// call operator
-		if (detail::is_test_operator(op)) {
-			present.writer.write<true, bytecode::oc_test>(
-			    static_cast<typename std::underlying_type<member::test_operator>::type>(to_test_operator(op)),
-			    left, right);
-			present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, left);
-		} else {
-			present.writer.write<true, bytecode::oc_operator>(
-			    left, right,
-			    static_cast<typename std::underlying_type<member::infix_operator>::type>(
-			        to_infix_operator(op)),
+		if (op == operator_::member_access) {
+			present.writer.write<true, bytecode::oc_get>(
+			    left,
+			    bytecode::member::resource{
+			        present.resources.index_of(tokens.data()[1].value.get<token::identifier>().memory) },
 			    left);
+
+			tokens = member_call(present, tokens.subspan(2), left, left);
+		} else {
+			// right hand
+			tokens =
+			    expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, op_precedence, jumper);
+
+			const bytecode::member::local right{ present.variables.add_tmp().id };
+
+			// call operator
+			if (detail::is_test_operator(op)) {
+				present.writer.write<true, bytecode::oc_test>(
+				    static_cast<typename std::underlying_type<member::test_operator>::type>(
+				        to_test_operator(op)),
+				    left, right);
+				present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, left);
+			} else {
+				present.writer.write<true, bytecode::oc_operator>(
+				    left, right,
+				    static_cast<typename std::underlying_type<member::infix_operator>::type>(
+				        to_infix_operator(op)),
+				    left);
+			}
+
+			present.writer.write<true, bytecode::oc_drop>(1);
+			present.variables.remove_tmp();
 		}
-		present.writer.write<true, bytecode::oc_drop>(1);
-		present.variables.remove_tmp();
 	}
 
 	// apply self operator

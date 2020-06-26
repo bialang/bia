@@ -100,9 +100,7 @@ inline exception::syntax_details expression(parameter& parameter)
 	while (true) {
 		const auto old = parameter.backup();
 
-		if (const auto err = eat_whitespaces(parameter)) {
-			break;
-		}
+		eat_whitespaces(parameter);
 
 		if (const auto err = operators(parameter)) {
 			parameter.restore(old);
@@ -121,7 +119,11 @@ inline exception::syntax_details expression(parameter& parameter)
 				}
 			}
 
-			if (const auto err = term(parameter)) {
+			if (op == operator_::member_access) {
+				if (const auto err = member(parameter)) {
+					return err;
+				}
+			} else if (const auto err = term(parameter)) {
 				return err;
 			}
 		}

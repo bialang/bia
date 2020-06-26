@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <bia/connector/connector-inl.hpp>
+#include <bia/creator/creator.hpp>
 #include <bia/gc/gc.hpp>
 #include <bia/log/log.hpp>
 #include <cctype>
@@ -71,6 +72,8 @@ bia::gc::gcable<bia::member::member> string::get(const native::string& name)
 	} else if (!name.compare("upper")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&string::_upper)>>(
 		    *this, &string::_upper);
+	} else if (!name.compare("length")) {
+		return creator::create(std::char_traits<char>::length(_value.get()));
 	}
 
 	return {};

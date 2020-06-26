@@ -76,6 +76,527 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		const auto op_code = ip.next_op_code();
 
 		switch (op_code) {
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_8 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_8 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_global_16): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_8 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_resource_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_local_16 * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_8): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_global_8): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_local_16): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_16 * mdo_count -
+		      mdo_global_16): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_global_16 * mdo_count - mdo_tos): {
+			const auto left = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto op = ip.read<infix_operator>();
+			auto& dest    = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_args * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_args * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_args * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_args * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_args * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_tos * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_tos * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_builtin * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_builtin * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_builtin * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_builtin * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
 		case (oc_operator - mso_resource_8 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_local_8): {
 			const auto left  = member_pointer(resources.at(ip.read<std::uint8_t>()));
@@ -509,6 +1030,56 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_local_8): {
 			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
@@ -920,6 +1491,61 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_8 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
 			const auto left  = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_8 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
 
@@ -1390,6 +2016,60 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_builtin * mdo_count -
+		      mdo_local_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_builtin * mdo_count -
+		      mdo_global_8): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_builtin * mdo_count -
+		      mdo_local_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_builtin * mdo_count -
+		      mdo_global_16): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
 		case (oc_operator - mso_resource_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_local_8): {
 			const auto left  = member_pointer(resources.at(ip.read<std::uint16_t>()));
@@ -1825,6 +2505,56 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
 		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_resource_8 * mdo_count -
 		      mdo_local_8): {
 			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
@@ -2241,6 +2971,62 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_local_16 * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
 			const auto left  = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_8): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_builtin * mdo_count -
+		      mdo_global_16): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_global_16 * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
 
@@ -2717,6 +3503,56 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_args * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_resource_8 * mdo_count - mdo_local_8): {
 			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right = member_pointer(resources.at(ip.read<std::uint8_t>()));
@@ -3120,6 +3956,56 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case (oc_operator - mso_args * mso_count * mdo_count - mso_tos * mdo_count - mdo_tos): {
 			const auto left  = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
 			const auto right = member_pointer(stack.tos());
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.push();
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_8): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_builtin * mdo_count - mdo_local_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_builtin * mdo_count - mdo_global_16): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto op    = ip.read<infix_operator>();
+			auto& dest       = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, left->operation(*right, op));
+
+			break;
+		}
+		case (oc_operator - mso_tos * mso_count * mdo_count - mso_builtin * mdo_count - mdo_tos): {
+			const auto left  = member_pointer(stack.tos());
+			const auto right = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
 			const auto op    = ip.read<infix_operator>();
 			auto& dest       = stack.push();
 
@@ -3810,6 +4696,61 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_invoke - mso_builtin * mdo_count - mdo_local_8): {
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+
+			stack.drop(count);
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+
+			break;
+		}
+		case (oc_invoke - mso_builtin * mdo_count - mdo_global_8): {
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+
+			stack.drop(count);
+			token->set(stack.local_at(ip.read<std::uint8_t>()), std::move(result));
+
+			break;
+		}
+		case (oc_invoke - mso_builtin * mdo_count - mdo_local_16): {
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+
+			stack.drop(count);
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+
+			break;
+		}
+		case (oc_invoke - mso_builtin * mdo_count - mdo_global_16): {
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+
+			stack.drop(count);
+			token->set(stack.local_at(ip.read<std::uint16_t>()), std::move(result));
+
+			break;
+		}
+		case (oc_invoke - mso_builtin * mdo_count - mdo_tos): {
+			const auto count  = ip.read<std::uint8_t>();
+			const auto kwargs = ip.read<std::uint8_t>();
+			auto result       = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()))
+			                  ->invoke(connector::parameters{ stack.frame(count), count, kwargs });
+
+			stack.drop(count);
+			token->set(stack.push(), std::move(result));
+
+			break;
+		}
 		case (oc_invoke - mso_resource_8 * mdo_count - mdo_local_8): {
 			const auto count  = ip.read<std::uint8_t>();
 			const auto kwargs = ip.read<std::uint8_t>();
@@ -4260,6 +5201,41 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_refer - mso_builtin * mdo_count - mdo_local_8): {
+			auto src = context.builtin(ip.read<bytecode::member::builtin>());
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src);
+
+			break;
+		}
+		case (oc_refer - mso_builtin * mdo_count - mdo_global_8): {
+			auto src = context.builtin(ip.read<bytecode::member::builtin>());
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src);
+
+			break;
+		}
+		case (oc_refer - mso_builtin * mdo_count - mdo_local_16): {
+			auto src = context.builtin(ip.read<bytecode::member::builtin>());
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src);
+
+			break;
+		}
+		case (oc_refer - mso_builtin * mdo_count - mdo_global_16): {
+			auto src = context.builtin(ip.read<bytecode::member::builtin>());
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src);
+
+			break;
+		}
+		case (oc_refer - mso_builtin * mdo_count - mdo_tos): {
+			auto src = context.builtin(ip.read<bytecode::member::builtin>());
+
+			token->set(stack.push(), src);
+
+			break;
+		}
 		case (oc_refer - mso_resource_8 * mdo_count - mdo_local_8): {
 			auto& src = resources.at(ip.read<std::uint8_t>());
 
@@ -4537,6 +5513,61 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			auto& src = stack.tos();
 
 			token->set(stack.push(), src);
+
+			break;
+		}
+		case (oc_clone - mso_builtin * mdo_count - mdo_local_8): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			if (src->flags() & flag::flag_clone_is_copy) {
+				token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
+			} else {
+				token->set(stack.local_at(ip.read<std::uint8_t>()), src);
+			}
+
+			break;
+		}
+		case (oc_clone - mso_builtin * mdo_count - mdo_global_8): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			if (src->flags() & flag::flag_clone_is_copy) {
+				token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
+			} else {
+				token->set(stack.local_at(ip.read<std::uint8_t>()), src);
+			}
+
+			break;
+		}
+		case (oc_clone - mso_builtin * mdo_count - mdo_local_16): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			if (src->flags() & flag::flag_clone_is_copy) {
+				token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
+			} else {
+				token->set(stack.local_at(ip.read<std::uint16_t>()), src);
+			}
+
+			break;
+		}
+		case (oc_clone - mso_builtin * mdo_count - mdo_global_16): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			if (src->flags() & flag::flag_clone_is_copy) {
+				token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
+			} else {
+				token->set(stack.local_at(ip.read<std::uint16_t>()), src);
+			}
+
+			break;
+		}
+		case (oc_clone - mso_builtin * mdo_count - mdo_tos): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			if (src->flags() & flag::flag_clone_is_copy) {
+				token->set(stack.push(), src->copy());
+			} else {
+				token->set(stack.push(), src);
+			}
 
 			break;
 		}
@@ -4990,6 +6021,41 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_copy - mso_builtin * mdo_count - mdo_local_8): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
+
+			break;
+		}
+		case (oc_copy - mso_builtin * mdo_count - mdo_global_8): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src->copy());
+
+			break;
+		}
+		case (oc_copy - mso_builtin * mdo_count - mdo_local_16): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
+
+			break;
+		}
+		case (oc_copy - mso_builtin * mdo_count - mdo_global_16): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src->copy());
+
+			break;
+		}
+		case (oc_copy - mso_builtin * mdo_count - mdo_tos): {
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			token->set(stack.push(), src->copy());
+
+			break;
+		}
 		case (oc_copy - mso_resource_8 * mdo_count - mdo_local_8): {
 			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
 
@@ -5277,6 +6343,51 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			const auto src = member_pointer(stack.tos());
 
 			token->set(stack.push(), src->copy());
+
+			break;
+		}
+		case (oc_self_operator - mso_builtin * mdo_count - mdo_local_8): {
+			const auto op  = ip.read<self_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, src->self_operation(op));
+
+			break;
+		}
+		case (oc_self_operator - mso_builtin * mdo_count - mdo_global_8): {
+			const auto op  = ip.read<self_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			auto& dest     = stack.local_at(ip.read<std::uint8_t>());
+
+			token->set(dest, src->self_operation(op));
+
+			break;
+		}
+		case (oc_self_operator - mso_builtin * mdo_count - mdo_local_16): {
+			const auto op  = ip.read<self_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, src->self_operation(op));
+
+			break;
+		}
+		case (oc_self_operator - mso_builtin * mdo_count - mdo_global_16): {
+			const auto op  = ip.read<self_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			auto& dest     = stack.local_at(ip.read<std::uint16_t>());
+
+			token->set(dest, src->self_operation(op));
+
+			break;
+		}
+		case (oc_self_operator - mso_builtin * mdo_count - mdo_tos): {
+			const auto op  = ip.read<self_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			auto& dest     = stack.push();
+
+			token->set(dest, src->self_operation(op));
 
 			break;
 		}
@@ -5650,6 +6761,90 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_test - mso_builtin * mso_count - mso_builtin): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
+
+			break;
+		}
+		case (oc_test - mso_builtin * mso_count - mso_resource_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_builtin * mso_count - mso_local_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_builtin * mso_count - mso_global_8): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_builtin * mso_count - mso_resource_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(op, *member_pointer(resources.at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_builtin * mso_count - mso_local_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(op, *member_pointer(stack.local_at(ip.read<std::uint16_t>())));
+
+			break;
+		}
+		case (oc_test - mso_builtin * mso_count - mso_global_16): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(
+			    op,
+			    *member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()));
+
+			break;
+		}
+		case (oc_test - mso_builtin * mso_count - mso_args): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(op, *member_pointer(stack.arg_at(ip.read<std::uint8_t>())));
+
+			break;
+		}
+		case (oc_test - mso_builtin * mso_count - mso_tos): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+
+			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_resource_8 * mso_count - mso_builtin): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
+
+			break;
+		}
 		case (oc_test - mso_resource_8 * mso_count - mso_resource_8): {
 			const auto op  = ip.read<test_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint8_t>()));
@@ -5718,6 +6913,14 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_test - mso_local_8 * mso_count - mso_builtin): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
+
+			break;
+		}
 		case (oc_test - mso_local_8 * mso_count - mso_resource_8): {
 			const auto op  = ip.read<test_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
@@ -5783,6 +6986,15 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint8_t>()));
 
 			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_global_8 * mso_count - mso_builtin): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
 
 			break;
 		}
@@ -5862,6 +7074,14 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_test - mso_resource_16 * mso_count - mso_builtin): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
+
+			break;
+		}
 		case (oc_test - mso_resource_16 * mso_count - mso_resource_8): {
 			const auto op  = ip.read<test_operator>();
 			const auto src = member_pointer(resources.at(ip.read<std::uint16_t>()));
@@ -5930,6 +7150,14 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_test - mso_local_16 * mso_count - mso_builtin): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
+
+			break;
+		}
 		case (oc_test - mso_local_16 * mso_count - mso_resource_8): {
 			const auto op  = ip.read<test_operator>();
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
@@ -5995,6 +7223,15 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			const auto src = member_pointer(stack.local_at(ip.read<std::uint16_t>()));
 
 			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_test - mso_global_16 * mso_count - mso_builtin): {
+			const auto op = ip.read<test_operator>();
+			const auto src =
+			    member_pointer(globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek());
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
 
 			break;
 		}
@@ -6074,6 +7311,14 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_test - mso_args * mso_count - mso_builtin): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
+
+			break;
+		}
 		case (oc_test - mso_args * mso_count - mso_resource_8): {
 			const auto op  = ip.read<test_operator>();
 			const auto src = member_pointer(stack.arg_at(ip.read<std::uint8_t>()));
@@ -6142,6 +7387,14 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 
 			break;
 		}
+		case (oc_test - mso_tos * mso_count - mso_builtin): {
+			const auto op  = ip.read<test_operator>();
+			const auto src = member_pointer(stack.tos());
+
+			test_register = src->test(op, *member_pointer(context.builtin(ip.read<bytecode::member::builtin>())));
+
+			break;
+		}
 		case (oc_test - mso_tos * mso_count - mso_resource_8): {
 			const auto op  = ip.read<test_operator>();
 			const auto src = member_pointer(stack.tos());
@@ -6207,6 +7460,126 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			const auto src = member_pointer(stack.tos());
 
 			test_register = src->test(op, *member_pointer(stack.tos()));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_32 * mdo_count - mdo_local_8): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_32 * mdo_count - mdo_global_8): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_32 * mdo_count - mdo_local_16): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_32 * mdo_count - mdo_global_16): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_32 * mdo_count - mdo_tos): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint32_t>()));
+
+			token->set(stack.push(), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_16 * mdo_count - mdo_local_8): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_16 * mdo_count - mdo_global_8): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_16 * mdo_count - mdo_local_16): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_16 * mdo_count - mdo_global_16): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_16 * mdo_count - mdo_tos): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint16_t>()));
+
+			token->set(stack.push(), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_8 * mdo_count - mdo_local_8): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_8 * mdo_count - mdo_global_8): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint8_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_8 * mdo_count - mdo_local_16): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_8 * mdo_count - mdo_global_16): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.local_at(ip.read<std::uint16_t>()), src->get(*name));
+
+			break;
+		}
+		case (oc_get - mso_builtin * ro_count * mdo_count - ro_8 * mdo_count - mdo_tos): {
+			const auto src  = member_pointer(context.builtin(ip.read<bytecode::member::builtin>()));
+			const auto name = string_pointer(resources.at(ip.read<std::uint8_t>()));
+
+			token->set(stack.push(), src->get(*name));
 
 			break;
 		}
