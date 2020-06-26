@@ -185,26 +185,43 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 			continue;
 		}
 
-		// right hand
-		tokens = expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, op_precedence, jumper);
+		if (op == operator_::member_access) {
+			tokens = tokens.subspan(1);
 
-		const bytecode::member::local right{ present.variables.add_tmp().id };
+			while (true) {
+				const auto new_tokens = member_step(present, tokens, left, left);
 
-		// call operator
-		if (detail::is_test_operator(op)) {
-			present.writer.write<true, bytecode::oc_test>(
-			    static_cast<typename std::underlying_type<member::test_operator>::type>(to_test_operator(op)),
-			    left, right);
-			present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, left);
+				if (new_tokens.size() == tokens.size()) {
+					break;
+				}
+
+				tokens = new_tokens;
+			}
 		} else {
-			present.writer.write<true, bytecode::oc_operator>(
-			    left, right,
-			    static_cast<typename std::underlying_type<member::infix_operator>::type>(
-			        to_infix_operator(op)),
-			    left);
+			// right hand
+			tokens =
+			    expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, op_precedence, jumper);
+
+			const bytecode::member::local right{ present.variables.add_tmp().id };
+
+			// call operator
+			if (detail::is_test_operator(op)) {
+				present.writer.write<true, bytecode::oc_test>(
+				    static_cast<typename std::underlying_type<member::test_operator>::type>(
+				        to_test_operator(op)),
+				    left, right);
+				present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, left);
+			} else {
+				present.writer.write<true, bytecode::oc_operator>(
+				    left, right,
+				    static_cast<typename std::underlying_type<member::infix_operator>::type>(
+				        to_infix_operator(op)),
+				    left);
+			}
+
+			present.writer.write<true, bytecode::oc_drop>(1);
+			present.variables.remove_tmp();
 		}
-		present.writer.write<true, bytecode::oc_drop>(1);
-		present.variables.remove_tmp();
 	}
 
 	// apply self operator
