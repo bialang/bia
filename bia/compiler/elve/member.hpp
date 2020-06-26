@@ -63,29 +63,27 @@ inline tokens_type member(present present, tokens_type tokens, Destination desti
 {
 	using tokenizer::token::token;
 
-	BIA_EXPECTS(!tokens.empty());
+	BIA_EXPECTS(!tokens.empty() &&
+	            static_cast<token::type>(tokens.data()->value.index()) == token::type::identifier);
 
-	switch (static_cast<token::type>(tokens.data()->value.index())) {
-	case token::type::identifier: {
-		const auto index = present.variables.index_of(tokens.data()->value.get<token::identifier>().memory);
+	const auto& identifier = tokens.data()->value.get<token::identifier>();
 
-		// local source
-		if (index.second) {
-			BIA_EXPECTS(index.first.scope_id == 0);
-
-			return member_call(present, tokens.subspan(1), bytecode::member::local{ index.first.id },
-			                   destination);
-		} // global source
-		else {
-			return member_call(present, tokens.subspan(1), bytecode::member::global{ index.first.id },
-			                   destination);
-		}
+	if (identifier.is_builtin) {
+		return member_call(present, tokens.subspan(1), identifier.builtin, destination);
 	}
-	case token::type::builtin:
-		return member_call(present, tokens.subspan(1), tokens.data()->value.get<bytecode::member::builtin>(),
+
+	const auto index = present.variables.index_of(identifier.memory);
+
+	// local source
+	if (index.second) {
+		BIA_EXPECTS(index.first.scope_id == 0);
+
+		return member_call(present, tokens.subspan(1), bytecode::member::local{ index.first.id },
 		                   destination);
-	default: BIA_IMPLEMENTATION_ERROR("invalid token type");
 	}
+
+	// global source
+	return member_call(present, tokens.subspan(1), bytecode::member::global{ index.first.id }, destination);
 }
 
 } // namespace elve

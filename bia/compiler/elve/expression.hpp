@@ -34,7 +34,6 @@ inline tokens_type value(present present, tokens_type tokens, Destination destin
 	BIA_EXPECTS(!tokens.empty());
 
 	switch (static_cast<token::type>(tokens.data()->value.index())) {
-	case token::type::builtin:
 	case token::type::identifier: return member(present, tokens, destination);
 	case token::type::keyword: {
 		int val = 0;

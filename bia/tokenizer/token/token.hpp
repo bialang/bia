@@ -22,6 +22,8 @@ struct token
 	struct identifier
 	{
 		resource::view memory;
+		bool is_builtin;
+		bytecode::member::builtin builtin;
 	};
 
 	struct string
@@ -75,7 +77,6 @@ struct token
 	{
 		cmd_end,
 		identifier,
-		builtin,
 		batch,
 		control,
 		keyword,
@@ -86,8 +87,7 @@ struct token
 		constant_float,
 	};
 
-	util::variant<cmd_end, identifier, bytecode::member::builtin, batch, control, keyword, operator_, string,
-	              regex, int_type, double>
+	util::variant<cmd_end, identifier, batch, control, keyword, operator_, string, regex, int_type, double>
 	    value;
 };
 

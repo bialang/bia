@@ -3,9 +3,9 @@
 #include "elve/statement.hpp"
 
 #include <bia/exception/implementation_error.hpp>
-#include <initializer_list>
 #include <bia/log/log.hpp>
 #include <bia/util/gsl.hpp>
+#include <initializer_list>
 
 using namespace bia::compiler;
 
@@ -29,13 +29,12 @@ void compiler::receive(util::span<const token*> tokens)
 		        std::initializer_list<const char*>{
 		            "cmd_end",
 		            "identifier",
-					"builtin",
 		            "batch",
 		            "control",
 		            "keyword",
 		            "operator_",
 		            "constant_string",
-					"constant_regex",
+		            "constant_regex",
 		            "constant_int",
 		            "constant_float",
 		        }

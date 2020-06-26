@@ -95,13 +95,16 @@ bia::exception::syntax_details bia::tokenizer::token::parse::identifier(paramete
 
 			// valid identifier
 			if (!first) {
-				if (const auto builtin = builtin_comparator.result()) {
-					tp.bundle.add(token{ static_cast<bytecode::member::builtin>(builtins - builtin) });
-				} else {
-					// zero terminate
-					outenc->put(output, 0);
-					tp.bundle.add(token{ token::identifier{ streambuf.finish(resource::type::string) } });
-				}
+				// zero terminate
+				outenc->put(output, 0);
+
+				auto memory        = streambuf.finish(resource::type::string);
+				const auto builtin = builtin_comparator.result();
+
+				tp.bundle.add(token{
+				    token::identifier{ memory, builtin,
+				                       builtin ? static_cast<bytecode::member::builtin>(builtins - builtin)
+				                               : bytecode::member::builtin{} } });
 
 				return {};
 			}
