@@ -29,6 +29,7 @@ void compiler::receive(util::span<const token*> tokens)
 		        std::initializer_list<const char*>{
 		            "cmd_end",
 		            "identifier",
+					"builtin",
 		            "batch",
 		            "control",
 		            "keyword",

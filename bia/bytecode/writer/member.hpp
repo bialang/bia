@@ -4,10 +4,10 @@
 #include "../op_code.hpp"
 #include "common.hpp"
 
-#include <ostream>
-#include <type_traits>
 #include <bia/util/type_traits/equals_any.hpp>
 #include <bia/util/type_traits/type_index.hpp>
+#include <ostream>
+#include <type_traits>
 
 namespace bia {
 namespace bytecode {
@@ -16,7 +16,7 @@ namespace writer {
 template<typename T>
 using is_member_source =
     util::type_traits::equals_any_type<typename std::decay<T>::type, member::tos, member::args,
-                                       member::global, member::local, member::resource>;
+                                       member::global, member::local, member::resource, member::builtin>;
 template<typename T>
 using is_member_destination = util::type_traits::equals_any_type<typename std::decay<T>::type, member::tos,
                                                                  member::global, member::local>;
@@ -40,10 +40,23 @@ inline typename std::enable_if<is_indexed_member<T>::value>::type optimized_memb
 	optimized_write<Optimize>(output, member.index);
 }
 
+template<bool Optimize>
+inline void optimized_member(std::ostream& output, member::builtin builtin) noexcept
+{
+	optimized_write<false>(output,
+	                       static_cast<typename std::underlying_type<member::builtin>::type>(builtin));
+}
+
 template<bool Optimize, typename T>
 inline typename std::enable_if<is_indexless_member<T>::value>::type optimized_member(std::ostream&,
                                                                                      T) noexcept
 {}
+
+template<bool Optimize>
+inline member_source_option member_source_index(member::builtin) noexcept
+{
+	return member_source_option::mso_builtin;
+}
 
 template<bool Optimize, typename T>
 inline typename std::enable_if<is_member_source<T>::value && is_not_optimizeable_member<T>::value,
@@ -89,11 +102,11 @@ inline typename std::enable_if<is_member_destination<T>::value && is_optimizeabl
 template<bool Optimize>
 inline resource_option resource_index(member::resource resource) noexcept
 {
-    if (util::limit_checker<std::uint8_t>::in_bounds(resource.index)) {
-        return ro_8;
-    }
+	if (util::limit_checker<std::uint8_t>::in_bounds(resource.index)) {
+		return ro_8;
+	}
 
-    return ro_16;
+	return ro_16;
 }
 
 } // namespace writer
