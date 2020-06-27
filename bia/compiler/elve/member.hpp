@@ -83,7 +83,9 @@ inline tokens_type member(present present, tokens_type tokens, Destination desti
 	}
 
 	// global source
-	return member_call(present, tokens.subspan(1), bytecode::member::global{ index.first.id }, destination);
+	return member_call(present, tokens.subspan(1),
+	                   bytecode::member::global{ present.resources.index_of(identifier.memory) },
+	                   destination);
 }
 
 } // namespace elve

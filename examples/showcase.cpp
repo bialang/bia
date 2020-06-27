@@ -7,13 +7,29 @@ int main()
 {
 	bia::engine engine;
 
-	engine.function("hello_world", +[] { std::cout << "Hello, World! - C++\n"; });
+	engine.function("foo", [](bia::connector::parameters_type params) {
+		std::cout << "positionals:";
+
+		for (auto i : params.positionals()) {
+			std::cout << " " << i;
+		}
+
+		std::cout << "\nkwargs:";
+
+		for (auto i : params.kwargs()) {
+			std::cout << " " << bia::member::cast::cast<const char*>(*i->key()) << "=" << i->value();
+		}
+
+		std::cout << std::endl;
+	});
 	engine.module<bia::bsl::io>("io", engine.gc());
 
 	std::stringstream code;
 
 	code << u8R"(
 		import io
+
+		foo(1, 2, "string", z=0, x=23, "another positional", something=true)
 
 		let l = list(1)
 		l.push("hi")
