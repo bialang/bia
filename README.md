@@ -58,9 +58,9 @@ Bia can be built without any third-party dependencies! However, some are recomme
 ### Compilation
 
 ```sh
-git clone https://github.com/terrakuh/Bia.git
-mkdir Bia/build
-cd Bia/build
+git clone https://github.com/bialang/bia.git
+mkdir bia/build
+cd bia/build
 
 cmake ..
 cmake --build .
