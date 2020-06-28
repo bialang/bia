@@ -3,6 +3,7 @@
 
 #include "declaration.hpp"
 #include "expression.hpp"
+#include "for_each.hpp"
 #include "if_.hpp"
 #include "import.hpp"
 #include "present.hpp"
@@ -28,6 +29,7 @@ inline tokens_type statement(present present, tokens_type tokens)
 		case token::keyword::import: tokens = import(present, tokens); break;
 		case token::keyword::while_: tokens = while_(present, tokens); break;
 		case token::keyword::if_: tokens = elve::if_(present, tokens); break;
+		case token::keyword::for_: tokens = elve::for_each(present, tokens); break;
 		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
 		}
 

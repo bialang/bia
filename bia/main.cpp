@@ -1,14 +1,30 @@
 #include <bia/bia.hpp>
 #include <bia/bsl/io.hpp>
 #include <bia/exception/syntax_error.hpp>
+#include <bia/member/function/generator.hpp>
 #include <iostream>
 #include <sstream>
+#include <typeinfo>
 
 int main()
 {
 	bia::engine engine{};
 
 	engine.module<bia::bsl::io>("io", engine.gc());
+	engine.function("range", [](int start, int end, int step) {
+		auto foo = [start, end, step]() mutable -> bia::gc::gcable<bia::member::member> {
+			if (start >= end) {
+				return {};
+			}
+
+			return bia::creator::create(start += step);
+		};
+
+		return bia::gc::gc::active_gc()
+		    ->construct<bia::member::function::generator<
+		        bia::member::function::method<false, decltype(&decltype(foo)::operator())>>>(
+		        foo, &decltype(foo)::operator());
+	});
 
 	std::stringstream code;
 
@@ -16,15 +32,16 @@ int main()
 
 import io
 
-let l = list(123, 232)
+let x = range(0, 99, 1)
 
-io.print(l.front(), l.size())
+io.print(x())
 
-l.insert(0, "hi", "bye")
-io.print(l.front(), l.size())
+for i in x {
+	io.print(i)
+}
 
-l.reverse()
-io.print(l.front(), l.size())
+// should it be still valid?
+io.print(i)
 
 )";
 

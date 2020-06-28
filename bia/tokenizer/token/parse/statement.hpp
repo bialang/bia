@@ -4,6 +4,7 @@
 #include "../parameter.hpp"
 #include "any_of.hpp"
 #include "expression.hpp"
+#include "for_each.hpp"
 #include "identifier.hpp"
 #include "if_.hpp"
 #include "while_.hpp"
@@ -98,6 +99,12 @@ inline exception::syntax_details single_stmt(parameter& parameter)
 	parameter.restore(old);
 
 	if (!if_(parameter)) {
+		return {};
+	}
+
+	parameter.restore(old);
+
+	if (!for_each(parameter)) {
 		return {};
 	}
 

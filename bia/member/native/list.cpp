@@ -90,6 +90,8 @@ bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 	} else if (!name.compare("reverse")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_reverse)>>(
 		    *this, &list::_reverse);
+	} else if (!name.compare("__iter__")) {
+		return {};
 	}
 
 	return {};
