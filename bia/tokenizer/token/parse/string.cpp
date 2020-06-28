@@ -1,18 +1,9 @@
-#ifndef BIA_TOKENZIER_TOKEN_PARSE_STRING_HPP_
-#define BIA_TOKENZIER_TOKEN_PARSE_STRING_HPP_
+#include "tokens.hpp"
 
-#include "../parameter.hpp"
-
-#include <bia/exception/syntax_error.hpp>
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/util/finally.hpp>
 
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-
-inline exception::syntax_details string(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::string(parameter& parameter)
 {
 	using namespace string::encoding;
 
@@ -30,14 +21,14 @@ inline exception::syntax_details string(parameter& parameter)
 		const auto cp = parameter.encoder.read(parameter.input);
 
 #define BIA_IMPL_STRING(a, b)                                                                                \
-case a: {                                                                                                    \
-	if (escape) {                                                                                            \
-		outenc->put(output, b);                                                                              \
-		escape = false;                                                                                      \
-		continue;                                                                                            \
-	}                                                                                                        \
-	break;                                                                                                   \
-}
+	case a: {                                                                                                \
+		if (escape) {                                                                                        \
+			outenc->put(output, b);                                                                          \
+			escape = false;                                                                                  \
+			continue;                                                                                        \
+		}                                                                                                    \
+		break;                                                                                               \
+	}
 
 		switch (cp) {
 			BIA_IMPL_STRING('a', '\a')
@@ -78,10 +69,3 @@ case a: {                                                                       
 		outenc->put(output, cp);
 	}
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif

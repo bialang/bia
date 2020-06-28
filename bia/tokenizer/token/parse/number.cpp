@@ -1,20 +1,13 @@
-#ifndef BIA_TOKENIZER_TOKEN_PARSE_NUMBER_HPP_
-#define BIA_TOKENIZER_TOKEN_PARSE_NUMBER_HPP_
+#include "tokens.hpp"
 
-#include "../parameter.hpp"
-
-#include <bia/exception/syntax_error.hpp>
 #include <limits>
 #include <string>
 
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-namespace detail {
-
-inline bool integer_add(token::int_type& value, string::encoding::code_point_type cp, int base)
+inline bool integer_add(bia::tokenizer::token::token::int_type& value,
+                        bia::string::encoding::code_point_type cp, int base)
 {
+	using bia::tokenizer::token::token;
+	
 	BIA_EXPECTS(cp >= '0' && cp <= '9');
 
 	const auto val = cp - '0';
@@ -30,16 +23,14 @@ inline bool integer_add(token::int_type& value, string::encoding::code_point_typ
 	return true;
 }
 
-inline bool floating_point_add(double& value, string::encoding::code_point_type cp, int base)
+inline bool floating_point_add(double& value, bia::string::encoding::code_point_type cp, int base)
 {
 	value += (cp - '0') / 10.0;
 
 	return true;
 }
 
-} // namespace detail
-
-inline exception::syntax_details number(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::number(parameter& parameter)
 {
 	enum class state
 	{
@@ -170,10 +161,3 @@ inline exception::syntax_details number(parameter& parameter)
 		return {};
 	}
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif

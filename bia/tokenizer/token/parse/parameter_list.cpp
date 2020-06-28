@@ -1,21 +1,11 @@
-#ifndef BIA_TOKENIZER_TOKEN_PARSE_PARAMETER_LIST_HPP_
-#define BIA_TOKENIZER_TOKEN_PARSE_PARAMETER_LIST_HPP_
-
-#include "../parameter.hpp"
-#include "identifier.hpp"
+#include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-#include <bia/exception/syntax_error.hpp>
-
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-
-exception::syntax_details expression(parameter& parameter);
-
-inline exception::syntax_details parameter_element(parameter& parameter)
+inline bia::exception::syntax_details parameter_element(bia::tokenizer::token::parameter& parameter)
 {
+	using namespace bia::tokenizer::token;
+	using namespace parse;
+
 	const auto old = parameter.backup();
 
 	parameter.bundle.add({ token::control{ token::control::type::key, 1 } });
@@ -35,7 +25,7 @@ inline exception::syntax_details parameter_element(parameter& parameter)
 	return expression(parameter);
 }
 
-inline exception::syntax_details parameter_list(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::parameter_list(parameter& parameter)
 {
 	auto pos = parameter.input.tellg();
 
@@ -46,8 +36,8 @@ inline exception::syntax_details parameter_list(parameter& parameter)
 	eat_whitespaces(parameter);
 
 	// parse first parameter
-	auto last       = parameter.bundle.add({ token::control{ token::control::type::bracket_open, 0 } });
-	const auto old  = parameter.backup();
+	auto last      = parameter.bundle.add({ token::control{ token::control::type::bracket_open, 0 } });
+	const auto old = parameter.backup();
 	const auto update_last = [&last, &parameter](enum token::control::type type) {
 		const auto index = parameter.bundle.add({ token::control{ type, 0 } });
 
@@ -95,10 +85,3 @@ gt_success:;
 
 	return {};
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif

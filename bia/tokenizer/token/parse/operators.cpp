@@ -1,17 +1,9 @@
-#ifndef BIA_TOKENIZER_TOKEN_PARSE_OPERATORS_HPP_
-#define BIA_TOKENIZER_TOKEN_PARSE_OPERATORS_HPP_
-
-#include "../parameter.hpp"
 #include "any_of.hpp"
+#include "tokens.hpp"
 
 #include <bia/util/gsl.hpp>
 
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-
-inline exception::syntax_details operators(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::operators(parameter& parameter)
 {
 	constexpr operator_ ops[] = { operator_::member_access,
 		                          operator_::exponentation,
@@ -49,10 +41,3 @@ inline exception::syntax_details operators(parameter& parameter)
 
 	return {};
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif
