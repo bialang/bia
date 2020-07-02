@@ -7,6 +7,8 @@ namespace bia {
 namespace member {
 namespace function {
 
+extern member* stop_iteration;
+
 template<typename Parent>
 class generator;
 
@@ -29,7 +31,9 @@ public:
 	{
 		auto result = method<Refer, Function>::invoke(params);
 
-		_valid = result.peek();
+		if (!(_valid = result.peek() != stop_iteration)) {
+			return {};
+		}
 
 		return result;
 	}
