@@ -16,6 +16,7 @@ inline tokens_type for_each(present present, tokens_type tokens)
 
 	BIA_EXPECTS(!tokens.empty() && is_keyword(tokens.data(), token::keyword::for_));
 
+	// create space on stack for dest variable
 	if (!present.variables.index_of(tokens.data()[1].value.get<token::identifier>().memory).second) {
 		present.writer.write<true, bytecode::oc_instantiate>(0, bytecode::member::tos{});
 		present.variables.add(tokens.data()[1].value.get<token::identifier>().memory);

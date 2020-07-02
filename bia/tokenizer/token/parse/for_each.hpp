@@ -45,6 +45,18 @@ inline exception::syntax_details for_each(parameter& parameter)
 		return err;
 	}
 
+	// add __iter__ call
+	{
+		parameter.bundle.add(token{ operator_::member_access });
+
+		auto streambuf = parameter.manager.start_memory(true);
+		std::ostream output{ &streambuf };
+
+		output << "__iter__";
+
+		parameter.bundle.add(token{ token::identifier{ streambuf.finish(resource::type::string), false } });
+	}
+
 	eat_whitespaces(parameter);
 
 	if (const auto err = batch(parameter, no_batch_call)) {

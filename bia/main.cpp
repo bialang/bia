@@ -13,11 +13,13 @@ int main()
 	engine.module<bia::bsl::io>("io", engine.gc());
 	engine.function("range", [](int start, int end, int step) {
 		auto foo = [start, end, step]() mutable -> bia::gc::gcable<bia::member::member> {
+			const auto current = start;
+
 			if ((start += step) >= end) {
 				return bia::member::function::stop_iteration;
 			}
 
-			return bia::creator::create(start);
+			return bia::creator::create(current);
 		};
 
 		return bia::gc::gc::active_gc()
@@ -32,6 +34,11 @@ int main()
 
 import io
 
+for i in range(0, 10, 2) {
+	io.print(i)
+}
+
+/*
 let x = range(0, 10, 1)
 
 io.print("outside the loop", x())
@@ -41,7 +48,7 @@ for i in x {
 }
 
 // should it be still valid?
-io.print(i)
+io.print(i)*/
 
 )";
 

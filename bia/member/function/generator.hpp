@@ -37,6 +37,14 @@ public:
 
 		return result;
 	}
+	gc::gcable<member> get(const native::string& name) override
+	{
+		if (!name.compare("__iter__")) {
+			return this;
+		}
+
+		return method<Refer, Function>::get(name);
+	}
 
 private:
 	bool _valid = false;
