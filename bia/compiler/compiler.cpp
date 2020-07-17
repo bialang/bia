@@ -11,10 +11,7 @@ using namespace bia::compiler;
 
 compiler::compiler(std::ostream& instructions, std::ostream& resource) noexcept
     : _writer{ instructions }, _resources{ resource }
-{
-	// open the script scope
-	_variables.open_scope();
-}
+{}
 
 void compiler::finish()
 {

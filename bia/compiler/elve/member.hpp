@@ -30,13 +30,9 @@ inline tokens_type member_call(present present, tokens_type tokens, Source sourc
 	while (true) {
 		const auto tuple = parameter(present, tokens);
 
-		present.writer.write<true, bytecode::oc_invoke>(present.variables.latest_variable().id -
-		                                                    std::get<1>(tuple),
-		                                                std::get<2>(tuple), destination, destination);
-
-		for (auto i = std::get<1>(tuple); i--;) {
-			present.variables.remove_tmp();
-		}
+		present.writer.write<true, bytecode::oc_invoke>(std::get<1>(tuple), std::get<2>(tuple), destination,
+		                                                destination);
+		present.variables.pop(std::get<1>(tuple) + std::get<2>(tuple));
 
 		tokens = std::get<0>(tuple);
 
@@ -63,14 +59,11 @@ inline tokens_type member(present present, tokens_type tokens, Destination desti
 		return member_call(present, tokens.subspan(1), identifier.builtin, destination);
 	}
 
-	const auto index = present.variables.index_of(identifier.memory);
+	const auto index = present.variables.find(identifier.memory);
 
 	// local source
 	if (index.second) {
-		BIA_EXPECTS(index.first.scope_id == 0);
-
-		return member_call(present, tokens.subspan(1), bytecode::member::local{ index.first.id },
-		                   destination);
+		return member_call(present, tokens.subspan(1), bytecode::member::local{ index.first }, destination);
 	}
 
 	// global source

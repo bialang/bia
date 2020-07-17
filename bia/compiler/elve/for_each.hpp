@@ -16,24 +16,16 @@ inline tokens_type for_each(present present, tokens_type tokens)
 
 	BIA_EXPECTS(!tokens.empty() && is_keyword(tokens.data(), token::keyword::for_));
 
-	// create space on stack for dest variable
-	if (!present.variables.index_of(tokens.data()[1].value.get<token::identifier>().memory).second) {
-		present.writer.write<true, bytecode::oc_instantiate>(
-		    0, bytecode::member::local{
-		           present.variables.add(tokens.data()[1].value.get<token::identifier>().memory).id });
-	}
-
-	bytecode::member::local dest{
-		present.variables.index_of(tokens.data()[1].value.get<token::identifier>().memory).first.id
-	};
+	const auto& dest_name = tokens.data()[1].value.get<token::identifier>().memory;
+	bytecode::member::local dest{ present.variables.add_overshadower(dest_name) };
 	jump_manager jumper{ &present.writer.output() };
-	bytecode::member::local generator{ present.variables.add_tmp().id };
+	bytecode::member::local generator{ present.variables.add_tmp() };
 
 	tokens = expression(present, tokens.subspan(2), generator);
 
 	// get next value
 	jumper.mark(jump_manager::destination::start);
-	present.writer.write<true, bytecode::oc_invoke>(present.variables.latest_variable().id, 0, generator, dest);
+	present.writer.write<true, bytecode::oc_invoke>(0, 0, generator, dest);
 
 	// test generator
 	present.writer.write<true, bytecode::oc_test>(
@@ -46,7 +38,8 @@ inline tokens_type for_each(present present, tokens_type tokens)
 
 	jumper.jump(jump_manager::type::unconditional, jump_manager::destination::start);
 	jumper.mark(jump_manager::destination::end);
-	present.variables.remove_tmp();
+	present.variables.remove_overshadower(dest_name);
+	present.variables.remove_tmp(generator.index);
 
 	return tokens;
 }
