@@ -1,54 +1,26 @@
 #ifndef BIA_BYTECODE_OP_CODE_HPP_
 #define BIA_BYTECODE_OP_CODE_HPP_
 
+#include "option.hpp"
+
 #include <bia/util/type_traits/equals_any.hpp>
+#include <bia/util/type_traits/type_select.hpp>
 #include <cstdint>
+#include <tuple>
 #include <type_traits>
 
 namespace bia {
 namespace bytecode {
 
-typedef std::uint16_t op_code_type;
+typedef std::int16_t op_code_type;
 
 constexpr auto max_instruction_size = sizeof(op_code_type) + 10;
-constexpr auto member_bits          = 4;
-constexpr auto constant_bits        = 4;
-constexpr auto size_bits            = 2;
-
-enum member_destination_option
-{
-	mdo_tos,
-	mdo_global_16,
-	mdo_local_16,
-	mdo_global_8,
-	mdo_local_8,
-
-	mdo_count
-};
-
-enum member_source_option
-{
-	mso_tos,
-	mso_args,
-	mso_global_16,
-	mso_local_16,
-	mso_resource_16,
-	mso_global_8,
-	mso_local_8,
-	mso_resource_8,
-	mso_builtin,
-
-	mso_count
-};
 
 namespace member {
 
-struct tos
-{};
-
 struct args
 {
-	std::uint8_t index;
+	std::uint16_t index;
 };
 
 struct global
@@ -76,70 +48,75 @@ enum class builtin : std::uint8_t
 struct test_register
 {};
 
-enum constant_option
-{
-	co_int_8,
-	co_int_16,
-	co_int_32,
-	co_int_64,
-	co_double,
-	co_test_register,
-	co_null,
-
-	co_count
-};
-
-enum resource_option
-{
-	ro_8,
-	ro_16,
-	ro_24,
-	ro_32,
-
-	ro_count
-};
-
-enum offset_option
-{
-	oo_8,
-	oo_16,
-	oo_24,
-	oo_32,
-
-	oo_count
-};
-
 enum op_code : op_code_type
 {
-	/** 12 bit variants */
-	oc_operator = -1 + mso_count * mso_count * mdo_count, // (left, right, operator, destination)
+	/** extended op code variantions */
+	oc_operator = 0 << 11, // [mso, mso, mdo](left source, right source, operator, destination)
+	oc_get      = 1 << 11, // [mso, ro, mdo](source, name resource, destination)
+	oc_test     = 2 << 11, // [mso, mso](operator, left source, right source)
 
-	/** 8 bit variants */
-	oc_instantiate   = oc_operator + co_count * mdo_count,     // (constant, member)
-	oc_invoke        = oc_instantiate + mso_count * mdo_count, // (uint8, source member, destination member)
-	oc_refer         = oc_invoke + mso_count * mdo_count,      // (member, member)
-	oc_clone         = oc_refer + mso_count * mdo_count,
-	oc_copy          = oc_clone + mso_count * mdo_count,         // (member, member)
-	oc_self_operator = oc_copy + mso_count * mdo_count,          // (operator, source, destination)
-	oc_test          = oc_self_operator + mso_count * mso_count, // (operator, left, right)
-
-	/** 6 bit variants */
-	oc_get    = oc_test + mso_count * ro_count * mdo_count, // (source member, resource, destination member)
-	oc_import = oc_get + ro_count * mdo_count,              // (name)
-
-	/** 4 bit variants */
-
-	/** 2 bit variants */
-	oc_jump       = oc_import + oo_count,    // (offset)
-	oc_jump_true  = oc_jump + oo_count,      // (offset)
-	oc_jump_false = oc_jump_true + oo_count, // (offset)
-	oc_name       = oc_jump_false + ro_count,
-
-	/** 0 bit variants */
-	oc_return_void,
-	oc_invert,
-	oc_drop, // (uint8)
+	/** normal op code variations */
+	oc_invoke =
+	    static_cast<op_code_type>(0x8000 | (0 << 7)), // [mso, mdo](count, kwarg count, source, destination)
+	oc_instantiate = static_cast<op_code_type>(0x8000 | (1 << 7)), // [co, mdo](constant, destination)
+	oc_refer       = static_cast<op_code_type>(0x8000 | (2 << 7)), // [mso, mdo](source, destination)
+	oc_clone       = static_cast<op_code_type>(0x8000 | (3 << 7)), // [mso, mdo](source, destination)
+	oc_copy        = static_cast<op_code_type>(0x8000 | (4 << 7)), // [mso, mdo](source, destination)
+	oc_self_operator =
+	    static_cast<op_code_type>(0x8000 | (5 << 7)), // [mso, mdo](operator, source, destination)
+	oc_import      = static_cast<op_code_type>(0x8000 | (6 << 7)),  // [ro, mdo](name resource, destination)
+	oc_jump        = static_cast<op_code_type>(0x8000 | (7 << 7)),  // [oo](offset)
+	oc_jump_true   = static_cast<op_code_type>(0x8000 | (8 << 7)),  // [oo](offset)
+	oc_jump_false  = static_cast<op_code_type>(0x8000 | (9 << 7)),  // [oo](offset)
+	oc_name        = static_cast<op_code_type>(0x8000 | (10 << 7)), // [ro](name resource)
+	oc_return_void = static_cast<op_code_type>(0x8000 | (11 << 7)), // []()
+	oc_invert      = static_cast<op_code_type>(0x8000 | (12 << 7)), // []()
+	oc_drop        = static_cast<op_code_type>(0x8000 | (13 << 7)), // []()
 };
+
+namespace detail {
+
+template<int BitOffset, typename Variation>
+constexpr Variation extract_variation(op_code_type x)
+{
+	return static_cast<Variation>(x >> (BitOffset - bit_size<Variation>()) &
+	                              static_cast<std::uint8_t>(~(0xff << bit_size<Variation>())));
+}
+
+template<int BitOffset, typename Variation, typename... Parsed>
+constexpr std::tuple<Parsed..., Variation> parse(op_code_type x, util::type_traits::type_container<>,
+                                                 Parsed... parsed)
+{
+	return { parsed..., extract_variation<BitOffset, Variation>(x) };
+}
+
+template<int BitOffset, typename Variation, typename... Next, typename... Parsed>
+constexpr std::tuple<Parsed..., Variation, Next...>
+    parse(op_code_type x, util::type_traits::type_container<Next...>, Parsed... parsed)
+{
+	return parse<BitOffset - bit_size<Variation>(), Next...>(
+	    x, util::type_traits::type_select<1, sizeof...(Next) - 1, Next...>::values, parsed...,
+	    extract_variation<BitOffset, Variation>(x));
+}
+
+} // namespace detail
+
+template<op_code OpCode, typename... Variations>
+constexpr std::tuple<Variations...> parse_options(op_code_type x)
+{
+	return detail::parse<
+	    (util::type_traits::equals_any<op_code, OpCode, oc_operator, oc_get, oc_test>::value ? 11 : 7),
+	    Variations...>(x,
+	                   util::type_traits::type_select<1, sizeof...(Variations) - 1, Variations...>::values);
+}
+
+constexpr op_code to_op_code_base(op_code_type x)
+{
+	static_assert(static_cast<std::int16_t>(0x8000) >> 15 == static_cast<std::int16_t>(0xffff),
+	              "foo you C++");
+
+	return static_cast<op_code>(x & ((static_cast<std::int16_t>(x & 0x8000) >> 8) | 0xf800));
+}
 
 } // namespace bytecode
 } // namespace bia

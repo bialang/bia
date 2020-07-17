@@ -36,9 +36,9 @@ inline tokens_type statement(present present, tokens_type tokens)
 		break;
 	}
 	default: {
-		tokens = expression(present, tokens, bytecode::member::tos{});
+		tokens = expression(present, tokens, bytecode::member::local{ present.variables.add_tmp().id });
 
-		present.writer.write<true, bytecode::oc_drop>(1);
+		present.variables.remove_tmp();
 
 		break;
 	}

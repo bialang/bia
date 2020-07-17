@@ -5,8 +5,6 @@
 #include "object/pointer.hpp"
 
 #include <bia/exception/bounds_error.hpp>
-#include <functional>
-#include <memory>
 
 namespace bia {
 namespace member {
@@ -21,19 +19,8 @@ class stack_view
 public:
 	typedef object::pointer<member::member> element_type;
 
-	stack_view(element_type* data, std::size_t size) noexcept
-	{
-		_data     = data;
-		_max_size = size;
-	}
-	std::size_t size() const noexcept
-	{
-		return _cursor;
-	}
-	std::size_t max_size() const noexcept
-	{
-		return _max_size;
-	}
+	stack_view(element_type* base, std::size_t size) noexcept : _base{ base }, _max_size{ size }
+	{}
 	void drop(std::size_t count)
 	{
 		if (count > _cursor) {
@@ -42,95 +29,57 @@ public:
 
 		_cursor -= count;
 	}
-	element_type& pop()
+	std::size_t cursor() const noexcept
 	{
-		if (!_cursor) {
-			BIA_THROW(exception::bounds_error, "stack underflow");
-		}
-
-		return _data[--_cursor];
+		return _cursor;
 	}
-	element_type& tos() const
+	std::size_t arg_count() const noexcept
 	{
-		if (!_cursor) {
-			BIA_THROW(exception::bounds_error, "empty stack");
-		}
-
-		return _data[_cursor - 1];
+		return _args;
 	}
-	element_type& push()
+	element_type& local_at(std::size_t index)
 	{
-		if (_cursor >= _max_size) {
-			BIA_THROW(exception::bounds_error, "stack overflow");
-		}
-
-		return _data[_cursor++];
-	}
-	element_type& local_at(std::size_t index) const
-	{
-		if (index >= _cursor) {
+		if (index >= _max_size) {
 			BIA_THROW(exception::bounds_error, "out of bounds");
+		} else if (index > _cursor) {
+			_cursor = index;
 		}
 
-		return _data[index];
+		return _base[index];
 	}
-	element_type& arg_at(std::size_t index) const
+	element_type& arg_at(std::size_t index)
 	{
-		if (index >= _args) {
+		if (index >= _max_size) {
 			BIA_THROW(exception::bounds_error, "out of bounds");
+		} else if (index > _args) {
+			_args = index;
 		}
 
-		return *(_data - _args + index);
+		return _base[_max_size - index];
 	}
-	element_type* data() const noexcept
+	stack_view sub_view(std::size_t count) const
 	{
-		return _data;
-	}
-	element_type* begin() const noexcept
-	{
-		return _data;
-	}
-	element_type* end() const noexcept
-	{
-		return _data + _max_size;
-	}
-	stack_view frame(std::size_t arg_count) const
-	{
-		BIA_EXPECTS(arg_count <= _cursor);
+		if (count > _args) {
+			BIA_THROW(exception::bounds_error, "out of arg bound");
+		}
 
-		stack_view s{ _data + _cursor, _max_size - _cursor };
+		stack_view s{ _base + _cursor + 1, _max_size - (_cursor + 1) - (_args - count) };
 
-		s._args = arg_count;
+		s._args = count;
 
 		return s;
-	}
-	bool operator==(const stack_view& other) const noexcept
-	{
-		return _data == other._data;
 	}
 
 private:
 	friend class token;
 
-	element_type* _data   = nullptr;
-	std::size_t _cursor   = 0;
-	std::size_t _max_size = 0;
-	std::size_t _args     = 0;
+	element_type* const _base;
+	const std::size_t _max_size;
+	std::size_t _cursor = 0;
+	std::size_t _args   = 0;
 };
 
 } // namespace gc
 } // namespace bia
-
-template<>
-struct std::hash<bia::gc::stack_view> : private hash<bia::gc::stack_view::element_type*>
-{
-	typedef bia::gc::stack_view argument_type;
-	typedef result_type result_type;
-
-	result_type operator()(const argument_type& s) const noexcept
-	{
-		return hash<bia::gc::stack_view::element_type*>::operator()(s.data());
-	}
-};
 
 #endif

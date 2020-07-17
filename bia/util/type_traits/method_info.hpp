@@ -1,7 +1,7 @@
 #ifndef BIA_UTIL_TYPE_TRAITS_METHOD_INFO_HPP_
 #define BIA_UTIL_TYPE_TRAITS_METHOD_INFO_HPP_
 
-#include "type_maker.hpp"
+#include "type_select.hpp"
 #include "void_type.hpp"
 
 namespace bia {

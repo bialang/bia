@@ -17,13 +17,13 @@ namespace connector {
 class parameters
 {
 public:
-	parameters(gc::stack_view stack, std::size_t size, std::size_t kwargs) : _stack{ std::move(stack) }
+	parameters(gc::stack_view stack, std::size_t count, std::size_t kwargs) : _stack{ std::move(stack) }
 	{
-		_size = size;
+		_size = count;
 
 		if (kwargs) {
-			_kwargs.first  = &_stack.arg_at(size - kwargs);
-			_kwargs.second = &_stack.arg_at(size - 1) + 1;
+			_kwargs.first  = &_stack.arg_at(_size - kwargs);
+			_kwargs.second = &_stack.arg_at(_size - 1) + 1;
 		}
 	}
 
@@ -35,15 +35,15 @@ public:
 	{
 		return _size;
 	}
-	stack_iterator<member::member> begin() const noexcept
+	stack_iterator<member::member> begin() noexcept
 	{
 		return _size ? &_stack.arg_at(0) : nullptr;
 	}
-	stack_iterator<member::member> end() const noexcept
+	stack_iterator<member::member> end() noexcept
 	{
 		return _size ? &_stack.arg_at(_size - 1) + 1 : nullptr;
 	}
-	util::span<stack_iterator<member::member>> positionals() const noexcept
+	util::span<stack_iterator<member::member>> positionals() noexcept
 	{
 		const auto end = static_cast<std::size_t>(_size - (_kwargs.second - _kwargs.first));
 
@@ -74,7 +74,7 @@ public:
 
 		return { static_cast<const member::native::key_value_pair*>(result->get())->value(), true };
 	}
-	member::member* operator[](std::size_t index) const
+	member::member* operator[](std::size_t index)
 	{
 		return _stack.arg_at(index).get();
 	}

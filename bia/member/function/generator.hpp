@@ -1,6 +1,7 @@
 #ifndef BIA_MEMBER_FUNCTION_GENERATOR_HPP_
 #define BIA_MEMBER_FUNCTION_GENERATOR_HPP_
 
+#include "../native/string.hpp"
 #include "method.hpp"
 
 namespace bia {

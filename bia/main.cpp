@@ -34,6 +34,13 @@ int main()
 
 import io
 
+let x = 0
+
+io.print(x)
+
+/*
+import io
+
 for i in range(0, 10, 2) {
 	io.print(i)
 }

@@ -59,8 +59,7 @@ inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present pre
 
 			kwargs.insert({ name, expr.subspan(2) });
 		} else {
-			expression(present, expr, bytecode::member::tos{});
-			present.variables.add_tmp();
+			expression(present, expr, bytecode::member::args{ static_cast<std::uint16_t>(count - 1) });
 		}
 
 		tokens = tokens.subspan(expr.end());
@@ -68,9 +67,7 @@ inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present pre
 
 	// push kwargs
 	for (const auto& i : kwargs) {
-		expression(present, i.second, bytecode::member::tos{});
-
-		present.variables.add_tmp();
+		expression(present, i.second, bytecode::member::local{ count++ });
 		present.writer.write<true, bytecode::oc_name>(
 		    bytecode::member::resource{ present.resources.index_of(i.first) });
 	}

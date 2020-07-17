@@ -4,20 +4,21 @@ CODE = 2
 
 arg_options = {
     "mso": [
-        ("tos", "stack.tos()"),
-        ("args", "stack.arg_at(ip.read<std::uint8_t>())"),
+        ("args_16", "stack.arg_at(ip.read<std::uint16_t>())"),
         ("global_16", "globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek()"),
         ("local_16", "stack.local_at(ip.read<std::uint16_t>())"),
         ("resource_16", "resources.at(ip.read<std::uint16_t>())"),
+        ("args_8", "stack.arg_at(ip.read<std::uint8_t>())"),
         ("global_8", "globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek()"),
         ("local_8", "stack.local_at(ip.read<std::uint8_t>())"),
         ("resource_8", "resources.at(ip.read<std::uint8_t>())"),
-        ("builtin", "context.builtin(ip.read<member::builtin>())")
+        ("builtin", "context.builtin(ip.read<bytecode::member::builtin>())")
     ],
     "mdo": [
-        ("tos", "stack.push()"),
+        ("args_16", "stack.arg_at(ip.read<std::uint16_t>())"),
         ("global_16", "stack.local_at(ip.read<std::uint16_t>())"),
         ("local_16", "stack.local_at(ip.read<std::uint16_t>())"),
+        ("args_8", "stack.arg_at(ip.read<std::uint8_t>())"),
         ("global_8", "stack.local_at(ip.read<std::uint8_t>())"),
         ("local_8", "stack.local_at(ip.read<std::uint8_t>())")
     ],
@@ -57,11 +58,17 @@ token->template set<bia::member::member>({1}, creator::create(constant));
 
 break;"""),
 
-    ("oc_invoke", ("mso", "mdo"), """const auto count = ip.read<std::uint8_t>();
+    ("oc_invoke", ("mso", "mdo"), """const auto from = ip.read<std::uint8_t>();
 const auto kwargs = ip.read<std::uint8_t>();
-auto result = member_pointer({0})->invoke(connector::parameters{{ stack.frame(count), count, kwargs }});
+auto sub_view = stack.sub_view(from);
 
-stack.drop(count);
+if (kwargs > sub_view.arg_count()) {{
+    BIA_IMPLEMENTATION_ERROR("invalid arg count");
+}}
+
+auto result = member_pointer({0})->invoke(connector::parameters{{ sub_view, sub_view.arg_count() - kwargs, kwargs }});
+
+stack.drop(sub_view.arg_count() - kwargs);
 token->set({1}, std::move(result));
 
 break;"""),
@@ -140,7 +147,9 @@ if (!test_register) {{
 
 break;"""),
 
-    ("oc_name", ("ro",), """token->set(stack.tos(), make_key_value_pair(string_pointer({0}), member_pointer(stack.tos())));
+    ("oc_name", ("ro",), """auto& src = stack.local_at(stack.cursor());
+
+token->set(src, make_key_value_pair(string_pointer({0}), member_pointer(src)));
 
 break;"""),
 

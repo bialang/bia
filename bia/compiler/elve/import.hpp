@@ -14,8 +14,7 @@ inline tokens_type import(present present, tokens_type tokens)
 	BIA_EXPECTS(tokens.size() >= 2 &&
 	            static_cast<token::type>(tokens.data()->value.index()) == token::type::keyword);
 
-	const auto variable =
-	    present.variables.index_of(tokens.data()[1].value.get<token::identifier>().memory);
+	const auto variable = present.variables.index_of(tokens.data()[1].value.get<token::identifier>().memory);
 	const bytecode::member::resource name{ present.resources.index_of(
 		tokens.data()[1].value.get<token::identifier>().memory) };
 
@@ -26,9 +25,9 @@ inline tokens_type import(present present, tokens_type tokens)
 
 		present.writer.write<true, bytecode::oc_import>(name, bytecode::member::local{ variable.first.id });
 	} else {
-		present.variables.add(tokens.data()[1].value.get<token::identifier>().memory);
-
-		present.writer.write<true, bytecode::oc_import>(name, bytecode::member::tos{});
+		present.writer.write<true, bytecode::oc_import>(
+		    name, bytecode::member::local{
+		              present.variables.add(tokens.data()[1].value.get<token::identifier>().memory).id });
 	}
 
 	return tokens.subspan(2);
