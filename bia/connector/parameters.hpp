@@ -35,15 +35,15 @@ public:
 	{
 		return _size;
 	}
-	stack_iterator<member::member> begin() noexcept
+	stack_iterator<member::member, true> begin() noexcept
 	{
 		return _size ? &_stack.arg_at(0) : nullptr;
 	}
-	stack_iterator<member::member> end() noexcept
+	stack_iterator<member::member, true> end() noexcept
 	{
 		return _size ? &_stack.arg_at(_size - 1) + 1 : nullptr;
 	}
-	util::span<stack_iterator<member::member>> positionals() noexcept
+	util::span<stack_iterator<member::member, true>> positionals() noexcept
 	{
 		const auto end = static_cast<std::size_t>(_size - (_kwargs.second - _kwargs.first));
 
@@ -52,9 +52,9 @@ public:
 			return { {}, 0 };
 		}
 
-		return { { &_stack.arg_at(end - 1) }, end };
+		return { { &_stack.arg_at(0) }, end };
 	}
-	util::span<stack_iterator<member::native::key_value_pair>> kwargs() const noexcept
+	util::span<stack_iterator<member::native::key_value_pair, false>> kwargs() const noexcept
 	{
 		return { { _kwargs.first }, { _kwargs.second } };
 	}

@@ -35,6 +35,8 @@ int main()
 
 import io
 
+io.print("hi", "ich", "bins")
+
 for i in range(0, 10, 1) {
 	io.print(i)
 }
