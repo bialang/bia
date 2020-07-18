@@ -65,18 +65,6 @@ variable::index_type variable::add_tmp()
 	return _next++;
 }
 
-variable::index_type variable::push() noexcept
-{
-	return _arguments++;
-}
-
-void variable::pop(std::size_t count)
-{
-	BIA_EXPECTS(count <= _arguments);
-
-	_arguments -= count;
-}
-
 variable::index_type variable::latest_index() const
 {
 	BIA_EXPECTS(_next);

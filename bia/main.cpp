@@ -36,7 +36,9 @@ import io
 
 let x = 0
 
+io.print(x, x, x)
 io.print(x)
+io.print("hi", "bye")
 
 /*
 import io

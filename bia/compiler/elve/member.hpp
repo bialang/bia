@@ -33,7 +33,6 @@ inline tokens_type member_call(present present, tokens_type tokens, Source sourc
 		tokens = parameter(present, tokens);
 
 		present.writer.write<true, bytecode::oc_invoke>(destination, destination);
-		//present.variables.pop(std::get<1>(tuple) + std::get<2>(tuple));
 
 		if (tokens.empty() ||
 		    static_cast<token::type>(tokens.data()->value.index()) != token::type::control) {
