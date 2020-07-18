@@ -12,10 +12,11 @@ int main()
 
 	engine.module<bia::bsl::io>("io", engine.gc());
 	engine.function("range", [](int start, int end, int step) {
+		std::cout << "range: " << start << "-" << end << "/" << step << std::endl;
 		auto foo = [start, end, step]() mutable -> bia::gc::gcable<bia::member::member> {
 			const auto current = start;
 
-			if ((start += step) >= end) {
+			if ((start += step, current) >= end) {
 				return bia::member::function::stop_iteration;
 			}
 
@@ -34,18 +35,15 @@ int main()
 
 import io
 
-let x = 0
-
-io.print(x, x, x)
-io.print(x)
-io.print("hi", "bye")
+for i in range(0, 10, 1) {
+	io.print(i)
+}
 
 /*
 import io
 
-for i in range(0, 10, 2) {
-	io.print(i)
-}
+io.print("hi", "bye")
+io.print("hey")
 
 /*
 let x = range(0, 10, 1)

@@ -4,7 +4,14 @@ using namespace bia::compiler::manager;
 
 std::pair<variable::index_type, bool> variable::find(const resource::view& identifer) noexcept
 {
-	const auto result = _variables.find(identifer);
+	// search overshadowers
+	auto result = _overshadower.find(identifer);
+
+	if (result != _overshadower.end()) {
+		return { result->second, true };
+	}
+
+	result = _variables.find(identifer);
 
 	if (result == _variables.end()) {
 		return { 0, false };
