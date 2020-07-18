@@ -97,6 +97,26 @@ bia::member::native::dict* math::_init(gc::gc& gc)
 	put_function(gc, *dict, "max", &max);
 	put_function(gc, *dict, "min", &min);
 	put_function(gc, *dict, "sqrt", static_cast<double (*)(double)>(&std::sqrt));
+	put_function(gc, *dict, "cbrt", static_cast<double (*)(double)>(&std::cbrt));
+	put_function(gc, *dict, "pow", static_cast<double (*)(double, double)>(&std::pow));
+	put_function(gc, *dict, "log", static_cast<double (*)(double)>(&std::log));
+	put_function(gc, *dict, "exp", static_cast<double (*)(double)>(&std::exp));
+	put_function(gc, *dict, "sin", static_cast<double (*)(double)>(&std::sin));
+	put_function(gc, *dict, "cos", static_cast<double (*)(double)>(&std::cos));
+	put_function(gc, *dict, "tan", static_cast<double (*)(double)>(&std::tan));
+	put_function(gc, *dict, "sinh", static_cast<double (*)(double)>(&std::sinh));
+	put_function(gc, *dict, "cosh", static_cast<double (*)(double)>(&std::cosh));
+	put_function(gc, *dict, "tanh", static_cast<double (*)(double)>(&std::tanh));
+	put_function(gc, *dict, "asin", static_cast<double (*)(double)>(&std::asin));
+	put_function(gc, *dict, "acos", static_cast<double (*)(double)>(&std::acos));
+	put_function(gc, *dict, "atan", static_cast<double (*)(double)>(&std::atan));
+	put_function(gc, *dict, "asinh", static_cast<double (*)(double)>(&std::asinh));
+	put_function(gc, *dict, "acosh", static_cast<double (*)(double)>(&std::acosh));
+	put_function(gc, *dict, "atanh", static_cast<double (*)(double)>(&std::atanh));
+	put_function(gc, *dict, "ceil", static_cast<double (*)(double)>(&std::ceil));
+	put_function(gc, *dict, "floor", static_cast<double (*)(double)>(&std::floor));
+	put_function(gc, *dict, "round", static_cast<double (*)(double)>(&std::round));
+	put_function(gc, *dict, "hypot", static_cast<double (*)(double, double)>(&std::hypot));
 
 	return dict;
 }
