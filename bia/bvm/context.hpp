@@ -8,6 +8,8 @@
 #include <bia/connector/connector-inl.hpp>
 #include <bia/gc/gc.hpp>
 #include <bia/gc/object/base.hpp>
+#include <bia/member/function/generator.hpp>
+#include <bia/member/function/method.hpp>
 #include <bia/member/function/static_.hpp>
 #include <bia/member/member.hpp>
 #include <bia/member/native/dict.hpp>
@@ -18,7 +20,7 @@
 namespace bia {
 namespace bvm {
 
-std::vector<member::member*> make_list(connector::parameters_type params)
+inline std::vector<member::member*> make_list(connector::parameters_type params)
 {
 	std::vector<member::member*> list;
 
@@ -31,6 +33,37 @@ std::vector<member::member*> make_list(connector::parameters_type params)
 	return list;
 }
 
+inline gc::gcable<member::member> range(connector::parameters_type params)
+{
+	auto start = 0, end = std::numeric_limits<int>::max(), step = 1;
+
+	if (params.size() == 1) {
+		end = member::cast::cast<int>(*params[0]);
+	} else if (params.size() == 2) {
+		start = member::cast::cast<int>(*params[0]);
+		end   = member::cast::cast<int>(*params[1]);
+	} else if (params.size() == 3) {
+		start = member::cast::cast<int>(*params[0]);
+		end   = member::cast::cast<int>(*params[1]);
+		step  = member::cast::cast<int>(*params[2]);
+	}
+
+	auto generator = [start, end, step]() mutable -> bia::gc::gcable<bia::member::member> {
+		const auto current = start;
+
+		if ((start += step, current) >= end) {
+			return bia::member::function::stop_iteration;
+		}
+
+		return bia::creator::create(current);
+	};
+
+	return bia::gc::gc::active_gc()
+	    ->construct<bia::member::function::generator<
+	        bia::member::function::method<false, decltype(&decltype(generator)::operator())>>>(
+	        generator, &decltype(generator)::operator());
+}
+
 class context : private gc::object::base
 {
 public:
@@ -39,6 +72,10 @@ public:
 		      _gc->template construct<
 		             member::function::static_<std::vector<member::member*>, connector::parameters_type>>(
 		             &make_list)
+		          .release(),
+		      _gc->template construct<
+		             member::function::static_<gc::gcable<member::member>, connector::parameters_type>>(
+		             &range)
 		          .release()
 	      }
 	{
@@ -73,7 +110,7 @@ private:
 	std::shared_ptr<gc::gc> _gc;
 	member::native::dict _symbols;
 	module::loader _loader;
-	std::array<member::member*, 1> _builtins;
+	std::array<member::member*, 2> _builtins;
 
 	void gc_mark_children(bool mark) const noexcept override
 	{

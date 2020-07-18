@@ -7,7 +7,6 @@ struct comparator
 {
 	const char** first;
 	const char** last;
-	std::size_t index = 0;
 
 	comparator(const char** first, const char** last) noexcept
 	{
@@ -22,14 +21,12 @@ struct comparator
 			return;
 		}
 
-		char c = static_cast<char>(cp);
-
-		++index;
+		const auto c = static_cast<char>(cp);
 
 		for (auto i = first; i != last; ++i) {
-			if (**i && **i == c) {
-				first = i;
+			first = i;
 
+			if (**i && **i == c) {
 				break;
 			}
 		}
@@ -60,7 +57,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::identifier(paramete
 {
 	using namespace string::encoding;
 
-	const char* builtins[] = { "list" };
+	const char* builtins[] = { "list", "range" };
 	auto first             = true;
 	auto streambuf         = parameter.manager.start_memory(true);
 	const auto outenc      = get_encoder(standard_encoding::utf_8);
@@ -103,7 +100,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::identifier(paramete
 
 				parameter.bundle.add(token{
 				    token::identifier{ memory, builtin,
-				                       builtin ? static_cast<bytecode::member::builtin>(builtins - builtin)
+				                       builtin ? static_cast<bytecode::member::builtin>(builtin - builtins)
 				                               : bytecode::member::builtin{} } });
 
 				return {};

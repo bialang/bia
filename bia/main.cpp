@@ -11,23 +11,6 @@ int main()
 	bia::engine engine{};
 
 	engine.module<bia::bsl::io>("io", engine.gc());
-	engine.function("range", [](int start, int end, int step) {
-		std::cout << "range: " << start << "-" << end << "/" << step << std::endl;
-		auto foo = [start, end, step]() mutable -> bia::gc::gcable<bia::member::member> {
-			const auto current = start;
-
-			if ((start += step, current) >= end) {
-				return bia::member::function::stop_iteration;
-			}
-
-			return bia::creator::create(current);
-		};
-
-		return bia::gc::gc::active_gc()
-		    ->construct<bia::member::function::generator<
-		        bia::member::function::method<false, decltype(&decltype(foo)::operator())>>>(
-		        foo, &decltype(foo)::operator());
-	});
 
 	std::stringstream code;
 
@@ -37,7 +20,7 @@ import io
 
 io.print("hi", "ich", "bins")
 
-for i in range(0, 10, 1) {
+for i in range(7) {
 	io.print(i)
 }
 

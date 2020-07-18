@@ -43,7 +43,8 @@ struct resource
 
 enum class builtin : std::uint8_t
 {
-	list
+	list,
+	range
 };
 
 } // namespace member
