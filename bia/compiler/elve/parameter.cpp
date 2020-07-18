@@ -1,7 +1,5 @@
-#ifndef BIA_COMPILER_ELVE_PARAMETER_HPP_
-#define BIA_COMPILER_ELVE_PARAMETER_HPP_
-
-#include "present.hpp"
+#include "expression.hpp"
+#include "helpers.hpp"
 
 #include <bia/log/log.hpp>
 #include <cstdint>
@@ -9,15 +7,7 @@
 #include <map>
 #include <utility>
 
-namespace bia {
-namespace compiler {
-namespace elve {
-
-template<typename Destination>
-tokens_type expression(present present, tokens_type tokens, Destination destination);
-tokens_type expression(present present, tokens_type tokens, bytecode::member::push destination);
-
-inline tokens_type parameter(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::parameter(present present, tokens_type tokens)
 {
 	using namespace tokenizer::token;
 
@@ -72,9 +62,3 @@ inline tokens_type parameter(present present, tokens_type tokens)
 
 	return tokens;
 }
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif

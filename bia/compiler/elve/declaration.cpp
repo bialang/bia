@@ -1,14 +1,7 @@
-#ifndef BIA_COMPILER_ELVE_DECLARATION_HPP_
-#define BIA_COMPILER_ELVE_DECLARATION_HPP_
-
 #include "expression.hpp"
-#include "present.hpp"
+#include "helpers.hpp"
 
-namespace bia {
-namespace compiler {
-namespace elve {
-
-inline tokens_type declaration(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::declaration(present present, tokens_type tokens)
 {
 	using namespace tokenizer::token;
 
@@ -26,9 +19,3 @@ inline tokens_type declaration(present present, tokens_type tokens)
 	                  bytecode::member::local{
 	                      present.variables.add(tokens.data()[1].value.get<token::identifier>().memory) });
 }
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif

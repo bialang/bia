@@ -1,17 +1,8 @@
-#ifndef BIA_COMPILER_ELVE_WHILE_HPP_
-#define BIA_COMPILER_ELVE_WHILE_HPP_
-
 #include "../jump_manager.hpp"
 #include "expression.hpp"
-#include "present.hpp"
+#include "helpers.hpp"
 
-namespace bia {
-namespace compiler {
-namespace elve {
-
-tokens_type statement(present present, tokens_type tokens);
-
-inline tokens_type while_(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::while_(present present, tokens_type tokens)
 {
 	using namespace tokenizer::token;
 
@@ -60,9 +51,3 @@ inline tokens_type while_(present present, tokens_type tokens)
 
 	return tokens;
 }
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif

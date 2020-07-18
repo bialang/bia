@@ -1,16 +1,8 @@
-#ifndef BIA_COMPILER_ELVE_FOR_EACH_HPP_
-#define BIA_COMPILER_ELVE_FOR_EACH_HPP_
-
 #include "../jump_manager.hpp"
-#include "batch.hpp"
 #include "expression.hpp"
-#include "present.hpp"
+#include "helpers.hpp"
 
-namespace bia {
-namespace compiler {
-namespace elve {
-
-inline tokens_type for_each(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::for_each(present present, tokens_type tokens)
 {
 	using tokenizer::token::token;
 
@@ -44,9 +36,3 @@ inline tokens_type for_each(present present, tokens_type tokens)
 
 	return tokens;
 }
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif

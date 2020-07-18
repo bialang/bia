@@ -2,13 +2,11 @@
 #define BIA_COMPILER_ELVE_EXPRESSION_HPP_
 
 #include "../jump_manager.hpp"
+#include "helpers.hpp"
 #include "member.hpp"
-#include "present.hpp"
 
-#include <bia/bytecode/writer/instruction.hpp>
 #include <bia/exception/implementation_error.hpp>
 #include <bia/tokenizer/token/token.hpp>
-#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -60,7 +58,7 @@ inline tokens_type value(present present, tokens_type tokens, Destination destin
 		bytecode::member::resource src{ (std::uint16_t) present.resources.index_of(
 			tokens.data()->value.get<token::string>().memory) };
 
-		present.writer.write<true, bytecode::oc_refer>(src, std::forward<Destination>(destination));
+		present.writer.write<true, bytecode::oc_refer>(src, destination);
 
 		break;
 	}
@@ -69,19 +67,18 @@ inline tokens_type value(present present, tokens_type tokens, Destination destin
 		bytecode::member::resource src{ (std::uint16_t) present.resources.index_of(
 			tokens.data()->value.get<token::regex>().memory) };
 
-		present.writer.write<true, bytecode::oc_refer>(src, std::forward<Destination>(destination));
+		present.writer.write<true, bytecode::oc_refer>(src, destination);
 
 		break;
 	}
 	case token::type::constant_int: {
 		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<token::int_type>(),
-		                                                     std::forward<Destination>(destination));
+		                                                     destination);
 
 		break;
 	}
 	case token::type::constant_float: {
-		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<double>(),
-		                                                     std::forward<Destination>(destination));
+		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<double>(), destination);
 
 		break;
 	}

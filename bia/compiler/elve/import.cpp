@@ -1,13 +1,6 @@
-#ifndef BIA_COMPILER_ELVE_IMPORT_HPP_
-#define BIA_COMPILER_ELVE_IMPORT_HPP_
+#include "helpers.hpp"
 
-#include "present.hpp"
-
-namespace bia {
-namespace compiler {
-namespace elve {
-
-inline tokens_type import(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::import(present present, tokens_type tokens)
 {
 	using namespace tokenizer::token;
 
@@ -29,9 +22,3 @@ inline tokens_type import(present present, tokens_type tokens)
 
 	return tokens.subspan(2);
 }
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif

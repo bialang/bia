@@ -1,18 +1,10 @@
-#ifndef BIA_COMPILER_ELVE_IF_HPP_
-#define BIA_COMPILER_ELVE_IF_HPP_
-
 #include "../jump_manager.hpp"
-#include "batch.hpp"
 #include "expression.hpp"
-#include "present.hpp"
+#include "helpers.hpp"
 
 #include <bia/util/finally.hpp>
 
-namespace bia {
-namespace compiler {
-namespace elve {
-
-inline tokens_type if_(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::if_(present present, tokens_type tokens)
 {
 	using tokenizer::token::token;
 
@@ -60,10 +52,4 @@ inline tokens_type if_(present present, tokens_type tokens)
 	jumper.mark(jump_manager::destination::end);
 
 	return tokens;
-} // namespace elve
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif
+}
