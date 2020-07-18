@@ -173,7 +173,13 @@ void list::gc_mark_children(bool mark) const noexcept
 }
 
 void list::register_gcables(gc::gc& gc) const noexcept
-{}
+{
+	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+	for (auto child : _data) {
+		gc.register_gcable(child);
+	}
+}
 
 void list::_push(connector::parameters_type params)
 {
