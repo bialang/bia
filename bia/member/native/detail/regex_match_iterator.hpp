@@ -1,18 +1,24 @@
-#ifndef BIA_MEMBER_NATIVE_REGEX_HPP_
-#define BIA_MEMBER_NATIVE_REGEX_HPP_
+#ifndef BIA_MEMBER_NATIVE_DETAIL_REGEX_MATCH_ITERATOR_HPP_
+#define BIA_MEMBER_NATIVE_DETAIL_REGEX_MATCH_ITERATOR_HPP_
 
-#include "../member.hpp"
+#include "../../member.hpp"
 
+#include <bia/gc/object/pointer.hpp>
 #include <regex>
 
 namespace bia {
 namespace member {
 namespace native {
 
-class regex : public member
+class regex;
+
+namespace detail {
+
+class regex_match_iterator : public member
 {
 public:
-	regex(std::regex pattern);
+	regex_match_iterator(gc::object::immutable_pointer<char> string,
+	                     gc::object::immutable_pointer<regex> pattern, std::cregex_iterator iterator);
 	flag_type flags() const override;
 	test_type test(test_operator op, const member& right) const override;
 	gc::gcable<member> copy() const override;
@@ -30,13 +36,15 @@ protected:
 	void register_gcables(gc::gc& gc) const noexcept override;
 
 private:
-	std::regex _pattern;
+	gc::object::immutable_pointer<char> _string;
+	gc::object::immutable_pointer<regex> _pattern;
+	std::cregex_iterator _iterator;
+	bool _valid = false;
 
-	gc::gcable<member> _match(connector::parameters_type params);
-	gc::gcable<member> _search(connector::parameters_type params);
-	gc::gcable<member> _match_all(connector::parameters_type params);
+	gc::gcable<string> _group(std::size_t index) const;
 };
 
+} // namespace detail
 } // namespace native
 } // namespace member
 } // namespace bia

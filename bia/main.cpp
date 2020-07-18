@@ -18,10 +18,10 @@ int main()
 
 import io
 
-io.print("hi", "ich", "bins")
+let x = "ich bin 21 jahre alt und wir schreiben den 18.07.2020"
 
-for i in range(7) {
-	io.print(i)
+for i in /\d+/.match_all(x) {
+	io.print(i.group(0))
 }
 
 /*
