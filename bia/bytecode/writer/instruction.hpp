@@ -25,15 +25,9 @@ public:
 	instruction(std::ostream& output) noexcept : _output(output)
 	{}
 	template<bool Optimize, op_code Op_code>
-	typename std::enable_if<is_op_code<Op_code, oc_return_void, oc_invert>::value>::type write()
+	typename std::enable_if<is_op_code<Op_code, oc_return_void, oc_invert, oc_prep_call>::value>::type write()
 	{
 		optimized_write<false>(_output, Op_code);
-	}
-	template<bool Optimize, op_code Op_code>
-	typename std::enable_if<is_op_code<Op_code, oc_drop>::value>::type write(std::uint8_t count)
-	{
-		optimized_write<false>(_output, Op_code);
-		optimized_write<false>(_output, count);
 	}
 	template<bool Optimize, op_code Op_code, typename P0>
 	typename std::enable_if<is_op_code<Op_code, oc_jump, oc_jump_false, oc_jump_true>::value &&
@@ -91,17 +85,16 @@ public:
 		optimized_member<Optimize>(_output, p0);
 		optimized_member<Optimize>(_output, p1);
 	}
-	template<bool Optimize, op_code Op_code, typename P2, typename P3>
-	typename std::enable_if<is_op_code<Op_code, oc_invoke>::value && is_member_source<P2>::value &&
-	                        is_member_destination<P3>::value>::type
-	    write(std::uint8_t p0, std::uint8_t p1, P2 p2, P3 p3)
+	template<bool Optimize, op_code OpCode, typename Source, typename Destination>
+	typename std::enable_if<is_op_code<OpCode, oc_invoke>::value && is_member_source<Source>::value &&
+	                        is_member_destination<Destination>::value>::type
+	    write(Source source, Destination destination)
 	{
-		optimized_write<false>(_output, encode_variations<Op_code>(member_source_index<Optimize>(p2),
-		                                                           member_destination_index<Optimize>(p3)));
-		optimized_write<false>(_output, p0);
-		optimized_write<false>(_output, p1);
-		optimized_member<Optimize>(_output, p2);
-		optimized_member<Optimize>(_output, p3);
+		optimized_write<false>(_output,
+		                       encode_variations<OpCode>(member_source_index<Optimize>(source),
+		                                                  member_destination_index<Optimize>(destination)));
+		optimized_member<Optimize>(_output, source);
+		optimized_member<Optimize>(_output, destination);
 	}
 	template<bool Optimize, op_code Op_code, typename P1, typename P2>
 	typename std::enable_if<is_op_code<Op_code, oc_self_operator>::value && is_member_source<P1>::value &&

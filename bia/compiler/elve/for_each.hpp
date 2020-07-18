@@ -25,7 +25,8 @@ inline tokens_type for_each(present present, tokens_type tokens)
 
 	// get next value
 	jumper.mark(jump_manager::destination::start);
-	present.writer.write<true, bytecode::oc_invoke>(0, 0, generator, dest);
+	present.writer.write<true, bytecode::oc_prep_call>();
+	present.writer.write<true, bytecode::oc_invoke>(generator, dest);
 
 	// test generator
 	present.writer.write<true, bytecode::oc_test>(

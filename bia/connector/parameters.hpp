@@ -17,12 +17,12 @@ namespace connector {
 class parameters
 {
 public:
-	parameters(gc::stack_view stack, std::size_t count, std::size_t kwargs) : _stack{ std::move(stack) }
+	parameters(gc::stack_view::call_frame call_frame) : _stack{ std::move(call_frame.stack) }
 	{
-		_size = count;
+		_size = call_frame.arg_count + call_frame.kwarg_count;
 
-		if (kwargs) {
-			_kwargs.first  = &_stack.arg_at(_size - kwargs);
+		if (call_frame.kwarg_count) {
+			_kwargs.first  = &_stack.arg_at(_size - call_frame.kwarg_count);
 			_kwargs.second = &_stack.arg_at(_size - 1) + 1;
 		}
 	}
@@ -47,11 +47,12 @@ public:
 	{
 		const auto end = static_cast<std::size_t>(_size - (_kwargs.second - _kwargs.first));
 
+		// empty
 		if (!end) {
 			return { {}, 0 };
 		}
 
-		return { { &_stack.arg_at(0) }, end };
+		return { { &_stack.arg_at(end - 1) }, end };
 	}
 	util::span<stack_iterator<member::native::key_value_pair>> kwargs() const noexcept
 	{

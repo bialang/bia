@@ -101,7 +101,7 @@ inline bool valid_right_hand(tokens_type tokens)
 }
 
 template<typename Member>
-inline void apply_self_operator(present present, tokenizer::token::operator_ op, Member&& mem)
+inline void apply_self_operator(present present, tokenizer::token::operator_ op, Member mem)
 {
 	using namespace tokenizer::token;
 
@@ -109,14 +109,13 @@ inline void apply_self_operator(present present, tokenizer::token::operator_ op,
 		present.writer.write<true, bytecode::oc_test>(
 		    static_cast<typename std::underlying_type<member::test_operator>::type>(
 		        member::test_operator::self),
-		    std::forward<Member>(mem), std::forward<Member>(mem));
+		    mem, mem);
 		present.writer.write<true, bytecode::oc_invert>();
-		present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{},
-		                                                     std::forward<Member>(mem));
+		present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, mem);
 	} else {
 		present.writer.write<true, bytecode::oc_self_operator>(
 		    static_cast<typename std::underlying_type<member::infix_operator>::type>(to_self_operator(op)),
-		    std::forward<Member>(mem), std::forward<Member>(mem));
+		    mem, mem);
 	}
 }
 
@@ -193,7 +192,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 			tokens = member_call(present, tokens.subspan(2), destination, destination);
 		} else {
 			// right hand
-			const bytecode::member::local right{ present.variables.add_tmp().id };
+			const bytecode::member::local right{ present.variables.add_tmp() };
 
 			tokens = expression_impl(present, tokens.subspan(1), right, op_precedence, jumper);
 
@@ -212,7 +211,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 				    destination);
 			}
 
-			present.variables.remove_tmp();
+			present.variables.remove_tmp(right.index);
 		}
 	}
 
@@ -229,11 +228,23 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 } // namespace detail
 
 template<typename Destination>
-inline tokens_type expression(present present, tokens_type tokens, Destination&& destination)
+inline tokens_type expression(present present, tokens_type tokens, Destination destination)
 {
 	jump_manager jumper{ &present.writer.output() };
 
-	return detail::expression_impl(present, tokens, std::forward<Destination>(destination), -1, jumper);
+	return detail::expression_impl(present, tokens, destination, -1, jumper);
+}
+
+inline tokens_type expression(present present, tokens_type tokens, bytecode::member::push destination)
+{
+	bytecode::member::local tmp{ present.variables.add_tmp() };
+
+	tokens = expression(present, tokens, tmp);
+
+	present.writer.write<true, bytecode::oc_refer>(tmp, destination);
+	present.variables.remove_tmp(tmp.index);
+
+	return tokens;
 }
 
 } // namespace elve

@@ -16,7 +16,7 @@ inline tokens_type while_(present present, tokens_type tokens)
 	using namespace tokenizer::token;
 
 	jump_manager manager{ &present.writer.output() };
-	bytecode::member::local condition{ present.variables.add_tmp().id };
+	bytecode::member::local condition{ present.variables.add_tmp() };
 
 	manager.mark(jump_manager::destination::start);
 
@@ -56,7 +56,7 @@ inline tokens_type while_(present present, tokens_type tokens)
 
 	manager.jump(jump_manager::type::unconditional, jump_manager::destination::start);
 	manager.mark(jump_manager::destination::end);
-	present.variables.remove_tmp();
+	present.variables.remove_tmp(condition.index);
 
 	return tokens;
 }

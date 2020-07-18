@@ -15,19 +15,16 @@ inline tokens_type declaration(present present, tokens_type tokens)
 	BIA_EXPECTS(tokens.size() > 2 &&
 	            static_cast<token::type>(tokens.data()->value.index()) == token::type::keyword);
 
-	const auto index = present.variables.index_of(tokens.data()[1].value.get<token::identifier>().memory);
+	const auto index = present.variables.find(tokens.data()[1].value.get<token::identifier>().memory);
 
 	// overwrite existing variable
 	if (index.second) {
-		// overwriting of other scopes not implemented
-		BIA_EXPECTS(index.first.scope_id == 0);
-
-		return expression(present, tokens.subspan(2), bytecode::member::local{ index.first.id });
+		return expression(present, tokens.subspan(2), bytecode::member::local{ index.first });
 	}
 
 	return expression(present, tokens.subspan(2),
 	                  bytecode::member::local{
-	                      present.variables.add(tokens.data()[1].value.get<token::identifier>().memory).id });
+	                      present.variables.add(tokens.data()[1].value.get<token::identifier>().memory) });
 }
 
 } // namespace elve

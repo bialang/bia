@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <limits>
 #include <map>
-#include <tuple>
 #include <utility>
 
 namespace bia {
@@ -15,9 +14,10 @@ namespace compiler {
 namespace elve {
 
 template<typename Destination>
-tokens_type expression(present present, tokens_type tokens, Destination&& destination);
+tokens_type expression(present present, tokens_type tokens, Destination destination);
+tokens_type expression(present present, tokens_type tokens, bytecode::member::push destination);
 
-inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present present, tokens_type tokens)
+inline tokens_type parameter(present present, tokens_type tokens)
 {
 	using namespace tokenizer::token;
 
@@ -57,7 +57,7 @@ inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present pre
 		} else {
 			++count;
 
-			expression(present, expr, bytecode::member::args{ present.variables.push() });
+			expression(present, expr, bytecode::member::push{});
 		}
 
 		tokens = tokens.subspan(expr.end());
@@ -65,12 +65,12 @@ inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present pre
 
 	// push kwargs
 	for (const auto& i : kwargs) {
-		expression(present, i.second, bytecode::member::args{ present.variables.push() });
+		expression(present, i.second, bytecode::member::push{});
 		present.writer.write<true, bytecode::oc_name>(
 		    bytecode::member::resource{ present.resources.index_of(i.first) });
 	}
 
-	return { tokens, static_cast<std::uint8_t>(count), static_cast<std::uint8_t>(kwargs.size()) };
+	return tokens;
 }
 
 } // namespace elve

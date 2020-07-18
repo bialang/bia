@@ -19,13 +19,17 @@ using is_member_source =
                                        member::local, member::resource, member::builtin>;
 template<typename T>
 using is_member_destination = util::type_traits::equals_any_type<typename std::decay<T>::type, member::args,
-                                                                 member::global, member::local>;
+                                                                 member::global, member::local, member::push>;
 
 template<bool Optimize, typename Type>
 inline void optimized_member(std::ostream& output, Type member)
 {
 	optimized_write<Optimize>(output, member.index);
 }
+
+template<bool Optimize>
+inline void optimized_member(std::ostream& output, member::push)
+{}
 
 template<bool Optimize>
 inline void optimized_member(std::ostream& output, member::builtin builtin) noexcept
@@ -35,7 +39,7 @@ inline void optimized_member(std::ostream& output, member::builtin builtin) noex
 }
 
 template<bool Optimize>
-inline member_source_option member_source_index(member::builtin) noexcept
+constexpr member_source_option member_source_index(member::builtin) noexcept
 {
 	return member_source_option::mso_builtin;
 }
@@ -50,6 +54,12 @@ inline typename std::enable_if<is_member_source<T>::value, member_source_option>
 
 	return static_cast<member_source_option>(
 	    index + (Optimize && util::limit_checker<std::uint8_t>::in_bounds(member.index) ? 4 : 0));
+}
+
+template<bool Optimize>
+constexpr member_destination_option member_destination_index(member::push)
+{
+	return mdo_push;
 }
 
 template<bool Optimize, typename T>

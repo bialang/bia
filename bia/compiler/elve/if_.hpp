@@ -19,8 +19,8 @@ inline tokens_type if_(present present, tokens_type tokens)
 	BIA_EXPECTS(!tokens.empty() && is_keyword(tokens.data(), token::keyword::if_));
 
 	jump_manager jumper{ &present.writer.output() };
-	const bytecode::member::local condition{ present.variables.add_tmp().id };
-	auto finally = util::make_finally([&] { present.variables.remove_tmp(); });
+	const bytecode::member::local condition{ present.variables.add_tmp() };
+	auto finally = util::make_finally([&] { present.variables.remove_tmp(condition.index); });
 	tokens       = expression(present, tokens.subspan(1), condition);
 
 	present.writer.write<true, bytecode::oc_test>(

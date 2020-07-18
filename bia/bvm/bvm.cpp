@@ -134,6 +134,7 @@ inline void mdo_parameter(bia::bytecode::member_destination_option option, instr
 		break;
 	case mdo_args_8: token.set(stack.arg_at(ip.read<std::uint8_t>()), std::forward<Source>(source)); break;
 	case mdo_local_8: token.set(stack.local_at(ip.read<std::uint8_t>()), std::forward<Source>(source)); break;
+	case mdo_push: token.set(stack.push(), std::forward<Source>(source)); break;
 	default: BIA_IMPLEMENTATION_ERROR("not implemented");
 	}
 }
@@ -211,16 +212,11 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case oc_invoke: {
 			const auto options =
 			    parse_options<oc_invoke, member_source_option, member_destination_option>(op_code);
-			const auto count  = ip.read<std::uint8_t>();
-			const auto kwargs = ip.read<std::uint8_t>();
 			const auto caller =
 			    member_pointer(mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
-			auto sub_view = stack.sub_view(count + kwargs);
-			connector::parameters params{ sub_view, count, kwargs };
-			auto result = caller->invoke(params);
+			connector::parameters params{ stack.make_call_frame() };
 
-			stack.drop(sub_view.arg_count());
-			mdo_parameter(std::get<1>(options), ip, stack, *token, std::move(result));
+			mdo_parameter(std::get<1>(options), ip, stack, *token, caller->invoke(params));
 
 			break;
 		}
@@ -307,23 +303,15 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case oc_name: {
 			const auto options = parse_options<oc_name, resource_option>(op_code);
 			const auto name    = string_pointer(ro_parameter(std::get<0>(options), ip, resources));
-			auto& src          = stack.local_at(stack.cursor());
+			auto& src          = stack.last_push();
 
 			token->set(src, make_key_value_pair(name, src));
 
 			break;
 		}
 		case oc_return_void: return;
-		case oc_invert: {
-			test_register = !test_register;
-
-			break;
-		}
-		case oc_drop: {
-			stack.drop(ip.read<std::uint8_t>());
-
-			break;
-		}
+		case oc_invert: test_register = !test_register; break;
+		case oc_prep_call: stack.prep_call(); break;
 		default: BIA_THROW(exception::opcode, "invalid opcode");
 		}
 	}

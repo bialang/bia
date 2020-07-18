@@ -2,7 +2,7 @@
 
 using namespace bia::compiler::manager;
 
-std::pair<variable::index_type, bool> variable::find(const resource::view& identifer)
+std::pair<variable::index_type, bool> variable::find(const resource::view& identifer) noexcept
 {
 	const auto result = _variables.find(identifer);
 
@@ -51,10 +51,10 @@ variable::index_type variable::add_overshadower(resource::view identifer)
 	return index;
 }
 
-variable::index_type variable::add_tmp(bool tos)
+variable::index_type variable::add_tmp()
 {
 	// free holes open...
-	if (!tos && !_holes.empty()) {
+	if (!_holes.empty()) {
 		const auto tmp = *_holes.begin();
 
 		_holes.erase(_holes.begin());
@@ -65,6 +65,18 @@ variable::index_type variable::add_tmp(bool tos)
 	return _next++;
 }
 
+variable::index_type variable::push() noexcept
+{
+	return _arguments++;
+}
+
+void variable::pop(std::size_t count)
+{
+	BIA_EXPECTS(count <= _arguments);
+
+	_arguments -= count;
+}
+
 variable::index_type variable::latest_index() const
 {
 	BIA_EXPECTS(_next);
@@ -72,12 +84,7 @@ variable::index_type variable::latest_index() const
 	return _next - 1;
 }
 
-bool variable::is_tos(index_type index) const noexcept
-{
-	return _next && _next - 1 == index;
-}
-
-std::uint8_t variable::remove_tmp(index_type index)
+void variable::remove_tmp(index_type index)
 {
 	_holes.insert(index);
 
@@ -93,26 +100,19 @@ std::uint8_t variable::remove_tmp(index_type index)
 	if (c != _next) {
 		_holes.erase(i.base(), _holes.end());
 
-		const auto tmp = _next - c;
-		_next          = c;
-
-		return static_cast<std::uint8_t>(tmp);
+		_next = c;
 	}
-
-	return 0;
 }
 
-std::uint8_t variable::remove_overshadower(const resource::view& identifer)
+void variable::remove_overshadower(const resource::view& identifer)
 {
 	const auto result = _overshadower.find(identifer);
 
-	if (result == _overshadower.end()) {
-		return 0;
+	if (result != _overshadower.end()) {
+		const auto index = result->second;
+
+		_overshadower.erase(result);
+
+		remove_tmp(index);
 	}
-
-	const auto index = result->second;
-
-	_overshadower.erase(result);
-
-	return remove_tmp(index);
 }

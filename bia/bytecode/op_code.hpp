@@ -23,6 +23,9 @@ struct args
 	std::uint16_t index;
 };
 
+struct push
+{};
+
 struct global
 {
 	std::uint16_t index;
@@ -56,8 +59,8 @@ enum op_code : op_code_type
 	oc_test     = 2 << 11, // [mso, mso](operator, left source, right source)
 
 	/** normal op code variations */
-	oc_invoke =
-	    static_cast<op_code_type>(0x8000 | (0 << 7)), // [mso, mdo](count, kwarg count, source, destination)
+	oc_invoke = static_cast<op_code_type>(
+	    0x8000 | (0 << 7)), // [mso, mdo](offset, count, kwarg count, source, destination)
 	oc_instantiate = static_cast<op_code_type>(0x8000 | (1 << 7)), // [co, mdo](constant, destination)
 	oc_refer       = static_cast<op_code_type>(0x8000 | (2 << 7)), // [mso, mdo](source, destination)
 	oc_clone       = static_cast<op_code_type>(0x8000 | (3 << 7)), // [mso, mdo](source, destination)
@@ -71,7 +74,7 @@ enum op_code : op_code_type
 	oc_name        = static_cast<op_code_type>(0x8000 | (10 << 7)), // [ro](name resource)
 	oc_return_void = static_cast<op_code_type>(0x8000 | (11 << 7)), // []()
 	oc_invert      = static_cast<op_code_type>(0x8000 | (12 << 7)), // []()
-	oc_drop        = static_cast<op_code_type>(0x8000 | (13 << 7)), // []()
+	oc_prep_call   = static_cast<op_code_type>(0x8000 | (13 << 7)), // []()
 };
 
 namespace detail {

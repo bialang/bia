@@ -36,9 +36,11 @@ inline tokens_type statement(present present, tokens_type tokens)
 		break;
 	}
 	default: {
-		tokens = expression(present, tokens, bytecode::member::local{ present.variables.add_tmp().id });
+		bytecode::member::local tmp{ present.variables.add_tmp() };
 
-		present.variables.remove_tmp();
+		tokens = expression(present, tokens, tmp);
+
+		present.variables.remove_tmp(tmp.index);
 
 		break;
 	}

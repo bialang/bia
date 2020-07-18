@@ -14,6 +14,7 @@ enum member_destination_option
 	mdo_args_8,
 	mdo_global_8,
 	mdo_local_8,
+	mdo_push,
 
 	mdo_count = 8
 };

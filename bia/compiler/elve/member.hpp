@@ -28,13 +28,12 @@ inline tokens_type member_call(present present, tokens_type tokens, Source sourc
 	}
 
 	while (true) {
-		const auto tuple = parameter(present, tokens);
+		present.writer.write<true, bytecode::oc_prep_call>();
 
-		present.writer.write<true, bytecode::oc_invoke>(std::get<1>(tuple), std::get<2>(tuple), destination,
-		                                                destination);
-		present.variables.pop(std::get<1>(tuple) + std::get<2>(tuple));
+		tokens = parameter(present, tokens);
 
-		tokens = std::get<0>(tuple);
+		present.writer.write<true, bytecode::oc_invoke>(destination, destination);
+		//present.variables.pop(std::get<1>(tuple) + std::get<2>(tuple));
 
 		if (tokens.empty() ||
 		    static_cast<token::type>(tokens.data()->value.index()) != token::type::control) {
