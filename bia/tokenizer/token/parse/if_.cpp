@@ -1,33 +1,13 @@
-#ifndef BIA_TOKENIZER_TOKEN_PARSE_IF_HPP_
-#define BIA_TOKENIZER_TOKEN_PARSE_IF_HPP_
-
-#include "../parameter.hpp"
 #include "any_of.hpp"
 #include "batch.hpp"
-#include "expression.hpp"
+#include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-
-inline exception::syntax_details else_(parameter& parameter)
+inline bia::exception::syntax_details else_if(bia::tokenizer::token::parameter& parameter)
 {
-	// compare else
-	if (const auto err = any_of(parameter, "invalid else statement", "else").second) {
-		return err;
-	}
+	using namespace bia::tokenizer::token;
+	using namespace parse;
 
-	parameter.bundle.add({ token::keyword::else_ });
-
-	eat_whitespaces(parameter);
-
-	return batch(parameter, no_batch_call);
-}
-
-inline exception::syntax_details else_if(parameter& parameter)
-{
 	// compare else
 	if (const auto err = any_of(parameter, "invalid else if statement", "else").second) {
 		return err;
@@ -52,7 +32,21 @@ inline exception::syntax_details else_if(parameter& parameter)
 	return batch(parameter, no_batch_call);
 }
 
-inline exception::syntax_details if_(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::else_(parameter& parameter)
+{
+	// compare else
+	if (const auto err = any_of(parameter, "invalid else statement", "else").second) {
+		return err;
+	}
+
+	parameter.bundle.add({ token::keyword::else_ });
+
+	eat_whitespaces(parameter);
+
+	return batch(parameter, no_batch_call);
+}
+
+bia::exception::syntax_details bia::tokenizer::token::parse::if_(parameter& parameter)
 {
 	// compare if
 	if (const auto err = any_of(parameter, "invalid if statement", "if").second) {
@@ -97,10 +91,3 @@ inline exception::syntax_details if_(parameter& parameter)
 
 	return {};
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif

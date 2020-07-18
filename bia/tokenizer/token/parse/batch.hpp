@@ -1,17 +1,13 @@
 #ifndef BIA_TOKENIZER_TOKEN_PARSE_BATCH_HPP_
 #define BIA_TOKENIZER_TOKEN_PARSE_BATCH_HPP_
 
-#include "../parameter.hpp"
-#include "expression.hpp"
+#include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
 namespace bia {
 namespace tokenizer {
 namespace token {
 namespace parse {
-
-exception::syntax_details single_stmt(parameter& parameter);
-exception::syntax_details cmd_end(parameter& parameter);
 
 const auto no_batch_call = [] { return true; };
 
