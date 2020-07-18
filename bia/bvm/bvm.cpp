@@ -305,6 +305,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			const auto name    = string_pointer(ro_parameter(std::get<0>(options), ip, resources));
 			auto& src          = stack.last_push();
 
+			stack.mark_kwarg();
 			token->set(src, make_key_value_pair(name, src));
 
 			break;
