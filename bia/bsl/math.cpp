@@ -3,6 +3,7 @@
 #include "helper.hpp"
 
 #include <bia/connector/connector-inl.hpp>
+#include <bia/gc/temporary_token.hpp>
 #include <bia/member/native/integer.hpp>
 #include <cmath>
 
@@ -91,7 +92,8 @@ void math::register_gcables(gc::gc& gc) const noexcept
 
 bia::member::native::dict* math::_init(gc::gc& gc)
 {
-	const auto dict = gc.construct<member::native::dict>().release();
+	const auto dict  = gc.construct<member::native::dict>().release();
+	const auto token = gc.activate_temporarily();
 
 	put_function(gc, *dict, "sum", &sum);
 	put_function(gc, *dict, "max", &max);
@@ -117,6 +119,8 @@ bia::member::native::dict* math::_init(gc::gc& gc)
 	put_function(gc, *dict, "floor", static_cast<double (*)(double)>(&std::floor));
 	put_function(gc, *dict, "round", static_cast<double (*)(double)>(&std::round));
 	put_function(gc, *dict, "hypot", static_cast<double (*)(double, double)>(&std::hypot));
+	put_gcable(gc, *dict, "pi", creator::create(3.141592653589793238462643383279502884197169399375105820974));
+	put_gcable(gc, *dict, "pi", creator::create(2.718281828459045235360287471352662497757247093699959574966));
 
 	return dict;
 }

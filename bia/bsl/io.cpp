@@ -31,8 +31,10 @@ inline void print(bia::connector::parameters_type params)
 		if (ptr) {
 			if (dynamic_cast<const bia::member::native::string*>(ptr)) {
 				std::cout << bia::member::cast::cast<const char*>(*ptr);
+			} else if (dynamic_cast<const bia::member::native::floating_point*>(ptr)) {
+				std::cout << bia::member::cast::cast<bia::member::member::float_type>(*ptr);
 			} else {
-				std::cout << bia::member::cast::cast<int>(*ptr);
+				std::cout << bia::member::cast::cast<bia::member::member::int_type>(*ptr);
 			}
 		} else {
 			std::cout << "<null>";
