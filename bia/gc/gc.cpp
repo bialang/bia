@@ -1,12 +1,13 @@
 #include "gc.hpp"
 
 #include "gcable.hpp"
+#include "temporary_token.hpp"
 #include "token.hpp"
 
-#include <cstring>
 #include <bia/log/log.hpp>
 #include <bia/thread/lock/unique_lock.hpp>
 #include <bia/thread/thread.hpp>
+#include <cstring>
 
 using namespace bia::gc;
 
@@ -130,6 +131,11 @@ const std::shared_ptr<memory::allocator>& gc::allocator() noexcept
 gc* gc::active_gc() noexcept
 {
 	return _active_gc_instance;
+}
+
+temporary_token gc::activate_temporarily()
+{
+	return { this };
 }
 
 void gc::register_gcable(const void* ptr)

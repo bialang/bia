@@ -22,6 +22,7 @@ namespace gc {
 template<typename>
 class gcable;
 class token;
+class temporary_token;
 
 /**
  * A garbage collector highly optimized for the BVM. Using this collector for custom task is not recommended.
@@ -105,6 +106,7 @@ public:
 	 * @returns the current gc if set, otherwise `nullptr`
 	 */
 	static gc* active_gc() noexcept;
+	temporary_token activate_temporarily();
 	/**
 	 * Starts monitoring for the given pointer.
 	 *
@@ -119,6 +121,7 @@ private:
 	template<typename T>
 	friend class gcable;
 	friend token;
+	friend temporary_token;
 
 	/** the currently active instance */
 	static thread_local gc* _active_gc_instance;
