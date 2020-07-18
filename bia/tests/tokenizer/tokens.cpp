@@ -1,8 +1,7 @@
 #include <algorithm>
 #include <bia/gc/memory/simple_allocator.hpp>
 #include <bia/tokenizer/token/parse/any_of.hpp>
-#include <bia/tokenizer/token/parse/number.hpp>
-#include <bia/tokenizer/token/parse/string.hpp>
+#include <bia/tokenizer/token/parse/tokens.hpp>
 #include <bia/tokenizer/token/parse/whitespace_eater.hpp>
 #include <bia/util/finally.hpp>
 #include <catch.hpp>

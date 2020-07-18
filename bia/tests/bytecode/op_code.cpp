@@ -24,7 +24,7 @@ TEST_CASE("opcodes", "[bytecode]")
 	REQUIRE(to_op_code_base(oc_name) == oc_name);
 	REQUIRE(to_op_code_base(oc_return_void) == oc_return_void);
 	REQUIRE(to_op_code_base(oc_invert) == oc_invert);
-	REQUIRE(to_op_code_base(oc_drop) == oc_drop);
+	REQUIRE(to_op_code_base(oc_prep_call) == oc_prep_call);
 }
 
 template<op_code OpCode, typename... Variations>
