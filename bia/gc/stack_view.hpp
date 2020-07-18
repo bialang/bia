@@ -5,8 +5,8 @@
 #include "object/pointer.hpp"
 
 #include <bia/exception/bounds_error.hpp>
-#include <functional>
-#include <memory>
+#include <utility>
+#include <vector>
 
 namespace bia {
 namespace member {
@@ -19,118 +19,101 @@ namespace gc {
 class stack_view
 {
 public:
+	struct call_frame;
+
 	typedef object::pointer<member::member> element_type;
 
-	stack_view(element_type* data, std::size_t size) noexcept
+	stack_view(element_type* base, std::size_t size) noexcept : _base{ base }, _max_size{ size }
 	{
-		_data     = data;
-		_max_size = size;
+		_last_push = _max_size;
 	}
-	std::size_t size() const noexcept
+	void prep_call()
 	{
-		return _cursor;
+		_arg_frames.push_back({ _last_push, 0 });
 	}
-	std::size_t max_size() const noexcept
-	{
-		return _max_size;
-	}
-	void drop(std::size_t count)
-	{
-		if (count > _cursor) {
-			BIA_THROW(exception::bounds_error, "stack underflow");
-		}
-
-		_cursor -= count;
-	}
-	element_type& pop()
-	{
-		if (!_cursor) {
-			BIA_THROW(exception::bounds_error, "stack underflow");
-		}
-
-		return _data[--_cursor];
-	}
-	element_type& tos() const
-	{
-		if (!_cursor) {
-			BIA_THROW(exception::bounds_error, "empty stack");
-		}
-
-		return _data[_cursor - 1];
-	}
+	/**
+	 * Pushes a new element onto the argument stack part.
+	 *
+	 * @return the newly pushed element
+	 * @throw exception::bounds_error if the push could overwrite the local space
+	 */
 	element_type& push()
 	{
-		if (_cursor >= _max_size) {
-			BIA_THROW(exception::bounds_error, "stack overflow");
+		if (_last_push - 1 <= _cursor) {
+			BIA_THROW(exception::bounds_error, "stack argument overflow");
 		}
 
-		return _data[_cursor++];
+		return _base[--_last_push];
 	}
-	element_type& local_at(std::size_t index) const
+	element_type& local_at(std::size_t index)
 	{
-		if (index >= _cursor) {
+		if (index >= _max_size) {
 			BIA_THROW(exception::bounds_error, "out of bounds");
+		} else if (index > _cursor) {
+			_cursor = index;
 		}
 
-		return _data[index];
+		return _base[index];
 	}
 	element_type& arg_at(std::size_t index) const
 	{
-		if (index >= _args) {
+		if (index >= _max_size) {
 			BIA_THROW(exception::bounds_error, "out of bounds");
 		}
 
-		return *(_data - _args + index);
+		return _base[_max_size - index - 1];
 	}
-	element_type* data() const noexcept
+	/**
+	 * Returns the last pushed argument.
+	 *
+	 * @return the last pushed argument
+	 * @throw exception::bounds_error if no argument was pushed
+	 */
+	element_type& last_push() const
 	{
-		return _data;
-	}
-	element_type* begin() const noexcept
-	{
-		return _data;
-	}
-	element_type* end() const noexcept
-	{
-		return _data + _max_size;
-	}
-	stack_view frame(std::size_t arg_count) const
-	{
-		BIA_EXPECTS(arg_count <= _cursor);
+		if (_last_push == _max_size) {
+			BIA_THROW(exception::bounds_error, "no last argument available");
+		}
 
-		stack_view s{ _data + _cursor, _max_size - _cursor };
-
-		s._args = arg_count;
-
-		return s;
+		return _base[_last_push];
 	}
-	bool operator==(const stack_view& other) const noexcept
-	{
-		return _data == other._data;
-	}
+	call_frame make_call_frame();
 
 private:
 	friend class token;
 
-	element_type* _data   = nullptr;
-	std::size_t _cursor   = 0;
-	std::size_t _max_size = 0;
-	std::size_t _args     = 0;
+	element_type* const _base;
+	const std::size_t _max_size;
+	std::size_t _cursor = 0;
+	std::size_t _last_push;
+	std::vector<std::pair<std::size_t, std::size_t>> _arg_frames;
 };
+
+struct stack_view::call_frame
+{
+	stack_view stack;
+	std::size_t arg_count;
+	std::size_t kwarg_count;
+};
+
+inline stack_view::call_frame stack_view::make_call_frame()
+{
+	if (_arg_frames.empty()) {
+		BIA_THROW(exception::bounds_error, "no arg frame");
+	}
+
+	const auto arg_frame = _arg_frames.back();
+	call_frame frame{ { _base + _cursor + 1, arg_frame.first - (_cursor + 1) }, 0, 0 };
+
+	frame.arg_count = arg_frame.first - _last_push;
+	_last_push      = arg_frame.first;
+
+	_arg_frames.pop_back();
+
+	return frame;
+}
 
 } // namespace gc
 } // namespace bia
-
-template<>
-struct std::hash<bia::gc::stack_view> : private hash<bia::gc::stack_view::element_type*>
-{
-	typedef bia::gc::stack_view argument_type;
-	typedef result_type result_type;
-
-	result_type operator()(const argument_type& s) const noexcept
-	{
-		return hash<bia::gc::stack_view::element_type*>::operator()(s.data());
-	}
-};
 
 #endif

@@ -21,7 +21,7 @@ namespace connector {
 
 class parameters;
 
-typedef const parameters& parameters_type;
+typedef parameters& parameters_type;
 
 template<typename Return, typename... Args>
 gc::gcable<member::member> connect_static(Return (*function)(Args...), parameters_type params);

@@ -2,13 +2,11 @@
 #define BIA_COMPILER_ELVE_EXPRESSION_HPP_
 
 #include "../jump_manager.hpp"
+#include "helpers.hpp"
 #include "member.hpp"
-#include "present.hpp"
 
-#include <bia/bytecode/writer/instruction.hpp>
 #include <bia/exception/implementation_error.hpp>
 #include <bia/tokenizer/token/token.hpp>
-#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -60,7 +58,7 @@ inline tokens_type value(present present, tokens_type tokens, Destination destin
 		bytecode::member::resource src{ (std::uint16_t) present.resources.index_of(
 			tokens.data()->value.get<token::string>().memory) };
 
-		present.writer.write<true, bytecode::oc_refer>(src, std::forward<Destination>(destination));
+		present.writer.write<true, bytecode::oc_refer>(src, destination);
 
 		break;
 	}
@@ -69,19 +67,18 @@ inline tokens_type value(present present, tokens_type tokens, Destination destin
 		bytecode::member::resource src{ (std::uint16_t) present.resources.index_of(
 			tokens.data()->value.get<token::regex>().memory) };
 
-		present.writer.write<true, bytecode::oc_refer>(src, std::forward<Destination>(destination));
+		present.writer.write<true, bytecode::oc_refer>(src, destination);
 
 		break;
 	}
 	case token::type::constant_int: {
 		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<token::int_type>(),
-		                                                     std::forward<Destination>(destination));
+		                                                     destination);
 
 		break;
 	}
 	case token::type::constant_float: {
-		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<double>(),
-		                                                     std::forward<Destination>(destination));
+		present.writer.write<true, bytecode::oc_instantiate>(tokens.data()->value.get<double>(), destination);
 
 		break;
 	}
@@ -101,7 +98,7 @@ inline bool valid_right_hand(tokens_type tokens)
 }
 
 template<typename Member>
-inline void apply_self_operator(present present, tokenizer::token::operator_ op, Member&& mem)
+inline void apply_self_operator(present present, tokenizer::token::operator_ op, Member mem)
 {
 	using namespace tokenizer::token;
 
@@ -109,19 +106,18 @@ inline void apply_self_operator(present present, tokenizer::token::operator_ op,
 		present.writer.write<true, bytecode::oc_test>(
 		    static_cast<typename std::underlying_type<member::test_operator>::type>(
 		        member::test_operator::self),
-		    std::forward<Member>(mem), std::forward<Member>(mem));
+		    mem, mem);
 		present.writer.write<true, bytecode::oc_invert>();
-		present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{},
-		                                                     std::forward<Member>(mem));
+		present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, mem);
 	} else {
 		present.writer.write<true, bytecode::oc_self_operator>(
 		    static_cast<typename std::underlying_type<member::infix_operator>::type>(to_self_operator(op)),
-		    std::forward<Member>(mem), std::forward<Member>(mem));
+		    mem, mem);
 	}
 }
 
 template<typename Destination>
-inline tokens_type expression_impl(present present, tokens_type tokens, Destination&& destination,
+inline tokens_type expression_impl(present present, tokens_type tokens, Destination destination,
                                    tokenizer::token::precedence_type precedence, jump_manager& jumper)
 {
 	using namespace tokenizer::token;
@@ -139,10 +135,9 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 		BIA_EXPECTS(!tokens.empty());
 	}
 
-	tokens = value(present, tokens, bytecode::member::tos{});
-
-	const bytecode::member::local left{ present.variables.add_tmp().id };
 	auto last_logical_and = false;
+
+	tokens = value(present, tokens, destination);
 
 	while (valid_right_hand(tokens)) {
 		const auto op            = tokens.data()->value.get<operator_>();
@@ -155,7 +150,7 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 
 		// prefix operator is stronger
 		if (self_operator.first && op_precedence <= precedence_of(self_operator.second)) {
-			apply_self_operator(present, self_operator.second, left);
+			apply_self_operator(present, self_operator.second, destination);
 
 			self_operator.first = false;
 		}
@@ -174,65 +169,55 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 			present.writer.write<true, bytecode::oc_test>(
 			    static_cast<typename std::underlying_type<member::test_operator>::type>(
 			        member::test_operator::self),
-			    left, left);
+			    destination, destination);
 			jumper.jump(op == operator_::logical_and ? jump_manager::type::if_false
 			                                         : jump_manager::type::if_true,
 			            jump_manager::destination::end);
 
-			tokens = expression_impl(present, tokens.subspan(1), left, op_precedence, jumper);
+			tokens = expression_impl(present, tokens.subspan(1), destination, op_precedence, jumper);
 
 			continue;
 		}
 
 		if (op == operator_::member_access) {
 			present.writer.write<true, bytecode::oc_get>(
-			    left,
+			    destination,
 			    bytecode::member::resource{
 			        present.resources.index_of(tokens.data()[1].value.get<token::identifier>().memory) },
-			    left);
+			    destination);
 
-			tokens = member_call(present, tokens.subspan(2), left, left);
+			tokens = member_call(present, tokens.subspan(2), destination, destination);
 		} else {
 			// right hand
-			tokens =
-			    expression_impl(present, tokens.subspan(1), bytecode::member::tos{}, op_precedence, jumper);
+			const bytecode::member::local right{ present.variables.add_tmp() };
 
-			const bytecode::member::local right{ present.variables.add_tmp().id };
+			tokens = expression_impl(present, tokens.subspan(1), right, op_precedence, jumper);
 
 			// call operator
 			if (detail::is_test_operator(op)) {
 				present.writer.write<true, bytecode::oc_test>(
 				    static_cast<typename std::underlying_type<member::test_operator>::type>(
 				        to_test_operator(op)),
-				    left, right);
-				present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, left);
+				    destination, right);
+				present.writer.write<true, bytecode::oc_instantiate>(bytecode::test_register{}, destination);
 			} else {
 				present.writer.write<true, bytecode::oc_operator>(
-				    left, right,
+				    destination, right,
 				    static_cast<typename std::underlying_type<member::infix_operator>::type>(
 				        to_infix_operator(op)),
-				    left);
+				    destination);
 			}
 
-			present.writer.write<true, bytecode::oc_drop>(1);
-			present.variables.remove_tmp();
+			present.variables.remove_tmp(right.index);
 		}
 	}
 
 	// apply self operator
 	if (self_operator.first) {
-		apply_self_operator(present, self_operator.second, left);
+		apply_self_operator(present, self_operator.second, destination);
 	}
 
 	jumper.mark(jump_manager::destination::end);
-
-	// destination was not tos
-	if (!std::is_same<typename std::decay<Destination>::type, bytecode::member::tos>::value) {
-		present.writer.write<true, bytecode::oc_refer>(left, std::forward<Destination>(destination));
-		present.writer.write<true, bytecode::oc_drop>(1);
-	}
-
-	present.variables.remove_tmp();
 
 	return tokens;
 }
@@ -240,11 +225,23 @@ inline tokens_type expression_impl(present present, tokens_type tokens, Destinat
 } // namespace detail
 
 template<typename Destination>
-inline tokens_type expression(present present, tokens_type tokens, Destination&& destination)
+inline tokens_type expression(present present, tokens_type tokens, Destination destination)
 {
 	jump_manager jumper{ &present.writer.output() };
 
-	return detail::expression_impl(present, tokens, std::forward<Destination>(destination), -1, jumper);
+	return detail::expression_impl(present, tokens, destination, -1, jumper);
+}
+
+inline tokens_type expression(present present, tokens_type tokens, bytecode::member::push destination)
+{
+	bytecode::member::local tmp{ present.variables.add_tmp() };
+
+	tokens = expression(present, tokens, tmp);
+
+	present.writer.write<true, bytecode::oc_refer>(tmp, destination);
+	present.variables.remove_tmp(tmp.index);
+
+	return tokens;
 }
 
 } // namespace elve

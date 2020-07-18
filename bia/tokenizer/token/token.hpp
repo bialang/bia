@@ -60,6 +60,7 @@ struct token
 		let,
 		import,
 		while_,
+		for_,
 		break_,
 		continue_,
 		null,

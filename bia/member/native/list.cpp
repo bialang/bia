@@ -1,6 +1,7 @@
 #include "list.hpp"
 
 #include "../cast/cast.hpp"
+#include "../function/generator.hpp"
 #include "../function/method.hpp"
 #include "string.hpp"
 
@@ -90,6 +91,39 @@ bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 	} else if (!name.compare("reverse")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_reverse)>>(
 		    *this, &list::_reverse);
+	} else if (!name.compare("__iter__")) {
+		class iterator : public gc::object::base
+		{
+		public:
+			iterator(list* parent) : _parent{ parent }
+			{}
+			void gc_mark_children(bool mark) const noexcept override
+			{
+				gc::object::gc_mark(_parent, mark);
+			}
+			gc::gcable<member> next()
+			{
+				thread::lock::guard<decltype(_parent->_mutex)> lock{ _parent->_mutex };
+
+				if (_index >= _parent->_data.size()) {
+					return function::stop_iteration;
+				}
+
+				return _parent->_data[_index++];
+			}
+
+		protected:
+			void register_gcables(gc::gc& gc) const noexcept override
+			{}
+
+		private:
+			list* _parent;
+			std::size_t _index = 0;
+		};
+
+		return gc::gc::active_gc()
+		    ->construct<function::generator<function::method<false, decltype(&iterator::next)>>>(
+		        iterator{ this }, &iterator::next);
 	}
 
 	return {};

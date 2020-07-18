@@ -1,8 +1,7 @@
 #ifndef BIA_COMPILER_ELVE_MEMBER_HPP_
 #define BIA_COMPILER_ELVE_MEMBER_HPP_
 
-#include "parameter.hpp"
-#include "present.hpp"
+#include "helpers.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
 #include <bia/exception/implementation_error.hpp>
@@ -21,38 +20,23 @@ inline tokens_type member_call(present present, tokens_type tokens, Source sourc
 {
 	using tokenizer::token::token;
 
-	if (tokens.empty() || static_cast<token::type>(tokens.data()->value.index()) != token::type::control) {
-		present.writer.write<true, bytecode::oc_refer>(source, destination);
+	present.writer.write<true, bytecode::oc_refer>(source, destination);
 
+	if (tokens.empty() || static_cast<token::type>(tokens.data()->value.index()) != token::type::control) {
 		return tokens;
 	}
 
-	present.writer.write<true, bytecode::oc_refer>(source, bytecode::member::tos{});
-
-	bytecode::member::local tmp{ present.variables.add_tmp().id };
-
 	while (true) {
-		const auto tuple = parameter(present, tokens);
+		present.writer.write<true, bytecode::oc_prep_call>();
 
-		present.writer.write<true, bytecode::oc_invoke>(std::get<1>(tuple), std::get<2>(tuple), tmp, tmp);
+		tokens = parameter(present, tokens);
 
-		for (auto i = std::get<1>(tuple); i--;) {
-			present.variables.remove_tmp();
-		}
-
-		tokens = std::get<0>(tuple);
+		present.writer.write<true, bytecode::oc_invoke>(destination, destination);
 
 		if (tokens.empty() ||
 		    static_cast<token::type>(tokens.data()->value.index()) != token::type::control) {
 			break;
 		}
-	}
-
-	present.variables.remove_tmp();
-
-	if (!std::is_same<Destination, bytecode::member::tos>::value) {
-		present.writer.write<true, bytecode::oc_refer>(tmp, destination);
-		present.writer.write<true, bytecode::oc_drop>(1);
 	}
 
 	return tokens;
@@ -72,14 +56,11 @@ inline tokens_type member(present present, tokens_type tokens, Destination desti
 		return member_call(present, tokens.subspan(1), identifier.builtin, destination);
 	}
 
-	const auto index = present.variables.index_of(identifier.memory);
+	const auto index = present.variables.find(identifier.memory);
 
 	// local source
 	if (index.second) {
-		BIA_EXPECTS(index.first.scope_id == 0);
-
-		return member_call(present, tokens.subspan(1), bytecode::member::local{ index.first.id },
-		                   destination);
+		return member_call(present, tokens.subspan(1), bytecode::member::local{ index.first }, destination);
 	}
 
 	// global source

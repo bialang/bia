@@ -1,14 +1,33 @@
 #include <bia/bia.hpp>
 #include <bia/bsl/io.hpp>
 #include <bia/exception/syntax_error.hpp>
+#include <bia/member/function/generator.hpp>
 #include <iostream>
 #include <sstream>
+#include <typeinfo>
 
 int main()
 {
 	bia::engine engine{};
 
 	engine.module<bia::bsl::io>("io", engine.gc());
+	engine.function("range", [](int start, int end, int step) {
+		std::cout << "range: " << start << "-" << end << "/" << step << std::endl;
+		auto foo = [start, end, step]() mutable -> bia::gc::gcable<bia::member::member> {
+			const auto current = start;
+
+			if ((start += step, current) >= end) {
+				return bia::member::function::stop_iteration;
+			}
+
+			return bia::creator::create(current);
+		};
+
+		return bia::gc::gc::active_gc()
+		    ->construct<bia::member::function::generator<
+		        bia::member::function::method<false, decltype(&decltype(foo)::operator())>>>(
+		        foo, &decltype(foo)::operator());
+	});
 
 	std::stringstream code;
 
@@ -16,15 +35,29 @@ int main()
 
 import io
 
-let l = list(123, 232)
+io.print("hi", "ich", "bins")
 
-io.print(l.front(), l.size())
+for i in range(0, 10, 1) {
+	io.print(i)
+}
 
-l.insert(0, "hi", "bye")
-io.print(l.front(), l.size())
+/*
+import io
 
-l.reverse()
-io.print(l.front(), l.size())
+io.print("hi", "bye")
+io.print("hey")
+
+/*
+let x = range(0, 10, 1)
+
+io.print("outside the loop", x())
+
+for i in x {
+	io.print("inside the loop", i)
+}
+
+// should it be still valid?
+io.print(i)*/
 
 )";
 

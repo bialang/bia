@@ -15,30 +15,21 @@ namespace writer {
 
 template<typename T>
 using is_member_source =
-    util::type_traits::equals_any_type<typename std::decay<T>::type, member::tos, member::args,
-                                       member::global, member::local, member::resource, member::builtin>;
+    util::type_traits::equals_any_type<typename std::decay<T>::type, member::args, member::global,
+                                       member::local, member::resource, member::builtin>;
 template<typename T>
-using is_member_destination = util::type_traits::equals_any_type<typename std::decay<T>::type, member::tos,
-                                                                 member::global, member::local>;
-template<typename T>
-using is_indexed_member = util::type_traits::equals_any_type<typename std::decay<T>::type, member::args,
-                                                             member::global, member::local, member::resource>;
-template<typename T>
-using is_indexless_member = util::type_traits::equals_any_type<typename std::decay<T>::type, member::tos>;
-template<typename T>
-using is_optimizeable_member =
-    util::type_traits::equals_any_type<typename std::decay<T>::type, member::global, member::local,
-                                       member::resource>;
-template<typename T>
-using is_not_optimizeable_member =
-    util::type_traits::equals_any_type<typename std::decay<T>::type, member::tos, member::args>;
+using is_member_destination = util::type_traits::equals_any_type<typename std::decay<T>::type, member::args,
+                                                                 member::global, member::local, member::push>;
 
-template<bool Optimize, typename T>
-inline typename std::enable_if<is_indexed_member<T>::value>::type optimized_member(std::ostream& output,
-                                                                                   T member)
+template<bool Optimize, typename Type>
+inline void optimized_member(std::ostream& output, Type member)
 {
 	optimized_write<Optimize>(output, member.index);
 }
+
+template<bool Optimize>
+inline void optimized_member(std::ostream& output, member::push)
+{}
 
 template<bool Optimize>
 inline void optimized_member(std::ostream& output, member::builtin builtin) noexcept
@@ -47,56 +38,39 @@ inline void optimized_member(std::ostream& output, member::builtin builtin) noex
 	                       static_cast<typename std::underlying_type<member::builtin>::type>(builtin));
 }
 
-template<bool Optimize, typename T>
-inline typename std::enable_if<is_indexless_member<T>::value>::type optimized_member(std::ostream&,
-                                                                                     T) noexcept
-{}
-
 template<bool Optimize>
-inline member_source_option member_source_index(member::builtin) noexcept
+constexpr member_source_option member_source_index(member::builtin) noexcept
 {
 	return member_source_option::mso_builtin;
 }
 
 template<bool Optimize, typename T>
-inline typename std::enable_if<is_member_source<T>::value && is_not_optimizeable_member<T>::value,
-                               member_source_option>::type member_source_index(T) noexcept
-{
-	return static_cast<member_source_option>(
-	    util::type_traits::type_index<typename std::decay<T>::type, member::tos, member::args>::value);
-}
-
-template<bool Optimize, typename T>
-inline typename std::enable_if<is_member_source<T>::value && is_optimizeable_member<T>::value,
-                               member_source_option>::type
+inline typename std::enable_if<is_member_source<T>::value, member_source_option>::type
     member_source_index(T member) noexcept
 {
-	constexpr auto index = util::type_traits::type_index<typename std::decay<T>::type, member::global,
-	                                                     member::local, member::resource>::value +
-	                       mso_global_16;
+	constexpr auto index =
+	    util::type_traits::type_index<typename std::decay<T>::type, member::args, member::global,
+	                                  member::local, member::resource>::value;
 
 	return static_cast<member_source_option>(
-	    index + (Optimize && util::limit_checker<std::uint8_t>::in_bounds(member.index) ? 3 : 0));
+	    index + (Optimize && util::limit_checker<std::uint8_t>::in_bounds(member.index) ? 4 : 0));
 }
 
-template<bool Optimize, typename T>
-inline typename std::enable_if<is_member_destination<T>::value && is_not_optimizeable_member<T>::value,
-                               member_destination_option>::type member_destination_index(T) noexcept
+template<bool Optimize>
+constexpr member_destination_option member_destination_index(member::push)
 {
-	return mdo_tos;
+	return mdo_push;
 }
 
 template<bool Optimize, typename T>
-inline typename std::enable_if<is_member_destination<T>::value && is_optimizeable_member<T>::value,
-                               member_destination_option>::type
+inline typename std::enable_if<is_member_destination<T>::value, member_destination_option>::type
     member_destination_index(T member) noexcept
 {
-	constexpr auto index =
-	    util::type_traits::type_index<typename std::decay<T>::type, member::global, member::local>::value +
-	    mdo_global_16;
+	constexpr auto index = util::type_traits::type_index<typename std::decay<T>::type, member::args,
+	                                                     member::global, member::local>::value;
 
 	return static_cast<member_destination_option>(
-	    index + (Optimize && util::limit_checker<std::uint8_t>::in_bounds(member.index) ? 2 : 0));
+	    index + (Optimize && util::limit_checker<std::uint8_t>::in_bounds(member.index) ? 3 : 0));
 }
 
 template<bool Optimize>

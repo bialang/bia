@@ -26,6 +26,7 @@ exception::syntax_details single_stmt(parameter& parameter);
  */
 exception::syntax_details cmd_end(parameter& parameter);
 exception::syntax_details while_(parameter& parameter);
+exception::syntax_details for_each(parameter& parameter);
 exception::syntax_details member(parameter& parameter);
 exception::syntax_details operators(parameter& parameter);
 exception::syntax_details regex(parameter& parameter);

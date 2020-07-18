@@ -1,7 +1,7 @@
 #ifndef BIA_COMPILER_ELVE_PRESENT_HPP_
 #define BIA_COMPILER_ELVE_PRESENT_HPP_
 
-#include "../variable_manager.hpp"
+#include "../manager/variable.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
 #include <bia/resource/serializer.hpp>
@@ -14,7 +14,7 @@ namespace elve {
 
 struct present
 {
-	variable_manager& variables;
+	manager::variable& variables;
 	bytecode::writer::instruction& writer;
 	resource::serializer& resources;
 };
