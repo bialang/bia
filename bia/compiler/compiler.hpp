@@ -1,14 +1,14 @@
 #ifndef BIA_COMPILER_COMPILER_HPP_
 #define BIA_COMPILER_COMPILER_HPP_
 
-#include "variable_manager.hpp"
+#include "manager/variable.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
-#include <ostream>
 #include <bia/resource/serializer.hpp>
 #include <bia/tokenizer/token/receiver.hpp>
-#include <bia/util/variant.hpp>
 #include <bia/util/gsl.hpp>
+#include <bia/util/variant.hpp>
+#include <ostream>
 #include <utility>
 
 namespace bia {
@@ -26,7 +26,7 @@ public:
 private:
 	bytecode::writer::instruction _writer;
 	resource::serializer _resources;
-	variable_manager _variables;
+	manager::variable _variables;
 };
 
 } // namespace compiler

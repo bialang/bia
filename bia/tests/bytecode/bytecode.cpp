@@ -84,8 +84,7 @@ TEST_CASE("member writer", "[bytecode]")
 {
 	SECTION("unoptimized")
 	{
-		REQUIRE(member_source_index<false>(member::tos{}) == mso_tos);
-		REQUIRE(member_source_index<false>(member::args{ 255 }) == mso_args);
+		REQUIRE(member_source_index<false>(member::args{ 255 }) == mso_args_16);
 		REQUIRE(member_source_index<false>(member::global{ 25 }) == mso_global_16);
 		REQUIRE(member_source_index<false>(member::global{ 6531 }) == mso_global_16);
 		REQUIRE(member_source_index<false>(member::local{ 25 }) == mso_local_16);
@@ -93,7 +92,8 @@ TEST_CASE("member writer", "[bytecode]")
 		REQUIRE(member_source_index<false>(member::resource{ 25 }) == mso_resource_16);
 		REQUIRE(member_source_index<false>(member::resource{ 6531 }) == mso_resource_16);
 
-		REQUIRE(member_destination_index<false>(member::tos{}) == mdo_tos);
+		REQUIRE(member_destination_index<false>(member::args{ 25 }) == mdo_args_16);
+		REQUIRE(member_destination_index<false>(member::args{ 6531 }) == mdo_args_16);
 		REQUIRE(member_destination_index<false>(member::global{ 25 }) == mdo_global_16);
 		REQUIRE(member_destination_index<false>(member::global{ 6531 }) == mdo_global_16);
 		REQUIRE(member_destination_index<false>(member::local{ 25 }) == mdo_local_16);
@@ -102,8 +102,8 @@ TEST_CASE("member writer", "[bytecode]")
 
 	SECTION("optimized")
 	{
-		REQUIRE(member_source_index<true>(member::tos{}) == mso_tos);
-		REQUIRE(member_source_index<true>(member::args{ 255 }) == mso_args);
+		REQUIRE(member_source_index<true>(member::args{ 25 }) == mso_args_8);
+		REQUIRE(member_source_index<true>(member::args{ 6531 }) == mso_args_16);
 		REQUIRE(member_source_index<true>(member::global{ 25 }) == mso_global_8);
 		REQUIRE(member_source_index<true>(member::global{ 6531 }) == mso_global_16);
 		REQUIRE(member_source_index<true>(member::local{ 25 }) == mso_local_8);
@@ -111,7 +111,8 @@ TEST_CASE("member writer", "[bytecode]")
 		REQUIRE(member_source_index<true>(member::resource{ 25 }) == mso_resource_8);
 		REQUIRE(member_source_index<true>(member::resource{ 6531 }) == mso_resource_16);
 
-		REQUIRE(member_destination_index<true>(member::tos{}) == mdo_tos);
+		REQUIRE(member_destination_index<true>(member::args{ 25 }) == mdo_args_8);
+		REQUIRE(member_destination_index<true>(member::args{ 6531 }) == mdo_args_16);
 		REQUIRE(member_destination_index<true>(member::global{ 25 }) == mdo_global_8);
 		REQUIRE(member_destination_index<true>(member::global{ 6531 }) == mdo_global_16);
 		REQUIRE(member_destination_index<true>(member::local{ 25 }) == mdo_local_8);

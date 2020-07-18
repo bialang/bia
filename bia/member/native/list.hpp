@@ -1,18 +1,19 @@
-#ifndef BIA_MEMBER_NATIVE_REGEX_HPP_
-#define BIA_MEMBER_NATIVE_REGEX_HPP_
+#ifndef BIA_MEMBER_NATIVE_LIST_HPP_
+#define BIA_MEMBER_NATIVE_LIST_HPP_
 
 #include "../member.hpp"
 
-#include <regex>
+#include <bia/thread/lock/spin_mutex.hpp>
+#include <vector>
 
 namespace bia {
 namespace member {
 namespace native {
 
-class regex : public member
+class list : public member
 {
 public:
-	regex(std::regex pattern);
+	list(std::vector<member*> data) noexcept;
 	flag_type flags() const override;
 	test_type test(test_operator op, const member& right) const override;
 	gc::gcable<member> copy() const override;
@@ -30,11 +31,22 @@ protected:
 	void register_gcables(gc::gc& gc) const noexcept override;
 
 private:
-	std::regex _pattern;
+	std::vector<member*> _data;
+	mutable thread::lock::spin_mutex _mutex;
 
-	gc::gcable<member> _match(connector::parameters_type params);
-	gc::gcable<member> _search(connector::parameters_type params);
-	gc::gcable<member> _match_all(connector::parameters_type params);
+	std::size_t _size() const;
+	std::size_t _capacity() const;
+	void _push(connector::parameters_type params);
+	void _pop(connector::parameters_type params);
+	void _reserve(std::size_t size);
+	void _shrink_to_fit();
+	bool _empty() const;
+	void _clear();
+	member* _front() const;
+	member* _back() const;
+	void _insert(connector::parameters_type params);
+	void _erase(connector::parameters_type params);
+	void _reverse();
 };
 
 } // namespace native

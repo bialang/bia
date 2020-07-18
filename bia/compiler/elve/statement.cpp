@@ -1,21 +1,10 @@
-#ifndef BIA_COMPILER_ELVE_STATEMENT_HPP_
-#define BIA_COMPILER_ELVE_STATEMENT_HPP_
-
-#include "declaration.hpp"
 #include "expression.hpp"
-#include "if_.hpp"
-#include "import.hpp"
-#include "present.hpp"
-#include "while_.hpp"
+#include "helpers.hpp"
 
 #include <bia/exception/implementation_error.hpp>
 #include <bia/util/gsl.hpp>
 
-namespace bia {
-namespace compiler {
-namespace elve {
-
-inline tokens_type statement(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::statement(present present, tokens_type tokens)
 {
 	using namespace tokenizer::token;
 
@@ -27,16 +16,19 @@ inline tokens_type statement(present present, tokens_type tokens)
 		case token::keyword::let: tokens = declaration(present, tokens); break;
 		case token::keyword::import: tokens = import(present, tokens); break;
 		case token::keyword::while_: tokens = while_(present, tokens); break;
-		case token::keyword::if_: tokens = elve::if_(present, tokens); break;
+		case token::keyword::if_: tokens = if_(present, tokens); break;
+		case token::keyword::for_: tokens = for_each(present, tokens); break;
 		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
 		}
 
 		break;
 	}
 	default: {
-		tokens = expression(present, tokens, bytecode::member::tos{});
+		bytecode::member::local tmp{ present.variables.add_tmp() };
 
-		present.writer.write<true, bytecode::oc_drop>(1);
+		tokens = expression(present, tokens, tmp);
+
+		present.variables.remove_tmp(tmp.index);
 
 		break;
 	}
@@ -47,9 +39,3 @@ inline tokens_type statement(present present, tokens_type tokens)
 
 	return tokens.subspan(1);
 }
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif

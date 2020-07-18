@@ -1,23 +1,10 @@
-#ifndef BIA_TOKENIZER_TOKEN_PARSE_STATEMENT_HPP_
-#define BIA_TOKENIZER_TOKEN_PARSE_STATEMENT_HPP_
-
-#include "../parameter.hpp"
 #include "any_of.hpp"
-#include "expression.hpp"
-#include "identifier.hpp"
-#include "if_.hpp"
-#include "while_.hpp"
+#include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-#include <bia/exception/syntax_error.hpp>
 #include <bia/log/log.hpp>
 
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-
-inline exception::syntax_details decl_stmt(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::decl_stmt(parameter& parameter)
 {
 	// compare let
 	if (const auto err = any_of(parameter, "invalid decl keyword", "let").second) {
@@ -58,7 +45,7 @@ inline exception::syntax_details decl_stmt(parameter& parameter)
 	return expression(parameter);
 }
 
-inline exception::syntax_details import_stmt(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::import_stmt(parameter& parameter)
 {
 	// compare import
 	if (const auto err = any_of(parameter, "invalid import statement", "import").second) {
@@ -75,7 +62,7 @@ inline exception::syntax_details import_stmt(parameter& parameter)
 	return identifier(parameter);
 }
 
-inline exception::syntax_details single_stmt(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::single_stmt(parameter& parameter)
 {
 	const auto old = parameter.backup();
 
@@ -103,16 +90,16 @@ inline exception::syntax_details single_stmt(parameter& parameter)
 
 	parameter.restore(old);
 
+	if (!for_each(parameter)) {
+		return {};
+	}
+
+	parameter.restore(old);
+
 	return expression(parameter);
 }
 
-/**
- * Parses for a cmd end token.
- *
- * @param[in,out] parameter the required parameters
- * @returns an error if no cmd end is found
- */
-inline exception::syntax_details cmd_end(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::cmd_end(parameter& parameter)
 {
 	const auto err = eat_whitespaces<true>(parameter);
 	const auto pos = parameter.input.tellg();
@@ -130,10 +117,3 @@ inline exception::syntax_details cmd_end(parameter& parameter)
 
 	return {};
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif

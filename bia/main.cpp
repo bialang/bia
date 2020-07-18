@@ -1,8 +1,10 @@
 #include <bia/bia.hpp>
 #include <bia/bsl/io.hpp>
 #include <bia/exception/syntax_error.hpp>
+#include <bia/member/function/generator.hpp>
 #include <iostream>
 #include <sstream>
+#include <typeinfo>
 
 int main()
 {
@@ -16,11 +18,29 @@ int main()
 
 import io
 
-let i = /asd/
+let x = "ich bin 21 jahre alt und wir schreiben den 18.07.2020"
 
-let x = i == "hi yunus, ich bins yunus"
+for i in /\d+/.match_all(x) {
+	io.print(i.group(0))
+}
 
-io.print(x)
+/*
+import io
+
+io.print("hi", "bye")
+io.print("hey")
+
+/*
+let x = range(0, 10, 1)
+
+io.print("outside the loop", x())
+
+for i in x {
+	io.print("inside the loop", i)
+}
+
+// should it be still valid?
+io.print(i)*/
 
 )";
 

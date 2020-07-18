@@ -5,6 +5,7 @@
 #include <bia/member/function/static_.hpp>
 #include <bia/member/native/floating_point.hpp>
 #include <bia/member/native/integer.hpp>
+#include <bia/member/native/list.hpp>
 #include <bia/member/native/string.hpp>
 #include <bia/util/type_traits/is_gcable.hpp>
 #include <cstddef>
@@ -62,6 +63,11 @@ inline typename std::enable_if<
 	return std::forward<Type>(value);
 }
 
+inline gc::gcable<member::member> create(member::member* value) noexcept
+{
+	return { value };
+}
+
 inline gc::gcable<member::native::string> create(const std::string& value)
 {
 	return create(value.c_str());
@@ -70,6 +76,11 @@ inline gc::gcable<member::native::string> create(const std::string& value)
 inline gc::gcable<member::member> create(std::nullptr_t) noexcept
 {
 	return {};
+}
+
+inline gc::gcable<member::native::list> create(std::vector<member::member*> value)
+{
+	return gc::gc::active_gc()->template construct<member::native::list>(std::move(value));
 }
 
 } // namespace creator

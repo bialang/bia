@@ -1,32 +1,23 @@
-#ifndef BIA_COMPILER_ELVE_WHILE_HPP_
-#define BIA_COMPILER_ELVE_WHILE_HPP_
-
 #include "../jump_manager.hpp"
 #include "expression.hpp"
-#include "present.hpp"
+#include "helpers.hpp"
 
-namespace bia {
-namespace compiler {
-namespace elve {
-
-tokens_type statement(present present, tokens_type tokens);
-
-inline tokens_type while_(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::while_(present present, tokens_type tokens)
 {
 	using namespace tokenizer::token;
 
 	jump_manager manager{ &present.writer.output() };
+	bytecode::member::local condition{ present.variables.add_tmp() };
 
 	manager.mark(jump_manager::destination::start);
 
-	tokens = expression(present, tokens.subspan(1), bytecode::member::tos{});
+	tokens = expression(present, tokens.subspan(1), condition);
 
 	auto count = tokens.data()->value.get<token::batch>().count;
 
 	present.writer.write<true, bytecode::oc_test>(
 	    static_cast<typename std::underlying_type<member::test_operator>::type>(member::test_operator::self),
-	    bytecode::member::tos{}, bytecode::member::tos{});
-	present.writer.write<true, bytecode::oc_drop>(1);
+	    condition, condition);
 	manager.jump(jump_manager::type::if_false, jump_manager::destination::end);
 
 	tokens = tokens.subspan(1);
@@ -56,12 +47,7 @@ inline tokens_type while_(present present, tokens_type tokens)
 
 	manager.jump(jump_manager::type::unconditional, jump_manager::destination::start);
 	manager.mark(jump_manager::destination::end);
+	present.variables.remove_tmp(condition.index);
 
 	return tokens;
 }
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif

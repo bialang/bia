@@ -3,6 +3,7 @@
 
 #include "operator_.hpp"
 
+#include <bia/bytecode/op_code.hpp>
 #include <bia/resource/view.hpp>
 #include <bia/util/variant.hpp>
 #include <cstdint>
@@ -21,6 +22,8 @@ struct token
 	struct identifier
 	{
 		resource::view memory;
+		bool is_builtin;
+		bytecode::member::builtin builtin;
 	};
 
 	struct string
@@ -57,6 +60,7 @@ struct token
 		let,
 		import,
 		while_,
+		for_,
 		break_,
 		continue_,
 		null,
@@ -84,7 +88,8 @@ struct token
 		constant_float,
 	};
 
-	util::variant<cmd_end, identifier, batch, control, keyword, operator_, string, regex, int_type, double> value;
+	util::variant<cmd_end, identifier, batch, control, keyword, operator_, string, regex, int_type, double>
+	    value;
 };
 
 } // namespace token

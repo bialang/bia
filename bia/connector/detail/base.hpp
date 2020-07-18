@@ -7,7 +7,7 @@
 #include <bia/member/cast/cast.hpp>
 #include <bia/member/member.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
-#include <bia/util/type_traits/type_maker.hpp>
+#include <bia/util/type_traits/type_select.hpp>
 
 namespace bia {
 namespace connector {

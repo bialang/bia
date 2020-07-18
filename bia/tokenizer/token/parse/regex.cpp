@@ -1,18 +1,9 @@
-#ifndef BIA_TOKENZIER_TOKEN_PARSE_REGEX_HPP_
-#define BIA_TOKENZIER_TOKEN_PARSE_REGEX_HPP_
+#include "tokens.hpp"
 
-#include "../parameter.hpp"
-
-#include <bia/exception/syntax_error.hpp>
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/util/finally.hpp>
 
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-
-inline exception::syntax_details regex(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::regex(parameter& parameter)
 {
 	using namespace string::encoding;
 
@@ -56,7 +47,7 @@ inline exception::syntax_details regex(parameter& parameter)
 
 		// had no special meaning
 		if (escape) {
-			outenc->put(output, '/');
+			outenc->put(output, '\\');
 		}
 
 		escape = false;
@@ -64,10 +55,3 @@ inline exception::syntax_details regex(parameter& parameter)
 		outenc->put(output, cp);
 	}
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif

@@ -1,8 +1,7 @@
 #ifndef BIA_COMPILER_ELVE_MEMBER_HPP_
 #define BIA_COMPILER_ELVE_MEMBER_HPP_
 
-#include "parameter.hpp"
-#include "present.hpp"
+#include "helpers.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
 #include <bia/exception/implementation_error.hpp>
@@ -17,110 +16,57 @@ namespace compiler {
 namespace elve {
 
 template<typename Source, typename Destination>
-inline tokens_type member_step(present present, tokens_type tokens, Source&& source,
-                               Destination&& destination)
+inline tokens_type member_call(present present, tokens_type tokens, Source source, Destination destination)
 {
 	using tokenizer::token::token;
 
-	if (tokens.empty()) {
+	present.writer.write<true, bytecode::oc_refer>(source, destination);
+
+	if (tokens.empty() || static_cast<token::type>(tokens.data()->value.index()) != token::type::control) {
 		return tokens;
 	}
 
-	switch (static_cast<token::type>(tokens.data()->value.index())) {
-	case token::type::control: { // function call
-		const auto tuple = parameter(present, tokens);
+	while (true) {
+		present.writer.write<true, bytecode::oc_prep_call>();
 
-		present.writer.write<true, bytecode::oc_invoke>(std::get<1>(tuple), std::get<2>(tuple),
-		                                                std::forward<Source>(source),
-		                                                std::forward<Destination>(destination));
+		tokens = parameter(present, tokens);
 
-		for (auto i = std::get<1>(tuple); i--;) {
-			present.variables.remove_tmp();
+		present.writer.write<true, bytecode::oc_invoke>(destination, destination);
+
+		if (tokens.empty() ||
+		    static_cast<token::type>(tokens.data()->value.index()) != token::type::control) {
+			break;
 		}
-
-		return std::get<0>(tuple);
 	}
-	case token::type::identifier: { // member access
-		const bytecode::member::resource name{ present.resources.index_of(
-			tokens.data()->value.get<token::identifier>().memory) };
 
-		BIA_LOG(INFO, "retrieving member");
-
-		present.writer.write<true, bytecode::oc_get>(std::forward<Source>(source), name,
-		                                             std::forward<Destination>(destination));
-
-		return tokens.subspan(1);
-	}
-	default: return tokens;
-	}
+	return tokens;
 }
 
-template<typename T>
-inline tokens_type member(present present, tokens_type tokens, T&& destination)
+template<typename Destination>
+inline tokens_type member(present present, tokens_type tokens, Destination destination)
 {
 	using tokenizer::token::token;
 
 	BIA_EXPECTS(!tokens.empty() &&
 	            static_cast<token::type>(tokens.data()->value.index()) == token::type::identifier);
 
-	const auto index = present.variables.index_of(tokens.data()->value.get<token::identifier>().memory);
+	const auto& identifier = tokens.data()->value.get<token::identifier>();
 
-	tokens = tokens.subspan(1);
+	if (identifier.is_builtin) {
+		return member_call(present, tokens.subspan(1), identifier.builtin, destination);
+	}
+
+	const auto index = present.variables.find(identifier.memory);
 
 	// local source
 	if (index.second) {
-		BIA_EXPECTS(index.first.scope_id == 0);
-
-		const auto x =
-		    member_step(present, tokens, bytecode::member::local{ index.first.id }, bytecode::member::tos{});
-
-		// just one
-		if (tokens.size() == x.size()) {
-			present.writer.write<true, bytecode::oc_clone>(bytecode::member::local{ index.first.id },
-			                                               std::forward<T>(destination));
-
-			return tokens;
-		}
-
-		tokens = x;
-	} // global source
-	else {
-		const auto id = present.resources.index_of(tokens.data()[-1].value.get<token::identifier>().memory);
-		const auto x  = member_step(present, tokens, bytecode::member::global{ id }, bytecode::member::tos{});
-
-		// just one
-		if (tokens.size() == x.size()) {
-			present.writer.write<true, bytecode::oc_clone>(bytecode::member::global{ id },
-			                                               std::forward<T>(destination));
-
-			return tokens;
-		}
-
-		tokens = x;
+		return member_call(present, tokens.subspan(1), bytecode::member::local{ index.first }, destination);
 	}
 
-	const bytecode::member::local tmp_source{ present.variables.add_tmp().id };
-	const auto finally = util::make_finally([&present, &destination] {
-		// remove tmp variable
-		present.variables.remove_tmp();
-		present.writer.write<true, bytecode::oc_refer>(bytecode::member::tos{}, std::forward<T>(destination));
-		present.writer.write<true, bytecode::oc_drop>(1);
-	});
-
-	// chain
-	while (!tokens.empty()) {
-		BIA_LOG(INFO, "processing member chain");
-
-		const auto x = member_step(present, tokens, tmp_source, tmp_source);
-
-		if (tokens.size() == x.size()) {
-			return tokens;
-		}
-
-		tokens = x;
-	}
-
-	return tokens.subspan(tokens.end());
+	// global source
+	return member_call(present, tokens.subspan(1),
+	                   bytecode::member::global{ present.resources.index_of(identifier.memory) },
+	                   destination);
 }
 
 } // namespace elve

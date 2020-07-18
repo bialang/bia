@@ -2,9 +2,12 @@
 
 #include "../cast/cast.hpp"
 #include "../function/method.hpp"
+#include "detail/regex_match.hpp"
+#include "detail/regex_match_iterator.hpp"
 #include "string.hpp"
 
 #include <bia/connector/connector-inl.hpp>
+#include <bia/creator/creator.hpp>
 
 using namespace bia::member::native;
 
@@ -51,6 +54,14 @@ bia::gc::gcable<bia::member::member> regex::get(const native::string& name)
 	if (!name.compare("match")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&regex::_match)>>(
 		    *this, &regex::_match);
+	} else if (!name.compare("match_all")) {
+		return gc::gc::active_gc()->construct<function::method<true, decltype(&regex::_match_all)>>(
+		    *this, &regex::_match_all);
+	} else if (!name.compare("search")) {
+		return gc::gc::active_gc()->template construct<function::method<true, decltype(&regex::_search)>>(
+		    *this, &regex::_search);
+	} else if (!name.compare("name")) {
+		return creator::create("std::regex");
 	}
 
 	return {};
@@ -82,17 +93,49 @@ void regex::gc_mark_children(bool mark) const noexcept
 void regex::register_gcables(gc::gc& gc) const noexcept
 {}
 
-bia::gc::gcable<detail::regex_match> regex::_match(connector::parameters_type params)
+bia::gc::gcable<bia::member::member> regex::_match(connector::parameters_type params)
 {
 	std::cmatch match;
-	
+
 	if (!dynamic_cast<string*>(params[0])) {
 		throw;
 	}
 
 	if (std::regex_match(cast::cast<const char*>(*params[0]), match, _pattern)) {
-		return gc::gc::active_gc()->template construct<detail::regex_match>(static_cast<string*>(params[0])->value(), match);
+		return gc::gc::active_gc()->template construct<detail::regex_match>(
+		    static_cast<string*>(params[0])->value(), match);
 	}
 
 	return {};
+}
+
+bia::gc::gcable<bia::member::member> regex::_search(connector::parameters_type params)
+{
+	std::cmatch match;
+
+	if (!dynamic_cast<string*>(params[0])) {
+		throw;
+	}
+
+	if (std::regex_search(cast::cast<const char*>(*params[0]), match, _pattern)) {
+		return gc::gc::active_gc()->template construct<detail::regex_match>(
+		    static_cast<string*>(params[0])->value(), match);
+	}
+
+	return {};
+}
+
+bia::gc::gcable<bia::member::member> regex::_match_all(connector::parameters_type params)
+{
+	if (!dynamic_cast<string*>(params[0])) {
+		throw;
+	}
+
+	return gc::gc::active_gc()->construct<detail::regex_match_iterator>(
+	    static_cast<string*>(params[0])->value(), this,
+	    std::cregex_iterator{
+	        static_cast<string*>(params[0])->value().get(),
+	        static_cast<string*>(params[0])->value().get() +
+	            std::char_traits<char>::length(static_cast<string*>(params[0])->value().get()),
+	        _pattern });
 }

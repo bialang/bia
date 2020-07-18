@@ -1,24 +1,10 @@
-#ifndef BIA_TOKENIZER_TOKEN_PARSE_EXPRESSION_HPP_
-#define BIA_TOKENIZER_TOKEN_PARSE_EXPRESSION_HPP_
-
-#include "../parameter.hpp"
 #include "any_of.hpp"
-#include "identifier.hpp"
-#include "member.hpp"
-#include "number.hpp"
-#include "operators.hpp"
-#include "regex.hpp"
-#include "string.hpp"
+#include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
 #include <bia/exception/implementation_error.hpp>
 
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-
-inline exception::syntax_details value(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::value(parameter& parameter)
 {
 	// constant
 	const auto old = parameter.backup();
@@ -68,7 +54,7 @@ inline exception::syntax_details value(parameter& parameter)
 	return {};
 }
 
-inline exception::syntax_details term(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::term(parameter& parameter)
 {
 	// match optional self operator
 	const auto old = parameter.backup();
@@ -90,7 +76,7 @@ inline exception::syntax_details term(parameter& parameter)
 	return value(parameter);
 }
 
-inline exception::syntax_details expression(parameter& parameter)
+bia::exception::syntax_details bia::tokenizer::token::parse::expression(parameter& parameter)
 {
 	if (const auto err = term(parameter)) {
 		return err;
@@ -100,9 +86,7 @@ inline exception::syntax_details expression(parameter& parameter)
 	while (true) {
 		const auto old = parameter.backup();
 
-		if (const auto err = eat_whitespaces(parameter)) {
-			break;
-		}
+		eat_whitespaces(parameter);
 
 		if (const auto err = operators(parameter)) {
 			parameter.restore(old);
@@ -121,7 +105,11 @@ inline exception::syntax_details expression(parameter& parameter)
 				}
 			}
 
-			if (const auto err = term(parameter)) {
+			if (op == operator_::member_access) {
+				if (const auto err = member(parameter)) {
+					return err;
+				}
+			} else if (const auto err = term(parameter)) {
 				return err;
 			}
 		}
@@ -129,10 +117,3 @@ inline exception::syntax_details expression(parameter& parameter)
 
 	return {};
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif

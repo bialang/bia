@@ -1,23 +1,13 @@
-#ifndef BIA_COMPILER_ELVE_PARAMETER_HPP_
-#define BIA_COMPILER_ELVE_PARAMETER_HPP_
-
-#include "present.hpp"
+#include "expression.hpp"
+#include "helpers.hpp"
 
 #include <bia/log/log.hpp>
 #include <cstdint>
 #include <limits>
 #include <map>
-#include <tuple>
 #include <utility>
 
-namespace bia {
-namespace compiler {
-namespace elve {
-
-template<typename Destination>
-tokens_type expression(present present, tokens_type tokens, Destination&& destination);
-
-inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present present, tokens_type tokens)
+bia::compiler::elve::tokens_type bia::compiler::elve::parameter(present present, tokens_type tokens)
 {
 	using namespace tokenizer::token;
 
@@ -28,7 +18,7 @@ inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present pre
 	        static_cast<const void*>(last));
 
 	std::map<resource::view, tokens_type> kwargs;
-	std::uint8_t count = 0;
+	std::size_t count = 0;
 
 	while (true) {
 		BIA_EXPECTS(!tokens.empty() &&
@@ -44,10 +34,6 @@ inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present pre
 
 		const auto expr = tokens.subspan(1, offset - 1);
 
-		// limit is 254
-		if (++count == std::numeric_limits<std::uint8_t>::max()) {
-			throw;
-		}
 		// kwarg
 		if (static_cast<token::type>(expr.data()->value.index()) == token::type::control) {
 			const auto& name = expr.data()[1].value.get<token::identifier>().memory;
@@ -59,8 +45,9 @@ inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present pre
 
 			kwargs.insert({ name, expr.subspan(2) });
 		} else {
-			expression(present, expr, bytecode::member::tos{});
-			present.variables.add_tmp();
+			++count;
+
+			expression(present, expr, bytecode::member::push{});
 		}
 
 		tokens = tokens.subspan(expr.end());
@@ -68,18 +55,10 @@ inline std::tuple<tokens_type, std::uint8_t, std::uint8_t> parameter(present pre
 
 	// push kwargs
 	for (const auto& i : kwargs) {
-		expression(present, i.second, bytecode::member::tos{});
-
-		present.variables.add_tmp();
+		expression(present, i.second, bytecode::member::push{});
 		present.writer.write<true, bytecode::oc_name>(
 		    bytecode::member::resource{ present.resources.index_of(i.first) });
 	}
 
-	return { tokens, count, static_cast<std::uint8_t>(kwargs.size()) };
+	return tokens;
 }
-
-} // namespace elve
-} // namespace compiler
-} // namespace bia
-
-#endif
