@@ -1,27 +1,30 @@
 #include <bia/bia.hpp>
 #include <bia/bsl/io.hpp>
 #include <bia/bsl/math.hpp>
+#include <bia/bsl/sys.hpp>
 #include <bia/exception/syntax_error.hpp>
 #include <bia/member/function/generator.hpp>
 #include <iostream>
 #include <sstream>
 #include <typeinfo>
 
-int main()
+int main(int argc, char** argv)
 {
 	bia::engine engine;
 
 	engine.module<bia::bsl::io>("io", engine.gc());
 	engine.module<bia::bsl::math>("math", engine.gc());
+	engine.module<bia::bsl::sys>("sys", engine.gc(), argc, argv);
 
 	std::stringstream code;
 
 	code << u8R"(
 
 import io
-import math
 
-io.print(math.min(9,8,77))
+for i in  list(23,43, "lol") {
+	io.print("hi", i)
+}
 
 )";
 

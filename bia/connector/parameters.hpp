@@ -39,7 +39,7 @@ public:
 	}
 	stack_iterator<member::member, true> end() noexcept
 	{
-		return _size ? &_stack.arg_at(_size - 1) + 1 : nullptr;
+		return _size ? &_stack.arg_at(_size - 1) - 1 : nullptr;
 	}
 	util::span<stack_iterator<member::member, true>> positionals() noexcept
 	{
