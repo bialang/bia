@@ -44,6 +44,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::for_each(parameter&
 		std::ostream output{ &streambuf };
 
 		output << "__iter__";
+		output.put(0);
 
 		parameter.bundle.add(token{ token::identifier{ streambuf.finish(resource::type::string), false } });
 	}
