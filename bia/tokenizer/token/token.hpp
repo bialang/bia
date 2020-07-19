@@ -61,6 +61,7 @@ struct token
 		import,
 		while_,
 		for_,
+		fun,
 		break_,
 		continue_,
 		null,

@@ -5,7 +5,6 @@
 
 bia::exception::syntax_details bia::tokenizer::token::parse::for_each(parameter& parameter)
 {
-	// compare if
 	if (const auto err = any_of(parameter, "invalid for statement", "for").second) {
 		return err;
 	}

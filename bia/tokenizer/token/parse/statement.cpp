@@ -96,6 +96,12 @@ bia::exception::syntax_details bia::tokenizer::token::parse::single_stmt(paramet
 
 	parameter.restore(old);
 
+	if (!function(parameter)) {
+		return {};
+	}
+
+	parameter.restore(old);
+
 	return expression(parameter);
 }
 
