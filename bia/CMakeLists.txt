@@ -32,7 +32,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in"
 # add modules
 set(BIA_MODULES "")
 
-foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "compiler" "bsl" "detail")
+foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "assembler" "compiler" "bsl" "detail")
 	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
 		add_subdirectory("${module}")
 	else()
@@ -70,7 +70,7 @@ link_dependency(base spdlog spdlog::spdlog)
 link_dependency(base Threads Threads::Threads)
 
 # bvm
-add_library(bvm $<TARGET_OBJECTS:bvm-obj>)
+add_library(bvm $<TARGET_OBJECTS:bvm-obj> $<TARGET_OBJECTS:assembler-obj>)
 target_link_libraries(bvm PUBLIC base)
 
 # bsl

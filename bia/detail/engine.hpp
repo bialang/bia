@@ -1,6 +1,7 @@
 #ifndef BIA_DETAIL_ENGINE_HPP_
 #define BIA_DETAIL_ENGINE_HPP_
 
+#include <bia/assembler/disassembler.hpp>
 #include <bia/bvm/bvm.hpp>
 #include <bia/bvm/context.hpp>
 #include <bia/bvm/module/module.hpp>
@@ -18,6 +19,7 @@
 #include <bia/util/gsl.hpp>
 #include <bia/util/type_traits/method_info.hpp>
 #include <cstring>
+#include <iostream>
 #include <istream>
 #include <sstream>
 #include <string>
@@ -94,9 +96,8 @@ public:
 	void execute(std::istream& code)
 	{
 		tokenizer::bia_lexer lexer{ _gc.allocator() };
-		auto encoder = bia::string::encoding::get_encoder(bia::string::encoding::standard_encoding::utf_8);
-		const auto finally =
-		    bia::util::make_finally([encoder] { bia::string::encoding::free_encoder(encoder); });
+		auto encoder       = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
+		const auto finally = util::make_finally([encoder] { string::encoding::free_encoder(encoder); });
 		std::stringstream output;
 		std::stringstream resources;
 		compiler::compiler compiler{ output, resources };
@@ -104,11 +105,13 @@ public:
 		lexer.lex(code, *encoder, compiler);
 		compiler.finish();
 
-		const auto bytecode = output.str();
+		const auto bytecode          = output.str();
+		const auto decoded_resources = resource::deserialize(resources, _gc);
 
-		bia::bvm::bvm::execute(_context,
-		                       { reinterpret_cast<const bia::util::byte*>(&bytecode[0]), bytecode.size() },
-		                       *bia::resource::deserialize(resources, _gc));
+		assembler::disassemble({ reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
+		                       *decoded_resources, std::cout);
+		bvm::bvm::execute(_context, { reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
+		                  *decoded_resources);
 	}
 	gc::gc& gc() noexcept
 	{
