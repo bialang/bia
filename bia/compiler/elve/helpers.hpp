@@ -23,6 +23,7 @@ tokens_type member(present present, tokens_type tokens, Destination destination)
 tokens_type parameter(present present, tokens_type tokens);
 tokens_type statement(present present, tokens_type tokens);
 tokens_type while_(present present, tokens_type tokens);
+tokens_type function(present present, tokens_type tokens);
 
 } // namespace elve
 } // namespace compiler

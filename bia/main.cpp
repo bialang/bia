@@ -22,9 +22,11 @@ int main(int argc, char** argv)
 
 import io
 
-for i in  list(23,43, "lol") {
-	io.print("hi", i)
+fun foo {
+	io.print("Hello, World")
 }
+
+foo()
 
 )";
 
