@@ -44,14 +44,16 @@ public:
 		optimized_write<false>(_output, encode_variations<Op_code>(resource_index<Optimize>(name)));
 		optimized_member<Optimize>(_output, name);
 	}
-	template<bool Optimize, op_code Op_code, typename P1>
-	typename std::enable_if<is_op_code<Op_code, oc_import>::value && is_member_destination<P1>::value>::type
-	    write(member::resource name, P1 p1)
+	template<bool Optimize, op_code OpCode, typename Destination>
+	typename std::enable_if<is_op_code<OpCode, oc_import, oc_initiate>::value &&
+	                        is_member_destination<Destination>::value>::type
+	    write(member::resource resource, Destination destination)
 	{
-		optimized_write<false>(_output, encode_variations<Op_code>(resource_index<Optimize>(name),
-		                                                           member_destination_index<Optimize>(p1)));
+		optimized_write<false>(_output,
+		                       encode_variations<Op_code>(resource_index<Optimize>(name),
+		                                                  member_destination_index<Optimize>(destination)));
 		optimized_member<Optimize>(_output, name);
-		optimized_member<Optimize>(_output, p1);
+		optimized_member<Optimize>(_output, destination);
 	}
 	template<bool Optimize, op_code Op_code, typename P0, typename P2>
 	typename std::enable_if<is_op_code<Op_code, oc_get>::value && is_member_source<P0>::value &&
@@ -92,7 +94,7 @@ public:
 	{
 		optimized_write<false>(_output,
 		                       encode_variations<OpCode>(member_source_index<Optimize>(source),
-		                                                  member_destination_index<Optimize>(destination)));
+		                                                 member_destination_index<Optimize>(destination)));
 		optimized_member<Optimize>(_output, source);
 		optimized_member<Optimize>(_output, destination);
 	}

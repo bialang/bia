@@ -69,13 +69,14 @@ enum op_code : op_code_type
 	oc_self_operator =
 	    static_cast<op_code_type>(0x8000 | (5 << 7)), // [mso, mdo](operator, source, destination)
 	oc_import      = static_cast<op_code_type>(0x8000 | (6 << 7)),  // [ro, mdo](name resource, destination)
-	oc_jump        = static_cast<op_code_type>(0x8000 | (7 << 7)),  // [oo](offset)
-	oc_jump_true   = static_cast<op_code_type>(0x8000 | (8 << 7)),  // [oo](offset)
-	oc_jump_false  = static_cast<op_code_type>(0x8000 | (9 << 7)),  // [oo](offset)
-	oc_name        = static_cast<op_code_type>(0x8000 | (10 << 7)), // [ro](name resource)
-	oc_return_void = static_cast<op_code_type>(0x8000 | (11 << 7)), // []()
-	oc_invert      = static_cast<op_code_type>(0x8000 | (12 << 7)), // []()
-	oc_prep_call   = static_cast<op_code_type>(0x8000 | (13 << 7)), // []()
+	oc_initiate    = static_cast<op_code_type>(0x8000 | (7 << 7)),  // [ro, mdo](function, destination)
+	oc_jump        = static_cast<op_code_type>(0x8000 | (8 << 7)),  // [oo](offset)
+	oc_jump_true   = static_cast<op_code_type>(0x8000 | (9 << 7)),  // [oo](offset)
+	oc_jump_false  = static_cast<op_code_type>(0x8000 | (10 << 7)), // [oo](offset)
+	oc_name        = static_cast<op_code_type>(0x8000 | (11 << 7)), // [ro](name resource)
+	oc_return_void = static_cast<op_code_type>(0x8000 | (12 << 7)), // []()
+	oc_invert      = static_cast<op_code_type>(0x8000 | (13 << 7)), // []()
+	oc_prep_call   = static_cast<op_code_type>(0x8000 | (14 << 7)), // []()
 };
 
 namespace detail {
