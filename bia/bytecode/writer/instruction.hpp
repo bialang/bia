@@ -50,9 +50,9 @@ public:
 	    write(member::resource resource, Destination destination)
 	{
 		optimized_write<false>(_output,
-		                       encode_variations<Op_code>(resource_index<Optimize>(name),
-		                                                  member_destination_index<Optimize>(destination)));
-		optimized_member<Optimize>(_output, name);
+		                       encode_variations<OpCode>(resource_index<Optimize>(resource),
+		                                                 member_destination_index<Optimize>(destination)));
+		optimized_member<Optimize>(_output, resource);
 		optimized_member<Optimize>(_output, destination);
 	}
 	template<bool Optimize, op_code Op_code, typename P0, typename P2>

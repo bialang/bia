@@ -21,8 +21,8 @@ template<typename Type>
 inline typename std::enable_if<std::is_base_of<bia::member::member, Type>::value, Type*>::type
     member_pointer(bia::member::member* element)
 {
-	if (const auto ptr = dynamic_cast<Type*>(element.get())) {
-		return element;
+	if (const auto ptr = dynamic_cast<Type*>(element)) {
+		return ptr;
 	}
 
 	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
@@ -273,12 +273,13 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			break;
 		}
 		case oc_initiate: {
-			const auto options =
-			    parse_options<oc_import, resource_option, member_destination_option>(op_code);
+			BIA_IMPLEMENTATION_ERROR("not implemented");
+			/*const auto options =
+			    parse_options<oc_initiate, resource_option, member_destination_option>(op_code);
 			const auto function = member_pointer<bia::member::function::function_template>(
 			    ro_parameter(std::get<0>(options), ip, resources));
 
-			mdo_parameter(std::get<1>(options), ip, stack, *token, function->initiate());
+			mdo_parameter(std::get<1>(options), ip, stack, *token, function->initiate());*/
 
 			break;
 		}

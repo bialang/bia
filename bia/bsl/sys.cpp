@@ -43,10 +43,9 @@ bia::member::native::dict* sys::_init(gc::gc& gc, int argc, char** argv)
 	const auto token    = gc.activate_temporarily();
 	const int byteorder = 1;
 
-	put_function(gc, *dict, "exit", std::exit);
-	put_function(gc, *dict, "quick_exit", std::quick_exit);
-	put_function(gc, *dict, "abort", std::abort);
-	put_function(gc, *dict, "system", std::system);
+	put_function(gc, *dict, "exit", &std::exit);
+	put_function(gc, *dict, "quick_exit", &std::quick_exit);
+	put_function(gc, *dict, "abort", &std::abort);
 	put_gcable(gc, *dict, "version", creator::create("v4.0-alpha"));
 	put_gcable(gc, *dict, "byteorder",
 	           creator::create(*reinterpret_cast<const char*>(&byteorder) == 1 ? "little" : "big"));
