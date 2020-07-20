@@ -17,37 +17,25 @@
 
 using namespace bia::bvm;
 
-template<typename Pointer>
-inline typename std::enable_if<
-    std::is_same<bia::gc::object::pointer<bia::member::member>, Pointer>::value ||
-        std::is_same<const bia::gc::object::immutable_pointer<bia::member::member>, Pointer>::value,
-    bia::member::member*>::type
-    member_pointer(Pointer& element)
+template<typename Type>
+inline typename std::enable_if<std::is_base_of<bia::member::member, Type>::value, Type*>::type
+    member_pointer(bia::member::member* element)
 {
-	if (const auto ptr = element.get()) {
-		return static_cast<bia::member::member*>(ptr);
-	}
-
-	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
-}
-
-inline bia::member::member* member_pointer(bia::member::member* element)
-{
-	if (element) {
+	if (const auto ptr = dynamic_cast<Type*>(element.get())) {
 		return element;
 	}
 
 	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
 }
 
-inline bia::member::native::string*
-    string_pointer(bia::gc::object::immutable_pointer<bia::member::member> element)
+template<>
+inline bia::member::member* member_pointer<bia::member::member>(bia::member::member* element)
 {
-	if (const auto ptr = dynamic_cast<bia::member::native::string*>(element.get())) {
-		return ptr;
+	if (element) {
+		return element;
 	}
 
-	BIA_THROW(bia::exception::nullpointer, "nullpointer string access");
+	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
 }
 
 inline std::int32_t oo_parameter(bia::bytecode::offset_option option, instruction_pointer& ip)
@@ -107,11 +95,17 @@ inline bia::member::member* mso_parameter(bia::bytecode::member_source_option op
 
 	switch (option) {
 	case mso_args_16: return stack.arg_at(ip.read<std::uint16_t>());
-	case mso_global_16: return globals.get(*string_pointer(resources.at(ip.read<std::uint16_t>()))).peek();
+	case mso_global_16:
+		return globals
+		    .get(*member_pointer<bia::member::native::string>(resources.at(ip.read<std::uint16_t>()).get()))
+		    .peek();
 	case mso_local_16: return stack.local_at(ip.read<std::uint16_t>());
 	case mso_resource_16: return resources.at(ip.read<std::uint16_t>()).get();
 	case mso_args_8: return stack.arg_at(ip.read<std::uint8_t>());
-	case mso_global_8: return globals.get(*string_pointer(resources.at(ip.read<std::uint8_t>()))).peek();
+	case mso_global_8:
+		return globals
+		    .get(*member_pointer<bia::member::native::string>(resources.at(ip.read<std::uint8_t>()).get()))
+		    .peek();
 	case mso_local_8: return stack.local_at(ip.read<std::uint8_t>());
 	case mso_resource_8: return resources.at(ip.read<std::uint8_t>()).get();
 	case mso_builtin: return context.builtin(ip.read<member::builtin>());
@@ -168,10 +162,10 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case oc_operator: {
 			const auto options = parse_options<oc_operator, member_source_option, member_source_option,
 			                                   member_destination_option>(op_code);
-			const auto left =
-			    member_pointer(mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
-			const auto right =
-			    member_pointer(mso_parameter(std::get<1>(options), ip, context, globals, stack, resources));
+			const auto left    = member_pointer<bia::member::member>(
+                mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
+			const auto right = member_pointer<bia::member::member>(
+			    mso_parameter(std::get<1>(options), ip, context, globals, stack, resources));
 			const auto op = ip.read<infix_operator>();
 
 			mdo_parameter(std::get<2>(options), ip, stack, *token, left->operation(*right, op));
@@ -182,9 +176,10 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			const auto options =
 			    parse_options<oc_get, member_source_option, resource_option, member_destination_option>(
 			        op_code);
-			const auto src =
-			    member_pointer(mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
-			const auto name = string_pointer(ro_parameter(std::get<1>(options), ip, resources));
+			const auto src = member_pointer<bia::member::member>(
+			    mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
+			const auto name = member_pointer<bia::member::native::string>(
+			    ro_parameter(std::get<1>(options), ip, resources));
 
 			mdo_parameter(std::get<2>(options), ip, stack, *token, src->get(*name));
 
@@ -196,7 +191,8 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			const auto left    = mso_parameter(std::get<0>(options), ip, context, globals, stack, resources);
 			const auto right   = mso_parameter(std::get<1>(options), ip, context, globals, stack, resources);
 
-			test_register = member_pointer(left)->test(op, *member_pointer(right));
+			test_register = member_pointer<bia::member::member>(left)->test(
+			    op, *member_pointer<bia::member::member>(right));
 
 			break;
 		}
@@ -212,8 +208,8 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case oc_invoke: {
 			const auto options =
 			    parse_options<oc_invoke, member_source_option, member_destination_option>(op_code);
-			const auto caller =
-			    member_pointer(mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
+			const auto caller = member_pointer<bia::member::member>(
+			    mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
 			connector::parameters params{ stack.make_call_frame() };
 
 			mdo_parameter(std::get<1>(options), ip, stack, *token, caller->invoke(params));
@@ -258,9 +254,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case oc_self_operator: {
 			const auto options =
 			    parse_options<oc_self_operator, member_source_option, member_destination_option>(op_code);
-			const auto op = ip.read<self_operator>();
-			const auto src =
-			    member_pointer(mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
+			const auto op  = ip.read<self_operator>();
+			const auto src = member_pointer<bia::member::member>(
+			    mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
 
 			mdo_parameter(std::get<1>(options), ip, stack, *token, src->self_operation(op));
 
@@ -269,9 +265,20 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		case oc_import: {
 			const auto options =
 			    parse_options<oc_import, resource_option, member_destination_option>(op_code);
-			const auto name = string_pointer(ro_parameter(std::get<0>(options), ip, resources));
+			const auto name = member_pointer<bia::member::native::string>(
+			    ro_parameter(std::get<0>(options), ip, resources));
 
 			mdo_parameter(std::get<1>(options), ip, stack, *token, loader.load(name).get());
+
+			break;
+		}
+		case oc_initiate: {
+			const auto options =
+			    parse_options<oc_import, resource_option, member_destination_option>(op_code);
+			const auto function = member_pointer<bia::member::function::function_template>(
+			    ro_parameter(std::get<0>(options), ip, resources));
+
+			mdo_parameter(std::get<1>(options), ip, stack, *token, function->initiate());
 
 			break;
 		}
@@ -302,8 +309,9 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 		}
 		case oc_name: {
 			const auto options = parse_options<oc_name, resource_option>(op_code);
-			const auto name    = string_pointer(ro_parameter(std::get<0>(options), ip, resources));
-			auto& src          = stack.last_push();
+			const auto name    = member_pointer<bia::member::native::string>(
+                ro_parameter(std::get<0>(options), ip, resources));
+			auto& src = stack.last_push();
 
 			stack.mark_kwarg();
 			token->set(src, make_key_value_pair(name, src));
