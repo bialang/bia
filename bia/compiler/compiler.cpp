@@ -19,7 +19,7 @@ void compiler::finish()
 	_resources.finish();
 }
 
-void compiler::receive(util::span<const token*> tokens)
+void compiler::receive(util::span<const token*> tokens, resource::manager& manager)
 {
 	for (const auto& i : tokens) {
 		BIA_LOG(INFO, "token {} is a {}", static_cast<const void*>(&i),
@@ -39,6 +39,6 @@ void compiler::receive(util::span<const token*> tokens)
 	}
 
 	while (!tokens.empty()) {
-		tokens = elve::statement({ _variables, _writer, _resources }, tokens);
+		tokens = elve::statement({ _variables, _writer, _resources, manager }, tokens);
 	}
 }

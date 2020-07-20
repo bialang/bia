@@ -13,7 +13,8 @@ namespace resource {
 enum class type
 {
 	string,
-	regex
+	regex,
+	function
 };
 
 enum class size_width

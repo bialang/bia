@@ -9,19 +9,21 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 
 	BIA_EXPECTS(!tokens.empty() && is_keyword(tokens.data(), token::keyword::fun));
 
-	auto variables = present.variables.open_scope();
-	auto binder = present.resources;
-	std::stringstream code;
+	// auto variables = present.variables.open_scope();
+	auto binder    = present.resources;
+	auto streambuf = present.manager.start_memory(false);
+	std::ostream code{ &streambuf };
 	bytecode::writer::instruction writer{ code };
-	
-	tokens = batch({ variables, writer, binder }, tokens.subspan(2));
+
+	tokens = batch({ present.variables, writer, binder, present.manager }, tokens.subspan(2));
 
 	writer.write<true, bytecode::oc_return_void>();
 
 	// bind references
-	variables.bind();
-	binder.bind();
+	/*variables.bind();
+	binder.bind();*/
 
+	// create destination variable
 	auto index = present.variables.find(tokens.data()[1].value.get<token::identifier>().memory);
 
 	if (!index.second) {
@@ -29,8 +31,9 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 	}
 
 	// initiate function
-	present.writer.write<true, bytecode::oc_initiate>(bytecode::member::resource{ code },
-	                                                  bytecode::member::local{ index.first });
+	present.writer.write<true, bytecode::oc_initiate>(
+	    bytecode::member::resource{ present.resources.index_of(streambuf.finish(resource::type::function)) },
+	    bytecode::member::local{ index.first });
 
 	return tokens;
 }
