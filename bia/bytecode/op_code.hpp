@@ -96,7 +96,7 @@ constexpr std::tuple<Parsed..., Variation> parse(op_code_type x, util::type_trai
 }
 
 template<int BitOffset, typename Variation, typename... Next, typename... Parsed>
-constexpr typename std::enable_if<sizeof...(Next), std::tuple<Parsed..., Variation, Next...>>::type
+constexpr typename std::enable_if<(sizeof...(Next) > 0), std::tuple<Parsed..., Variation, Next...>>::type
     parse(op_code_type x, util::type_traits::type_container<Next...>, Parsed... parsed)
 {
 	return parse<BitOffset - bit_size<Variation>(), Next...>(

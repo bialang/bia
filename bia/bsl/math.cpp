@@ -5,6 +5,7 @@
 #include <bia/connector/connector-inl.hpp>
 #include <bia/gc/temporary_token.hpp>
 #include <bia/member/native/integer.hpp>
+#include <bia/util/gsl.hpp>
 #include <cmath>
 
 using namespace bia::bsl;
@@ -63,7 +64,8 @@ inline bia::gc::gcable<bia::member::member> average(bia::connector::parameters_t
 	}
 
 	if (const auto ptr = s.peek()) {
-		const bia::member::native::integer count{ params.size() };
+		const bia::member::native::integer count{ bia::util::narrow<bia::member::member::int_type>(
+			params.size()) };
 
 		return ptr->operation(count, bia::member::infix_operator::division);
 	}

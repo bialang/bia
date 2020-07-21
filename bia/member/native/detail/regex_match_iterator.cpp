@@ -29,7 +29,7 @@ bia::gc::gcable<bia::member::member> regex_match_iterator::copy() const
 
 bia::gc::gcable<bia::member::member> regex_match_iterator::invoke(parameters_type params)
 {
-	if (_valid = _iterator != std::cregex_iterator{}) {
+	if ((_valid = _iterator != std::cregex_iterator{})) {
 		auto result = gc::gc::active_gc()->construct<regex_match>(_string, *_iterator);
 
 		++_iterator;
