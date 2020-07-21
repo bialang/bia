@@ -116,10 +116,16 @@ private:
 	{
 		_symbols.gc_mark_children(mark);
 		_loader.gc_mark_children(mark);
+
+		for (const auto i : _builtins) {
+			if (i) {
+				gc::object::gc_mark(i, mark);
+			}
+		}
 	}
 	void register_gcables(gc::gc& gc) const noexcept override
 	{
-		for (auto i : _builtins) {
+		for (const auto i : _builtins) {
 			gc.register_gcable(i);
 		}
 	}

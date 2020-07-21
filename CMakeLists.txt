@@ -46,6 +46,12 @@ option(BIA_BUILD_TESTS "Builds the tests for the Bia library." ON)
 option(BIA_BUILD_EXAMPLES "Builds the example programs." ON)
 option(BIA_GENERATE_DOCUMENTATION "Generate the documentatio with Doxygen." OFF)
 option(BIA_ENABLE_DEV_BACKTRACING "Enables C++ backtracing. Intended for development." OFF)
+option(BIA_ENABLE_SANITIZER "Enables the use of sanitizers." OFF)
+
+if(BIA_ENABLE_SANITIZER)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+	set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+endif()
 
 # Enable testing
 if(BIA_BUILD_TESTS)

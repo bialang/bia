@@ -36,6 +36,7 @@ bia::thread::lock::guard<bia::thread::lock::spin_mutex> gc::lock()
 void gc::register_root(util::not_null<object::base*> base)
 {
 	_roots.add(base);
+	base->register_gcables(*this);
 }
 
 void gc::deregister_root(util::not_null<object::base*> base)
