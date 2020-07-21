@@ -206,6 +206,15 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 
 			break;
 		}
+		case oc_initiate: {
+			const auto options =
+			    parse_options<oc_import, resource_option, member_destination_option>(op_code);
+
+			ro_parameter(std::get<0>(options), ip, resources, output << "initiate ");
+			mdo_parameter(std::get<1>(options), ip, resources, output << ", ");
+
+			break;
+		}
 		case oc_jump: {
 			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmp ");
 

@@ -9,6 +9,19 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 
 	BIA_EXPECTS(!tokens.empty() && is_keyword(tokens.data(), token::keyword::fun));
 
+	// create destination variable
+	bytecode::member::local destination;
+
+	{
+		auto index = present.variables.find(tokens.data()[1].value.get<token::identifier>().memory);
+
+		if (!index.second) {
+			index.first = present.variables.add(tokens.data()[1].value.get<token::identifier>().memory);
+		}
+
+		destination = { index.first };
+	}
+
 	// auto variables = present.variables.open_scope();
 	auto binder    = present.resources;
 	auto streambuf = present.manager.start_memory(false);
@@ -23,17 +36,10 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 	/*variables.bind();
 	binder.bind();*/
 
-	// create destination variable
-	auto index = present.variables.find(tokens.data()[1].value.get<token::identifier>().memory);
-
-	if (!index.second) {
-		index.first = present.variables.add(tokens.data()[1].value.get<token::identifier>().memory);
-	}
-
 	// initiate function
 	present.writer.write<true, bytecode::oc_initiate>(
 	    bytecode::member::resource{ present.resources.index_of(streambuf.finish(resource::type::function)) },
-	    bytecode::member::local{ index.first });
+	    destination);
 
 	return tokens;
 }
