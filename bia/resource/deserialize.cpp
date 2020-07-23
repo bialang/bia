@@ -4,6 +4,7 @@
 #include "serializer.hpp"
 
 #include <bia/exception/implementation_error.hpp>
+#include <bia/member/function/function.hpp>
 #include <bia/member/native/regex.hpp>
 #include <bia/member/native/string.hpp>
 #include <bia/util/finally.hpp>
@@ -49,6 +50,18 @@ std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, g
 			    gc.construct<member::native::regex>(std::regex{ static_cast<const char*>(pattern) });
 
 			builder.add(gcable.peek());
+			gcable.start_monitor();
+
+			break;
+		}
+		case type::function: {
+			auto code   = gc.allocate(size);
+			auto gcable = gc.construct<member::function::function>(
+			    util::span<const util::byte*>{ static_cast<const util::byte*>(code.peek()), size });
+
+			input.read(static_cast<char*>(code.peek()), size);
+			builder.add(gcable.peek());
+			code.start_monitor();
 			gcable.start_monitor();
 
 			break;

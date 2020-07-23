@@ -60,10 +60,12 @@ public:
 	 *
 	 * @param[out] dest defines the destination
 	 * @param src defines the source
-	 * @tparam T the type of the pointer
+	 * @tparam Destination the destination type
+	 * @tparam Source the source type
 	 */
-	template<typename T>
-	void set(object::pointer<T>& dest, T* src) noexcept
+	template<typename Destination, typename Source>
+	typename std::enable_if<std::is_base_of<Destination, Source>::value>::type
+	    set(object::pointer<Destination>& dest, Source* src) noexcept
 	{
 		// gc is active and dest could be possibly missed
 		if (const auto ptr = dest.get()) {

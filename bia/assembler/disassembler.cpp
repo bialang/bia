@@ -3,7 +3,10 @@
 #include <bia/bvm/instruction_pointer.hpp>
 #include <bia/exception/implementation_error.hpp>
 #include <bia/member/cast/cast.hpp>
+#include <bia/member/function/function.hpp>
 #include <bia/member/member.hpp>
+#include <bia/member/native/regex.hpp>
+#include <bia/member/native/string.hpp>
 #include <bia/util/finally.hpp>
 
 inline std::ostream& oo_parameter(bia::bytecode::offset_option option, bia::bvm::instruction_pointer& ip,
@@ -38,7 +41,16 @@ inline std::ostream& co_parameter(bia::bytecode::constant_option option, bia::bv
 
 inline std::ostream& print_resource(const bia::member::member& resource, std::ostream& output)
 {
-	return output << '"' << bia::member::cast::cast<const char*>(resource) << '"';
+	if (dynamic_cast<const bia::member::native::string*>(&resource)) {
+		return output << '"' << static_cast<const bia::member::native::string*>(&resource)->value().get()
+		              << '"';
+	} else if (dynamic_cast<const bia::member::native::regex*>(&resource)) {
+		return output << "regex";
+	} else if (dynamic_cast<const bia::member::function::function*>(&resource)) {
+		return output << "function";
+	}
+
+	return output << "invalid";
 }
 
 inline std::ostream& ro_parameter(bia::bytecode::resource_option option, bia::bvm::instruction_pointer& ip,
