@@ -29,12 +29,7 @@ public:
 	{
 		return {};
 	}
-	gc::gcable<member> invoke(parameters_type params) override
-	{
-		puts("not implemented");
-
-		return {};
-	}
+	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override;
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
 		return {};

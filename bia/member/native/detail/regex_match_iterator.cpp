@@ -27,7 +27,7 @@ bia::gc::gcable<bia::member::member> regex_match_iterator::copy() const
 	return gc::gc::active_gc()->construct<regex_match_iterator>(*this);
 }
 
-bia::gc::gcable<bia::member::member> regex_match_iterator::invoke(parameters_type params)
+bia::gc::gcable<bia::member::member> regex_match_iterator::invoke(parameters_type params, invoke_context& context)
 {
 	if ((_valid = _iterator != std::cregex_iterator{})) {
 		auto result = gc::gc::active_gc()->construct<regex_match>(_string, *_iterator);

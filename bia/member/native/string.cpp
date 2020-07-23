@@ -35,7 +35,7 @@ bia::gc::gcable<bia::member::member> string::copy() const
 	return gc::gc::active_gc()->construct<string>(_value);
 }
 
-bia::gc::gcable<bia::member::member> string::invoke(parameters_type params)
+bia::gc::gcable<bia::member::member> string::invoke(parameters_type params, invoke_context& context)
 {
 	return {};
 }

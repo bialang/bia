@@ -1,6 +1,7 @@
 #include <bia/bia.hpp>
 #include <bia/bsl/io.hpp>
 #include <bia/bsl/math.hpp>
+#include <bia/bsl/os.hpp>
 #include <bia/bsl/sys.hpp>
 #include <bia/exception/syntax_error.hpp>
 #include <bia/member/function/generator.hpp>
@@ -15,6 +16,7 @@ int main(int argc, char** argv)
 	engine.module<bia::bsl::io>("io", engine.gc());
 	engine.module<bia::bsl::math>("math", engine.gc());
 	engine.module<bia::bsl::sys>("sys", engine.gc(), argc, argv);
+	engine.module<bia::bsl::os>("os", engine.gc());
 
 	std::stringstream code;
 
@@ -23,10 +25,11 @@ int main(int argc, char** argv)
 import io
 
 fun foo {
-	io.print("Hello, World")
+	import io
+	io.print("hi")
 }
 
-foo()
+io.print(foo())
 
 )";
 

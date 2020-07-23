@@ -45,7 +45,7 @@ public:
 	{
 		return gc::gc::active_gc()->construct<integer>(_value);
 	}
-	gc::gcable<member> invoke(parameters_type params) override
+	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override
 	{
 		return {};
 	}

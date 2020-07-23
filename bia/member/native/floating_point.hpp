@@ -42,7 +42,7 @@ public:
 	{
 		return gc::gc::active_gc()->construct<floating_point>(_value);
 	}
-	gc::gcable<member> invoke(parameters_type params) override
+	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override
 	{
 		return {};
 	}

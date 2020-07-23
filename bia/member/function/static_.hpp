@@ -37,7 +37,7 @@ public:
 	{
 		return gc::gc::active_gc()->construct<static_>(_function);
 	}
-	gc::gcable<member> invoke(parameters_type params) override
+	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override
 	{
 		return connector::connect_static(_function, params);
 	}
