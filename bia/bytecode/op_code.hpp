@@ -21,6 +21,11 @@ namespace member {
 struct args
 {
 	std::uint16_t index;
+
+	bool operator==(const args& other) noexcept
+	{
+		return index == other.index;
+	}
 };
 
 struct push
@@ -29,16 +34,31 @@ struct push
 struct global
 {
 	std::uint16_t index;
+
+	bool operator==(const global& other) noexcept
+	{
+		return index == other.index;
+	}
 };
 
 struct local
 {
 	std::uint16_t index;
+
+	bool operator==(const local& other) noexcept
+	{
+		return index == other.index;
+	}
 };
 
 struct resource
 {
 	std::uint16_t index;
+
+	bool operator==(const resource& other) noexcept
+	{
+		return index == other.index;
+	}
 };
 
 enum class builtin : std::uint8_t
@@ -46,6 +66,18 @@ enum class builtin : std::uint8_t
 	list,
 	range
 };
+
+template<typename Left, typename Right>
+constexpr bool is_same(Left, Right) noexcept
+{
+	return false;
+}
+
+template<typename Type>
+constexpr bool is_same(Type left, Type right) noexcept
+{
+	return left == right;
+}
 
 } // namespace member
 
