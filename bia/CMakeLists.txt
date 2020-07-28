@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 project(bia
 	VERSION 4.0
-	LANGUAGES CXX C)
+	LANGUAGES CXX)
 
 set(BIA_BIALANG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
@@ -88,16 +88,6 @@ target_link_libraries(cbia PUBLIC compiler bsl)
 # test
 if(BIA_BUILD_TESTS)
 	add_subdirectory("tests")
-endif()
-
-
-add_executable(maindev "main.cpp" ${BACKWARD_ENABLE})
-target_link_libraries(maindev PUBLIC bsl compiler)
-add_executable(mama "main.c")
-target_link_libraries(mama PUBLIC cbia)
-
-if(BACKWARD_ENABLE)
-	add_backward(maindev)
 endif()
 
 
