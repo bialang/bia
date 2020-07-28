@@ -2,6 +2,9 @@
 #include <bia/bsl/io.hpp>
 #include <bia/cbia.h>
 #include <bia/connector/parameters.hpp>
+#include <type_traits>
+
+typedef typename std::remove_reference<bia::parameters>::type parameters_t;
 
 bia_engine_t bia_engine_new()
 try {
@@ -30,7 +33,7 @@ try {
 	return -1;
 }
 
-int bia_engine_use_bsl(bia_engine_t engine)
+int bia_engine_use_bsl(bia_engine_t engine, const char* const* argv, size_t argc)
 try {
 	if (!engine) {
 		return -1;
@@ -65,6 +68,110 @@ try {
 	std::stringstream istream;
 	istream.write(static_cast<const char*>(code), length);
 	static_cast<bia::engine*>(engine)->execute(istream);
+
+	return 0;
+} catch (...) {
+	return -1;
+}
+
+int bia_parameters_count(bia_parameters_t params, size_t* out)
+try {
+	if (!params || !out) {
+		return -1;
+	}
+
+	*out = static_cast<parameters_t*>(params)->size();
+
+	return 0;
+} catch (...) {
+	return -1;
+}
+
+int bia_parameters_at(bia_parameters_t params, size_t index, bia_member_t* out)
+try {
+	if (!params || !out) {
+		return -1;
+	}
+
+	*out = static_cast<parameters_t*>(params)->positionals().at(index);
+
+	return 0;
+} catch (...) {
+	return -1;
+}
+
+int bia_parameters_positionals_count(bia_parameters_t params, size_t* out)
+try {
+	if (!params || !out) {
+		return -1;
+	}
+
+	*out = static_cast<parameters_t*>(params)->positionals().size();
+
+	return 0;
+} catch (...) {
+	return -1;
+}
+
+int bia_parameters_kwargs_count(bia_parameters_t params, size_t* out)
+try {
+	if (!params || !out) {
+		return -1;
+	}
+
+	*out = static_cast<parameters_t*>(params)->kwargs().size();
+
+	return 0;
+} catch (...) {
+	return -1;
+}
+
+int bia_member_cast_int(bia_member_t member, int* out)
+try {
+	if (!member || !out) {
+		return -1;
+	}
+
+	*out = bia::member::cast::cast<int>(*static_cast<bia::member::member*>(member));
+
+	return 0;
+} catch (...) {
+	return -1;
+}
+
+int bia_member_cast_llong(bia_member_t member, long long* out)
+try {
+	if (!member || !out) {
+		return -1;
+	}
+
+	*out = bia::member::cast::cast<long long>(*static_cast<bia::member::member*>(member));
+
+	return 0;
+} catch (...) {
+	return -1;
+}
+
+int bia_member_cast_double(bia_member_t member, double* out)
+try {
+	if (!member || !out) {
+		return -1;
+	}
+
+	*out = bia::member::cast::cast<double>(*static_cast<bia::member::member*>(member));
+
+	return 0;
+} catch (...) {
+	return -1;
+}
+
+int bia_member_cast_cstring(bia_member_t member, const char** out)
+try {
+	if (!member || !out) {
+		return -1;
+	}
+
+	*out = bia::member::cast::cast<const char*>(*static_cast<bia::member::member*>(member));
 
 	return 0;
 } catch (...) {
