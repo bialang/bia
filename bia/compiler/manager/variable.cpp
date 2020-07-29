@@ -22,13 +22,12 @@ std::pair<variable::index_type, bool> variable::find(const resource::view& ident
 	if (_parent) {
 		const auto r = _parent->find(identifer);
 
-		// add mapping
+		// add mapping; always take next because holes can be reused (whatever this means)
 		if (r.second) {
-			const auto index = add(identifer);
+			_variables.insert({ identifer, _next });
+			_bindings.push_back({ r.first, _next });
 
-			_bindings.push_back({ r.first, index });
-
-			return { index, true };
+			return { _next++, true };
 		}
 	}
 
