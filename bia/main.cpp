@@ -24,8 +24,12 @@ int main(int argc, char** argv)
 
 import io
 
+let x = "heyho"
+
 fun foo {
-	io.print("heyho")
+	io.print("inside function")
+
+	return x + " na wie gehts?"
 }
 
 io.print("return:", foo())

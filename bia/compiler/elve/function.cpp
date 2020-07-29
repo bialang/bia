@@ -31,12 +31,7 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 
 	writer.finish();
 
-	// bind references
-	for (const auto& i : variables.bindings()) {
-		BIA_LOG(DEBUG, "binding variable from {} to {}", i.first, i.second);
-	}
-	/*variables.bind();
-	binder.bind();*/
+	// todo:
 	auto streambuf = present.manager.start_memory(false);
 	code.seekg(0, std::ios_base::beg);
 	std::ostream{ &streambuf } << code.rdbuf();
@@ -45,6 +40,13 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 	present.writer.write<true, bytecode::oc_initiate>(
 	    bytecode::member::resource{ present.resources.index_of(streambuf.finish(resource::type::function)) },
 	    destination);
+
+	// bind references
+	for (const auto& i : variables.bindings()) {
+		BIA_LOG(DEBUG, "binding variable from {} to {}", i.first, i.second);
+
+		present.resources.add_binding(i.first, i.second);
+	}
 
 	return tokens;
 }

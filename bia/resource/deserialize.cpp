@@ -1,7 +1,6 @@
 #include "deserialize.hpp"
 
 #include "info.hpp"
-#include "serializer.hpp"
 
 #include <bia/exception/implementation_error.hpp>
 #include <bia/member/function/function.hpp>
@@ -10,6 +9,8 @@
 #include <bia/util/finally.hpp>
 #include <bia/util/portable/stream.hpp>
 #include <cstdint>
+
+using namespace bia::resource;
 
 std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, gc::gc& gc)
 {
@@ -55,11 +56,14 @@ std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, g
 			break;
 		}
 		case type::function: {
-			auto code   = gc.allocate(size);
+			//todo: this is dirty
+			const auto binding_size =
+			    util::portable::read<serializer::size_type>(input) * sizeof(serializer::size_type) * 2;
+			auto code   = gc.allocate(size + binding_size);
 			auto gcable = gc.construct<member::function::function>(
-			    util::span<const util::byte*>{ static_cast<const util::byte*>(code.peek()), size });
+			    static_cast<const util::byte*>(code.peek()), size, binding_size);
 
-			input.read(static_cast<char*>(code.peek()), size);
+			input.read(static_cast<char*>(code.peek()), size + binding_size);
 			builder.add(gcable.peek());
 			code.start_monitor();
 			gcable.start_monitor();
@@ -71,4 +75,12 @@ std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, g
 	}
 
 	return builder.finish();
+}
+
+std::pair<serializer::size_type, serializer::size_type>
+    bia::resource::deserialize_binding(util::span<const util::byte*>& input)
+{
+	const auto tmp = util::portable::read<serializer::size_type>(input);
+
+	return { tmp, util::portable::read<serializer::size_type>(input) };
 }

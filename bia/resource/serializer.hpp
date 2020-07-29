@@ -3,9 +3,9 @@
 
 #include "view.hpp"
 
-#include <ostream>
 #include <cstdint>
 #include <map>
+#include <ostream>
 
 namespace bia {
 namespace resource {
@@ -19,12 +19,15 @@ public:
 
 	void finish();
 	size_type index_of(view view);
+	void add_binding(size_type from, size_type to);
 
 private:
 	std::ostream& _output;
 	std::ostream::pos_type _start;
-	size_type _index = 0;
 	std::map<view, size_type> _map;
+	size_type _index                     = 0;
+	size_type _binding_count             = 0;
+	std::ostream::pos_type _last_binding = std::ostream::off_type{ -1 };
 };
 
 } // namespace resource

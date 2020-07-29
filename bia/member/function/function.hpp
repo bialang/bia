@@ -5,6 +5,8 @@
 
 #include <bia/gc/object/pointer.hpp>
 #include <bia/gc/stack_view.hpp>
+#include <bia/log/log.hpp>
+#include <bia/resource/deserialize.hpp>
 #include <bia/util/gsl.hpp>
 #include <vector>
 
@@ -15,7 +17,11 @@ namespace function {
 class function : public member
 {
 public:
-	function(util::span<const util::byte*> code) noexcept : _code{ code.data() }, _size{ code.size() }
+	typedef std::vector<std::pair<std::size_t, member*>> bindings_type;
+
+	function(gc::object::immutable_pointer<const util::byte> data, std::size_t code_size,
+	         std::size_t binding_size, bindings_type bindings = {}) noexcept
+	    : _code{ data }, _size{ code_size }, _binding_size{ binding_size }, _bindings{ std::move(bindings) }
 	{}
 	~function()
 	{}
@@ -42,7 +48,7 @@ public:
 	}
 	gc::gcable<member> get(const native::string& name) override
 	{
-		return nullptr;
+		return {};
 	}
 	float_type as_float() const noexcept override
 	{
@@ -63,7 +69,7 @@ public:
 	void gc_mark_children(bool mark) const noexcept override
 	{
 		gc::object::gc_mark(_code.get(), mark);
-		
+
 		for (const auto& i : _bindings) {
 			if (i.second) {
 				gc::object::gc_mark(i.second, mark);
@@ -72,26 +78,36 @@ public:
 	}
 	gc::gcable<member> initiate(const gc::stack_view& parent)
 	{
-		auto c = gc::gc::active_gc()->construct<function>(*this);
+		bindings_type bindings;
 
 		// bind variables
-		c.peek()->_bindings.clear();
-		c.peek()->_bindings.push_back({ 1, parent.local_at(0) });
+		util::span<const util::byte*> binding_input{ _code.get() + _size, _binding_size };
 
-		return c;
+		while (!binding_input.empty()) {
+			const auto binding = resource::deserialize_binding(binding_input);
+
+			bindings.push_back({ binding.second, parent.local_at(binding.first) });
+			BIA_LOG(DEBUG, "binding {} to {}", binding.first, binding.second);
+		}
+
+		return gc::gc::active_gc()->construct<function>(_code, _size, _binding_size, std::move(bindings));
 	}
 
 protected:
 	void register_gcables(gc::gc& gc) const noexcept override
 	{
 		gc.register_gcable(_code.get());
-		//todo: add bindings for consistency
+
+		for (const auto& i : _bindings) {
+			gc.register_gcable(i.second);
+		}
 	}
 
 private:
 	gc::object::immutable_pointer<const util::byte> _code;
 	const std::size_t _size;
-	std::vector<std::pair<std::size_t, member*>> _bindings;
+	const std::size_t _binding_size;
+	const bindings_type _bindings;
 };
 
 } // namespace function
