@@ -1,10 +1,10 @@
 #include "serializer.hpp"
 
+#include <algorithm>
 #include <bia/exception/implementation_error.hpp>
 #include <bia/log/log.hpp>
 #include <bia/util/portable/memory.hpp>
 #include <bia/util/portable/stream.hpp>
-#include <algorithm>
 
 using namespace bia::resource;
 
@@ -31,7 +31,7 @@ serializer::size_type serializer::index_of(view view)
 		return it->second;
 	}
 
-	BIA_LOG(DEBUG, "serializing new entry with {} bytes", view.size);
+	BIA_LOG(TRACE, "serializing new entry with {} bytes", view.size);
 
 	// write info
 	const auto sw = size_width_of(view.size);

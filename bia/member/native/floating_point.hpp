@@ -24,7 +24,7 @@ public:
 	{}
 	~floating_point()
 	{
-		BIA_LOG(DEBUG, "destroying floating point={}: {}", _value, static_cast<void*>(this));
+		BIA_LOG(TRACE, "destroying floating point={}: {}", _value, static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{

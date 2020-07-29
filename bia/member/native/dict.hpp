@@ -37,7 +37,7 @@ public:
 	{}
 	~dict()
 	{
-		BIA_LOG(DEBUG, "destroying dict: {}", static_cast<void*>(this));
+		BIA_LOG(TRACE, "destroying dict: {}", static_cast<void*>(this));
 	}
 	void put(util::not_null<const string*> key, util::not_null<member*> value)
 	{

@@ -23,7 +23,7 @@ public:
 	{}
 	~static_()
 	{
-		BIA_LOG(DEBUG, "destroying static function: {}", static_cast<void*>(this));
+		BIA_LOG(TRACE, "destroying static function: {}", static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{

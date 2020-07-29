@@ -25,7 +25,6 @@ int main(int argc, char** argv)
 import io
 
 fun foo {
-	import io
 	io.print("hi")
 }
 

@@ -17,7 +17,7 @@ string::string(gc::object::immutable_pointer<char> value) noexcept : _value(valu
 
 string::~string()
 {
-	BIA_LOG(DEBUG, "destroying string='{}': {}", _value.get(), static_cast<void*>(this));
+	BIA_LOG(TRACE, "destroying string='{}': {}", _value.get(), static_cast<void*>(this));
 }
 
 string::flag_type string::flags() const

@@ -2,6 +2,7 @@
 #include "helpers.hpp"
 
 #include <sstream>
+#include <bia/log/log.hpp>
 
 bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, tokens_type tokens)
 {
@@ -22,17 +23,20 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 		destination = { index.first };
 	}
 
-	// auto variables = present.variables.open_scope();
+	auto variables = present.variables.open_scope();
 	auto binder    = present.resources;
 	auto streambuf = present.manager.start_memory(false);
 	std::ostream code{ &streambuf };
 	bytecode::writer::instruction writer{ code };
 
-	tokens = batch({ present.variables, writer, binder, present.manager }, tokens.subspan(2));
+	tokens = batch({ variables, writer, binder, present.manager }, tokens.subspan(2));
 
 	writer.write<true, bytecode::oc_return_void>();
 
 	// bind references
+	for (const auto& i : variables.bindings()) {
+		BIA_LOG(DEBUG, "binding variable from {} to {}", i.first, i.second);
+	}
 	/*variables.bind();
 	binder.bind();*/
 

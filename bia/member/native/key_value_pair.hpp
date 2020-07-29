@@ -26,7 +26,8 @@ public:
 	{}
 	~key_value_pair()
 	{
-		BIA_LOG(DEBUG, "destroying key_value={}: {}: {}", _key.get(), _value.get(), static_cast<void*>(this));
+		BIA_LOG(TRACE, "destroying key_value={}: {}: {}", static_cast<void*>(_key.get()),
+		        static_cast<void*>(_value.get()), static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{

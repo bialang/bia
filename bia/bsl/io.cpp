@@ -48,7 +48,7 @@ inline void print(bia::connector::parameters_type params)
 	std::cout << end;
 }
 
-inline std::string read(bia::connector::parameters_type params)
+inline std::string read_input(bia::connector::parameters_type params)
 {
 	std::string input;
 
@@ -90,7 +90,7 @@ bia::member::native::dict* io::_init(gc::gc& gc)
 	const auto dict = gc.construct<member::native::dict>().release();
 
 	put_function(gc, *dict, "print", &print);
-	put_function(gc, *dict, "read", &read);
+	put_function(gc, *dict, "read", &read_input);
 
 	return dict;
 }

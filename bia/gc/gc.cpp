@@ -52,12 +52,12 @@ bool gc::run_once()
 
 	// an instance is already running
 	if (!lock) {
-		BIA_LOG(INFO, "gc instance already running");
+		BIA_LOG(WARN, "gc instance already running");
 
 		return false;
 	}
 
-	BIA_LOG(DEBUG, "preparing garbage collection");
+	BIA_LOG(TRACE, "preparing garbage collection");
 
 	_current_mark = !_current_mark;
 
@@ -65,7 +65,7 @@ bool gc::run_once()
 	auto allocated_token = _allocated.begin_operation();
 	auto roots_token     = _roots.begin_operation();
 
-	BIA_LOG(DEBUG, "traversing all registered roots");
+	BIA_LOG(TRACE, "traversing all registered roots");
 
 	// go through all roots and mark their children objects
 	for (auto i : roots_token) {
@@ -163,7 +163,7 @@ bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 
 	new (ptr) object::header{ _current_mark, leaf };
 
-	BIA_LOG(DEBUG, "allocated gcable memory at info={} with {} bytes", static_cast<void*>(ptr), size);
+	BIA_LOG(TRACE, "allocated gcable memory at info={} with {} bytes", static_cast<void*>(ptr), size);
 
 	return ptr + 1;
 }

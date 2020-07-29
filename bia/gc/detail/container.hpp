@@ -34,7 +34,7 @@ public:
 		void end_operation()
 		{
 			if (_container) {
-				BIA_LOG(DEBUG, "ending operation");
+				BIA_LOG(TRACE, "ending operation");
 
 				thread::lock::unique_lock<thread::lock::spin_mutex> lock(_container->_mutex);
 

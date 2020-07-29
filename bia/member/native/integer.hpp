@@ -27,7 +27,7 @@ public:
 	{}
 	~integer()
 	{
-		BIA_LOG(DEBUG, "destroying int={}: {}", _value, static_cast<void*>(this));
+		BIA_LOG(TRACE, "destroying int={}: {}", _value, static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{
