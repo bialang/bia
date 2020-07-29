@@ -24,11 +24,10 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 	}
 
 	auto variables = present.variables.open_scope();
-	auto binder    = present.resources;
 	std::stringstream code;
 	bytecode::writer::instruction writer{ code };
 
-	tokens = batch({ variables, writer, binder, present.manager }, tokens.subspan(2));
+	tokens = batch({ variables, writer, present.resources, present.manager }, tokens.subspan(2));
 
 	writer.finish();
 

@@ -4,7 +4,9 @@
 #include "../member.hpp"
 
 #include <bia/gc/object/pointer.hpp>
+#include <bia/gc/stack_view.hpp>
 #include <bia/util/gsl.hpp>
+#include <vector>
 
 namespace bia {
 namespace member {
@@ -27,7 +29,7 @@ public:
 	}
 	gc::gcable<member> copy() const override
 	{
-		return {};
+		return gc::gc::active_gc()->construct<function>(*this);
 	}
 	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override;
 	gc::gcable<member> operation(const member& right, infix_operator op) override
@@ -61,17 +63,35 @@ public:
 	void gc_mark_children(bool mark) const noexcept override
 	{
 		gc::object::gc_mark(_code.get(), mark);
+		
+		for (const auto& i : _bindings) {
+			if (i.second) {
+				gc::object::gc_mark(i.second, mark);
+			}
+		}
+	}
+	gc::gcable<member> initiate(const gc::stack_view& parent)
+	{
+		auto c = gc::gc::active_gc()->construct<function>(*this);
+
+		// bind variables
+		c.peek()->_bindings.clear();
+		c.peek()->_bindings.push_back({ 1, parent.local_at(0) });
+
+		return c;
 	}
 
 protected:
 	void register_gcables(gc::gc& gc) const noexcept override
 	{
 		gc.register_gcable(_code.get());
+		//todo: add bindings for consistency
 	}
 
 private:
 	gc::object::immutable_pointer<const util::byte> _code;
 	const std::size_t _size;
+	std::vector<std::pair<std::size_t, member*>> _bindings;
 };
 
 } // namespace function

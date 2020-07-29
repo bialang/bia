@@ -12,7 +12,7 @@
 #include <bia/member/native/key_value_pair.hpp>
 #include <bia/util/finally.hpp>
 #include <type_traits>
-
+#include <typeinfo>
 using namespace bia::bvm;
 
 template<typename Type>
@@ -287,7 +287,7 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 			const auto function = member_pointer<bia::member::function::function>(
 			    ro_parameter(std::get<0>(options), ip, resources));
 
-			mdo_parameter(std::get<1>(options), ip, stack, token, function);
+			mdo_parameter(std::get<1>(options), ip, stack, token, function->initiate(stack));
 
 			break;
 		}

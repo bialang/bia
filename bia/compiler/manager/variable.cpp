@@ -24,9 +24,11 @@ std::pair<variable::index_type, bool> variable::find(const resource::view& ident
 
 		// add mapping
 		if (r.second) {
-			_bindings.push_back({ r.first, add(identifer) });
+			const auto index = add(identifer);
 
-			return r;
+			_bindings.push_back({ r.first, index });
+
+			return { index, true };
 		}
 	}
 
