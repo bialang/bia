@@ -25,7 +25,8 @@ int main(int argc, char** argv)
 import io
 
 fun foo {
-	io.print("hi")
+	let x = 99
+	return x
 }
 
 io.print(foo())
