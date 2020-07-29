@@ -29,6 +29,13 @@ public:
 	{
 		optimized_write<false>(_output, Op_code);
 	}
+	template<bool Optimize, op_code OpCode, typename Source>
+	typename std::enable_if<is_op_code<OpCode, oc_return>::value && is_member_source<Source>::value>::type
+	    write(Source source)
+	{
+		optimized_write<false>(_output, encode_variations<OpCode>(member_source_index<Optimize>(source)));
+		optimized_member<Optimize>(_output, source);
+	}
 	template<bool Optimize, op_code Op_code, typename P0>
 	typename std::enable_if<is_op_code<Op_code, oc_jump, oc_jump_false, oc_jump_true>::value &&
 	                        is_offset<P0>::value &&

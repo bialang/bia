@@ -248,6 +248,12 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 
 			break;
 		}
+		case oc_return: {
+			mso_parameter(std::get<0>(parse_options<oc_return, member_source_option>(op_code)), ip, resources,
+			              output << "ret ");
+
+			break;
+		}
 		case oc_return_void: output << "ret"; break;
 		case oc_invert: output << "invert"; break;
 		case oc_prep_call: output << "prep_call"; break;

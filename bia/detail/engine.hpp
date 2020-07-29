@@ -93,7 +93,7 @@ public:
 		name_member.start_monitor();
 		module_member.start_monitor();
 	}
-	void execute(std::istream& code)
+	gc::gcable<member::member> execute(std::istream& code)
 	{
 		tokenizer::bia_lexer lexer{ _gc.allocator() };
 		auto encoder       = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
@@ -110,8 +110,9 @@ public:
 
 		assembler::disassemble({ reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
 		                       *decoded_resources, std::cout);
-		bvm::bvm::execute(_context, { reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
-		                  *decoded_resources);
+		return bvm::bvm::execute(_context,
+		                         { reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
+		                         *decoded_resources);
 	}
 	gc::gc& gc() noexcept
 	{

@@ -24,6 +24,7 @@ tokens_type parameter(present present, tokens_type tokens);
 tokens_type statement(present present, tokens_type tokens);
 tokens_type while_(present present, tokens_type tokens);
 tokens_type function(present present, tokens_type tokens);
+tokens_type return_(present present, tokens_type tokens);
 
 } // namespace elve
 } // namespace compiler

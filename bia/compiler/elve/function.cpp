@@ -1,8 +1,8 @@
 #include "../jump_manager.hpp"
 #include "helpers.hpp"
 
-#include <sstream>
 #include <bia/log/log.hpp>
+#include <sstream>
 
 bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, tokens_type tokens)
 {
@@ -25,13 +25,12 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 
 	auto variables = present.variables.open_scope();
 	auto binder    = present.resources;
-	auto streambuf = present.manager.start_memory(false);
-	std::ostream code{ &streambuf };
+	std::stringstream code;
 	bytecode::writer::instruction writer{ code };
 
 	tokens = batch({ variables, writer, binder, present.manager }, tokens.subspan(2));
 
-	writer.write<true, bytecode::oc_return_void>();
+	writer.finish();
 
 	// bind references
 	for (const auto& i : variables.bindings()) {
@@ -39,6 +38,9 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 	}
 	/*variables.bind();
 	binder.bind();*/
+	auto streambuf = present.manager.start_memory(false);
+	code.seekg(0, std::ios_base::beg);
+	std::ostream{ &streambuf } << code.rdbuf();
 
 	// initiate function
 	present.writer.write<true, bytecode::oc_initiate>(

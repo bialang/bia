@@ -62,6 +62,7 @@ struct token
 		while_,
 		for_,
 		fun,
+		return_,
 		break_,
 		continue_,
 		null,

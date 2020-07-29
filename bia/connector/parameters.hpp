@@ -74,6 +74,10 @@ public:
 	{
 		return _stack.arg_at(index).get();
 	}
+	gc::stack_view& stack() noexcept
+	{
+		return _stack;
+	}
 
 private:
 	gc::stack_view _stack;

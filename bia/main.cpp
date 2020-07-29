@@ -29,12 +29,15 @@ fun foo {
 	return x
 }
 
-io.print(foo())
+io.print("return:", foo())
+return 33
 
 )";
 
 	try {
-		engine.execute(code);
+		const auto value = bia::member::cast::cast<int>(*engine.execute(code).peek());
+
+		std::cout << "result: " << value << std::endl;
 	} catch (const bia::exception::bia_error& e) {
 		std::cout << "exception (" << e.name() << "; " << e.filename() << ":" << e.line() << "): " << e.what()
 		          << "\n";

@@ -3,7 +3,6 @@
 
 #include <bia/bvm/context.hpp>
 #include <bia/gc/root.hpp>
-#include <bia/gc/stack_view.hpp>
 #include <bia/gc/token.hpp>
 
 namespace bia {
@@ -13,7 +12,6 @@ struct invoke_context
 {
 	bvm::context& context;
 	gc::root& resources;
-	gc::stack_view& parent_stack;
 	gc::token& token;
 };
 
