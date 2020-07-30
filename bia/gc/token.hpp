@@ -76,7 +76,7 @@ public:
 			while (true) {
 				auto current_index = _gc->_miss_index.load(std::memory_order_consume);
 
-				if (header->miss_index.exchange(current_index, std::memory_order_seq_cst) <= current_index) {
+				if (header->miss_index.exchange(current_index, std::memory_order_release) <= current_index) {
 					break;
 				}
 			}

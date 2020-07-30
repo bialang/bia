@@ -79,7 +79,7 @@ bool gc::run_once()
 			// not marked
 			if (i->mark != _current_mark) {
 				// marked as miss
-				if (i->miss_index.load(std::memory_order_seq_cst) == miss_index) {
+				if (i->miss_index.load(std::memory_order_consume) == miss_index) {
 					object::gc_mark(&*i + 1, _current_mark);
 				}
 			}

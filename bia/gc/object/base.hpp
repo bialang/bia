@@ -17,7 +17,7 @@ namespace object {
 /**
  * This object must be implemented ny all gc node objects. Node objects are objects that must be destructed
  * before deallocation and can contain references to other gc objects.
- * 
+ *
  * @warning No gc children may be referenced or used in the destructor.
  */
 class alignas(alignment) base
@@ -54,13 +54,23 @@ inline void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept
 {
 	BIA_LOG(TRACE, "marking {}", ptr.get());
 
-	auto info        = const_cast<header*>(static_cast<const header*>(ptr.get()) - 1);
+	auto info      = const_cast<header*>(static_cast<const header*>(ptr.get()) - 1);
+	const auto old = info->mark;
+
+	info->mark = mark;
+
+	if (!info->leaf && old != mark) {
+		static_cast<const base*>(ptr.get())->gc_mark_children(mark);
+	}
+
+	// todo
+	/*auto info        = const_cast<header*>(static_cast<const header*>(ptr.get()) - 1);
 	const auto value = mark ? info->miss_index.fetch_or(0x80000000) : info->miss_index.fetch_and(0x7fffffff);
 
 	// another base and was not marked
 	if (mark != static_cast<bool>(value & 0x80000000) && value & 0x40000000) {
-		static_cast<const base*>(ptr.get())->gc_mark_children(mark);
-	}
+	    static_cast<const base*>(ptr.get())->gc_mark_children(mark);
+	}*/
 }
 
 } // namespace object
