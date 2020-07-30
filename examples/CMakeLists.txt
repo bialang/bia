@@ -20,7 +20,6 @@ add_executable(playground "playground.c" ${BACKWARD_ENABLE})
 target_link_libraries(playground PUBLIC cbia)
 
 if(BACKWARD_ENABLE)
-        add_backward(playground++)
+	add_backward(playground++)
 	add_backward(playground)
 endif()
-

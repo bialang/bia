@@ -70,15 +70,18 @@ link_dependency(base spdlog spdlog::spdlog)
 link_dependency(base Threads Threads::Threads)
 
 # bvm
-add_library(bvm $<TARGET_OBJECTS:bvm-obj> $<TARGET_OBJECTS:assembler-obj>)
+add_library(bvm)
+target_sources(bvm PUBLIC $<TARGET_OBJECTS:bvm-obj> $<TARGET_OBJECTS:assembler-obj>)
 target_link_libraries(bvm PUBLIC base)
 
 # bsl
-add_library(bsl $<TARGET_OBJECTS:bsl-obj>)
+add_library(bsl)
+target_sources(bsl PUBLIC $<TARGET_OBJECTS:bsl-obj>)
 target_link_libraries(bsl PUBLIC bvm)
 
 # compiler
-add_library(compiler $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
+add_library(compiler)
+target_sources(compiler PUBLIC $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
 target_link_libraries(compiler PUBLIC base)
 
 add_library(cbia "c/cbia.cpp")
