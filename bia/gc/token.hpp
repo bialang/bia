@@ -143,7 +143,7 @@ private:
 	{
 		if (_gc) {
 			gc::_active_gc_instance = nullptr;
-			_gc->_roots.remove(this);
+			_gc->deregister_root(this);
 
 			for (auto i = _size; i--;) {
 				_base[i].~pointer();

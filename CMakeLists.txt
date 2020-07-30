@@ -49,8 +49,8 @@ option(BIA_ENABLE_DEV_BACKTRACING "Enables C++ backtracing. Intended for develop
 option(BIA_ENABLE_SANITIZER "Enables the use of sanitizers." OFF)
 
 if(BIA_ENABLE_SANITIZER)
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
-	set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address")
+	set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -g -fsanitize=address")
 endif()
 
 # Enable testing

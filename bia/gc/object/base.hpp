@@ -17,6 +17,8 @@ namespace object {
 /**
  * This object must be implemented ny all gc node objects. Node objects are objects that must be destructed
  * before deallocation and can contain references to other gc objects.
+ * 
+ * @warning No gc children may be referenced or used in the destructor.
  */
 class alignas(alignment) base
 {
@@ -35,6 +37,7 @@ public:
 
 protected:
 	friend gc;
+
 	virtual void register_gcables(gc& gc) const noexcept = 0;
 };
 

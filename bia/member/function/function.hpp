@@ -23,8 +23,6 @@ public:
 	         std::size_t binding_size, bindings_type bindings = {}) noexcept
 	    : _code{ data }, _size{ code_size }, _binding_size{ binding_size }, _bindings{ std::move(bindings) }
 	{}
-	~function()
-	{}
 	flag_type flags() const override
 	{
 		return flag_none;
