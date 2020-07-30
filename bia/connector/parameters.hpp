@@ -78,6 +78,14 @@ public:
 	{
 		return _stack;
 	}
+	member::member* at(std::size_t index)
+	{
+		if (index >= _size) {
+			BIA_THROW(exception::bounds_error, "out of bounds");
+		}
+
+		return (*this)[index];
+	}
 
 private:
 	gc::stack_view _stack;

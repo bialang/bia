@@ -12,7 +12,7 @@
 
 using namespace bia::member::native;
 
-list::list(std::vector<member*> data) noexcept : _data{ std::move(data) }
+list::list(list_type data) noexcept : _data{ std::move(data) }
 {}
 
 list::flag_type list::flags() const
@@ -152,8 +152,8 @@ bool list::as_data(const std::type_info& type, void* output)
 
 bool list::as_data(const std::type_info& type, void* output) const
 {
-	if (type == typeid(std::vector<member*>)) {
-		*static_cast<std::vector<member*>*>(output) = _data;
+	if (type == typeid(list_type)) {
+		*static_cast<list_type*>(output) = _data;
 
 		return true;
 	}

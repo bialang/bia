@@ -5,6 +5,7 @@
 #include <bia/gc/gc.hpp>
 #include <bia/gc/object/pointer.hpp>
 #include <bia/member/native/dict.hpp>
+#include <bia/util/gsl.hpp>
 
 namespace bia {
 namespace bsl {
@@ -12,7 +13,7 @@ namespace bsl {
 class sys : public bvm::module::module
 {
 public:
-	sys(gc::gc& gc, int argc, char** argv);
+	sys(gc::gc& gc, util::span<const char* const*> arguments);
 	version_type version() const noexcept override;
 	util::not_null<member::member*> create(gc::gc& gc) override;
 	void gc_mark_children(bool mark) const noexcept override;
@@ -23,7 +24,7 @@ protected:
 private:
 	gc::object::immutable_pointer<member::native::dict> _symbols;
 
-	static member::native::dict* _init(gc::gc& gc, int argc, char** argv);
+	static member::native::dict* _init(gc::gc& gc, util::span<const char* const*> arguments);
 };
 
 } // namespace bsl

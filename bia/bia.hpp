@@ -7,7 +7,7 @@
 namespace bia {
 
 using engine     = detail::engine;
-using parameters = connector::parameters;
+using parameters = connector::parameters_type;
 
 using namespace member::cast;
 

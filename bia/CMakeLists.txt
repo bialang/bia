@@ -60,7 +60,7 @@ endfunction()
 
 
 # build exportable libraries
-list(APPEND BIA_COMPONENTS base bvm bsl compiler)
+list(APPEND BIA_COMPONENTS base bvm bsl compiler cbia)
 
 # base
 add_library(base $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:member-obj> $<TARGET_OBJECTS:resource-obj>)
@@ -81,18 +81,13 @@ target_link_libraries(bsl PUBLIC bvm)
 add_library(compiler $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
 target_link_libraries(compiler PUBLIC base)
 
+add_library(cbia "c/cbia.cpp")
+target_link_libraries(cbia PUBLIC compiler bsl)
+
 
 # test
 if(BIA_BUILD_TESTS)
 	add_subdirectory("tests")
-endif()
-
-
-add_executable(maindev "main.cpp" ${BACKWARD_ENABLE})
-target_link_libraries(maindev PUBLIC bsl compiler)
-
-if(BACKWARD_ENABLE)
-	add_backward(maindev)
 endif()
 
 
@@ -113,7 +108,7 @@ write_basic_package_version_file(
 	COMPATIBILITY SameMajorVersion)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake" DESTINATION "lib/bia/cmake")
-install(FILES "config.hpp" "bia.hpp" DESTINATION "include/bia")
+install(FILES "config.hpp" "bia.hpp" "cbia.h" DESTINATION "include/bia")
 
 foreach(component ${BIA_COMPONENTS})
 	install(TARGETS ${component}

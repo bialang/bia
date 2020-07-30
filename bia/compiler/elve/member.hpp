@@ -20,7 +20,9 @@ inline tokens_type member_call(present present, tokens_type tokens, Source sourc
 {
 	using tokenizer::token::token;
 
-	present.writer.write<true, bytecode::oc_refer>(source, destination);
+	if (!bytecode::member::is_same(source, destination)) {
+		present.writer.write<true, bytecode::oc_refer>(source, destination);
+	}
 
 	if (tokens.empty() || static_cast<token::type>(tokens.data()->value.index()) != token::type::control) {
 		return tokens;

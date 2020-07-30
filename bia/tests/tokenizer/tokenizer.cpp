@@ -16,7 +16,7 @@ using namespace bia::string;
 class mock_receiver : public token::receiver
 {
 public:
-	void receive(bia::util::span<const token::token*> tokens) override
+	void receive(bia::util::span<const token::token*> tokens, bia::resource::manager& manager) override
 	{
 		for (const auto& i : tokens) {
 			this->tokens.push_back(i);
