@@ -39,9 +39,7 @@ try {
 		return berr_invalid_arguments;
 	}
 
-	auto& eng = *static_cast<bia::engine*>(engine);
-
-	eng.module<bia::bsl::io>("io", eng.gc());
+	static_cast<bia::engine*>(engine)->use_bsl({ argv, argc });
 
 	return berr_ok;
 } catch (...) {

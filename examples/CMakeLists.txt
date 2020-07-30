@@ -15,9 +15,9 @@ target_link_libraries(hello_world_c PUBLIC cbia)
 
 # playground
 add_executable(playground++ "playground.cpp" ${BACKWARD_ENABLE})
-target_link_libraries(maindev PUBLIC bsl compiler)
+target_link_libraries(playground++ PUBLIC bsl compiler)
 add_executable(playground "playground.c" ${BACKWARD_ENABLE})
-target_link_libraries(playground++ PUBLIC cbia)
+target_link_libraries(playground PUBLIC cbia)
 
 if(BACKWARD_ENABLE)
         add_backward(playground++)

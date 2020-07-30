@@ -2,6 +2,10 @@
 #define BIA_DETAIL_ENGINE_HPP_
 
 #include <bia/assembler/disassembler.hpp>
+#include <bia/bsl/io.hpp>
+#include <bia/bsl/math.hpp>
+#include <bia/bsl/os.hpp>
+#include <bia/bsl/sys.hpp>
 #include <bia/bvm/bvm.hpp>
 #include <bia/bvm/context.hpp>
 #include <bia/bvm/module/module.hpp>
@@ -92,6 +96,13 @@ public:
 		_context.loader().add_module(name_member.peek(), module_member.peek());
 		name_member.start_monitor();
 		module_member.start_monitor();
+	}
+	void use_bsl(util::span<const char* const*> arguments)
+	{
+		module<bia::bsl::io>("io", _gc);
+		module<bia::bsl::math>("math", _gc);
+		module<bia::bsl::sys>("sys", _gc, arguments);
+		module<bia::bsl::os>("os", _gc);
 	}
 	void execute(std::istream& code)
 	{

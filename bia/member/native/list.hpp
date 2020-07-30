@@ -13,7 +13,9 @@ namespace native {
 class list : public member
 {
 public:
-	list(std::vector<member*> data) noexcept;
+	typedef std::vector<member*> list_type;
+
+	list(list_type data) noexcept;
 	flag_type flags() const override;
 	test_type test(test_operator op, const member& right) const override;
 	gc::gcable<member> copy() const override;
@@ -31,7 +33,7 @@ protected:
 	void register_gcables(gc::gc& gc) const noexcept override;
 
 private:
-	std::vector<member*> _data;
+	list_type _data;
 	mutable thread::lock::spin_mutex _mutex;
 
 	void _push(connector::parameters_type params);

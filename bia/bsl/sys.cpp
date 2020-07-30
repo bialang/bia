@@ -9,7 +9,7 @@
 
 using namespace bia::bsl;
 
-sys::sys(gc::gc& gc, int argc, char** argv) : _symbols{ _init(gc, argc, argv) }
+sys::sys(gc::gc& gc, util::span<const char* const*> arguments) : _symbols{ _init(gc, arguments) }
 {}
 
 sys::version_type sys::version() const noexcept
@@ -37,7 +37,7 @@ void sys::register_gcables(gc::gc& gc) const noexcept
 	}
 }
 
-bia::member::native::dict* sys::_init(gc::gc& gc, int argc, char** argv)
+bia::member::native::dict* sys::_init(gc::gc& gc, util::span<const char* const*> arguments)
 {
 	const auto dict     = gc.construct<member::native::dict>().release();
 	const auto token    = gc.activate_temporarily();
@@ -46,14 +46,16 @@ bia::member::native::dict* sys::_init(gc::gc& gc, int argc, char** argv)
 	put_function(gc, *dict, "exit", &std::exit);
 	put_function(gc, *dict, "quick_exit", &std::quick_exit);
 	put_function(gc, *dict, "abort", &std::abort);
-	put_gcable(gc, *dict, "version", creator::create("v4.0-alpha"));
+	put_gcable(gc, *dict, "version", creator::create("4.0.0-alpha"));
 	put_gcable(gc, *dict, "byteorder",
 	           creator::create(*reinterpret_cast<const char*>(&byteorder) == 1 ? "little" : "big"));
 
-	std::vector<member::member*> args;
+	member::native::list::list_type args;
 
-	for (auto i = 0; i < argc; ++i) {
-		args.push_back(creator::create(argv[i]).release());
+	args.reserve(arguments.size());
+
+	for (auto i : arguments) {
+		args.push_back(creator::create(i).release());
 	}
 
 	put_gcable(gc, *dict, "args", creator::create(std::move(args)));

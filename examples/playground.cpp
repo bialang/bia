@@ -1,8 +1,4 @@
 #include <bia/bia.hpp>
-#include <bia/bsl/io.hpp>
-#include <bia/bsl/math.hpp>
-#include <bia/bsl/os.hpp>
-#include <bia/bsl/sys.hpp>
 #include <bia/exception/syntax_error.hpp>
 #include <bia/member/function/generator.hpp>
 #include <iostream>
@@ -13,23 +9,16 @@ int main(int argc, char** argv)
 {
 	bia::engine engine;
 
-	engine.module<bia::bsl::io>("io", engine.gc());
-	engine.module<bia::bsl::math>("math", engine.gc());
-	engine.module<bia::bsl::sys>("sys", engine.gc(), argc, argv);
-	engine.module<bia::bsl::os>("os", engine.gc());
+	engine.use_bsl({ argv, argv + argc });
 
 	std::stringstream code;
 
 	code << u8R"(
 
 import io
+import sys
 
-fun foo {
-	import io
-	io.print("hi")
-}
-
-io.print(foo())
+io.print(sys.version)
 
 )";
 
