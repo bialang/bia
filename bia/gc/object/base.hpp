@@ -52,13 +52,13 @@ protected:
  */
 inline void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept
 {
+	BIA_LOG(TRACE, "marking {}", ptr.get());
+
 	auto info        = const_cast<header*>(static_cast<const header*>(ptr.get()) - 1);
 	const auto value = mark ? info->miss_index.fetch_or(0x80000000) : info->miss_index.fetch_and(0x7fffffff);
 
 	// another base and was not marked
 	if (mark != static_cast<bool>(value & 0x80000000) && value & 0x40000000) {
-		BIA_LOG(TRACE, "marking children of info={}", static_cast<void*>(info));
-
 		static_cast<const base*>(ptr.get())->gc_mark_children(mark);
 	}
 }

@@ -69,12 +69,14 @@ public:
 	{
 		// gc is active and dest could be possibly missed
 		if (const auto ptr = dest.get()) {
+			BIA_LOG(TRACE, "updating miss index of {}", static_cast<const void*>(ptr));
+
 			const auto header = reinterpret_cast<object::header*>(ptr) - 1;
 
 			while (true) {
 				auto current_index = _gc->_miss_index.load(std::memory_order_consume);
 
-				if (header->miss_index.exchange(current_index, std::memory_order_release) <= current_index) {
+				if (header->miss_index.exchange(current_index, std::memory_order_seq_cst) <= current_index) {
 					break;
 				}
 			}

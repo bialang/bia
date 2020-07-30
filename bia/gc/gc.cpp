@@ -79,7 +79,7 @@ bool gc::run_once()
 			// not marked
 			if (i->mark != _current_mark) {
 				// marked as miss
-				if (i->miss_index.load(std::memory_order_consume) == miss_index) {
+				if (i->miss_index.load(std::memory_order_seq_cst) == miss_index) {
 					object::gc_mark(&*i + 1, _current_mark);
 				}
 			}
@@ -90,14 +90,7 @@ bool gc::run_once()
 	for (auto i = allocated_token.begin(); i != allocated_token.end();) {
 		// not marked
 		if ((*i)->mark != _current_mark) {
-			if (!(*i)->leaf) {
-				reinterpret_cast<object::base*>(*i + 1)->~base();
-			}
-
-			// deallocate
-			(*i)->~header();
-
-			_allocator->deallocate(*i);
+			_free(*i + 1);
 
 			i = allocated_token.erase(i);
 		} else {
@@ -163,7 +156,7 @@ bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 
 	new (ptr) object::header{ _current_mark, leaf };
 
-	BIA_LOG(TRACE, "allocated gcable memory at info={} with {} bytes", static_cast<void*>(ptr), size);
+	BIA_LOG(TRACE, "allocated gcable memory at {} with {} bytes", static_cast<void*>(ptr + 1), size);
 
 	return ptr + 1;
 }
@@ -171,6 +164,12 @@ bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 void gc::_free(util::not_null<void*> ptr)
 {
 	auto info = static_cast<object::header*>(ptr.get()) - 1;
+
+	if (!info->leaf) {
+		static_cast<object::base*>(ptr.get())->~base();
+	}
+
+	BIA_LOG(TRACE, "freeing {}", ptr.get());
 
 	info->~header();
 	_allocator->deallocate(info);

@@ -113,7 +113,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 	using bia::member::infix_operator;
 	using bia::member::self_operator;
 	using bia::member::test_operator;
-
+return;
 	bvm::instruction_pointer ip{ instructions.begin(), instructions.end() };
 	const auto finally = util::make_finally([&] { output.flush(); });
 

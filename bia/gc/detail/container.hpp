@@ -74,6 +74,8 @@ public:
 			end_operation();
 
 			std::swap(_container, move._container);
+
+			return *this;
 		}
 
 	private:
