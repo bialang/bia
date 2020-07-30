@@ -96,6 +96,32 @@ bia::exception::syntax_details bia::tokenizer::token::parse::single_stmt(paramet
 
 	parameter.restore(old);
 
+	{
+		const auto err = any_of(parameter, "invalid return statement", "return").second;
+
+		if (!err) {
+			parameter.bundle.add({ token::keyword::return_ });
+
+			const auto before_return = parameter.backup();
+
+			eat_whitespaces(parameter);
+
+			if (expression(parameter)) {
+				parameter.restore(before_return);
+			}
+
+			return {};
+		}
+	}
+
+	parameter.restore(old);
+
+	if (!function(parameter)) {
+		return {};
+	}
+
+	parameter.restore(old);
+
 	return expression(parameter);
 }
 

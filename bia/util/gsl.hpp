@@ -4,14 +4,14 @@
 #include "contract.hpp"
 #include "type_traits/is_null_comparable.hpp"
 
+#include <bia/exception/bounds_error.hpp>
+#include <bia/exception/narrowing_error.hpp>
 #include <cstddef>
 #include <cstdint>
-#include <bia/exception/bad_variant_access.hpp>
-#include <bia/exception/bounds_error.hpp>
+#include <iterator>
 #include <limits>
 #include <type_traits>
 #include <utility>
-#include <iterator>
 
 namespace bia {
 namespace util {
@@ -80,6 +80,22 @@ enum class byte : std::uint8_t
 };
 #endif
 
+template<typename To, typename From>
+constexpr To narrow_cast(From&& from) noexcept
+{
+	return static_cast<To>(std::forward<From>(from));
+}
+
+template<typename To, typename From>
+constexpr To narrow(From from)
+{
+	return static_cast<From>(narrow_cast<To>(from)) != from ||
+	               (std::is_signed<To>::value != std::is_signed<From>::value &&
+	                (narrow_cast<To>(from) < To{}) != (from < From{}))
+	           ? BIA_THROW(exception::narrowing_error, "invalid narrowing operation")
+	           : narrow_cast<To>(from);
+}
+
 constexpr std::size_t dynamic_extent = std::numeric_limits<std::size_t>::max();
 
 template<typename Iterable>
@@ -133,7 +149,7 @@ public:
 		if (count == dynamic_extent) {
 			count = _size - offset;
 		}
-		
+
 		BIA_EXPECTS(offset + count <= _size);
 
 		return { _data + offset, _data + offset + count };

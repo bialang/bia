@@ -17,7 +17,7 @@ string::string(gc::object::immutable_pointer<char> value) noexcept : _value(valu
 
 string::~string()
 {
-	BIA_LOG(DEBUG, "destroying string='{}': {}", _value.get(), static_cast<void*>(this));
+	BIA_LOG(TRACE, "destroying string={}: {}", static_cast<void*>(_value.get()), static_cast<void*>(this));
 }
 
 string::flag_type string::flags() const
@@ -35,7 +35,7 @@ bia::gc::gcable<bia::member::member> string::copy() const
 	return gc::gc::active_gc()->construct<string>(_value);
 }
 
-bia::gc::gcable<bia::member::member> string::invoke(parameters_type params)
+bia::gc::gcable<bia::member::member> string::invoke(parameters_type params, invoke_context& context)
 {
 	return {};
 }

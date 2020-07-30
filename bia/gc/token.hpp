@@ -60,13 +60,17 @@ public:
 	 *
 	 * @param[out] dest defines the destination
 	 * @param src defines the source
-	 * @tparam T the type of the pointer
+	 * @tparam Destination the destination type
+	 * @tparam Source the source type
 	 */
-	template<typename T>
-	void set(object::pointer<T>& dest, T* src) noexcept
+	template<typename Destination, typename Source>
+	typename std::enable_if<std::is_base_of<Destination, Source>::value>::type
+	    set(object::pointer<Destination>& dest, Source* src) noexcept
 	{
 		// gc is active and dest could be possibly missed
 		if (const auto ptr = dest.get()) {
+			BIA_LOG(TRACE, "updating miss index of {}", static_cast<const void*>(ptr));
+
 			const auto header = reinterpret_cast<object::header*>(ptr) - 1;
 
 			while (true) {
@@ -141,7 +145,7 @@ private:
 	{
 		if (_gc) {
 			gc::_active_gc_instance = nullptr;
-			_gc->_roots.remove(this);
+			_gc->deregister_root(this);
 
 			for (auto i = _size; i--;) {
 				_base[i].~pointer();

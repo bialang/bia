@@ -26,7 +26,7 @@ bia::gc::gcable<bia::member::member> regex_match::copy() const
 	return gc::gc::active_gc()->construct<regex_match>(*this);
 }
 
-bia::gc::gcable<bia::member::member> regex_match::invoke(parameters_type params)
+bia::gc::gcable<bia::member::member> regex_match::invoke(parameters_type params, invoke_context& context)
 {
 	return {};
 }

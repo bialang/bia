@@ -55,6 +55,14 @@ public:
 
 		return _base[index];
 	}
+	element_type& local_at(std::size_t index) const
+	{
+		if (index > _cursor) {
+			BIA_THROW(exception::bounds_error, "out of bounds");
+		}
+
+		return _base[index];
+	}
 	element_type& arg_at(std::size_t index) const
 	{
 		if (index >= _max_size) {
@@ -76,6 +84,16 @@ public:
 		}
 
 		return _base[_last_push];
+	}
+	void mark_kwarg()
+	{
+		if (_last_push == _max_size || _arg_frames.empty()) {
+			BIA_THROW(exception::bounds_error, "invalid arguments");
+		}
+
+		if (!_arg_frames.back().second) {
+			_arg_frames.back().second = _last_push;
+		}
 	}
 	call_frame make_call_frame();
 
@@ -105,8 +123,9 @@ inline stack_view::call_frame stack_view::make_call_frame()
 	const auto arg_frame = _arg_frames.back();
 	call_frame frame{ { _base + _cursor + 1, arg_frame.first - (_cursor + 1) }, 0, 0 };
 
-	frame.arg_count = arg_frame.first - _last_push;
-	_last_push      = arg_frame.first;
+	frame.kwarg_count = arg_frame.second ? arg_frame.second - _last_push + 1 : 0;
+	frame.arg_count   = arg_frame.first - _last_push - frame.kwarg_count;
+	_last_push        = arg_frame.first;
 
 	_arg_frames.pop_back();
 

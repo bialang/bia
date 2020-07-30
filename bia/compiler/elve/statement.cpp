@@ -18,6 +18,8 @@ bia::compiler::elve::tokens_type bia::compiler::elve::statement(present present,
 		case token::keyword::while_: tokens = while_(present, tokens); break;
 		case token::keyword::if_: tokens = if_(present, tokens); break;
 		case token::keyword::for_: tokens = for_each(present, tokens); break;
+		case token::keyword::fun: tokens = function(present, tokens); break;
+		case token::keyword::return_: tokens = return_(present, tokens); break;
 		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
 		}
 

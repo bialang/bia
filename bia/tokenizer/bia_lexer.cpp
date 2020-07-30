@@ -32,7 +32,7 @@ void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& e
 		}
 
 		// give to receiver
-		receiver.receive({ bundle.begin(), bundle.end() });
+		receiver.receive({ bundle.begin(), bundle.end() }, _manager);
 		bundle.clear();
 	}
 }

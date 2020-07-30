@@ -21,6 +21,11 @@ namespace member {
 struct args
 {
 	std::uint16_t index;
+
+	bool operator==(const args& other) noexcept
+	{
+		return index == other.index;
+	}
 };
 
 struct push
@@ -29,16 +34,31 @@ struct push
 struct global
 {
 	std::uint16_t index;
+
+	bool operator==(const global& other) noexcept
+	{
+		return index == other.index;
+	}
 };
 
 struct local
 {
 	std::uint16_t index;
+
+	bool operator==(const local& other) noexcept
+	{
+		return index == other.index;
+	}
 };
 
 struct resource
 {
 	std::uint16_t index;
+
+	bool operator==(const resource& other) noexcept
+	{
+		return index == other.index;
+	}
 };
 
 enum class builtin : std::uint8_t
@@ -46,6 +66,18 @@ enum class builtin : std::uint8_t
 	list,
 	range
 };
+
+template<typename Left, typename Right>
+constexpr bool is_same(Left, Right) noexcept
+{
+	return false;
+}
+
+template<typename Type>
+constexpr bool is_same(Type left, Type right) noexcept
+{
+	return left == right;
+}
 
 } // namespace member
 
@@ -69,13 +101,15 @@ enum op_code : op_code_type
 	oc_self_operator =
 	    static_cast<op_code_type>(0x8000 | (5 << 7)), // [mso, mdo](operator, source, destination)
 	oc_import      = static_cast<op_code_type>(0x8000 | (6 << 7)),  // [ro, mdo](name resource, destination)
-	oc_jump        = static_cast<op_code_type>(0x8000 | (7 << 7)),  // [oo](offset)
-	oc_jump_true   = static_cast<op_code_type>(0x8000 | (8 << 7)),  // [oo](offset)
-	oc_jump_false  = static_cast<op_code_type>(0x8000 | (9 << 7)),  // [oo](offset)
-	oc_name        = static_cast<op_code_type>(0x8000 | (10 << 7)), // [ro](name resource)
-	oc_return_void = static_cast<op_code_type>(0x8000 | (11 << 7)), // []()
-	oc_invert      = static_cast<op_code_type>(0x8000 | (12 << 7)), // []()
-	oc_prep_call   = static_cast<op_code_type>(0x8000 | (13 << 7)), // []()
+	oc_initiate    = static_cast<op_code_type>(0x8000 | (7 << 7)),  // [ro, mdo](function, destination)
+	oc_jump        = static_cast<op_code_type>(0x8000 | (8 << 7)),  // [oo](offset)
+	oc_jump_true   = static_cast<op_code_type>(0x8000 | (9 << 7)),  // [oo](offset)
+	oc_jump_false  = static_cast<op_code_type>(0x8000 | (10 << 7)), // [oo](offset)
+	oc_name        = static_cast<op_code_type>(0x8000 | (11 << 7)), // [ro](name resource)
+	oc_return      = static_cast<op_code_type>(0x8000 | (12 << 7)), // [mso](member)
+	oc_return_void = static_cast<op_code_type>(0x8000 | (13 << 7)), // []()
+	oc_invert      = static_cast<op_code_type>(0x8000 | (14 << 7)), // []()
+	oc_prep_call   = static_cast<op_code_type>(0x8000 | (15 << 7)), // []()
 };
 
 namespace detail {
@@ -95,7 +129,7 @@ constexpr std::tuple<Parsed..., Variation> parse(op_code_type x, util::type_trai
 }
 
 template<int BitOffset, typename Variation, typename... Next, typename... Parsed>
-constexpr typename std::enable_if<sizeof...(Next), std::tuple<Parsed..., Variation, Next...>>::type
+constexpr typename std::enable_if<(sizeof...(Next) > 0), std::tuple<Parsed..., Variation, Next...>>::type
     parse(op_code_type x, util::type_traits::type_container<Next...>, Parsed... parsed)
 {
 	return parse<BitOffset - bit_size<Variation>(), Next...>(

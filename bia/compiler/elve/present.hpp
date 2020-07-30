@@ -4,6 +4,7 @@
 #include "../manager/variable.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
+#include <bia/resource/manager.hpp>
 #include <bia/resource/serializer.hpp>
 #include <bia/tokenizer/token/token.hpp>
 #include <bia/util/gsl.hpp>
@@ -17,6 +18,7 @@ struct present
 	manager::variable& variables;
 	bytecode::writer::instruction& writer;
 	resource::serializer& resources;
+	resource::manager& manager;
 };
 
 typedef util::span<const tokenizer::token::token*> tokens_type;

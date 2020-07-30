@@ -28,9 +28,9 @@ public:
 		return {};
 		// return gc::gc::active_gc()->construct<iterator>(_instance, _function);
 	}
-	gc::gcable<member> invoke(member::parameters_type params) override
+	gc::gcable<member> invoke(member::parameters_type params, invoke_context& context) override
 	{
-		auto result = method<Refer, Function>::invoke(params);
+		auto result = method<Refer, Function>::invoke(params, context);
 
 		if (!(_valid = result.peek() != stop_iteration)) {
 			return {};

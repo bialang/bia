@@ -22,11 +22,9 @@ public:
 		_size = call_frame.arg_count + call_frame.kwarg_count;
 
 		if (call_frame.kwarg_count) {
-			_kwargs.first  = &_stack.arg_at(_size - call_frame.kwarg_count);
-			_kwargs.second = &_stack.arg_at(_size - 1) + 1;
+			_kwargs = { { &_stack.arg_at(call_frame.arg_count) }, call_frame.kwarg_count };
 		}
 	}
-
 	bool empty() const noexcept
 	{
 		return !_size;
@@ -41,11 +39,11 @@ public:
 	}
 	stack_iterator<member::member, true> end() noexcept
 	{
-		return _size ? &_stack.arg_at(_size - 1) + 1 : nullptr;
+		return _size ? &_stack.arg_at(_size - 1) - 1 : nullptr;
 	}
 	util::span<stack_iterator<member::member, true>> positionals() noexcept
 	{
-		const auto end = static_cast<std::size_t>(_size - (_kwargs.second - _kwargs.first));
+		const auto end = _size - _kwargs.size();
 
 		// empty
 		if (!end) {
@@ -54,36 +52,45 @@ public:
 
 		return { { &_stack.arg_at(0) }, end };
 	}
-	util::span<stack_iterator<member::native::key_value_pair, false>> kwargs() const noexcept
+	util::span<stack_iterator<member::native::key_value_pair, true>> kwargs() const noexcept
 	{
-		return { { _kwargs.first }, { _kwargs.second } };
+		return _kwargs;
 	}
 	std::pair<member::member*, bool> operator[](util::not_null<util::czstring> name) const noexcept
 	{
-		const auto result = std::lower_bound(
-		    _kwargs.first, _kwargs.second, name.get(),
-		    [](const gc::stack_view::element_type& left, util::czstring name) {
-			    return static_cast<const member::native::key_value_pair*>(left.get())->key()->compare(name) <
-			           0;
-		    });
+		const auto result =
+		    std::lower_bound(_kwargs.begin(), _kwargs.end(), name.get(),
+		                     [](const member::native::key_value_pair* left, util::czstring name) {
+			                     return left->key()->compare(name) < 0;
+		                     });
 
-		if (result == _kwargs.second ||
-		    static_cast<const member::native::key_value_pair*>(result->get())->key()->compare(name.get()) !=
-		        0) {
+		if (result == _kwargs.end() || result->key()->compare(name.get()) != 0) {
 			return { nullptr, false };
 		}
 
-		return { static_cast<const member::native::key_value_pair*>(result->get())->value(), true };
+		return { result->value(), true };
 	}
 	member::member* operator[](std::size_t index)
 	{
 		return _stack.arg_at(index).get();
 	}
+	gc::stack_view& stack() noexcept
+	{
+		return _stack;
+	}
+	member::member* at(std::size_t index)
+	{
+		if (index >= _size) {
+			BIA_THROW(exception::bounds_error, "out of bounds");
+		}
+
+		return (*this)[index];
+	}
 
 private:
 	gc::stack_view _stack;
 	std::size_t _size;
-	std::pair<gc::stack_view::element_type*, gc::stack_view::element_type*> _kwargs;
+	util::span<stack_iterator<member::native::key_value_pair, true>> _kwargs;
 };
 
 } // namespace connector

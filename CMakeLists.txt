@@ -21,7 +21,7 @@ function(create_test NAME PATH)
 		file(GLOB_RECURSE TMP_SOURCE_FILES "${PATH}/*.cpp")
 
 		add_executable("${NAME}_test" ${TMP_SOURCE_FILES} ${BACKWARD_ENABLE})
-		target_link_libraries("${NAME}_test" PUBLIC bvm bsl compiler)
+		target_link_libraries("${NAME}_test" PUBLIC bsl compiler)
 		target_include_directories("${NAME}_test" PUBLIC ${CATCH_INCLUDE_DIRS})
 		
 		if(BACKWARD_ENABLE)
@@ -46,6 +46,12 @@ option(BIA_BUILD_TESTS "Builds the tests for the Bia library." ON)
 option(BIA_BUILD_EXAMPLES "Builds the example programs." ON)
 option(BIA_GENERATE_DOCUMENTATION "Generate the documentatio with Doxygen." OFF)
 option(BIA_ENABLE_DEV_BACKTRACING "Enables C++ backtracing. Intended for development." OFF)
+option(BIA_ENABLE_SANITIZER "Enables the use of sanitizers." OFF)
+
+if(BIA_ENABLE_SANITIZER)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address")
+	set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -g -fsanitize=address")
+endif()
 
 # Enable testing
 if(BIA_BUILD_TESTS)

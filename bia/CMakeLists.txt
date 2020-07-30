@@ -32,7 +32,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in"
 # add modules
 set(BIA_MODULES "")
 
-foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "compiler" "bsl" "detail")
+foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "assembler" "compiler" "bsl" "detail")
 	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
 		add_subdirectory("${module}")
 	else()
@@ -60,7 +60,7 @@ endfunction()
 
 
 # build exportable libraries
-list(APPEND BIA_COMPONENTS base bvm bsl compiler)
+list(APPEND BIA_COMPONENTS base bvm bsl compiler cbia)
 
 # base
 add_library(base $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:member-obj> $<TARGET_OBJECTS:resource-obj>)
@@ -70,29 +70,27 @@ link_dependency(base spdlog spdlog::spdlog)
 link_dependency(base Threads Threads::Threads)
 
 # bvm
-add_library(bvm $<TARGET_OBJECTS:bvm-obj>)
+add_library(bvm)
+target_sources(bvm PUBLIC $<TARGET_OBJECTS:bvm-obj> $<TARGET_OBJECTS:assembler-obj>)
 target_link_libraries(bvm PUBLIC base)
 
 # bsl
-add_library(bsl $<TARGET_OBJECTS:bsl-obj>)
+add_library(bsl)
+target_sources(bsl PUBLIC $<TARGET_OBJECTS:bsl-obj>)
 target_link_libraries(bsl PUBLIC bvm)
 
 # compiler
-add_library(compiler $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
+add_library(compiler)
+target_sources(compiler PUBLIC $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
 target_link_libraries(compiler PUBLIC base)
+
+add_library(cbia "c/cbia.cpp")
+target_link_libraries(cbia PUBLIC compiler bsl)
 
 
 # test
 if(BIA_BUILD_TESTS)
 	add_subdirectory("tests")
-endif()
-
-
-add_executable(maindev "main.cpp" ${BACKWARD_ENABLE})
-target_link_libraries(maindev PUBLIC bsl compiler)
-
-if(BACKWARD_ENABLE)
-	add_backward(maindev)
 endif()
 
 
@@ -113,7 +111,7 @@ write_basic_package_version_file(
 	COMPATIBILITY SameMajorVersion)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake" DESTINATION "lib/bia/cmake")
-install(FILES "config.hpp" "bia.hpp" DESTINATION "include/bia")
+install(FILES "config.hpp" "bia.hpp" "cbia.h" DESTINATION "include/bia")
 
 foreach(component ${BIA_COMPONENTS})
 	install(TARGETS ${component}

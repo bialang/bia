@@ -2,6 +2,7 @@
 #define BIA_BSL_IO_HPP_
 
 #include <bia/bvm/module/module.hpp>
+#include <bia/gc/gc.hpp>
 #include <bia/gc/object/pointer.hpp>
 #include <bia/member/native/dict.hpp>
 

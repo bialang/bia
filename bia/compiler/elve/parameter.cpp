@@ -14,9 +14,6 @@ bia::compiler::elve::tokens_type bia::compiler::elve::parameter(present present,
 	BIA_EXPECTS(!tokens.empty() &&
 	            static_cast<token::type>(tokens.data()->value.index()) == token::type::control);
 
-	BIA_LOG(INFO, "processing parameters {} - {}", static_cast<const void*>(first),
-	        static_cast<const void*>(last));
-
 	std::map<resource::view, tokens_type> kwargs;
 	std::size_t count = 0;
 

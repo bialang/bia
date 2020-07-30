@@ -1,10 +1,11 @@
 #include "serializer.hpp"
 
+#include <algorithm>
 #include <bia/exception/implementation_error.hpp>
 #include <bia/log/log.hpp>
+#include <bia/util/gsl.hpp>
 #include <bia/util/portable/memory.hpp>
 #include <bia/util/portable/stream.hpp>
-#include <algorithm>
 
 using namespace bia::resource;
 
@@ -19,6 +20,13 @@ void serializer::finish()
 
 	_output.seekp(_start);
 	util::portable::write(_output, _index);
+
+	// finalize last bindings
+	if (_last_binding != std::ostream::off_type{ -1 } && _binding_count) {
+		_output.seekp(_last_binding);
+		util::portable::write(_output, _binding_count);
+	}
+
 	_output.seekp(current);
 }
 
@@ -31,7 +39,22 @@ serializer::size_type serializer::index_of(view view)
 		return it->second;
 	}
 
-	BIA_LOG(DEBUG, "serializing new entry with {} bytes", view.size);
+	// finalize bindings of last write
+	if (_last_binding != std::ostream::off_type{ -1 }) {
+		if (_binding_count) {
+			const auto current = _output.tellp();
+
+			_output.seekp(_last_binding);
+			util::portable::write(_output, _binding_count);
+			_output.seekp(current);
+
+			_binding_count = 0;
+		}
+
+		_last_binding = std::ostream::off_type{ -1 };
+	}
+
+	BIA_LOG(TRACE, "serializing new entry with {} bytes", view.size);
 
 	// write info
 	const auto sw = size_width_of(view.size);
@@ -51,6 +74,14 @@ serializer::size_type serializer::index_of(view view)
 
 	_output.write(buffer, sw.second);
 
+	// bindable
+	if (view.type == type::function) {
+		_binding_count = 0;
+		_last_binding  = _output.tellp();
+
+		util::portable::write(_output, size_type{ 0 });
+	}
+
 	// copy data
 	for (auto i : view) {
 		_output.put(*reinterpret_cast<const char*>(&i));
@@ -59,4 +90,13 @@ serializer::size_type serializer::index_of(view view)
 	_map.insert({ view, _index });
 
 	return _index++;
+}
+
+void serializer::add_binding(size_type from, size_type to)
+{
+	BIA_EXPECTS(_last_binding != std::ostream::off_type{ -1 });
+
+	util::portable::write(_output, from, to);
+
+	++_binding_count;
 }

@@ -58,11 +58,7 @@ public:
 	{
 		stack_iterator copy{ _ptr };
 
-		if (Reverse) {
-			--_ptr;
-		} else {
-			++_ptr;
-		}
+		++(*this);
 
 		return copy;
 	}
@@ -80,11 +76,7 @@ public:
 	{
 		stack_iterator copy{ _ptr };
 
-		if (Reverse) {
-			++_ptr;
-		} else {
-			--_ptr;
-		}
+		--(*this);
 
 		return copy;
 	}
@@ -124,7 +116,7 @@ public:
 	}
 	reference operator[](difference_type i) const noexcept
 	{
-		return static_cast<DestType*>((Reverse ? _ptr + i : _ptr - i)->get());
+		return *(*this + i);
 	}
 	bool operator<(stack_iterator other) const noexcept
 	{

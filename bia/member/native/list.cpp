@@ -6,12 +6,13 @@
 #include "string.hpp"
 
 #include <bia/connector/connector-inl.hpp>
+#include <bia/creator/creator.hpp>
 #include <bia/thread/lock/guard.hpp>
 #include <bia/util/aggregate.hpp>
 
 using namespace bia::member::native;
 
-list::list(std::vector<member*> data) noexcept : _data{ std::move(data) }
+list::list(list_type data) noexcept : _data{ std::move(data) }
 {}
 
 list::flag_type list::flags() const
@@ -34,7 +35,7 @@ bia::gc::gcable<bia::member::member> list::copy() const
 	// return gc::gc::active_gc()->template construct<list>(*this);
 }
 
-bia::gc::gcable<bia::member::member> list::invoke(parameters_type params)
+bia::gc::gcable<bia::member::member> list::invoke(parameters_type params, invoke_context& context)
 {
 	return {};
 }
@@ -52,11 +53,13 @@ bia::gc::gcable<bia::member::member> list::self_operation(self_operator op)
 bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 {
 	if (!name.compare("size")) {
-		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_size)>>(
-		    *this, &list::_size);
+		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+		return creator::create(_data.size());
 	} else if (!name.compare("capacity")) {
-		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_capacity)>>(
-		    *this, &list::_capacity);
+		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+		return creator::create(_data.capacity());
 	} else if (!name.compare("push")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_push)>>(
 		    *this, &list::_push);
@@ -71,17 +74,20 @@ bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 		    ->template construct<function::method<true, decltype(&list::_shrink_to_fit)>>(
 		        *this, &list::_shrink_to_fit);
 	} else if (!name.compare("empty")) {
-		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_empty)>>(
-		    *this, &list::_empty);
+		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+		return creator::create(_data.empty());
 	} else if (!name.compare("clear")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_clear)>>(
 		    *this, &list::_clear);
 	} else if (!name.compare("front")) {
-		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_front)>>(
-		    *this, &list::_front);
+		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+		return creator::create(_data.front());
 	} else if (!name.compare("back")) {
-		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_back)>>(
-		    *this, &list::_back);
+		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
+
+		return creator::create(_data.back());
 	} else if (!name.compare("insert")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_insert)>>(
 		    *this, &list::_insert);
@@ -146,8 +152,8 @@ bool list::as_data(const std::type_info& type, void* output)
 
 bool list::as_data(const std::type_info& type, void* output) const
 {
-	if (type == typeid(std::vector<member*>)) {
-		*static_cast<std::vector<member*>*>(output) = _data;
+	if (type == typeid(list_type)) {
+		*static_cast<list_type*>(output) = _data;
 
 		return true;
 	}
@@ -167,20 +173,12 @@ void list::gc_mark_children(bool mark) const noexcept
 }
 
 void list::register_gcables(gc::gc& gc) const noexcept
-{}
-
-std::size_t list::_size() const
 {
 	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
-	return _data.size();
-}
-
-std::size_t list::_capacity() const
-{
-	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
-
-	return _data.capacity();
+	for (auto child : _data) {
+		gc.register_gcable(child);
+	}
 }
 
 void list::_push(connector::parameters_type params)
@@ -217,40 +215,11 @@ void list::_shrink_to_fit()
 	_data.shrink_to_fit();
 }
 
-bool list::_empty() const
-{
-	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
-
-	return _data.empty();
-}
-
 void list::_clear()
 {
 	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
 	_data.clear();
-}
-
-bia::member::member* list::_front() const
-{
-	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
-
-	if (_data.empty()) {
-		throw;
-	}
-
-	return _data.front();
-}
-
-bia::member::member* list::_back() const
-{
-	thread::lock::guard<decltype(_mutex)> lock{ _mutex };
-
-	if (_data.empty()) {
-		throw;
-	}
-
-	return _data.back();
 }
 
 void list::_insert(connector::parameters_type params)

@@ -6,7 +6,6 @@
 #include <bia/connector/connector.hpp>
 #include <bia/gc/gcable.hpp>
 #include <bia/gc/object/base.hpp>
-#include <bia/gc/stack_view.hpp>
 #include <cstdint>
 #include <typeinfo>
 
@@ -17,6 +16,8 @@ namespace native {
 class string;
 
 } // namespace native
+
+struct invoke_context;
 
 /**
  * The base type for all member types. All members are gc objects and must provide the following functions.
@@ -74,9 +75,11 @@ public:
 	 * Invokes this member.
 	 *
 	 * @param params the parameter manager
-	 * @returns the result of the function call
+	 * @param[in,out] context the machine context
+	 * @param[in,out] resources the resources for the machinee
+	 * @return the result of the function call
 	 */
-	virtual gc::gcable<member> invoke(parameters_type params) = 0;
+	virtual gc::gcable<member> invoke(parameters_type params, invoke_context& context) = 0;
 	/**
 	 * Executes an infix operation on this member and returns the result.
 	 *

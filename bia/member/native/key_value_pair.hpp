@@ -26,7 +26,8 @@ public:
 	{}
 	~key_value_pair()
 	{
-		BIA_LOG(DEBUG, "destroying key_value={}: {}: {}", _key.get(), _value.get(), static_cast<void*>(this));
+		BIA_LOG(TRACE, "destroying key_value={}: {}: {}", static_cast<void*>(_key.get()),
+		        static_cast<void*>(_value.get()), static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{
@@ -40,7 +41,7 @@ public:
 	{
 		return gc::gc::active_gc()->construct<key_value_pair>(_key.get(), _value.get());
 	}
-	gc::gcable<member> invoke(parameters_type params) override
+	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override
 	{
 		return {};
 	}

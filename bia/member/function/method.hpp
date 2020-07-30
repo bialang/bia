@@ -29,7 +29,7 @@ public:
 	{}
 	~method()
 	{
-		BIA_LOG(DEBUG, "destroying method function: {}", static_cast<void*>(this));
+		BIA_LOG(TRACE, "destroying method function: {}", static_cast<void*>(this));
 	}
 	flag_type flags() const override
 	{
@@ -43,7 +43,7 @@ public:
 	{
 		return gc::gc::active_gc()->construct<method>(_instance, _function);
 	}
-	gc::gcable<member> invoke(parameters_type params) override
+	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override
 	{
 		return connector::connect_method(_instance, _function, params);
 	}
@@ -128,7 +128,7 @@ public:
 	{
 		return gc::gc::active_gc()->construct<method>(_instance, _function);
 	}
-	gc::gcable<member> invoke(parameters_type params) override
+	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override
 	{
 		return connector::connect_method(_instance, _function, params);
 	}

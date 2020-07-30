@@ -6,6 +6,7 @@
 #include <map>
 #include <set>
 #include <utility>
+#include <vector>
 
 namespace bia {
 namespace compiler {
@@ -27,14 +28,18 @@ public:
 	index_type add_overshadower(resource::view identifer);
 	index_type add_tmp();
 	index_type latest_index() const;
+	variable open_scope();
 	void remove_tmp(index_type index);
 	void remove_overshadower(const resource::view& identifer);
+	const std::vector<std::pair<index_type, index_type>>& bindings() const noexcept;
 
 private:
 	std::map<resource::view, index_type> _variables;
 	std::map<resource::view, index_type> _overshadower;
 	std::set<index_type> _holes;
-	index_type _next = 0;
+	std::vector<std::pair<index_type, index_type>> _bindings;
+	variable* _parent = nullptr;
+	index_type _next  = 0;
 };
 
 } // namespace manager

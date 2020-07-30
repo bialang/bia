@@ -11,13 +11,27 @@ std::pair<variable::index_type, bool> variable::find(const resource::view& ident
 		return { result->second, true };
 	}
 
+	// normal variables
 	result = _variables.find(identifer);
 
-	if (result == _variables.end()) {
-		return { 0, false };
+	if (result != _variables.end()) {
+		return { result->second, true };
 	}
 
-	return { result->second, true };
+	// ask parent
+	if (_parent) {
+		const auto r = _parent->find(identifer);
+
+		// add mapping; always take next because holes can be reused (whatever this means)
+		if (r.second) {
+			_variables.insert({ identifer, _next });
+			_bindings.push_back({ r.first, _next });
+
+			return { _next++, true };
+		}
+	}
+
+	return { 0, false };
 }
 
 variable::index_type variable::add(resource::view identifer)
@@ -79,6 +93,15 @@ variable::index_type variable::latest_index() const
 	return _next - 1;
 }
 
+variable variable::open_scope()
+{
+	variable v;
+
+	v._parent = this;
+
+	return v;
+}
+
 void variable::remove_tmp(index_type index)
 {
 	_holes.insert(index);
@@ -110,4 +133,9 @@ void variable::remove_overshadower(const resource::view& identifer)
 
 		remove_tmp(index);
 	}
+}
+
+const std::vector<std::pair<variable::index_type, variable::index_type>>& variable::bindings() const noexcept
+{
+	return _bindings;
 }

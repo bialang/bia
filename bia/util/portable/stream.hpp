@@ -2,8 +2,10 @@
 #define BIA_UTIL_PORTABLE_STREAM_HPP_
 
 #include "../config.hpp"
+#include "../gsl.hpp"
 
 #include <algorithm>
+#include <cstring>
 #include <istream>
 #include <ostream>
 #include <utility>
@@ -39,6 +41,26 @@ inline T read(std::istream& input)
 
 #if BIA_ENDIAN == BIA_BIG_ENDIAN
 	std::reverse(reinterpret_cast<char*>(&value), reinterpret_cast<char*>(&value) + sizeof(value));
+#endif
+
+	return value;
+}
+
+template<typename Type>
+inline Type read(span<const byte*>& input)
+{
+	if (input.size_bytes() < sizeof(Type)) {
+		throw;
+	}
+
+	Type value{};
+
+	std::memcpy(&value, input.data(), sizeof(Type));
+
+	input = input.subspan(sizeof(Type));
+
+#if BIA_ENDIAN == BIA_BIG_ENDIAN
+	std::reverse(reinterpret_cast<byte*>(&value), reinterpret_cast<byte*>(&value) + sizeof(Type));
 #endif
 
 	return value;

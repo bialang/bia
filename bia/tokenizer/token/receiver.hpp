@@ -3,6 +3,7 @@
 
 #include "token.hpp"
 
+#include <bia/resource/manager.hpp>
 #include <bia/util/gsl.hpp>
 
 namespace bia {
@@ -24,8 +25,9 @@ public:
 	 * grouped.
 	 *
 	 * @param tokens the parsed tokens
+	 * @param manager the resource manager for resource creation during compilation
 	 */
-	virtual void receive(util::span<const token*> tokens) = 0;
+	virtual void receive(util::span<const token*> tokens, resource::manager& manager) = 0;
 };
 
 } // namespace token

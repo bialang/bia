@@ -1,12 +1,13 @@
 #include "gc.hpp"
 
 #include "gcable.hpp"
+#include "temporary_token.hpp"
 #include "token.hpp"
 
-#include <cstring>
 #include <bia/log/log.hpp>
 #include <bia/thread/lock/unique_lock.hpp>
 #include <bia/thread/thread.hpp>
+#include <cstring>
 
 using namespace bia::gc;
 
@@ -35,6 +36,7 @@ bia::thread::lock::guard<bia::thread::lock::spin_mutex> gc::lock()
 void gc::register_root(util::not_null<object::base*> base)
 {
 	_roots.add(base);
+	base->register_gcables(*this);
 }
 
 void gc::deregister_root(util::not_null<object::base*> base)
@@ -50,12 +52,12 @@ bool gc::run_once()
 
 	// an instance is already running
 	if (!lock) {
-		BIA_LOG(INFO, "gc instance already running");
+		BIA_LOG(WARN, "gc instance already running");
 
 		return false;
 	}
 
-	BIA_LOG(DEBUG, "preparing garbage collection");
+	BIA_LOG(TRACE, "preparing garbage collection");
 
 	_current_mark = !_current_mark;
 
@@ -63,7 +65,7 @@ bool gc::run_once()
 	auto allocated_token = _allocated.begin_operation();
 	auto roots_token     = _roots.begin_operation();
 
-	BIA_LOG(DEBUG, "traversing all registered roots");
+	BIA_LOG(TRACE, "traversing all registered roots");
 
 	// go through all roots and mark their children objects
 	for (auto i : roots_token) {
@@ -88,14 +90,7 @@ bool gc::run_once()
 	for (auto i = allocated_token.begin(); i != allocated_token.end();) {
 		// not marked
 		if ((*i)->mark != _current_mark) {
-			if (!(*i)->leaf) {
-				reinterpret_cast<object::base*>(*i + 1)->~base();
-			}
-
-			// deallocate
-			(*i)->~header();
-
-			_allocator->deallocate(*i);
+			_free(*i + 1);
 
 			i = allocated_token.erase(i);
 		} else {
@@ -132,6 +127,11 @@ gc* gc::active_gc() noexcept
 	return _active_gc_instance;
 }
 
+temporary_token gc::activate_temporarily()
+{
+	return { this };
+}
+
 void gc::register_gcable(const void* ptr)
 {
 	if (ptr) {
@@ -156,7 +156,7 @@ bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 
 	new (ptr) object::header{ _current_mark, leaf };
 
-	BIA_LOG(DEBUG, "allocated gcable memory at info={} with {} bytes", static_cast<void*>(ptr), size);
+	BIA_LOG(TRACE, "allocated gcable memory at {} with {} bytes", static_cast<void*>(ptr + 1), size);
 
 	return ptr + 1;
 }
@@ -164,6 +164,12 @@ bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 void gc::_free(util::not_null<void*> ptr)
 {
 	auto info = static_cast<object::header*>(ptr.get()) - 1;
+
+	if (!info->leaf) {
+		static_cast<object::base*>(ptr.get())->~base();
+	}
+
+	BIA_LOG(TRACE, "freeing {}", ptr.get());
 
 	info->~header();
 	_allocator->deallocate(info);

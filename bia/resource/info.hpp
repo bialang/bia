@@ -1,10 +1,10 @@
 #ifndef BIA_RESOURCE_INFO_HPP_
 #define BIA_RESOURCE_INFO_HPP_
 
+#include <bia/util/limit_checker.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
-#include <bia/util/limit_checker.hpp>
 #include <utility>
 
 namespace bia {
@@ -13,7 +13,8 @@ namespace resource {
 enum class type
 {
 	string,
-	regex
+	regex,
+	function
 };
 
 enum class size_width
@@ -25,7 +26,8 @@ enum class size_width
 
 inline std::pair<type, size_width> info_from(char c) noexcept
 {
-	return { static_cast<type>((c >> 2) & 0x1), static_cast<size_width>(c & 0x3) };
+	return { static_cast<type>((static_cast<unsigned char>(c) >> 2) & 0xf),
+		     static_cast<size_width>(c & 0x3) };
 }
 
 inline char info_to(type type, size_width size_width) noexcept

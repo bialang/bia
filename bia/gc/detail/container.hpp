@@ -7,8 +7,8 @@
 #include <bia/log/log.hpp>
 #include <bia/thread/lock/spin_mutex.hpp>
 #include <bia/thread/lock/unique_lock.hpp>
-#include <unordered_set>
 #include <bia/util/gsl.hpp>
+#include <unordered_set>
 
 namespace bia {
 namespace gc {
@@ -34,7 +34,7 @@ public:
 		void end_operation()
 		{
 			if (_container) {
-				BIA_LOG(DEBUG, "ending operation");
+				BIA_LOG(TRACE, "ending operation");
 
 				thread::lock::unique_lock<thread::lock::spin_mutex> lock(_container->_mutex);
 
@@ -74,6 +74,8 @@ public:
 			end_operation();
 
 			std::swap(_container, move._container);
+
+			return *this;
 		}
 
 	private:
@@ -112,12 +114,14 @@ public:
 	}
 	void remove(const T& element)
 	{
-		thread::lock::unique_lock<thread::lock::spin_mutex> lock(_mutex);
-
 		BIA_LOG(TRACE, "removing element from container");
 
-		if (!_main.erase(element)) {
-			BIA_EXPECTS(_back.erase(element) > 0);
+		while (true) {
+			thread::lock::unique_lock<thread::lock::spin_mutex> lock(_mutex);
+
+			if (!_operation_active && _main.erase(element) || _back.erase(element)) {
+				break;
+			}
 		}
 	}
 

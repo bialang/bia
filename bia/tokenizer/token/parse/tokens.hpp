@@ -35,6 +35,7 @@ exception::syntax_details number(parameter& parameter);
 exception::syntax_details if_(parameter& parameter);
 exception::syntax_details else_(parameter& parameter);
 exception::syntax_details loop_flow_control(parameter& parameter);
+exception::syntax_details function(parameter& parameter);
 
 } // namespace parse
 } // namespace token

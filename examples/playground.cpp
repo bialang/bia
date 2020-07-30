@@ -1,51 +1,62 @@
+#include <atomic>
 #include <bia/bia.hpp>
-#include <bia/bsl/io.hpp>
 #include <bia/exception/syntax_error.hpp>
 #include <bia/member/function/generator.hpp>
 #include <iostream>
 #include <sstream>
+#include <thread>
 #include <typeinfo>
 
-int main()
+int main(int argc, char** argv)
 {
-	bia::engine engine{};
+	bia::engine engine;
 
-	engine.module<bia::bsl::io>("io", engine.gc());
+	engine.use_bsl({ argv, argv + argc });
+
+	std::atomic_bool b;
+	auto t = std::thread{ [&] {
+		while (!b) {
+			std::this_thread::sleep_for(std::chrono::seconds{ 1 });
+			engine.gc().run_once();
+		}
+
+		BIA_LOG(INFO, "exiting gc thread");
+	} };
+	auto f = bia::util::make_finally([&] {
+		BIA_LOG(INFO, "waiting for gc to finish");
+
+		b = true;
+
+		t.join();
+	});
 
 	std::stringstream code;
 
 	code << u8R"(
 
 import io
+import sys
+import os
 
-let x = "ich bin 21 jahre alt und wir schreiben den 18.07.2020"
+let x = "heyho"
 
-for i in /\d+/.match_all(x) {
-	io.print(i.group(0))
+fun foo {
+	io.print("inside function")
+
+	return x + " na wie gehts?"
 }
 
-/*
-import io
-
-io.print("hi", "bye")
-io.print("hey")
-
-/*
-let x = range(0, 10, 1)
-
-io.print("outside the loop", x())
-
-for i in x {
-	io.print("inside the loop", i)
-}
-
-// should it be still valid?
-io.print(i)*/
+io.print("return:", foo())
+os.system("sleep 1")
+io.print(sys.version)
+return 33
 
 )";
 
 	try {
-		engine.execute(code);
+		const auto value = bia::member::cast::cast<int>(*engine.execute(code).peek());
+
+		std::cout << "result: " << value << std::endl;
 	} catch (const bia::exception::bia_error& e) {
 		std::cout << "exception (" << e.name() << "; " << e.filename() << ":" << e.line() << "): " << e.what()
 		          << "\n";
