@@ -32,7 +32,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in"
 # add modules
 set(BIA_MODULES "")
 
-foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "assembler" "compiler" "bsl" "detail")
+foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "assembler" "compiler" "bsl" "detail" "cbia")
 	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
 		add_subdirectory("${module}")
 	else()
@@ -51,7 +51,7 @@ endforeach()
 function(link_dependency TARGET NAME ITEM)
 	if(BIA_DEPENDENCY_${NAME})
 		find_package(${NAME} REQUIRED)
-		target_link_libraries(${TARGET} PUBLIC ${ITEM})
+		target_link_libraries(${TARGET} INTERFACE ${ITEM})
 		list(APPEND BIA_DEPENDENCIES ${NAME})
 		set(BIA_DEPENDENCIES ${BIA_DEPENDENCIES} PARENT_SCOPE)
 	endif()
@@ -63,29 +63,60 @@ endfunction()
 list(APPEND BIA_COMPONENTS base bvm bsl compiler cbia)
 
 # base
-add_library(base $<TARGET_OBJECTS:log-obj> $<TARGET_OBJECTS:thread-obj> $<TARGET_OBJECTS:gc-obj> $<TARGET_OBJECTS:string-obj> $<TARGET_OBJECTS:member-obj> $<TARGET_OBJECTS:resource-obj>)
-target_include_directories(base PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
+add_library(base INTERFACE)
+target_sources(base
+	INTERFACE
+		$<TARGET_OBJECTS:log-obj>
+		$<TARGET_OBJECTS:thread-obj>
+		$<TARGET_OBJECTS:gc-obj>
+		$<TARGET_OBJECTS:string-obj>
+		$<TARGET_OBJECTS:member-obj>
+		$<TARGET_OBJECTS:resource-obj>)
+target_include_directories(base
+	INTERFACE
+		"$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
 
 link_dependency(base spdlog spdlog::spdlog)
 link_dependency(base Threads Threads::Threads)
 
 # bvm
-add_library(bvm)
-target_sources(bvm PUBLIC $<TARGET_OBJECTS:bvm-obj> $<TARGET_OBJECTS:assembler-obj>)
-target_link_libraries(bvm PUBLIC base)
+add_library(bvm INTERFACE)
+target_sources(bvm
+	INTERFACE
+		$<TARGET_OBJECTS:bvm-obj>
+		$<TARGET_OBJECTS:assembler-obj>)
+target_link_libraries(bvm
+	INTERFACE
+		base)
 
 # bsl
-add_library(bsl)
-target_sources(bsl PUBLIC $<TARGET_OBJECTS:bsl-obj>)
-target_link_libraries(bsl PUBLIC bvm)
+add_library(bsl INTERFACE)
+target_sources(bsl
+	INTERFACE
+		$<TARGET_OBJECTS:bsl-obj>)
+target_link_libraries(bsl
+	INTERFACE
+		bvm)
 
 # compiler
-add_library(compiler)
-target_sources(compiler PUBLIC $<TARGET_OBJECTS:compiler-obj> $<TARGET_OBJECTS:tokenizer-obj>)
-target_link_libraries(compiler PUBLIC base)
+add_library(compiler INTERFACE)
+target_sources(compiler
+	INTERFACE
+		$<TARGET_OBJECTS:compiler-obj>
+		$<TARGET_OBJECTS:tokenizer-obj>)
+target_link_libraries(compiler
+	INTERFACE
+		base)
 
-add_library(cbia "c/cbia.cpp")
-target_link_libraries(cbia PUBLIC compiler bsl)
+# cbia
+add_library(cbia INTERFACE)
+target_sources(cbia
+	INTERFACE
+		$<TARGET_OBJECTS:cbia-obj>)
+target_link_libraries(cbia
+	INTERFACE
+		compiler
+		bsl)
 
 
 # test
