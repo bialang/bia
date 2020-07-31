@@ -21,8 +21,10 @@ function(create_test NAME PATH)
 		file(GLOB_RECURSE TMP_SOURCE_FILES "${PATH}/*.cpp")
 
 		add_executable("${NAME}_test" ${TMP_SOURCE_FILES} ${BACKWARD_ENABLE})
-		target_link_libraries("${NAME}_test" PUBLIC bsl compiler)
-		target_include_directories("${NAME}_test" PUBLIC ${CATCH_INCLUDE_DIRS})
+		target_link_libraries("${NAME}_test"
+			PUBLIC bia::bia)
+		target_include_directories("${NAME}_test"
+			PUBLIC ${CATCH_INCLUDE_DIRS})
 		
 		if(BACKWARD_ENABLE)
 			add_backward("${NAME}_test")

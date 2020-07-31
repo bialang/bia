@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
 project(bia
-	VERSION 4.0
+	VERSION 4.0.0
 	LANGUAGES CXX)
 
 set(BIA_BIALANG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
@@ -51,7 +51,7 @@ endforeach()
 function(link_dependency TARGET NAME ITEM)
 	if(BIA_DEPENDENCY_${NAME})
 		find_package(${NAME} REQUIRED)
-		target_link_libraries(${TARGET} INTERFACE ${ITEM})
+		target_link_libraries(${TARGET} PUBLIC ${ITEM})
 		list(APPEND BIA_DEPENDENCIES ${NAME})
 		set(BIA_DEPENDENCIES ${BIA_DEPENDENCIES} PARENT_SCOPE)
 	endif()
@@ -60,63 +60,81 @@ endfunction()
 
 
 # build exportable libraries
-list(APPEND BIA_COMPONENTS base bvm bsl compiler cbia)
+list(APPEND BIA_COMPONENTS base bvm bsl compiler bia cbia)
 
 # base
-add_library(base INTERFACE)
-target_sources(base
-	INTERFACE
-		$<TARGET_OBJECTS:log-obj>
-		$<TARGET_OBJECTS:thread-obj>
-		$<TARGET_OBJECTS:gc-obj>
-		$<TARGET_OBJECTS:string-obj>
-		$<TARGET_OBJECTS:member-obj>
-		$<TARGET_OBJECTS:resource-obj>)
+add_library(base
+	$<TARGET_OBJECTS:log-obj>
+	$<TARGET_OBJECTS:thread-obj>
+	$<TARGET_OBJECTS:gc-obj>
+	$<TARGET_OBJECTS:string-obj>
+	$<TARGET_OBJECTS:member-obj>
+	$<TARGET_OBJECTS:resource-obj>)
+add_library(bia::base ALIAS base)
+set_target_properties(base
+	PROPERTIES
+		OUTPUT_NAME "bia_base")
 target_include_directories(base
-	INTERFACE
+	PUBLIC
 		"$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
 
 link_dependency(base spdlog spdlog::spdlog)
 link_dependency(base Threads Threads::Threads)
 
 # bvm
-add_library(bvm INTERFACE)
-target_sources(bvm
-	INTERFACE
-		$<TARGET_OBJECTS:bvm-obj>
-		$<TARGET_OBJECTS:assembler-obj>)
+add_library(bvm
+	$<TARGET_OBJECTS:bvm-obj>
+	$<TARGET_OBJECTS:assembler-obj>)
+add_library(bia::bvm ALIAS bvm)
+set_target_properties(bvm
+	PROPERTIES
+		OUTPUT_NAME "bia_bvm")
 target_link_libraries(bvm
-	INTERFACE
+	PUBLIC
 		base)
 
 # bsl
-add_library(bsl INTERFACE)
-target_sources(bsl
-	INTERFACE
-		$<TARGET_OBJECTS:bsl-obj>)
+add_library(bsl
+	$<TARGET_OBJECTS:bsl-obj>)
+add_library(bia::bsl ALIAS bsl)
+set_target_properties(bsl
+	PROPERTIES
+		OUTPUT_NAME "bia_bsl")
 target_link_libraries(bsl
-	INTERFACE
+	PUBLIC
 		bvm)
 
 # compiler
-add_library(compiler INTERFACE)
-target_sources(compiler
-	INTERFACE
-		$<TARGET_OBJECTS:compiler-obj>
-		$<TARGET_OBJECTS:tokenizer-obj>)
+add_library(compiler
+	$<TARGET_OBJECTS:compiler-obj>
+	$<TARGET_OBJECTS:tokenizer-obj>)
+add_library(bia::compiler ALIAS compiler)
+set_target_properties(compiler
+	PROPERTIES
+		OUTPUT_NAME "bia_compiler")
 target_link_libraries(compiler
-	INTERFACE
+	PUBLIC
 		base)
 
-# cbia
-add_library(cbia INTERFACE)
-target_sources(cbia
-	INTERFACE
-		$<TARGET_OBJECTS:cbia-obj>)
-target_link_libraries(cbia
+# bia
+add_library(bia INTERFACE)
+add_library(bia::bia ALIAS bia)
+target_link_libraries(bia
 	INTERFACE
 		compiler
 		bsl)
+
+
+# cbia
+add_library(cbia
+	$<TARGET_OBJECTS:cbia-obj>)
+add_library(bia::cbia ALIAS cbia)
+set_target_properties(cbia
+	PROPERTIES
+		OUTPUT_NAME "bia_cbia")
+target_link_libraries(cbia
+	PUBLIC
+		bia)
 
 
 # test
@@ -129,11 +147,11 @@ endif()
 include(CMakePackageConfigHelpers)
 
 set(INCLUDE_INSTALL_DIR "include/")
-set(LIBRARY_INSTALL_DIR "lib/bia")
+set(LIBRARY_INSTALL_DIR "lib/")
 
 configure_package_config_file("bia-config.cmake.in"
 	"${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake"
-	INSTALL_DESTINATION "lib/bia/cmake"
+	INSTALL_DESTINATION "${LIBRARY_INSTALL_DIR}/cmake/bia"
 	PATH_VARS INCLUDE_INSTALL_DIR LIBRARY_INSTALL_DIR)
 
 write_basic_package_version_file(
@@ -141,17 +159,19 @@ write_basic_package_version_file(
 	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY SameMajorVersion)
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake" DESTINATION "lib/bia/cmake")
-install(FILES "config.hpp" "bia.hpp" "cbia.h" DESTINATION "include/bia")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake"
+	DESTINATION "${LIBRARY_INSTALL_DIR}/cmake/bia")
+install(FILES "config.hpp" "bia.hpp" "cbia.h"
+	DESTINATION "${INCLUDE_INSTALL_DIR}/bia")
 
 foreach(component ${BIA_COMPONENTS})
 	install(TARGETS ${component}
 			EXPORT ${component}-targets
-			ARCHIVE DESTINATION "lib/bia"
-			LIBRARY DESTINATION "lib/bia"
-			INCLUDES DESTINATION "include/")
+			ARCHIVE DESTINATION "${LIBRARY_INSTALL_DIR}"
+			LIBRARY DESTINATION "${LIBRARY_INSTALL_DIR}"
+			INCLUDES DESTINATION "${INCLUDE_INSTALL_DIR}")
 	install(EXPORT ${component}-targets
-			DESTINATION "lib/bia/cmake"
+			DESTINATION "${LIBRARY_INSTALL_DIR}/cmake/bia"
 			NAMESPACE bia::
 			EXPORT_LINK_INTERFACE_LIBRARIES
 			FILE "bia-${component}-targets.cmake"

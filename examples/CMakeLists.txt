@@ -4,20 +4,25 @@ project(examples
 	LANGUAGES CXX C)
 
 add_executable(hello_world "hello_world.cpp")
-target_link_libraries(hello_world PUBLIC bsl compiler)
+target_link_libraries(hello_world
+	PUBLIC bia::bia)
 
 add_executable(showcase "showcase.cpp")
-target_link_libraries(showcase PUBLIC bsl compiler)
+target_link_libraries(showcase
+	PUBLIC bia::bia)
 
 add_executable(hello_world_c "hello_world.c")
-target_link_libraries(hello_world_c PUBLIC cbia)
+target_link_libraries(hello_world_c
+	PUBLIC bia::cbia)
 
 
 # playground
 add_executable(playground++ "playground.cpp" ${BACKWARD_ENABLE})
-target_link_libraries(playground++ PUBLIC bsl compiler)
+target_link_libraries(playground++
+	PUBLIC bia::bia)
 add_executable(playground "playground.c" ${BACKWARD_ENABLE})
-target_link_libraries(playground PUBLIC cbia)
+target_link_libraries(playground
+	PUBLIC bia::cbia)
 
 if(BACKWARD_ENABLE)
 	add_backward(playground++)
