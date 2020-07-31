@@ -1,4 +1,5 @@
 #include "../jump_manager.hpp"
+#include "expression.hpp"
 #include "helpers.hpp"
 
 #include <sstream>

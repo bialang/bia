@@ -4,150 +4,127 @@ project(bia
 	VERSION 4.0.0
 	LANGUAGES CXX)
 
-set(BIA_BIALANG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
+option(BIA_LOG_ENABLE_LOGGING "Whether the Bia library should make internal logs to the default logger." OFF)
+set(BIA_UTIL_CONTRACT_BEHAVIOR "abort" CACHE STRING "How a contract violation should end (throw, abort, nothing).")
+set_property(CACHE BIA_UTIL_CONTRACT_BEHAVIOR PROPERTY STRINGS "throw" "abort" "nothing")
+set(BIA_THREAD_BACKEND "std::thread"
+	CACHE STRING "The thread backend that should be used for creating threads in Bia and in its implementation.")
+set_property(CACHE BIA_THREAD_BACKEND
+	PROPERTY STRINGS "std::thread" "none")
+set(BIA_STRING_ENCODING_BACKEND "none"
+	CACHE STRING "The library that should be used for encoding conversion of strings.")
+set_property(CACHE BIA_STRING_ENCODING_BACKEND
+	PROPERTY STRINGS "ICU" "none")
+set(BIA_RESOURCE_PAGE_SIZE 256 
+	CACHE STRING "The size of each page for the resource manager in bytes.")
 
-function(create_library DIRECTORY)
-	get_filename_component(LIB_NAME ${DIRECTORY} NAME)
+add_library(bia)
 
-	file(GLOB_RECURSE SOURCE_FILES "${DIRECTORY}/*.cpp")
+# logging
+if(BIA_LOG_ENABLE_LOGGING)
+	find_package(spdlog REQUIRED)
+	list(APPEND BIA_DEPENDENCIES spdlog)
+	target_link_libraries(bia
+		PUBLIC spdlog::spdlog)
 
-	if(SOURCE_FILES)
-		add_library(${LIB_NAME}-obj OBJECT ${SOURCE_FILES})
-		target_include_directories(${LIB_NAME}-obj PUBLIC "$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>" "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>")
-		
-		if(BUILD_SHARED_LIBS)
-			set_property(TARGET ${LIB_NAME}-obj PROPERTY POSITION_INDEPENDENT_CODE ON)
-		endif()
+	set(BIA_LOG_NAME "bialang-logger"
+		CACHE STRING "The name of the default logger.")
+	set(BIA_LOG_PATTERN "[%T.%e | %n | %t | %^%l%$ ] %@@%!\\n\t%v"
+		CACHE STRING "The defaul logging pattern. For more information look here: https://github.com/gabime/spdlog/wiki/3.-Custom-formatting#pattern-flags")
+	set(BIA_LOG_LEVEL "INFO"
+		CACHE STRING "The logging level (CIRITICAL, ERROR, WARN, INFO, DEBUG, TRACE)")
+	set_property(CACHE BIA_LOG_LEVEL
+		PROPERTY STRINGS "CRITICAL" "ERROR" "WARN" "INFO" "DEBUG" "TRACE")
+endif()
+
+# test endianess
+include(TestBigEndian)
+test_big_endian(BIA_BIG_ENDIAN)
+
+if(BIA_BIG_ENDIAN)
+	set(BIA_ENDIAN "BIA_BIG_ENDIAN")
+else()
+	set(BIA_ENDIAN "BIA_LITTLE_ENDIAN")
+endif()
+
+if(${BIA_UTIL_CONTRACT_BEHAVIOR} STREQUAL "throw")
+	set(BIA_UTIL_CONTRACT_BEHAVIOR_THROW ON)
+elseif(${BIA_UTIL_CONTRACT_BEHAVIOR} STREQUAL "abort")
+	set(BIA_UTIL_CONTRACT_BEHAVIOR_ABORT ON)
+else()
+	set(BIA_UTIL_CONTRACT_BEHAVIOR_NOTHING ON)
+endif()
+
+# thread
+if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
+	find_package(Threads REQUIRED)
+	list(APPEND BIA_DEPENDENCIES Threads)
+	target_link_libraries(bia
+		PUBLIC Threads::Threads)
+	set(BIA_THREAD_BACKEND_STD ON)
+else()
+	# disable threading
+	set(BIA_THREAD_BACKEND_NONE ON)
+	set(BIA_THREAD_SLEEP_FUNCTION ""
+		CACHE STRING "The sleep function implementation. Takes a single std::chrono::duration<Rep, Period> argument.")
+	set(BIA_THREAD_SLEEP_INCLUDE ""
+		CACHE STRING "One additional include for the sleep function. For example <thread>")
+
+	if(NOT BIA_THREAD_SLEEP_FUNCTION)
+		message(FATAL_ERROR "BIA_THREAD_SLEEP_FUNCTION must be defined.")
 	endif()
+endif()
 
-	# config file
-	if(EXISTS "${DIRECTORY}/config.hpp.in")
-		configure_file("${DIRECTORY}/config.hpp.in" "${DIRECTORY}/config.hpp")
-	endif()
-endfunction()
+# string
+if(${BIA_STRING_ENCODING_BACKEND} STREQUAL "ICU")
+	message(FATAL_ERROR "not implemented")
+	set(BIA_STRING_ENCODING_BACKEND_ICU ON)
+	include(FindICU)
+	find_package(ICU COMPONENTS io i18n)
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in"
-				"${CMAKE_CURRENT_SOURCE_DIR}/config.hpp")
-
-# add modules
-set(BIA_MODULES "")
-
-foreach(module "exception" "log" "util" "thread" "gc" "string" "member" "creator" "resource" "bytecode" "tokenizer" "connector" "bvm" "assembler" "compiler" "bsl" "detail" "cbia")
-	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
-		add_subdirectory("${module}")
+	if(ICU_FOUND)
+		list(APPEND LINK_LIBS
+			PRIVATE ${ICU_LIBRARIES})
 	else()
-		create_library("${CMAKE_CURRENT_SOURCE_DIR}/${module}")
+		message("ICU was not found")
+
+		#require_submodule_lib("icu")
+
+		# Compile
 	endif()
+else()
+	set(BIA_STRING_ENCODING_BACKEND_NONE ON)
+endif()
 
-	list(APPEND BIA_MODULES "${module}")
 
-	install(DIRECTORY "${module}"
-			DESTINATION "include/bia"
-			FILES_MATCHING PATTERN "*.hpp")
+# configure all config.hpp.in
+file(GLOB_RECURSE BIA_CONFIG_TEMPLATES "${CMAKE_CURRENT_SOURCE_DIR}/*/config.hpp.in")
+
+foreach(config ${BIA_CONFIG_TEMPLATES})
+	string(LENGTH "${config}" config_length)
+	math(EXPR config_length "${config_length} - 3")
+	string(SUBSTRING "${config}" 0 ${config_length} config_output)
+	configure_file("${config}" "${config_output}")
 endforeach()
 
 
-# dependency function
-function(link_dependency TARGET NAME ITEM)
-	if(BIA_DEPENDENCY_${NAME})
-		find_package(${NAME} REQUIRED)
-		target_link_libraries(${TARGET} PUBLIC ${ITEM})
-		list(APPEND BIA_DEPENDENCIES ${NAME})
-		set(BIA_DEPENDENCIES ${BIA_DEPENDENCIES} PARENT_SCOPE)
-	endif()
-endfunction()
-
-
-
-# build exportable libraries
-list(APPEND BIA_COMPONENTS base bvm bsl compiler bia cbia)
-
-# base
-add_library(base
-	$<TARGET_OBJECTS:log-obj>
-	$<TARGET_OBJECTS:thread-obj>
-	$<TARGET_OBJECTS:gc-obj>
-	$<TARGET_OBJECTS:string-obj>
-	$<TARGET_OBJECTS:member-obj>
-	$<TARGET_OBJECTS:resource-obj>)
-add_library(bia::base ALIAS base)
-set_target_properties(base
-	PROPERTIES
-		OUTPUT_NAME "bia_base")
-target_include_directories(base
-	PUBLIC
-		"$<BUILD_INTERFACE:${BIA_BIALANG_INCLUDE_DIR}>")
-
-link_dependency(base spdlog spdlog::spdlog)
-link_dependency(base Threads Threads::Threads)
-
-# bvm
-add_library(bvm
-	$<TARGET_OBJECTS:bvm-obj>
-	$<TARGET_OBJECTS:assembler-obj>)
-add_library(bia::bvm ALIAS bvm)
-set_target_properties(bvm
-	PROPERTIES
-		OUTPUT_NAME "bia_bvm")
-target_link_libraries(bvm
-	PUBLIC
-		base)
-
-# bsl
-add_library(bsl
-	$<TARGET_OBJECTS:bsl-obj>)
-add_library(bia::bsl ALIAS bsl)
-set_target_properties(bsl
-	PROPERTIES
-		OUTPUT_NAME "bia_bsl")
-target_link_libraries(bsl
-	PUBLIC
-		bvm)
-
-# compiler
-add_library(compiler
-	$<TARGET_OBJECTS:compiler-obj>
-	$<TARGET_OBJECTS:tokenizer-obj>)
-add_library(bia::compiler ALIAS compiler)
-set_target_properties(compiler
-	PROPERTIES
-		OUTPUT_NAME "bia_compiler")
-target_link_libraries(compiler
-	PUBLIC
-		base)
-
 # bia
-add_library(bia INTERFACE)
+file(GLOB_RECURSE BIA_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE BIA_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
+list(APPEND BIA_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/cbia.h")
+
+target_sources(bia
+	PRIVATE "${BIA_SOURCE_FILES}" "${CMAKE_CURRENT_HEADER_FILES}")
+target_include_directories(bia
+	PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
 add_library(bia::bia ALIAS bia)
-target_link_libraries(bia
-	INTERFACE
-		compiler
-		bsl)
-
-
-# cbia
-add_library(cbia
-	$<TARGET_OBJECTS:cbia-obj>)
-add_library(bia::cbia ALIAS cbia)
-set_target_properties(cbia
-	PROPERTIES
-		OUTPUT_NAME "bia_cbia")
-target_link_libraries(cbia
-	PUBLIC
-		bia)
-
-
-# test
-if(BIA_BUILD_TESTS)
-	add_subdirectory("tests")
-endif()
 
 
 # install
 include(CMakePackageConfigHelpers)
 
-set(INCLUDE_INSTALL_DIR "include/")
-set(LIBRARY_INSTALL_DIR "lib/")
+set(INCLUDE_INSTALL_DIR "include")
+set(LIBRARY_INSTALL_DIR "lib")
 
 configure_package_config_file("bia-config.cmake.in"
 	"${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake"
@@ -159,21 +136,21 @@ write_basic_package_version_file(
 	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY SameMajorVersion)
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake"
+install(FILES
+		"${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake"
+		"${CMAKE_CURRENT_BINARY_DIR}/bia-config-version.cmake"
 	DESTINATION "${LIBRARY_INSTALL_DIR}/cmake/bia")
-install(FILES "config.hpp" "bia.hpp" "cbia.h"
-	DESTINATION "${INCLUDE_INSTALL_DIR}/bia")
-
-foreach(component ${BIA_COMPONENTS})
-	install(TARGETS ${component}
-			EXPORT ${component}-targets
-			ARCHIVE DESTINATION "${LIBRARY_INSTALL_DIR}"
-			LIBRARY DESTINATION "${LIBRARY_INSTALL_DIR}"
-			INCLUDES DESTINATION "${INCLUDE_INSTALL_DIR}")
-	install(EXPORT ${component}-targets
-			DESTINATION "${LIBRARY_INSTALL_DIR}/cmake/bia"
-			NAMESPACE bia::
-			EXPORT_LINK_INTERFACE_LIBRARIES
-			FILE "bia-${component}-targets.cmake"
-			COMPONENT ${component})
-endforeach()
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+	DESTINATION "${INCLUDE_INSTALL_DIR}"
+	FILES_MATCHING REGEX ".*\\.(hpp|h)$")
+install(TARGETS bia
+	EXPORT bia-targets
+	ARCHIVE DESTINATION "${LIBRARY_INSTALL_DIR}"
+	LIBRARY DESTINATION "${LIBRARY_INSTALL_DIR}"
+	INCLUDES DESTINATION "${INCLUDE_INSTALL_DIR}")
+install(EXPORT bia-targets
+	DESTINATION "${LIBRARY_INSTALL_DIR}/cmake/bia"
+	NAMESPACE bia::
+	EXPORT_LINK_INTERFACE_LIBRARIES
+	FILE "bia-targets.cmake"
+	COMPONENT bia)

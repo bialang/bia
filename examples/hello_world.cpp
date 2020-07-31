@@ -1,14 +1,14 @@
 #include <bia/bia.hpp>
-#include <bia/bsl/io.hpp>
 #include <iostream>
 #include <sstream>
 
-int main()
+int main(int argc, char** argv)
 {
 	bia::engine engine;
 
-	engine.function("hello_world", +[] { std::cout << "Hello, World! - C++\n"; });
-	engine.module<bia::bsl::io>("io", engine.gc());
+	engine.function(
+	    "hello_world", +[] { std::cout << "Hello, World! - C++\n"; });
+	engine.use_bsl({ argv, argv + argc });
 
 	std::stringstream code;
 

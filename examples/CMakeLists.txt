@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(examples
+project(bia_examples
 	LANGUAGES CXX C)
 
 add_executable(hello_world "hello_world.cpp")
@@ -13,7 +13,7 @@ target_link_libraries(showcase
 
 add_executable(hello_world_c "hello_world.c")
 target_link_libraries(hello_world_c
-	PUBLIC bia::cbia)
+	PUBLIC bia::bia)
 
 
 # playground
@@ -22,7 +22,7 @@ target_link_libraries(playground++
 	PUBLIC bia::bia)
 add_executable(playground "playground.c" ${BACKWARD_ENABLE})
 target_link_libraries(playground
-	PUBLIC bia::cbia)
+	PUBLIC bia::bia)
 
 if(BACKWARD_ENABLE)
 	add_backward(playground++)

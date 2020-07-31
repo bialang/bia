@@ -9,9 +9,7 @@ foreach(dependency @BIA_DEPENDENCIES@)
 	find_package(${dependency} REQUIRED)
 endforeach()
 
-foreach(component @BIA_COMPONENTS@)
-	include("${CMAKE_CURRENT_LIST_DIR}/bia-${component}-targets.cmake")
-	set(bia_${component}_FOUND TRUE)
-endforeach()
+include("${CMAKE_CURRENT_LIST_DIR}/bia-targets.cmake")
+set(bia_FOUND TRUE)
 
 check_required_components(bia)
