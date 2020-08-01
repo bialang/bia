@@ -41,6 +41,14 @@ code << u8R"(
 engine.execute(code);
 ```
 
+And the corresponding CMake:
+
+```cmake
+find_package(bia REQUIRED)
+add_executable(example example.cpp)
+target_link_libraries(example PRIVATE bia::bia)
+```
+
 ## Building
 
 ### Prerequisites
