@@ -1,0 +1,194 @@
+# https://eeyo.io/iro/
+# https://pygments.org/docs/tokens/
+# https://macromates.com/manual/en/language_grammars
+
+name                   = bia
+file_extensions []     = bia;
+
+styles [] {
+
+.comment : style {
+   color                 = light_green
+   italic                = true
+   ace_scope             = comment
+   textmate_scope        = comment
+   pygments_scope        = Comment
+}
+
+.keyword : style {
+   color     = purple
+   ace_scope             = keyword
+   textmate_scope        = keyword
+   pygments_scope        = Keyword
+}
+
+.operator : style {
+   color     = grey
+   ace_scope             = keyword.operator
+   textmate_scope        = keyword.operator
+   pygments_scope        = Operator
+}
+
+
+.numeric : style {
+   color                 = gold
+   ace_scope             = constant.numeric
+   textmate_scope        = constant.numeric
+   pygments_scope        = Number
+}
+
+.punctuation : style {
+   color     = red_2
+   ace_scope             = punctuation
+   textmate_scope        = punctuation
+   pygments_scope        = Punctuation
+}
+
+.identifier : style {
+   color                 = light_grey
+   ace_scope             = variable
+   textmate_scope        = variable
+   pygments_scope        = Name
+}
+
+.regex : style {
+   color                 = cyan
+   ace_scope             = string.regexp
+   textmate_scope        = string.regexp
+   pygments_scope        = String.Regex
+}
+
+.string : style {
+   color                 = brown
+   ace_scope             = string.quoted
+   textmate_scope        = string.quoted
+   pygments_scope        = String
+}
+
+.illegal : style {
+   color                 = white
+   background_color      = red
+   ace_scope             = invalid
+   textmate_scope        = invalid
+   pygments_scope        = Generic.Error
+}
+
+}
+
+contexts [] {
+
+main : context {
+
+   : pattern {
+      regex          \= (import|let|fun|if|else|while|for|continue|break|in|and|not|or)
+      styles []       = .keyword;
+   }
+   
+   : inline_push {
+      regex          \= (\{)
+      styles []       = .punctuation;
+      : pop {  
+         regex       \= (\})
+         styles []    = .punctuation;
+      }
+      : include "main" ;
+   }
+   
+   : pattern {
+      regex          \= (;)
+      styles []       = .punctuation;
+   }
+   
+   
+   : inline_push {
+      regex          \= (/\*)
+      styles []       = .comment;
+      default_style   = .comment
+      : pop {
+         regex       \= (\*/)
+         styles []    = .comment;
+      }
+   }
+   
+   : pattern {
+      regex          \= (//.*)
+      styles []       = .comment;
+   }
+   
+   
+   :include "expression";
+   
+   : pattern {
+      regex          \= ([^\s])
+      styles []       = .illegal;
+   }
+   
+}
+
+numeric : context {
+   : pattern {
+      regex          \= (\b\d+(\.\d*)?)
+      styles []       = .numeric;
+   }
+}
+
+expression : context {
+   : pattern {
+      regex \= (true|false)
+      styles [] = .keyword;
+   }
+   
+   : pattern {
+      regex          \= (=|==|!=|<|>|<=|>=|<=>|\.)
+      styles []       = .operator;
+   }
+   
+   : include "numeric" ;
+   
+   : inline_push {
+      regex          \= (\")
+      styles []       = .string;
+      default_style   = .string
+      : pop {
+         regex       \= (\")
+         styles []    = .string;
+      }
+   }
+   
+   : inline_push {
+      regex \= (/)
+      styles [] = .regex;
+      default_style = .regex
+      : pop {
+       regex \= (/)
+         styles[] = .regex;
+      }
+   }
+   
+   : pattern {
+      regex \= (\b[a-z_][a-z0-9_]*)
+      styles [] = .identifier;
+   }
+   
+   
+   : inline_push {
+      regex          \= (\()
+      styles []       = .punctuation;
+      : pop {
+         regex       \= (\))
+         styles []    = .punctuation;
+      }
+      : pattern {
+         regex       \= (,)
+         styles []    = .punctuation;
+      }
+      : include "expression" ;
+   }
+   
+   : pattern {
+      regex          \= ([^\s])
+      styles []       = .illegal;
+   }
+}
+   
+}
