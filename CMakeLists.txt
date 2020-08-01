@@ -31,6 +31,10 @@ endif()
 # language
 add_subdirectory("bia")
 
+# tool
+if(BIA_BUILD_BIA_TOOL)
+	add_subdirectory("tools")
+endif()
 
 # testing
 if(BIA_BUILD_TESTS)
