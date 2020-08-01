@@ -19,8 +19,9 @@ extern "C"
 
 	typedef void* bia_engine_t;
 	typedef void* bia_parameters_t;
-	typedef void (*bia_function_t)(bia_parameters_t, void*);
 	typedef void* bia_member_t;
+	typedef void* bia_creation_t;
+	typedef bia_creation_t (*bia_function_t)(bia_parameters_t, void*);
 
 	bia_engine_t bia_engine_new();
 	void bia_engine_free(bia_engine_t engine);
@@ -43,6 +44,10 @@ extern "C"
 	int bia_member_cast_double(bia_member_t member, double* out);
 	int bia_member_cast_cstring(bia_member_t member, const char** out);
 
+	int bia_create_integer(long long value, bia_creation_t* out);
+	int bia_create_double(double value, bia_creation_t* out);
+	int bia_create_cstring(const char* value, bia_creation_t* out);
+	void bia_creation_free(bia_creation_t creation);
 #ifdef __cplusplus
 }
 #endif

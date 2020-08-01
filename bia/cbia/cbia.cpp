@@ -26,7 +26,18 @@ try {
 	}
 
 	static_cast<bia::engine*>(engine)->function(
-	    name, [function, custom_arg](bia::parameters params) { function(&params, custom_arg); });
+	    name, [function, custom_arg](bia::parameters params) -> bia::gc::gcable<bia::member::member> {
+		    if (auto creation = function(&params, custom_arg)) {
+			    bia::gc::gcable<bia::member::member> result{ std::move(
+				    *static_cast<bia::gc::gcable<bia::member::member>*>(creation)) };
+
+			    bia_creation_free(creation);
+
+			    return result;
+		    }
+
+		    return {};
+	    });
 
 	return berr_ok;
 } catch (...) {
@@ -215,4 +226,48 @@ try {
 	return berr_ok;
 } catch (...) {
 	return berr_invalid_arguments;
+}
+
+int bia_create_integer(long long value, bia_creation_t* out)
+try {
+	if (!out) {
+		return berr_invalid_arguments;
+	}
+
+	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(value) };
+
+	return berr_ok;
+} catch (...) {
+	return berr_invalid_arguments;
+}
+
+int bia_create_double(double value, bia_creation_t* out)
+try {
+	if (!out) {
+		return berr_invalid_arguments;
+	}
+
+	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(value) };
+
+	return berr_ok;
+} catch (...) {
+	return berr_invalid_arguments;
+}
+
+int bia_create_cstring(const char* value, bia_creation_t* out)
+try {
+	if (!out) {
+		return berr_invalid_arguments;
+	}
+
+	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(value) };
+
+	return berr_ok;
+} catch (...) {
+	return berr_invalid_arguments;
+}
+
+void bia_creation_free(bia_creation_t creation)
+{
+	delete static_cast<bia::gc::gcable<bia::member::member>*>(creation);
 }
