@@ -7,8 +7,14 @@ bia::exception::syntax_details bia::tokenizer::token::parse::regex(parameter& pa
 {
 	using namespace string::encoding;
 
-	if (parameter.encoder.read(parameter.input) != '/') {
-		return { parameter.input.tellg(), "expected '/'" };
+	if (parameter.encoder.read(parameter.input) != 'r') {
+		return { parameter.input.tellg(), "expected 'r'" };
+	}
+
+	const auto punct = parameter.encoder.read(parameter.input);
+
+	if (punct != '"' && punct != '\'') {
+		return { parameter.input.tellg(), "expected regex punctuation" };
 	}
 
 	auto streambuf    = parameter.manager.start_memory(true);
@@ -21,9 +27,10 @@ bia::exception::syntax_details bia::tokenizer::token::parse::regex(parameter& pa
 		const auto cp = parameter.encoder.read(parameter.input);
 
 		switch (cp) {
-		case encoder::eof: return { parameter.input.tellg(), "expected '/'" };
-		case '/': {
-			if (!escape) {
+		case encoder::eof: return { parameter.input.tellg(), "expected regex punctuation" };
+		case '"':
+		case '\'': {
+			if (!escape && cp == punct) {
 				// zero terminate
 				outenc->put(output, 0);
 				parameter.bundle.add({ token::regex{ streambuf.finish(resource::type::regex) } });
