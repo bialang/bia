@@ -1,0 +1,6 @@
+import io
+import sys
+
+for i in r"\d+".match_all("02.08.2020") {
+	io.print(i.group(0))
+}
