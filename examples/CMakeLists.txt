@@ -17,10 +17,10 @@ target_link_libraries(hello_world_c
 
 
 # playground
-add_executable(playground++ "playground.cpp" ${BACKWARD_ENABLE})
+add_executable(playground++ "playground.cpp" "${BACKWARD_ENABLE}")
 target_link_libraries(playground++
 	PUBLIC bia::bia)
-add_executable(playground "playground.c" ${BACKWARD_ENABLE})
+add_executable(playground "playground.c" "${BACKWARD_ENABLE}")
 target_link_libraries(playground
 	PUBLIC bia::bia)
 
