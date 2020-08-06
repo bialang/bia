@@ -18,10 +18,13 @@ typedef std::int32_t code_point_type;
 class encoder
 {
 public:
-	/** the byte order mark */
-	constexpr static code_point_type bom = 0xfeff;
-	/** the end of the input */
-	constexpr static code_point_type eof = -1;
+	enum : code_point_type
+	{
+		/** the byte order mark */
+		bom = 0xfeff,
+		/** the end of the input */
+		eof = -1
+	};
 
 	/**
 	 * Destructor.

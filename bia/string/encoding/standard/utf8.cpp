@@ -1,16 +1,78 @@
 #include "utf8.hpp"
 
 #include <bia/exception/invalid_code_point.hpp>
+#include <bia/util/gsl.hpp>
 
 using namespace bia::string::encoding::standard;
 
+inline bia::string::encoding::code_point_type next(std::istream& input)
+{
+	const auto tmp = input.get();
+
+	if (tmp == std::istream::traits_type::eof()) {
+		BIA_THROW(bia::exception::invalid_code_point, "reached eof of unfinished UTF-8 sequence");
+	} else if ((tmp & 0xc0) != 0x80) {
+		BIA_THROW(bia::exception::invalid_code_point, "invalid continuation of UTF-8 sequence");
+	}
+
+	return static_cast<bia::string::encoding::code_point_type>(tmp & 0x3f);
+}
+
 void utf8::put(std::ostream& output, code_point_type cp) const
 {
-  if (~cp & 0x7f) {
-    const auto data = static_cast<char>(cp);
-    output.write()
-  }
+	if (cp < 0) {
+		BIA_THROW(exception::invalid_code_point, "code point outside of Unicode range");
+	} else if (cp <= 0x7f) {
+		const char data[]{ util::narrow_cast<char>(cp) };
+
+		output.write(data, sizeof(data));
+	} else if (cp <= 0x7ff) {
+		const char data[]{ util::narrow_cast<char>(0xc0 | (cp >> 6 & 0x1f)),
+			               util::narrow_cast<char>(0x80 | (cp & 0x3f)) };
+
+		output.write(data, sizeof(data));
+	} else if (cp <= 0xffff) {
+		const char data[]{ util::narrow_cast<char>(0xe0 | (cp >> 12 & 0x1f)),
+			               util::narrow_cast<char>(0x80 | (cp >> 6 & 0x3f)),
+			               util::narrow_cast<char>(0x80 | (cp & 0x3f)) };
+
+		output.write(data, sizeof(data));
+	} else if (cp <= 0x10ffff) {
+		const char data[]{ util::narrow_cast<char>(0xf0 | (cp >> 18 & 0x07)),
+			               util::narrow_cast<char>(0x80 | (cp >> 12 & 0x3f)),
+			               util::narrow_cast<char>(0x80 | (cp >> 6 & 0x3f)),
+			               util::narrow_cast<char>(0x80 | (cp & 0x3f)) };
+
+		output.write(data, sizeof(data));
+	} else {
+		BIA_THROW(exception::invalid_code_point, "code point outside of Unicode range");
+	}
 }
 
 bia::string::encoding::code_point_type utf8::read(std::istream& input) const
-{}
+{
+	const auto first = input.get();
+
+	if (first == std::istream::traits_type::eof()) {
+		input.clear();
+
+		return eof;
+	}
+
+	if (!(first & 0x80)) {
+		return static_cast<code_point_type>(first);
+	} else if ((first & 0xe0) == 0xc0) {
+		return static_cast<code_point_type>((first & 0x1f) << 6 | next(input));
+	} else if ((first & 0xf0) == 0xe0) {
+		const auto second = next(input);
+
+		return static_cast<code_point_type>((first & 0x0f) << 12 | second << 6 | next(input));
+	} else if ((first & 0xf8) == 0xf0) {
+		const auto second = next(input);
+		const auto third  = next(input);
+
+		return static_cast<code_point_type>((first & 0x07) << 18 | second << 12 | third << 6 | next(input));
+	}
+
+	BIA_THROW(exception::invalid_code_point, "invalid first UTF-8 octet");
+}

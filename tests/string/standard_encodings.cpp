@@ -1,27 +1,26 @@
-﻿/*#include <catch.hpp>
-#include <string/encoding/standard/ascii.hpp>
+﻿#include <bia/string/encoding/encoder.hpp>
+#include <bia/util/memory_streambuf.hpp>
+#include <catch.hpp>
 
 using namespace bia::string::encoding;
-using namespace bia::string::encoding::standard;
 
-template<typename T>
-inline void test_encoding(encoder* enc, const T* string, const char32_t* characters)
+template<typename Type>
+inline void test_encoding(encoder* enc, const Type* string, const char32_t* characters)
 {
-	code_point cp = 0;
-	auto begin    = reinterpret_cast<const std::int8_t*>(string);
-	auto end      = begin + std::char_traits<T>::length(string) + 1;
+	bia::util::memory_streambuf buffer{ { reinterpret_cast<const bia::util::byte*>(string),
+		                                  std::char_traits<Type>::length(string) } };
+	std::istream input{ &buffer };
 
-	while (begin < end) {
-		REQUIRE(enc->next(begin, end, cp));
-		REQUIRE(cp == *characters++);
+	while (*characters) {
+		REQUIRE(enc->read(input) == static_cast<code_point_type>(*characters++));
 	}
 
-	REQUIRE_FALSE(enc->next(begin, end, cp));
+	REQUIRE(enc->read(input) == encoder::eof);
 }
 
 TEST_CASE("standard ascii encoder", "[string][encoder][standard]")
 {
-	auto enc = encoder::get_instance(encoder::STANDARD_ENCODING::ASCII);
+	const auto enc = get_encoder(standard_encoding::ascii);
 
 	SECTION("correct encoding")
 	{
@@ -29,21 +28,14 @@ TEST_CASE("standard ascii encoder", "[string][encoder][standard]")
 	}
 
 	SECTION("invalid character")
-	{
-		const std::int8_t buffer[] = { static_cast<std::int8_t>(0xaa) };
-		code_point cp              = 0;
-		auto begin                 = buffer;
-		auto end                   = buffer + sizeof(buffer);
+	{}
 
-		REQUIRE_THROWS_AS(enc->next(begin, end, cp), bia::exception::char_encoding_exception);
-	}
-
-	encoder::free_instance(enc);
+	free_encoder(enc);
 }
 
 TEST_CASE("standard utf8 encoder", "[string][encoder][standard]")
 {
-	auto enc = encoder::get_instance(encoder::STANDARD_ENCODING::UTF_8);
+	const auto enc = get_encoder(standard_encoding::utf_8);
 
 	SECTION("ascii")
 	{
@@ -53,11 +45,12 @@ TEST_CASE("standard utf8 encoder", "[string][encoder][standard]")
 	SECTION("correct encoding")
 	{
 		test_encoding(enc, u8"じゅういちがつ", U"じゅういちがつ");
+		test_encoding(enc, u8"\u0001\u0079\u0080\u07ff\u0800\uffff\U00010000\U0010ffff",
+		              U"\u0001\u0079\u0080\u07ff\u0800\uffff\U00010000\U0010ffff");
 	}
 
 	SECTION("invalid character")
-	{
-	}
+	{}
 
-	encoder::free_instance(enc);
-}*/
+	free_encoder(enc);
+}

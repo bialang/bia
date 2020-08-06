@@ -30,5 +30,5 @@ bia::string::encoding::code_point_type ascii::read(std::istream& input) const
 		BIA_THROW(exception::invalid_code_point, "code point outside of ASCII range");
 	}
 
-	return cp;
+	return static_cast<code_point_type>(cp);
 }
