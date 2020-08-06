@@ -11,10 +11,6 @@ set(BIA_THREAD_BACKEND "std::thread"
 	CACHE STRING "The thread backend that should be used for creating threads in Bia and in its implementation.")
 set_property(CACHE BIA_THREAD_BACKEND
 	PROPERTY STRINGS "std::thread" "none")
-set(BIA_STRING_ENCODING_BACKEND "none"
-	CACHE STRING "The library that should be used for encoding conversion of strings.")
-set_property(CACHE BIA_STRING_ENCODING_BACKEND
-	PROPERTY STRINGS "ICU" "none")
 set(BIA_RESOURCE_PAGE_SIZE 256 
 	CACHE STRING "The size of each page for the resource manager in bytes.")
 
@@ -76,25 +72,7 @@ else()
 endif()
 
 # string
-if(${BIA_STRING_ENCODING_BACKEND} STREQUAL "ICU")
-	message(FATAL_ERROR "not implemented")
-	set(BIA_STRING_ENCODING_BACKEND_ICU ON)
-	include(FindICU)
-	find_package(ICU COMPONENTS io i18n)
-
-	if(ICU_FOUND)
-		list(APPEND LINK_LIBS
-			PRIVATE ${ICU_LIBRARIES})
-	else()
-		message("ICU was not found")
-
-		#require_submodule_lib("icu")
-
-		# Compile
-	endif()
-else()
-	set(BIA_STRING_ENCODING_BACKEND_NONE ON)
-endif()
+set(BIA_STRING_ENCODING_BACKEND_NONE ON)
 
 
 # configure all config.hpp.in

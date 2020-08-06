@@ -1,9 +1,8 @@
-#pragma once
+#ifndef BIA_STRING_ENCODING_STANDARD_UTF8_HPP_
+#define BIA_STRING_ENCODING_STANDARD_UTF8_HPP_
 
 #include "../encoder.hpp"
 #include "../unicode.hpp"
-
-#include <bia/exception/char_encoding_exception.hpp>
 
 namespace bia {
 namespace string {
@@ -13,6 +12,8 @@ namespace standard {
 class utf8 final : public encoder
 {
 public:
+	void put(std::ostream& output, code_point_type cp) const override;
+	code_point_type read(std::istream& input) const override;
 	virtual void read_start(const std::int8_t*& begin, const std::int8_t* end) const override
 	{
 		auto tmp      = begin;
@@ -189,8 +190,8 @@ private:
 				return false;
 			}
 
-			output =
-			    ((begin[0] & 0x07) << 18) | ((begin[1] & 0x3f) << 12) | ((begin[2] & 0x3f) << 6) | (begin[3] & 0x3f);
+			output = ((begin[0] & 0x07) << 18) | ((begin[1] & 0x3f) << 12) | ((begin[2] & 0x3f) << 6) |
+			         (begin[3] & 0x3f);
 			begin += 4;
 		} else {
 			BIA_THROW(exception::char_encoding_exception, error_msg);
@@ -204,3 +205,5 @@ private:
 } // namespace encoding
 } // namespace string
 } // namespace bia
+
+#endif
