@@ -39,11 +39,11 @@ public:
 	{
 		BIA_LOG(TRACE, "destroying dict: {}", static_cast<void*>(this));
 	}
-	void put(util::not_null<const string*> key, util::not_null<member*> value)
+	void put(util::not_null<const string*> key, member* value)
 	{
 		thread::lock::guard<thread::lock::mutex> lock{ _mutex };
 
-		_map.emplace(key.get(), value.get());
+		_map.emplace(key.get(), value);
 	}
 	flag_type flags() const override
 	{
@@ -104,7 +104,10 @@ public:
 
 		for (const auto& i : _map) {
 			gc_mark(i.first.get(), mark);
-			gc_mark(i.second.get(), mark);
+
+			if (const auto ptr = i.second.get()) {
+				gc_mark(ptr, mark);
+			}
 		}
 	}
 	const map_type& map() noexcept
@@ -114,7 +117,14 @@ public:
 
 protected:
 	void register_gcables(gc::gc& gc) const noexcept override
-	{}
+	{
+		thread::lock::guard<thread::lock::mutex> lock{ _mutex };
+
+		for (const auto& i : _map) {
+			gc.register_gcable(i.first.get());
+			gc.register_gcable(i.second.get());
+		}
+	}
 
 private:
 	map_type _map;

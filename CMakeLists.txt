@@ -17,11 +17,6 @@ if(BIA_ENABLE_SANITIZER)
 	set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -g -fsanitize=address")
 endif()
 
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_BUILD_TYPE STREQUAL "")
-	set(CMAKE_BUILD_TYPE Release
-		CACHE STRING "Build type." FORCE)
-endif()
-
 # backtracing
 if(BIA_ENABLE_DEV_BACKTRACING)
 	add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/backward-cpp")

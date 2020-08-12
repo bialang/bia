@@ -2,6 +2,10 @@
 #include <bia/bsl/io.hpp>
 #include <bia/cbia.h>
 #include <bia/connector/parameters.hpp>
+#include <bia/creator/creator.hpp>
+#include <bia/member/native/dict.hpp>
+#include <bia/member/native/list.hpp>
+#include <bia/member/native/string.hpp>
 #include <type_traits>
 
 typedef typename std::remove_reference<bia::parameters>::type parameters_t;
@@ -53,6 +57,25 @@ try {
 	static_cast<bia::engine*>(engine)->use_bsl({ argv, argc });
 
 	return berr_ok;
+} catch (...) {
+	return berr_invalid_arguments;
+}
+
+int bia_engine_put(bia_engine_t engine, bia_member_t name, bia_member_t member)
+try {
+	if (!engine || !name) {
+		return berr_invalid_arguments;
+	}
+
+	if (const auto ptr =
+	        dynamic_cast<bia::member::native::string*>(static_cast<bia::member::member*>(name))) {
+		static_cast<bia::engine*>(engine)->context().symbols().put(ptr,
+		                                                           static_cast<bia::member::member*>(member));
+
+		return berr_ok;
+	}
+
+	return berr_invalid_arguments;
 } catch (...) {
 	return berr_invalid_arguments;
 }
@@ -228,7 +251,7 @@ try {
 	return berr_invalid_arguments;
 }
 
-int bia_create_integer(long long value, bia_creation_t* out)
+int bia_create_llong(long long value, bia_creation_t* out)
 try {
 	if (!out) {
 		return berr_invalid_arguments;
@@ -267,7 +290,77 @@ try {
 	return berr_invalid_arguments;
 }
 
+int bia_create_list(bia_creation_t* out)
+try {
+	if (!out) {
+		return berr_invalid_arguments;
+	}
+
+	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(
+		bia::member::native::list::list_type{}) };
+
+	return berr_ok;
+} catch (...) {
+	return berr_invalid_arguments;
+}
+
+int bia_create_dict(bia_creation_t* out)
+try {
+	if (!out) {
+		return berr_invalid_arguments;
+	}
+
+	*out = new bia::gc::gcable<bia::member::member>{
+		bia::gc::gc::active_gc()->construct<bia::member::native::dict>()
+	};
+
+	return berr_ok;
+} catch (...) {
+	return berr_invalid_arguments;
+}
+
+int bia_creation_dict_put(bia_creation_t dict, bia_member_t key, bia_member_t value)
+try {
+	if (!dict || !key) {
+		return berr_invalid_arguments;
+	}
+
+	const auto key_ptr  = dynamic_cast<bia::member::native::string*>(static_cast<bia::member::member*>(key));
+	const auto dict_ptr = dynamic_cast<bia::member::native::dict*>(
+	    static_cast<bia::gc::gcable<bia::member::member>*>(dict)->peek());
+
+	if (key_ptr && dict_ptr) {
+		dict_ptr->put(key_ptr, static_cast<bia::member::member*>(value));
+
+		return berr_ok;
+	}
+
+	return berr_invalid_arguments;
+} catch (...) {
+	return berr_invalid_arguments;
+}
+
+int bia_creation_start_monitoring(bia_creation_t creation)
+try {
+	if (!creation) {
+		return berr_invalid_arguments;
+	} else if (!static_cast<bia::gc::gcable<bia::member::member>*>(creation)->valid()) {
+		return berr_invalid_arguments;
+	}
+
+	static_cast<bia::gc::gcable<bia::member::member>*>(creation)->start_monitor();
+
+	return berr_ok;
+} catch (...) {
+	return berr_invalid_arguments;
+}
+
 void bia_creation_free(bia_creation_t creation)
 {
 	delete static_cast<bia::gc::gcable<bia::member::member>*>(creation);
+}
+
+bia_member_t bia_creation_peek(bia_creation_t creation)
+{
+	return creation ? static_cast<bia::gc::gcable<bia::member::member>*>(creation)->peek() : nullptr;
 }
