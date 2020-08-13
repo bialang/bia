@@ -55,7 +55,7 @@ inline gc::gcable<member::member> range(connector::parameters_type params)
 			return bia::member::function::stop_iteration;
 		}
 
-		return bia::creator::create(current);
+		return bia::creator::create(*bia::gc::gc::active_gc(), current);
 	};
 
 	return bia::gc::gc::active_gc()

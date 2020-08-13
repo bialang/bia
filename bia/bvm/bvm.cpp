@@ -51,18 +51,18 @@ inline std::int32_t oo_parameter(bia::bytecode::offset_option option, instructio
 }
 
 inline bia::gc::gcable<bia::member::member> co_parameter(bia::bytecode::constant_option option,
-                                                         instruction_pointer& ip,
+                                                         instruction_pointer& ip, bia::gc::gc& gc,
                                                          bia::member::member::test_type test_register)
 {
 	using namespace bia::bytecode;
 
 	switch (option) {
-	case co_int_8: return bia::creator::create(ip.read<std::int8_t>());
-	case co_int_16: return bia::creator::create(ip.read<std::int16_t>());
-	case co_int_32: return bia::creator::create(ip.read<std::int32_t>());
-	case co_int_64: return bia::creator::create(ip.read<std::int64_t>());
-	case co_double: return bia::creator::create(ip.read<double>());
-	case co_test_register: return bia::creator::create(test_register);
+	case co_int_8: return bia::creator::create(gc, ip.read<std::int8_t>());
+	case co_int_16: return bia::creator::create(gc, ip.read<std::int16_t>());
+	case co_int_32: return bia::creator::create(gc, ip.read<std::int32_t>());
+	case co_int_64: return bia::creator::create(gc, ip.read<std::int64_t>());
+	case co_double: return bia::creator::create(gc, ip.read<double>());
+	case co_test_register: return bia::creator::create(gc, test_register);
 	case co_null: return {};
 	default: break;
 	}
@@ -209,7 +209,7 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 			    parse_options<oc_instantiate, constant_option, member_destination_option>(op_code);
 
 			mdo_parameter(std::get<1>(options), ip, stack, token,
-			              co_parameter(std::get<0>(options), ip, test_register));
+			              co_parameter(std::get<0>(options), ip, gc, test_register));
 
 			break;
 		}

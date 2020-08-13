@@ -15,6 +15,7 @@ inline gc::gcable<member::member> connect_static(Return (*function)(Args...), pa
                                                  parameter_indices<Indices...>)
 {
 	return creator::create(
+	    *gc::gc::active_gc(),
 	    function(std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...));
 }
 
@@ -31,7 +32,7 @@ template<typename Return>
 inline gc::gcable<member::member> connect_static(Return (*function)(parameters_type), parameters_type params,
                                                  parameter_indices<0>)
 {
-	return creator::create(function(params));
+	return creator::create(*gc::gc::active_gc(), function(params));
 }
 
 inline gc::gcable<member::member> connect_static(void (*function)(parameters_type), parameters_type params,

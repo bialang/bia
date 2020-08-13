@@ -40,25 +40,24 @@ void sys::register_gcables(gc::gc& gc) const noexcept
 bia::member::native::dict* sys::_init(gc::gc& gc, util::span<const char* const*> arguments)
 {
 	const auto dict     = gc.construct<member::native::dict>().release();
-	const auto token    = gc.activate_temporarily();
 	const int byteorder = 1;
 
 	put_function(gc, *dict, "exit", &std::exit);
 	put_function(gc, *dict, "quick_exit", &std::quick_exit);
 	put_function(gc, *dict, "abort", &std::abort);
-	put_gcable(gc, *dict, "version", creator::create("4.0.0-alpha"));
+	put_gcable(gc, *dict, "version", creator::create(gc, "4.0.0-alpha"));
 	put_gcable(gc, *dict, "byteorder",
-	           creator::create(*reinterpret_cast<const char*>(&byteorder) == 1 ? "little" : "big"));
+	           creator::create(gc, *reinterpret_cast<const char*>(&byteorder) == 1 ? "little" : "big"));
 
 	member::native::list::list_type args;
 
 	args.reserve(arguments.size());
 
 	for (auto i : arguments) {
-		args.push_back(creator::create(i).release());
+		args.push_back(creator::create(gc, i).release());
 	}
 
-	put_gcable(gc, *dict, "args", creator::create(std::move(args)));
+	put_gcable(gc, *dict, "args", creator::create(gc, std::move(args)));
 
 	return dict;
 }

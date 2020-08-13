@@ -61,7 +61,7 @@ bia::gc::gcable<bia::member::member> regex::get(const native::string& name)
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&regex::_search)>>(
 		    *this, &regex::_search);
 	} else if (!name.compare("name")) {
-		return creator::create("std::regex");
+		return creator::create(*gc::gc::active_gc(), "std::regex");
 	}
 
 	return {};

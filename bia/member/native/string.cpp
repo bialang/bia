@@ -73,7 +73,7 @@ bia::gc::gcable<bia::member::member> string::get(const native::string& name)
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&string::_upper)>>(
 		    *this, &string::_upper);
 	} else if (!name.compare("length")) {
-		return creator::create(std::char_traits<char>::length(_value.get()));
+		return creator::create(*gc::gc::active_gc(),std::char_traits<char>::length(_value.get()));
 	}
 
 	return {};

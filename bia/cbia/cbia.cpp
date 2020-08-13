@@ -80,6 +80,11 @@ try {
 	return berr_invalid_arguments;
 }
 
+bia_gc_t bia_engine_get_gc(bia_engine_t engine)
+{
+	return engine ? &static_cast<bia::engine*>(engine)->gc() : nullptr;
+}
+
 int bia_run(bia_engine_t engine, const void* code, size_t length)
 try {
 	if (!engine || (!code && length)) {
@@ -104,6 +109,11 @@ try {
 	return berr_ok;
 } catch (...) {
 	return berr_invalid_arguments;
+}
+
+bia_gc_t bia_active_gc()
+{
+	return bia::gc::gc::active_gc();
 }
 
 int bia_parameters_count(bia_parameters_t params, size_t* out)
@@ -251,67 +261,70 @@ try {
 	return berr_invalid_arguments;
 }
 
-int bia_create_llong(long long value, bia_creation_t* out)
+int bia_create_llong(bia_gc_t gc, long long value, bia_creation_t* out)
 try {
-	if (!out) {
+	if (!gc || !out) {
 		return berr_invalid_arguments;
 	}
 
-	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(value) };
+	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(*static_cast<bia::gc::gc*>(gc),
+		                                                                  value) };
 
 	return berr_ok;
 } catch (...) {
 	return berr_invalid_arguments;
 }
 
-int bia_create_double(double value, bia_creation_t* out)
+int bia_create_double(bia_gc_t gc, double value, bia_creation_t* out)
 try {
-	if (!out) {
+	if (!gc || !out) {
 		return berr_invalid_arguments;
 	}
 
-	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(value) };
+	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(*static_cast<bia::gc::gc*>(gc),
+		                                                                  value) };
 
 	return berr_ok;
 } catch (...) {
 	return berr_invalid_arguments;
 }
 
-int bia_create_cstring(const char* value, bia_creation_t* out)
+int bia_create_cstring(bia_gc_t gc, const char* value, bia_creation_t* out)
 try {
-	if (!out) {
+	if (!gc || !out || !value) {
 		return berr_invalid_arguments;
 	}
 
-	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(value) };
+	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(*static_cast<bia::gc::gc*>(gc),
+		                                                                  value) };
 
 	return berr_ok;
 } catch (...) {
 	return berr_invalid_arguments;
 }
 
-int bia_create_list(bia_creation_t* out)
+int bia_create_list(bia_gc_t gc, bia_creation_t* out)
 try {
-	if (!out) {
+	if (!gc || !out) {
 		return berr_invalid_arguments;
 	}
 
 	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(
-		bia::member::native::list::list_type{}) };
+		*static_cast<bia::gc::gc*>(gc), bia::member::native::list::list_type{}) };
 
 	return berr_ok;
 } catch (...) {
 	return berr_invalid_arguments;
 }
 
-int bia_create_dict(bia_creation_t* out)
+int bia_create_dict(bia_gc_t gc, bia_creation_t* out)
 try {
-	if (!out) {
+	if (!gc || !out) {
 		return berr_invalid_arguments;
 	}
 
 	*out = new bia::gc::gcable<bia::member::member>{
-		bia::gc::gc::active_gc()->construct<bia::member::native::dict>()
+		static_cast<bia::gc::gc*>(gc)->construct<bia::member::native::dict>()
 	};
 
 	return berr_ok;

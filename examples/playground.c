@@ -14,7 +14,7 @@ static bia_creation_t sqrt_(bia_parameters_t params, void* arg)
 		guess -= (guess * guess - x) / (2 * guess);
 	}
 
-	bia_create_double(guess, &result);
+	bia_create_double(bia_active_gc(), guess, &result);
 
 	return result;
 }

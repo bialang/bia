@@ -55,11 +55,11 @@ bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 	if (!name.compare("size")) {
 		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
-		return creator::create(_data.size());
+		return creator::create(*gc::gc::active_gc(), _data.size());
 	} else if (!name.compare("capacity")) {
 		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
-		return creator::create(_data.capacity());
+		return creator::create(*gc::gc::active_gc(), _data.capacity());
 	} else if (!name.compare("push")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_push)>>(
 		    *this, &list::_push);
@@ -76,18 +76,18 @@ bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 	} else if (!name.compare("empty")) {
 		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
-		return creator::create(_data.empty());
+		return creator::create(*gc::gc::active_gc(), _data.empty());
 	} else if (!name.compare("clear")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_clear)>>(
 		    *this, &list::_clear);
 	} else if (!name.compare("front")) {
 		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
-		return creator::create(_data.front());
+		return creator::create(*gc::gc::active_gc(), _data.front());
 	} else if (!name.compare("back")) {
 		thread::lock::guard<decltype(_mutex)> lock{ _mutex };
 
-		return creator::create(_data.back());
+		return creator::create(*gc::gc::active_gc(), _data.back());
 	} else if (!name.compare("insert")) {
 		return gc::gc::active_gc()->template construct<function::method<true, decltype(&list::_insert)>>(
 		    *this, &list::_insert);

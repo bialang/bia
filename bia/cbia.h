@@ -18,6 +18,7 @@ extern "C"
 	} bia_err_t;
 
 	typedef void* bia_engine_t;
+	typedef void* bia_gc_t;
 	typedef void* bia_parameters_t;
 	typedef void* bia_member_t;
 	typedef void* bia_creation_t;
@@ -29,8 +30,11 @@ extern "C"
 	                            void* custom_arg);
 	int bia_engine_use_bsl(bia_engine_t engine, const char* const* argv, size_t argc);
 	int bia_engine_put(bia_engine_t engine, bia_member_t name, bia_member_t member);
+	bia_gc_t bia_engine_get_gc(bia_engine_t engine);
 
 	int bia_run(bia_engine_t engine, const void* code, size_t length);
+
+	bia_gc_t bia_active_gc();
 
 	int bia_parameters_count(bia_parameters_t params, size_t* out);
 	int bia_parameters_at(bia_parameters_t params, size_t index, bia_member_t* out);
@@ -45,11 +49,11 @@ extern "C"
 	int bia_member_cast_double(bia_member_t member, double* out);
 	int bia_member_cast_cstring(bia_member_t member, const char** out);
 
-	int bia_create_llong(long long value, bia_creation_t* out);
-	int bia_create_double(double value, bia_creation_t* out);
-	int bia_create_cstring(const char* value, bia_creation_t* out);
-	int bia_create_list(bia_creation_t* out);
-	int bia_create_dict(bia_creation_t* out);
+	int bia_create_llong(bia_gc_t gc, long long value, bia_creation_t* out);
+	int bia_create_double(bia_gc_t gc, double value, bia_creation_t* out);
+	int bia_create_cstring(bia_gc_t gc, const char* value, bia_creation_t* out);
+	int bia_create_list(bia_gc_t gc, bia_creation_t* out);
+	int bia_create_dict(bia_gc_t gc, bia_creation_t* out);
 	int bia_creation_dict_put(bia_creation_t dict, bia_member_t key, bia_member_t value);
 	int bia_creation_start_monitoring(bia_creation_t creation);
 	void bia_creation_free(bia_creation_t creation);

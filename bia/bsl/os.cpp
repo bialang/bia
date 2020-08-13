@@ -11,7 +11,7 @@ using namespace bia::bsl;
 inline bia::gc::gcable<bia::member::member> get_env(const char* name)
 {
 	if (const auto value = getenv(name)) {
-		return bia::creator::create(value);
+		return bia::creator::create(*bia::gc::gc::active_gc(), value);
 	}
 
 	return {};

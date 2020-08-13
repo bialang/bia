@@ -15,6 +15,7 @@ inline gc::gcable<member::member> connect_method(Class& instance, Return (Class:
                                                  parameters_type params, parameter_indices<Indices...>)
 {
 	return creator::create(
+	    *gc::gc::active_gc(),
 	    (instance.*function)(std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...));
 }
 
@@ -33,6 +34,7 @@ inline gc::gcable<member::member> connect_method(const Class& instance,
                                                  parameters_type params, parameter_indices<Indices...>)
 {
 	return creator::create(
+	    *gc::gc::active_gc(),
 	    (instance.*function)(std::forward<Args>(member::cast::cast<Args>(not_null(params[Indices])))...));
 }
 
@@ -50,7 +52,7 @@ template<typename Class, typename Return>
 inline gc::gcable<member::member> connect_method(Class& instance, Return (Class::*function)(parameters_type),
                                                  parameters_type params, parameter_indices<0>)
 {
-	return creator::create((instance.*function)(params));
+	return creator::create(*gc::gc::active_gc(), (instance.*function)(params));
 }
 
 template<typename Class>
@@ -67,7 +69,7 @@ inline gc::gcable<member::member> connect_method(const Class& instance,
                                                  Return (Class::*function)(parameters_type) const,
                                                  parameters_type params, parameter_indices<0>)
 {
-	return creator::create((instance.*function)(params));
+	return creator::create(*gc::gc::active_gc(), (instance.*function)(params));
 }
 
 template<typename Class>
