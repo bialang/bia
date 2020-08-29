@@ -5,7 +5,7 @@
 #include "helpers.hpp"
 #include "member.hpp"
 
-#include <bia/exception/implementation_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/tokenizer/token/token.hpp>
 #include <type_traits>
 #include <utility>
@@ -48,7 +48,7 @@ inline tokens_type value(present present, tokens_type tokens, Destination destin
 
 			break;
 		}
-		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
+		default: BIA_THROW(error::code::bad_switch_value);
 		}
 
 		break;
@@ -82,7 +82,7 @@ inline tokens_type value(present present, tokens_type tokens, Destination destin
 
 		break;
 	}
-	default: BIA_IMPLEMENTATION_ERROR("invalid token type");
+	default: BIA_THROW(error::code::bad_switch_value);
 	}
 
 	return tokens.subspan(1);

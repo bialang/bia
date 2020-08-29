@@ -5,8 +5,7 @@
 #include <bia/bytecode/op_code.hpp>
 #include <bia/connector/connector-inl.hpp>
 #include <bia/creator/creator.hpp>
-#include <bia/exception/nullpointer.hpp>
-#include <bia/exception/opcode.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/member/function/function.hpp>
 #include <bia/member/invoke_context.hpp>
 #include <bia/member/native/key_value_pair.hpp>
@@ -23,7 +22,7 @@ inline typename std::enable_if<std::is_base_of<bia::member::member, Type>::value
 		return ptr;
 	}
 
-	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
+	BIA_THROW(bia::error::code::null_argument);
 }
 
 template<>
@@ -33,7 +32,7 @@ inline bia::member::member* member_pointer<bia::member::member>(bia::member::mem
 		return element;
 	}
 
-	BIA_THROW(bia::exception::nullpointer, "nullpointer member access");
+	BIA_THROW(bia::error::code::null_argument);
 }
 
 inline std::int32_t oo_parameter(bia::bytecode::offset_option option, instruction_pointer& ip)
@@ -44,10 +43,8 @@ inline std::int32_t oo_parameter(bia::bytecode::offset_option option, instructio
 	case oo_8: return ip.read<std::int8_t>();
 	case oo_16: return ip.read<std::int16_t>();
 	case oo_32: return ip.read<std::int32_t>();
-	default: break;
+	default: BIA_THROW(bia::error::code::bad_offset_option);
 	}
-
-	BIA_IMPLEMENTATION_ERROR("not implemented");
 }
 
 inline bia::gc::gcable<bia::member::member> co_parameter(bia::bytecode::constant_option option,
@@ -64,10 +61,8 @@ inline bia::gc::gcable<bia::member::member> co_parameter(bia::bytecode::constant
 	case co_double: return bia::creator::create(gc, ip.read<double>());
 	case co_test_register: return bia::creator::create(gc, test_register);
 	case co_null: return {};
-	default: break;
+	default: BIA_THROW(bia::error::code::bad_constant_option);
 	}
-
-	BIA_IMPLEMENTATION_ERROR("not implemented");
 }
 
 inline bia::member::member* ro_parameter(bia::bytecode::resource_option option, instruction_pointer& ip,
@@ -79,10 +74,8 @@ inline bia::member::member* ro_parameter(bia::bytecode::resource_option option, 
 	case ro_8: return resources.at(ip.read<std::uint8_t>()).get();
 	case ro_16: return resources.at(ip.read<std::uint16_t>()).get();
 	case ro_32: return resources.at(ip.read<std::uint32_t>()).get();
-	default: break;
+	default: BIA_THROW(bia::error::code::bad_resource_option);
 	}
-
-	BIA_IMPLEMENTATION_ERROR("not implemented");
 }
 
 inline bia::member::member* mso_parameter(bia::bytecode::member_source_option option, instruction_pointer& ip,
@@ -107,10 +100,8 @@ inline bia::member::member* mso_parameter(bia::bytecode::member_source_option op
 	case mso_local_8: return stack.local_at(ip.read<std::uint8_t>());
 	case mso_resource_8: return resources.at(ip.read<std::uint8_t>()).get();
 	case mso_builtin: return context.builtin(ip.read<member::builtin>());
-	default: break;
+	default: BIA_THROW(bia::error::code::bad_member_source_option);
 	}
-
-	BIA_IMPLEMENTATION_ERROR("not implemented");
 }
 
 template<typename Source>
@@ -127,7 +118,7 @@ inline void mdo_parameter(bia::bytecode::member_destination_option option, instr
 	case mdo_args_8: token.set(stack.arg_at(ip.read<std::uint8_t>()), std::forward<Source>(source)); break;
 	case mdo_local_8: token.set(stack.local_at(ip.read<std::uint8_t>()), std::forward<Source>(source)); break;
 	case mdo_push: token.set(stack.push(), std::forward<Source>(source)); break;
-	default: BIA_IMPLEMENTATION_ERROR("not implemented");
+	default: BIA_THROW(bia::error::code::bad_member_destination_option);
 	}
 }
 
@@ -333,7 +324,7 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 		case oc_return_void: return {};
 		case oc_invert: test_register = !test_register; break;
 		case oc_prep_call: stack.prep_call(); break;
-		default: BIA_THROW(exception::opcode, "invalid opcode");
+		default: BIA_THROW(bia::error::code::bad_opcode);
 		}
 	}
 

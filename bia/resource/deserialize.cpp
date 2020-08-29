@@ -2,7 +2,7 @@
 
 #include "info.hpp"
 
-#include <bia/exception/implementation_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/member/function/function.hpp>
 #include <bia/member/native/regex.hpp>
 #include <bia/member/native/string.hpp>
@@ -56,7 +56,7 @@ std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, g
 			break;
 		}
 		case type::function: {
-			//todo: this is dirty
+			// todo: this is dirty
 			const auto binding_size =
 			    util::portable::read<serializer::size_type>(input) * sizeof(serializer::size_type) * 2;
 			auto code   = gc.allocate(size + binding_size);
@@ -70,7 +70,7 @@ std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, g
 
 			break;
 		}
-		default: BIA_IMPLEMENTATION_ERROR("failed to deserialize resource");
+		default: BIA_THROW(error::code::bad_switch_value);
 		}
 	}
 

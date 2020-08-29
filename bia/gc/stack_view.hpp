@@ -4,7 +4,7 @@
 #include "object/base.hpp"
 #include "object/pointer.hpp"
 
-#include <bia/exception/bounds_error.hpp>
+#include <bia/error/exception.hpp>
 #include <utility>
 #include <vector>
 
@@ -40,7 +40,7 @@ public:
 	element_type& push()
 	{
 		if (_last_push - 1 <= _cursor) {
-			BIA_THROW(exception::bounds_error, "stack argument overflow");
+			BIA_THROW(error::code::out_of_bounds);
 		}
 
 		return _base[--_last_push];
@@ -48,7 +48,7 @@ public:
 	element_type& local_at(std::size_t index)
 	{
 		if (index >= _max_size) {
-			BIA_THROW(exception::bounds_error, "out of bounds");
+			BIA_THROW(error::code::out_of_bounds);
 		} else if (index > _cursor) {
 			_cursor = index;
 		}
@@ -58,7 +58,7 @@ public:
 	element_type& local_at(std::size_t index) const
 	{
 		if (index > _cursor) {
-			BIA_THROW(exception::bounds_error, "out of bounds");
+			BIA_THROW(error::code::out_of_bounds);
 		}
 
 		return _base[index];
@@ -66,7 +66,7 @@ public:
 	element_type& arg_at(std::size_t index) const
 	{
 		if (index >= _max_size) {
-			BIA_THROW(exception::bounds_error, "out of bounds");
+			BIA_THROW(error::code::out_of_bounds);
 		}
 
 		return _base[_max_size - index - 1];
@@ -80,7 +80,7 @@ public:
 	element_type& last_push() const
 	{
 		if (_last_push == _max_size) {
-			BIA_THROW(exception::bounds_error, "no last argument available");
+			BIA_THROW(error::code::out_of_bounds);
 		}
 
 		return _base[_last_push];
@@ -88,7 +88,7 @@ public:
 	void mark_kwarg()
 	{
 		if (_last_push == _max_size || _arg_frames.empty()) {
-			BIA_THROW(exception::bounds_error, "invalid arguments");
+			BIA_THROW(error::code::out_of_bounds);
 		}
 
 		if (!_arg_frames.back().second) {
@@ -117,7 +117,7 @@ struct stack_view::call_frame
 inline stack_view::call_frame stack_view::make_call_frame()
 {
 	if (_arg_frames.empty()) {
-		BIA_THROW(exception::bounds_error, "no arg frame");
+		BIA_THROW(error::code::out_of_bounds);
 	}
 
 	const auto arg_frame = _arg_frames.back();

@@ -1,12 +1,12 @@
 #include "tokens.hpp"
 
-bia::exception::syntax_details bia::tokenizer::token::parse::member(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::member(parameter& parameter)
 {
 	auto once = false;
 
 	while (true) {
 		if (const auto err = identifier(parameter)) {
-			return once ? exception::syntax_details{} : err;
+			return once ? std::error_code{} : err;
 		}
 
 		once = true;

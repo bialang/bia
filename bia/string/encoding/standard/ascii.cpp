@@ -1,6 +1,6 @@
 #include "ascii.hpp"
 
-#include <bia/exception/invalid_code_point.hpp>
+#include <bia/error/exception.hpp>
 
 using namespace bia::string::encoding::standard;
 
@@ -8,7 +8,7 @@ void ascii::put(std::ostream& output, code_point_type cp) const
 {
 	// invalid ascii
 	if (cp & ~0x7f) {
-		BIA_THROW(exception::invalid_code_point, "code point outside of ASCII range");
+		BIA_THROW(error::code::bad_ascii);
 	}
 
 	output.put(static_cast<char>(cp));
@@ -27,7 +27,7 @@ bia::string::encoding::code_point_type ascii::read(std::istream& input) const
 
 	// invalid ascii
 	if (cp & ~0x7f) {
-		BIA_THROW(exception::invalid_code_point, "code point outside of ASCII range");
+		BIA_THROW(error::code::bad_ascii);
 	}
 
 	return static_cast<code_point_type>(cp);

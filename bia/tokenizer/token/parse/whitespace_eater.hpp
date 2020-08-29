@@ -3,7 +3,7 @@
 
 #include "../parameter.hpp"
 
-#include <bia/exception/syntax_error.hpp>
+#include <bia/error/exception.hpp>
 
 namespace bia {
 namespace tokenizer {
@@ -20,7 +20,7 @@ namespace parse {
  * @tparam RequireCmd if `true`, this function fails if no whitespace cmd_end character is found
  */
 template<bool RequireCmd = false>
-inline exception::syntax_details eat_whitespaces(parameter& parameter)
+inline std::error_code eat_whitespaces(parameter& parameter)
 {
 	enum class s
 	{
@@ -121,10 +121,8 @@ inline exception::syntax_details eat_whitespaces(parameter& parameter)
 	gt_return:;
 		parameter.input.seekg(pos);
 
-		if (!eaten) {
-			return { pos, "expected whitespace" };
-		} else if (RequireCmd && !cmd) {
-			return { pos, "expected cmd whitespace, like a line feed" };
+		if (!eaten || (RequireCmd && !cmd)) {
+			return error::code::expected_whitespace;
 		}
 
 		return {};

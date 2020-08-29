@@ -3,18 +3,18 @@
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/util/finally.hpp>
 
-bia::exception::syntax_details bia::tokenizer::token::parse::regex(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::regex(parameter& parameter)
 {
 	using namespace string::encoding;
 
 	if (parameter.encoder.read(parameter.input) != 'r') {
-		return { parameter.input.tellg(), "expected 'r'" };
+		return error::code::expected_regex;
 	}
 
 	const auto punct = parameter.encoder.read(parameter.input);
 
 	if (punct != '"' && punct != '\'') {
-		return { parameter.input.tellg(), "expected regex punctuation" };
+		return error::code::expected_regex;
 	}
 
 	auto streambuf    = parameter.manager.start_memory(true);
@@ -27,7 +27,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::regex(parameter& pa
 		const auto cp = parameter.encoder.read(parameter.input);
 
 		switch (cp) {
-		case encoder::eof: return { parameter.input.tellg(), "expected regex punctuation" };
+		case encoder::eof: return error::code::expected_regex;
 		case '"':
 		case '\'': {
 			if (!escape && cp == punct) {

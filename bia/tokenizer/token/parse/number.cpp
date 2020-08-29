@@ -7,7 +7,7 @@ inline bool integer_add(bia::tokenizer::token::token::int_type& value,
                         bia::string::encoding::code_point_type cp, int base)
 {
 	using bia::tokenizer::token::token;
-	
+
 	BIA_EXPECTS(cp >= '0' && cp <= '9');
 
 	const auto val = cp - '0';
@@ -30,7 +30,7 @@ inline bool floating_point_add(double& value, bia::string::encoding::code_point_
 	return true;
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::number(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::number(parameter& parameter)
 {
 	enum class state
 	{
@@ -62,7 +62,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::number(parameter& p
 			} else if (cp >= '1' && cp <= '9') {
 				s = state::decimal;
 			} else {
-				return { pos, "unexpected start of number" };
+				return error::code::bad_number;
 			}
 
 			number.push_back(static_cast<char>(cp));
@@ -133,7 +133,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::number(parameter& p
 
 			break;
 		}
-		default: BIA_IMPLEMENTATION_ERROR("not implemented");
+		default: BIA_THROW(error::code::bad_switch_value);
 		}
 
 		continue;
@@ -148,13 +148,13 @@ bia::exception::syntax_details bia::tokenizer::token::parse::number(parameter& p
 			try {
 				parameter.bundle.add({ std::stod(number) });
 			} catch (const std::exception& e) {
-				return { pos, e.what() };
+				return error::code::bad_number;
 			}
 		} else {
 			try {
 				parameter.bundle.add({ static_cast<token::int_type>(std::stoll(number, nullptr, 0)) });
 			} catch (const std::exception& e) {
-				return { pos, e.what() };
+				return error::code::bad_number;
 			}
 		}
 

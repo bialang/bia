@@ -2,10 +2,10 @@
 
 #include "manager.hpp"
 
-#include <bia/exception/implementation_error.hpp>
-#include <limits>
+#include <bia/error/exception.hpp>
 #include <bia/util/finally.hpp>
 #include <bia/util/portable/memory.hpp>
+#include <limits>
 #include <utility>
 
 using namespace bia::resource;
@@ -59,7 +59,7 @@ streambuf::int_type streambuf::sync()
 			    _manager->_space.next_region(std::numeric_limits<gc::memory::space::size_type>::max()).get();
 
 			setp(reinterpret_cast<char*>(buf.begin()), reinterpret_cast<char*>(buf.end()));
-		} catch (const exception::bia_error&) {
+		} catch (const error::exception&) {
 			return -1;
 		}
 	}

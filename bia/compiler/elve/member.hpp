@@ -4,7 +4,6 @@
 #include "helpers.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
-#include <bia/exception/implementation_error.hpp>
 #include <bia/log/log.hpp>
 #include <bia/tokenizer/token/token.hpp>
 #include <bia/util/finally.hpp>

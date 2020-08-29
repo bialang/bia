@@ -4,6 +4,7 @@
 #include "temporary_token.hpp"
 #include "token.hpp"
 
+#include <bia/error/exception.hpp>
 #include <bia/log/log.hpp>
 #include <bia/thread/lock/unique_lock.hpp>
 #include <bia/thread/thread.hpp>
@@ -21,7 +22,7 @@ gc::~gc()
 {
 	try {
 		run_once();
-	} catch (const exception::bia_error& e) {
+	} catch (const error::exception& e) {
 		BIA_LOG_ERROR(CRITICAL, e);
 	}
 

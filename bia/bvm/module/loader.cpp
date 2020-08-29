@@ -1,6 +1,6 @@
 #include "loader.hpp"
 
-#include <bia/exception/import.hpp>
+#include <bia/error/exception.hpp>
 
 using namespace bia::bvm::module;
 
@@ -18,7 +18,7 @@ bia::util::not_null<bia::util::gcable<bia::member::member*>>
 		return it->second->create(*_gc);
 	}
 
-	BIA_THROW(exception::import, "module not found");
+	BIA_THROW(error::code::module_not_found);
 }
 
 void loader::add_module(util::not_null<util::gcable<member::native::string*>> name,

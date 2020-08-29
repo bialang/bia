@@ -12,10 +12,10 @@ namespace parse {
 const auto no_batch_call = [] { return true; };
 
 template<typename PreStatement>
-inline exception::syntax_details batch(parameter& parameter, PreStatement&& pre_statement)
+inline std::error_code batch(parameter& parameter, PreStatement&& pre_statement)
 {
 	if (parameter.encoder.read(parameter.input) != '{') {
-		return { parameter.input.tellg(), "expected '{'" };
+		return error::code::expected_curly_bracket;
 	}
 
 	const auto open_index = parameter.bundle.add({ token::batch{ 0 } });
@@ -47,7 +47,7 @@ inline exception::syntax_details batch(parameter& parameter, PreStatement&& pre_
 	}
 
 	if (parameter.encoder.read(parameter.input) != '}') {
-		return { parameter.input.tellg(), "expected '}'" };
+		return error::code::expected_curly_bracket;
 	}
 
 	parameter.bundle.at(open_index).value.get<token::batch>().count = count;

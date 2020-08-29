@@ -3,11 +3,11 @@
 #include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-bia::exception::syntax_details bia::tokenizer::token::parse::while_(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::while_(parameter& parameter)
 {
 	// compare while
-	if (const auto err = any_of(parameter, "invalid while statement", "while").second) {
-		return err;
+	if (!any_of(parameter, "while").second) {
+		return error::code::expected_while_statement;
 	}
 
 	parameter.bundle.add({ token::keyword::while_ });

@@ -3,18 +3,18 @@
 #include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-inline bia::exception::syntax_details else_if(bia::tokenizer::token::parameter& parameter)
+inline std::error_code else_if(bia::tokenizer::token::parameter& parameter)
 {
 	using namespace bia::tokenizer::token;
 	using namespace parse;
 
 	// compare else
-	if (const auto err = any_of(parameter, "invalid else if statement", "else").second) {
-		return err;
+	if (!any_of(parameter, "invalid else if statement", "else").second) {
+		return bia::error::code::bad_else_if_statement;
 	} else if (const auto err = eat_whitespaces(parameter)) {
 		return err;
-	} else if (const auto err = any_of(parameter, "invalid else if statement", "if").second) {
-		return err;
+	} else if (!any_of(parameter, "invalid else if statement", "if").second) {
+		return bia::error::code::bad_else_if_statement;
 	}
 
 	parameter.bundle.add({ token::keyword::else_if });
@@ -32,11 +32,11 @@ inline bia::exception::syntax_details else_if(bia::tokenizer::token::parameter& 
 	return batch(parameter, no_batch_call);
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::else_(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::else_(parameter& parameter)
 {
 	// compare else
-	if (const auto err = any_of(parameter, "invalid else statement", "else").second) {
-		return err;
+	if (!any_of(parameter, "else").second) {
+		return error::code::bad_else_statement;
 	}
 
 	parameter.bundle.add({ token::keyword::else_ });
@@ -46,11 +46,11 @@ bia::exception::syntax_details bia::tokenizer::token::parse::else_(parameter& pa
 	return batch(parameter, no_batch_call);
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::if_(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::if_(parameter& parameter)
 {
 	// compare if
-	if (const auto err = any_of(parameter, "invalid if statement", "if").second) {
-		return err;
+	if (!any_of(parameter, "if").second) {
+		return error::code::bad_if_statement;
 	}
 
 	parameter.bundle.add({ token::keyword::if_ });

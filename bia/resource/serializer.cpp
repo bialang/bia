@@ -1,7 +1,7 @@
 #include "serializer.hpp"
 
 #include <algorithm>
-#include <bia/exception/implementation_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/log/log.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/portable/memory.hpp>
@@ -69,7 +69,7 @@ serializer::size_type serializer::index_of(view view)
 	case size_width::_8: util::portable::write(buffer, static_cast<std::uint8_t>(view.size)); break;
 	case size_width::_16: util::portable::write(buffer, static_cast<std::uint16_t>(view.size)); break;
 	case size_width::_32: util::portable::write(buffer, static_cast<std::uint32_t>(view.size)); break;
-	default: BIA_IMPLEMENTATION_ERROR("missing size_width case");
+	default: BIA_THROW(error::code::bad_switch_value);
 	}
 
 	_output.write(buffer, sw.second);

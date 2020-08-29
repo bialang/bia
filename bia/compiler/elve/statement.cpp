@@ -1,7 +1,7 @@
 #include "expression.hpp"
 #include "helpers.hpp"
 
-#include <bia/exception/implementation_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/util/gsl.hpp>
 
 bia::compiler::elve::tokens_type bia::compiler::elve::statement(present present, tokens_type tokens)
@@ -20,7 +20,7 @@ bia::compiler::elve::tokens_type bia::compiler::elve::statement(present present,
 		case token::keyword::for_: tokens = for_each(present, tokens); break;
 		case token::keyword::fun: tokens = function(present, tokens); break;
 		case token::keyword::return_: tokens = return_(present, tokens); break;
-		default: BIA_IMPLEMENTATION_ERROR("invalid keyword");
+		default: BIA_THROW(error::code::bad_switch_value);
 		}
 
 		break;

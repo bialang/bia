@@ -3,10 +3,10 @@
 #include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-bia::exception::syntax_details bia::tokenizer::token::parse::for_each(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::for_each(parameter& parameter)
 {
-	if (const auto err = any_of(parameter, "invalid for statement", "for").second) {
-		return err;
+	if (!any_of(parameter, "for").second) {
+		return error::code::bad_for_statement;
 	}
 
 	parameter.bundle.add({ token::keyword::for_ });
@@ -23,8 +23,8 @@ bia::exception::syntax_details bia::tokenizer::token::parse::for_each(parameter&
 		return err;
 	}
 
-	if (const auto err = any_of(parameter, "invalid in statement", "in").second) {
-		return err;
+	if (!any_of(parameter, "in").second) {
+		return error::code::expected_in;
 	}
 
 	if (const auto err = eat_whitespaces(parameter)) {

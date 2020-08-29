@@ -1,9 +1,9 @@
 #ifndef BIA_GC_MEMORY_ALLOCATOR_HPP_
 #define BIA_GC_MEMORY_ALLOCATOR_HPP_
 
-#include <cstddef>
-#include <bia/exception/memory_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/util/gsl.hpp>
+#include <cstddef>
 
 namespace bia {
 namespace gc {
@@ -38,23 +38,23 @@ public:
 	 * The memory is aligned according to memory_allocator::alignment.
 	 *
 	 * @param size is the amount of required bytes
-	 * @returns the pointer to the first byte if successful, otherwise `nullptr`
+	 * @return the pointer to the first byte if successful, otherwise `nullptr`
 	 */
 	virtual void* allocate(std::size_t size) = 0;
 	/**
 	 * Calls allocate() and returns the non-null result. If allocate() returns `nullptr`, this function will
 	 * fail.
 	 *
+	 * @exception error::exception not enough memory
 	 * @param size is the amount of required bytes
-	 * @returns the pointer to the first byte
-	 * @throw exception::memory_error if the allocation failed
+	 * @return the pointer to the first byte
 	 */
 	util::not_null<void*> checked_allocate(std::size_t size)
 	{
 		auto ptr = allocate(size);
 
 		if (!ptr) {
-			BIA_THROW(exception::memory_error, "could not allocate more memory");
+			BIA_THROW(std::make_error_code(std::errc::not_enough_memory));
 		}
 
 		return ptr;

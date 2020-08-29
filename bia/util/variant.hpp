@@ -7,7 +7,7 @@
 #include "type_traits/type_at.hpp"
 #include "type_traits/type_index.hpp"
 
-#include <bia/exception/bad_variant_access.hpp>
+#include <bia/error/exception.hpp>
 #include <limits>
 #include <type_traits>
 #include <utility>
@@ -83,9 +83,9 @@ public:
 	const typename type_traits::type_at<Index, Ts...>::type& get() const
 	{
 		if (_index == npos) {
-			BIA_THROW(exception::bad_variant_access, "accessing empty variant");
+			BIA_THROW(error::code::empty_variant);
 		} else if (_index != Index) {
-			BIA_THROW(exception::bad_variant_access, "wrong index given");
+			BIA_THROW(error::code::bad_variant_index);
 		}
 
 		return *reinterpret_cast<const typename type_traits::type_at<Index, Ts...>::type*>(&_data);
@@ -99,9 +99,9 @@ public:
 	typename std::enable_if<index_of<T>::value != npos, const T&>::type get() const
 	{
 		if (_index == npos) {
-			BIA_THROW(exception::bad_variant_access, "accessing empty variant");
+			BIA_THROW(error::code::empty_variant);
 		} else if (_index != index_of<T>::value) {
-			BIA_THROW(exception::bad_variant_access, "wrong type given");
+			BIA_THROW(error::code::bad_variant_index);
 		}
 
 		return *reinterpret_cast<const T*>(&_data);

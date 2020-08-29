@@ -1,7 +1,7 @@
 #include "disassembler.hpp"
 
 #include <bia/bvm/instruction_pointer.hpp>
-#include <bia/exception/implementation_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/member/cast/cast.hpp>
 #include <bia/member/function/function.hpp>
 #include <bia/member/member.hpp>
@@ -18,7 +18,7 @@ inline std::ostream& oo_parameter(bia::bytecode::offset_option option, bia::bvm:
 	case oo_8: return output << (int) ip.read<std::int8_t>();
 	case oo_16: return output << ip.read<std::int16_t>();
 	case oo_32: return output << ip.read<std::int32_t>();
-	default: BIA_IMPLEMENTATION_ERROR("not implemented");
+	default: BIA_THROW(bia::error::code::bad_offset_option);
 	}
 }
 
@@ -35,7 +35,7 @@ inline std::ostream& co_parameter(bia::bytecode::constant_option option, bia::bv
 	case co_double: return output << '$' << ip.read<double>();
 	case co_test_register: return output << "$tr";
 	case co_null: return output << "$null";
-	default: BIA_IMPLEMENTATION_ERROR("not implemented");
+	default: BIA_THROW(bia::error::code::bad_constant_option);
 	}
 }
 
@@ -62,7 +62,7 @@ inline std::ostream& ro_parameter(bia::bytecode::resource_option option, bia::bv
 	case ro_8: return print_resource(*resources.at(ip.read<std::uint8_t>()).get(), output);
 	case ro_16: return print_resource(*resources.at(ip.read<std::uint16_t>()).get(), output);
 	case ro_32: return print_resource(*resources.at(ip.read<std::uint32_t>()).get(), output);
-	default: BIA_IMPLEMENTATION_ERROR("not implemented");
+	default: BIA_THROW(bia::error::code::bad_resource_option);
 	}
 }
 
@@ -84,7 +84,7 @@ inline std::ostream& mso_parameter(bia::bytecode::member_source_option option,
 	case mso_resource_8: return print_resource(*resources.at(ip.read<std::uint8_t>()).get(), output);
 	case mso_local_8: return output << 'l' << (int) ip.read<std::uint8_t>();
 	case mso_builtin: return output << builtins[(int) ip.read<member::builtin>()];
-	default: BIA_IMPLEMENTATION_ERROR("not implemented");
+	default: BIA_THROW(bia::error::code::bad_member_source_option);
 	}
 }
 
@@ -102,7 +102,7 @@ inline std::ostream& mdo_parameter(bia::bytecode::member_destination_option opti
 	case mdo_global_8: return print_resource(*resources.at(ip.read<std::uint8_t>()).get(), output << 'g');
 	case mdo_local_8: return output << 'l' << (int) ip.read<std::uint8_t>();
 	case mdo_push: return output << "push";
-	default: BIA_IMPLEMENTATION_ERROR("not implemented");
+	default: BIA_THROW(bia::error::code::bad_member_destination_option);
 	}
 }
 
@@ -113,7 +113,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 	using bia::member::infix_operator;
 	using bia::member::self_operator;
 	using bia::member::test_operator;
-return;
+	return;
 	bvm::instruction_pointer ip{ instructions.begin(), instructions.end() };
 	const auto finally = util::make_finally([&] { output.flush(); });
 

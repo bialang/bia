@@ -4,7 +4,7 @@
 #include "token/parse/tokens.hpp"
 #include "token/parse/whitespace_eater.hpp"
 
-#include <bia/exception/syntax_error.hpp>
+#include <bia/error/exception.hpp>
 
 namespace bia {
 namespace tokenizer {
@@ -24,11 +24,11 @@ void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& e
 
 		// match single statements
 		if (const auto err = token::parse::single_stmt(parameter)) {
-			BIA_THROW(exception::syntax_error, "syntax error", err);
+			BIA_THROW(err);
 		}
 
 		if (const auto err = token::parse::cmd_end(parameter)) {
-			BIA_THROW(exception::syntax_error, "syntax error", err);
+			BIA_THROW(err);
 		}
 
 		// give to receiver

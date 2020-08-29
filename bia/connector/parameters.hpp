@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <bia/gc/stack_view.hpp>
 #include <bia/member/member.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/member/native/key_value_pair.hpp>
 #include <bia/util/gsl.hpp>
 #include <cstdint>
@@ -81,7 +82,7 @@ public:
 	member::member* at(std::size_t index)
 	{
 		if (index >= _size) {
-			BIA_THROW(exception::bounds_error, "out of bounds");
+			BIA_THROW(error::code::out_of_bounds);
 		}
 
 		return (*this)[index];

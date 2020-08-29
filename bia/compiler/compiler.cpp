@@ -2,7 +2,6 @@
 
 #include "elve/helpers.hpp"
 
-#include <bia/exception/implementation_error.hpp>
 #include <bia/log/log.hpp>
 #include <bia/util/gsl.hpp>
 #include <initializer_list>

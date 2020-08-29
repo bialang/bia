@@ -3,39 +3,39 @@
 
 #include "../parameter.hpp"
 
-#include <bia/exception/syntax_error.hpp>
+#include <bia/error/exception.hpp>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
 namespace parse {
 
-exception::syntax_details value(parameter& parameter);
-exception::syntax_details term(parameter& parameter);
-exception::syntax_details expression(parameter& parameter);
-exception::syntax_details identifier(parameter& parameter);
-exception::syntax_details string(parameter& parameter);
-exception::syntax_details decl_stmt(parameter& parameter);
-exception::syntax_details import_stmt(parameter& parameter);
-exception::syntax_details single_stmt(parameter& parameter);
+std::error_code value(parameter& parameter);
+std::error_code term(parameter& parameter);
+std::error_code expression(parameter& parameter);
+std::error_code identifier(parameter& parameter);
+std::error_code string(parameter& parameter);
+std::error_code decl_stmt(parameter& parameter);
+std::error_code import_stmt(parameter& parameter);
+std::error_code single_stmt(parameter& parameter);
 /**
  * Parses for a cmd end token.
  *
  * @param[in,out] parameter the required parameters
  * @returns an error if no cmd end is found
  */
-exception::syntax_details cmd_end(parameter& parameter);
-exception::syntax_details while_(parameter& parameter);
-exception::syntax_details for_each(parameter& parameter);
-exception::syntax_details member(parameter& parameter);
-exception::syntax_details operators(parameter& parameter);
-exception::syntax_details regex(parameter& parameter);
-exception::syntax_details parameter_list(parameter& parameter);
-exception::syntax_details number(parameter& parameter);
-exception::syntax_details if_(parameter& parameter);
-exception::syntax_details else_(parameter& parameter);
-exception::syntax_details loop_flow_control(parameter& parameter);
-exception::syntax_details function(parameter& parameter);
+std::error_code cmd_end(parameter& parameter);
+std::error_code while_(parameter& parameter);
+std::error_code for_each(parameter& parameter);
+std::error_code member(parameter& parameter);
+std::error_code operators(parameter& parameter);
+std::error_code regex(parameter& parameter);
+std::error_code parameter_list(parameter& parameter);
+std::error_code number(parameter& parameter);
+std::error_code if_(parameter& parameter);
+std::error_code else_(parameter& parameter);
+std::error_code loop_flow_control(parameter& parameter);
+std::error_code function(parameter& parameter);
 
 } // namespace parse
 } // namespace token

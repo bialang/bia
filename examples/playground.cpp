@@ -1,6 +1,6 @@
 #include <atomic>
 #include <bia/bia.hpp>
-#include <bia/exception/syntax_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/member/function/generator.hpp>
 #include <iostream>
 #include <sstream>
@@ -34,21 +34,6 @@ int main(int argc, char** argv)
 
 	code << u8R"(
 
-import io
-import sys
-import os
-
-let x = "heyho"
-
-fun foo {
-	io.print("inside function")
-
-	return x + " na wie gehts?"
-}
-
-io.print("return:", foo())
-os.system("sleep 1")
-io.print(sys.version)
 return 33
 
 )";
@@ -57,22 +42,25 @@ return 33
 		const auto value = bia::member::cast::cast<int>(*engine.execute(code).peek());
 
 		std::cout << "result: " << value << std::endl;
-	} catch (const bia::exception::bia_error& e) {
-		std::cout << "exception (" << e.name() << "; " << e.filename() << ":" << e.line() << "): " << e.what()
-		          << "\n";
+	} catch (const bia::error::exception& e) {
+		std::cerr << "exception (" << e.error() << ") from " << e.source_location() << ": " << e.what()
+		          << '\n';
+		// std::cout << "exception (" << e.name() << "; " << e.filename() << ":" << e.line() << "): " <<
+		// e.what()
+		//           << "\n";
 
-		if (dynamic_cast<const bia::exception::syntax_error*>(&e)) {
-			const auto details = static_cast<const bia::exception::syntax_error&>(e).details();
+		// if (dynamic_cast<const bia::exception::syntax_error*>(&e)) {
+		// 	const auto details = static_cast<const bia::exception::syntax_error&>(e).details();
 
-			std::cout << details.message << ":" << details.position.operator std::streamoff() << "\n\n"
-			          << code.str() << "\n";
+		// 	std::cout << details.message << ":" << details.position.operator std::streamoff() << "\n\n"
+		// 	          << code.str() << "\n";
 
-			for (auto i = details.position.operator std::streamoff(); i--;) {
-				std::cout.put(' ');
-			}
+		// 	for (auto i = details.position.operator std::streamoff(); i--;) {
+		// 		std::cout.put(' ');
+		// 	}
 
-			std::cout << "\e[0;32m^\e[0;30m\n";
-		}
+		// 	std::cout << "\e[0;32m^\e[0;30m\n";
+		// }
 
 		return 1;
 	}

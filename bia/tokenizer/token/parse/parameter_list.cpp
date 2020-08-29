@@ -1,7 +1,7 @@
 #include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-inline bia::exception::syntax_details parameter_element(bia::tokenizer::token::parameter& parameter)
+inline std::error_code parameter_element(bia::tokenizer::token::parameter& parameter)
 {
 	using namespace bia::tokenizer::token;
 	using namespace parse;
@@ -25,12 +25,12 @@ inline bia::exception::syntax_details parameter_element(bia::tokenizer::token::p
 	return expression(parameter);
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::parameter_list(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::parameter_list(parameter& parameter)
 {
 	auto pos = parameter.input.tellg();
 
 	if (parameter.encoder.read(parameter.input) != '(') {
-		return { pos, "expected '('" };
+		return error::code::expected_parameter_list;
 	}
 
 	eat_whitespaces(parameter);
@@ -53,7 +53,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::parameter_list(para
 
 		// must close when no parameter
 		if (parameter.encoder.read(parameter.input) != ')') {
-			return { pos, "expected ')'" };
+			return error::code::expected_parameter_list;
 		}
 
 		goto gt_success;
@@ -76,7 +76,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::parameter_list(para
 
 			break;
 		}
-		default: return { pos, "unexcepted character" };
+		default: return error::code::expected_parameter_list;
 		}
 	}
 

@@ -4,8 +4,7 @@
 #include "contract.hpp"
 #include "type_traits/is_null_comparable.hpp"
 
-#include <bia/exception/bounds_error.hpp>
-#include <bia/exception/narrowing_error.hpp>
+#include <bia/error/exception.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
@@ -92,7 +91,7 @@ constexpr To narrow(From from)
 	return static_cast<From>(narrow_cast<To>(from)) != from ||
 	               (std::is_signed<To>::value != std::is_signed<From>::value &&
 	                (narrow_cast<To>(from) < To{}) != (from < From{}))
-	           ? BIA_THROW(exception::narrowing_error, "invalid narrowing operation")
+	           ? BIA_THROW(error::code::bad_narrowing)
 	           : narrow_cast<To>(from);
 }
 
@@ -165,7 +164,7 @@ public:
 	reference at(size_type index) const
 	{
 		if (index >= _size) {
-			BIA_THROW(exception::bounds_error, "out of bounds");
+			BIA_THROW(error::code::out_of_bounds);
 		}
 
 		return _data[index];

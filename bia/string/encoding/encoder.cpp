@@ -4,7 +4,7 @@
 #include "standard/ascii.hpp"
 #include "standard/utf8.hpp"
 
-#include <bia/exception/implementation_error.hpp>
+#include <bia/error/exception.hpp>
 
 using namespace bia::string::encoding;
 
@@ -25,7 +25,7 @@ encoder* bia::string::encoding::get_encoder(standard_encoding encoding)
 	case standard_encoding::utf_32:
 	case standard_encoding::utf_32_le:
 	case standard_encoding::utf_32_be:
-	default: BIA_IMPLEMENTATION_ERROR("not implemented");
+	default: BIA_THROW(error::code::bad_switch_value);
 	}
 #endif
 }

@@ -3,7 +3,7 @@
 
 #include "../parameters.hpp"
 
-#include <bia/exception/nullpointer.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/member/cast/cast.hpp>
 #include <bia/member/member.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
@@ -23,8 +23,8 @@ inline member::member& not_null(member::member* element)
 	if (element) {
 		return *element;
 	}
-
-	BIA_THROW(exception::nullpointer, "nullpointer argument");
+	
+	BIA_THROW(bia::error::code::null_argument);
 }
 
 inline void assert_parameters(parameters_type params, util::type_traits::type_container<parameters_type>)
@@ -34,7 +34,7 @@ template<typename... Args>
 inline void assert_parameters(parameters_type params, util::type_traits::type_container<Args...>)
 {
 	if (sizeof...(Args) != params.size()) {
-		throw;
+		BIA_THROW(bia::error::code::argument_count_mismatch);
 	}
 }
 

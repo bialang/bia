@@ -4,11 +4,11 @@
 
 #include <bia/log/log.hpp>
 
-bia::exception::syntax_details bia::tokenizer::token::parse::decl_stmt(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::decl_stmt(parameter& parameter)
 {
 	// compare let
-	if (const auto err = any_of(parameter, "invalid decl keyword", "let").second) {
-		return err;
+	if (!any_of(parameter, "let").second) {
+		return error::code::expected_declaration_statement;
 	}
 
 	parameter.bundle.add(token{ token::keyword::let });
@@ -35,7 +35,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::decl_stmt(parameter
 	const auto pos = parameter.input.tellg();
 
 	if (parameter.encoder.read(parameter.input) != '=') {
-		return { pos, "expected assignment operator" };
+		return error::code::expected_declaration_statement;
 	}
 
 	// optional whitespaces
@@ -45,11 +45,11 @@ bia::exception::syntax_details bia::tokenizer::token::parse::decl_stmt(parameter
 	return expression(parameter);
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::import_stmt(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::import_stmt(parameter& parameter)
 {
 	// compare import
-	if (const auto err = any_of(parameter, "invalid import statement", "import").second) {
-		return err;
+	if (!any_of(parameter, "import").second) {
+		return error::code::expected_import_statement;
 	}
 
 	// whitespaces are required
@@ -62,7 +62,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::import_stmt(paramet
 	return identifier(parameter);
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::single_stmt(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::single_stmt(parameter& parameter)
 {
 	const auto old = parameter.backup();
 
@@ -96,22 +96,18 @@ bia::exception::syntax_details bia::tokenizer::token::parse::single_stmt(paramet
 
 	parameter.restore(old);
 
-	{
-		const auto err = any_of(parameter, "invalid return statement", "return").second;
+	if (!any_of(parameter, "return").second) {
+		parameter.bundle.add({ token::keyword::return_ });
 
-		if (!err) {
-			parameter.bundle.add({ token::keyword::return_ });
+		const auto before_return = parameter.backup();
 
-			const auto before_return = parameter.backup();
+		eat_whitespaces(parameter);
 
-			eat_whitespaces(parameter);
-
-			if (expression(parameter)) {
-				parameter.restore(before_return);
-			}
-
-			return {};
+		if (expression(parameter)) {
+			parameter.restore(before_return);
 		}
+
+		return {};
 	}
 
 	parameter.restore(old);
@@ -125,7 +121,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::single_stmt(paramet
 	return expression(parameter);
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::cmd_end(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::cmd_end(parameter& parameter)
 {
 	const auto err = eat_whitespaces<true>(parameter);
 	const auto pos = parameter.input.tellg();
@@ -134,7 +130,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::cmd_end(parameter& 
 		parameter.input.seekg(pos);
 
 		if (err) {
-			return { pos, "expected ';' or a line feed" };
+			return error::code::expected_command_end;
 		}
 	}
 

@@ -2,20 +2,18 @@
 #include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-#include <bia/exception/implementation_error.hpp>
-
-bia::exception::syntax_details bia::tokenizer::token::parse::value(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::value(parameter& parameter)
 {
 	// constant
 	const auto old = parameter.backup();
-	const auto t   = any_of(parameter, nullptr, "true", "false", "null");
+	const auto t   = any_of(parameter, "true", "false", "null");
 
 	if (!t.second) {
 		switch (t.first) {
 		case 0: parameter.bundle.add(token{ token::keyword::true_ }); break;
 		case 1: parameter.bundle.add(token{ token::keyword::false_ }); break;
 		case 2: parameter.bundle.add(token{ token::keyword::null }); break;
-		default: BIA_IMPLEMENTATION_ERROR("invalid keyword id");
+		default: BIA_THROW(error::code::bad_switch_value);
 		}
 
 		return {};
@@ -54,11 +52,11 @@ bia::exception::syntax_details bia::tokenizer::token::parse::value(parameter& pa
 	return {};
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::term(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::term(parameter& parameter)
 {
 	// match optional self operator
 	const auto old = parameter.backup();
-	const auto t   = any_of(parameter, nullptr, "not", "~", "-");
+	const auto t   = any_of(parameter, "not", "~", "-");
 
 	// match self operator, but whitespace required if operator is 'not'
 	if (!t.second && !(eat_whitespaces(parameter) && t.first == 0)) {
@@ -66,7 +64,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::term(parameter& par
 		case 0: parameter.bundle.add({ operator_::logical_not }); break;
 		case 1: parameter.bundle.add({ operator_::bitwise_not }); break;
 		case 2: parameter.bundle.add({ operator_::unary_minus }); break;
-		default: BIA_IMPLEMENTATION_ERROR("invalid operator id");
+		default: BIA_THROW(error::code::bad_switch_value);
 		}
 	} else {
 		parameter.restore(old);
@@ -76,7 +74,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::term(parameter& par
 	return value(parameter);
 }
 
-bia::exception::syntax_details bia::tokenizer::token::parse::expression(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::expression(parameter& parameter)
 {
 	if (const auto err = term(parameter)) {
 		return err;

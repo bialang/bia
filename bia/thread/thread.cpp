@@ -1,6 +1,5 @@
 #include "thread.hpp"
 
-#include <bia/exception/unsupported_error.hpp>
 #include <exception>
 #include <bia/log/log.hpp>
 #include <bia/util/gsl.hpp>

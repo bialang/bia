@@ -53,7 +53,7 @@ struct comparator
 	}
 };
 
-bia::exception::syntax_details bia::tokenizer::token::parse::identifier(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::identifier(parameter& parameter)
 {
 	using namespace string::encoding;
 
@@ -107,7 +107,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::identifier(paramete
 			}
 
 			// not an identifier
-			return { pos, "invalid identifier" };
+			return error::code::bad_identifier;
 		}
 		}
 	}

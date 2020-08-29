@@ -3,12 +3,12 @@
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/util/finally.hpp>
 
-bia::exception::syntax_details bia::tokenizer::token::parse::string(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::string(parameter& parameter)
 {
 	using namespace string::encoding;
 
 	if (parameter.encoder.read(parameter.input) != '"') {
-		return { parameter.input.tellg(), "expected '\"'" };
+		return error::code::expected_string;
 	}
 
 	auto streambuf    = parameter.manager.start_memory(true);
@@ -38,7 +38,7 @@ bia::exception::syntax_details bia::tokenizer::token::parse::string(parameter& p
 			BIA_IMPL_STRING('r', '\r')
 			BIA_IMPL_STRING('t', '\t')
 			BIA_IMPL_STRING('v', '\v')
-		case string::encoding::encoder::eof: return { parameter.input.tellg(), "expected '\"'" };
+		case string::encoding::encoder::eof: return error::code::expected_string;
 		case '"': {
 			if (!escape) {
 				// zero terminate

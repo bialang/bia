@@ -2,10 +2,11 @@
 #define BIA_BVM_INSTRUCTION_POINTER_HPP_
 
 #include <bia/bytecode/op_code.hpp>
-#include <cstddef>
-#include <cstdint>
+#include <bia/error/exception.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/portable/memory.hpp>
+#include <cstddef>
+#include <cstdint>
 
 namespace bia {
 namespace bvm {
@@ -41,7 +42,7 @@ public:
 		_cursor += offset;
 
 		if (_cursor < _first || _cursor > _last) {
-			throw;
+			BIA_THROW(bia::error::code::out_of_bounds);
 		}
 
 		return *this;

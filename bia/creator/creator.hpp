@@ -1,7 +1,7 @@
 #ifndef BIA_CREATOR_CREATOR_HPP_
 #define BIA_CREATOR_CREATOR_HPP_
 
-#include <bia/exception/implementation_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/gc/gc.hpp>
 #include <bia/member/function/static_.hpp>
 #include <bia/member/native/floating_point.hpp>
@@ -53,7 +53,7 @@ inline typename std::enable_if<Index + 1 == Type::type_count &&
 		return create(gc, value.template get<Index>());
 	}
 
-	BIA_IMPLEMENTATION_ERROR("this should not have happened");
+	BIA_THROW(bia::error::code::why_did_this_happen);
 }
 
 template<typename Type, std::size_t Index = 0>

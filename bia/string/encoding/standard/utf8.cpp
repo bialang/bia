@@ -1,6 +1,6 @@
 #include "utf8.hpp"
 
-#include <bia/exception/invalid_code_point.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/util/gsl.hpp>
 
 using namespace bia::string::encoding::standard;
@@ -10,9 +10,9 @@ inline bia::string::encoding::code_point_type next(std::istream& input)
 	const auto tmp = input.get();
 
 	if (tmp == std::istream::traits_type::eof()) {
-		BIA_THROW(bia::exception::invalid_code_point, "reached eof of unfinished UTF-8 sequence");
+		BIA_THROW(bia::error::code::unfinished_utf_sequence);
 	} else if ((tmp & 0xc0) != 0x80) {
-		BIA_THROW(bia::exception::invalid_code_point, "invalid continuation of UTF-8 sequence");
+		BIA_THROW(bia::error::code::bad_utf_sequence);
 	}
 
 	return static_cast<bia::string::encoding::code_point_type>(tmp & 0x3f);
@@ -21,7 +21,7 @@ inline bia::string::encoding::code_point_type next(std::istream& input)
 void utf8::put(std::ostream& output, code_point_type cp) const
 {
 	if (cp < 0) {
-		BIA_THROW(exception::invalid_code_point, "code point outside of Unicode range");
+		BIA_THROW(error::code::bad_unicode);
 	} else if (cp <= 0x7f) {
 		const char data[]{ util::narrow_cast<char>(cp) };
 
@@ -45,7 +45,7 @@ void utf8::put(std::ostream& output, code_point_type cp) const
 
 		output.write(data, sizeof(data));
 	} else {
-		BIA_THROW(exception::invalid_code_point, "code point outside of Unicode range");
+		BIA_THROW(error::code::bad_unicode);
 	}
 }
 
@@ -74,5 +74,5 @@ bia::string::encoding::code_point_type utf8::read(std::istream& input) const
 		return static_cast<code_point_type>((first & 0x07) << 18 | second << 12 | third << 6 | next(input));
 	}
 
-	BIA_THROW(exception::invalid_code_point, "invalid first UTF-8 octet");
+	BIA_THROW(error::code::bad_utf_sequence);
 }

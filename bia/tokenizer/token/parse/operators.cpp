@@ -3,7 +3,7 @@
 
 #include <bia/util/gsl.hpp>
 
-bia::exception::syntax_details bia::tokenizer::token::parse::operators(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::operators(parameter& parameter)
 {
 	constexpr operator_ ops[] = { operator_::member_access,
 		                          operator_::exponentation,
@@ -28,11 +28,11 @@ bia::exception::syntax_details bia::tokenizer::token::parse::operators(parameter
 		                          operator_::bitwise_or,
 		                          operator_::bitwise_xor };
 	const auto x =
-	    any_of(parameter, "invalid operator", ".", "**", "*", "/", "%", "+", "-", "==", "!=", "<=>",
+	    any_of(parameter, ".", "**", "*", "/", "%", "+", "-", "==", "!=", "<=>",
 	           "<=", ">=", "<", ">", "and", "&&", "or", "||", "in", "&", "|", "^");
 
-	if (x.second) {
-		return x.second;
+	if (!x.second) {
+		return error::code::bad_operator;
 	}
 
 	BIA_EXPECTS(x.first < sizeof(ops) / sizeof(operator_));

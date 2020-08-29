@@ -3,10 +3,10 @@
 #include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-bia::exception::syntax_details bia::tokenizer::token::parse::function(parameter& parameter)
+std::error_code bia::tokenizer::token::parse::function(parameter& parameter)
 {
-	if (const auto err = any_of(parameter, "invalid function statement", "fun").second) {
-		return err;
+	if (!any_of(parameter, "fun").second) {
+		return error::code::bad_function_statement;
 	}
 
 	parameter.bundle.add({ token::keyword::fun });

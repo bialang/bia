@@ -1,6 +1,6 @@
 #include "bundle.hpp"
 
-#include <bia/exception/bounds_error.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/util/gsl.hpp>
 
 namespace bia {
@@ -34,7 +34,7 @@ void bundle::restore(state_type state)
 token& bundle::at(std::size_t index)
 {
 	if (index >= _tokens.size()) {
-		BIA_THROW(exception::bounds_error, "out of bounds");
+		BIA_THROW(error::code::out_of_bounds);
 	}
 
 	return _tokens[index];
