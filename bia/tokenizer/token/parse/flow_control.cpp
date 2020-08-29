@@ -5,7 +5,7 @@ std::error_code bia::tokenizer::token::parse::loop_flow_control(parameter& param
 {
 	const auto x = any_of(parameter, "break", "continue");
 
-	if (x.second) {
+	if (!x.second) {
 		return error::code::expected_flow_control;
 	}
 

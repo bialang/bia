@@ -8,7 +8,7 @@ std::error_code bia::tokenizer::token::parse::value(parameter& parameter)
 	const auto old = parameter.backup();
 	const auto t   = any_of(parameter, "true", "false", "null");
 
-	if (!t.second) {
+	if (t.second) {
 		switch (t.first) {
 		case 0: parameter.bundle.add(token{ token::keyword::true_ }); break;
 		case 1: parameter.bundle.add(token{ token::keyword::false_ }); break;
@@ -59,7 +59,7 @@ std::error_code bia::tokenizer::token::parse::term(parameter& parameter)
 	const auto t   = any_of(parameter, "not", "~", "-");
 
 	// match self operator, but whitespace required if operator is 'not'
-	if (!t.second && !(eat_whitespaces(parameter) && t.first == 0)) {
+	if (t.second && !(eat_whitespaces(parameter) && t.first == 0)) {
 		switch (t.first) {
 		case 0: parameter.bundle.add({ operator_::logical_not }); break;
 		case 1: parameter.bundle.add({ operator_::bitwise_not }); break;

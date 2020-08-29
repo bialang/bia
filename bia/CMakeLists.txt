@@ -76,9 +76,9 @@ set(BIA_STRING_ENCODING_BACKEND_NONE ON)
 
 
 # configure all config.hpp.in
-file(GLOB_RECURSE BIA_CONFIG_TEMPLATES "${CMAKE_CURRENT_SOURCE_DIR}/*/config.hpp.in")
+file(GLOB_RECURSE config_templates "${CMAKE_CURRENT_SOURCE_DIR}/*config.hpp.in")
 
-foreach(config ${BIA_CONFIG_TEMPLATES})
+foreach(config ${config_templates})
 	string(LENGTH "${config}" config_length)
 	math(EXPR config_length "${config_length} - 3")
 	string(SUBSTRING "${config}" 0 ${config_length} config_output)

@@ -96,7 +96,7 @@ std::error_code bia::tokenizer::token::parse::single_stmt(parameter& parameter)
 
 	parameter.restore(old);
 
-	if (!any_of(parameter, "return").second) {
+	if (any_of(parameter, "return").second) {
 		parameter.bundle.add({ token::keyword::return_ });
 
 		const auto before_return = parameter.backup();

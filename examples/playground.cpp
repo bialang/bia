@@ -33,15 +33,17 @@ int main(int argc, char** argv)
 	std::stringstream code;
 
 	code << u8R"(
-
-return 33
-
+import io
+import sys
+io.print(sys.version)
 )";
 
 	try {
-		const auto value = bia::member::cast::cast<int>(*engine.execute(code).peek());
+		if (const auto ptr = engine.execute(code).peek()) {
+			const auto value = bia::member::cast::cast<int>(*ptr);
 
-		std::cout << "result: " << value << std::endl;
+			std::cout << "result: " << value << std::endl;
+		}
 	} catch (const bia::error::exception& e) {
 		std::cerr << "exception (" << e.error() << ") from " << e.source_location() << ": " << e.what()
 		          << '\n';

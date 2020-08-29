@@ -2,6 +2,7 @@
 
 #include "helper.hpp"
 
+#include <bia/config.hpp>
 #include <bia/connector/connector-inl.hpp>
 #include <bia/creator/creator.hpp>
 #include <bia/gc/temporary_token.hpp>
@@ -45,7 +46,7 @@ bia::member::native::dict* sys::_init(gc::gc& gc, util::span<const char* const*>
 	put_function(gc, *dict, "exit", &std::exit);
 	put_function(gc, *dict, "quick_exit", &std::quick_exit);
 	put_function(gc, *dict, "abort", &std::abort);
-	put_gcable(gc, *dict, "version", creator::create(gc, "4.0.0-alpha"));
+	put_gcable(gc, *dict, "version", creator::create(gc, BIA_VERSION));
 	put_gcable(gc, *dict, "byteorder",
 	           creator::create(gc, *reinterpret_cast<const char*>(&byteorder) == 1 ? "little" : "big"));
 

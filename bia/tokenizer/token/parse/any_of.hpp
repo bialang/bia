@@ -30,7 +30,7 @@ inline std::pair<std::size_t, bool> any_of(parameter& tp, util::czstring token, 
 	const auto old = tp.input.tellg();
 	const auto t   = any_of(tp, token);
 
-	if (!t.second) {
+	if (t.second) {
 		return t;
 	}
 
