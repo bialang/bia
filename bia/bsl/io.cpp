@@ -27,20 +27,20 @@ inline void print(bia::connector::parameters_type params)
 		}
 	}
 
-	for (auto ptr : params.positionals()) {
-		if (ptr) {
-			if (dynamic_cast<const bia::member::native::string*>(ptr)) {
-				std::cout << bia::member::cast::cast<const char*>(*ptr);
-			} else if (dynamic_cast<const bia::member::native::floating_point*>(ptr)) {
-				std::cout << bia::member::cast::cast<bia::member::member::float_type>(*ptr);
+	for (auto i = params.positionals().begin(); i != params.positionals().end(); ++i) {
+		if (*i) {
+			if (dynamic_cast<const bia::member::native::string*>(*i)) {
+				std::cout << bia::member::cast::cast<const char*>(**i);
+			} else if (dynamic_cast<const bia::member::native::floating_point*>(*i)) {
+				std::cout << bia::member::cast::cast<bia::member::member::float_type>(**i);
 			} else {
-				std::cout << bia::member::cast::cast<bia::member::member::int_type>(*ptr);
+				std::cout << bia::member::cast::cast<bia::member::member::int_type>(**i);
 			}
 		} else {
 			std::cout << "<null>";
 		}
 
-		if (ptr != *(params.positionals().end() - 1)) {
+		if (i + 1 != params.positionals().end()) {
 			std::cout << sep;
 		}
 	}
