@@ -57,11 +57,19 @@ inline tokens_type member(present present, tokens_type tokens, Destination desti
 		return member_call(present, tokens.subspan(1), identifier.builtin, destination);
 	}
 
-	const auto index = present.variables.find(identifier.memory);
+	const auto variable = present.variables.find(identifier.memory);
 
 	// local source
-	if (index.second) {
-		return member_call(present, tokens.subspan(1), bytecode::member::local{ index.first }, destination);
+	if (variable.second) {
+		switch (variable.first.second) {
+		case manager::variable::type::local:
+			return member_call(present, tokens.subspan(1), bytecode::member::local{ variable.first.first },
+			                   destination);
+		case manager::variable::type::argument:
+			return member_call(present, tokens.subspan(1), bytecode::member::args{ variable.first.first },
+			                   destination);
+		default: BIA_THROW(error::code::bad_switch_value);
+		}
 	}
 
 	// global source

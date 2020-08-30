@@ -1,18 +1,22 @@
 #include "variable.hpp"
 
+#include <bia/util/contract.hpp>
+
 using namespace bia::compiler::manager;
 
-std::pair<variable::index_type, bool> variable::find(const resource::view& identifer) noexcept
+std::pair<variable::variable_type, bool> variable::find(const resource::view& identifer) noexcept
 {
 	// search overshadowers
-	auto result = _overshadower.find(identifer);
+	{
+		const auto result = _overshadower.find(identifer);
 
-	if (result != _overshadower.end()) {
-		return { result->second, true };
+		if (result != _overshadower.end()) {
+			return { { result->second, type::local }, true };
+		}
 	}
 
 	// normal variables
-	result = _variables.find(identifer);
+	const auto result = _variables.find(identifer);
 
 	if (result != _variables.end()) {
 		return { result->second, true };
@@ -24,17 +28,18 @@ std::pair<variable::index_type, bool> variable::find(const resource::view& ident
 
 		// add mapping; always take next because holes can be reused (whatever this means)
 		if (r.second) {
-			_variables.insert({ identifer, _next });
-			_bindings.push_back({ r.first, _next });
+			BIA_EXPECTS(r.first.second == type::local);
+			_variables.insert({ identifer, { _next, r.first.second } });
+			_bindings.push_back({ r.first.first, _next });
 
-			return { _next++, true };
+			return { { _next++, r.first.second }, true };
 		}
 	}
 
-	return { 0, false };
+	return { { 0, {} }, false };
 }
 
-variable::index_type variable::add(resource::view identifer)
+variable::index_type variable::add(resource::view identifer, type type)
 {
 	BIA_EXPECTS(_variables.find(identifer) == _variables.end());
 
@@ -48,7 +53,7 @@ variable::index_type variable::add(resource::view identifer)
 		_holes.erase(_holes.begin());
 	}
 
-	_variables.insert({ std::move(identifer), index });
+	_variables.insert({ std::move(identifer), { index, type } });
 
 	return index;
 }
@@ -84,13 +89,6 @@ variable::index_type variable::add_tmp()
 	}
 
 	return _next++;
-}
-
-variable::index_type variable::latest_index() const
-{
-	BIA_EXPECTS(_next);
-
-	return _next - 1;
 }
 
 variable variable::open_scope()

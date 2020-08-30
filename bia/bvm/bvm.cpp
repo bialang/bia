@@ -131,7 +131,7 @@ inline bia::gc::gcable<bia::member::member> make_key_value_pair(bia::member::nat
 bia::gc::gcable<bia::member::member>
     bvm::execute(context& context, util::span<const util::byte*> instructions, gc::root& resources)
 {
-	auto token = context.gc().register_thread(64);
+	auto token = context.gc().register_thread(1024);
 	auto stack = token->stack_view();
 
 	return execute(context, instructions, resources, stack, *token);

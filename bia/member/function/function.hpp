@@ -77,13 +77,11 @@ public:
 	gc::gcable<member> initiate(const gc::stack_view& parent)
 	{
 		bindings_type bindings;
-
-		// bind variables
 		util::span<const util::byte*> binding_input{ _code.get() + _size, _binding_size };
 
+		// bind variables
 		while (!binding_input.empty()) {
 			const auto binding = resource::deserialize_binding(binding_input);
-
 			bindings.push_back({ binding.second, parent.local_at(binding.first) });
 			BIA_LOG(DEBUG, "binding {} to {}", binding.first, binding.second);
 		}

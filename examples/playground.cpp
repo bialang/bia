@@ -8,7 +8,7 @@
 #include <typeinfo>
 
 int main(int argc, char** argv)
-{
+try {
 	bia::engine engine;
 
 	engine.use_bsl({ argv, argv + argc });
@@ -35,7 +35,12 @@ int main(int argc, char** argv)
 	code << u8R"(
 import io
 import sys
-io.print(sys.version)
+
+fun a(x) {
+	io.print("ha", x)
+}
+
+a("hi")
 )";
 
 	try {
@@ -66,4 +71,7 @@ io.print(sys.version)
 
 		return 1;
 	}
+} catch (const bia::error::contract_violation& e) {
+	std::cerr << "contract violated (" << e.source_location() << "): " << e.what() << '\n';
+	return -1;
 }

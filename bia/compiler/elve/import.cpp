@@ -13,11 +13,22 @@ bia::compiler::elve::tokens_type bia::compiler::elve::import(present present, to
 
 	// overwrite existing variable
 	if (variable.second) {
-		present.writer.write<true, bytecode::oc_import>(name, bytecode::member::local{ variable.first });
+		switch (variable.first.second) {
+		case manager::variable::type::local:
+			present.writer.write<true, bytecode::oc_import>(name,
+			                                                bytecode::member::local{ variable.first.first });
+			break;
+		case manager::variable::type::argument:
+			present.writer.write<true, bytecode::oc_import>(name,
+			                                                bytecode::member::args{ variable.first.first });
+			break;
+		default: BIA_THROW(error::code::bad_switch_value);
+		}
 	} else {
 		present.writer.write<true, bytecode::oc_import>(
-		    name, bytecode::member::local{
-		              present.variables.add(tokens.data()[1].value.get<token::identifier>().memory) });
+		    name,
+		    bytecode::member::local{ present.variables.add(
+		        tokens.data()[1].value.get<token::identifier>().memory, manager::variable::type::local) });
 	}
 
 	return tokens.subspan(2);

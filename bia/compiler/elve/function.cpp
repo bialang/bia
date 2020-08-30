@@ -14,20 +14,37 @@ bia::compiler::elve::tokens_type bia::compiler::elve::function(present present, 
 	bytecode::member::local destination;
 
 	{
-		auto index = present.variables.find(tokens.data()[1].value.get<token::identifier>().memory);
+		auto variable = present.variables.find(tokens.data()[1].value.get<token::identifier>().memory);
 
-		if (!index.second) {
-			index.first = present.variables.add(tokens.data()[1].value.get<token::identifier>().memory);
+		if (!variable.second) {
+			variable.first.first = present.variables.add(
+			    tokens.data()[1].value.get<token::identifier>().memory, manager::variable::type::local);
+		} else {
+			BIA_EXPECTS(variable.first.second == manager::variable::type::local);
 		}
 
-		destination = { index.first };
+		destination = { variable.first.first };
 	}
 
 	auto variables = present.variables.open_scope();
 	std::stringstream code;
 	bytecode::writer::instruction writer{ code };
 
-	tokens = batch({ variables, writer, present.resources, present.manager }, tokens.subspan(2));
+	// register arguments
+	tokens = tokens.subspan(3);
+
+	while (true) {
+		if (static_cast<token::type>(tokens.data()->value.index()) == token::type::control) {
+			tokens = tokens.subspan(1);
+			break;
+		}
+
+		variables.add(tokens.data()->value.get<token::identifier>().memory,
+		              manager::variable::type::argument);
+		tokens = tokens.subspan(1);
+	}
+
+	tokens = batch({ variables, writer, present.resources, present.manager }, tokens);
 
 	writer.finish();
 
