@@ -1,6 +1,6 @@
 #include "log.hpp"
 
-#if defined(BIA_LOG_ENABLE_LOGGING)
+#if BIA_LOG_ENABLE
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace bia {

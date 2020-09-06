@@ -3,6 +3,7 @@
 
 #include "../member.hpp"
 
+#include <bia/error/exception.hpp>
 #include <bia/util/type_traits/conjunction.hpp>
 #include <type_traits>
 #include <typeinfo>
@@ -11,51 +12,51 @@ namespace bia {
 namespace member {
 namespace cast {
 
-template<typename T>
+template<typename Type>
 using is_const_value =
-    std::is_const<typename std::remove_pointer<typename std::remove_reference<T>::type>::type>;
+    std::is_const<typename std::remove_pointer<typename std::remove_reference<Type>::type>::type>;
 
-template<typename T>
-inline typename std::enable_if<std::is_integral<T>::value, T>::type cast(member& m)
+template<typename Type>
+inline typename std::enable_if<std::is_integral<Type>::value, Type>::type cast(member& m)
 {
 	if (!(m.flags() & member::flag_numeric)) {
-		throw;
+		BIA_THROW(error::code::bad_cast);
 	}
 
-	return static_cast<T>(m.as_int());
+	return static_cast<Type>(m.as_int());
 }
 
-template<typename T>
-inline typename std::enable_if<std::is_floating_point<T>::value, T>::type cast(member& m)
+template<typename Type>
+inline typename std::enable_if<std::is_floating_point<Type>::value, Type>::type cast(member& m)
 {
 	if (!(m.flags() & member::flag_numeric)) {
-		throw;
+		BIA_THROW(error::code::bad_cast);
 	}
 
-	return static_cast<T>(m.as_float());
+	return static_cast<Type>(m.as_float());
 }
 
-template<typename T>
-inline typename std::enable_if<!std::is_arithmetic<T>::value && !is_const_value<T>::value, T>::type
+template<typename Type>
+inline typename std::enable_if<!std::is_arithmetic<Type>::value && !is_const_value<Type>::value, Type>::type
     cast(member& m)
 {
-	T output{};
+	Type output{};
 
-	if (!m.as_data(typeid(T), &output)) {
-		throw;
+	if (!m.as_data(typeid(Type), &output)) {
+		BIA_THROW(error::code::bad_cast);
 	}
 
 	return output;
 }
 
-template<typename T>
-inline typename std::enable_if<!std::is_arithmetic<T>::value && is_const_value<T>::value, T>::type
+template<typename Type>
+inline typename std::enable_if<!std::is_arithmetic<Type>::value && is_const_value<Type>::value, Type>::type
     cast(const member& m)
 {
-	T output{};
+	Type output{};
 
-	if (!m.as_data(typeid(T), &output)) {
-		throw;
+	if (!m.as_data(typeid(Type), &output)) {
+		BIA_THROW(error::code::bad_cast);
 	}
 
 	return output;

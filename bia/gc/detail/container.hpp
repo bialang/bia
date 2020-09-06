@@ -119,7 +119,7 @@ public:
 		while (true) {
 			thread::lock::unique_lock<thread::lock::spin_mutex> lock(_mutex);
 
-			if (!_operation_active && _main.erase(element) || _back.erase(element)) {
+			if ((!_operation_active && _main.erase(element)) || _back.erase(element)) {
 				break;
 			}
 		}

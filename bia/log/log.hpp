@@ -5,7 +5,7 @@
 
 #include <memory>
 
-#if defined(BIA_LOG_ENABLE_LOGGING)
+#if BIA_LOG_ENABLE
 #	include <spdlog/spdlog.h>
 
 #	define BIA_LOG(level, ...) SPDLOG_LOGGER_##level(bia::log::get_default_logger(), __VA_ARGS__)

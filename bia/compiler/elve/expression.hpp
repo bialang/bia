@@ -37,7 +37,7 @@ inline tokens_type value(present present, tokens_type tokens, Destination destin
 		int val = 0;
 
 		switch (tokens.data()->value.get<token::keyword>()) {
-		case token::keyword::true_: val = 1;
+		case token::keyword::true_: val = 1; BIA_ATTR_FALLTHROUGH;
 		case token::keyword::false_: {
 			present.writer.write<true, bytecode::oc_instantiate>(val, destination);
 

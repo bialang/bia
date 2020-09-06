@@ -20,8 +20,10 @@
 
 #if __cplusplus > 201703L
 #	define BIA_ATTR_NO_DISCARD [[nodiscard]]
+#	define BIA_ATTR_FALLTHROUGH [[fallthrough]]
 #else
 #	define BIA_ATTR_NO_DISCARD
+#	define BIA_ATTR_FALLTHROUGH
 #endif
 
 #endif

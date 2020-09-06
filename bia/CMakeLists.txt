@@ -4,7 +4,7 @@ project(bia
 	VERSION 0.1.0
 	LANGUAGES CXX)
 
-option(BIA_LOG_ENABLE_LOGGING "Whether the Bia library should make internal logs to the default logger." OFF)
+option(BIA_LOG_ENABLE "Whether the Bia library should make internal logs to the default logger." OFF)
 set(BIA_UTIL_CONTRACT_BEHAVIOR "abort" CACHE STRING "How a contract violation should end (throw, abort, nothing).")
 set_property(CACHE BIA_UTIL_CONTRACT_BEHAVIOR PROPERTY STRINGS "throw" "abort" "nothing")
 set(BIA_THREAD_BACKEND "std::thread"
@@ -17,7 +17,7 @@ set(BIA_RESOURCE_PAGE_SIZE 256
 add_library(bia)
 
 # logging
-if(BIA_LOG_ENABLE_LOGGING)
+if(BIA_LOG_ENABLE)
 	find_package(spdlog REQUIRED)
 	list(APPEND BIA_DEPENDENCIES spdlog)
 	target_link_libraries(bia
@@ -95,6 +95,7 @@ target_sources(bia
 	PRIVATE "${BIA_SOURCE_FILES}" "${CMAKE_CURRENT_HEADER_FILES}")
 target_include_directories(bia
 	PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
+add_compile_options(-Wall -Wextra -pedantic -Werror -Wno-missing-field-initializers -Wno-unused-parameter)
 add_library(bia::bia ALIAS bia)
 
 

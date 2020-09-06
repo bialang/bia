@@ -24,14 +24,11 @@ try {
 	} };
 	auto f = bia::util::make_finally([&] {
 		BIA_LOG(INFO, "waiting for gc to finish");
-
 		b = true;
-
 		t.join();
 	});
 
 	std::stringstream code;
-
 	code << u8R"(
 import io
 import sys
@@ -46,7 +43,6 @@ a("hi")
 	try {
 		if (const auto ptr = engine.execute(code).peek()) {
 			const auto value = bia::member::cast::cast<int>(*ptr);
-
 			std::cout << "result: " << value << std::endl;
 		}
 	} catch (const bia::error::exception& e) {

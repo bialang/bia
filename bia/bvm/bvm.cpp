@@ -143,7 +143,6 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
                                                   gc::token& token)
 {
 	using namespace bytecode;
-	using flag = bia::member::member::flag;
 	using bia::member::infix_operator;
 	using bia::member::self_operator;
 	using bia::member::test_operator;

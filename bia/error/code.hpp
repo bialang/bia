@@ -15,6 +15,7 @@ enum class code
 	bad_unicode,
 
 	bad_narrowing,
+	bad_cast,
 	out_of_bounds,
 	null_argument,
 	argument_count_mismatch,
@@ -75,6 +76,7 @@ inline const std::error_category& code_category() noexcept
 			case code::bad_utf_sequence: return "bad UTF sequence";
 			case code::bad_unicode: return "bad Unicode code point value";
 			case code::bad_narrowing: return "bad narrowing";
+			case code::bad_cast: return "bad cast";
 			case code::out_of_bounds: return "out of bounds";
 			case code::null_argument: return "null argument not allowed";
 			case code::argument_count_mismatch: return "argument count mismatch";
@@ -127,8 +129,10 @@ inline std::error_code make_error_code(code c)
 } // namespace error
 } // namespace bia
 
+namespace std {
 template<>
-struct std::is_error_code_enum<bia::error::code> : std::true_type
+struct is_error_code_enum<bia::error::code> : true_type
 {};
+} // namespace std
 
 #endif
