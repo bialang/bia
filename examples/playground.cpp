@@ -1,5 +1,6 @@
 #include <atomic>
 #include <bia/bia.hpp>
+#include <bia/error/contract_violation.hpp>
 #include <bia/error/exception.hpp>
 #include <bia/member/function/generator.hpp>
 #include <iostream>

@@ -125,7 +125,8 @@ inline stack_view::call_frame stack_view::make_call_frame()
 
 	frame.kwarg_count = arg_frame.second ? arg_frame.second - _last_push + 1 : 0;
 	frame.arg_count   = arg_frame.first - _last_push - frame.kwarg_count;
-	_last_push        = arg_frame.first;
+	frame.stack._last_push -= frame.kwarg_count + frame.arg_count;
+	_last_push = arg_frame.first;
 
 	_arg_frames.pop_back();
 

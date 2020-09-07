@@ -208,7 +208,7 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 			    parse_options<oc_invoke, member_source_option, member_destination_option>(op_code);
 			const auto caller = member_pointer<bia::member::member>(
 			    mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
-			connector::parameters params{ stack.make_call_frame() };
+			connector::parameters params(stack.make_call_frame());
 			bia::member::invoke_context ic{ context, resources, token };
 
 			mdo_parameter(std::get<1>(options), ip, stack, token, caller->invoke(params, ic));
