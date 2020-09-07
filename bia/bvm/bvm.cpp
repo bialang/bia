@@ -147,7 +147,7 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 	using bia::member::self_operator;
 	using bia::member::test_operator;
 
-	instruction_pointer ip{ instructions.begin(), instructions.end() };
+	instruction_pointer ip(instructions);
 	bia::member::member::test_type test_register = 0;
 	auto& gc                                     = context.gc();
 	auto& globals                                = context.symbols();

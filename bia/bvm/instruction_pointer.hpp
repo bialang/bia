@@ -11,50 +11,78 @@
 namespace bia {
 namespace bvm {
 
+/**
+ * Manages the input bytecode stream.
+ */
 class instruction_pointer
 {
 public:
 	typedef const util::byte* buffer_type;
 
-	instruction_pointer(util::not_null<buffer_type> first, util::not_null<buffer_type> last) noexcept
+	/**
+	 * Constructor.
+	 *
+	 * @param instructions the byte instructions
+	 */
+	instruction_pointer(util::span<buffer_type> instructions) noexcept
 	{
-		_first  = first.get();
-		_last   = last.get();
-		_cursor = _first;
+		_instructions = instructions;
+		_cursor       = instructions.begin();
 	}
-	template<typename T>
-	T read()
+	/**
+	 * Reads the requested type from the instruction buffer.
+	 *
+	 * @pre this object must be valid
+	 * @tparam Type the type
+	 * @return the read value
+	 */
+	template<typename Type>
+	Type read()
 	{
 		BIA_EXPECTS(*this);
 
-		const auto x = util::portable::read<T>(_cursor);
-
-		_cursor += sizeof(T);
-
+		const auto x = util::portable::read<Type>(_cursor);
+		_cursor += sizeof(Type);
 		return x;
 	}
+	/**
+	 * Reads the next opcode.
+	 *
+	 * @return the next opcode
+	 * @see read()
+	 */
 	bytecode::op_code_type next_op_code()
 	{
 		return read<bytecode::op_code_type>();
 	}
+	/**
+	 * Advances the instruction pointer.
+	 *
+	 * @param offset the offset in bytes
+	 * @return `*this`
+	 */
 	instruction_pointer& operator+=(std::int32_t offset)
 	{
 		_cursor += offset;
 
-		if (_cursor < _first || _cursor > _last) {
+		if (_cursor < _instructions.begin() || _cursor > _instructions.end()) {
 			BIA_THROW(bia::error::code::out_of_bounds);
 		}
 
 		return *this;
 	}
+	/**
+	 * Checks if this object is valid.
+	 *
+	 * @return `true` if this object is valid, otherwise `false`
+	 */
 	operator bool() const noexcept
 	{
-		return _cursor + bytecode::max_instruction_size < _last;
+		return _cursor + bytecode::max_instruction_size < _instructions.end();
 	}
 
 private:
-	buffer_type _first;
-	buffer_type _last;
+	util::span<buffer_type> _instructions;
 	buffer_type _cursor;
 };
 
