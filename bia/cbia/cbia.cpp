@@ -6,6 +6,7 @@
 #include <bia/member/native/dict.hpp>
 #include <bia/member/native/list.hpp>
 #include <bia/member/native/string.hpp>
+#include <bia/util/memory_streambuf.hpp>
 #include <type_traits>
 
 typedef typename std::remove_reference<bia::parameters>::type parameters_t;
@@ -91,19 +92,8 @@ try {
 		return berr_invalid_arguments;
 	}
 
-	/*struct membuf : std::streambuf
-	{
-	    membuf(char* begin, char* end)
-	    {
-	        setg(begin, begin, end);
-	    }
-	};
-
-	membuf buffer{ static_cast<char*>(const_cast<void*>(code)),
-	               static_cast<char*>(const_cast<void*>(code)) + length };
-	std::istream istream{ &buffer };*/
-	std::stringstream istream;
-	istream.write(static_cast<const char*>(code), length);
+	bia::util::memory_streambuf buffer({ static_cast<const bia::util::byte*>(code), length });
+	std::istream istream(&buffer);
 	static_cast<bia::engine*>(engine)->execute(istream);
 
 	return berr_ok;
