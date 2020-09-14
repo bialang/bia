@@ -71,6 +71,10 @@ public:
 
 		return *this;
 	}
+	std::size_t cursor() const noexcept
+	{
+		return static_cast<std::size_t>(_cursor - _instructions.begin());
+	}
 	/**
 	 * Checks if this object is valid.
 	 *

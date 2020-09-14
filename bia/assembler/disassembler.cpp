@@ -8,6 +8,7 @@
 #include <bia/member/native/regex.hpp>
 #include <bia/member/native/string.hpp>
 #include <bia/util/finally.hpp>
+#include <iomanip>
 
 inline std::ostream& oo_parameter(bia::bytecode::offset_option option, bia::bvm::instruction_pointer& ip,
                                   std::ostream& output)
@@ -113,10 +114,22 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 	using bia::member::infix_operator;
 	using bia::member::self_operator;
 	using bia::member::test_operator;
-	bvm::instruction_pointer ip(instructions);
-	const auto finally = util::make_finally([&] { output.flush(); });
+
+	bvm::instruction_pointer ip{ instructions };
+	const auto print_border = [&output] {
+		constexpr auto disassembly_padding = "=====================";
+		output << disassembly_padding << "DISASSEMBLY" << disassembly_padding << '\n';
+	};
+	const auto finally = util::make_finally([&] {
+		print_border();
+		output.flush();
+	});
+
+	print_border();
 
 	while (ip) {
+		output << "0x" << std::hex << std::setw(8) << std::setfill('0') << ip.cursor() << ": "
+		       << std::setw(10) << std::setfill(' ') << std::left;
 		const auto op_code = ip.next_op_code();
 
 		switch (to_op_code_base(op_code)) {
@@ -124,7 +137,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options = parse_options<oc_operator, member_source_option, member_source_option,
 			                                   member_destination_option>(op_code);
 
-			mso_parameter(std::get<0>(options), ip, resources, output << "op ");
+			mso_parameter(std::get<0>(options), ip, resources, output << "op");
 			mso_parameter(std::get<1>(options), ip, resources, output << ", ");
 			mdo_parameter(std::get<2>(options), ip, resources,
 			              output << ", " << (int) ip.read<infix_operator>() << ", ");
@@ -136,7 +149,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			    parse_options<oc_get, member_source_option, resource_option, member_destination_option>(
 			        op_code);
 
-			mso_parameter(std::get<0>(options), ip, resources, output << "get ");
+			mso_parameter(std::get<0>(options), ip, resources, output << "get");
 			ro_parameter(std::get<1>(options), ip, resources, output << ", ");
 			mdo_parameter(std::get<2>(options), ip, resources, output << ", ");
 
@@ -146,7 +159,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options = parse_options<oc_test, member_source_option, member_source_option>(op_code);
 			const auto op      = ip.read<test_operator>();
 
-			mso_parameter(std::get<0>(options), ip, resources, output << "test ");
+			mso_parameter(std::get<0>(options), ip, resources, output << "test");
 			mso_parameter(std::get<1>(options), ip, resources, output << ", ");
 
 			output << ", " << (int) op;
@@ -157,7 +170,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options =
 			    parse_options<oc_instantiate, constant_option, member_destination_option>(op_code);
 
-			co_parameter(std::get<0>(options), ip, output << "inst ");
+			co_parameter(std::get<0>(options), ip, output << "inst");
 			mdo_parameter(std::get<1>(options), ip, resources, output << ", ");
 
 			break;
@@ -166,7 +179,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options =
 			    parse_options<oc_invoke, member_source_option, member_destination_option>(op_code);
 
-			mso_parameter(std::get<0>(options), ip, resources, output << "invoke ");
+			mso_parameter(std::get<0>(options), ip, resources, output << "invoke");
 			mdo_parameter(std::get<1>(options), ip, resources, output << ", ");
 
 			break;
@@ -175,7 +188,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options =
 			    parse_options<oc_refer, member_source_option, member_destination_option>(op_code);
 
-			mso_parameter(std::get<0>(options), ip, resources, output << "refer ");
+			mso_parameter(std::get<0>(options), ip, resources, output << "refer");
 			mdo_parameter(std::get<1>(options), ip, resources, output << ", ");
 
 			break;
@@ -184,7 +197,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options =
 			    parse_options<oc_clone, member_source_option, member_destination_option>(op_code);
 
-			mso_parameter(std::get<0>(options), ip, resources, output << "clone ");
+			mso_parameter(std::get<0>(options), ip, resources, output << "clone");
 			mdo_parameter(std::get<1>(options), ip, resources, output << ", ");
 
 			break;
@@ -193,7 +206,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options =
 			    parse_options<oc_copy, member_source_option, member_destination_option>(op_code);
 
-			mso_parameter(std::get<0>(options), ip, resources, output << "copy ");
+			mso_parameter(std::get<0>(options), ip, resources, output << "copy");
 			mdo_parameter(std::get<1>(options), ip, resources, output << ", ");
 
 			break;
@@ -203,7 +216,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			    parse_options<oc_self_operator, member_source_option, member_destination_option>(op_code);
 			const auto op = ip.read<self_operator>();
 
-			mso_parameter(std::get<0>(options), ip, resources, output << "self_op ");
+			mso_parameter(std::get<0>(options), ip, resources, output << "self_op");
 			mdo_parameter(std::get<1>(options), ip, resources, output << ", " << (int) op << ", ");
 
 			break;
@@ -212,7 +225,7 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options =
 			    parse_options<oc_import, resource_option, member_destination_option>(op_code);
 
-			ro_parameter(std::get<0>(options), ip, resources, output << "import ");
+			ro_parameter(std::get<0>(options), ip, resources, output << "import");
 			mdo_parameter(std::get<1>(options), ip, resources, output << ", ");
 
 			break;
@@ -221,35 +234,35 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 			const auto options =
 			    parse_options<oc_import, resource_option, member_destination_option>(op_code);
 
-			ro_parameter(std::get<0>(options), ip, resources, output << "initiate ");
+			ro_parameter(std::get<0>(options), ip, resources, output << "initiate");
 			mdo_parameter(std::get<1>(options), ip, resources, output << ", ");
 
 			break;
 		}
 		case oc_jump: {
-			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmp ");
+			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmp");
 
 			break;
 		}
 		case oc_jump_true: {
-			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmpt ");
+			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmpt");
 
 			break;
 		}
 		case oc_jump_false: {
-			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmpf ");
+			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmpf");
 
 			break;
 		}
 		case oc_name: {
 			ro_parameter(std::get<0>(parse_options<oc_name, resource_option>(op_code)), ip, resources,
-			             output << "name ");
+			             output << "name");
 
 			break;
 		}
 		case oc_return: {
 			mso_parameter(std::get<0>(parse_options<oc_return, member_source_option>(op_code)), ip, resources,
-			              output << "ret ");
+			              output << "ret3");
 
 			break;
 		}
