@@ -23,7 +23,7 @@ void write(not_null<void*> memory, T value)
 
 	std::memcpy(ptr, &value, sizeof(value));
 
-#if BIA_ENDIAN == BIA_BIG_ENDIAN
+#if BIA_BIG_ENDIAN
 	std::reverse(ptr, ptr + sizeof(value));
 #endif
 }
@@ -40,7 +40,7 @@ typename std::decay<T>::type read(not_null<const void*> memory)
 
 	std::memcpy(&val, ptr, sizeof(val));
 
-#if BIA_ENDIAN == BIA_BIG_ENDIAN
+#if BIA_BIG_ENDIAN
 	std::reverse(reinterpret_cast<byte*>(&val), reinterpret_cast<byte*>(&val) + sizeof(val));
 #endif
 

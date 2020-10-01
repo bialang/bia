@@ -3,7 +3,7 @@
 
 #include "config.hpp"
 
-#if defined(BIA_UTIL_CONTRACT_BEHAVIOR_THROW)
+#if BIA_UTIL_CONTRACT_BEHAVIOR_THROW
 #	include <bia/error/contract_violation.hpp>
 
 #	define BIA_EXPECTS(cond)                                                                                \
@@ -14,7 +14,7 @@
 		if (!(cond))                                                                                         \
 		throw bia::error::contract_violation("postcondition ( " #cond " ) was violated",                     \
 		                                     BIA_CURRENT_SOURCE_LOCATION)
-#elif defined(BIA_UTIL_CONTRACT_BEHAVIOR_ABORT)
+#elif BIA_UTIL_CONTRACT_BEHAVIOR_ABORT
 #	include <cstdlib>
 
 #	define BIA_EXPECTS(cond)                                                                                \
@@ -23,7 +23,7 @@
 #	define BIA_ENSURES(cond)                                                                                \
 		if (!(cond))                                                                                         \
 		std::abort()
-#elif defined(BIA_UTIL_CONTRACT_BEHAVIOR_NOTHING)
+#else
 #	define BIA_EXPECTS(cond) ((void) 0)
 #	define BIA_ENSURES(cond) ((void) 0)
 #endif

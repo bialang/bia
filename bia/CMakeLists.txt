@@ -1,17 +1,19 @@
 cmake_minimum_required(VERSION 3.1)
 
 project(bia
-	VERSION 0.1.0
+	VERSION 0.0.0
 	LANGUAGES CXX)
 
 option(BIA_LOG_ENABLE "Whether the Bia library should make internal logs to the default logger." OFF)
-set(BIA_UTIL_CONTRACT_BEHAVIOR "abort" CACHE STRING "How a contract violation should end (throw, abort, nothing).")
-set_property(CACHE BIA_UTIL_CONTRACT_BEHAVIOR PROPERTY STRINGS "throw" "abort" "nothing")
+set(BIA_UTIL_CONTRACT_BEHAVIOR "abort"
+	CACHE STRING "How a contract violation should end {throw, abort, none}.")
+set_property(CACHE BIA_UTIL_CONTRACT_BEHAVIOR
+	PROPERTY STRINGS "throw" "abort" "none")
 set(BIA_THREAD_BACKEND "std::thread"
-	CACHE STRING "The thread backend that should be used for creating threads in Bia and in its implementation.")
+	CACHE STRING "The thread backend that should be used for creating threads in Bia and in its implementation {std::thread, none}.")
 set_property(CACHE BIA_THREAD_BACKEND
 	PROPERTY STRINGS "std::thread" "none")
-set(BIA_RESOURCE_PAGE_SIZE 256 
+set(BIA_RESOURCE_PAGE_SIZE 256
 	CACHE STRING "The size of each page for the resource manager in bytes.")
 
 add_library(bia)
@@ -37,22 +39,14 @@ endif()
 include(TestBigEndian)
 test_big_endian(BIA_BIG_ENDIAN)
 
-if(BIA_BIG_ENDIAN)
-	set(BIA_ENDIAN "BIA_BIG_ENDIAN")
-else()
-	set(BIA_ENDIAN "BIA_LITTLE_ENDIAN")
-endif()
-
-if(${BIA_UTIL_CONTRACT_BEHAVIOR} STREQUAL "throw")
-	set(BIA_UTIL_CONTRACT_BEHAVIOR_THROW ON)
-elseif(${BIA_UTIL_CONTRACT_BEHAVIOR} STREQUAL "abort")
-	set(BIA_UTIL_CONTRACT_BEHAVIOR_ABORT ON)
-else()
-	set(BIA_UTIL_CONTRACT_BEHAVIOR_NOTHING ON)
+if("${BIA_UTIL_CONTRACT_BEHAVIOR}" STREQUAL "throw")
+	set(BIA_UTIL_CONTRACT_BEHAVIOR_THROW TRUE)
+elseif("${BIA_UTIL_CONTRACT_BEHAVIOR}" STREQUAL "abort")
+	set(BIA_UTIL_CONTRACT_BEHAVIOR_ABORT TRUE)
 endif()
 
 # thread
-if(${BIA_THREAD_BACKEND} STREQUAL "std::thread")
+if("${BIA_THREAD_BACKEND}" STREQUAL "std::thread")
 	find_package(Threads REQUIRED)
 	list(APPEND BIA_DEPENDENCIES Threads)
 	target_link_libraries(bia

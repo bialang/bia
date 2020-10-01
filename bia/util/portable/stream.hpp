@@ -18,7 +18,7 @@ template<typename T>
 inline void write(std::ostream& output, T value)
 {
 	// reverse bytes
-#if BIA_ENDIAN == BIA_BIG_ENDIAN
+#if BIA_BIG_ENDIAN
 	std::reverse(reinterpret_cast<char*>(&value), reinterpret_cast<char*>(&value) + sizeof(value));
 #endif
 
@@ -39,7 +39,7 @@ inline T read(std::istream& input)
 
 	input.read(reinterpret_cast<char*>(&value), sizeof(value));
 
-#if BIA_ENDIAN == BIA_BIG_ENDIAN
+#if BIA_BIG_ENDIAN
 	std::reverse(reinterpret_cast<char*>(&value), reinterpret_cast<char*>(&value) + sizeof(value));
 #endif
 
@@ -59,7 +59,7 @@ inline Type read(span<const byte*>& input)
 
 	input = input.subspan(sizeof(Type));
 
-#if BIA_ENDIAN == BIA_BIG_ENDIAN
+#if BIA_BIG_ENDIAN
 	std::reverse(reinterpret_cast<byte*>(&value), reinterpret_cast<byte*>(&value) + sizeof(Type));
 #endif
 

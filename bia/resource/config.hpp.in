@@ -1,6 +1,8 @@
 #ifndef BIA_RESOURCE_CONFIG_HPP_
 #define BIA_RESOURCE_CONFIG_HPP_
 
-#cmakedefine BIA_RESOURCE_PAGE_SIZE ${BIA_RESOURCE_PAGE_SIZE}
+// clang-format off
+#cmakedefine BIA_RESOURCE_PAGE_SIZE @BIA_RESOURCE_PAGE_SIZE@
+// clang-format on
 
 #endif

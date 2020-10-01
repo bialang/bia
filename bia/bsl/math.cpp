@@ -14,7 +14,6 @@ using namespace bia::bsl;
 inline bia::gc::gcable<bia::member::member> sum(bia::connector::parameters_type params)
 {
 	bia::gc::gcable<bia::member::member> s;
-
 	for (auto i : params.positionals()) {
 		if (!s.peek()) {
 			s = i;
@@ -22,40 +21,34 @@ inline bia::gc::gcable<bia::member::member> sum(bia::connector::parameters_type 
 			s = s.peek()->operation(*i, bia::member::infix_operator::addition);
 		}
 	}
-
 	return s;
 }
 
 inline bia::gc::gcable<bia::member::member> max(bia::connector::parameters_type params)
 {
 	bia::gc::gcable<bia::member::member> m;
-
 	for (auto i : params.positionals()) {
 		if (!m.peek() || (i && m.peek()->test(bia::member::test_operator::less, *i))) {
 			m = i;
 		}
 	}
-
 	return m;
 }
 
 inline bia::gc::gcable<bia::member::member> min(bia::connector::parameters_type params)
 {
 	bia::gc::gcable<bia::member::member> m;
-
 	for (auto i : params.positionals()) {
 		if (!m.peek() || (i && m.peek()->test(bia::member::test_operator::greater, *i))) {
 			m = i;
 		}
 	}
-
 	return m;
 }
 
 inline bia::gc::gcable<bia::member::member> average(bia::connector::parameters_type params)
 {
 	bia::gc::gcable<bia::member::member> s;
-
 	for (auto i : params.positionals()) {
 		if (!s.peek()) {
 			s = i;
@@ -67,7 +60,6 @@ inline bia::gc::gcable<bia::member::member> average(bia::connector::parameters_t
 	if (const auto ptr = s.peek()) {
 		const bia::member::native::integer count{ bia::util::narrow<bia::member::member::int_type>(
 			params.size()) };
-
 		return ptr->operation(count, bia::member::infix_operator::division);
 	}
 
@@ -81,7 +73,6 @@ inline bia::gc::gcable<bia::member::member> absolute(bia::connector::parameters_
 	}
 
 	const bia::member::native::integer zero{ 0 };
-
 	return params[0]->test(bia::member::test_operator::less, zero)
 	           ? params[0]->self_operation(bia::member::self_operator::unary_minus)
 	           : params[0];
@@ -108,7 +99,6 @@ void math::gc_mark_children(bool mark) const noexcept
 void math::register_gcables(gc::gc& gc) const noexcept
 {
 	gc.register_gcable(_symbols.get());
-
 	for (const auto& i : _symbols->map()) {
 		gc.register_gcable(i.first.get());
 		gc.register_gcable(i.second.get());
@@ -147,6 +137,8 @@ bia::member::native::dict* math::_init(gc::gc& gc)
 	put_function(gc, *dict, "hypot", static_cast<double (*)(double, double)>(&std::hypot));
 	put_gcable(gc, *dict, "pi",
 	           creator::create(gc, 3.141592653589793238462643383279502884197169399375105820974));
+	put_gcable(gc, *dict, "tau",
+	           creator::create(gc, 2 * 3.141592653589793238462643383279502884197169399375105820974));
 	put_gcable(gc, *dict, "e",
 	           creator::create(gc, 2.718281828459045235360287471352662497757247093699959574966));
 

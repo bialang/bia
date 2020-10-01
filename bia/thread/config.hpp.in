@@ -1,10 +1,12 @@
 #ifndef BIA_THREAD_CONFIG_HPP_
 #define BIA_THREAD_CONFIG_HPP_
 
+// clang-format off
 #cmakedefine01 BIA_THREAD_BACKEND_STD
 #cmakedefine01 BIA_THREAD_BACKEND_NONE
 #cmakedefine BIA_THREAD_SLEEP_FUNCTION(duration) @BIA_THREAD_SLEEP_FUNCTION@
 #cmakedefine BIA_THREAD_SLEEP_INCLUDE @BIA_THREAD_SLEEP_INCLUDE@
+// clang-format on
 
 #if defined(BIA_THREAD_BACKEND_NONE)
 #	define BIA_THREAD_SUPPORTED 0

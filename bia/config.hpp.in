@@ -1,10 +1,12 @@
 #ifndef BIA_CONFIG_HPP_
 #define BIA_CONFIG_HPP_
 
+// clang-format off
 #define BIA_VERSION "v@PROJECT_VERSION@"
 #define BIA_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
 #define BIA_VERSION_MINOR @PROJECT_VERSION_MINOR@
 #define BIA_VERSION_PATCH @PROJECT_VERSION_PATCH@
+// clang-format on
 
 #if __cplusplus > 201103L
 #	define BIA_ATTR_NO_RETURN [[noreturn]]

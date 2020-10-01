@@ -1,11 +1,10 @@
 #ifndef BIA_UTIL_CONFIG_HPP_
 #define BIA_UTIL_CONFIG_HPP_
 
-#define BIA_BIG_ENDIAN 1
-#define BIA_LITTLE_ENDIAN 2
-#cmakedefine BIA_ENDIAN @BIA_ENDIAN@
-#cmakedefine BIA_UTIL_CONTRACT_BEHAVIOR_THROW
-#cmakedefine BIA_UTIL_CONTRACT_BEHAVIOR_ABORT
-#cmakedefine BIA_UTIL_CONTRACT_BEHAVIOR_NOTHING
+// clang-format off
+#cmakedefine01 BIA_BIA_ENDIAN
+#cmakedefine01 BIA_UTIL_CONTRACT_BEHAVIOR_THROW
+#cmakedefine01 BIA_UTIL_CONTRACT_BEHAVIOR_ABORT
+// clang-format on
 
 #endif

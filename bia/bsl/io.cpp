@@ -15,13 +15,11 @@ inline void print(bia::connector::parameters_type params)
 
 	{
 		auto tmp = params["sep"];
-
 		if (tmp.second) {
 			sep = bia::member::cast::cast<const char*>(*tmp.first);
 		}
 
 		tmp = params["end"];
-
 		if (tmp.second) {
 			end = bia::member::cast::cast<const char*>(*tmp.first);
 		}
@@ -51,9 +49,7 @@ inline void print(bia::connector::parameters_type params)
 inline std::string read_input(bia::connector::parameters_type params)
 {
 	std::string input;
-
 	std::getline(std::cin, input);
-
 	return input;
 }
 

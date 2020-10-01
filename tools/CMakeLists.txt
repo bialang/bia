@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
 project(bia-tool
-	VERSION 0.0.1
+	VERSION 0.0.0
 	LANGUAGES CXX)
 
 file(GLOB_RECURSE SOURCE_FILES

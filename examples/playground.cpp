@@ -11,7 +11,6 @@
 int main(int argc, char** argv)
 try {
 	bia::engine engine;
-
 	engine.use_bsl({ argv, argv + argc });
 
 	std::atomic_bool b;
@@ -36,9 +35,10 @@ import sys
 
 fun a(x) {
 	io.print("ha", x)
+	return 61
 }
 
-a("hi")
+return a("hi")
 )";
 
 	try {
