@@ -4,10 +4,11 @@ project(bia-tool
 	VERSION 0.0.0
 	LANGUAGES CXX)
 
-file(GLOB_RECURSE SOURCE_FILES
-	"${CMAKE_CURRENT_SOURCE_DIR}/bia/*.cpp")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.hpp")
 
-add_executable(bia_tool "${SOURCE_FILES}" "${BACKWARD_ENABLE}")
+file(GLOB_RECURSE sources
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+add_executable(bia_tool "${sources}" "${BACKWARD_ENABLE}")
 target_link_libraries(bia_tool PRIVATE bia::bia)
 target_include_directories(bia_tool
 	PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/CLI11/include/")
