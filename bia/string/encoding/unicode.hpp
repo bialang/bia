@@ -46,19 +46,17 @@ category category_of(code_point_type value) noexcept;
 
 inline bool is_letter(code_point_type value) noexcept
 {
-	auto c = category_of(value);
-
+	const auto c = category_of(value);
 	return c >= category::Ll && c <= category::Lu;
 }
 
 inline bool is_number(code_point_type value) noexcept
 {
-	auto c = category_of(value);
-
+	const auto c = category_of(value);
 	return c >= category::Nd && c <= category::No;
 }
 
-inline bool is_valid_unicode(code_point_type value)
+inline bool is_valid_unicode(code_point_type value) noexcept
 {
 	return value <= 0x10ffff && (value < 0xd800 || value > 0xdfff) && (value < 0xfdd0 || value > 0xfdef) &&
 	       (value & 0xfffe) != 0xfffe && value != 0xfeff;

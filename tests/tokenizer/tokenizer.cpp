@@ -1,6 +1,5 @@
 #define CATCH_CONFIG_MAIN
 
-#include <bia/exception/syntax_error.hpp>
 #include <bia/gc/memory/simple_allocator.hpp>
 #include <bia/tokenizer/bia_lexer.hpp>
 #include <bia/util/finally.hpp>

@@ -6,16 +6,13 @@
 int main()
 {
 	bia::engine engine;
-
 	engine.function("foo", [](bia::connector::parameters_type params) {
 		std::cout << "positionals:";
-
 		for (auto i : params.positionals()) {
 			std::cout << " " << i;
 		}
 
 		std::cout << "\nkwargs:";
-
 		for (auto i : params.kwargs()) {
 			std::cout << " " << bia::member::cast::cast<const char*>(*i->key()) << "=" << i->value();
 		}
@@ -25,7 +22,6 @@ int main()
 	engine.module<bia::bsl::io>("io", engine.gc());
 
 	std::stringstream code;
-
 	code << u8R"(
 		import io
 
@@ -41,9 +37,8 @@ int main()
 		}
 
 		if /fly/ in "iliketofly" {
-			io.print("Oh really, me too")
+			io.print("Oh really? - Me too")
 		}
 	)";
-
 	engine.execute(code);
 }

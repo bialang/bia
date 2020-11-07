@@ -12,11 +12,11 @@ int main(int argc, char** argv)
 	std::stringstream code;
 	code << u8R"(
 
-// prints 'Hello, World' to the console
+// prints 'Hello, World! - Bia' to the console
 import io
 io.print("Hello, World! - Bia")
 
-// calls the C++ function and print 'Hello, World - C++' to the console
+// calls the C++ function and prints 'Hello, World - C++' to the console
 hello_world()
 
 	)";

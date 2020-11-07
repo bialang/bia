@@ -3,9 +3,9 @@
 
 #include "config.hpp"
 
-#if defined(BIA_THREAD_BACKEND_STD)
+#if BIA_THREAD_BACKEND_STD
 #	include <condition_variable>
-#elif defined(BIA_THREAD_BACKEND_NONE)
+#elif BIA_THREAD_BACKEND_NONE
 #	include <chrono>
 #	include <bia/exception/implementation_error.hpp>
 
@@ -17,10 +17,10 @@
 namespace bia {
 namespace thread {
 
-#if defined(BIA_THREAD_BACKEND_STD)
+#if BIA_THREAD_BACKEND_STD
 using condition_variable     = std::condition_variable;
 using condition_variable_any = std::condition_variable_any;
-#elif defined(BIA_THREAD_BACKEND_NONE)
+#elif BIA_THREAD_BACKEND_NONE
 class condition_variable
 {
 public:

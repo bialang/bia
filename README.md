@@ -27,7 +27,6 @@ engine.module<bia::bsl::io>("io", engine.gc());
 
 // bia script
 std::stringstream code;
-
 code << u8R"(
   // prints 'Hello, World' to the console
   import io
@@ -61,7 +60,7 @@ target_link_libraries(example PRIVATE bia::bia)
 
 Bia can be built without any third-party dependencies! However, some are recommended for performance gains and more features:
 
-- **Catch2** for testing *(if not provided, no tests will be build)*
+- **Catch2** for testing
 
 ### Compilation
 

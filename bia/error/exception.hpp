@@ -17,7 +17,7 @@ class exception : public std::runtime_error
 {
 public:
 	exception(std::error_code ec, class source_location source_location)
-	    : runtime_error(ec.message()), _ec(std::move(ec)), _source_location{ std::move(source_location) }
+	    : runtime_error{ ec.message() }, _ec{ std::move(ec) }, _source_location{ std::move(source_location) }
 	{}
 	const std::error_code& error() const noexcept
 	{

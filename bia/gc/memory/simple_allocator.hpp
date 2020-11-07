@@ -3,32 +3,32 @@
 
 #include "allocator.hpp"
 
-#include <cstdint>
+#include <cstdlib>
 #include <functional>
 
 namespace bia {
 namespace gc {
 namespace memory {
 
-/*
- A simple implememntation of the @ref allocator that uses the given allocator and free functions without any
- additional synchronozation/caching.
-*/
+/**
+ * A simple implememntation of the @ref allocator that uses the given allocator and free functions without any
+ * additional synchronozation/caching.
+ */
 class simple_allocator : public allocator
 {
 public:
 	typedef std::function<void*(std::size_t)> allocate_fun_type;
 	typedef std::function<void(void*)> free_fun_type;
 
-	simple_allocator(allocate_fun_type allocate_fun = std::malloc,
-	                 free_fun_type free_fun         = std::free) noexcept
-	    : _allocate_fun(std::move(allocate_fun)), _free_fun(std::move(free_fun))
+	simple_allocator(allocate_fun_type allocate_fun = &std::malloc,
+	                 free_fun_type free_fun         = &std::free) noexcept
+	    : _allocate_fun{ std::move(allocate_fun) }, _free_fun{ std::move(free_fun) }
 	{}
-	virtual void deallocate(void* ptr) override
+	void deallocate(void* ptr) override
 	{
 		_free_fun(ptr);
 	}
-	virtual void* allocate(std::size_t size) override
+	void* allocate(std::size_t size) override
 	{
 		return _allocate_fun(size);
 	}

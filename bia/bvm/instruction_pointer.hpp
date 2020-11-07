@@ -46,8 +46,6 @@ public:
 		return x;
 	}
 	/**
-	 * Reads the next opcode.
-	 *
 	 * @return the next opcode
 	 * @see read()
 	 */
@@ -58,26 +56,27 @@ public:
 	/**
 	 * Advances the instruction pointer.
 	 *
+	 * @exception error::exception
+	 * 	- error::code::out_of_bounds if the new cursor is out of bounds
 	 * @param offset the offset in bytes
 	 * @return `*this`
 	 */
 	instruction_pointer& operator+=(std::int32_t offset)
 	{
 		_cursor += offset;
-
 		if (_cursor < _instructions.begin() || _cursor > _instructions.end()) {
-			BIA_THROW(bia::error::code::out_of_bounds);
+			BIA_THROW(error::code::out_of_bounds);
 		}
-
 		return *this;
 	}
+	/**
+	 * @return the current cursor
+	*/
 	std::size_t cursor() const noexcept
 	{
 		return static_cast<std::size_t>(_cursor - _instructions.begin());
 	}
 	/**
-	 * Checks if this object is valid.
-	 *
 	 * @return `true` if this object is valid, otherwise `false`
 	 */
 	operator bool() const noexcept

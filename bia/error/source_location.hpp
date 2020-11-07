@@ -16,12 +16,8 @@ public:
 	source_location() = default;
 	source_location(std::uint_least32_t line, std::uint_least32_t column, const char* file_name,
 	                const char* function_name) noexcept
-	{
-		_line          = line;
-		_column        = column;
-		_file_name     = file_name;
-		_function_name = function_name;
-	}
+	    : _line{ line }, _column{ column }, _file_name{ file_name }, _function_name{ function_name }
+	{}
 	std::uint_least32_t line() const noexcept
 	{
 		return _line;
@@ -40,10 +36,10 @@ public:
 	}
 
 private:
-	std::uint_least32_t _line;
-	std::uint_least32_t _column;
-	const char* _file_name;
-	const char* _function_name;
+	const std::uint_least32_t _line   = 0;
+	const std::uint_least32_t _column = 0;
+	const char* const _file_name      = "<none>";
+	const char* const _function_name  = "<none>";
 };
 
 } // namespace error

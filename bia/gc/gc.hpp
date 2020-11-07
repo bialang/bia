@@ -45,7 +45,7 @@ public:
 	/**
 	 * Locks the garbage collector, ensuring that no other thread starts to garbage collect.
 	 *
-	 * @returns the lock guard
+	 * @return the lock guard
 	 */
 	thread::lock::guard<thread::lock::spin_mutex> lock();
 	void register_root(util::not_null<object::base*> base);

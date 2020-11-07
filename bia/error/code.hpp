@@ -121,7 +121,7 @@ inline const std::error_category& code_category() noexcept
 	return category;
 }
 
-inline std::error_code make_error_code(code c)
+inline std::error_code make_error_code(code c) noexcept
 {
 	return { static_cast<int>(c), code_category() };
 }

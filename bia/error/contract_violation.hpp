@@ -16,7 +16,7 @@ class contract_violation : public std::logic_error
 {
 public:
 	contract_violation(const char* msg, class source_location source_location)
-	    : logic_error(msg), _source_location{ std::move(source_location) }
+	    : logic_error{ msg }, _source_location{ std::move(source_location) }
 	{}
 	const class source_location& source_location() const noexcept
 	{
@@ -27,7 +27,7 @@ private:
 	class source_location _source_location;
 };
 
-} // namespace exception
+} // namespace error
 } // namespace bia
 
 #endif

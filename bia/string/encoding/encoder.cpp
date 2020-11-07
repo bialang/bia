@@ -8,14 +8,14 @@
 
 using namespace bia::string::encoding;
 
-#if defined(BIA_STRING_ENCODING_BACKEND_NONE)
+#if BIA_STRING_ENCODING_BACKEND_NONE
 static standard::ascii ascii_encoder;
 static standard::utf8 utf8_encoder;
 #endif
 
 encoder* bia::string::encoding::get_encoder(standard_encoding encoding)
 {
-#if defined(BIA_STRING_ENCODING_BACKEND_NONE)
+#if BIA_STRING_ENCODING_BACKEND_NONE
 	switch (encoding) {
 	case standard_encoding::ascii: return &ascii_encoder;
 	case standard_encoding::utf_8: return &utf8_encoder;
