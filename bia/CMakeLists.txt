@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(bia
-	VERSION 0.0.0
-	LANGUAGES CXX)
-
 option(BIA_LOG_ENABLE "Whether the Bia library should make internal logs to the default logger." OFF)
 set(BIA_UTIL_CONTRACT_BEHAVIOR "abort"
 	CACHE STRING "How a contract violation should end {throw, abort, none}.")
