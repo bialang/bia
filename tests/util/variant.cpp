@@ -43,8 +43,8 @@ TEST_CASE("variant setting", "[util]")
 
 		REQUIRE(v.get<0>().value == 5);
 		REQUIRE(v.get<tester<int>>().value == 5);
-		REQUIRE_THROWS_AS(v.get<1>(), bia::exception::bad_variant_access);
-		REQUIRE_THROWS_AS(v.get<tester<char>>(), bia::exception::bad_variant_access);
+		REQUIRE_THROWS_AS(v.get<1>(), bia::error::exception);
+		REQUIRE_THROWS_AS(v.get<tester<char>>(), bia::error::exception);
 
 		SECTION("overwrite")
 		{
@@ -55,8 +55,8 @@ TEST_CASE("variant setting", "[util]")
 
 			REQUIRE(v.get<1>().value == 'b');
 			REQUIRE(v.get<tester<char>>().value == 'b');
-			REQUIRE_THROWS_AS(v.get<0>(), bia::exception::bad_variant_access);
-			REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::exception::bad_variant_access);
+			REQUIRE_THROWS_AS(v.get<0>(), bia::error::exception);
+			REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::error::exception);
 		}
 
 		SECTION("destroy")
@@ -88,8 +88,8 @@ TEST_CASE("variant construction", "[util]")
 		REQUIRE(tester<char>::count == 1);
 		REQUIRE(v.get<1>().value == 'b');
 		REQUIRE(v.get<tester<char>>().value == 'b');
-		REQUIRE_THROWS_AS(v.get<0>(), bia::exception::bad_variant_access);
-		REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::exception::bad_variant_access);
+		REQUIRE_THROWS_AS(v.get<0>(), bia::error::exception);
+		REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::error::exception);
 
 		SECTION("copy")
 		{
@@ -99,13 +99,13 @@ TEST_CASE("variant construction", "[util]")
 			REQUIRE(tester<char>::count == 2);
 			REQUIRE(copy.get<1>().value == 'b');
 			REQUIRE(copy.get<tester<char>>().value == 'b');
-			REQUIRE_THROWS_AS(copy.get<0>(), bia::exception::bad_variant_access);
-			REQUIRE_THROWS_AS(copy.get<tester<int>>(), bia::exception::bad_variant_access);
+			REQUIRE_THROWS_AS(copy.get<0>(), bia::error::exception);
+			REQUIRE_THROWS_AS(copy.get<tester<int>>(), bia::error::exception);
 
 			REQUIRE(v.get<1>().value == 'b');
 			REQUIRE(v.get<tester<char>>().value == 'b');
-			REQUIRE_THROWS_AS(v.get<0>(), bia::exception::bad_variant_access);
-			REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::exception::bad_variant_access);
+			REQUIRE_THROWS_AS(v.get<0>(), bia::error::exception);
+			REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::error::exception);
 		}
 
 		SECTION("move")
@@ -116,13 +116,13 @@ TEST_CASE("variant construction", "[util]")
 			REQUIRE(tester<char>::count == 1);
 			REQUIRE(move.get<1>().value == 'b');
 			REQUIRE(move.get<tester<char>>().value == 'b');
-			REQUIRE_THROWS_AS(move.get<0>(), bia::exception::bad_variant_access);
-			REQUIRE_THROWS_AS(move.get<tester<int>>(), bia::exception::bad_variant_access);
+			REQUIRE_THROWS_AS(move.get<0>(), bia::error::exception);
+			REQUIRE_THROWS_AS(move.get<tester<int>>(), bia::error::exception);
 
-			REQUIRE_THROWS_AS(v.get<1>(), bia::exception::bad_variant_access);
-			REQUIRE_THROWS_AS(v.get<tester<char>>(), bia::exception::bad_variant_access);
-			REQUIRE_THROWS_AS(v.get<0>(), bia::exception::bad_variant_access);
-			REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::exception::bad_variant_access);
+			REQUIRE_THROWS_AS(v.get<1>(), bia::error::exception);
+			REQUIRE_THROWS_AS(v.get<tester<char>>(), bia::error::exception);
+			REQUIRE_THROWS_AS(v.get<0>(), bia::error::exception);
+			REQUIRE_THROWS_AS(v.get<tester<int>>(), bia::error::exception);
 		}
 	}
 
