@@ -5,7 +5,6 @@ project(bialang
 
 set(CMAKE_CXX_STANDARD 11)
 
-option(BIA_BUILD_BIA_TOOL "Builds the command line tool for Bia." ON)
 option(BUILD_SHARED_LIBS "Builds the Bia library as a shared library." ON)
 option(BIA_BUILD_TESTS "Builds the tests for the Bia library." ON)
 option(BIA_BUILD_EXAMPLES "Builds the example programs." ON)
@@ -26,10 +25,6 @@ endif()
 # language
 add_subdirectory("bia")
 
-# tool
-if(BIA_BUILD_BIA_TOOL)
-	add_subdirectory("tools")
-endif()
 
 # testing
 if(BIA_BUILD_TESTS)

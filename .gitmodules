@@ -1,7 +1,3 @@
 [submodule "dependencies/backward-cpp"]
 	path = dependencies/backward-cpp
 	url = https://github.com/bombela/backward-cpp.git
-[submodule "CLI11"]
-	path = dependencies/CLI11
-	url = https://github.com/CLIUtils/CLI11.git
-	shallow = true
