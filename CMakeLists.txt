@@ -11,6 +11,7 @@ option(BIA_BUILD_TESTS "Builds the tests for the Bia library." ON)
 option(BIA_BUILD_EXAMPLES "Builds the example programs." ON)
 option(BIA_ENABLE_DEV_BACKTRACING "Enables C++ backtracing. Intended for development." OFF)
 option(BIA_ENABLE_SANITIZER "Enables the use of sanitizers." OFF)
+option(BIA_DEVELOPER "Enables developer mode." OFF)
 
 if(BIA_ENABLE_SANITIZER)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address")
@@ -20,6 +21,10 @@ endif()
 # backtracing
 if(BIA_ENABLE_DEV_BACKTRACING)
 	add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/backward-cpp")
+endif()
+
+if(BIA_DEVELOPER)
+	option(BIA_DEVELOPER_DISASSEMBLY "Enables the disassembly output for the bytecode." ON)
 endif()
 
 

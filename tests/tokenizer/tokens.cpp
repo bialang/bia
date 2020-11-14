@@ -21,9 +21,7 @@ inline std::shared_ptr<token::parameter> create_parameter(T&&... values)
 	auto bndl  = std::make_shared<token::bundle>();
 	auto manager =
 	    std::make_shared<bia::resource::manager>(std::make_shared<bia::gc::memory::simple_allocator>());
-
 	int dummy[sizeof...(values)] = { (*input << values, 0)... };
-
 	return { new token::parameter{ *input, *manager, *enc, *bndl },
 		     [input, manager, enc, bndl](token::parameter* ptr) {
 		         delete ptr;
@@ -34,7 +32,6 @@ inline std::shared_ptr<token::parameter> create_parameter(T&&... values)
 TEST_CASE("any of", "[tokenizer]")
 {
 	auto pair = any_of(*create_parameter("false"), nullptr, "true", "false");
-
 	REQUIRE(!pair.second);
 	REQUIRE(pair.first == 1);
 }
@@ -43,12 +40,10 @@ TEST_CASE("number", "[tokenizer]")
 {
 	const auto parse = [](const char* value) {
 		const auto param = create_parameter(value);
-
 		REQUIRE(!number(*param));
 		REQUIRE(param->bundle.size() == 1);
 		REQUIRE(static_cast<token::token::type>(param->bundle.begin()->value.index()) ==
 		        token::token::type::constant_int);
-
 		return param->bundle.begin()->value.get<token::token::int_type>();
 	};
 
@@ -63,14 +58,12 @@ TEST_CASE("string", "[tokenizer]")
 {
 	const auto parse = [](const char* p, const char* str) {
 		const auto param = create_parameter(p);
-
 		REQUIRE(!string(*param));
 		REQUIRE(param->bundle.size() == 1);
 		REQUIRE(static_cast<token::token::type>(param->bundle.begin()->value.index()) ==
 		        token::token::type::constant_string);
 
 		const auto mem = param->bundle.begin()->value.get<token::token::string>().memory;
-
 		REQUIRE(mem.size == std::char_traits<char>::length(str) + 1);
 		REQUIRE(std::equal(mem.begin(), mem.end() - 1, str, [](bia::util::byte left, char right) {
 			return *reinterpret_cast<char*>(&left) == right;
@@ -86,9 +79,7 @@ TEST_CASE("whitespaces", "[tokenizer]")
 {
 	const auto consumed = [](const char* str, bool expect_error) -> std::streamoff {
 		const auto param = create_parameter(str);
-
-		REQUIRE(eat_whitespaces(*param).valid == expect_error);
-
+		REQUIRE(static_cast<bool>(eat_whitespaces(*param)) == expect_error);
 		return expect_error ? -1 : static_cast<std::streamoff>(param->input.tellg());
 	};
 

@@ -122,22 +122,17 @@ TEST_CASE("tokenization", "[tokenizer]")
 		REQUIRE(static_cast<type>(receiver.tokens[2].value.index()) == type::operator_);
 		REQUIRE(static_cast<type>(receiver.tokens[3].value.index()) == type::keyword);
 		REQUIRE(static_cast<type>(receiver.tokens[4].value.index()) == type::cmd_end);
-	} catch (const bia::exception::bia_error& e) {
-		std::cout << "exception (" << e.name() << "): " << e.what() << "\n";
-
-		if (dynamic_cast<const bia::exception::syntax_error*>(&e)) {
-			auto details = static_cast<const bia::exception::syntax_error&>(e).details();
-
-			std::cout << details.message << ":" << details.position.operator std::streamoff() << "\n\n";
-
-			std::cout << code.str() << "\n";
-
-			for (auto i = details.position.operator std::streamoff(); i--;) {
-				std::cout.put(' ');
-			}
-			std::cout << "\e[0;32m^\e[0;30m\n";
-		}
-
+	} catch (const bia::error::exception& e) {
+		std::cout << "exception (ec=" << e.code() << "): " << e.what() << "\n";
+		// if (dynamic_cast<const bia::exception::syntax_error*>(&e)) {
+		// 	auto details = static_cast<const bia::exception::syntax_error&>(e).details();
+		// 	std::cout << details.message << ":" << details.position.operator std::streamoff() << "\n\n";
+		// 	std::cout << code.str() << "\n";
+		// 	for (auto i = details.position.operator std::streamoff(); i--;) {
+		// 		std::cout.put(' ');
+		// 	}
+		// 	std::cout << "\e[0;32m^\e[0;30m\n";
+		// }
 		FAIL("invalid syntax");
 	}
 }

@@ -10,6 +10,7 @@
 #include <bia/bvm/context.hpp>
 #include <bia/bvm/module/module.hpp>
 #include <bia/compiler/compiler.hpp>
+#include <bia/config.hpp>
 #include <bia/connector/connector-inl.hpp>
 #include <bia/gc/gc.hpp>
 #include <bia/gc/memory/simple_allocator.hpp>
@@ -119,8 +120,11 @@ public:
 		const auto bytecode          = output.str();
 		const auto decoded_resources = resource::deserialize(resources, _gc);
 
+#if BIA_DEVELOPER_DISASSEMBLY
 		assembler::disassemble({ reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
 		                       *decoded_resources, std::cout);
+#endif
+
 		return bvm::bvm::execute(_context,
 		                         { reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
 		                         *decoded_resources);
