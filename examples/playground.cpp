@@ -30,15 +30,17 @@ try {
 
 	std::stringstream code;
 	code << u8R"(
-import io
-import sys
+	
+let x: int = 0
+// import io
+// import sys
 
-fun a(x) {
-	io.print("ha", x)
-	return 61
-}
+// fun a(x: any): int {
+// 	io.print("ha", x, asd or "hey")
+// 	return 61
+// }
 
-return a("hi")
+// return a("hi")
 )";
 
 	try {
@@ -47,7 +49,7 @@ return a("hi")
 			std::cout << "result: " << value << std::endl;
 		}
 	} catch (const bia::error::exception& e) {
-		std::cerr << "exception (" << e.error() << ") from " << e.source_location() << ": " << e.what()
+		std::cerr << "exception (" << e.code() << ") from " << e.source_location() << ": " << e.what()
 		          << '\n';
 		// std::cout << "exception (" << e.name() << "; " << e.filename() << ":" << e.line() << "): " <<
 		// e.what()

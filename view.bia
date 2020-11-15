@@ -1,0 +1,52 @@
+// variable declaration
+let x = 0							// x of type int
+let x = 0u						// x of type uint
+let x = 0i32					// of type int32
+let x = 0ui64					// of type uint64
+let x = 0.0						// of type float64
+let x = 0.3f					// of type float32
+let x									// compiler error: no value assigned
+let x: int = 0.0			// compiler error: impicit narrowing
+let x = int(0.0)			// of type int
+let x: int | null = 0	// of type int or null
+let y = x							// of type int or null
+let y: int = x				// of type int because, x is not null
+
+
+let mut i: int = 0
+
+i = 2
+
+// makes a mutable variable unmutable (cannot be conditional)
+seal i
+
+// compile error: unmutable
+i = 0
+// compile error: already declared
+int i = 0
+
+// removes a variable (cannot be conditional)
+drop i
+
+// scope: every variable declared inside will not be visible outside
+scoped {
+	int j = 0
+	io.print(j)
+}
+// compile error: unknown variable 'j'
+io.print(j)
+
+
+// functions
+fun square(int i): int {
+
+}
+
+// lambdas
+auto lambda = fun(int i): int {
+	return i**2
+}
+
+let lambda: fun(i: int): int = fun(i: int): int {
+	return i**2
+}

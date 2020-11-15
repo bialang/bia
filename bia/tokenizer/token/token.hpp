@@ -73,7 +73,8 @@ struct token
 		or_,
 		if_,
 		else_if,
-		else_
+		else_,
+		type_definition
 	};
 
 	enum class type

@@ -10,30 +10,29 @@ std::error_code bia::tokenizer::token::parse::decl_stmt(parameter& parameter)
 	if (!any_of(parameter, "let").second) {
 		return error::code::expected_declaration_statement;
 	}
-
 	parameter.bundle.add(token{ token::keyword::let });
-
 	BIA_LOG(TRACE, "matched 'let'");
 
 	// whitespaces are required
 	if (const auto err = eat_whitespaces(parameter)) {
 		return err;
 	}
-
 	BIA_LOG(TRACE, "matched whitespace");
 
 	if (const auto err = identifier(parameter)) {
 		return err;
 	}
-
 	BIA_LOG(TRACE, "matched identifier");
 
 	// optional whitespaces
 	eat_whitespaces(parameter);
+	if (const auto err = type_definition(parameter)) {
+		return err;
+	}
+	eat_whitespaces(parameter);
 
 	// compare '='
 	const auto pos = parameter.input.tellg();
-
 	if (parameter.encoder.read(parameter.input) != '=') {
 		return error::code::expected_declaration_statement;
 	}
