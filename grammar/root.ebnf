@@ -1,4 +1,21 @@
 root ::= single_stmt (";" single_stmt )* ";"? NEWLINE?
-single_stmt ::= (expression | decl_stmt)
+single_stmt ::= (drop_stmt | decl_stmt | assign_stmt | identifier (member_access* member_invocation)+ ) ";"?
 
-decl_stmt ::= "let" identifier "=" expression
+scope_stmt ::= "scoped" "{" root "}"
+
+decl_stmt ::= "let" "mut"? identifier type_definition? "=" expression
+assign_stmt ::= identifier (invocation* "?"? "." identifier)* assign_operator expression
+drop_stmt ::= "drop" identifier
+
+if_stmt ::= "if" expression "{" root "}" else_if_stmt* else_stmt
+else_if_stmt ::= "else" "if" expression "{" root "}"
+else_stmt ::= "else" "{" root* "}"
+
+expression ::= value (operator value)* | "(" expression ")"
+value ::= number | "false" | "true" | "null" | (string | identifier) member_invocation* (member_access member_invocation*)*
+
+member_access ::= "?"? "." identifier
+member_invocation ::= "?"? "(" (expression ("," expression)*)? ")"
+
+type_definition ::= ":" (native_type) ("|" native_type)*
+native_type ::= "int64" | "int32" | "int16" | "int8" | "int" | "uint64" | "uint32" | "uint16" | "uint8" | "uint" | "bool" | "byte" | "char" | "float64" | "float32" | "null"

@@ -35,12 +35,9 @@ TEST_CASE("variant setting", "[util]")
 
 	{
 		variant<tester<int>, tester<char>> v;
-
 		v.emplace<tester<int>>(5);
-
 		REQUIRE(tester<int>::count == 1);
 		REQUIRE(tester<char>::count == 0);
-
 		REQUIRE(v.get<0>().value == 5);
 		REQUIRE(v.get<tester<int>>().value == 5);
 		REQUIRE_THROWS_AS(v.get<1>(), bia::error::exception);
@@ -49,10 +46,8 @@ TEST_CASE("variant setting", "[util]")
 		SECTION("overwrite")
 		{
 			v.emplace<tester<char>>('b');
-
 			REQUIRE(tester<int>::count == 0);
 			REQUIRE(tester<char>::count == 1);
-
 			REQUIRE(v.get<1>().value == 'b');
 			REQUIRE(v.get<tester<char>>().value == 'b');
 			REQUIRE_THROWS_AS(v.get<0>(), bia::error::exception);
@@ -62,7 +57,6 @@ TEST_CASE("variant setting", "[util]")
 		SECTION("destroy")
 		{
 			v.destroy();
-
 			REQUIRE(tester<int>::count == 0);
 			REQUIRE(tester<char>::count == 0);
 		}
@@ -81,9 +75,7 @@ TEST_CASE("variant construction", "[util]")
 
 	{
 		v_type v;
-
 		v.emplace<tester<char>>('b');
-
 		REQUIRE(tester<int>::count == 0);
 		REQUIRE(tester<char>::count == 1);
 		REQUIRE(v.get<1>().value == 'b');
@@ -94,14 +86,16 @@ TEST_CASE("variant construction", "[util]")
 		SECTION("copy")
 		{
 			v_type copy{ v };
-
 			REQUIRE(tester<int>::count == 0);
 			REQUIRE(tester<char>::count == 2);
 			REQUIRE(copy.get<1>().value == 'b');
 			REQUIRE(copy.get<tester<char>>().value == 'b');
 			REQUIRE_THROWS_AS(copy.get<0>(), bia::error::exception);
 			REQUIRE_THROWS_AS(copy.get<tester<int>>(), bia::error::exception);
+<<<<<<< HEAD
 
+=======
+>>>>>>> bfa99be5c2526d95dcb8a05247fa94b0897e68df
 			REQUIRE(v.get<1>().value == 'b');
 			REQUIRE(v.get<tester<char>>().value == 'b');
 			REQUIRE_THROWS_AS(v.get<0>(), bia::error::exception);
@@ -111,14 +105,12 @@ TEST_CASE("variant construction", "[util]")
 		SECTION("move")
 		{
 			v_type move{ std::move(v) };
-
 			REQUIRE(tester<int>::count == 0);
 			REQUIRE(tester<char>::count == 1);
 			REQUIRE(move.get<1>().value == 'b');
 			REQUIRE(move.get<tester<char>>().value == 'b');
 			REQUIRE_THROWS_AS(move.get<0>(), bia::error::exception);
 			REQUIRE_THROWS_AS(move.get<tester<int>>(), bia::error::exception);
-
 			REQUIRE_THROWS_AS(v.get<1>(), bia::error::exception);
 			REQUIRE_THROWS_AS(v.get<tester<char>>(), bia::error::exception);
 			REQUIRE_THROWS_AS(v.get<0>(), bia::error::exception);

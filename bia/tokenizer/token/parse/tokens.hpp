@@ -36,6 +36,7 @@ std::error_code if_(parameter& parameter);
 std::error_code else_(parameter& parameter);
 std::error_code loop_flow_control(parameter& parameter);
 std::error_code function(parameter& parameter);
+std::error_code type_definition(parameter& parameter);
 
 } // namespace parse
 } // namespace token
