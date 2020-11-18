@@ -1,52 +1,93 @@
 // variable declaration
-let x = 0							// x of type int
-let x = 0u						// x of type uint
-let x = 0i32					// of type int32
-let x = 0ui64					// of type uint64
-let x = 0.0						// of type float64
-let x = 0.3f					// of type float32
-let x									// compiler error: no value assigned
-let x: int = 0.0			// compiler error: impicit narrowing
-let x = int(0.0)			// of type int
-let x: int | null = 0	// of type int or null
-let y = x							// of type int or null
-let y: int = x				// of type int because, x is not null
+let x = 0             // x of type int
+let x = 0u            // x of type uint
+let x = 0i32          // of type int32
+let x = 0ui64         // of type uint64
+let x = 0.0           // of type float64
+let x = 0.3f          // of type float32
+let x                 // compiler error: no value assigned
+let x: int = 0.0      // compiler error: impicit narrowing
+let x = int(0.0)      // of type int
+let x: int | null = 0 // of type int or null
+let y = x             // of type int or null
+let y: int = x        // of type int because, x is not null
 
 
-let mut i: int = 0
+let mut i = 0
+let j = 0
+i = 2                 // ok
+j = 2                 // compiler error: j cannot be mutated
 
-i = 2
 
-// makes a mutable variable unmutable (cannot be conditional)
-seal i
+let i = 0
+let i = 1             // compiler error: already declared
+drop i                // removes a variable (cannot be conditional)
+let i = 1             // ok
 
-// compile error: unmutable
-i = 0
-// compile error: already declared
-int i = 0
 
-// removes a variable (cannot be conditional)
-drop i
-
-// scope: every variable declared inside will not be visible outside
-scoped {
-	int j = 0
-	io.print(j)
+scope {              // variables declared inside are not available outside of it
+  let j = 0
+  io.print(j)
 }
-// compile error: unknown variable 'j'
-io.print(j)
+io.print(j)           // compile error: unknown variable
 
 
-// functions
-fun square(int i): int {
-
+fun square(x: int) {    // return type is deduced automatically
+  return x**2
+}
+fun fake_square(x: int, fake: int = 2): int { // default arguments always come last
+  return x**fake
+}
+fun foo(x: string | null = null) {
+  if string != null {
+    io.print(string)
+  }
+}
+let lambda = fun(x: int) {  // same as 'square' function
+  return x**2
 }
 
-// lambdas
-auto lambda = fun(int i): int {
-	return i**2
+
+type pair = {
+  ...Something,
+  first: string,
+  second: string,
+  optional: int
+}
+let defaults = {
+  optional = 0
+}
+fun foo(bar: pair from defaults): int {
+  // ...
 }
 
-let lambda: fun(i: int): int = fun(i: int): int {
-	return i**2
+
+defer (fun() => io.print("hi"))() // called when the global scope exits
+scope {
+  defer (fun() => io.print("hi"))() // called when the scope exits
 }
+fun foo() {
+  defer io.print("hi")  // called when the function exits
+  if true {
+    defer {             // called when the function exits
+      io.print("hi")
+    }
+  }
+}
+
+
+error my_error { // allowed types for the fields are 'string' or 'fun(...): string'
+  success {
+    ok = "success",
+    created,  // default value is name of field
+    no_content
+  },
+  client_error {
+    bad_request,
+    unauthorized,
+    forbidden,
+    not_found = (fun(url: string) => f"url '{url}' not found")
+  }
+}
+raise my_error.success.ok
+raise my_error.success.not_found(url)

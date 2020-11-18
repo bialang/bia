@@ -1,21 +1,56 @@
-root ::= single_stmt (";" single_stmt )* ";"? NEWLINE?
-single_stmt ::= (drop_stmt | decl_stmt | assign_stmt | identifier (member_access* member_invocation)+ ) ";"?
+root ::= (simple_stmt | compound_stmt)*
+small_stmt ::= (drop_stmt | decl_stmt | assign_stmt | return_stmt | yield_stmt | flow_ctrl_stmt | import_stmt | type_stmt | fun_call_stmt) ";"?
+compound_stmt ::= if_stmt | scope_stmt | fun_stmt
 
-scope_stmt ::= "scoped" "{" root "}"
+scope_stmt ::= "scope" "{" root "}"
 
-decl_stmt ::= "let" "mut"? identifier type_definition? "=" expression
-assign_stmt ::= identifier (invocation* "?"? "." identifier)* assign_operator expression
+return_stmt ::= "return" multi_expression?
+yield_stmt ::= "yield" multi_expression?
+import_stmt ::= "import" string ("as" identifier)?
+flow_ctrl_stmt ::= ("break" | "continue") identifier?
+defer_stmt ::= "defer" (member_value | "{" root "}")
+
+decl_stmt ::= "let" decl_stmt_signature ("," decl_stmt_signature)* "=" multi_expression
+decl_stmt_signature ::= "mut"? identifier type_definition?
+assign_stmt ::= member_value assign_operator single_expression
 drop_stmt ::= "drop" identifier
 
-if_stmt ::= "if" expression "{" root "}" else_if_stmt* else_stmt
-else_if_stmt ::= "else" "if" expression "{" root "}"
-else_stmt ::= "else" "{" root* "}"
+if_stmt ::= "if" single_expression "{" root* "}" else_if_stmt* else_stmt
+else_if_stmt ::= "else" "if" single_expression "{" root "}"
+else_stmt ::= "else" "{" root "}"
 
-expression ::= value (operator value)* | "(" expression ")"
-value ::= number | "false" | "true" | "null" | (string | identifier) member_invocation* (member_access member_invocation*)*
+multi_expression ::= single_expression ("," single_expression)*
+raw_expression ::= expression_value (operator expression_value)* | "(" single_expression ")"
+expression_value ::= value | "(" "use" value ")"
+value ::= number | "false" | "true" | "null" | member_value
+fun_value ::= "fun" parameter_decl type_definition? "{" root "}" | "(" "fun" parameter_decl type_definition? "=>" multi_expression ")"
+object_value ::= "{" (object_value_field ("," object_value_field)* ","?)? "}"
+object_value_field ::= (string | identifier) "=" single_expression | "..." identifier
+array_value ::= "[" number? "]" type "{" (single_expression ("," single_expression)*)? "}"
+tuple_value ::= "(" single_expression ("," single_expression)+ ")"
+member_value ::= (string | regex | fun_value | object_value | array_value | tuple_value | identifier) (member_access | member_invocation | member_subscript)*
 
 member_access ::= "?"? "." identifier
-member_invocation ::= "?"? "(" (expression ("," expression)*)? ")"
+member_invocation ::= "?"? "(" ((identifier "=" exression | single_expression ("," single_expression)*) ("," identifier "=" single_expression)*)? ")"
+member_subscript ::= "?"? "[" (subscript_slice | single_expression) "]"
+subscript_slice ::= single_expression? ":" single_expression? (":" single_expression?)?
 
-type_definition ::= ":" (native_type) ("|" native_type)*
-native_type ::= "int64" | "int32" | "int16" | "int8" | "int" | "uint64" | "uint32" | "uint16" | "uint8" | "uint" | "bool" | "byte" | "char" | "float64" | "float32" | "null"
+fun_stmt ::= "fun" identifier parameter_decl type_definition? "{" root "}"
+parameter_decl ::= "(" (identifier type_definition ("," identifier type_definition)* parameter_decl_default? ("," identifier type_definition parameter_decl_default)*)? ")"
+parameter_decl_default ::= ("from" (identifier | object_value))? "=" single_expression
+
+type_stmt ::= "type" identifier "=" chained_typed
+type_definition ::= ":" chained_typed
+type ::= tuple_type | single_type
+chained_typed ::= type ("|" type)*
+tuple_type ::= "(" chained_typed ("," chained_typed)* ")"
+single_type ::= "[]"* (fun_type | object_type | identifier | tuple_type)
+fun_type ::= "fun" parameter_decl type_definition
+object_type ::= "{" (object_type_field ("," object_type_field)* ","?)? "}"
+object_type_field ::= identifier type_definition | "..." identifier
+
+error_stmt ::= "error" identifier "{" 
+error_field ::= identifier parameter_decl? ("=" single_expression)?
+
+min < use x < max
+min < (use x) < max
