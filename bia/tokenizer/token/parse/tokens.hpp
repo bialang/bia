@@ -1,6 +1,7 @@
 #ifndef BIA_TOKENIZER_TOKEN_PARSE_TOKENS_HPP_
 #define BIA_TOKENIZER_TOKEN_PARSE_TOKENS_HPP_
 
+#include "../error_info.hpp"
 #include "../parameter.hpp"
 
 #include <bia/error/exception.hpp>
@@ -10,33 +11,22 @@ namespace tokenizer {
 namespace token {
 namespace parse {
 
-std::error_code value(parameter& parameter);
-std::error_code term(parameter& parameter);
-std::error_code expression(parameter& parameter);
-std::error_code identifier(parameter& parameter);
-std::error_code string(parameter& parameter);
-std::error_code decl_stmt(parameter& parameter);
-std::error_code import_stmt(parameter& parameter);
-std::error_code single_stmt(parameter& parameter);
-/**
- * Parses for a cmd end token.
- *
- * @param[in,out] parameter the required parameters
- * @returns an error if no cmd end is found
- */
-std::error_code cmd_end(parameter& parameter);
-std::error_code while_(parameter& parameter);
-std::error_code for_each(parameter& parameter);
-std::error_code member(parameter& parameter);
-std::error_code operators(parameter& parameter);
-std::error_code regex(parameter& parameter);
-std::error_code parameter_list(parameter& parameter);
-std::error_code number(parameter& parameter);
-std::error_code if_(parameter& parameter);
-std::error_code else_(parameter& parameter);
-std::error_code loop_flow_control(parameter& parameter);
-std::error_code function(parameter& parameter);
-std::error_code type_definition(parameter& parameter);
+typedef error_info(*token_type)(parameter&);
+
+error_info identifier(parameter& param);
+error_info string(parameter& param);
+error_info regex(parameter& param);
+error_info number(parameter& param);
+
+error_info decl_stmt(parameter& param);
+
+error_info multi_expression(parameter& param);
+error_info single_expression(parameter& param);
+error_info value(parameter& param);
+error_info member(parameter& param);
+
+error_info type_stmt(parameter& param);
+error_info type_definition(parameter& param);
 
 } // namespace parse
 } // namespace token

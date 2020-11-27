@@ -2,116 +2,56 @@
 #include "tokens.hpp"
 #include "whitespace_eater.hpp"
 
-std::error_code bia::tokenizer::token::parse::value(parameter& parameter)
+using namespace bia::tokenizer::token;
+
+error_info parse::value(parameter& param)
 {
-	// constant
-	const auto old = parameter.backup();
-	const auto t   = any_of(parameter, "true", "false", "null");
-
-	if (t.second) {
-		switch (t.first) {
-		case 0: parameter.bundle.add(token{ token::keyword::true_ }); break;
-		case 1: parameter.bundle.add(token{ token::keyword::false_ }); break;
-		case 2: parameter.bundle.add(token{ token::keyword::null }); break;
-		default: BIA_THROW(error::code::bad_switch_value);
+	const auto constant_keyword = static_cast<error_info (*)(parameter&)>([](parameter& param) -> error_info {
+		const auto tmp = any_of(param, "true", "false", "null");
+		if (tmp.second) {
+			switch (tmp.first) {
+			case 0: param.bundle.add(token{ token::keyword::true_ }); break;
+			case 1: param.bundle.add(token{ token::keyword::false_ }); break;
+			case 2: param.bundle.add(token{ token::keyword::null }); break;
+			default: BIA_THROW(error::code::bad_switch_value);
+			}
+			return {};
 		}
-
-		return {};
-	}
-
-	parameter.restore(old);
-
-	// number
-	auto err = number(parameter);
-
-	if (!err) {
-		return {};
-	}
-
-	parameter.restore(old);
-
-	// string
-	if (!string(parameter)) {
-		return {};
-	}
-
-	parameter.restore(old);
-
-	// regex
-	if (!regex(parameter)) {
-		return {};
-	}
-
-	parameter.restore(old);
-
-	// member
-	if ((err = member(parameter))) {
-		return err;
-	}
-
-	return {};
+		return param.make_error(error::code::bad_constant_keyword);
+	});
+	return any_of(param, number, constant_keyword, member);
 }
 
-std::error_code bia::tokenizer::token::parse::term(parameter& parameter)
+inline error_info expression_value(parameter& param)
 {
-	// match optional self operator
-	const auto old = parameter.backup();
-	const auto t   = any_of(parameter, "not", "~", "-");
-
-	// match self operator, but whitespace required if operator is 'not'
-	if (t.second && !(eat_whitespaces(parameter) && t.first == 0)) {
-		switch (t.first) {
-		case 0: parameter.bundle.add({ operator_::logical_not }); break;
-		case 1: parameter.bundle.add({ operator_::bitwise_not }); break;
-		case 2: parameter.bundle.add({ operator_::unary_minus }); break;
-		default: BIA_THROW(error::code::bad_switch_value);
+	const auto use = static_cast<parse::token_type>([](parameter& param) -> error_info {
+		if (param.encoder.read(param.input) != '(') {
 		}
-	} else {
-		parameter.restore(old);
-	}
-
-	// match value
-	return value(parameter);
+		parse::eat_whitespaces(param);
+		if (!parse::any_of(param, "use").second) {
+			return param.make_error(bia::error::code::expected_use, -1);
+		}
+		param.bundle.add({ token::keyword::use });
+		if (const auto err = parse::eat_whitespaces(param)) {
+			return err;
+		}
+		if (const auto err = parse::value(param)) {
+			return err;
+		}
+		parse::eat_whitespaces(param);
+		if (param.encoder.read(param.input) != ')') {
+		}
+		return {};
+	});
+	return parse::any_of(param, parse::value, use);
 }
 
-std::error_code bia::tokenizer::token::parse::expression(parameter& parameter)
+error_info parse::multi_expression(parameter& param)
 {
-	if (const auto err = term(parameter)) {
-		return err;
-	}
+	return single_expression(param);
+}
 
-	// more
-	while (true) {
-		const auto old = parameter.backup();
-
-		eat_whitespaces(parameter);
-
-		if (const auto err = operators(parameter)) {
-			parameter.restore(old);
-
-			break;
-		}
-
-		// only if operator is infix
-		const auto op = parameter.bundle.last().value.get<operator_>();
-
-		if (type_of(op) == operator_type::infix) {
-			if (const auto err = eat_whitespaces(parameter)) {
-				// whitespaces are required
-				if (op == operator_::in || op == operator_::logical_and || op == operator_::logical_or) {
-					return err;
-				}
-			}
-
-			if (op == operator_::member_access) {
-				if (const auto err = member(parameter)) {
-					return err;
-				}
-			} else if (const auto err = term(parameter)) {
-				return err;
-			}
-		}
-	}
-
-	return {};
+error_info parse::single_expression(parameter& param)
+{
+	return expression_value(param);
 }

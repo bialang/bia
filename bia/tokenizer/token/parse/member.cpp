@@ -1,24 +1,32 @@
+#include "any_of.hpp"
 #include "tokens.hpp"
 
-std::error_code bia::tokenizer::token::parse::member(parameter& parameter)
+using namespace bia::tokenizer::token;
+
+inline error_info member_access(parameter& param)
 {
-	auto once = false;
+	auto c        = param.encoder.read(param.input);
+	auto nullable = false;
+	if (c == '?') {
+		nullable = true;
+		c        = param.encoder.read(param.input);
+	}
+	if (c != '.') {
+		return param.make_error(bia::error::code::, -1);
+	}
+	param.bundle.add({ nullable ? operator_::nullable_member_access : operator_::member_access });
+	return parse::identifier(param);
+}
 
+error_info parse::member(parameter& param)
+{
+	if (const auto err = any_of(param, string, regex, identifier)) {
+		return err;
+	}
 	while (true) {
-		if (const auto err = identifier(parameter)) {
-			return once ? std::error_code{} : err;
-		}
-
-		once = true;
-
-		while (true) {
-			const auto old = parameter.backup();
-
-			if (parameter_list(parameter)) {
-				parameter.restore(old);
-
-				break;
-			}
+		if (any_of(param, member_access)) {
+			break;
 		}
 	}
+	return {};
 }

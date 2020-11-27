@@ -15,15 +15,22 @@ namespace token {
 struct token
 {
 	typedef std::int64_t int_type;
+	typedef double float64_type;
 
 	struct cmd_end
 	{};
 
+	struct number
+	{};
+
+	struct array_dimension
+	{
+		std::uint32_t dimension;
+	};
+
 	struct identifier
 	{
 		resource::view memory;
-		bool is_builtin;
-		bytecode::member::builtin builtin;
 	};
 
 	struct string
@@ -36,63 +43,26 @@ struct token
 		resource::view memory;
 	};
 
-	struct batch
+	enum class control
 	{
-		std::size_t count;
-	};
-
-	struct control
-	{
-		enum class type
-		{
-			bracket_open,
-			bracket_close,
-			comma,
-			key
-		};
-
-		type type;
-		std::size_t value;
+		type_definition,
+		type_chain,
+		bracket_open,
+		bracket_close,
+		comma,
 	};
 
 	enum class keyword
 	{
-		let,
-		import,
-		while_,
-		for_,
-		fun,
-		return_,
-		break_,
-		continue_,
-		null,
-		true_,
 		false_,
-		not_,
-		and_,
-		or_,
-		if_,
-		else_if,
-		else_,
-		type_definition
+		true_,
+		null,
+		use,
+		mut,
+		type
 	};
 
-	enum class type
-	{
-		cmd_end,
-		identifier,
-		batch,
-		control,
-		keyword,
-		operator_,
-		constant_string,
-		constant_regex,
-		constant_int,
-		constant_float,
-	};
-
-	util::variant<cmd_end, identifier, batch, control, keyword, operator_, string, regex, int_type, double>
-	    value;
+	util::variant<number, control, keyword, string, regex, identifier, operator_, array_dimension> value;
 };
 
 } // namespace token

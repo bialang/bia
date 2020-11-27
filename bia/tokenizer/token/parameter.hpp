@@ -2,6 +2,7 @@
 #define BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
 
 #include "bundle.hpp"
+#include "error_info.hpp"
 
 #include <bia/resource/manager.hpp>
 #include <bia/string/encoding/encoder.hpp>
@@ -39,6 +40,10 @@ struct parameter
 		input.seekg(old.input_pos);
 		manager.restore_state(old.rm_state);
 		bundle.restore(old.bundle_state);
+	}
+	error_info make_error(error::code code, int offset = 0)
+	{
+		return {};
 	}
 };
 

@@ -16,16 +16,14 @@ struct comparator
 	void next(bia::string::encoding::code_point_type cp) noexcept
 	{
 		if (first == last || cp < 'a' || cp > 'z') {
-			first = last = nullptr;
-
+			first = nullptr;
+			last  = nullptr;
 			return;
 		}
 
 		const auto c = static_cast<char>(cp);
-
 		for (auto i = first; i != last; ++i) {
 			first = i;
-
 			if (**i && **i == c) {
 				break;
 			}
@@ -35,10 +33,8 @@ struct comparator
 			if (**i) {
 				if (**i != c) {
 					last = i;
-
 					break;
 				}
-
 				++*i;
 			}
 		}
@@ -48,15 +44,13 @@ struct comparator
 		if (first != last && !**first) {
 			return first;
 		}
-
 		return nullptr;
 	}
 };
 
-std::error_code bia::tokenizer::token::parse::identifier(parameter& parameter)
+bia::tokenizer::token::error_info bia::tokenizer::token::parse::identifier(parameter& parameter)
 {
 	using namespace string::encoding;
-
 	const char* builtins[] = { "list", "range" };
 	auto first             = true;
 	auto streambuf         = parameter.manager.start_memory(true);
@@ -68,7 +62,6 @@ std::error_code bia::tokenizer::token::parse::identifier(parameter& parameter)
 	while (true) {
 		const auto pos = parameter.input.tellg();
 		const auto cp  = parameter.encoder.read(parameter.input);
-
 		switch (category_of(cp)) {
 		case category::Ll:
 		case category::Lu:
@@ -82,32 +75,25 @@ std::error_code bia::tokenizer::token::parse::identifier(parameter& parameter)
 			if (!first) {
 				outenc->put(output, cp);
 				builtin_comparator.next(cp);
-
 				break;
 			}
 		}
 		default: {
-			// invalid char -> reset
-			parameter.input.seekg(pos);
-
 			// valid identifier
 			if (!first) {
+				parameter.input.seekg(pos);
 				// zero terminate
 				outenc->put(output, 0);
-
 				auto memory        = streambuf.finish(resource::type::string);
 				const auto builtin = builtin_comparator.result();
-
 				parameter.bundle.add(token{
 				    token::identifier{ memory, builtin,
 				                       builtin ? static_cast<bytecode::member::builtin>(builtin - builtins)
 				                               : bytecode::member::builtin{} } });
-
 				return {};
 			}
-
 			// not an identifier
-			return error::code::bad_identifier;
+			return parameter.make_error(error::code::bad_identifier, -1);
 		}
 		}
 	}

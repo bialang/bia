@@ -9,7 +9,9 @@ namespace error {
 
 enum class code
 {
-	bad_ascii = 1,
+	success,
+
+	bad_ascii,
 	unfinished_utf_sequence,
 	bad_utf_sequence,
 	bad_unicode,
@@ -37,6 +39,10 @@ enum class code
 	expected_string,
 	expected_while_statement,
 	expected_whitespace,
+	expected_use,
+	expected_assignment,
+	bad_tuple,
+	bad_constant_keyword,
 	bad_for_statement,
 	bad_function_statement,
 	bad_identifier,

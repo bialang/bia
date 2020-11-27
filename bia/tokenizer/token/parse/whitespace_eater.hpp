@@ -1,6 +1,7 @@
 #ifndef BIA_TOKENIZER_TOKEN_PARSE_WHITESPACE_EATER_HPP_
 #define BIA_TOKENIZER_TOKEN_PARSE_WHITESPACE_EATER_HPP_
 
+#include "../error_info.hpp"
 #include "../parameter.hpp"
 
 #include <bia/error/exception.hpp>
@@ -15,12 +16,12 @@ namespace parse {
  *
  * @note this function always consumes all whitespaces, even if an error is returned
  *
- * @param[in,out] parameter the required parameters
+ * @param[in,out] param the required parameters
  * @returns an error if no whitespaces are found
  * @tparam RequireCmd if `true`, this function fails if no whitespace cmd_end character is found
  */
 template<bool RequireCmd = false>
-inline std::error_code eat_whitespaces(parameter& parameter)
+inline error_info eat_whitespaces(parameter& param)
 {
 	enum class s
 	{
@@ -35,16 +36,14 @@ inline std::error_code eat_whitespaces(parameter& parameter)
 	auto state    = s::whitespace;
 	auto eaten    = false;
 	auto cmd      = false;
-	auto last_pos = parameter.input.tellg();
+	auto last_pos = param.input.tellg();
 
 	while (true) {
-		auto pos      = parameter.input.tellg();
-		const auto cp = parameter.encoder.read(parameter.input);
-
+		auto pos      = param.input.tellg();
+		const auto cp = param.encoder.read(param.input);
 		if (cp == string::encoding::encoder::eof) {
 			eaten = true;
 			cmd   = true;
-
 			goto gt_return;
 		}
 
@@ -60,7 +59,6 @@ inline std::error_code eat_whitespaces(parameter& parameter)
 			case '\f': eaten = true; break;
 			default: goto gt_return;
 			}
-
 			break;
 		}
 		case s::comment_start: {
@@ -69,7 +67,6 @@ inline std::error_code eat_whitespaces(parameter& parameter)
 			case '*': state = s::comment_multi; break;
 			default: pos = last_pos; goto gt_return; // rollback one character more
 			}
-
 			break;
 		}
 		case s::comment_single: {
@@ -77,7 +74,6 @@ inline std::error_code eat_whitespaces(parameter& parameter)
 				cmd   = true;
 				state = s::comment_single_ending;
 			}
-
 			break;
 		}
 		case s::comment_single_ending: {
@@ -85,21 +81,17 @@ inline std::error_code eat_whitespaces(parameter& parameter)
 			case '\r':
 			case '\n': break;
 			default: {
-				parameter.input.seekg(pos);
-
+				param.input.seekg(pos);
 				state = s::whitespace;
-
 				break;
 			}
 			}
-
 			break;
 		}
 		case s::comment_multi: {
 			if (cp == '*') {
 				state = s::comment_multi_ending;
 			}
-
 			break;
 		}
 		case s::comment_multi_ending: {
@@ -108,23 +100,19 @@ inline std::error_code eat_whitespaces(parameter& parameter)
 			} else if (cp != '*') {
 				state = s::comment_multi;
 			}
-
 			break;
 		}
 		}
 
 		// consume
 		last_pos = pos;
-
 		continue;
 
 	gt_return:;
-		parameter.input.seekg(pos);
-
+		param.input.seekg(pos);
 		if (!eaten || (RequireCmd && !cmd)) {
-			return error::code::expected_whitespace;
+			return param.make_error(error::code::expected_whitespace, -1);
 		}
-
 		return {};
 	}
 }

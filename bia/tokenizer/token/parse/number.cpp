@@ -3,11 +3,10 @@
 #include <limits>
 #include <string>
 
-inline bool integer_add(bia::tokenizer::token::token::int_type& value,
-                        bia::string::encoding::code_point_type cp, int base)
-{
-	using bia::tokenizer::token::token;
+using namespace bia::tokenizer::token;
 
+inline bool integer_add(token::int_type& value, bia::string::encoding::code_point_type cp, int base)
+{
 	BIA_EXPECTS(cp >= '0' && cp <= '9');
 
 	const auto val = cp - '0';
@@ -30,7 +29,7 @@ inline bool floating_point_add(double& value, bia::string::encoding::code_point_
 	return true;
 }
 
-std::error_code bia::tokenizer::token::parse::number(parameter& parameter)
+error_info parse::number(parameter& param)
 {
 	enum class state
 	{
@@ -47,8 +46,8 @@ std::error_code bia::tokenizer::token::parse::number(parameter& parameter)
 	std::string number;
 
 	while (true) {
-		const auto pos = parameter.input.tellg();
-		const auto cp  = parameter.encoder.read(parameter.input);
+		const auto pos = param.input.tellg();
+		const auto cp  = param.encoder.read(param.input);
 
 		// consume ' as whitespace
 		if (s != state::start && cp == '\'') {

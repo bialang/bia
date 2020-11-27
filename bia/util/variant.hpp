@@ -15,24 +15,24 @@
 namespace bia {
 namespace util {
 
-template<typename... Ts>
+template<typename... Types>
 class variant
 {
 public:
 	constexpr static std::size_t npos       = type_traits::type_index<>::npos;
-	constexpr static std::size_t type_count = sizeof...(Ts);
+	constexpr static std::size_t type_count = sizeof...(Types);
 
-	template<typename T>
-	using index_of = type_traits::type_index<T, Ts...>;
+	template<typename Type>
+	using index_of = type_traits::type_index<Type, Types...>;
 
 	variant() = default;
 	template<
-	    typename T,
+	    typename Type,
 	    typename = typename std::enable_if<!std::is_same<
-	        typename std::remove_cv<typename std::remove_reference<T>::type>::type, variant>::value>::type>
-	variant(T&& value)
+	        typename std::remove_cv<typename std::remove_reference<Type>::type>::type, variant>::value>::type>
+	variant(Type&& value)
 	{
-		emplace<T>(std::forward<T>(value));
+		emplace<Type>(std::forward<Type>(value));
 	}
 	/**
 	 * Copy-Constructor. Only available if all variant types are copy constructible.
@@ -43,7 +43,7 @@ public:
 	variant(const variant& copy)
 	{
 		if (copy._index != npos) {
-			_copy<0, Ts...>(copy);
+			_copy<0, Types...>(copy);
 		}
 	}
 	/**
@@ -55,7 +55,7 @@ public:
 	variant(variant&& move)
 	{
 		if (move._index != npos) {
-			_move<0, Ts...>(std::move(move));
+			_move<0, Types...>(std::move(move));
 		}
 	}
 	~variant()
@@ -70,139 +70,103 @@ public:
 	void destroy() noexcept
 	{
 		if (_index != npos) {
-			_destroy<0, Ts...>();
+			_destroy<0, Types...>();
 		}
 	}
 	template<std::size_t Index>
-	typename type_traits::type_at<Index, Ts...>::type& get()
+	typename type_traits::type_at<Index, Types...>::type& get()
 	{
-		return const_cast<typename type_traits::type_at<Index, Ts...>::type&>(
+		return const_cast<typename type_traits::type_at<Index, Types...>::type&>(
 		    const_cast<const variant*>(this)->get<Index>());
 	}
 	template<std::size_t Index>
-	const typename type_traits::type_at<Index, Ts...>::type& get() const
+	const typename type_traits::type_at<Index, Types...>::type& get() const
 	{
 		if (_index == npos) {
 			BIA_THROW(error::code::empty_variant);
 		} else if (_index != Index) {
 			BIA_THROW(error::code::bad_variant_index);
 		}
-
-		return *reinterpret_cast<const typename type_traits::type_at<Index, Ts...>::type*>(&_data);
+		return *reinterpret_cast<const typename type_traits::type_at<Index, Types...>::type*>(&_data);
 	}
-	template<typename T>
-	typename std::enable_if<index_of<T>::value != npos, T&>::type get()
+	template<typename Type>
+	typename std::enable_if<index_of<Type>::value != npos, Type&>::type get()
 	{
-		return const_cast<T&>(const_cast<const variant*>(this)->get<T>());
+		return const_cast<Type&>(const_cast<const variant*>(this)->get<Type>());
 	}
-	template<typename T>
-	typename std::enable_if<index_of<T>::value != npos, const T&>::type get() const
+	template<typename Type>
+	typename std::enable_if<index_of<Type>::value != npos, const Type&>::type get() const
 	{
 		if (_index == npos) {
 			BIA_THROW(error::code::empty_variant);
-		} else if (_index != index_of<T>::value) {
+		} else if (_index != index_of<Type>::value) {
 			BIA_THROW(error::code::bad_variant_index);
 		}
-
-		return *reinterpret_cast<const T*>(&_data);
+		return *reinterpret_cast<const Type*>(&_data);
 	}
 	template<std::size_t Index, typename... Args>
-	typename type_traits::type_at<Index, Ts...>::type& emplace(Args&&... args)
+	typename type_traits::type_at<Index, Types...>::type& emplace(Args&&... args)
 	{
 		destroy();
-
-		// initialize
-		auto ptr =
-		    new (&_data) typename type_traits::type_at<Index, Ts...>::type(std::forward<Args>(args)...);
-
+		const auto ptr =
+		    new (&_data) typename type_traits::type_at<Index, Types...>::type{ std::forward<Args>(args)... };
 		_index = Index;
-
 		return *ptr;
 	}
-	template<typename T, typename... Args>
-	typename std::enable_if<index_of<T>::value != npos, T&>::type emplace(Args&&... args)
+	template<typename Type, typename... Args>
+	typename std::enable_if<index_of<Type>::value != npos, Type&>::type emplace(Args&&... args)
 	{
-		destroy();
-
-		// initialize
-		auto ptr = new (&_data) T(std::forward<Args>(args)...);
-
-		_index = index_of<T>::value;
-
-		return *ptr;
+		return emplace<index_of<Type>::value>(std::forward<Args>(args)...);
 	}
 	std::size_t index() const noexcept
 	{
 		return _index;
 	}
-	/*template<typename = typename std::enable_if<type_traits::are_all_copy_assignable<Ts...>::value>::type>
-	variant& operator=(const variant& copy)
-	{
-	    if (copy._index != npos) {
-	        _copy<0, Ts...>(copy);
-	    }
-
-	    return *this;
-	}
-	template<typename = typename std::enable_if<type_traits::are_all_move_constructible<Ts...>::value>::type>
-	variant& operator=(variant&& move)
-	{
-	    if (move._index != npos) {
-	        _move<0, Ts...>(std::move(move));
-	    }
-
-	    return *this;
-	}*/
 
 private:
-	/** the current value */
-	typename std::aligned_storage<max(sizeof(Ts)...), max(alignof(Ts)...)>::type _data;
-	/** type information about the current type or npos if no value is stored */
+	/// the current value
+	typename std::aligned_storage<max(sizeof(Types)...), max(alignof(Types)...)>::type _data;
+	/// type information about the current type or npos if no value is stored
 	std::size_t _index = npos;
 
-	template<std::size_t Index, typename T, typename... Vs>
+	template<std::size_t Index, typename Type, typename... Others>
 	void _destroy() noexcept
 	{
 		if (Index == _index) {
-			reinterpret_cast<T*>(&_data)->~T();
+			reinterpret_cast<Type*>(&_data)->~Type();
 
 			_index = npos;
 		} else {
-			_destroy<Index + 1, Vs...>();
+			_destroy<Index + 1, Others...>();
 		}
 	}
 	template<std::size_t Index>
 	void _destroy() noexcept
 	{}
-	template<std::size_t Index, typename T, typename... Vs>
+	template<std::size_t Index, typename Type, typename... Others>
 	void _copy(const variant& other)
 	{
 		if (other._index == Index) {
 			destroy();
-
-			new (&_data) T(*reinterpret_cast<const T*>(&other._data));
-
+			new (&_data) Type{ *reinterpret_cast<const Type*>(&other._data) };
 			_index = other._index;
 		} else {
-			_copy<Index + 1, Vs...>(other);
+			_copy<Index + 1, Others...>(other);
 		}
 	}
 	template<std::size_t Index>
 	void _copy(const variant& other)
 	{}
-	template<std::size_t Index, typename T, typename... Vs>
+	template<std::size_t Index, typename Type, typename... Others>
 	void _move(variant&& other)
 	{
 		if (other._index == Index) {
 			destroy();
-
-			new (&_data) T(std::move(*reinterpret_cast<T*>(&other._data)));
-
+			new (&_data) Type{ std::move(*reinterpret_cast<Type*>(&other._data)) };
 			_index = other._index;
-
 			other.destroy();
 		} else {
-			_move<Index + 1, Vs...>(std::move(other));
+			_move<Index + 1, Others...>(std::move(other));
 		}
 	}
 	template<std::size_t Index>
