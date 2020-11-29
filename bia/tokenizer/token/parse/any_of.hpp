@@ -13,11 +13,11 @@ namespace tokenizer {
 namespace token {
 namespace parse {
 
-inline std::pair<std::size_t, bool> any_of(parameter& tp, util::czstring token)
+inline std::pair<std::size_t, bool> any_of(parameter& param, util::czstring token)
 {
 	while (*token) {
-		const auto pos = tp.input.tellg();
-		if (tp.encoder.read(tp.input) != *token++) {
+		const auto pos = param.input.tellg();
+		if (param.encoder.read(param.input) != *token++) {
 			return { 0, false };
 		}
 	}
@@ -25,15 +25,15 @@ inline std::pair<std::size_t, bool> any_of(parameter& tp, util::czstring token)
 }
 
 template<typename... Types>
-inline std::pair<std::size_t, bool> any_of(parameter& tp, util::czstring token, Types&&... tokens)
+inline std::pair<std::size_t, bool> any_of(parameter& param, util::czstring token, Types&&... tokens)
 {
-	const auto old = tp.input.tellg();
-	const auto t   = any_of(tp, token);
+	const auto old = param.input.tellg();
+	const auto t   = any_of(param, token);
 	if (t.second) {
 		return t;
 	}
-	tp.input.seekg(old);
-	const auto o = any_of(tp, std::forward<Ts>(tokens)...);
+	param.input.seekg(old);
+	const auto o = any_of(param, std::forward<Types>(tokens)...);
 	return { o.first + 1, o.second };
 }
 
@@ -44,7 +44,7 @@ inline error_info any_of(parameter& param, Types&&... tokens)
 
 	const auto old = param.backup();
 	error_info error{};
-	for (auto token : std::initializer_list<error_info (*)(param&)>{ tokens... }) {
+	for (auto token : std::initializer_list<error_info (*)(parameter&)>{ tokens... }) {
 		const auto err = token(param);
 		if (!err) {
 			return {};

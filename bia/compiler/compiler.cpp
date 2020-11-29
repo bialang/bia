@@ -20,26 +20,4 @@ void compiler::finish()
 
 void compiler::receive(util::span<const token*> tokens, resource::manager& manager)
 {
-#if BIA_LOG_ENABLE
-	for (const auto& i : tokens) {
-		BIA_LOG(TRACE, "token {} is a {}", static_cast<const void*>(&i),
-		        std::initializer_list<const char*>{
-		            "cmd_end",
-		            "identifier",
-		            "batch",
-		            "control",
-		            "keyword",
-		            "operator_",
-		            "constant_string",
-		            "constant_regex",
-		            "constant_int",
-		            "constant_float",
-		        }
-		            .begin()[i.value.index()]);
-	}
-#endif
-
-	while (!tokens.empty()) {
-		tokens = elve::statement({ _variables, _writer, _resources, manager }, tokens);
-	}
 }

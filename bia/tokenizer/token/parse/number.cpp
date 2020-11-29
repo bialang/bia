@@ -1,162 +1,60 @@
 #include "tokens.hpp"
 
-#include <limits>
 #include <string>
+#include <tuple>
 
 using namespace bia::tokenizer::token;
 
-inline bool integer_add(token::int_type& value, bia::string::encoding::code_point_type cp, int base)
+inline std::tuple<std::string, enum token::number::type, error_info> extract_number(parameter& param)
 {
-	BIA_EXPECTS(cp >= '0' && cp <= '9');
-
-	const auto val = cp - '0';
-
-	// limit
-	if (std::numeric_limits<token::int_type>::max() / 10 < value ||
-	    std::numeric_limits<token::int_type>::max() - value * 10 < val) {
-		return false;
+	std::string str;
+	while (true) {
+		const auto pos = param.input.tellg();
+		const auto c   = param.encoder.read(param.input);
+		if (c < '0' || c > '9') {
+			param.input.seekg(pos);
+			break;
+		}
+		str.append(1, c);
 	}
-
-	value = value * 10 + val;
-
-	return true;
+	return { str, token::number::type::i, {} };
 }
 
-inline bool floating_point_add(double& value, bia::string::encoding::code_point_type cp, int base)
+inline std::pair<enum token::number::type, error_info> check_special(parameter& param,
+                                                                     enum token::number::type type)
 {
-	value += (cp - '0') / 10.0;
+	// TODO
+	return { type, {} };
+}
 
-	return true;
+inline error_info convert(const std::string& str, enum token::number::type type)
+{
+	using number = token::number;
+	// convert
+	std::size_t processed = 0;
+	number num{};
+	num.type = type;
+	try {
+		switch (num.type) {
+		case number::type::f32: num.value.f32 = std::stof(str, &processed); break;
+		case number::type::f64: num.value.f64 = std::stod(str, &processed); break;
+		}
+	} catch (const std::out_of_range& e) {
+	} catch (const std::invalid_argument& e) {
+	}
+
+	if (processed != str.length()) {
+	}
+	param.bundle.emplace_back(num);
+	return {};
 }
 
 error_info parse::number(parameter& param)
 {
-	enum class state
-	{
-		start,
-		decimal,
-		zero,
-		octal,
-		hex,
-		binary,
-		floating_point,
-	};
-
-	auto s = state::start;
-	std::string number;
-
-	while (true) {
-		const auto pos = param.input.tellg();
-		const auto cp  = param.encoder.read(param.input);
-
-		// consume ' as whitespace
-		if (s != state::start && cp == '\'') {
-			continue;
-		}
-
-		switch (s) {
-		case state::start: {
-			if (cp == '0') {
-				s = state::zero;
-			} else if (cp >= '1' && cp <= '9') {
-				s = state::decimal;
-			} else {
-				return error::code::bad_number;
-			}
-
-			number.push_back(static_cast<char>(cp));
-
-			break;
-		}
-		case state::decimal: {
-			if (cp == '.') {
-				s = state::floating_point;
-			} else if (cp < '0' || cp > '9') {
-				goto gt_end;
-			}
-
-			number.push_back(static_cast<char>(cp));
-
-			break;
-		}
-		case state::zero: {
-			if (cp == 'x' || cp == 'X') {
-				s = state::hex;
-			} else if (cp == 'b' || cp == 'B') {
-				s = state::binary;
-			} else if (cp >= '0' && cp <= '7') {
-				s = state::octal;
-			} else if (cp == '.') {
-				s = state::floating_point;
-			} else {
-				goto gt_end;
-			}
-
-			number.push_back(static_cast<char>(cp));
-
-			break;
-		}
-		case state::octal: {
-			if (cp < '0' || cp > '7') {
-				goto gt_end;
-			}
-
-			number.push_back(static_cast<char>(cp));
-
-			break;
-		}
-		case state::hex: {
-			if ((cp < '0' || cp > '9') && (cp < 'a' || cp > 'f') && (cp < 'A' && cp > 'F')) {
-				goto gt_end;
-			}
-
-			number.push_back(static_cast<char>(cp));
-
-			break;
-		}
-		case state::binary: {
-			if (cp != '0' && cp != '1') {
-				goto gt_end;
-			}
-
-			number.push_back(static_cast<char>(cp));
-
-			break;
-		}
-		case state::floating_point: {
-			if (cp < '0' || cp > '9') {
-				goto gt_end;
-			}
-
-			number.push_back(static_cast<char>(cp));
-
-			break;
-		}
-		default: BIA_THROW(error::code::bad_switch_value);
-		}
-
-		continue;
-
-	gt_end:;
-		parameter.input.seekg(pos);
-
-		std::size_t tmp = 0;
-
-		// double value
-		if (s == state::floating_point) {
-			try {
-				parameter.bundle.add({ std::stod(number) });
-			} catch (const std::exception& e) {
-				return error::code::bad_number;
-			}
-		} else {
-			try {
-				parameter.bundle.add({ static_cast<token::int_type>(std::stoll(number, nullptr, 0)) });
-			} catch (const std::exception& e) {
-				return error::code::bad_number;
-			}
-		}
-
-		return {};
+	const auto extracted = extract_number(param);
+	if (std::get<2>(extracted)) {
+		return std::get<2>(extracted);
 	}
+	const auto special = check_special(param, std::get<1>(extracted));
+	return special.second ? special.second : convert(std::get<0>(extracted), special.first);
 }

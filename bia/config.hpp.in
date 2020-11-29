@@ -10,19 +10,19 @@
 #cmakedefine01 BIA_DEVELOPER_DISASSEMBLY
 // clang-format on
 
-#if __cplusplus > 201103L
+#if __cplusplus >= 201103L
 #	define BIA_ATTR_NO_RETURN [[noreturn]]
 #else
 #	define BIA_ATTR_NO_RETURN
 #endif
 
-#if __cplusplus > 201402L
+#if __cplusplus >= 201402L
 #	define BIA_ATTR_DEPRECATED [[deprecated]]
 #else
 #	define BIA_ATTR_DEPRECATED
 #endif
 
-#if __cplusplus > 201703L
+#if __cplusplus >= 201703L
 #	define BIA_ATTR_NO_DISCARD [[nodiscard]]
 #	define BIA_ATTR_FALLTHROUGH [[fallthrough]]
 #else

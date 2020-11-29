@@ -1,14 +1,5 @@
-constant ::= "null" | "true" | "false" | number
-member ::= identifier ("." identifier)* parameter_list?
-value ::= constant | member
+number ::= integer | floating_point
+integer ::= non_zero_digit digit* (("i" | "u") ("8" | "16" | "32" | "64")?)?
 
-parameter_list = "(" (expression ("," expression)*)? ")"
-
-arithmetic_operator ::= "*" | "/" | "%" | "+" | "-" | "//" | "**"
-bit_operator ::= "&" | "|" | "^"
-self_operator ::= "not" | "~" | "-"
-condition_chain_operator ::= "and" | "or"
-compare_operator ::= "<" | ">" | "<=" | ">=" | "==" | "!=" | "<=>" | "is" | "is not"
-
-term ::= self_operator? value
-expression ::= term ((arithmetic_operator | bit_operator | condition_chain_operator | compare_operator) term)*
+non_zero_digit ::= [1-9]
+digit ::= [0-9]

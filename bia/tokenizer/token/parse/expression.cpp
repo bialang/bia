@@ -10,9 +10,9 @@ error_info parse::value(parameter& param)
 		const auto tmp = any_of(param, "true", "false", "null");
 		if (tmp.second) {
 			switch (tmp.first) {
-			case 0: param.bundle.add(token{ token::keyword::true_ }); break;
-			case 1: param.bundle.add(token{ token::keyword::false_ }); break;
-			case 2: param.bundle.add(token{ token::keyword::null }); break;
+			case 0: param.bundle.emplace_back(token::keyword::true_); break;
+			case 1: param.bundle.emplace_back(token::keyword::false_); break;
+			case 2: param.bundle.emplace_back(token::keyword::null); break;
 			default: BIA_THROW(error::code::bad_switch_value);
 			}
 			return {};
@@ -31,7 +31,7 @@ inline error_info expression_value(parameter& param)
 		if (!parse::any_of(param, "use").second) {
 			return param.make_error(bia::error::code::expected_use, -1);
 		}
-		param.bundle.add({ token::keyword::use });
+		param.bundle.emplace_back(token::keyword::use);
 		if (const auto err = parse::eat_whitespaces(param)) {
 			return err;
 		}

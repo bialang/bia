@@ -1,41 +1,41 @@
-root ::= (simple_stmt | compound_stmt)*
-small_stmt ::= (drop_stmt | decl_stmt | assign_stmt | return_stmt | yield_stmt | flow_ctrl_stmt | import_stmt | type_stmt | fun_call_stmt) ";"?
+root ::= small_stmt | compound_stmt
+small_stmt ::= (drop_stmt | decl_stmt | assign_stmt | return_stmt | yield_stmt | flow_ctrl_stmt | defer_stmt | import_stmt | type_stmt | single_expression) ";"?
 compound_stmt ::= if_stmt | scope_stmt | fun_stmt
+batch ::= "{" root* "}"
 
-scope_stmt ::= "scope" "{" root "}"
+scope_stmt ::= "scoped" batch
 
 return_stmt ::= "return" multi_expression?
 yield_stmt ::= "yield" multi_expression?
 import_stmt ::= "import" string ("as" identifier)?
 flow_ctrl_stmt ::= ("break" | "continue") identifier?
-defer_stmt ::= "defer" (member | "{" root "}")
+defer_stmt ::= "defer" (single_expression | batch)
 
 decl_stmt ::= "let" decl_stmt_signature ("," decl_stmt_signature)* "=" multi_expression
 decl_stmt_signature ::= "mut"? identifier type_definition?
-assign_stmt ::= member assign_operator single_expression
+assign_stmt ::= single_expression assign_operator single_expression
 drop_stmt ::= "drop" identifier
 
-if_stmt ::= "if" single_expression "{" root* "}" else_if_stmt* else_stmt
-else_if_stmt ::= "else" "if" single_expression "{" root "}"
-else_stmt ::= "else" "{" root "}"
+if_stmt ::= "if" single_expression batch else_if_stmt* else_stmt
+else_if_stmt ::= "else" "if" single_expression batch
+else_stmt ::= "else" batch
 
 multi_expression ::= single_expression ("," single_expression)*
-single_expression ::= expression_value (operator expression_value)* | "(" single_expression ")"
+single_expression ::= (expression_value (operator expression_value)* | "(" single_expression ")") (member_access | member_invocation | member_subscript)*
 expression_value ::= value | "(" "use" value ")"
-value ::= number | "false" | "true" | "null" | member
-fun_value ::= "fun" parameter_decl type_definition? "{" root "}" | "(" "fun" parameter_decl type_definition? "=>" multi_expression ")"
+value ::= number | "false" | "true" | "null" | string | regex | fun_value | object_value | array_value | tuple_value | identifier
+fun_value ::= "fun" parameter_decl type_definition? batch | "(" "fun" parameter_decl type_definition? "=>" multi_expression ")"
 object_value ::= "{" (object_value_field ("," object_value_field)* ","?)? "}"
 object_value_field ::= (string | identifier) "=" single_expression | "..." identifier
 array_value ::= "[" number? "]" type "{" (single_expression ("," single_expression)*)? "}"
 tuple_value ::= "(" single_expression ("," single_expression)+ ")"
-member ::= (string | regex | fun_value | object_value | array_value | tuple_value | identifier) (member_access | member_invocation | member_subscript)*
 
 member_access ::= "?"? "." identifier
 member_invocation ::= "?"? "(" ((identifier "=" exression | single_expression ("," single_expression)*) ("," identifier "=" single_expression)*)? ")"
 member_subscript ::= "?"? "[" (subscript_slice | single_expression) "]"
 subscript_slice ::= single_expression? ":" single_expression? (":" single_expression?)?
 
-fun_stmt ::= "fun" identifier parameter_decl type_definition? "{" root "}"
+fun_stmt ::= "fun" identifier parameter_decl type_definition? batch
 parameter_decl ::= "(" (identifier type_definition ("," identifier type_definition)* parameter_decl_default? ("," identifier type_definition parameter_decl_default)*)? ")"
 parameter_decl_default ::= ("from" (identifier | object_value))? "=" single_expression
 

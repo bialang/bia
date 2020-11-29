@@ -5,16 +5,16 @@ using namespace bia::tokenizer::token;
 
 inline error_info member_access(parameter& param)
 {
-	auto c        = param.encoder.read(param.input);
+	auto cp       = param.encoder.read(param.input);
 	auto nullable = false;
-	if (c == '?') {
+	if (cp == '?') {
 		nullable = true;
-		c        = param.encoder.read(param.input);
+		cp       = param.encoder.read(param.input);
 	}
-	if (c != '.') {
+	if (cp != '.') {
 		return param.make_error(bia::error::code::, -1);
 	}
-	param.bundle.add({ nullable ? operator_::nullable_member_access : operator_::member_access });
+	param.bundle.emplace_back(nullable ? operator_::nullable_member_access : operator_::member_access);
 	return parse::identifier(param);
 }
 

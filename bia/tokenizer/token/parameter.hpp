@@ -1,12 +1,13 @@
 #ifndef BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
 #define BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
 
-#include "bundle.hpp"
 #include "error_info.hpp"
+#include "token.hpp"
 
 #include <bia/resource/manager.hpp>
 #include <bia/string/encoding/encoder.hpp>
 #include <bia/util/types.hpp>
+#include <vector>
 
 namespace bia {
 namespace tokenizer {
@@ -18,17 +19,17 @@ struct parameter
 	{
 		util::byte_istream_type::pos_type input_pos;
 		resource::manager::state_type rm_state;
-		bundle::state_type bundle_state;
+		std::size_t bundle_state;
 	};
 
 	util::byte_istream_type& input;
 	resource::manager& manager;
 	string::encoding::encoder& encoder;
-	class bundle& bundle;
+	std::vector<token> bundle;
 
 	state backup() const
 	{
-		return { input.tellg(), manager.save_state(), bundle.save() };
+		return { input.tellg(), manager.save_state(), bundle.size() };
 	}
 	/**
 	 * Restores the state of all parameters.
@@ -39,7 +40,7 @@ struct parameter
 	{
 		input.seekg(old.input_pos);
 		manager.restore_state(old.rm_state);
-		bundle.restore(old.bundle_state);
+		bundle.resize(old.bundle_state);
 	}
 	error_info make_error(error::code code, int offset = 0)
 	{

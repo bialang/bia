@@ -1,7 +1,8 @@
 #ifndef BIA_COMPILER_COMPILER_HPP_
 #define BIA_COMPILER_COMPILER_HPP_
 
-#include "manager/variable.hpp"
+#include "type/system.hpp"
+#include "variable_manager.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
 #include <bia/resource/serializer.hpp>
@@ -26,7 +27,8 @@ public:
 private:
 	bytecode::writer::instruction _writer;
 	resource::serializer _resources;
-	manager::variable _variables;
+	variable_manager _variables;
+	type::system _type_system;
 };
 
 } // namespace compiler

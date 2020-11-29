@@ -122,6 +122,12 @@ public:
 	{
 		return _index;
 	}
+	template<typename Type>
+	bool is_type() const noexcept
+	{
+		static_assert(index_of<Type>::value != npos, "Type is not in variant");
+		return _index == index_of<Type>::value;
+	}
 
 private:
 	/// the current value

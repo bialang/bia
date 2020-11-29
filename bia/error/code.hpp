@@ -28,7 +28,12 @@ enum class code
 	empty_variant,
 	bad_variant_index,
 
-	expected_curly_bracket,
+	expected_opening_curly_bracket,
+	expected_closing_curly_bracket,
+	expected_scope,
+	expected_return,
+	expected_yield,
+	expected_defer,
 	expected_flow_control,
 	expected_in,
 	expected_parameter_list,
