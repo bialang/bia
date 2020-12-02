@@ -1,5 +1,6 @@
 #include "tokens.hpp"
 
+#include <bia/error/exception.hpp>
 #include <string>
 #include <tuple>
 
@@ -27,7 +28,7 @@ inline std::pair<enum token::number::type, error_info> check_special(parameter& 
 	return { type, {} };
 }
 
-inline error_info convert(const std::string& str, enum token::number::type type)
+inline error_info convert(parameter& param, const std::string& str, enum token::number::type type)
 {
 	using number = token::number;
 	// convert
@@ -38,6 +39,7 @@ inline error_info convert(const std::string& str, enum token::number::type type)
 		switch (num.type) {
 		case number::type::f32: num.value.f32 = std::stof(str, &processed); break;
 		case number::type::f64: num.value.f64 = std::stod(str, &processed); break;
+		default: BIA_THROW(bia::error::code::bad_switch_value);
 		}
 	} catch (const std::out_of_range& e) {
 	} catch (const std::invalid_argument& e) {
@@ -56,5 +58,5 @@ error_info parse::number(parameter& param)
 		return std::get<2>(extracted);
 	}
 	const auto special = check_special(param, std::get<1>(extracted));
-	return special.second ? special.second : convert(std::get<0>(extracted), special.first);
+	return special.second ? special.second : convert(param, std::get<0>(extracted), special.first);
 }

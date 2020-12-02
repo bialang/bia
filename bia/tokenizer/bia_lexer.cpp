@@ -1,7 +1,6 @@
 #include "bia_lexer.hpp"
 
 #include "token/parse/tokens.hpp"
-#include "token/parse/whitespace_eater.hpp"
 
 #include <bia/error/exception.hpp>
 #include <vector>
@@ -17,17 +16,17 @@ void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& e
                     token::receiver& receiver)
 {
 	std::vector<token::token> bundle;
-	token::parameter parameter{ input, _manager, encoder, bundle };
+	token::parameter param{ input, _manager, encoder, bundle };
 
 	while (!(input.peek(), input.eof())) {
-		token::parse::eat_whitespaces(parameter);
+		token::parse::spacer(param);
 
 		// match single statements
-		if (const auto err = token::parse::root(parameter)) {
+		if (const auto err = token::parse::root(param)) {
 		}
 
 		// give to receiver
-		receiver.receive({ bundle }, _manager);
+		// receiver.receive({ bundle }, _manager);
 		bundle.clear();
 	}
 }

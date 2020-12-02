@@ -24,7 +24,7 @@ bia::tokenizer::token::error_info bia::tokenizer::token::parse::string(parameter
 			if (!escape) {
 				// zero terminate
 				outenc->put(output, 0);
-				parameter.bundle.add({ token::string{ streambuf.finish(resource::type::string) } });
+				parameter.bundle.emplace_back(token::string{ streambuf.finish(resource::type::string) });
 				return {};
 			}
 			break;

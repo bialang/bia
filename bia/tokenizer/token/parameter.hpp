@@ -46,6 +46,8 @@ struct parameter
 	{
 		return {};
 	}
+	void set_optional_error(error_info err)
+	{}
 };
 
 } // namespace token

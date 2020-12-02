@@ -30,7 +30,6 @@ error_info flow_control_stmt(parameter& param);
 error_info defer_stmt(parameter& param);
 
 error_info decl_stmt(parameter& param);
-error_info assign_stmt(parameter& param);
 error_info drop_stmt(parameter& param);
 
 error_info if_stmt(parameter& param);
@@ -41,7 +40,10 @@ error_info scope_stmt(parameter& param);
 error_info multi_expression(parameter& param);
 error_info single_expression(parameter& param);
 error_info value(parameter& param);
-error_info member(parameter& param);
+
+error_info member_access(parameter& param);
+error_info member_invocation(parameter& param);
+error_info member_subscript(parameter& param);
 
 error_info type_stmt(parameter& param);
 error_info type_definition(parameter& param);

@@ -44,12 +44,12 @@ inline error_info any_of(parameter& param, Types&&... tokens)
 
 	const auto old = param.backup();
 	error_info error{};
-	for (auto token : std::initializer_list<error_info (*)(parameter&)>{ tokens... }) {
+	for (auto token : { tokens... }) {
 		const auto err = token(param);
 		if (!err) {
 			return {};
 		} else if (error < err) {
-			err = token;
+			error = err;
 		}
 		param.restore(old);
 	}

@@ -1,27 +1,8 @@
-#ifndef BIA_TOKENIZER_TOKEN_PARSE_WHITESPACE_EATER_HPP_
-#define BIA_TOKENIZER_TOKEN_PARSE_WHITESPACE_EATER_HPP_
+#include "tokens.hpp"
 
-#include "../error_info.hpp"
-#include "../parameter.hpp"
+using namespace bia::tokenizer::token;
 
-#include <bia/error/exception.hpp>
-
-namespace bia {
-namespace tokenizer {
-namespace token {
-namespace parse {
-
-/**
- * Eats all the whitespaces this function encounters.
- *
- * @note this function always consumes all whitespaces, even if an error is returned
- *
- * @param[in,out] param the required parameters
- * @returns an error if no whitespaces are found
- * @tparam RequireCmd if `true`, this function fails if no whitespace cmd_end character is found
- */
-template<bool RequireCmd = false>
-inline error_info eat_whitespaces(parameter& param)
+error_info parse::spacer(parameter& param)
 {
 	enum class s
 	{
@@ -116,10 +97,3 @@ inline error_info eat_whitespaces(parameter& param)
 		return {};
 	}
 }
-
-} // namespace parse
-} // namespace token
-} // namespace tokenizer
-} // namespace bia
-
-#endif

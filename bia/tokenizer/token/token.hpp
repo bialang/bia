@@ -108,8 +108,28 @@ struct token
 		as,
 	};
 
-	util::variant<number, batch, control, keyword, string, regex, identifier, operator_, array_dimension>
+	util::variant<number, array_dimension, batch, control, keyword, string, regex, identifier, operator_,
+	              array_dimension>
 	    value;
+
+	token() = default;
+	template<typename Type>
+	token(Type&& value) : value{ std::forward<Type>(value) }
+	{}
+	token(const token& copy) : value{ copy.value }
+	{}
+	token(token&& move) : value{ std::move(move.value) }
+	{}
+	token& operator=(const token& copy)
+	{
+		value = copy.value;
+		return *this;
+	}
+	token& operator=(token&& move)
+	{
+		value = std::move(move.value);
+		return *this;
+	}
 };
 
 } // namespace token

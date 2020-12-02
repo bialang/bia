@@ -1,5 +1,5 @@
 root ::= small_stmt | compound_stmt
-small_stmt ::= (drop_stmt | decl_stmt | assign_stmt | return_stmt | yield_stmt | flow_ctrl_stmt | defer_stmt | import_stmt | type_stmt | single_expression) ";"?
+small_stmt ::= (drop_stmt | decl_stmt | return_stmt | yield_stmt | flow_ctrl_stmt | defer_stmt | import_stmt | type_stmt | single_expression) ";"?
 compound_stmt ::= if_stmt | scope_stmt | fun_stmt
 batch ::= "{" root* "}"
 
@@ -7,14 +7,13 @@ scope_stmt ::= "scoped" batch
 
 return_stmt ::= "return" multi_expression?
 yield_stmt ::= "yield" multi_expression?
-import_stmt ::= "import" string ("as" identifier)?
+!!! import_stmt ::= "import" string ("as" identifier)?
 flow_ctrl_stmt ::= ("break" | "continue") identifier?
 defer_stmt ::= "defer" (single_expression | batch)
 
-decl_stmt ::= "let" decl_stmt_signature ("," decl_stmt_signature)* "=" multi_expression
+decl_stmt ::= "let" decl_stmt_signature ("," decl_stmt_signature)* ("=" multi_expression)?
 decl_stmt_signature ::= "mut"? identifier type_definition?
-assign_stmt ::= single_expression assign_operator single_expression
-drop_stmt ::= "drop" identifier
+drop_stmt ::= "drop" identifier ("," identifier)*
 
 if_stmt ::= "if" single_expression batch else_if_stmt* else_stmt
 else_if_stmt ::= "else" "if" single_expression batch

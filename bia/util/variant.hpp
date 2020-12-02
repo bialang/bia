@@ -32,7 +32,7 @@ public:
 	        typename std::remove_cv<typename std::remove_reference<Type>::type>::type, variant>::value>::type>
 	variant(Type&& value)
 	{
-		emplace<Type>(std::forward<Type>(value));
+		emplace<typename std::decay<Type>::type>(std::forward<Type>(value));
 	}
 	/**
 	 * Copy-Constructor. Only available if all variant types are copy constructible.
@@ -127,6 +127,20 @@ public:
 	{
 		static_assert(index_of<Type>::value != npos, "Type is not in variant");
 		return _index == index_of<Type>::value;
+	}
+	variant& operator=(const variant& copy)
+	{
+		if (copy._index != npos) {
+			_copy<0, Types...>(copy);
+		}
+		return *this;
+	}
+	variant& operator=(variant&& move)
+	{
+		if (move._index != npos) {
+			_move<0, Types...>(std::move(move));
+		}
+		return *this;
 	}
 
 private:
