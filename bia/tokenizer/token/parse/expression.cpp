@@ -31,13 +31,15 @@ error_info parse::value(parameter& param)
 {
 	const auto constant_keyword = static_cast<error_info (*)(parameter&)>([](parameter& param) -> error_info {
 		const auto tmp = any_of(param, "true", "false", "null");
-		if (tmp.second) {
+		const auto old = param.backup();
+		if (tmp.second && !parse::spacer(param)) {
 			switch (tmp.first) {
 			case 0: param.bundle.emplace_back(token::keyword::true_); break;
 			case 1: param.bundle.emplace_back(token::keyword::false_); break;
 			case 2: param.bundle.emplace_back(token::keyword::null); break;
 			default: BIA_THROW(error::code::bad_switch_value);
 			}
+			param.restore(old);
 			return {};
 		}
 		return param.make_error(error::code::bad_constant_keyword);
@@ -49,10 +51,11 @@ inline error_info expression_value(parameter& param)
 {
 	const auto use = static_cast<parse::token_type>([](parameter& param) -> error_info {
 		if (param.encoder.read(param.input) != '(') {
+			return param.make_error(bia::error::code::expected_use, -1);
 		}
 		parse::spacer(param);
-		if (!parse::any_of(param, "use").second || !parse::spacer(param)) {
-			return param.make_error(bia::error::code::expected_use, -1);
+		if (!parse::any_of(param, "use").second || parse::spacer(param)) {
+			return param.make_error(bia::error::code::expected_use);
 		}
 		param.bundle.emplace_back(token::keyword::use);
 		if (const auto err = parse::value(param)) {
@@ -60,6 +63,7 @@ inline error_info expression_value(parameter& param)
 		}
 		parse::spacer(param);
 		if (param.encoder.read(param.input) != ')') {
+			return param.make_error(bia::error::code::expected_use, -1);
 		}
 		return {};
 	});

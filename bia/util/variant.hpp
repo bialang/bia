@@ -27,9 +27,9 @@ public:
 
 	variant() = default;
 	template<
-	    typename Type,
-	    typename = typename std::enable_if<!std::is_same<
-	        typename std::remove_cv<typename std::remove_reference<Type>::type>::type, variant>::value>::type>
+	  typename Type,
+	  typename = typename std::enable_if<!std::is_same<
+	    typename std::remove_cv<typename std::remove_reference<Type>::type>::type, variant>::value>::type>
 	variant(Type&& value)
 	{
 		emplace<typename std::decay<Type>::type>(std::forward<Type>(value));
@@ -77,7 +77,7 @@ public:
 	typename type_traits::type_at<Index, Types...>::type& get()
 	{
 		return const_cast<typename type_traits::type_at<Index, Types...>::type&>(
-		    const_cast<const variant*>(this)->get<Index>());
+		  const_cast<const variant*>(this)->get<Index>());
 	}
 	template<std::size_t Index>
 	const typename type_traits::type_at<Index, Types...>::type& get() const
@@ -109,7 +109,7 @@ public:
 	{
 		destroy();
 		const auto ptr =
-		    new (&_data) typename type_traits::type_at<Index, Types...>::type{ std::forward<Args>(args)... };
+		  new (&_data) typename type_traits::type_at<Index, Types...>::type{ std::forward<Args>(args)... };
 		_index = Index;
 		return *ptr;
 	}
@@ -127,6 +127,16 @@ public:
 	{
 		static_assert(index_of<Type>::value != npos, "Type is not in variant");
 		return _index == index_of<Type>::value;
+	}
+	template<typename Type>
+	bool has_value(const Type& value) const noexcept
+	{
+		return is_type<Type>() && get<Type>() == value;
+	}
+	template<typename Type>
+	bool operator==(const Type& value) const noexcept
+	{
+		return has_value(value);
 	}
 	variant& operator=(const variant& copy)
 	{

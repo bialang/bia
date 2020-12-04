@@ -50,7 +50,7 @@ enum class code
 	expected_command_end,
 	expected_string,
 	expected_while_statement,
-	expected_whitespace,
+	expected_seperator,
 	expected_use,
 	expected_assignment,
 	bad_tuple,

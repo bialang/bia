@@ -5,7 +5,7 @@ using namespace bia::tokenizer::token;
 
 error_info parse::if_stmt(parameter& param)
 {
-	if (!any_of(param, "if").second || !spacer(param)) {
+	if (!any_of(param, "if").second || spacer(param)) {
 		return param.make_error(error::code::expected_if);
 	}
 	if (const auto err = single_expression(param)) {
@@ -32,10 +32,10 @@ error_info parse::if_stmt(parameter& param)
 
 error_info parse::else_if_stmt(parameter& param)
 {
-	if (!any_of(param, "else").second || !spacer(param)) {
+	if (!any_of(param, "else").second || spacer(param)) {
 		return param.make_error(error::code::expected_else_if);
 	}
-	if (!any_of(param, "if").second || !spacer(param)) {
+	if (!any_of(param, "if").second || spacer(param)) {
 		return param.make_error(error::code::expected_else_if);
 	}
 	if (const auto err = single_expression(param)) {
@@ -49,7 +49,7 @@ error_info parse::else_if_stmt(parameter& param)
 
 error_info parse::else_stmt(parameter& param)
 {
-	if (!any_of(param, "else").second || !spacer(param)) {
+	if (!any_of(param, "else").second || spacer(param)) {
 		return param.make_error(error::code::expected_else);
 	}
 	if (const auto err = batch(param)) {

@@ -1,6 +1,7 @@
 #ifndef BIA_COMPILER_COMPILER_HPP_
 #define BIA_COMPILER_COMPILER_HPP_
 
+#include "flags.hpp"
 #include "type/system.hpp"
 #include "variable_manager.hpp"
 
@@ -29,6 +30,7 @@ private:
 	resource::serializer _resources;
 	variable_manager _variables;
 	type::system _type_system;
+	flags _flags;
 };
 
 } // namespace compiler

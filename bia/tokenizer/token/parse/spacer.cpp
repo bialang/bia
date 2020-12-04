@@ -4,7 +4,7 @@ using namespace bia::tokenizer::token;
 
 error_info parse::spacer(parameter& param)
 {
-	enum class s
+	enum class state
 	{
 		whitespace,
 		comment_start,
@@ -14,72 +14,73 @@ error_info parse::spacer(parameter& param)
 		comment_multi_ending
 	};
 
-	auto state    = s::whitespace;
-	auto eaten    = false;
-	auto cmd      = false;
-	auto last_pos = param.input.tellg();
+	auto state     = state::whitespace;
+	auto seperator = false;
+	auto last_pos  = param.input.tellg();
 
 	while (true) {
 		auto pos      = param.input.tellg();
 		const auto cp = param.encoder.read(param.input);
 		if (cp == string::encoding::encoder::eof) {
-			eaten = true;
-			cmd   = true;
+			seperator = true;
 			goto gt_return;
 		}
 
 		switch (state) {
-		case s::whitespace: {
+		case state::whitespace: {
 			switch (cp) {
-			case '/': state = s::comment_start; break;
+			case '/': {
+				seperator = true;
+				state     = state::comment_start;
+				break;
+			}
 			case '\r':
-			case '\n': cmd = true;
+			case '\n':
 			case ' ':
 			case '\t':
 			case '\v':
-			case '\f': eaten = true; break;
+			case '\f': seperator = true; break;
 			default: goto gt_return;
 			}
 			break;
 		}
-		case s::comment_start: {
+		case state::comment_start: {
 			switch (cp) {
-			case '/': state = s::comment_single; break;
-			case '*': state = s::comment_multi; break;
+			case '/': state = state::comment_single; break;
+			case '*': state = state::comment_multi; break;
 			default: pos = last_pos; goto gt_return; // rollback one character more
 			}
 			break;
 		}
-		case s::comment_single: {
+		case state::comment_single: {
 			if (cp == '\r' || cp == '\n') {
-				cmd   = true;
-				state = s::comment_single_ending;
+				state = state::comment_single_ending;
 			}
 			break;
 		}
-		case s::comment_single_ending: {
+		case state::comment_single_ending: {
 			switch (cp) {
 			case '\r':
 			case '\n': break;
 			default: {
 				param.input.seekg(pos);
-				state = s::whitespace;
+				state = state::whitespace;
 				break;
 			}
 			}
 			break;
 		}
-		case s::comment_multi: {
+		case state::comment_multi: {
 			if (cp == '*') {
-				state = s::comment_multi_ending;
+				state = state::comment_multi_ending;
 			}
 			break;
 		}
-		case s::comment_multi_ending: {
+		case state::comment_multi_ending: {
 			if (cp == '/') {
-				state = s::whitespace;
+				state = state::whitespace;
 			} else if (cp != '*') {
-				state = s::comment_multi;
+				state = state::comment_multi;
 			}
 			break;
 		}
@@ -91,9 +92,9 @@ error_info parse::spacer(parameter& param)
 
 	gt_return:;
 		param.input.seekg(pos);
-		if (!eaten || (RequireCmd && !cmd)) {
-			return param.make_error(error::code::expected_whitespace, -1);
+		if (seperator) {
+			return {};
 		}
-		return {};
+		return param.make_error(error::code::expected_seperator, -1);
 	}
 }

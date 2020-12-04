@@ -6,7 +6,7 @@ using namespace bia::tokenizer::token;
 inline error_info decl_stmt_signature(parameter& param)
 {
 	auto old = param.backup();
-	if (parse::any_of(param, "mut").second && parse::spacer(param)) {
+	if (parse::any_of(param, "mut").second && !parse::spacer(param)) {
 		param.bundle.emplace_back(token::keyword::mut);
 	} else {
 		param.restore(old);
@@ -14,6 +14,7 @@ inline error_info decl_stmt_signature(parameter& param)
 	if (const auto err = parse::identifier(param)) {
 		return err;
 	}
+	parse::spacer(param);
 	old = param.backup();
 	if (const auto err = parse::type_definition(param)) {
 		param.set_optional_error(err);
@@ -24,9 +25,10 @@ inline error_info decl_stmt_signature(parameter& param)
 
 error_info parse::decl_stmt(parameter& param)
 {
-	if (!any_of(param, "let").second || !spacer(param)) {
+	if (!any_of(param, "let").second || spacer(param)) {
 		return param.make_error(error::code::expected_let);
 	}
+	param.bundle.emplace_back(token::keyword::let);
 
 	if (const auto err = decl_stmt_signature(param)) {
 		return err;
@@ -59,7 +61,7 @@ error_info parse::decl_stmt(parameter& param)
 
 error_info parse::drop_stmt(parameter& param)
 {
-	if (!any_of(param, "drop").second || !spacer(param)) {
+	if (!any_of(param, "drop").second || spacer(param)) {
 		return param.make_error(error::code::expected_drop);
 	}
 

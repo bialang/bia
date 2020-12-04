@@ -18,6 +18,9 @@ inline std::tuple<std::string, enum token::number::type, error_info> extract_num
 		}
 		str.append(1, c);
 	}
+	if (str.empty()) {
+		return { str, token::number::type::i, param.make_error(bia::error::code::bad_number) };
+	}
 	return { str, token::number::type::i, {} };
 }
 
@@ -37,6 +40,7 @@ inline error_info convert(parameter& param, const std::string& str, enum token::
 	num.type = type;
 	try {
 		switch (num.type) {
+		case number::type::i: num.value.i = std::stoi(str, &processed); break;
 		case number::type::f32: num.value.f32 = std::stof(str, &processed); break;
 		case number::type::f64: num.value.f64 = std::stod(str, &processed); break;
 		default: BIA_THROW(bia::error::code::bad_switch_value);
@@ -46,6 +50,7 @@ inline error_info convert(parameter& param, const std::string& str, enum token::
 	}
 
 	if (processed != str.length()) {
+		return param.make_error(bia::error::code::bad_number);
 	}
 	param.bundle.emplace_back(num);
 	return {};

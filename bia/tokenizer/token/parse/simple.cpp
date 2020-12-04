@@ -5,7 +5,7 @@ using namespace bia::tokenizer::token;
 
 error_info parse::return_stmt(parameter& param)
 {
-	if (!any_of(param, "return").second || !spacer(param)) {
+	if (!any_of(param, "return").second || spacer(param)) {
 		return param.make_error(error::code::expected_return);
 	}
 	param.bundle.emplace_back(token::keyword::return_);
@@ -14,7 +14,7 @@ error_info parse::return_stmt(parameter& param)
 
 error_info parse::yield_stmt(parameter& param)
 {
-	if (!any_of(param, "yield").second || !spacer(param)) {
+	if (!any_of(param, "yield").second || spacer(param)) {
 		return param.make_error(error::code::expected_yield);
 	}
 	param.bundle.emplace_back(token::keyword::yield);
@@ -23,7 +23,7 @@ error_info parse::yield_stmt(parameter& param)
 
 error_info parse::import_stmt(parameter& param)
 {
-	if (!any_of(param, "import").second || !spacer(param)) {
+	if (!any_of(param, "import").second || spacer(param)) {
 		return param.make_error(error::code::expected_yield);
 	}
 	param.bundle.emplace_back(token::keyword::import);
@@ -33,7 +33,7 @@ error_info parse::import_stmt(parameter& param)
 error_info parse::flow_control_stmt(parameter& param)
 {
 	const auto x = any_of(param, "break", "continue");
-	if (!x.second || !spacer(param)) {
+	if (!x.second || spacer(param)) {
 		return param.make_error(error::code::expected_yield);
 	}
 	param.bundle.emplace_back(x.first == 1 ? token::keyword::break_ : token::keyword::continue_);
@@ -47,7 +47,7 @@ error_info parse::flow_control_stmt(parameter& param)
 
 error_info parse::defer_stmt(parameter& param)
 {
-	if (!any_of(param, "defer").second || !spacer(param)) {
+	if (!any_of(param, "defer").second || spacer(param)) {
 		return param.make_error(error::code::expected_yield);
 	}
 	param.bundle.emplace_back(token::keyword::defer);

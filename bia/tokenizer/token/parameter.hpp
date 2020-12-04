@@ -25,7 +25,7 @@ struct parameter
 	util::byte_istream_type& input;
 	resource::manager& manager;
 	string::encoding::encoder& encoder;
-	std::vector<token> bundle;
+	std::vector<token>& bundle;
 
 	state backup() const
 	{
@@ -44,7 +44,9 @@ struct parameter
 	}
 	error_info make_error(error::code code, int offset = 0)
 	{
-		return {};
+		error_info err{};
+		err.code = code;
+		return err;
 	}
 	void set_optional_error(error_info err)
 	{}

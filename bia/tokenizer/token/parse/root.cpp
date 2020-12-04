@@ -20,7 +20,7 @@ inline error_info small_stmt(parameter& param)
 
 inline error_info compound_stmt(parameter& param)
 {
-	return parse::any_of(param, parse::if_stmt, parse::scope_stmt, parse::fun_stmt);
+	return parse::any_of(param, parse::if_stmt, parse::scope_stmt);
 }
 
 error_info parse::root(parameter& param)

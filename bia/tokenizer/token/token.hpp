@@ -4,6 +4,7 @@
 #include "operator_.hpp"
 
 #include <bia/bytecode/op_code.hpp>
+#include <bia/error/exception.hpp>
 #include <bia/resource/view.hpp>
 #include <bia/util/variant.hpp>
 #include <cstdint>
@@ -58,12 +59,39 @@ struct token
 			std::uint64_t u64;
 			float f32;
 			double f64;
-		} value;
+		} value{};
+
+		bool operator==(const number& other) const
+		{
+			if (type != other.type) {
+				return false;
+			}
+			switch (type) {
+			case type::i:
+			case type::u: return value.u == other.value.u;
+			case type::i8:
+			case type::u8: return value.u8 == other.value.u8;
+			case type::i16:
+			case type::u16: return value.u16 == other.value.u16;
+			case type::i32:
+			case type::u32: return value.u32 == other.value.u32;
+			case type::i64:
+			case type::u64: return value.u64 == other.value.u64;
+			case type::f32: return value.f32 == other.value.f32;
+			case type::f64: return value.f64 == other.value.f64;
+			default: BIA_THROW(error::code::bad_switch_value);
+			}
+		}
 	};
 
 	struct array_dimension
 	{
 		std::uint32_t dimension;
+
+		bool operator==(const array_dimension& other) const noexcept
+		{
+			return dimension == other.dimension;
+		}
 	};
 
 	struct identifier
@@ -106,11 +134,12 @@ struct token
 		continue_,
 		import,
 		as,
+		let,
 	};
 
 	util::variant<number, array_dimension, batch, control, keyword, string, regex, identifier, operator_,
 	              array_dimension>
-	    value;
+	  value;
 
 	token() = default;
 	template<typename Type>

@@ -18,7 +18,25 @@ bia::tokenizer::token::error_info bia::tokenizer::token::parse::string(parameter
 
 	while (true) {
 		const auto cp = parameter.encoder.read(parameter.input);
+
+#define BIA_IMPL_STRING(a, b)                                                                                \
+	case a: {                                                                                                  \
+		if (escape) {                                                                                            \
+			outenc->put(output, b);                                                                                \
+			escape = false;                                                                                        \
+			continue;                                                                                              \
+		}                                                                                                        \
+		break;                                                                                                   \
+	}
+
 		switch (cp) {
+			BIA_IMPL_STRING('a', '\a')
+			BIA_IMPL_STRING('b', '\b')
+			BIA_IMPL_STRING('f', '\f')
+			BIA_IMPL_STRING('n', '\n')
+			BIA_IMPL_STRING('r', '\r')
+			BIA_IMPL_STRING('t', '\t')
+			BIA_IMPL_STRING('v', '\v')
 		case encoder::eof: return parameter.make_error(error::code::expected_string, -1);
 		case '"': {
 			if (!escape) {
@@ -41,5 +59,7 @@ bia::tokenizer::token::error_info bia::tokenizer::token::parse::string(parameter
 
 		escape = false;
 		outenc->put(output, cp);
+
+#undef BIA_IMPL_STRING
 	}
 }

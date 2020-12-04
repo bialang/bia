@@ -13,8 +13,6 @@ public:
 	virtual ~definition()                                              = default;
 	virtual bool is_assignable(const definition* other) const noexcept = 0;
 	virtual int hash_code() const noexcept                             = 0;
-
-private:
 };
 
 } // namespace type

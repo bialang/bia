@@ -1,7 +1,7 @@
 #ifndef BIA_COMPILER_TYPE_INTEGER_HPP_
 #define BIA_COMPILER_TYPE_INTEGER_HPP_
 
-#include "type.hpp"
+#include "definition.hpp"
 
 namespace bia {
 namespace compiler {
@@ -32,7 +32,7 @@ public:
 	}
 	int hash_code() const noexcept override
 	{
-		return 1;
+		return static_cast<int>(_size) + 1;
 	}
 
 private:

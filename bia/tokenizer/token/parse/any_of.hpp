@@ -48,7 +48,7 @@ inline error_info any_of(parameter& param, Types&&... tokens)
 		const auto err = token(param);
 		if (!err) {
 			return {};
-		} else if (error < err) {
+		} else if (!error || error < err) {
 			error = err;
 		}
 		param.restore(old);

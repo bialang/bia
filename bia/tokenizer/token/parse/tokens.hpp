@@ -48,8 +48,6 @@ error_info member_subscript(parameter& param);
 error_info type_stmt(parameter& param);
 error_info type_definition(parameter& param);
 
-error_info fun_stmt(parameter& param);
-
 } // namespace parse
 } // namespace token
 } // namespace tokenizer
