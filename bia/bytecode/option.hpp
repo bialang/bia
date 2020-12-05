@@ -37,14 +37,20 @@ enum member_source_option
 enum constant_option
 {
 	co_int_8,
+	co_uint_8,
 	co_int_16,
+	co_uint_16,
 	co_int_32,
+	co_uint_32,
 	co_int_64,
-	co_double,
+	co_uint_64,
+	co_float_32,
+	co_float_64,
+	co_bool,
 	co_test_register,
 	co_null,
 
-	co_count = 8
+	co_count = 16
 };
 
 enum resource_option

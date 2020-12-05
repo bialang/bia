@@ -79,16 +79,6 @@ bia::gc::gcable<bia::member::member> string::get(const native::string& name)
 	return {};
 }
 
-string::float_type string::as_float() const noexcept
-{
-	return {};
-}
-
-string::int_type string::as_int() const noexcept
-{
-	return {};
-}
-
 bool string::as_data(const std::type_info& type, void* output)
 {
 	return false;

@@ -59,16 +59,6 @@ bia::gc::gcable<bia::member::member> regex_match_iterator::get(const native::str
 	return {};
 }
 
-regex_match_iterator::float_type regex_match_iterator::as_float() const noexcept
-{
-	return {};
-}
-
-regex_match_iterator::int_type regex_match_iterator::as_int() const noexcept
-{
-	return {};
-}
-
 bool regex_match_iterator::as_data(const std::type_info& type, void* output)
 {
 	return false;

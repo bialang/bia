@@ -16,13 +16,12 @@ inline bool equal(Float left, Float right)
 
 TEST_CASE("numerical casting", "[member]")
 {
-	native::integer m{ 34 };
+	native::integer<int> m{ 34 };
 
-	REQUIRE(cast::cast<member::int_type>(m) == 34);
 	REQUIRE(cast::cast<int>(m) == 34);
-	REQUIRE(cast::cast<char>(m) == 34);
-	REQUIRE(equal(cast::cast<double>(m), 34.0));
-	REQUIRE(equal(cast::cast<float>(m), 34.0f));
+	// REQUIRE(cast::cast<char>(m) == 34);
+	// REQUIRE(equal(cast::cast<double>(m), 34.0));
+	// REQUIRE(equal(cast::cast<float>(m), 34.0f));
 	// REQUIRE(*cast<const member::int_type*>(m) == 34);
 	// REQUIRE_THROWS(*cast<member::int_type*>(m) == 34);
 	// REQUIRE(*cast<member::int_type&>(m) == 34);

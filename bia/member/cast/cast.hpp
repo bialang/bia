@@ -22,8 +22,9 @@ inline typename std::enable_if<std::is_integral<Type>::value, Type>::type cast(m
 	if (!(m.flags() & member::flag_numeric)) {
 		BIA_THROW(error::code::bad_cast);
 	}
-
-	return static_cast<Type>(m.as_int());
+	Type value{};
+	// TODO implement this
+	return 0;
 }
 
 template<typename Type>
@@ -32,8 +33,9 @@ inline typename std::enable_if<std::is_floating_point<Type>::value, Type>::type 
 	if (!(m.flags() & member::flag_numeric)) {
 		BIA_THROW(error::code::bad_cast);
 	}
-
-	return static_cast<Type>(m.as_float());
+	Type value{};
+	// TODO implement this
+	return value;
 }
 
 template<typename Type>

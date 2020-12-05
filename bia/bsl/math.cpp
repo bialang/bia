@@ -58,8 +58,7 @@ inline bia::gc::gcable<bia::member::member> average(bia::connector::parameters_t
 	}
 
 	if (const auto ptr = s.peek()) {
-		const bia::member::native::integer count{ bia::util::narrow<bia::member::member::int_type>(
-			params.size()) };
+		const bia::member::native::integer<int> count{ bia::util::narrow<int>(params.size()) };
 		return ptr->operation(count, bia::member::infix_operator::division);
 	}
 
@@ -72,10 +71,10 @@ inline bia::gc::gcable<bia::member::member> absolute(bia::connector::parameters_
 		BIA_THROW(bia::error::code::null_argument);
 	}
 
-	const bia::member::native::integer zero{ 0 };
+	const bia::member::native::integer<int> zero{ 0 };
 	return params[0]->test(bia::member::test_operator::less, zero)
-	           ? params[0]->self_operation(bia::member::self_operator::unary_minus)
-	           : params[0];
+	         ? params[0]->self_operation(bia::member::self_operator::unary_minus)
+	         : params[0];
 }
 
 math::math(gc::gc& gc) : _symbols{ _init(gc) }

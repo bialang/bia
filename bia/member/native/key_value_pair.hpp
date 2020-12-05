@@ -57,14 +57,6 @@ public:
 	{
 		return nullptr;
 	}
-	float_type as_float() const noexcept override
-	{
-		return {};
-	}
-	int_type as_int() const noexcept override
-	{
-		return {};
-	}
 	bool as_data(const std::type_info& type, void* output) override
 	{
 		return false;

@@ -26,8 +26,6 @@ public:
 	gc::gcable<member> operation(const member& right, infix_operator op) override;
 	gc::gcable<member> self_operation(self_operator op) override;
 	gc::gcable<member> get(const native::string& name) override;
-	float_type as_float() const noexcept override;
-	int_type as_int() const noexcept override;
 	bool as_data(const std::type_info& type, void* output) override;
 	bool as_data(const std::type_info& type, void* output) const override;
 	void gc_mark_children(bool mark) const noexcept override;

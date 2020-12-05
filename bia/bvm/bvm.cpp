@@ -16,7 +16,7 @@ using namespace bia::bvm;
 
 template<typename Type>
 inline typename std::enable_if<std::is_base_of<bia::member::member, Type>::value, Type*>::type
-    member_pointer(bia::member::member* element)
+  member_pointer(bia::member::member* element)
 {
 	if (const auto ptr = dynamic_cast<Type*>(element)) {
 		return ptr;
@@ -51,10 +51,16 @@ inline bia::gc::gcable<bia::member::member> co_parameter(bia::bytecode::constant
 	using namespace bia::bytecode;
 	switch (option) {
 	case co_int_8: return bia::creator::create(gc, ip.read<std::int8_t>());
+	case co_uint_8: return bia::creator::create(gc, ip.read<std::uint8_t>());
 	case co_int_16: return bia::creator::create(gc, ip.read<std::int16_t>());
+	case co_uint_16: return bia::creator::create(gc, ip.read<std::uint16_t>());
 	case co_int_32: return bia::creator::create(gc, ip.read<std::int32_t>());
+	case co_uint_32: return bia::creator::create(gc, ip.read<std::uint32_t>());
 	case co_int_64: return bia::creator::create(gc, ip.read<std::int64_t>());
-	case co_double: return bia::creator::create(gc, ip.read<double>());
+	case co_uint_64: return bia::creator::create(gc, ip.read<std::uint64_t>());
+	case co_float_32: return bia::creator::create(gc, ip.read<float>());
+	case co_float_64: return bia::creator::create(gc, ip.read<double>());
+	case co_bool: return bia::creator::create(gc, ip.read<bool>());
 	case co_test_register: return bia::creator::create(gc, test_register);
 	case co_null: return {};
 	default: BIA_THROW(bia::error::code::bad_constant_option);
@@ -82,15 +88,15 @@ inline bia::member::member* mso_parameter(bia::bytecode::member_source_option op
 	case mso_args_16: return stack.arg_at(ip.read<std::uint16_t>());
 	case mso_global_16:
 		return globals
-		    .get(*member_pointer<bia::member::native::string>(resources.at(ip.read<std::uint16_t>()).get()))
-		    .peek();
+		  .get(*member_pointer<bia::member::native::string>(resources.at(ip.read<std::uint16_t>()).get()))
+		  .peek();
 	case mso_local_16: return stack.local_at(ip.read<std::uint16_t>());
 	case mso_resource_16: return resources.at(ip.read<std::uint16_t>()).get();
 	case mso_args_8: return stack.arg_at(ip.read<std::uint8_t>());
 	case mso_global_8:
 		return globals
-		    .get(*member_pointer<bia::member::native::string>(resources.at(ip.read<std::uint8_t>()).get()))
-		    .peek();
+		  .get(*member_pointer<bia::member::native::string>(resources.at(ip.read<std::uint8_t>()).get()))
+		  .peek();
 	case mso_local_8: return stack.local_at(ip.read<std::uint8_t>());
 	case mso_resource_8: return resources.at(ip.read<std::uint8_t>()).get();
 	case mso_builtin: return context.builtin(ip.read<member::builtin>());
@@ -105,9 +111,7 @@ inline void mdo_parameter(bia::bytecode::member_destination_option option, instr
 	using namespace bia::bytecode;
 	switch (option) {
 	case mdo_args_16: token.set(stack.arg_at(ip.read<std::uint16_t>()), std::forward<Source>(source)); break;
-	case mdo_local_16:
-		token.set(stack.local_at(ip.read<std::uint16_t>()), std::forward<Source>(source));
-		break;
+	case mdo_local_16: token.set(stack.local_at(ip.read<std::uint16_t>()), std::forward<Source>(source)); break;
 	case mdo_args_8: token.set(stack.arg_at(ip.read<std::uint8_t>()), std::forward<Source>(source)); break;
 	case mdo_local_8: token.set(stack.local_at(ip.read<std::uint8_t>()), std::forward<Source>(source)); break;
 	case mdo_push: token.set(stack.push(), std::forward<Source>(source)); break;
@@ -122,7 +126,7 @@ inline bia::gc::gcable<bia::member::member> make_key_value_pair(bia::member::nat
 }
 
 bia::gc::gcable<bia::member::member>
-    bvm::execute(context& context, util::span<const util::byte*> instructions, gc::root& resources)
+  bvm::execute(context& context, util::span<const util::byte*> instructions, gc::root& resources)
 {
 	auto token = context.gc().register_thread(1024);
 	auto stack = token->stack_view();
@@ -149,24 +153,24 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 		const auto op_code = ip.next_op_code();
 		switch (to_op_code_base(op_code)) {
 		case oc_operator: {
-			const auto options = parse_options<oc_operator, member_source_option, member_source_option,
-			                                   member_destination_option>(op_code);
-			const auto left    = member_pointer<bia::member::member>(
-                mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
+			const auto options =
+			  parse_options<oc_operator, member_source_option, member_source_option, member_destination_option>(
+			    op_code);
+			const auto left = member_pointer<bia::member::member>(
+			  mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
 			const auto right = member_pointer<bia::member::member>(
-			    mso_parameter(std::get<1>(options), ip, context, globals, stack, resources));
+			  mso_parameter(std::get<1>(options), ip, context, globals, stack, resources));
 			const auto op = ip.read<infix_operator>();
 			mdo_parameter(std::get<2>(options), ip, stack, token, left->operation(*right, op));
 			break;
 		}
 		case oc_get: {
 			const auto options =
-			    parse_options<oc_get, member_source_option, resource_option, member_destination_option>(
-			        op_code);
+			  parse_options<oc_get, member_source_option, resource_option, member_destination_option>(op_code);
 			const auto src = member_pointer<bia::member::member>(
-			    mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
-			const auto name = member_pointer<bia::member::native::string>(
-			    ro_parameter(std::get<1>(options), ip, resources));
+			  mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
+			const auto name =
+			  member_pointer<bia::member::native::string>(ro_parameter(std::get<1>(options), ip, resources));
 			mdo_parameter(std::get<2>(options), ip, stack, token, src->get(*name));
 			break;
 		}
@@ -179,33 +183,29 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 			break;
 		}
 		case oc_instantiate: {
-			const auto options =
-			    parse_options<oc_instantiate, constant_option, member_destination_option>(op_code);
+			const auto options = parse_options<oc_instantiate, constant_option, member_destination_option>(op_code);
 			mdo_parameter(std::get<1>(options), ip, stack, token,
 			              co_parameter(std::get<0>(options), ip, gc, test_register));
 			break;
 		}
 		case oc_invoke: {
-			const auto options =
-			    parse_options<oc_invoke, member_source_option, member_destination_option>(op_code);
-			const auto caller = member_pointer<bia::member::member>(
-			    mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
+			const auto options = parse_options<oc_invoke, member_source_option, member_destination_option>(op_code);
+			const auto caller  = member_pointer<bia::member::member>(
+        mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
 			connector::parameters params(stack.make_call_frame());
 			bia::member::invoke_context ic{ context, resources, token };
 			mdo_parameter(std::get<1>(options), ip, stack, token, caller->invoke(params, ic));
 			break;
 		}
 		case oc_refer: {
-			const auto options =
-			    parse_options<oc_refer, member_source_option, member_destination_option>(op_code);
-			const auto src = mso_parameter(std::get<0>(options), ip, context, globals, stack, resources);
+			const auto options = parse_options<oc_refer, member_source_option, member_destination_option>(op_code);
+			const auto src     = mso_parameter(std::get<0>(options), ip, context, globals, stack, resources);
 			mdo_parameter(std::get<1>(options), ip, stack, token, src);
 			break;
 		}
 		case oc_clone: {
-			const auto options =
-			    parse_options<oc_clone, member_source_option, member_destination_option>(op_code);
-			const auto src = mso_parameter(std::get<0>(options), ip, context, globals, stack, resources);
+			const auto options = parse_options<oc_clone, member_source_option, member_destination_option>(op_code);
+			const auto src     = mso_parameter(std::get<0>(options), ip, context, globals, stack, resources);
 			if (src && src->flags() & bia::member::member::flag_clone_is_copy) {
 				mdo_parameter(std::get<1>(options), ip, stack, token, src->copy());
 			} else {
@@ -214,9 +214,8 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 			break;
 		}
 		case oc_copy: {
-			const auto options =
-			    parse_options<oc_copy, member_source_option, member_destination_option>(op_code);
-			const auto src = mso_parameter(std::get<0>(options), ip, context, globals, stack, resources);
+			const auto options = parse_options<oc_copy, member_source_option, member_destination_option>(op_code);
+			const auto src     = mso_parameter(std::get<0>(options), ip, context, globals, stack, resources);
 			if (src) {
 				mdo_parameter(std::get<1>(options), ip, stack, token, src->copy());
 			} else {
@@ -226,26 +225,24 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 		}
 		case oc_self_operator: {
 			const auto options =
-			    parse_options<oc_self_operator, member_source_option, member_destination_option>(op_code);
+			  parse_options<oc_self_operator, member_source_option, member_destination_option>(op_code);
 			const auto op  = ip.read<self_operator>();
 			const auto src = member_pointer<bia::member::member>(
-			    mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
+			  mso_parameter(std::get<0>(options), ip, context, globals, stack, resources));
 			mdo_parameter(std::get<1>(options), ip, stack, token, src->self_operation(op));
 			break;
 		}
 		case oc_import: {
-			const auto options =
-			    parse_options<oc_import, resource_option, member_destination_option>(op_code);
-			const auto name = member_pointer<bia::member::native::string>(
-			    ro_parameter(std::get<0>(options), ip, resources));
+			const auto options = parse_options<oc_import, resource_option, member_destination_option>(op_code);
+			const auto name =
+			  member_pointer<bia::member::native::string>(ro_parameter(std::get<0>(options), ip, resources));
 			mdo_parameter(std::get<1>(options), ip, stack, token, loader.load(name).get());
 			break;
 		}
 		case oc_initiate: {
-			const auto options =
-			    parse_options<oc_initiate, resource_option, member_destination_option>(op_code);
-			const auto function = member_pointer<bia::member::function::function>(
-			    ro_parameter(std::get<0>(options), ip, resources));
+			const auto options = parse_options<oc_initiate, resource_option, member_destination_option>(op_code);
+			const auto function =
+			  member_pointer<bia::member::function::function>(ro_parameter(std::get<0>(options), ip, resources));
 			mdo_parameter(std::get<1>(options), ip, stack, token, function->initiate(stack));
 			break;
 		}
@@ -270,16 +267,16 @@ bia::gc::gcable<bia::member::member> bvm::execute(context& context,
 		}
 		case oc_name: {
 			const auto options = parse_options<oc_name, resource_option>(op_code);
-			const auto name    = member_pointer<bia::member::native::string>(
-                ro_parameter(std::get<0>(options), ip, resources));
+			const auto name =
+			  member_pointer<bia::member::native::string>(ro_parameter(std::get<0>(options), ip, resources));
 			auto& src = stack.last_push();
 			stack.mark_kwarg();
 			token.set(src, make_key_value_pair(name, src));
 			break;
 		}
 		case oc_return:
-			return mso_parameter(std::get<0>(parse_options<oc_return, member_source_option>(op_code)), ip,
-			                     context, globals, stack, resources);
+			return mso_parameter(std::get<0>(parse_options<oc_return, member_source_option>(op_code)), ip, context,
+			                     globals, stack, resources);
 		case oc_return_void: return {};
 		case oc_invert: test_register = !test_register; break;
 		case oc_prep_call: stack.prep_call(); break;

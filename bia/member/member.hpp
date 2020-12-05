@@ -25,8 +25,6 @@ struct invoke_context;
 class member : public gc::object::base
 {
 public:
-	typedef double float_type;
-	typedef std::int64_t int_type;
 	/** the flag type */
 	typedef int flag_type;
 	/** the type for testing operations; is able to hold at least: -1, 0 and 1 */
@@ -101,19 +99,7 @@ public:
 	 * @param name the name of the member
 	 * @returns the member or `nullptr` if it does not exist
 	 */
-	virtual gc::gcable<member> get(const native::string& name) = 0;
-	/**
-	 * Returns a representation of this object as a floating point number.
-	 *
-	 * @returns a floating point representation
-	 */
-	virtual float_type as_float() const noexcept = 0;
-	/**
-	 * Returns a representation of this object as an integer.
-	 *
-	 * @returns an integer representation
-	 */
-	virtual int_type as_int() const noexcept                             = 0;
+	virtual gc::gcable<member> get(const native::string& name)           = 0;
 	virtual bool as_data(const std::type_info& type, void* output)       = 0;
 	virtual bool as_data(const std::type_info& type, void* output) const = 0;
 };

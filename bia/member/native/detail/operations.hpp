@@ -48,8 +48,8 @@ inline typename std::enable_if<std::is_floating_point<Type>::value, Type>::type
 	}
 }
 
-template<typename Left, typename Right>
-inline member::test_type test_operation(Left left, test_operator op, Right right)
+template<typename Type>
+inline member::test_type test_operation(Type left, test_operator op, Type right)
 {
 	switch (op) {
 	case test_operator::equal: return left == right;

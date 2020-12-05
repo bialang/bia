@@ -135,16 +135,6 @@ bia::gc::gcable<bia::member::member> list::get(const native::string& name)
 	return {};
 }
 
-list::float_type list::as_float() const noexcept
-{
-	return {};
-}
-
-list::int_type list::as_int() const noexcept
-{
-	return {};
-}
-
 bool list::as_data(const std::type_info& type, void* output)
 {
 	return const_cast<const list*>(this)->as_data(type, output);

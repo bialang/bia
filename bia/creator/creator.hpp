@@ -19,20 +19,26 @@
 namespace bia {
 namespace creator {
 
+inline gc::gcable<member::member> create(gc::gc& gc, bool value)
+{
+	// TODO implement this
+	return {};
+}
+
 template<typename Type>
 inline typename std::enable_if<std::is_integral<Type>::value && (sizeof(Type) <= 8),
-                               gc::gcable<member::native::integer>>::type
-    create(gc::gc& gc, Type value)
+                               gc::gcable<member::native::integer<Type>>>::type
+  create(gc::gc& gc, Type value)
 {
-	return gc.construct<member::native::integer>(value);
+	return gc.construct<member::native::integer<Type>>(value);
 }
 
 template<typename Type>
 inline typename std::enable_if<std::is_floating_point<Type>::value && (sizeof(Type) <= 8),
-                               gc::gcable<member::native::floating_point>>::type
-    create(gc::gc& gc, Type value)
+                               gc::gcable<member::native::floating_point<Type>>>::type
+  create(gc::gc& gc, Type value)
 {
-	return gc.construct<member::native::floating_point>(value);
+	return gc.construct<member::native::floating_point<Type>>(value);
 }
 
 template<typename Return, typename... Args>
@@ -43,9 +49,9 @@ inline gc::gcable<member::function::static_<Return, Args...>> create(gc::gc& gc,
 
 template<typename Type, std::size_t Index = 0>
 inline typename std::enable_if<Index + 1 == Type::type_count &&
-                                   util::type_traits::is_variant<typename std::decay<Type>::type>::value,
+                                 util::type_traits::is_variant<typename std::decay<Type>::type>::value,
                                gc::gcable<member::member>>::type
-    create(gc::gc& gc, Type&& value)
+  create(gc::gc& gc, Type&& value)
 {
 	if (!Index && value.index() == value.npos) {
 		return {};
@@ -58,9 +64,9 @@ inline typename std::enable_if<Index + 1 == Type::type_count &&
 
 template<typename Type, std::size_t Index = 0>
 inline typename std::enable_if<Index + 1 != Type::type_count &&
-                                   util::type_traits::is_variant<typename std::decay<Type>::type>::value,
+                                 util::type_traits::is_variant<typename std::decay<Type>::type>::value,
                                gc::gcable<member::member>>::type
-    create(gc::gc& gc, Type&& value)
+  create(gc::gc& gc, Type&& value)
 {
 	if (!Index && value.index() == value.npos) {
 		return {};
@@ -83,12 +89,12 @@ inline gc::gcable<member::native::string> create(gc::gc& gc, const char* value)
 }
 
 template<typename Type>
-inline typename std::enable_if<
-    util::type_traits::is_gcable<typename std::decay<Type>::type>::value &&
-        std::is_base_of<member::member,
-                        typename util::type_traits::is_gcable<typename std::decay<Type>::type>::type>::value,
-    Type>::type
-    create(gc::gc& gc, Type&& value)
+inline
+  typename std::enable_if<util::type_traits::is_gcable<typename std::decay<Type>::type>::value &&
+                            std::is_base_of<member::member, typename util::type_traits::is_gcable<
+                                                              typename std::decay<Type>::type>::type>::value,
+                          Type>::type
+  create(gc::gc& gc, Type&& value)
 {
 	return std::forward<Type>(value);
 }

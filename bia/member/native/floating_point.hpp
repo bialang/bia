@@ -6,21 +6,26 @@
 
 #include <bia/gc/gc.hpp>
 #include <bia/log/log.hpp>
+#include <bia/util/type_traits/equals_any.hpp>
 #include <cstdint>
 
 namespace bia {
 namespace member {
 namespace native {
 
+template<typename Type>
 class floating_point : public member
 {
 public:
+	static_assert(util::type_traits::equals_any_type<Type, float, double>::value,
+	              "floating_point must equal float or double");
+
 	/**
 	 * Constructor.
 	 *
 	 * @param value the initial value
 	 */
-	floating_point(float_type value) noexcept : _value(value)
+	floating_point(Type value) noexcept : _value(value)
 	{}
 	~floating_point()
 	{
@@ -35,8 +40,11 @@ public:
 		if (op == test_operator::self) {
 			return _value ? 1 : 0;
 		}
-
-		return detail::test_operation(_value, op, right.as_float());
+		Type rhs{};
+		if (!right.as_data(typeid(Type), &rhs)) {
+			BIA_THROW(error::code::bad_cast);
+		}
+		return detail::test_operation(_value, op, rhs);
 	}
 	gc::gcable<member> copy() const override
 	{
@@ -48,8 +56,11 @@ public:
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
-		return gc::gc::active_gc()->construct<floating_point>(
-		    detail::operation(_value, op, right.as_float()));
+		Type rhs{};
+		if (!right.as_data(typeid(Type), &rhs)) {
+			BIA_THROW(error::code::bad_cast);
+		}
+		return gc::gc::active_gc()->construct<floating_point>(detail::operation(_value, op, rhs));
 	}
 	gc::gcable<member> self_operation(self_operator op) override
 	{
@@ -64,22 +75,14 @@ public:
 	{
 		return nullptr;
 	}
-	float_type as_float() const noexcept override
-	{
-		return _value;
-	}
-	int_type as_int() const noexcept override
-	{
-		return static_cast<int_type>(_value);
-	}
 	bool as_data(const std::type_info& type, void* output) override
 	{
 		return false;
 	}
 	bool as_data(const std::type_info& type, void* output) const override
 	{
-		if (type == typeid(float_type*)) {
-			*static_cast<const float_type**>(output) = &_value;
+		if (type == typeid(Type*)) {
+			*static_cast<const Type**>(output) = &_value;
 
 			return true;
 		}
@@ -94,7 +97,7 @@ protected:
 	{}
 
 private:
-	const float_type _value;
+	const Type _value;
 };
 
 } // namespace native

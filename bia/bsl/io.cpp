@@ -29,10 +29,10 @@ inline void print(bia::connector::parameters_type params)
 		if (*i) {
 			if (dynamic_cast<const bia::member::native::string*>(*i)) {
 				std::cout << bia::member::cast::cast<const char*>(**i);
-			} else if (dynamic_cast<const bia::member::native::floating_point*>(*i)) {
-				std::cout << bia::member::cast::cast<bia::member::member::float_type>(**i);
+			} else if (dynamic_cast<const bia::member::native::floating_point<double>*>(*i)) {
+				std::cout << bia::member::cast::cast<double>(**i);
 			} else {
-				std::cout << bia::member::cast::cast<bia::member::member::int_type>(**i);
+				std::cout << bia::member::cast::cast<int>(**i);
 			}
 		} else {
 			std::cout << "<null>";

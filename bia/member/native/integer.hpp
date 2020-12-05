@@ -7,6 +7,7 @@
 #include <bia/gc/gc.hpp>
 #include <bia/log/log.hpp>
 #include <cstdint>
+#include <type_traits>
 
 namespace bia {
 namespace member {
@@ -15,15 +16,18 @@ namespace native {
 /**
  * A simple int member capable of holding an int64. This member is always unmutable.
  */
+template<typename Type>
 class integer : public member
 {
 public:
+	static_assert(std::is_integral<Type>::value && sizeof(Type) <= 8, "integer must be of integral type");
+
 	/**
 	 * Constructor.
 	 *
 	 * @param value the initial value
 	 */
-	integer(int_type value) noexcept : _value(value)
+	integer(Type value) noexcept : _value(value)
 	{}
 	~integer()
 	{
@@ -38,8 +42,11 @@ public:
 		if (op == test_operator::self) {
 			return _value ? 1 : 0;
 		}
-
-		return detail::test_operation(_value, op, right.as_int());
+		Type rhs{};
+		if (!right.as_data(typeid(Type), &rhs)) {
+			BIA_THROW(error::code::bad_cast);
+		}
+		return detail::test_operation(_value, op, rhs);
 	}
 	gc::gcable<member> copy() const override
 	{
@@ -51,7 +58,11 @@ public:
 	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
-		return gc::gc::active_gc()->construct<integer>(detail::operation(_value, op, right.as_int()));
+		Type rhs{};
+		if (!right.as_data(typeid(Type), &rhs)) {
+			BIA_THROW(error::code::bad_cast);
+		}
+		return gc::gc::active_gc()->construct<integer>(detail::operation(_value, op, rhs));
 	}
 	gc::gcable<member> self_operation(self_operator op) override
 	{
@@ -66,22 +77,14 @@ public:
 	{
 		return nullptr;
 	}
-	float_type as_float() const noexcept override
-	{
-		return static_cast<float_type>(_value);
-	}
-	int_type as_int() const noexcept override
-	{
-		return _value;
-	}
 	bool as_data(const std::type_info& type, void* output) override
 	{
 		return false;
 	}
 	bool as_data(const std::type_info& type, void* output) const override
 	{
-		if (type == typeid(int_type*)) {
-			*static_cast<const int_type**>(output) = &_value;
+		if (type == typeid(Type*)) {
+			*static_cast<const Type**>(output) = &_value;
 
 			return true;
 		}
@@ -96,7 +99,7 @@ protected:
 	{}
 
 private:
-	const int_type _value;
+	const Type _value;
 };
 
 } // namespace native

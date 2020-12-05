@@ -67,16 +67,6 @@ bia::gc::gcable<bia::member::member> regex::get(const native::string& name)
 	return {};
 }
 
-regex::float_type regex::as_float() const noexcept
-{
-	return {};
-}
-
-regex::int_type regex::as_int() const noexcept
-{
-	return {};
-}
-
 bool regex::as_data(const std::type_info& type, void* output)
 {
 	return false;

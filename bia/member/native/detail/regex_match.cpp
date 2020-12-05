@@ -52,16 +52,6 @@ bia::gc::gcable<bia::member::member> regex_match::get(const native::string& name
 	return {};
 }
 
-regex_match::float_type regex_match::as_float() const noexcept
-{
-	return {};
-}
-
-regex_match::int_type regex_match::as_int() const noexcept
-{
-	return {};
-}
-
 bool regex_match::as_data(const std::type_info& type, void* output)
 {
 	return false;

@@ -92,10 +92,6 @@ TEST_CASE("variant construction", "[util]")
 			REQUIRE(copy.get<tester<char>>().value == 'b');
 			REQUIRE_THROWS_AS(copy.get<0>(), bia::error::exception);
 			REQUIRE_THROWS_AS(copy.get<tester<int>>(), bia::error::exception);
-<<<<<<< HEAD
-
-=======
->>>>>>> bfa99be5c2526d95dcb8a05247fa94b0897e68df
 			REQUIRE(v.get<1>().value == 'b');
 			REQUIRE(v.get<tester<char>>().value == 'b');
 			REQUIRE_THROWS_AS(v.get<0>(), bia::error::exception);
