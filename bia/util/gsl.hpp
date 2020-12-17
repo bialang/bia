@@ -89,10 +89,10 @@ template<typename To, typename From>
 constexpr To narrow(From from)
 {
 	return static_cast<From>(narrow_cast<To>(from)) != from ||
-	               (std::is_signed<To>::value != std::is_signed<From>::value &&
-	                (narrow_cast<To>(from) < To{}) != (from < From{}))
-	           ? BIA_THROW(error::code::bad_narrowing)
-	           : narrow_cast<To>(from);
+	           (std::is_signed<To>::value != std::is_signed<From>::value &&
+	            (narrow_cast<To>(from) < To{}) != (from < From{}))
+	         ? BIA_THROW(error::code::bad_narrowing)
+	         : narrow_cast<To>(from);
 }
 
 constexpr std::size_t dynamic_extent = std::numeric_limits<std::size_t>::max();
@@ -160,6 +160,14 @@ public:
 	Iterable data() const noexcept
 	{
 		return _data;
+	}
+	reference front() const
+	{
+		return at(0);
+	}
+	reference back() const
+	{
+		return at(size() - 1);
 	}
 	reference at(size_type index) const
 	{

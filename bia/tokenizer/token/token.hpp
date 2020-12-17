@@ -15,12 +15,6 @@ namespace token {
 
 struct token
 {
-	typedef std::int64_t int_type;
-	typedef double float64_type;
-
-	struct cmd_end
-	{};
-
 	struct batch
 	{
 		std::size_t statement_count;
@@ -116,6 +110,7 @@ struct token
 		bracket_open,
 		bracket_close,
 		comma,
+		cmd_end,
 	};
 
 	enum class keyword

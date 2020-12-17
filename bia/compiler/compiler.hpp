@@ -2,8 +2,8 @@
 #define BIA_COMPILER_COMPILER_HPP_
 
 #include "flags.hpp"
+#include "symbol/manager.hpp"
 #include "type/system.hpp"
-#include "variable_manager.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
 #include <bia/resource/serializer.hpp>
@@ -28,7 +28,7 @@ public:
 private:
 	bytecode::writer::instruction _writer;
 	resource::serializer _resources;
-	variable_manager _variables;
+	symbol::manager _symbols;
 	type::system _type_system;
 	flags _flags;
 };

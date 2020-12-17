@@ -91,3 +91,32 @@ error my_error { // allowed types for the fields are 'string' or 'fun(...): stri
 }
 raise my_error.success.ok
 raise my_error.success.not_found(url)
+
+
+
+class My_map
+{}
+
+import container
+
+let x: container.My_map
+let x: container.my_map
+let x: container.MyMap
+
+// default types
+int, uint, ..., float32, float64, bool, null, string
+
+type integer = int | uint | ... 
+type number = integer | float32 | float64
+
+// default variables/functions
+int(x: number | bool): int
+float32(x: number): float32
+
+
+import path
+import Path from path
+import "properties.json" // syntax error: missing identifier
+import "properties.json" as props
+
+fun load(path: path.Path)

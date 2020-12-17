@@ -64,6 +64,10 @@ enum class code
 	bad_number,
 	bad_operator,
 
+	type_mismatch,
+	variable_alread_declared,
+	unknown_type,
+
 	bad_opcode,
 	bad_offset_option,
 	bad_constant_option,

@@ -25,7 +25,11 @@ inline error_info compound_stmt(parameter& param)
 
 error_info parse::root(parameter& param)
 {
-	return parse::any_of(param, small_stmt, compound_stmt);
+	if (const auto err = parse::any_of(param, small_stmt, compound_stmt)) {
+		return err;
+	}
+	param.bundle.emplace_back(token::control::cmd_end);
+	return {};
 }
 
 error_info parse::batch(parameter& param)

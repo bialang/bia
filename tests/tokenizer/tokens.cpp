@@ -38,11 +38,12 @@ TEST_CASE("declaration statement", "[tokenizer]")
 
 	auto param = create_parameter("let i = 0");
 	REQUIRE(!root(*param));
-	REQUIRE(param->bundle.size() == 4);
+	REQUIRE(param->bundle.size() == 5);
 	REQUIRE(param->bundle[0].value == token::keyword::let);
 	REQUIRE(param->bundle[1].value.is_type<token::identifier>());
 	REQUIRE(param->bundle[2].value == operator_::assign);
 	REQUIRE(param->bundle[3].value == zero);
+	REQUIRE(param->bundle[4].value == token::control::cmd_end);
 
 	param = create_parameter("let i = ?");
 	REQUIRE(static_cast<bool>(root(*param)));
@@ -50,7 +51,7 @@ TEST_CASE("declaration statement", "[tokenizer]")
 
 	param = create_parameter("let i: int = 0");
 	REQUIRE(!root(*param));
-	REQUIRE(param->bundle.size() == 7);
+	REQUIRE(param->bundle.size() == 8);
 	REQUIRE(param->bundle[0].value == token::keyword::let);
 	REQUIRE(param->bundle[1].value.is_type<token::identifier>());
 	REQUIRE(param->bundle[2].value == token::control::type_definition);
@@ -58,6 +59,7 @@ TEST_CASE("declaration statement", "[tokenizer]")
 	REQUIRE(param->bundle[4].value.is_type<token::identifier>());
 	REQUIRE(param->bundle[5].value == operator_::assign);
 	REQUIRE(param->bundle[6].value == zero);
+	REQUIRE(param->bundle[7].value == token::control::cmd_end);
 }
 
 TEST_CASE("any of", "[tokenizer]")

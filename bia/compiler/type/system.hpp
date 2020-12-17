@@ -3,8 +3,8 @@
 
 #include "definition.hpp"
 
-#include <map>
 #include <bia/resource/view.hpp>
+#include <map>
 
 namespace bia {
 namespace compiler {
@@ -13,7 +13,10 @@ namespace type {
 class system
 {
 public:
+	system();
+	~system();
 
+	definition* get(const resource::view& name);
 private:
 	std::map<resource::view, definition*> _definitions;
 };

@@ -133,10 +133,23 @@ public:
 	{
 		return is_type<Type>() && get<Type>() == value;
 	}
+	bool empty() const noexcept
+	{
+		return _index == npos;
+	}
+	bool operator==(std::nullptr_t) const noexcept
+	{
+		return empty();
+	}
 	template<typename Type>
 	bool operator==(const Type& value) const noexcept
 	{
 		return has_value(value);
+	}
+	template<typename Type>
+	bool operator!=(const Type& value) const noexcept
+	{
+		return !has_value(value);
 	}
 	variant& operator=(const variant& copy)
 	{
@@ -164,7 +177,6 @@ private:
 	{
 		if (Index == _index) {
 			reinterpret_cast<Type*>(&_data)->~Type();
-
 			_index = npos;
 		} else {
 			_destroy<Index + 1, Others...>();
