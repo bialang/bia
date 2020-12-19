@@ -131,8 +131,8 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 	print_border();
 
 	while (ip) {
-		output << "0x" << std::hex << std::setw(8) << std::setfill('0') << ip.cursor() << ": " << std::setw(10)
-		       << std::setfill(' ') << std::left;
+		output << "0x" << std::hex << std::setw(8) << std::setfill('0') << std::right << ip.cursor() << ": "
+		       << std::setw(10) << std::setfill(' ') << std::left;
 		const auto op_code = ip.next_op_code();
 
 		switch (to_op_code_base(op_code)) {
@@ -237,29 +237,24 @@ void bia::assembler::disassemble(util::span<const util::byte*> instructions, gc:
 		}
 		case oc_jump: {
 			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmp");
-
 			break;
 		}
 		case oc_jump_true: {
 			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmpt");
-
 			break;
 		}
 		case oc_jump_false: {
 			oo_parameter(std::get<0>(parse_options<oc_jump, offset_option>(op_code)), ip, output << "jmpf");
-
 			break;
 		}
 		case oc_name: {
 			ro_parameter(std::get<0>(parse_options<oc_name, resource_option>(op_code)), ip, resources,
 			             output << "name");
-
 			break;
 		}
 		case oc_return: {
 			mso_parameter(std::get<0>(parse_options<oc_return, member_source_option>(op_code)), ip, resources,
-			              output << "ret3");
-
+			              output << "ret");
 			break;
 		}
 		case oc_return_void: output << "ret"; break;

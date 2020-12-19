@@ -26,7 +26,7 @@ public:
 
 	integer(size size) noexcept : _size{ size }
 	{}
-	bool is_assignable(const definition* other) const noexcept
+	bool is_assignable(const definition* other) const noexcept override
 	{
 		return dynamic_cast<const integer*>(other) && static_cast<const integer*>(other)->_size == _size;
 	}

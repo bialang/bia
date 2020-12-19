@@ -5,6 +5,7 @@ project(bia
 	LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(BUILD_SHARED_LIBS "Builds the Bia library as a shared library." ON)
 option(BIA_BUILD_TESTS "Builds the tests for the Bia library." ON)

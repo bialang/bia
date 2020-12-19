@@ -4,7 +4,6 @@
 
 #include <bia/log/log.hpp>
 #include <bia/util/gsl.hpp>
-#include <initializer_list>
 
 using namespace bia::compiler;
 
@@ -20,4 +19,9 @@ void compiler::finish()
 
 void compiler::receive(util::span<const token*> tokens, resource::manager& manager)
 {
+	elve::parameter params{ _writer, _symbols };
+
+	while (!tokens.empty()) {
+		tokens = elve::root(params, tokens);
+	}
 }

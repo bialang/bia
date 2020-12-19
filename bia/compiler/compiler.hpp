@@ -3,7 +3,6 @@
 
 #include "flags.hpp"
 #include "symbol/manager.hpp"
-#include "type/system.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
 #include <bia/resource/serializer.hpp>
@@ -29,7 +28,6 @@ private:
 	bytecode::writer::instruction _writer;
 	resource::serializer _resources;
 	symbol::manager _symbols;
-	type::system _type_system;
 	flags _flags;
 };
 

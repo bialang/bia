@@ -10,6 +10,7 @@ elve::tokens_type elve::decl_stmt(parameter& param, tokens_type tokens)
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == token::keyword::let);
 
 	auto variable = param.symbols.declare(tokens.at(1).value.get<token::identifier>().memory);
+	tokens        = tokens.subspan(2);
 
 	// process type definition
 	if (tokens.front().value != operator_::assign) {
@@ -18,6 +19,7 @@ elve::tokens_type elve::decl_stmt(parameter& param, tokens_type tokens)
 		variable.definition(def);
 	}
 
+	BIA_EXPECTS(tokens.front().value == operator_::assign);
 	// TODO make util assignable from subset
 	const auto expr =
 	  single_expression(param, tokens.subspan(1), variable.location().get<bytecode::member::local>(), false);
@@ -28,5 +30,5 @@ elve::tokens_type elve::decl_stmt(parameter& param, tokens_type tokens)
 	}
 	variable.definition(expr.second.get());
 	variable.build();
-	return tokens;
+	return expr.first;
 }

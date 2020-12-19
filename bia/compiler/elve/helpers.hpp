@@ -2,7 +2,6 @@
 #define BIA_COMPILER_ELVE_HELPERS_HPP_
 
 #include "../symbol/manager.hpp"
-#include "../type/system.hpp"
 
 #include <bia/bytecode/writer/instruction.hpp>
 #include <bia/tokenizer/token/token.hpp>
@@ -17,7 +16,6 @@ struct parameter
 {
 	bytecode::writer::instruction& writer;
 	symbol::manager& symbols;
-	type::system& type_system;
 };
 
 typedef util::variant<bytecode::member::local, bytecode::member::args, bytecode::member::push>

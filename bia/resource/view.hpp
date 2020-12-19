@@ -11,7 +11,6 @@ namespace resource {
 struct view
 {
 	enum type type;
-	std::size_t size;
 	gc::memory::iterator first;
 	gc::memory::iterator last;
 
@@ -23,15 +22,47 @@ struct view
 	{
 		return last;
 	}
+	std::size_t size() const noexcept
+	{
+		return last - first;
+	}
+	int compare(const char* string, std::size_t length) const noexcept
+	{
+		if (type < type::string) {
+			return -1;
+		} else if (type > type::string) {
+			return 1;
+		}
+
+		const auto ls = size();
+		if (ls < length) {
+			return -1;
+		} else if (ls > length) {
+			return 1;
+		}
+
+		for (auto i = first; i != last; ++i, ++string) {
+			if (static_cast<char>(*i) < *string) {
+				return -1;
+			} else if (static_cast<char>(*i) < *string) {
+				return 1;
+			}
+		}
+		return 0;
+	}
 	int compare(const view& other) const noexcept
 	{
 		if (type < other.type) {
 			return -1;
 		} else if (type > other.type) {
 			return 1;
-		} else if (size < other.size) {
+		}
+
+		const auto ls = size();
+		const auto rs = other.size();
+		if (ls < rs) {
 			return -1;
-		} else if (size > other.size) {
+		} else if (ls > rs) {
 			return 1;
 		}
 
@@ -42,7 +73,6 @@ struct view
 				return 1;
 			}
 		}
-
 		return 0;
 	}
 	bool operator<(const view& other) const noexcept

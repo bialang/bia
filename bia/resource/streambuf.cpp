@@ -32,7 +32,6 @@ view streambuf::finish(type type)
 	BIA_EXPECTS(valid());
 
 	const auto end     = _manager->_space.size() - (epptr() - pptr());
-	const auto size    = end - _initial_size;
 	const auto finally = util::make_finally([this] {
 		_manager->_buf_active = false;
 		_manager              = nullptr;
@@ -40,7 +39,7 @@ view streambuf::finish(type type)
 
 	_manager->_space.truncate(end);
 
-	return { type, size, _manager->_space.cursor(_initial_size), _manager->_space.cursor(end) };
+	return { type, _manager->_space.cursor(_initial_size), _manager->_space.cursor(end) };
 }
 
 bool streambuf::valid() const noexcept

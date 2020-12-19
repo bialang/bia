@@ -32,7 +32,13 @@ public:
 
 private:
 	friend builder;
-	typedef std::map<resource::view, variable> map_type;
+	typedef util::span<const char*> string_type;
+	typedef util::variant<resource::view, string_type> map_key_type;
+	struct comparator
+	{
+		bool operator()(const map_key_type& left, const map_key_type& right) const;
+	};
+	typedef std::map<map_key_type, variable, comparator> map_type;
 
 	map_type _variables;
 	std::map<resource::view, location_type> _declared;
