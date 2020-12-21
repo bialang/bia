@@ -57,7 +57,8 @@ serializer::size_type serializer::index_of(view view)
 	BIA_LOG(TRACE, "serializing new entry with {} bytes", view.size);
 
 	// write info
-	const auto sw = size_width_of(view.size);
+	const auto size = view.size();
+	const auto sw   = size_width_of(size);
 
 	// write info
 	_output.put(info_to(view.type, sw.first));
@@ -66,9 +67,9 @@ serializer::size_type serializer::index_of(view view)
 	char buffer[4]{};
 
 	switch (sw.first) {
-	case size_width::_8: util::portable::write(buffer, static_cast<std::uint8_t>(view.size)); break;
-	case size_width::_16: util::portable::write(buffer, static_cast<std::uint16_t>(view.size)); break;
-	case size_width::_32: util::portable::write(buffer, static_cast<std::uint32_t>(view.size)); break;
+	case size_width::_8: util::portable::write(buffer, static_cast<std::uint8_t>(size)); break;
+	case size_width::_16: util::portable::write(buffer, static_cast<std::uint16_t>(size)); break;
+	case size_width::_32: util::portable::write(buffer, static_cast<std::uint32_t>(size)); break;
 	default: BIA_THROW(error::code::bad_switch_value);
 	}
 

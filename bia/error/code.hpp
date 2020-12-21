@@ -65,7 +65,7 @@ enum class code
 	bad_operator,
 
 	type_mismatch,
-	variable_alread_declared,
+	symbol_already_declared,
 	unknown_type,
 
 	bad_opcode,

@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <iterator>
 #include <limits>
+#include <string>
 #include <type_traits>
 #include <utility>
 
@@ -195,6 +196,11 @@ private:
 	Iterable _data;
 	size_type _size;
 };
+
+inline span<const char*> from_cstring(const char* string)
+{
+	return { string, std::char_traits<char>::length(string) };
+}
 
 } // namespace util
 } // namespace bia

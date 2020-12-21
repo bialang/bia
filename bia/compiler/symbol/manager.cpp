@@ -18,19 +18,19 @@ manager::manager()
 	_scopes.emplace_back();
 
 	// create native types
-	_variables.insert({ string_type{ "int", 3 }, {} });
-	_variables.insert({ string_type{ "uint", 4 }, {} });
-	_variables.insert({ string_type{ "int8", 4 }, {} });
-	_variables.insert({ string_type{ "uint8", 5 }, {} });
-	_variables.insert({ string_type{ "int16", 5 }, {} });
-	_variables.insert({ string_type{ "uint16", 6 }, {} });
-	_variables.insert({ string_type{ "int32", 5 }, {} });
-	_variables.insert({ string_type{ "uint32", 6 }, {} });
-	_variables.insert({ string_type{ "int64", 5 }, {} });
-	_variables.insert({ string_type{ "uint64", 6 }, {} });
+	_symbols.insert({ string_type{ "int", 3 }, static_cast<type::definition*>(&int_type) });
+	// _variables.insert({ string_type{ "uint", 4 }, {} });
+	// _variables.insert({ string_type{ "int8", 4 }, {} });
+	// _variables.insert({ string_type{ "uint8", 5 }, {} });
+	// _variables.insert({ string_type{ "int16", 5 }, {} });
+	// _variables.insert({ string_type{ "uint16", 6 }, {} });
+	// _variables.insert({ string_type{ "int32", 5 }, {} });
+	// _variables.insert({ string_type{ "uint32", 6 }, {} });
+	// _variables.insert({ string_type{ "int64", 5 }, {} });
+	// _variables.insert({ string_type{ "uint64", 6 }, {} });
 
-	_variables.insert({ string_type{ "float32", 7 }, {} });
-	_variables.insert({ string_type{ "float64", 7 }, {} });
+	// _variables.insert({ string_type{ "float32", 7 }, {} });
+	// _variables.insert({ string_type{ "float64", 7 }, {} });
 }
 
 void manager::open_scope()
@@ -42,18 +42,36 @@ void manager::close_scope()
 {
 	BIA_EXPECTS(_scopes.size() > 1);
 	for (const auto& it : _scopes.back()) {
-		_variables.erase(it);
+		_symbols.erase(it);
 	}
 	_scopes.pop_back();
 }
 
 builder manager::declare(const resource::view& name)
 {
-	if (_variables.find(name) != _variables.end() || _declared.find(name) != _declared.end()) {
-		BIA_THROW(error::code::variable_alread_declared);
+	if (_symbols.find(name) != _symbols.end() || _declared.find(name) != _declared.end()) {
+		BIA_THROW(error::code::symbol_already_declared);
 	}
 	_declared.insert({ name, bytecode::member::local{ _index } });
 	return { this, name, bytecode::member::local{ _index++ } };
+}
+
+symbol_type manager::get_symbol(const resource::view& name)
+{
+	const auto result = _symbols.find(name);
+	if (result == _symbols.end()) {
+		return {};
+	}
+	return result->second;
+}
+
+symbol_type manager::get_symbol(const string_type& name)
+{
+	const auto result = _symbols.find(name);
+	if (result == _symbols.end()) {
+		return {};
+	}
+	return result->second;
 }
 
 bool manager::comparator::operator()(const map_key_type& left, const map_key_type& right) const
@@ -65,7 +83,7 @@ bool manager::comparator::operator()(const map_key_type& left, const map_key_typ
 		const auto str = right.get<string_type>();
 		return left.get<resource::view>().compare(str.data(), str.size()) < 0;
 	}
-	const auto lstr = right.get<string_type>();
+	const auto lstr = left.get<string_type>();
 	if (right.is_type<resource::view>()) {
 		return right.get<resource::view>().compare(lstr.data(), lstr.size()) > 0;
 	}
@@ -89,7 +107,8 @@ bool manager::comparator::operator()(const map_key_type& left, const map_key_typ
 void manager::_accept_declared(const resource::view& name, variable var)
 {
 	_declared.erase(name);
-	_variables.insert({ name, std::move(var) });
+	const auto it = _symbols.insert({ name, std::move(var) });
+	_scopes.back().push_back(it.first);
 }
 
 void manager::_decline_declared(const resource::view& name)

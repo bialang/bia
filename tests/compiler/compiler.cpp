@@ -1,4 +1,4 @@
-#define CATCH_CONFIG_MAIN
+//#define CATCH_CONFIG_MAIN
 
 #include <bia/assembler/disassembler.hpp>
 #include <bia/compiler/compiler.hpp>
@@ -8,11 +8,13 @@
 #include <bia/util/finally.hpp>
 #include <catch.hpp>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
 using namespace bia;
 
-TEST_CASE("simple compiling", "[compiler]")
+// TEST_CASE("simple compiling", "[compiler]")
+int main()
 {
 	std::stringstream code;
 	// std::ofstream output{ "/home/yunus/Projects/bia/bytecode.generated", std::ios::out | std::ios::binary };
@@ -33,7 +35,7 @@ TEST_CASE("simple compiling", "[compiler]")
 	cp.finish();
 
 	// disassemble
-	const auto ins  = output.str();
+	const auto ins = output.str();
 	resources.seekg(0, std::ios::beg);
 	const auto root = resource::deserialize(resources, g);
 	util::span<const util::byte*> instructions{ reinterpret_cast<const util::byte*>(ins.data()), ins.size() };

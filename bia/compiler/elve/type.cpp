@@ -9,9 +9,10 @@ std::pair<elve::tokens_type, bia::util::not_null<type::definition*>> elve::type_
                                                                                            tokens_type tokens)
 {
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == token::control::type_definition);
-	const auto type = param.type_system.get(tokens.at(1).value.get<token::identifier>().memory);
-	if (!type) {
-		BIA_THROW(error::code::unknown_type);
-	}
-	return { tokens.subspan(2), type };
+	// const auto type = param.type_system.get(tokens.at(1).value.get<token::identifier>().memory);
+	// if (!type) {
+	// 	BIA_THROW(error::code::unknown_type);
+	// }
+	// return { tokens.subspan(2), type };
+	return {tokens, (type::definition*)nullptr};
 }

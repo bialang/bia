@@ -120,3 +120,55 @@ import "properties.json" // syntax error: missing identifier
 import "properties.json" as props
 
 fun load(path: path.Path)
+
+
+// create on the stack
+let x: object = 0
+
+fun foo(val: *object): object {
+  // does something
+  return new_val
+}
+
+foo(x) // passed by value, meaning make a shallow copy of it
+
+foo(&x) // object is not created on the stack
+
+let x: int = 0        // created on the heap
+let y: *int = &x      // a reference to x
+y = 9                 // compiler error: y is not mutable
+let mut y: *int = &x
+y = 9                 // compiler error: 9 is not a reference
+*y = 9                // compiler error: cannot assign value to immutable type
+let y: *mut int = &x  // compiler error: x is immutable
+
+fun(x: int) {
+  x = 9               // compiler error: not mutable
+}
+
+fun(x: mut int)       // compiler error: type cannot be mutable
+
+fun(mut x: int) {
+  x = 9
+}
+
+
+// types: i, i8, i16, i32, i64, (and all unsigned), f32, f64, str
+
+let x = 0             // push 0i (  )
+
+let x: int8 = 0
+
+let x = fun(): int | *int | none
+
+if x is *int {
+  
+}
+
+
+fun foo(): any {
+  type o = {
+    x: int
+  }
+  return o{x: 9}
+}

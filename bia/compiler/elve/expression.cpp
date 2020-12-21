@@ -8,10 +8,10 @@ std::pair<elve::tokens_type, bia::util::not_null<type::definition*>>
 {
 	// BIA_EXPECTS(tokens.front());
 	BIA_EXPECTS(tokens.front().value.is_type<tokenizer::token::token::number>());
-	static type::integer def{ type::integer::size::i };
-
+	const auto def = param.symbols.get_symbol(util::from_cstring("int"));
+	BIA_EXPECTS(def.is_type<type::definition*>());
 	const auto number = tokens.front().value.get<tokenizer::token::token::number>();
 	param.writer.write<false, bytecode::oc_instantiate>(number.value.i,
 	                                                    destination.get<bytecode::member::local>());
-	return { tokens.subspan(1), &def };
+	return { tokens.subspan(1), def.get<type::definition*>() };
 }
