@@ -16,6 +16,7 @@ enum class code
 	bad_utf_sequence,
 	bad_unicode,
 
+	out_of_stack,
 	bad_narrowing,
 	bad_cast,
 	out_of_bounds,

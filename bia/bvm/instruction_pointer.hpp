@@ -14,7 +14,7 @@ namespace bvm {
 /**
  * Manages the input bytecode stream.
  */
-class instruction_pointer
+class Instruction_pointer
 {
 public:
 	typedef const util::byte* buffer_type;
@@ -24,7 +24,7 @@ public:
 	 *
 	 * @param instructions the byte instructions
 	 */
-	instruction_pointer(util::span<buffer_type> instructions) noexcept
+	Instruction_pointer(util::span<buffer_type> instructions) noexcept
 	{
 		_instructions = instructions;
 		_cursor       = instructions.begin();
@@ -61,7 +61,7 @@ public:
 	 * @param offset the offset in bytes
 	 * @return `*this`
 	 */
-	instruction_pointer& operator+=(std::int32_t offset)
+	Instruction_pointer& operator+=(std::int32_t offset)
 	{
 		_cursor += offset;
 		if (_cursor < _instructions.begin() || _cursor > _instructions.end()) {

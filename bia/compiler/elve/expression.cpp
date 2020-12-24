@@ -11,7 +11,6 @@ std::pair<elve::tokens_type, bia::util::not_null<type::definition*>>
 	const auto def = param.symbols.get_symbol(util::from_cstring("int"));
 	BIA_EXPECTS(def.is_type<type::definition*>());
 	const auto number = tokens.front().value.get<tokenizer::token::token::number>();
-	param.writer.write<false, bytecode::oc_instantiate>(number.value.i,
-	                                                    destination.get<bytecode::member::local>());
+	param.writer.write<bytecode::Op_code::oc_push>(number.value.i);
 	return { tokens.subspan(1), def.get<type::definition*>() };
 }

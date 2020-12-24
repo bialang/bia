@@ -3,10 +3,11 @@
 
 #include "../symbol/manager.hpp"
 
-#include <bia/bytecode/writer/instruction.hpp>
+#include <bia/bytecode/instructor.hpp>
 #include <bia/tokenizer/token/token.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/variant.hpp>
+#include <cstdint>
 
 namespace bia {
 namespace compiler {
@@ -14,7 +15,7 @@ namespace elve {
 
 struct parameter
 {
-	bytecode::writer::instruction& writer;
+	bytecode::Instructor<std::uint32_t>& writer;
 	symbol::manager& symbols;
 };
 
