@@ -7,20 +7,13 @@
 
 using namespace bia::compiler;
 
-compiler::compiler(std::ostream& instructions, std::ostream& resource) noexcept
-    : _writer{ instructions }, _resources{ resource }
+Compiler::Compiler(std::ostream& instructions) noexcept
+    : _instructor{ instructions }
 {}
 
-void compiler::finish()
+void Compiler::receive(util::span<const token*> tokens, resource::Manager& manager)
 {
-	_writer.finish();
-	_resources.finish();
-}
-
-void compiler::receive(util::span<const token*> tokens, resource::manager& manager)
-{
-	elve::parameter params{ _writer, _symbols };
-
+	elve::Parameter params{ _instructor, _symbols };
 	while (!tokens.empty()) {
 		tokens = elve::root(params, tokens);
 	}

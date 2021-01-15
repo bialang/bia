@@ -46,10 +46,10 @@ private:
 	std::set<const void*> allocated;
 };
 
-inline std::unique_ptr<gc> create_gc(std::shared_ptr<memory::allocator> allocator = nullptr)
+inline std::unique_ptr<gc> create_gc(std::shared_ptr<memory::Allocator> allocator = nullptr)
 {
 	return std::unique_ptr<gc>(
-	    new gc(allocator ? allocator : std::shared_ptr<memory::allocator>(new tracking_allocator())));
+	    new gc(allocator ? allocator : std::shared_ptr<memory::Allocator>(new tracking_allocator())));
 }
 
 TEST_CASE("unmonitored memory allocation", "[gc]")

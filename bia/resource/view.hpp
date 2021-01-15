@@ -8,7 +8,7 @@
 namespace bia {
 namespace resource {
 
-struct view
+struct View
 {
 	enum type type;
 	gc::memory::iterator first;
@@ -50,7 +50,7 @@ struct view
 		}
 		return 0;
 	}
-	int compare(const view& other) const noexcept
+	int compare(const View& other) const noexcept
 	{
 		if (type < other.type) {
 			return -1;
@@ -75,7 +75,7 @@ struct view
 		}
 		return 0;
 	}
-	bool operator<(const view& other) const noexcept
+	bool operator<(const View& other) const noexcept
 	{
 		return compare(other) < 0;
 	}

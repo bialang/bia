@@ -7,7 +7,7 @@ namespace bia {
 namespace tokenizer {
 namespace token {
 
-struct error_info
+struct Error_info
 {
 	error::code code = error::code::success;
 	std::size_t line;
@@ -17,7 +17,7 @@ struct error_info
 	/// the length of the error token
 	std::size_t length;
 
-	bool operator<(const error_info& other) const noexcept
+	bool operator<(const Error_info& other) const noexcept
 	{
 		return offset < other.offset;
 	}

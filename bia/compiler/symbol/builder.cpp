@@ -4,17 +4,17 @@
 
 using namespace bia::compiler::symbol;
 
-builder::builder(builder&& move) noexcept : _name{ move._name }
+Builder::Builder(Builder&& move) noexcept : _name{ move._name }
 {
 	*this = std::move(move);
 }
 
-builder::~builder()
+Builder::~Builder()
 {
 	_drop();
 }
 
-void builder::build()
+void Builder::build()
 {
 	if (!_manager) {
 	} else if (!_definition) {
@@ -23,22 +23,22 @@ void builder::build()
 	_manager = nullptr;
 }
 
-void builder::definition(type::definition* def) noexcept
+void Builder::definition(type::Definition* def) noexcept
 {
 	_definition = def;
 }
 
-bia::compiler::type::definition* builder::definition() const noexcept
+bia::compiler::type::Definition* Builder::definition() const noexcept
 {
 	return _definition;
 }
 
-location_type builder::location() const noexcept
+Location Builder::location() const noexcept
 {
 	return _location;
 }
 
-builder& builder::operator=(builder&& move) noexcept
+Builder& Builder::operator=(Builder&& move) noexcept
 {
 	_drop();
 	_manager      = move._manager;
@@ -49,13 +49,13 @@ builder& builder::operator=(builder&& move) noexcept
 	return *this;
 }
 
-builder::builder(manager* manager, resource::view name, location_type location)
+Builder::Builder(Manager* manager, resource::View name, Location location)
     : _location{ location }, _name{ std::move(name) }
 {
 	_manager = manager;
 }
 
-void builder::_drop() noexcept
+void Builder::_drop() noexcept
 {
 	if (_manager) {
 		_manager->_decline_declared(_name);

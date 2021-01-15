@@ -8,7 +8,7 @@ namespace string {
 namespace encoding {
 namespace standard {
 
-class utf8 final : public encoder
+class UTF8 final : public Encoder
 {
 public:
 	void put(std::ostream& output, code_point_type cp) const override;

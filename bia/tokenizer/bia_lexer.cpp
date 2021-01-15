@@ -8,14 +8,14 @@
 namespace bia {
 namespace tokenizer {
 
-bia_lexer::bia_lexer(util::not_null<std::shared_ptr<gc::memory::allocator>> allocator)
+Bia_lexer::Bia_lexer(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator)
     : _manager(std::move(allocator), 4096)
 {}
 
-void bia_lexer::lex(util::byte_istream_type& input, string::encoding::encoder& encoder,
-                    token::receiver& receiver)
+void Bia_lexer::lex(util::byte_istream_type& input, string::encoding::Encoder& encoder,
+                    token::Receiver& receiver)
 {
-	std::vector<token::token> bundle;
+	std::vector<token::Token> bundle;
 	token::parameter param{ input, _manager, encoder, bundle };
 
 	while (!(input.peek(), input.eof())) {

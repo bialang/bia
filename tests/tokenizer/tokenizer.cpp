@@ -102,7 +102,7 @@ using namespace bia::string;
 // 	bia_lexer lexer(std::make_shared<bia::gc::memory::simple_allocator>());
 // 	std::stringstream code;
 // 	auto encoder = encoding::get_encoder(encoding::standard_encoding::utf_8);
-// 	auto finally = bia::util::make_finally([encoder] { encoding::free_encoder(encoder); });
+// 	auto finally = bia::util::finallay([encoder] { encoding::free_encoder(encoder); });
 // 	mock_receiver receiver;
 
 // 	code << R"(let x=~false)";
@@ -142,7 +142,7 @@ using namespace bia::string;
 // 	bia_lexer lexer(std::make_shared<bia::gc::memory::simple_allocator>());
 // 	std::stringstream code;
 // 	auto encoder = encoding::get_encoder(encoding::standard_encoding::utf_8);
-// 	auto finally = bia::util::make_finally([encoder] { encoding::free_encoder(encoder); });
+// 	auto finally = bia::util::finallay([encoder] { encoding::free_encoder(encoder); });
 // 	mock_receiver receiver;
 
 // 	constexpr char script[] = R"(

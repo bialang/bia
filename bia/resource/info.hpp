@@ -37,9 +37,9 @@ inline char info_to(type type, size_width size_width) noexcept
 
 inline std::pair<size_width, int> size_width_of(std::size_t value) noexcept
 {
-	if (util::limit_checker<std::uint8_t>::in_bounds(value)) {
+	if (util::Limit_checker<std::uint8_t>::in_bounds(value)) {
 		return { size_width::_8, 1 };
-	} else if (util::limit_checker<std::uint16_t>::in_bounds(value)) {
+	} else if (util::Limit_checker<std::uint16_t>::in_bounds(value)) {
 		return { size_width::_16, 2 };
 	}
 

@@ -13,13 +13,13 @@ namespace token {
 /**
  * This interface receives the parsed input as tokens.
  */
-class receiver
+class Receiver
 {
 public:
 	/**
 	 * Destructor.
 	 */
-	virtual ~receiver() = default;
+	virtual ~Receiver() = default;
 	/**
 	 * This function is called when a new set of tokens is available. The token are not guaranteed to be
 	 * grouped.
@@ -27,7 +27,7 @@ public:
 	 * @param tokens the parsed tokens
 	 * @param manager the resource manager for resource creation during compilation
 	 */
-	virtual void receive(util::span<const token*> tokens, resource::manager& manager) = 0;
+	virtual void receive(util::span<const Token*> tokens, resource::Manager& manager) = 0;
 };
 
 } // namespace token

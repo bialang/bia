@@ -21,8 +21,8 @@ namespace resource {
  * @throw see gc::gc::construct()
  */
 std::unique_ptr<gc::root> deserialize(std::istream& input, gc::gc& gc);
-std::pair<serializer::size_type, serializer::size_type>
-    deserialize_binding(util::span<const util::byte*>& input);
+std::pair<Serializer::size_type, Serializer::size_type>
+    deserialize_binding(util::span<const util::byte_type*>& input);
 
 } // namespace resource
 } // namespace bia

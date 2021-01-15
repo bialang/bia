@@ -3,10 +3,10 @@
 
 using namespace bia::tokenizer::token;
 
-error_info parse::if_stmt(parameter& param)
+Error_info parse::if_stmt(parameter& param)
 {
 	if (!any_of(param, "if").second || spacer(param)) {
-		return param.make_error(error::code::expected_if);
+		return param.make_error(error::Code::expected_if);
 	}
 	if (const auto err = single_expression(param)) {
 		return err;
@@ -30,13 +30,13 @@ error_info parse::if_stmt(parameter& param)
 	return {};
 }
 
-error_info parse::else_if_stmt(parameter& param)
+Error_info parse::else_if_stmt(parameter& param)
 {
 	if (!any_of(param, "else").second || spacer(param)) {
-		return param.make_error(error::code::expected_else_if);
+		return param.make_error(error::Code::expected_else_if);
 	}
 	if (!any_of(param, "if").second || spacer(param)) {
-		return param.make_error(error::code::expected_else_if);
+		return param.make_error(error::Code::expected_else_if);
 	}
 	if (const auto err = single_expression(param)) {
 		return err;
@@ -47,10 +47,10 @@ error_info parse::else_if_stmt(parameter& param)
 	return {};
 }
 
-error_info parse::else_stmt(parameter& param)
+Error_info parse::else_stmt(parameter& param)
 {
 	if (!any_of(param, "else").second || spacer(param)) {
-		return param.make_error(error::code::expected_else);
+		return param.make_error(error::Code::expected_else);
 	}
 	if (const auto err = batch(param)) {
 		return err;

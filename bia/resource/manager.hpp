@@ -4,17 +4,17 @@
 #include "config.hpp"
 #include "streambuf.hpp"
 
-#include <cstddef>
+#include <bia/config.hpp>
 #include <bia/gc/memory/space.hpp>
 #include <bia/gc/memory/view.hpp>
-#include <memory>
 #include <bia/util/gsl.hpp>
-#include <bia/config.hpp>
+#include <cstddef>
+#include <memory>
 
 namespace bia {
 namespace resource {
 
-class manager
+class Manager
 {
 public:
 	typedef gc::memory::space::size_type state_type;
@@ -25,9 +25,9 @@ public:
 	 * @param allocator the memory allocator
 	 * @param page_size the size of each page
 	 */
-	manager(util::not_null<std::shared_ptr<gc::memory::allocator>> allocator,
+	Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
 	        std::size_t page_size = BIA_RESOURCE_PAGE_SIZE) noexcept;
-	~manager();
+	~Manager();
 	/**
 	 * Starts a new memory sequence.
 	 *
@@ -37,7 +37,7 @@ public:
 	 * @throw
 	 */
 	BIA_ATTR_NO_DISCARD
-	streambuf start_memory(bool avoid_duplicates);
+	Streambuf start_memory(bool avoid_duplicates);
 	/**
 	 * Saves the current state of the resource manager.
 	 *
@@ -61,7 +61,7 @@ public:
 	bool buf_active() const noexcept;
 
 private:
-	friend streambuf;
+	friend Streambuf;
 
 	/** whether a streambuf is active */
 	bool _buf_active = false;

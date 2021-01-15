@@ -1,7 +1,6 @@
 #ifndef BIA_DETAIL_ENGINE_HPP_
 #define BIA_DETAIL_ENGINE_HPP_
 
-#include <bia/assembler/disassembler.hpp>
 #include <bia/bsl/io.hpp>
 #include <bia/bsl/math.hpp>
 #include <bia/bsl/os.hpp>
@@ -37,12 +36,12 @@ namespace detail {
 class engine
 {
 public:
-	engine(std::shared_ptr<gc::memory::allocator> allocator = nullptr)
+	engine(std::shared_ptr<gc::memory::Allocator> allocator = nullptr)
 	    : _gc{ allocator ? std::move(allocator) : std::make_shared<gc::memory::simple_allocator>() },
 	      _context{ std::shared_ptr<gc::gc>(&_gc, [](gc::gc*) {}) }
 	{}
 	template<typename Return, typename... Args>
-	void function(util::not_null<util::czstring> name, Return (*func)(Args...))
+	void function(util::Not_null<util::czstring> name, Return (*func)(Args...))
 	{
 		const auto length = std::char_traits<char>::length(name.get());
 		const auto str    = static_cast<char*>(_gc.allocate(length + 1).release());
@@ -58,7 +57,7 @@ public:
 		func_member.start_monitor();
 	}
 	template<typename Functor>
-	void function(util::not_null<util::czstring> name, Functor&& functor)
+	void function(util::Not_null<util::czstring> name, Functor&& functor)
 	{
 		typedef typename std::remove_const<typename std::decay<Functor>::type>::type functor_type;
 
@@ -80,7 +79,7 @@ public:
 		func_member.start_monitor();
 	}
 	template<typename Module, typename... Args>
-	void module(util::not_null<util::czstring> name, Args&&... args)
+	void module(util::Not_null<util::czstring> name, Args&&... args)
 	{
 		static_assert(std::is_base_of<bvm::module::module, Module>::value,
 		              "module type must inherit bia::module::module");
@@ -107,12 +106,12 @@ public:
 	}
 	gc::gcable<member::member> execute(std::istream& code)
 	{
-		tokenizer::bia_lexer lexer{ _gc.allocator() };
+		tokenizer::Bia_lexer lexer{ _gc.allocator() };
 		auto encoder       = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
-		const auto finally = util::make_finally([encoder] { string::encoding::free_encoder(encoder); });
+		const auto finally = util::finallay([encoder] { string::encoding::free_encoder(encoder); });
 		std::stringstream output;
 		std::stringstream resources;
-		compiler::compiler compiler{ output, resources };
+		compiler::Compiler compiler{ output, resources };
 
 		lexer.lex(code, *encoder, compiler);
 		compiler.finish();
@@ -121,12 +120,12 @@ public:
 		const auto decoded_resources = resource::deserialize(resources, _gc);
 
 #if BIA_DEVELOPER_DISASSEMBLY
-		assembler::disassemble({ reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
+		assembler::disassemble({ reinterpret_cast<const util::byte_type*>(&bytecode[0]), bytecode.size() },
 		                       *decoded_resources, std::cout);
 #endif
 
 		return bvm::bvm::execute(_context,
-		                         { reinterpret_cast<const util::byte*>(&bytecode[0]), bytecode.size() },
+		                         { reinterpret_cast<const util::byte_type*>(&bytecode[0]), bytecode.size() },
 		                         *decoded_resources);
 	}
 	gc::gc& gc() noexcept

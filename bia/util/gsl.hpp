@@ -16,52 +16,50 @@
 namespace bia {
 namespace util {
 
-template<typename T>
-class not_null
+template<typename Type>
+class Not_null
 {
 public:
-	static_assert(type_traits::is_equal_null_comparable<T>::value, "invalid T");
+	static_assert(type_traits::is_equal_null_comparable<Type>::value, "invalid T");
 
-	template<typename Ty>
-	not_null(Ty&& value) : _value(std::forward<Ty>(value))
+	template<typename Other>
+	Not_null(Other&& value) : _value(std::forward<Other>(value))
 	{
 		BIA_EXPECTS(!(_value == nullptr));
 	}
-	template<typename Ty, typename = typename std::enable_if<std::is_assignable<T, Ty>::value>::type>
-	not_null(const not_null<Ty>& other) noexcept : not_null(other.get())
+	template<typename Other, typename = typename std::enable_if<std::is_assignable<Type, Other>::value>::type>
+	Not_null(const Not_null<Other>& other) noexcept : Not_null{ other.get() }
 	{}
-	not_null(std::nullptr_t) = delete;
-	T& get()
+	Not_null(std::nullptr_t) = delete;
+	Type& get()
 	{
 		BIA_ENSURES(!(_value == nullptr));
-
 		return _value;
 	}
-	const T& get() const
+	const Type& get() const
 	{
 		BIA_ENSURES(!(_value == nullptr));
-
 		return _value;
 	}
-	operator T&()
+	operator Type&()
 	{
 		return get();
 	}
-	operator const T&() const
+	operator const Type&() const
 	{
 		return get();
 	}
-	T operator->()
+	Type operator->()
 	{
 		return get();
 	}
-	const T operator->() const
+	const Type operator->() const
 	{
 		return get();
 	}
 
 private:
-	T _value;
+	Type _value;
 };
 
 typedef const char* czstring;
@@ -73,11 +71,11 @@ template<typename T>
 using gcable = T;
 
 #if __cplusplus >= 201703L
-typedef std::byte byte;
+typedef std::byte byte_type;
 #else
-enum class byte : std::uint8_t
+typedef enum class : std::uint8_t
 {
-};
+} byte_type;
 #endif
 
 template<typename To, typename From>
@@ -92,7 +90,7 @@ constexpr To narrow(From from)
 	return static_cast<From>(narrow_cast<To>(from)) != from ||
 	           (std::is_signed<To>::value != std::is_signed<From>::value &&
 	            (narrow_cast<To>(from) < To{}) != (from < From{}))
-	         ? BIA_THROW(error::code::bad_narrowing)
+	         ? BIA_THROW(error::Code::bad_narrowing)
 	         : narrow_cast<To>(from);
 }
 
@@ -173,7 +171,7 @@ public:
 	reference at(size_type index) const
 	{
 		if (index >= _size) {
-			BIA_THROW(error::code::out_of_bounds);
+			BIA_THROW(error::Code::out_of_bounds);
 		}
 
 		return _data[index];

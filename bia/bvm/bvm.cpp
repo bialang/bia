@@ -6,14 +6,14 @@
 
 using namespace bia;
 
-void bvm::execute(context& context, util::span<const util::byte*> instructions, gc::root& resources)
+void bvm::execute(context& context, util::span<const util::byte_type*> instructions, gc::root& resources)
 {
 	auto token = context.gc().register_thread(1024);
 	auto stack = token->stack_view();
 	return execute(context, instructions, resources, stack, *token);
 }
 
-void bvm::execute(context& context, util::span<const util::byte*> instructions, gc::root& resources,
+void bvm::execute(context& context, util::span<const util::byte_type*> instructions, gc::root& resources,
                   gc::Stack<std::int32_t>& stack, gc::token& token)
 {
 	using namespace bytecode;
@@ -31,7 +31,7 @@ void bvm::execute(context& context, util::span<const util::byte*> instructions, 
 			stack.pop(ip.read<std::uint8_t>());
 			break;
 		}
-		default: BIA_THROW(bia::error::code::bad_opcode);
+		default: BIA_THROW(bia::error::Code::bad_opcode);
 		}
 	}
 

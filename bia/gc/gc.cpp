@@ -14,7 +14,7 @@ using namespace bia::gc;
 
 thread_local gc* gc::_active_gc_instance = nullptr;
 
-gc::gc(bia::util::not_null<std::shared_ptr<memory::allocator>> allocator) noexcept
+gc::gc(bia::util::Not_null<std::shared_ptr<memory::Allocator>> allocator) noexcept
     : _allocator(allocator.get()), _allocated(allocator), _roots(allocator)
 {}
 
@@ -22,7 +22,7 @@ gc::~gc()
 {
 	try {
 		run_once();
-	} catch (const error::exception& e) {
+	} catch (const error::Exception& e) {
 		BIA_LOG_ERROR(CRITICAL, e);
 	}
 
@@ -34,13 +34,13 @@ bia::thread::lock::guard<bia::thread::lock::spin_mutex> gc::lock()
 	return { _mutex };
 }
 
-void gc::register_root(util::not_null<object::base*> base)
+void gc::register_root(util::Not_null<object::base*> base)
 {
 	_roots.add(base);
 	base->register_gcables(*this);
 }
 
-void gc::deregister_root(util::not_null<object::base*> base)
+void gc::deregister_root(util::Not_null<object::base*> base)
 {
 	_roots.remove(base);
 }
@@ -74,7 +74,7 @@ bool gc::run_once()
 	}
 
 	// can only miss objects in multi thread environment
-	if (thread::thread::supported()) {
+	if (thread::Thread::supported()) {
 		// go through all allocated objects and mark the missed ones
 		for (auto& i : allocated_token) {
 			// not marked
@@ -102,11 +102,6 @@ bool gc::run_once()
 	return true;
 }
 
-std::unique_ptr<token> gc::register_thread(std::size_t stack_size)
-{
-	return std::unique_ptr<token>{ new token{ this, stack_size } };
-}
-
 gcable<void> gc::allocate(std::size_t size, bool zero)
 {
 	auto ptr = _allocate_impl(size, true);
@@ -118,7 +113,7 @@ gcable<void> gc::allocate(std::size_t size, bool zero)
 	return { ptr, this };
 }
 
-const std::shared_ptr<memory::allocator>& gc::allocator() noexcept
+const std::shared_ptr<memory::Allocator>& gc::allocator() noexcept
 {
 	return _allocator;
 }
@@ -148,7 +143,7 @@ void gc::register_gcable(const object::base* ptr)
 	}
 }
 
-bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
+bia::util::Not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 {
 	BIA_LOG(TRACE, "allocating {} bytes as {}", size, leaf ? "leaf" : "node");
 
@@ -162,7 +157,7 @@ bia::util::not_null<void*> gc::_allocate_impl(std::size_t size, bool leaf)
 	return ptr + 1;
 }
 
-void gc::_free(util::not_null<void*> ptr)
+void gc::_free(util::Not_null<void*> ptr)
 {
 	auto info = static_cast<object::header*>(ptr.get()) - 1;
 

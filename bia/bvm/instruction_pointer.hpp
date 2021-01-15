@@ -17,7 +17,7 @@ namespace bvm {
 class Instruction_pointer
 {
 public:
-	typedef const util::byte* buffer_type;
+	typedef const util::byte_type* buffer_type;
 
 	/**
 	 * Constructor.
@@ -65,7 +65,7 @@ public:
 	{
 		_cursor += offset;
 		if (_cursor < _instructions.begin() || _cursor > _instructions.end()) {
-			BIA_THROW(error::code::out_of_bounds);
+			BIA_THROW(error::Code::out_of_bounds);
 		}
 		return *this;
 	}
@@ -81,7 +81,7 @@ public:
 	 */
 	operator bool() const noexcept
 	{
-		return _cursor + bytecode::max_instruction_size < _instructions.end();
+		return _cursor < _instructions.end();
 	}
 
 private:

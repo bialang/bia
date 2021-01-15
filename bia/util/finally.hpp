@@ -7,24 +7,24 @@ namespace bia {
 namespace util {
 
 template<typename Lambda>
-class finally
+class Final_action
 {
 public:
-	finally(const Lambda& lambda) : lambda(lambda)
+	Final_action(const Lambda& lambda) : lambda(lambda)
 	{
 		run = true;
 	}
-	finally(Lambda&& lambda) : lambda(std::move(lambda))
+	Final_action(Lambda&& lambda) : lambda(std::move(lambda))
 	{
 		run = true;
 	}
-	finally(const finally& copy) = delete;
-	finally(finally&& move) : lambda(std::move(move.lambda))
+	Final_action(const Final_action& copy) = delete;
+	Final_action(Final_action&& move) : lambda(std::move(move.lambda))
 	{
 		run      = move.run;
 		move.run = false;
 	}
-	~finally()
+	~Final_action()
 	{
 		if (run) {
 			lambda();
@@ -45,7 +45,7 @@ private:
 };
 
 template<typename Lambda>
-inline finally<Lambda> make_finally(Lambda&& lambda)
+inline Final_action<Lambda> finallay(Lambda&& lambda)
 {
 	return { std::forward<Lambda>(lambda) };
 }

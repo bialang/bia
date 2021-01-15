@@ -17,11 +17,11 @@ namespace module {
 class loader : public gc::object::base
 {
 public:
-	loader(util::not_null<gc::gc*> gc) noexcept;
-	util::not_null<util::gcable<member::member*>>
-	    load(util::not_null<util::gcable<member::native::string*>> name);
-	void add_module(util::not_null<util::gcable<member::native::string*>> name,
-	                util::not_null<util::gcable<module*>> module);
+	loader(util::Not_null<gc::gc*> gc) noexcept;
+	util::Not_null<util::gcable<member::member*>>
+	    load(util::Not_null<util::gcable<member::native::string*>> name);
+	void add_module(util::Not_null<util::gcable<member::native::string*>> name,
+	                util::Not_null<util::gcable<module*>> module);
 	void gc_mark_children(bool mark) const noexcept override;
 
 protected:

@@ -14,55 +14,47 @@ namespace bia {
 namespace util {
 namespace portable {
 
-template<typename T>
-inline void write(std::ostream& output, T value)
+template<typename Type>
+inline void write(std::ostream& output, Type value)
 {
 	// reverse bytes
 #if BIA_BIG_ENDIAN
 	std::reverse(reinterpret_cast<char*>(&value), reinterpret_cast<char*>(&value) + sizeof(value));
 #endif
-
 	output.write(reinterpret_cast<char*>(&value), sizeof(value));
 }
 
-template<typename T, typename... Ts>
-inline void write(std::ostream& output, T&& value, Ts&&... values)
+template<typename Type, typename... Others>
+inline void write(std::ostream& output, Type&& value, Others&&... values)
 {
-	write(output, std::forward<T>(value));
-	write(output, std::forward<Ts>(values)...);
+	write(output, std::forward<Type>(value));
+	write(output, std::forward<Others>(values)...);
 }
 
-template<typename T>
-inline T read(std::istream& input)
+template<typename Type>
+inline Type read(std::istream& input)
 {
-	T value{};
-
+	Type value{};
 	input.read(reinterpret_cast<char*>(&value), sizeof(value));
-
 #if BIA_BIG_ENDIAN
 	std::reverse(reinterpret_cast<char*>(&value), reinterpret_cast<char*>(&value) + sizeof(value));
 #endif
-
 	return value;
 }
 
 template<typename Type>
-inline Type read(span<const byte*>& input)
+inline Type read(span<const byte_type*>& input)
 {
 	if (input.size_bytes() < sizeof(Type)) {
 		throw;
 	}
 
 	Type value{};
-
 	std::memcpy(&value, input.data(), sizeof(Type));
-
 	input = input.subspan(sizeof(Type));
-
 #if BIA_BIG_ENDIAN
-	std::reverse(reinterpret_cast<byte*>(&value), reinterpret_cast<byte*>(&value) + sizeof(Type));
+	std::reverse(reinterpret_cast<byte_type*>(&value), reinterpret_cast<byte_type*>(&value) + sizeof(Type));
 #endif
-
 	return value;
 }
 

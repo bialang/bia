@@ -5,9 +5,9 @@
 using namespace bia::compiler;
 using namespace bia::tokenizer::token;
 
-elve::tokens_type elve::decl_stmt(parameter& param, tokens_type tokens)
+elve::Tokens_type elve::decl_stmt(parameter& param, Tokens_type tokens)
 {
-	BIA_EXPECTS(!tokens.empty() && tokens.front().value == token::keyword::let);
+	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::keyword::let);
 
 	auto variable = param.symbols.declare(tokens.at(1).value.get<token::identifier>().memory);
 	tokens        = tokens.subspan(2);
@@ -26,7 +26,7 @@ elve::tokens_type elve::decl_stmt(parameter& param, tokens_type tokens)
 
 	// check types
 	if (variable.definition() && !variable.definition()->is_assignable(expr.second.get())) {
-		BIA_THROW(error::code::type_mismatch);
+		BIA_THROW(error::Code::type_mismatch);
 	}
 	variable.definition(expr.second.get());
 	variable.build();

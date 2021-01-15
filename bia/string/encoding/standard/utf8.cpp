@@ -9,17 +9,17 @@ inline bia::string::encoding::code_point_type next(std::istream& input)
 {
 	const auto tmp = input.get();
 	if (tmp == std::istream::traits_type::eof()) {
-		BIA_THROW(bia::error::code::unfinished_utf_sequence);
+		BIA_THROW(bia::error::Code::unfinished_utf_sequence);
 	} else if ((tmp & 0xc0) != 0x80) {
-		BIA_THROW(bia::error::code::bad_utf_sequence);
+		BIA_THROW(bia::error::Code::bad_utf_sequence);
 	}
 	return static_cast<bia::string::encoding::code_point_type>(tmp & 0x3f);
 }
 
-void utf8::put(std::ostream& output, code_point_type cp) const
+void UTF8::put(std::ostream& output, code_point_type cp) const
 {
 	if (cp < 0) {
-		BIA_THROW(error::code::bad_unicode);
+		BIA_THROW(error::Code::bad_unicode);
 	} else if (cp <= 0x7f) {
 		const char data[]{ util::narrow_cast<char>(cp) };
 		output.write(data, sizeof(data));
@@ -39,11 +39,11 @@ void utf8::put(std::ostream& output, code_point_type cp) const
 			               util::narrow_cast<char>(0x80 | (cp & 0x3f)) };
 		output.write(data, sizeof(data));
 	} else {
-		BIA_THROW(error::code::bad_unicode);
+		BIA_THROW(error::Code::bad_unicode);
 	}
 }
 
-bia::string::encoding::code_point_type utf8::read(std::istream& input) const
+bia::string::encoding::code_point_type UTF8::read(std::istream& input) const
 {
 	const auto first = input.get();
 	if (first == std::istream::traits_type::eof()) {
@@ -63,5 +63,5 @@ bia::string::encoding::code_point_type utf8::read(std::istream& input) const
 		const auto third  = next(input);
 		return static_cast<code_point_type>((first & 0x07) << 18 | second << 12 | third << 6 | next(input));
 	}
-	BIA_THROW(error::code::bad_utf_sequence);
+	BIA_THROW(error::Code::bad_utf_sequence);
 }

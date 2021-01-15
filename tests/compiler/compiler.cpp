@@ -25,11 +25,11 @@ int main()
 
 	code << u8R"(let x=5)";
 
-	compiler::compiler cp{ output, resources };
+	compiler::Compiler cp{ output, resources };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
-	auto finally = util::make_finally([encoder] { string::encoding::free_encoder(encoder); });
+	auto finally = util::finallay([encoder] { string::encoding::free_encoder(encoder); });
 	gc::gc g{ std::make_shared<gc::memory::simple_allocator>() };
-	tokenizer::bia_lexer lexer{ g.allocator() };
+	tokenizer::Bia_lexer lexer{ g.allocator() };
 
 	lexer.lex(code, *encoder, cp);
 	cp.finish();
@@ -38,6 +38,6 @@ int main()
 	const auto ins = output.str();
 	resources.seekg(0, std::ios::beg);
 	const auto root = resource::deserialize(resources, g);
-	util::span<const util::byte*> instructions{ reinterpret_cast<const util::byte*>(ins.data()), ins.size() };
+	util::span<const util::byte_type*> instructions{ reinterpret_cast<const util::byte_type*>(ins.data()), ins.size() };
 	assembler::disassemble(instructions, *root, std::cout);
 }

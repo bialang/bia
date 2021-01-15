@@ -83,13 +83,13 @@ public:
 
 		container* _container = nullptr;
 
-		token(util::not_null<container*> container) noexcept
+		token(util::Not_null<container*> container) noexcept
 		{
 			_container = container.get();
 		}
 	};
 
-	container(util::not_null<std::shared_ptr<memory::allocator>> allocator)
+	container(util::Not_null<std::shared_ptr<memory::Allocator>> allocator)
 	    : _main(allocator), _back(allocator)
 	{}
 	token begin_operation()

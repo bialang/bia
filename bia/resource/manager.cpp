@@ -2,17 +2,17 @@
 
 using namespace bia::resource;
 
-manager::manager(util::not_null<std::shared_ptr<gc::memory::allocator>> allocator,
+Manager::Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
                  std::size_t page_size) noexcept
     : _space(allocator, page_size)
 {}
 
-manager::~manager()
+Manager::~Manager()
 {
 	BIA_EXPECTS(!buf_active());
 }
 
-streambuf manager::start_memory(bool avoid_duplicates)
+Streambuf Manager::start_memory(bool avoid_duplicates)
 {
 	BIA_EXPECTS(!buf_active());
 
@@ -21,19 +21,19 @@ streambuf manager::start_memory(bool avoid_duplicates)
 	return { this };
 }
 
-manager::state_type manager::save_state() const
+Manager::state_type Manager::save_state() const
 {
 	BIA_EXPECTS(!buf_active());
 
 	return _space.size();
 }
 
-void manager::restore_state(state_type old)
+void Manager::restore_state(state_type old)
 {
 	_space.truncate(old);
 }
 
-bool manager::buf_active() const noexcept
+bool Manager::buf_active() const noexcept
 {
 	return _buf_active;
 }

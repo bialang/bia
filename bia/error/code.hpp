@@ -7,7 +7,7 @@
 namespace bia {
 namespace error {
 
-enum class code
+enum class Code
 {
 	success,
 
@@ -17,6 +17,7 @@ enum class code
 	bad_unicode,
 
 	out_of_stack,
+	bad_stack_alignment,
 	bad_narrowing,
 	bad_cast,
 	out_of_bounds,
@@ -89,25 +90,25 @@ inline const std::error_category& code_category() noexcept
 	public:
 		const char* name() const noexcept override
 		{
-			return "bia-errc";
+			return "bialang";
 		}
 		std::string message(int ec) const override
 		{
-			switch (static_cast<code>(ec)) {
-			case code::bad_ascii: return "bad ASCII code point value";
-			case code::unfinished_utf_sequence: return "unfinished UTF sequence";
-			case code::bad_utf_sequence: return "bad UTF sequence";
-			case code::bad_unicode: return "bad Unicode code point value";
-			case code::bad_narrowing: return "bad narrowing";
-			case code::bad_cast: return "bad cast";
-			case code::out_of_bounds: return "out of bounds";
-			case code::null_argument: return "null argument not allowed";
-			case code::argument_count_mismatch: return "argument count mismatch";
-			case code::bad_infix_operator: return "bad infix operator";
-			case code::bad_test_operator: return "bad test operator";
-			case code::bad_self_operator: return "bad self operator";
-			case code::empty_variant: return "accessing empty variant";
-			case code::bad_variant_index: return "bad variant index";
+			switch (static_cast<Code>(ec)) {
+			case Code::bad_ascii: return "bad ASCII code point value";
+			case Code::unfinished_utf_sequence: return "unfinished UTF sequence";
+			case Code::bad_utf_sequence: return "bad UTF sequence";
+			case Code::bad_unicode: return "bad Unicode code point value";
+			case Code::bad_narrowing: return "bad narrowing";
+			case Code::bad_cast: return "bad cast";
+			case Code::out_of_bounds: return "out of bounds";
+			case Code::null_argument: return "null argument not allowed";
+			case Code::argument_count_mismatch: return "argument count mismatch";
+			case Code::bad_infix_operator: return "bad infix operator";
+			case Code::bad_test_operator: return "bad test operator";
+			case Code::bad_self_operator: return "bad self operator";
+			case Code::empty_variant: return "accessing empty variant";
+			case Code::bad_variant_index: return "bad variant index";
 			// case code::expected_curly_bracket:
 			// case code::expected_flow_control:
 			// case code::expected_in:
@@ -115,7 +116,7 @@ inline const std::error_category& code_category() noexcept
 			// case code::expected_regex:
 			// case code::expected_declaration_statement:
 			// case code::expected_import_statement:
-			case code::expected_command_end: return "expected command end, like a semicolon";
+			case Code::expected_command_end: return "expected command end, like a semicolon";
 			// case code::expected_string:
 			// case code::expected_while_statement:
 			// case code::expected_whitespace:
@@ -127,24 +128,23 @@ inline const std::error_category& code_category() noexcept
 			// case code::bad_else_if_statement:
 			// case code::bad_number:
 			// case code::bad_operator:
-			case code::bad_opcode: return "bad opcode";
+			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:
 			// case code::bad_resource_option:
 			// case code::bad_member_source_option:
 			// case code::bad_member_destination_option:
-			case code::module_not_found: return "module was not found";
-			case code::bad_switch_value: return "a bad switch value";
-			case code::why_did_this_happen: return "this should not have happened";
+			case Code::module_not_found: return "module was not found";
+			case Code::bad_switch_value: return "a bad switch value";
+			case Code::why_did_this_happen: return "this should not have happened";
 			default: return "(unrecognized error code)";
 			}
 		}
 	} category;
-
 	return category;
 }
 
-inline std::error_code make_error_code(code c) noexcept
+inline std::error_code make_error_code(Code c) noexcept
 {
 	return { static_cast<int>(c), code_category() };
 }
@@ -154,7 +154,7 @@ inline std::error_code make_error_code(code c) noexcept
 
 namespace std {
 template<>
-struct is_error_code_enum<bia::error::code> : true_type
+struct is_error_code_enum<bia::error::Code> : true_type
 {};
 } // namespace std
 

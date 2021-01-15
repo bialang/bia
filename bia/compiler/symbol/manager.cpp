@@ -5,40 +5,18 @@
 
 using namespace bia::compiler::symbol;
 
-namespace {
-
-using namespace bia::compiler;
-
-type::integer int_type{ type::integer::size::i };
-
-} // namespace
-
-manager::manager()
+Manager::Manager()
 {
+	// there is always a global scope
 	_scopes.emplace_back();
-
-	// create native types
-	_symbols.insert({ string_type{ "int", 3 }, static_cast<type::definition*>(&int_type) });
-	// _variables.insert({ string_type{ "uint", 4 }, {} });
-	// _variables.insert({ string_type{ "int8", 4 }, {} });
-	// _variables.insert({ string_type{ "uint8", 5 }, {} });
-	// _variables.insert({ string_type{ "int16", 5 }, {} });
-	// _variables.insert({ string_type{ "uint16", 6 }, {} });
-	// _variables.insert({ string_type{ "int32", 5 }, {} });
-	// _variables.insert({ string_type{ "uint32", 6 }, {} });
-	// _variables.insert({ string_type{ "int64", 5 }, {} });
-	// _variables.insert({ string_type{ "uint64", 6 }, {} });
-
-	// _variables.insert({ string_type{ "float32", 7 }, {} });
-	// _variables.insert({ string_type{ "float64", 7 }, {} });
 }
 
-void manager::open_scope()
+void Manager::open_scope()
 {
 	_scopes.emplace_back();
 }
 
-void manager::close_scope()
+void Manager::close_scope()
 {
 	BIA_EXPECTS(_scopes.size() > 1);
 	for (const auto& it : _scopes.back()) {
@@ -47,16 +25,17 @@ void manager::close_scope()
 	_scopes.pop_back();
 }
 
-builder manager::declare(const resource::view& name)
+Builder Manager::declare(const resource::View& name)
 {
 	if (_symbols.find(name) != _symbols.end() || _declared.find(name) != _declared.end()) {
-		BIA_THROW(error::code::symbol_already_declared);
+		BIA_THROW(error::Code::symbol_already_declared);
 	}
-	_declared.insert({ name, bytecode::member::local{ _index } });
-	return { this, name, bytecode::member::local{ _index++ } };
+	// TODO add location
+	_declared.insert({ name, Location{} });
+	return { this, name, Location{} };
 }
 
-symbol_type manager::get_symbol(const resource::view& name)
+Symbol_type Manager::symbol(const resource::View& name)
 {
 	const auto result = _symbols.find(name);
 	if (result == _symbols.end()) {
@@ -65,7 +44,7 @@ symbol_type manager::get_symbol(const resource::view& name)
 	return result->second;
 }
 
-symbol_type manager::get_symbol(const string_type& name)
+Symbol_type Manager::symbol(const string_type& name)
 {
 	const auto result = _symbols.find(name);
 	if (result == _symbols.end()) {
@@ -74,18 +53,18 @@ symbol_type manager::get_symbol(const string_type& name)
 	return result->second;
 }
 
-bool manager::comparator::operator()(const map_key_type& left, const map_key_type& right) const
+bool Manager::Comparator::operator()(const map_key_type& left, const map_key_type& right) const
 {
-	if (left.is_type<resource::view>()) {
-		if (right.is_type<resource::view>()) {
-			return left.get<resource::view>() < right.get<resource::view>();
+	if (left.is_type<resource::View>()) {
+		if (right.is_type<resource::View>()) {
+			return left.get<resource::View>() < right.get<resource::View>();
 		}
 		const auto str = right.get<string_type>();
-		return left.get<resource::view>().compare(str.data(), str.size()) < 0;
+		return left.get<resource::View>().compare(str.data(), str.size()) < 0;
 	}
 	const auto lstr = left.get<string_type>();
-	if (right.is_type<resource::view>()) {
-		return right.get<resource::view>().compare(lstr.data(), lstr.size()) > 0;
+	if (right.is_type<resource::View>()) {
+		return right.get<resource::View>().compare(lstr.data(), lstr.size()) > 0;
 	}
 	// both are strings
 	const auto rstr = right.get<string_type>();
@@ -104,14 +83,18 @@ bool manager::comparator::operator()(const map_key_type& left, const map_key_typ
 	return false;
 }
 
-void manager::_accept_declared(const resource::view& name, variable var)
+void Manager::_accept_declared(const resource::View& name, Variable var)
 {
-	_declared.erase(name);
+	const auto d = _declared.find(name);
+	BIA_EXPECTS(d != _declared.end());
+	_declared.erase(d);
 	const auto it = _symbols.insert({ name, std::move(var) });
 	_scopes.back().push_back(it.first);
 }
 
-void manager::_decline_declared(const resource::view& name)
+void Manager::_decline_declared(const resource::View& name)
 {
-	_declared.erase(name);
+	const auto d = _declared.find(name);
+	BIA_EXPECTS(d != _declared.end());
+	_declared.erase(d);
 }

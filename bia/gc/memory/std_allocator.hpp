@@ -35,19 +35,19 @@ public:
 		typedef std_allocator<U> other;
 	};
 
-	std_allocator(util::not_null<std::shared_ptr<allocator>> allocator) noexcept
+	std_allocator(util::Not_null<std::shared_ptr<Allocator>> allocator) noexcept
 	    : _allocator(std::move(allocator.get()))
 	{}
 	template<typename U>
 	std_allocator(const std_allocator<U>& copy) noexcept : _allocator(copy._allocator)
 	{}
 	template<typename U, typename... Args>
-	void construct(util::not_null<U*> ptr, Args&&... args)
+	void construct(util::Not_null<U*> ptr, Args&&... args)
 	{
 		new (ptr) U(std::forward<Args>(args)...);
 	}
 	template<typename U>
-	void destroy(util::not_null<U*> ptr)
+	void destroy(util::Not_null<U*> ptr)
 	{
 		ptr->~U();
 	}
@@ -74,7 +74,7 @@ private:
 	template<typename U>
 	friend class std_allocator;
 
-	std::shared_ptr<allocator> _allocator;
+	std::shared_ptr<Allocator> _allocator;
 };
 
 } // namespace memory

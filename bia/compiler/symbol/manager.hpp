@@ -14,36 +14,43 @@ namespace bia {
 namespace compiler {
 namespace symbol {
 
-typedef util::variant<variable, type::definition*> symbol_type;
+/// A symbol is either a variable or a type.
+typedef util::Variant<Variable, type::Definition*> Symbol_type;
 
-class manager
+class Manager
 {
 public:
 	typedef util::span<const char*> string_type;
 	typedef std::uint16_t index_type;
 
-	manager();
+	Manager();
 	void open_scope();
 	void close_scope();
-	builder declare(const resource::view& name);
-	symbol_type get_symbol(const resource::view& name);
-	symbol_type get_symbol(const string_type& name);
+	Builder declare(const resource::View& name);
+	/// Returns the symbol or an empty variant if not found.
+	Symbol_type symbol(const resource::View& name);
+	/// Returns the symbol or an empty variant if not found.
+	Symbol_type symbol(const string_type& name);
 
 private:
-	friend builder;
-	typedef util::variant<resource::view, string_type> map_key_type;
-	struct comparator
+	friend Builder;
+	typedef util::Variant<resource::View, string_type> map_key_type;
+	struct Comparator
 	{
 		bool operator()(const map_key_type& left, const map_key_type& right) const;
 	};
-	typedef std::map<map_key_type, symbol_type, comparator> map_type;
+	typedef std::map<map_key_type, Symbol_type, Comparator> map_type;
 
+	/// All defined symbols.
 	map_type _symbols;
-	std::map<resource::view, location_type> _declared;
+	/// Variables that were declared but not defined.
+	std::map<resource::View, Location> _declared;
+	/// All scopes with the latest ones at the back.
 	std::vector<std::vector<map_type::const_iterator>> _scopes;
-	std::uint16_t _index = 0;
+	/// ID counter for all newly declared types.
+	unsigned int _type_index = 0;
 
-	void _accept_declared(const resource::view& name, variable var);
+	void _accept_declared(const resource::view& name, Variable var);
 	void _decline_declared(const resource::view& name);
 };
 

@@ -16,7 +16,7 @@ namespace bia {
 namespace util {
 
 template<typename... Types>
-class variant
+class Variant
 {
 public:
 	constexpr static std::size_t npos       = type_traits::type_index<>::npos;
@@ -25,12 +25,12 @@ public:
 	template<typename Type>
 	using index_of = type_traits::type_index<Type, Types...>;
 
-	variant() = default;
+	Variant() = default;
 	template<
 	  typename Type,
 	  typename = typename std::enable_if<!std::is_same<
-	    typename std::remove_cv<typename std::remove_reference<Type>::type>::type, variant>::value>::type>
-	variant(Type&& value)
+	    typename std::remove_cv<typename std::remove_reference<Type>::type>::type, Variant>::value>::type>
+	Variant(Type&& value)
 	{
 		emplace<typename std::decay<Type>::type>(std::forward<Type>(value));
 	}
@@ -40,7 +40,7 @@ public:
 	 * @param copy the object to copy
 	 * @throw see the copy constructors of the types
 	 */
-	variant(const variant& copy)
+	Variant(const Variant& copy)
 	{
 		if (copy._index != npos) {
 			_copy<0, Types...>(copy);
@@ -52,13 +52,13 @@ public:
 	 * @param[in,out] move the object to move
 	 * @throw see the move constructors of the types
 	 */
-	variant(variant&& move)
+	Variant(Variant&& move)
 	{
 		if (move._index != npos) {
 			_move<0, Types...>(std::move(move));
 		}
 	}
-	~variant()
+	~Variant()
 	{
 		destroy();
 	}
@@ -77,30 +77,30 @@ public:
 	typename type_traits::type_at<Index, Types...>::type& get()
 	{
 		return const_cast<typename type_traits::type_at<Index, Types...>::type&>(
-		  const_cast<const variant*>(this)->get<Index>());
+		  const_cast<const Variant*>(this)->get<Index>());
 	}
 	template<std::size_t Index>
 	const typename type_traits::type_at<Index, Types...>::type& get() const
 	{
 		if (_index == npos) {
-			BIA_THROW(error::code::empty_variant);
+			BIA_THROW(error::Code::empty_variant);
 		} else if (_index != Index) {
-			BIA_THROW(error::code::bad_variant_index);
+			BIA_THROW(error::Code::bad_variant_index);
 		}
 		return *reinterpret_cast<const typename type_traits::type_at<Index, Types...>::type*>(&_data);
 	}
 	template<typename Type>
 	typename std::enable_if<index_of<Type>::value != npos, Type&>::type get()
 	{
-		return const_cast<Type&>(const_cast<const variant*>(this)->get<Type>());
+		return const_cast<Type&>(const_cast<const Variant*>(this)->get<Type>());
 	}
 	template<typename Type>
 	typename std::enable_if<index_of<Type>::value != npos, const Type&>::type get() const
 	{
 		if (_index == npos) {
-			BIA_THROW(error::code::empty_variant);
+			BIA_THROW(error::Code::empty_variant);
 		} else if (_index != index_of<Type>::value) {
-			BIA_THROW(error::code::bad_variant_index);
+			BIA_THROW(error::Code::bad_variant_index);
 		}
 		return *reinterpret_cast<const Type*>(&_data);
 	}
@@ -151,14 +151,14 @@ public:
 	{
 		return !has_value(value);
 	}
-	variant& operator=(const variant& copy)
+	Variant& operator=(const Variant& copy)
 	{
 		if (copy._index != npos) {
 			_copy<0, Types...>(copy);
 		}
 		return *this;
 	}
-	variant& operator=(variant&& move)
+	Variant& operator=(Variant&& move)
 	{
 		if (move._index != npos) {
 			_move<0, Types...>(std::move(move));
@@ -167,9 +167,9 @@ public:
 	}
 
 private:
-	/// the current value
+	/// The current value.
 	typename std::aligned_storage<max(sizeof(Types)...), max(alignof(Types)...)>::type _data;
-	/// type information about the current type or npos if no value is stored
+	/// Type information about the current type or npos if no value is stored.
 	std::size_t _index = npos;
 
 	template<std::size_t Index, typename Type, typename... Others>
@@ -186,7 +186,7 @@ private:
 	void _destroy() noexcept
 	{}
 	template<std::size_t Index, typename Type, typename... Others>
-	void _copy(const variant& other)
+	void _copy(const Variant& other)
 	{
 		if (other._index == Index) {
 			destroy();
@@ -197,10 +197,10 @@ private:
 		}
 	}
 	template<std::size_t Index>
-	void _copy(const variant& other)
+	void _copy(const Variant& other)
 	{}
 	template<std::size_t Index, typename Type, typename... Others>
-	void _move(variant&& other)
+	void _move(Variant&& other)
 	{
 		if (other._index == Index) {
 			destroy();
@@ -212,7 +212,7 @@ private:
 		}
 	}
 	template<std::size_t Index>
-	void _move(variant&& other)
+	void _move(Variant&& other)
 	{}
 };
 

@@ -4,16 +4,16 @@
 
 using namespace bia::string::encoding::standard;
 
-void ascii::put(std::ostream& output, code_point_type cp) const
+void ASCII::put(std::ostream& output, code_point_type cp) const
 {
 	// invalid ascii
 	if (cp & ~0x7f) {
-		BIA_THROW(error::code::bad_ascii);
+		BIA_THROW(error::Code::bad_ascii);
 	}
 	output.put(static_cast<char>(cp));
 }
 
-bia::string::encoding::code_point_type ascii::read(std::istream& input) const
+bia::string::encoding::code_point_type ASCII::read(std::istream& input) const
 {
 	// no more input
 	const auto cp = input.get();
@@ -22,7 +22,7 @@ bia::string::encoding::code_point_type ascii::read(std::istream& input) const
 		return eof;
 	} // invalid ascii
 	else if (cp & ~0x7f) {
-		BIA_THROW(error::code::bad_ascii);
+		BIA_THROW(error::Code::bad_ascii);
 	}
 	return static_cast<code_point_type>(cp);
 }

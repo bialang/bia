@@ -11,39 +11,41 @@ namespace bia {
 namespace compiler {
 namespace symbol {
 
-typedef util::variant<bytecode::member::local, bytecode::member::args> location_type;
-
-struct variable
+struct Location
 {
-	location_type location;
-	type::definition* definition;
+	std::size_t offset;
 };
 
-class manager;
+struct Variable
+{
+	Location location;
+	type::Definition* definition;
+};
 
-class builder
+class Manager;
+
+class Builder
 {
 public:
-	builder(const builder& copy) = delete;
-	builder(builder&& move) noexcept;
-	~builder();
+	Builder(const Builder& copy) = delete;
+	Builder(Builder&& move) noexcept;
+	~Builder();
 
 	void build();
-	void definition(type::definition* def) noexcept;
-	type::definition* definition() const noexcept;
-	location_type location() const noexcept;
-	builder& operator=(const builder& copy) = delete;
-
-	builder& operator=(builder&& move) noexcept;
+	void definition(type::Definition* def) noexcept;
+	type::Definition* definition() const noexcept;
+	Location location() const noexcept;
+	Builder& operator=(const Builder& copy) = delete;
+	Builder& operator=(Builder&& move) noexcept;
 
 private:
-	friend manager;
-	manager* _manager = nullptr;
-	location_type _location;
-	type::definition* _definition = nullptr;
-	resource::view _name;
+	friend Manager;
+	Manager* _manager = nullptr;
+	Location _location;
+	type::Definition* _definition = nullptr;
+	resource::View _name;
 
-	builder(manager* manager, resource::view name, location_type location);
+	Builder(Manager* manager, resource::view name, Location location);
 	void _drop() noexcept;
 };
 

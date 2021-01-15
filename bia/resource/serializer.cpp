@@ -9,12 +9,12 @@
 
 using namespace bia::resource;
 
-serializer::serializer(std::ostream& output) noexcept : _output{ output }, _start{ output.tellp() }
+Serializer::Serializer(std::ostream& output) noexcept : _output{ output }, _start{ output.tellp() }
 {
 	util::portable::write(output, size_type{ 0 });
 }
 
-void serializer::finish()
+void Serializer::finish()
 {
 	const auto current = _output.tellp();
 
@@ -30,7 +30,7 @@ void serializer::finish()
 	_output.seekp(current);
 }
 
-serializer::size_type serializer::index_of(view view)
+Serializer::size_type Serializer::index_of(View view)
 {
 	// alreay added
 	const auto it = _map.find(view);
@@ -70,7 +70,7 @@ serializer::size_type serializer::index_of(view view)
 	case size_width::_8: util::portable::write(buffer, static_cast<std::uint8_t>(size)); break;
 	case size_width::_16: util::portable::write(buffer, static_cast<std::uint16_t>(size)); break;
 	case size_width::_32: util::portable::write(buffer, static_cast<std::uint32_t>(size)); break;
-	default: BIA_THROW(error::code::bad_switch_value);
+	default: BIA_THROW(error::Code::bad_switch_value);
 	}
 
 	_output.write(buffer, sw.second);
@@ -93,7 +93,7 @@ serializer::size_type serializer::index_of(view view)
 	return _index++;
 }
 
-void serializer::add_binding(size_type from, size_type to)
+void Serializer::add_binding(size_type from, size_type to)
 {
 	BIA_EXPECTS(_last_binding != std::ostream::off_type{ -1 });
 

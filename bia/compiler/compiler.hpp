@@ -1,11 +1,9 @@
 #ifndef BIA_COMPILER_COMPILER_HPP_
 #define BIA_COMPILER_COMPILER_HPP_
 
-#include "flags.hpp"
 #include "symbol/manager.hpp"
 
-#include <bia/bytecode/writer/instruction.hpp>
-#include <bia/resource/serializer.hpp>
+#include <bia/bytecode/instructor.hpp>
 #include <bia/tokenizer/token/receiver.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/variant.hpp>
@@ -15,20 +13,17 @@
 namespace bia {
 namespace compiler {
 
-class compiler : public tokenizer::token::receiver
+class Compiler : public tokenizer::token::Receiver
 {
 public:
-	using token = tokenizer::token::token;
+	using token = tokenizer::token::Token;
 
-	compiler(std::ostream& instructions, std::ostream& resource) noexcept;
-	void finish();
-	void receive(util::span<const token*> tokens, resource::manager& manager) override;
+	Compiler(std::ostream& instructions) noexcept;
+	void receive(util::span<const token*> tokens, resource::Manager& manager) override;
 
 private:
-	bytecode::writer::instruction _writer;
-	resource::serializer _resources;
-	symbol::manager _symbols;
-	flags _flags;
+	bytecode::Instructor _instructor;
+	symbol::Manager _symbols;
 };
 
 } // namespace compiler

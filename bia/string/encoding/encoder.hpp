@@ -12,49 +12,45 @@ namespace encoding {
 
 typedef std::int32_t code_point_type;
 
-/**
- * Interface for converting from and to a specific encoding.
- */
-class encoder
+/// Interface for converting from and to a specific encoding.
+class Encoder
 {
 public:
 	enum : code_point_type
 	{
-		/** the byte order mark */
+		/// The byte order mark.
 		bom = 0xfeff,
-		/** the end of the input */
+		/// The end of the input.
 		eof = -1
 	};
 
 	/**
 	 * Destructor.
 	 */
-	virtual ~encoder() = default;
+	virtual ~Encoder() = default;
 
 	virtual void put(std::ostream& output, code_point_type cp) const = 0;
 	virtual code_point_type read(std::istream& input) const          = 0;
 };
 
-/**
- * The standard supported encodings.
- */
+/// The standard supported encodings.
 enum class standard_encoding
 {
-	/** normal 7 bit ascii encoding */
+	/// Normal 7 bit ascii encoding.
 	ascii,
-	/** default UTF-8 ecoding */
+	/// Default UTF-8 ecoding.
 	utf_8,
-	/** UTF-16 encoding in CPU endianness */
+	/// UTF-16 encoding in CPU endianness.
 	utf_16,
-	/** UTF-16 encoding in little endianness */
+	/// UTF-16 encoding in little endianness.
 	utf_16_le,
-	/** UTF-16 encoding in big endianness */
+	/// UTF-16 encoding in big endianness.
 	utf_16_be,
-	/** UTF-32 encoding in CPU endianness */
+	/// UTF-32 encoding in CPU endianness.
 	utf_32,
-	/** UTF-32 encoding in little endianness */
+	/// UTF-32 encoding in little endianness.
 	utf_32_le,
-	/** UTF-32 encoding in big endianness */
+	/// UTF-32 encoding in big endianness.
 	utf_32_be
 };
 
@@ -64,8 +60,8 @@ enum class standard_encoding
  * @param encoding is the standard encoding
  * @return a pointer to the instance that can **ONLY** be used in the current thread
  */
-encoder* get_encoder(standard_encoding encoding);
-void free_encoder(encoder* encoder);
+Encoder* get_encoder(standard_encoding encoding);
+void free_encoder(Encoder* encoder);
 
 } // namespace encoding
 } // namespace string

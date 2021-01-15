@@ -29,7 +29,7 @@ public:
 	 * @param allocator the memory allocator
 	 * @param page_size the size of each memory page in bytes
 	 */
-	space(util::not_null<std::shared_ptr<allocator>> allocator, std::size_t page_size) noexcept;
+	space(util::Not_null<std::shared_ptr<Allocator>> allocator, std::size_t page_size) noexcept;
 	space(space&& move) noexcept;
 
 	/**
@@ -63,13 +63,13 @@ public:
 	 * @returns the capacity in bytes
 	 */
 	size_type capacity() const;
-	util::not_null<util::span<util::byte*>> next_region(size_type size);
+	util::Not_null<util::span<util::byte_type*>> next_region(size_type size);
 	iterator cursor(size_type pos = cpos) const;
 	space& operator=(space&& move) noexcept;
 
 private:
 	/** the active memory allocator */
-	std::shared_ptr<allocator> _allocator;
+	std::shared_ptr<Allocator> _allocator;
 	/** all allocated pages */
 	std::shared_ptr<page_container_type> _pages;
 	/** size of every page */

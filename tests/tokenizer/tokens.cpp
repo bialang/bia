@@ -19,9 +19,9 @@ inline std::shared_ptr<parameter> create_parameter(T&&... values)
 {
 	auto input = std::make_shared<std::stringstream>();
 	auto enc   = get_encoder(standard_encoding::utf_8);
-	auto bndl  = std::make_shared<std::vector<token>>();
+	auto bndl  = std::make_shared<std::vector<Token>>();
 	auto manager =
-	  std::make_shared<bia::resource::manager>(std::make_shared<bia::gc::memory::simple_allocator>());
+	  std::make_shared<bia::resource::Manager>(std::make_shared<bia::gc::memory::simple_allocator>());
 	int dummy[sizeof...(values)] = { (*input << values, 0)... };
 	return { new parameter{ *input, *manager, *enc, *bndl }, [input, manager, enc, bndl](parameter* ptr) {
 		        delete ptr;
@@ -32,18 +32,18 @@ inline std::shared_ptr<parameter> create_parameter(T&&... values)
 
 TEST_CASE("declaration statement", "[tokenizer]")
 {
-	token::number zero{};
-	zero.type    = token::number::type::i;
+	Token::number zero{};
+	zero.type    = Token::number::type::i;
 	zero.value.i = 0;
 
 	auto param = create_parameter("let i = 0");
 	REQUIRE(!root(*param));
 	REQUIRE(param->bundle.size() == 5);
-	REQUIRE(param->bundle[0].value == token::keyword::let);
-	REQUIRE(param->bundle[1].value.is_type<token::identifier>());
+	REQUIRE(param->bundle[0].value == Token::keyword::let);
+	REQUIRE(param->bundle[1].value.is_type<Token::identifier>());
 	REQUIRE(param->bundle[2].value == operator_::assign);
 	REQUIRE(param->bundle[3].value == zero);
-	REQUIRE(param->bundle[4].value == token::control::cmd_end);
+	REQUIRE(param->bundle[4].value == Token::control::cmd_end);
 
 	param = create_parameter("let i = ?");
 	REQUIRE(static_cast<bool>(root(*param)));
@@ -52,14 +52,14 @@ TEST_CASE("declaration statement", "[tokenizer]")
 	param = create_parameter("let i: int = 0");
 	REQUIRE(!root(*param));
 	REQUIRE(param->bundle.size() == 8);
-	REQUIRE(param->bundle[0].value == token::keyword::let);
-	REQUIRE(param->bundle[1].value.is_type<token::identifier>());
-	REQUIRE(param->bundle[2].value == token::control::type_definition);
-	REQUIRE(param->bundle[3].value == token::array_dimension{ 0 });
-	REQUIRE(param->bundle[4].value.is_type<token::identifier>());
+	REQUIRE(param->bundle[0].value == Token::keyword::let);
+	REQUIRE(param->bundle[1].value.is_type<Token::identifier>());
+	REQUIRE(param->bundle[2].value == Token::control::type_definition);
+	REQUIRE(param->bundle[3].value == Token::array_dimension{ 0 });
+	REQUIRE(param->bundle[4].value.is_type<Token::identifier>());
 	REQUIRE(param->bundle[5].value == operator_::assign);
 	REQUIRE(param->bundle[6].value == zero);
-	REQUIRE(param->bundle[7].value == token::control::cmd_end);
+	REQUIRE(param->bundle[7].value == Token::control::cmd_end);
 }
 
 TEST_CASE("any of", "[tokenizer]")
@@ -75,25 +75,25 @@ TEST_CASE("number", "[tokenizer]")
 		const auto param = create_parameter(value);
 		REQUIRE(!number(*param));
 		REQUIRE(param->bundle.size() == 1);
-		REQUIRE(param->bundle.front().value.is_type<token::number>());
-		return param->bundle.begin()->value.get<token::number>();
+		REQUIRE(param->bundle.front().value.is_type<Token::number>());
+		return param->bundle.begin()->value.get<Token::number>();
 	};
 
 	auto num = parse("0");
-	REQUIRE(num.type == token::number::type::i);
+	REQUIRE(num.type == Token::number::type::i);
 	REQUIRE(num.value.i == 0);
 
 	num = parse("255");
-	REQUIRE(num.type == token::number::type::i);
+	REQUIRE(num.type == Token::number::type::i);
 	REQUIRE(num.value.i == 255);
 
 	num = parse("22222");
-	REQUIRE(num.type == token::number::type::i);
+	REQUIRE(num.type == Token::number::type::i);
 	REQUIRE(num.value.i == 22222);
 
-	REQUIRE(number(*create_parameter("?")).code == bia::error::code::bad_number);
-	REQUIRE(number(*create_parameter("-")).code == bia::error::code::bad_number);
-	REQUIRE(number(*create_parameter("+")).code == bia::error::code::bad_number);
+	REQUIRE(number(*create_parameter("?")).code == bia::error::Code::bad_number);
+	REQUIRE(number(*create_parameter("-")).code == bia::error::Code::bad_number);
+	REQUIRE(number(*create_parameter("+")).code == bia::error::Code::bad_number);
 }
 
 TEST_CASE("string", "[tokenizer]")
@@ -102,12 +102,12 @@ TEST_CASE("string", "[tokenizer]")
 		const auto param = create_parameter(p);
 		REQUIRE(!string(*param));
 		REQUIRE(param->bundle.size() == 1);
-		REQUIRE(param->bundle.front().value.is_type<token::string>());
+		REQUIRE(param->bundle.front().value.is_type<Token::string>());
 
-		const auto mem = param->bundle.begin()->value.get<token::string>().memory;
+		const auto mem = param->bundle.begin()->value.get<Token::string>().memory;
 		REQUIRE(mem.size == std::char_traits<char>::length(str) + 1);
 		REQUIRE(std::equal(mem.begin(), mem.end() - 1, str,
-		                   [](bia::util::byte left, char right) { return static_cast<char>(left) == right; }));
+		                   [](bia::util::byte_type left, char right) { return static_cast<char>(left) == right; }));
 	};
 
 	parse(R"("hello world!")", "hello world!");
@@ -118,9 +118,9 @@ TEST_CASE("string", "[tokenizer]")
 TEST_CASE("identifiers", "[tokenizer]")
 {
 	REQUIRE(!identifier(*create_parameter("some_id")));
-	REQUIRE(identifier(*create_parameter("let")).code == code::bad_identifier);
+	REQUIRE(identifier(*create_parameter("let")).code == Code::bad_identifier);
 	REQUIRE(!identifier(*create_parameter("lettuce")));
-	REQUIRE(identifier(*create_parameter("import ")).code == code::bad_identifier);
+	REQUIRE(identifier(*create_parameter("import ")).code == Code::bad_identifier);
 }
 
 TEST_CASE("seperators", "[tokenizer]")

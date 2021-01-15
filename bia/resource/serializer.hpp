@@ -10,21 +10,21 @@
 namespace bia {
 namespace resource {
 
-class serializer
+class Serializer
 {
 public:
 	typedef std::uint16_t size_type;
 
-	serializer(std::ostream& output) noexcept;
+	Serializer(std::ostream& output) noexcept;
 
 	void finish();
-	size_type index_of(view view);
+	size_type index_of(View view);
 	void add_binding(size_type from, size_type to);
 
 private:
 	std::ostream& _output;
 	std::ostream::pos_type _start;
-	std::map<view, size_type> _map;
+	std::map<View, size_type> _map;
 	size_type _index                     = 0;
 	size_type _binding_count             = 0;
 	std::ostream::pos_type _last_binding = std::ostream::off_type{ -1 };

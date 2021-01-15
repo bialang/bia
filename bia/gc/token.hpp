@@ -1,4 +1,4 @@
-#ifndef BIA_GC_TOKEN_HPP_
+#ifndef __FILE__
 #define BIA_GC_TOKEN_HPP_
 
 #include "gc.hpp"

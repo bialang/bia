@@ -2,7 +2,7 @@
 
 using namespace bia::tokenizer::token;
 
-error_info parse::spacer(parameter& param)
+Error_info parse::spacer(parameter& param)
 {
 	enum class state
 	{
@@ -21,7 +21,7 @@ error_info parse::spacer(parameter& param)
 	while (true) {
 		auto pos      = param.input.tellg();
 		const auto cp = param.encoder.read(param.input);
-		if (cp == string::encoding::encoder::eof) {
+		if (cp == string::encoding::Encoder::eof) {
 			seperator = true;
 			goto gt_return;
 		}
@@ -95,6 +95,6 @@ error_info parse::spacer(parameter& param)
 		if (seperator) {
 			return {};
 		}
-		return param.make_error(error::code::expected_seperator, -1);
+		return param.make_error(error::Code::expected_seperator, -1);
 	}
 }

@@ -6,10 +6,15 @@
 namespace bia {
 namespace bytecode {
 
-typedef std::uint8_t Op_code_type;
+typedef std::uint8_t op_code_type;
 
-enum Op_code : Op_code_type
+enum Op_code : op_code_type
 {
+	oc_store_8,
+	oc_store_16,
+	oc_store_32,
+	oc_store_64,
+
 	/// (Element) - pushes the argument on top of the native stack
 	oc_push,
 	/// (std::uint8_t) - pops n given elements from the native stack

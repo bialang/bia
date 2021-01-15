@@ -14,7 +14,7 @@ namespace memory {
  * A simple implememntation of the @ref allocator that uses the given allocator and free functions without any
  * additional synchronozation/caching.
  */
-class simple_allocator : public allocator
+class simple_allocator : public Allocator
 {
 public:
 	typedef std::function<void*(std::size_t)> allocate_fun_type;

@@ -9,11 +9,11 @@
 using namespace bia::string::encoding;
 
 #if BIA_STRING_ENCODING_BACKEND_NONE
-static standard::ascii ascii_encoder;
-static standard::utf8 utf8_encoder;
+static standard::ASCII ascii_encoder;
+static standard::UTF8 utf8_encoder;
 #endif
 
-encoder* bia::string::encoding::get_encoder(standard_encoding encoding)
+Encoder* bia::string::encoding::get_encoder(standard_encoding encoding)
 {
 #if BIA_STRING_ENCODING_BACKEND_NONE
 	switch (encoding) {
@@ -25,10 +25,10 @@ encoder* bia::string::encoding::get_encoder(standard_encoding encoding)
 	case standard_encoding::utf_32:
 	case standard_encoding::utf_32_le:
 	case standard_encoding::utf_32_be:
-	default: BIA_THROW(error::code::bad_switch_value);
+	default: BIA_THROW(error::Code::bad_switch_value);
 	}
 #endif
 }
 
-void bia::string::encoding::free_encoder(encoder* encoder)
+void bia::string::encoding::free_encoder(Encoder* encoder)
 {}

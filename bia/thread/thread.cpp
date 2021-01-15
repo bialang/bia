@@ -1,8 +1,8 @@
 #include "thread.hpp"
 
-#include <exception>
 #include <bia/log/log.hpp>
 #include <bia/util/gsl.hpp>
+#include <exception>
 
 #if BIA_THREAD_BACKEND_STD
 #	include <thread>
@@ -15,7 +15,7 @@
 namespace bia {
 namespace thread {
 
-struct thread::impl
+struct Thread::Impl
 {
 	bool valid;
 #if BIA_THREAD_BACKEND_STD
@@ -23,7 +23,7 @@ struct thread::impl
 	std::exception_ptr ex;
 #endif
 
-	impl(std::function<void()>&& target)
+	Impl(std::function<void()>&& target)
 	{
 		if (target) {
 			valid = true;
@@ -40,14 +40,13 @@ struct thread::impl
 			BIA_LOG(INFO, "new thread launched");
 #elif BIA_THREAD_BACKEND_NONE
 			BIA_LOG(CRITICAL, "tried to launch thread; operation unsupported");
-
 			BIA_THROW(exception::unsupported_error, "threading is not supported");
 #endif
 		} else {
 			valid = false;
 		}
 	}
-	~impl()
+	~Impl()
 	{
 #if BIA_THREAD_BACKEND_STD
 		if (thread_backend.joinable()) {
@@ -57,20 +56,20 @@ struct thread::impl
 	}
 };
 
-thread::thread(std::function<void()> target) : _pimpl(new impl(std::move(target)))
+Thread::Thread(std::function<void()> target) : _pimpl{ new Impl{ std::move(target) } }
 {}
 
-thread::~thread()
+Thread::~Thread()
 {}
 
-void thread::yield()
+void Thread::yield()
 {
 #if BIA_THREAD_BACKEND_STD
 	std::this_thread::yield();
 #endif
 }
 
-void thread::sleep(std::chrono::milliseconds duration)
+void Thread::sleep(std::chrono::milliseconds duration)
 {
 #if BIA_THREAD_BACKEND_STD
 	std::this_thread::sleep_for(duration);
@@ -79,20 +78,19 @@ void thread::sleep(std::chrono::milliseconds duration)
 #endif
 }
 
-void thread::join()
+void Thread::join()
 {
 	BIA_EXPECTS(valid());
 
 #if BIA_THREAD_BACKEND_STD
 	_pimpl->thread_backend.join();
-
 	if (_pimpl->ex) {
 		std::rethrow_exception(_pimpl->ex);
 	}
 #endif
 }
 
-void thread::detach()
+void Thread::detach()
 {
 	BIA_EXPECTS(valid());
 
@@ -101,7 +99,7 @@ void thread::detach()
 #endif
 }
 
-bool thread::valid() const noexcept
+bool Thread::valid() const noexcept
 {
 #if BIA_THREAD_BACKEND_STD
 	return _pimpl->valid && _pimpl->thread_backend.joinable();
@@ -110,7 +108,7 @@ bool thread::valid() const noexcept
 #endif
 }
 
-bool thread::supported() noexcept
+bool Thread::supported() noexcept
 {
 	return BIA_THREAD_SUPPORTED;
 }

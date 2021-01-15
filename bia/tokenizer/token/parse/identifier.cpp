@@ -48,7 +48,7 @@ struct comparator
 	}
 };
 
-error_info parse::identifier(parameter& param)
+Error_info parse::identifier(parameter& param)
 {
 	using namespace string::encoding;
 	const char* values[]{ "as",   "break",  "continue", "defer", "drop",   "else", "error", "false",
@@ -58,21 +58,21 @@ error_info parse::identifier(parameter& param)
 	auto first        = true;
 	auto streambuf    = param.manager.start_memory(true);
 	const auto outenc = get_encoder(standard_encoding::utf_8);
-	const auto free   = util::make_finally([outenc] { free_encoder(outenc); });
+	const auto free   = util::finallay([outenc] { free_encoder(outenc); });
 	std::ostream output{ &streambuf };
 
 	while (true) {
 		const auto pos = param.input.tellg();
 		const auto cp  = param.encoder.read(param.input);
 		switch (category_of(cp)) {
-		case category::Ll:
-		case category::Lu:
-		case category::Lt:
-		case category::Lo:
-		case category::Pc:
-		case category::Nl: first = false;
-		case category::Nd:
-		case category::No: {
+		case Category::Ll:
+		case Category::Lu:
+		case Category::Lt:
+		case Category::Lo:
+		case Category::Pc:
+		case Category::Nl: first = false;
+		case Category::Nd:
+		case Category::No: {
 			// add to output
 			if (!first) {
 				outenc->put(output, cp);
@@ -87,11 +87,11 @@ error_info parse::identifier(parameter& param)
 				param.input.seekg(pos);
 				// zero terminate
 				outenc->put(output, 0);
-				param.bundle.emplace_back(token::identifier{ streambuf.finish(resource::type::string) });
+				param.bundle.emplace_back(Token::identifier{ streambuf.finish(resource::type::string) });
 				return {};
 			}
 			// not an identifier
-			return param.make_error(error::code::bad_identifier, -1);
+			return param.make_error(error::Code::bad_identifier, -1);
 		}
 		}
 	}

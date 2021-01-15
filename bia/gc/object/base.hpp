@@ -50,7 +50,7 @@ protected:
  * @param ptr the pointer to mark
  * @param mark the mark provided by the gc
  */
-inline void gc_mark(util::not_null<const void*> ptr, bool mark) noexcept
+inline void gc_mark(util::Not_null<const void*> ptr, bool mark) noexcept
 {
 	BIA_LOG(TRACE, "marking {}", ptr.get());
 

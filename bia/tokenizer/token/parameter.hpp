@@ -18,14 +18,14 @@ struct parameter
 	struct state
 	{
 		util::byte_istream_type::pos_type input_pos;
-		resource::manager::state_type rm_state;
+		resource::Manager::state_type rm_state;
 		std::size_t bundle_state;
 	};
 
 	util::byte_istream_type& input;
-	resource::manager& manager;
-	string::encoding::encoder& encoder;
-	std::vector<token>& bundle;
+	resource::Manager& manager;
+	string::encoding::Encoder& encoder;
+	std::vector<Token>& bundle;
 
 	state backup() const
 	{
@@ -42,13 +42,13 @@ struct parameter
 		manager.restore_state(old.rm_state);
 		bundle.resize(old.bundle_state);
 	}
-	error_info make_error(error::code code, int offset = 0)
+	Error_info make_error(error::code code, int offset = 0)
 	{
-		error_info err{};
+		Error_info err{};
 		err.code = code;
 		return err;
 	}
-	void set_optional_error(error_info err)
+	void set_optional_error(Error_info err)
 	{}
 };
 

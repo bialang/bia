@@ -11,14 +11,14 @@
 namespace bia {
 namespace resource {
 
-class manager;
+class Manager;
 
 /**
  * An output stream buffer for the @ref manager.
  *
  * @see @ref manager
  */
-class streambuf : public std::streambuf
+class Streambuf : public std::streambuf
 {
 public:
 	/**
@@ -26,17 +26,17 @@ public:
 	 *
 	 * @param space the destination of the data
 	 */
-	streambuf(util::not_null<manager*> manager);
-	streambuf(streambuf&& move) noexcept;
-	~streambuf();
-	view finish(type type);
+	Streambuf(util::Not_null<Manager*> manager);
+	Streambuf(Streambuf&& move) noexcept;
+	~Streambuf();
+	View finish(type type);
 	/**
 	 * Checks whether this streambuf is valid.
 	 *
 	 * @returns `true` if valid, otherwise `false`
 	 */
 	bool valid() const noexcept;
-	streambuf& operator=(streambuf&& move) noexcept;
+	Streambuf& operator=(Streambuf&& move) noexcept;
 
 protected:
 	int_type sync() override;
@@ -44,7 +44,7 @@ protected:
 
 private:
 	/** if non-null the parent */
-	manager* _manager  = nullptr;
+	Manager* _manager  = nullptr;
 	/** the size when this streambuf was created */
 	gc::memory::space::size_type _initial_size = 0;
 

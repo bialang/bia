@@ -13,18 +13,18 @@ namespace bia {
 namespace gc {
 namespace memory {
 
-typedef std::vector<util::byte*, std_allocator<util::byte*>> page_container_type;
+typedef std::vector<util::byte_type*, std_allocator<util::byte_type*>> page_container_type;
 
 class iterator
 {
 public:
 	typedef std::random_access_iterator_tag iterator_category;
-	typedef util::byte value_type;
+	typedef util::byte_type value_type;
 	typedef std::ptrdiff_t difference_type;
 	typedef const value_type* pointer;
 	typedef value_type reference;
 
-	iterator(util::not_null<std::shared_ptr<page_container_type>> pages, std::size_t page_size,
+	iterator(util::Not_null<std::shared_ptr<page_container_type>> pages, std::size_t page_size,
 	         std::size_t index, std::size_t offset)
 	    : _pages(std::move(pages.get()))
 	{

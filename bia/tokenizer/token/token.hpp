@@ -13,7 +13,7 @@ namespace bia {
 namespace tokenizer {
 namespace token {
 
-struct token
+struct Token
 {
 	struct batch
 	{
@@ -73,7 +73,7 @@ struct token
 			case type::u64: return value.u64 == other.value.u64;
 			case type::f32: return value.f32 == other.value.f32;
 			case type::f64: return value.f64 == other.value.f64;
-			default: BIA_THROW(error::code::bad_switch_value);
+			default: BIA_THROW(error::Code::bad_switch_value);
 			}
 		}
 	};
@@ -90,17 +90,17 @@ struct token
 
 	struct identifier
 	{
-		resource::view memory;
+		resource::View memory;
 	};
 
 	struct string
 	{
-		resource::view memory;
+		resource::View memory;
 	};
 
 	struct regex
 	{
-		resource::view memory;
+		resource::View memory;
 	};
 
 	enum class control
@@ -132,24 +132,24 @@ struct token
 		let,
 	};
 
-	util::variant<number, array_dimension, batch, control, keyword, string, regex, identifier, operator_,
+	util::Variant<number, array_dimension, batch, control, keyword, string, regex, identifier, operator_,
 	              array_dimension>
 	  value;
 
-	token() = default;
+	Token() = default;
 	template<typename Type>
-	token(Type&& value) : value{ std::forward<Type>(value) }
+	Token(Type&& value) : value{ std::forward<Type>(value) }
 	{}
-	token(const token& copy) : value{ copy.value }
+	Token(const Token& copy) : value{ copy.value }
 	{}
-	token(token&& move) : value{ std::move(move.value) }
+	Token(Token&& move) : value{ std::move(move.value) }
 	{}
-	token& operator=(const token& copy)
+	Token& operator=(const Token& copy)
 	{
 		value = copy.value;
 		return *this;
 	}
-	token& operator=(token&& move)
+	Token& operator=(Token&& move)
 	{
 		value = std::move(move.value);
 		return *this;

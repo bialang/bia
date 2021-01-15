@@ -37,7 +37,7 @@ public:
 	 *
 	 * @param allocator provides the required memory for the allocations
 	 */
-	gc(util::not_null<std::shared_ptr<memory::allocator>> allocator) noexcept;
+	gc(util::Not_null<std::shared_ptr<memory::Allocator>> allocator) noexcept;
 	/**
 	 * Destructor.
 	 */
@@ -48,8 +48,8 @@ public:
 	 * @return the lock guard
 	 */
 	thread::lock::guard<thread::lock::spin_mutex> lock();
-	void register_root(util::not_null<object::base*> base);
-	void deregister_root(util::not_null<object::base*> base);
+	void register_root(util::Not_null<object::base*> base);
+	void deregister_root(util::Not_null<object::base*> base);
 	/**
 	 * Blocks the current thread and runs the garbage collector. If an instance is already running, this
 	 * function returns.
@@ -57,15 +57,6 @@ public:
 	 * @returns `true` if the gc was run, otherwise `false`
 	 */
 	bool run_once();
-	/**
-	 * Registeres the current thread. If this thread has already been registered, this function fails.
-	 *
-	 * @pre no active gc in the current thread
-	 *
-	 * @param stack_size how much space the root should have
-	 * @returns a token which deregisteres this thread upon destruction
-	 */
-	std::unique_ptr<token> register_thread(std::size_t stack_size);
 	/**
 	 * Allocates gc monitorable memory. In order for this memory to be monitored by the garbage collector
 	 * gcable::start_monitor() must be called.
@@ -99,7 +90,7 @@ public:
 	 *
 	 * @returns the internally used memory allocator
 	 */
-	const std::shared_ptr<memory::allocator>& allocator() noexcept;
+	const std::shared_ptr<memory::Allocator>& allocator() noexcept;
 	/**
 	 * Returns the active gc of the current thread.
 	 *
@@ -126,7 +117,7 @@ private:
 	/** the currently active instance */
 	static thread_local gc* _active_gc_instance;
 	/** the memory allocator */
-	std::shared_ptr<memory::allocator> _allocator;
+	std::shared_ptr<memory::Allocator> _allocator;
 	/** the current gc mark */
 	bool _current_mark = false;
 	/** the current miss index; this value is used to prevent misfreeing objects */
@@ -147,14 +138,14 @@ private:
 	 * @returns the memory buffer
 	 * @throw see memory::allocator::checked_allocate()
 	 */
-	util::not_null<void*> _allocate_impl(std::size_t size, bool leaf);
+	util::Not_null<void*> _allocate_impl(std::size_t size, bool leaf);
 	/**
 	 * Deallocates the pointer allocated by _allocate_impl().
 	 *
 	 * @param ptr the pointer
 	 * @throw see memory::allocator::deallocate()
 	 */
-	void _free(util::not_null<void*> ptr);
+	void _free(util::Not_null<void*> ptr);
 };
 
 } // namespace gc

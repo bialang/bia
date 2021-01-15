@@ -29,7 +29,7 @@ inline typename std::enable_if<std::is_integral<Type>::value, Type>::type
 	case infix_operator::division: return left / right;
 	case infix_operator::remainder: return left % right;
 	case infix_operator::exponentation: return static_cast<Type>(std::pow(left, right));
-	default: BIA_THROW(bia::error::code::bad_infix_operator);
+	default: BIA_THROW(bia::error::Code::bad_infix_operator);
 	}
 }
 
@@ -44,7 +44,7 @@ inline typename std::enable_if<std::is_floating_point<Type>::value, Type>::type
 	case infix_operator::division: return left / right;
 	case infix_operator::remainder: return std::fmod(left, right);
 	case infix_operator::exponentation: return std::pow(left, right);
-	default: BIA_THROW(bia::error::code::bad_infix_operator);
+	default: BIA_THROW(bia::error::Code::bad_infix_operator);
 	}
 }
 
@@ -59,7 +59,7 @@ inline member::test_type test_operation(Type left, test_operator op, Type right)
 	case test_operator::greater: return left > right;
 	case test_operator::greater_equal: return left >= right;
 	case test_operator::three_way_comparison: return left < right ? -1 : (left > right ? 1 : 0);
-	default: BIA_THROW(bia::error::code::bad_test_operator);
+	default: BIA_THROW(bia::error::Code::bad_test_operator);
 	}
 }
 

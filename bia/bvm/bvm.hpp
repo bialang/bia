@@ -8,8 +8,8 @@
 namespace bia {
 namespace bvm {
 
-void execute(util::span<const util::byte*> instructions, gc::root& resources);
-void execute(util::span<const util::byte*> instructions, gc::root& resources, gc::Stack<std::int32_t>& stack,
+void execute(util::span<const util::byte_type*> instructions, gc::root& resources);
+void execute(util::span<const util::byte_type*> instructions, gc::root& resources, gc::Stack<std::int32_t>& stack,
              gc::token& token);
 
 } // namespace bvm

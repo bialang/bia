@@ -38,12 +38,12 @@ inline std::pair<std::size_t, bool> any_of(parameter& param, util::czstring toke
 }
 
 template<typename... Types>
-inline error_info any_of(parameter& param, Types&&... tokens)
+inline Error_info any_of(parameter& param, Types&&... tokens)
 {
 	static_assert(sizeof...(Types) > 0, "must provide at least one option");
 
 	const auto old = param.backup();
-	error_info error{};
+	Error_info error{};
 	for (auto token : { tokens... }) {
 		const auto err = token(param);
 		if (!err) {

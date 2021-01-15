@@ -3,19 +3,19 @@
 
 #include "token/receiver.hpp"
 
-#include <istream>
 #include <bia/string/encoding/encoder.hpp>
 #include <bia/util/types.hpp>
+#include <istream>
 
 namespace bia {
 namespace tokenizer {
 
-class lexer
+class Lexer
 {
 public:
-	virtual ~lexer()                           = default;
-	virtual void lex(util::byte_istream_type& input, string::encoding::encoder& encoder,
-	                 token::receiver& receiver) = 0;
+	virtual ~Lexer()                            = default;
+	virtual void lex(util::byte_istream_type& input, string::encoding::Encoder& encoder,
+	                 token::Receiver& receiver) = 0;
 };
 
 } // namespace tokenizer

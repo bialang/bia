@@ -22,7 +22,7 @@ try {
 
 		BIA_LOG(INFO, "exiting gc thread");
 	} };
-	auto f = bia::util::make_finally([&] {
+	auto f = bia::util::finallay([&] {
 		BIA_LOG(INFO, "waiting for gc to finish");
 		b = true;
 		t.join();
@@ -48,7 +48,7 @@ let x: int = 0
 			const auto value = bia::member::cast::cast<int>(*ptr);
 			std::cout << "result: " << value << std::endl;
 		}
-	} catch (const bia::error::exception& e) {
+	} catch (const bia::error::Exception& e) {
 		std::cerr << "exception (" << e.code() << ") from " << e.source_location() << ": " << e.what()
 		          << '\n';
 		// std::cout << "exception (" << e.name() << "; " << e.filename() << ":" << e.line() << "): " <<
@@ -70,7 +70,7 @@ let x: int = 0
 
 		return 1;
 	}
-} catch (const bia::error::contract_violation& e) {
+} catch (const bia::error::Contract_violation& e) {
 	std::cerr << "contract violated (" << e.source_location() << "): " << e.what() << '\n';
 	return -1;
 }

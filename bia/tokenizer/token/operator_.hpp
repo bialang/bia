@@ -85,7 +85,7 @@ inline member::infix_operator to_infix_operator(operator_ op)
 	case operator_::division: return member::infix_operator::division;
 	case operator_::remainder: return member::infix_operator::remainder;
 	case operator_::exponentation: return member::infix_operator::exponentation;
-	default: BIA_THROW(error::code::bad_infix_operator);
+	default: BIA_THROW(error::Code::bad_infix_operator);
 	}
 }
 
@@ -100,7 +100,7 @@ inline member::test_operator to_test_operator(operator_ op)
 	case operator_::greater_equal: return member::test_operator::greater_equal;
 	case operator_::in: return member::test_operator::in;
 	case operator_::three_way_comparison: return member::test_operator::three_way_comparison;
-	default: BIA_THROW(error::code::bad_test_operator);
+	default: BIA_THROW(error::Code::bad_test_operator);
 	}
 }
 
@@ -109,7 +109,7 @@ inline member::self_operator to_self_operator(operator_ op)
 	switch (op) {
 	case operator_::unary_minus: return member::self_operator::unary_minus;
 	case operator_::bitwise_not: return member::self_operator::bitwise_not;
-	default: BIA_THROW(error::code::bad_self_operator);
+	default: BIA_THROW(error::Code::bad_self_operator);
 	}
 }
 

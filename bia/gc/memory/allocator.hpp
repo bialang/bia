@@ -14,7 +14,7 @@ namespace memory {
  *
  * @see simple_allocator
  */
-class allocator
+class Allocator
 {
 public:
 	/** the alignment of the allocated memory */
@@ -23,7 +23,7 @@ public:
 	/**
 	 * Destructor.
 	 */
-	virtual ~allocator() = default;
+	virtual ~Allocator() = default;
 	/**
 	 * Deallocates the memory prior allocated by allocate(). This function is thread-safe to call.
 	 *
@@ -50,7 +50,7 @@ public:
 	 * @param size is the amount of required bytes
 	 * @return the pointer to the first byte
 	 */
-	util::not_null<void*> checked_allocate(std::size_t size)
+	util::Not_null<void*> checked_allocate(std::size_t size)
 	{
 		const auto ptr = allocate(size);
 		if (!ptr) {

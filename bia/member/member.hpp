@@ -3,7 +3,6 @@
 
 #include "operator_.hpp"
 
-#include <bia/connector/connector.hpp>
 #include <bia/gc/gcable.hpp>
 #include <bia/gc/object/base.hpp>
 #include <cstdint>
@@ -17,8 +16,6 @@ class string;
 
 } // namespace native
 
-struct invoke_context;
-
 /**
  * The base type for all member types. All members are gc objects and must provide the following functions.
  */
@@ -29,8 +26,6 @@ public:
 	typedef int flag_type;
 	/** the type for testing operations; is able to hold at least: -1, 0 and 1 */
 	typedef int test_type;
-	typedef connector::parameters_type parameters_type;
-	typedef std::uint8_t parameter_count_type;
 
 	/**
 	 * Additional flags describing the member and how its going to behave in certain situations.
@@ -69,15 +64,6 @@ public:
 	 * @returns a fresh copy of this member
 	 */
 	virtual gc::gcable<member> copy() const = 0;
-	/**
-	 * Invokes this member.
-	 *
-	 * @param params the parameter manager
-	 * @param[in,out] context the machine context
-	 * @param[in,out] resources the resources for the machinee
-	 * @return the result of the function call
-	 */
-	virtual gc::gcable<member> invoke(parameters_type params, invoke_context& context) = 0;
 	/**
 	 * Executes an infix operation on this member and returns the result.
 	 *

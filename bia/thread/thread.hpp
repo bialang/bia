@@ -14,7 +14,7 @@ namespace thread {
 /**
  * A threading class with automatic joining.
  */
-class thread
+class Thread
 {
 public:
 	/** the type of the function to run in the thread */
@@ -26,8 +26,8 @@ public:
 	 * @param target (optional) the function that should be run
 	 * @throw exception::unsupported_error if threading is not supported
 	 */
-	thread(target_type target = {});
-	~thread();
+	Thread(target_type target = {});
+	~Thread();
 	static void yield();
 	/**
 	 * Blocks the execution of the current thread for the given duration. If the thread is interrupted, an
@@ -39,31 +39,19 @@ public:
 	 * @throw exception::interrupt_error if this thread was interrupted
 	 */
 	static void sleep(std::chrono::milliseconds duration);
-	/**
-	 * Blocks and waits for this running thread.
-	 *
-	 * @pre must be valid()
-	 */
+	/// Blocks and waits for this running thread.
 	void join();
 	void detach();
-	/**
-	 * Checks if this thread is valid. A thread is valid if it was initialized with a target and threading is
-	 * supported. See supported() for more information.
-	 *
-	 * @returns `true` if this thread is valid, otherwise `false`
-	 */
+	/// Checks if this thread is valid. A thread is valid if it was initialized with a target and threading is
+	/// supported. See supported() for more information.
 	bool valid() const noexcept;
-	/**
-	 * Checks if threading is supported. This is done through the config file. See also BIA_THRAED_SUPPORTED.
-	 *
-	 * @returns `true` if threading is supported, otherwise `false`
-	 */
+	/// Checks whether threading is supported by the Bialang libarary.
 	static bool supported() noexcept;
 
 private:
-	struct impl;
+	struct Impl;
 
-	std::shared_ptr<impl> _pimpl;
+	std::shared_ptr<Impl> _pimpl;
 };
 
 } // namespace thread

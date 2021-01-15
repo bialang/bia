@@ -18,7 +18,7 @@ public:
 
 	virtual ~module()                                            = default;
 	virtual version_type version() const noexcept                = 0;
-	virtual util::not_null<member::member*> create(gc::gc& gc)   = 0;
+	virtual util::Not_null<member::member*> create(gc::gc& gc)   = 0;
 };
 
 } // namespace module

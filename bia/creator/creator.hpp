@@ -59,7 +59,7 @@ inline typename std::enable_if<Index + 1 == Type::type_count &&
 		return create(gc, value.template get<Index>());
 	}
 
-	BIA_THROW(bia::error::code::why_did_this_happen);
+	BIA_THROW(bia::error::Code::why_did_this_happen);
 }
 
 template<typename Type, std::size_t Index = 0>

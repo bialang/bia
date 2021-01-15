@@ -13,25 +13,23 @@ namespace bia {
 namespace compiler {
 namespace elve {
 
-struct parameter
+struct Parameter
 {
-	bytecode::Instructor<std::uint32_t>& writer;
-	symbol::manager& symbols;
+	bytecode::Instructor& instructor;
+	symbol::Manager& symbols;
 };
 
-typedef util::variant<bytecode::member::local, bytecode::member::args, bytecode::member::push>
-  destination_type;
-typedef util::span<const tokenizer::token::token*> tokens_type;
+typedef util::span<const tokenizer::token::Token*> Tokens_type;
 
-tokens_type root(parameter& param, tokens_type tokens);
+Tokens_type root(parameter& param, Tokens_type tokens);
 
-tokens_type decl_stmt(parameter& param, tokens_type tokens);
+Tokens_type decl_stmt(parameter& param, Tokens_type tokens);
 
-std::pair<tokens_type, util::not_null<type::definition*>>
-  single_expression(parameter& param, tokens_type tokens, destination_type destination, bool atomic);
+std::pair<Tokens_type, util::Not_null<type::Definition*>>
+  single_expression(Parameter& param, Tokens_type tokens, destination_type destination, bool atomic);
 
-std::pair<tokens_type, util::not_null<type::definition*>> type_definition(parameter& param,
-                                                                          tokens_type tokens);
+std::pair<Tokens_type, util::Not_null<type::definition*>> type_definition(parameter& param,
+                                                                          Tokens_type tokens);
 
 } // namespace elve
 } // namespace compiler

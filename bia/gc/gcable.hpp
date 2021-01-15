@@ -162,7 +162,7 @@ private:
 	void _discard() noexcept
 	{
 		if (_gc) {
-			_destroy(util::not_null<Type*>{ _ptr });
+			_destroy(util::Not_null<Type*>{ _ptr });
 			_gc->_free(_ptr);
 
 			_gc  = nullptr;
@@ -174,7 +174,7 @@ private:
 	 */
 	template<typename U>
 	static
-	    typename std::enable_if<!std::is_destructible<U>::value>::type _destroy(util::not_null<U*>) noexcept
+	    typename std::enable_if<!std::is_destructible<U>::value>::type _destroy(util::Not_null<U*>) noexcept
 	{}
 	/**
 	 * Destroys the given object.
@@ -184,7 +184,7 @@ private:
 	 */
 	template<typename U>
 	static typename std::enable_if<std::is_destructible<U>::value>::type
-	    _destroy(util::not_null<U*> ptr) noexcept
+	    _destroy(util::Not_null<U*> ptr) noexcept
 	{
 		ptr->~U();
 	}

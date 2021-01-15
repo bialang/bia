@@ -7,32 +7,30 @@ namespace bia {
 namespace compiler {
 namespace type {
 
-class integer : public definition
+class Integer : public Definition
 {
 public:
 	enum class size
 	{
-		i,
 		i8,
-		i16,
-		i32,
-		i64,
-		u,
 		u8,
+		i16,
 		u16,
+		i32,
 		u32,
+		i64,
 		u64
 	};
 
-	integer(size size) noexcept : _size{ size }
+	Integer(size size) noexcept : _size{ size }
 	{}
-	bool is_assignable(const definition* other) const noexcept override
+	bool is_assignable(const Definition* other) const noexcept override
 	{
-		return dynamic_cast<const integer*>(other) && static_cast<const integer*>(other)->_size == _size;
+		return dynamic_cast<const Integer*>(other) && static_cast<const Integer*>(other)->_size == _size;
 	}
-	int hash_code() const noexcept override
+	unsigned int hash_code() const noexcept override
 	{
-		return static_cast<int>(_size) + 1;
+		return static_cast<unsigned int>(_size) + 1;
 	}
 
 private:

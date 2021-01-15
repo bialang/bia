@@ -12,7 +12,7 @@ namespace encoding {
 namespace standard {
 
 template<bool Big_endian>
-class utf16 final : public encoder
+class UTF16 final : public Encoder
 {
 public:
 	virtual bool next(const std::int8_t*& begin, const std::int8_t* end, code_point& output) const override

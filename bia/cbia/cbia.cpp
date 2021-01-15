@@ -92,7 +92,7 @@ try {
 		return berr_invalid_arguments;
 	}
 
-	bia::util::memory_streambuf buffer({ static_cast<const bia::util::byte*>(code), length });
+	bia::util::Memory_streambuf buffer({ static_cast<const bia::util::byte_type*>(code), length });
 	std::istream istream(&buffer);
 	static_cast<bia::engine*>(engine)->execute(istream);
 

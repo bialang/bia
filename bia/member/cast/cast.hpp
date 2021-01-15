@@ -20,7 +20,7 @@ template<typename Type>
 inline typename std::enable_if<std::is_integral<Type>::value, Type>::type cast(member& m)
 {
 	if (!(m.flags() & member::flag_numeric)) {
-		BIA_THROW(error::code::bad_cast);
+		BIA_THROW(error::Code::bad_cast);
 	}
 	Type value{};
 	// TODO implement this
@@ -31,7 +31,7 @@ template<typename Type>
 inline typename std::enable_if<std::is_floating_point<Type>::value, Type>::type cast(member& m)
 {
 	if (!(m.flags() & member::flag_numeric)) {
-		BIA_THROW(error::code::bad_cast);
+		BIA_THROW(error::Code::bad_cast);
 	}
 	Type value{};
 	// TODO implement this
@@ -45,7 +45,7 @@ inline typename std::enable_if<!std::is_arithmetic<Type>::value && !is_const_val
 	Type output{};
 
 	if (!m.as_data(typeid(Type), &output)) {
-		BIA_THROW(error::code::bad_cast);
+		BIA_THROW(error::Code::bad_cast);
 	}
 
 	return output;
@@ -58,7 +58,7 @@ inline typename std::enable_if<!std::is_arithmetic<Type>::value && is_const_valu
 	Type output{};
 
 	if (!m.as_data(typeid(Type), &output)) {
-		BIA_THROW(error::code::bad_cast);
+		BIA_THROW(error::Code::bad_cast);
 	}
 
 	return output;

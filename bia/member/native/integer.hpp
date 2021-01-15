@@ -44,7 +44,7 @@ public:
 		}
 		Type rhs{};
 		if (!right.as_data(typeid(Type), &rhs)) {
-			BIA_THROW(error::code::bad_cast);
+			BIA_THROW(error::Code::bad_cast);
 		}
 		return detail::test_operation(_value, op, rhs);
 	}
@@ -60,7 +60,7 @@ public:
 	{
 		Type rhs{};
 		if (!right.as_data(typeid(Type), &rhs)) {
-			BIA_THROW(error::code::bad_cast);
+			BIA_THROW(error::Code::bad_cast);
 		}
 		return gc::gc::active_gc()->construct<integer>(detail::operation(_value, op, rhs));
 	}

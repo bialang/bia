@@ -10,11 +10,11 @@
 namespace bia {
 namespace error {
 
-class source_location
+class Source_location
 {
 public:
-	source_location() = default;
-	source_location(std::uint_least32_t line, std::uint_least32_t column, const char* file_name,
+	Source_location() = default;
+	Source_location(std::uint_least32_t line, std::uint_least32_t column, const char* file_name,
 	                const char* function_name) noexcept
 	    : _line{ line }, _column{ column }, _file_name{ file_name }, _function_name{ function_name }
 	{}
@@ -47,7 +47,7 @@ private:
 
 template<typename Ostream>
 inline typename std::enable_if<std::is_base_of<std::ostream, Ostream>::value, Ostream&>::type
-    operator<<(Ostream& stream, const bia::error::source_location& source_location)
+    operator<<(Ostream& stream, const bia::error::Source_location& source_location)
 {
 	stream << source_location.file_name() << ":" << source_location.line() << " ["
 	       << source_location.function_name() << "]";

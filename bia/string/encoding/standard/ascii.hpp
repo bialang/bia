@@ -8,10 +8,8 @@ namespace string {
 namespace encoding {
 namespace standard {
 
-/**
- * The standard encoder for ASCII without any state. This class is thread safe.
- */
-class ascii : public encoder
+/// The standard encoder for ASCII without any state. This class is thread safe.
+class ASCII : public Encoder
 {
 public:
 	void put(std::ostream& output, code_point_type cp) const override;

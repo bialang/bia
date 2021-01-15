@@ -6,7 +6,7 @@
 
 using namespace bia::tokenizer::token;
 
-inline std::tuple<std::string, enum token::number::type, error_info> extract_number(parameter& param)
+inline std::tuple<std::string, enum Token::number::type, Error_info> extract_number(parameter& param)
 {
 	std::string str;
 	while (true) {
@@ -19,21 +19,21 @@ inline std::tuple<std::string, enum token::number::type, error_info> extract_num
 		str.append(1, c);
 	}
 	if (str.empty()) {
-		return { str, token::number::type::i, param.make_error(bia::error::code::bad_number) };
+		return { str, Token::number::type::i, param.make_error(bia::error::Code::bad_number) };
 	}
-	return { str, token::number::type::i, {} };
+	return { str, Token::number::type::i, {} };
 }
 
-inline std::pair<enum token::number::type, error_info> check_special(parameter& param,
-                                                                     enum token::number::type type)
+inline std::pair<enum Token::number::type, Error_info> check_special(parameter& param,
+                                                                     enum Token::number::type type)
 {
 	// TODO
 	return { type, {} };
 }
 
-inline error_info convert(parameter& param, const std::string& str, enum token::number::type type)
+inline Error_info convert(parameter& param, const std::string& str, enum Token::number::type type)
 {
-	using number = token::number;
+	using number = Token::number;
 	// convert
 	std::size_t processed = 0;
 	number num{};
@@ -43,20 +43,20 @@ inline error_info convert(parameter& param, const std::string& str, enum token::
 		case number::type::i: num.value.i = std::stoi(str, &processed); break;
 		case number::type::f32: num.value.f32 = std::stof(str, &processed); break;
 		case number::type::f64: num.value.f64 = std::stod(str, &processed); break;
-		default: BIA_THROW(bia::error::code::bad_switch_value);
+		default: BIA_THROW(bia::error::Code::bad_switch_value);
 		}
 	} catch (const std::out_of_range& e) {
 	} catch (const std::invalid_argument& e) {
 	}
 
 	if (processed != str.length()) {
-		return param.make_error(bia::error::code::bad_number);
+		return param.make_error(bia::error::Code::bad_number);
 	}
 	param.bundle.emplace_back(num);
 	return {};
 }
 
-error_info parse::number(parameter& param)
+Error_info parse::number(parameter& param)
 {
 	const auto extracted = extract_number(param);
 	if (std::get<2>(extracted)) {

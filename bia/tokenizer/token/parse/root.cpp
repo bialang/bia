@@ -3,7 +3,7 @@
 
 using namespace bia::tokenizer::token;
 
-inline error_info small_stmt(parameter& param)
+inline Error_info small_stmt(parameter& param)
 {
 	if (const auto err = parse::any_of(param, parse::drop_stmt, parse::decl_stmt, parse::return_stmt,
 	                                   parse::yield_stmt, parse::flow_control_stmt, parse::defer_stmt,
@@ -18,30 +18,30 @@ inline error_info small_stmt(parameter& param)
 	return {};
 }
 
-inline error_info compound_stmt(parameter& param)
+inline Error_info compound_stmt(parameter& param)
 {
 	return parse::any_of(param, parse::if_stmt, parse::scope_stmt);
 }
 
-error_info parse::root(parameter& param)
+Error_info parse::root(parameter& param)
 {
 	if (const auto err = parse::any_of(param, small_stmt, compound_stmt)) {
 		return err;
 	}
-	param.bundle.emplace_back(token::control::cmd_end);
+	param.bundle.emplace_back(Token::control::cmd_end);
 	return {};
 }
 
-error_info parse::batch(parameter& param)
+Error_info parse::batch(parameter& param)
 {
 	if (param.encoder.read(param.input) != '{') {
-		return param.make_error(error::code::expected_opening_curly_bracket, -1);
+		return param.make_error(error::Code::expected_opening_curly_bracket, -1);
 	}
-	token::batch info{};
+	Token::batch info{};
 	const auto index = param.bundle.size();
 	param.bundle.emplace_back();
 
-	error_info root_err{};
+	Error_info root_err{};
 	while (true) {
 		spacer(param);
 		const auto old = param.backup();
@@ -54,9 +54,9 @@ error_info parse::batch(parameter& param)
 
 	spacer(param);
 	if (param.encoder.read(param.input) != '}') {
-		const auto err = param.make_error(error::code::expected_closing_curly_bracket, -1);
+		const auto err = param.make_error(error::Code::expected_closing_curly_bracket, -1);
 		return err < root_err ? root_err : err;
 	}
-	param.bundle.at(index).value.emplace<token::batch>(info);
+	param.bundle.at(index).value.emplace<Token::batch>(info);
 	return {};
 }

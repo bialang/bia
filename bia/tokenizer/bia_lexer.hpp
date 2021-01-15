@@ -8,15 +8,15 @@
 namespace bia {
 namespace tokenizer {
 
-class bia_lexer : public lexer
+class Bia_lexer : public Lexer
 {
 public:
-	bia_lexer(util::not_null<std::shared_ptr<gc::memory::allocator>> allocator);
-	void lex(util::byte_istream_type& input, string::encoding::encoder& encoder,
-	         token::receiver& receiver) override;
+	Bia_lexer(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator);
+	void lex(util::byte_istream_type& input, string::encoding::Encoder& encoder,
+	         token::Receiver& receiver) override;
 
 private:
-	resource::manager _manager;
+	resource::Manager _manager;
 };
 
 } // namespace tokenizer

@@ -12,7 +12,6 @@
 namespace bia {
 namespace bytecode {
 
-template<typename Element>
 class Instructor
 {
 public:

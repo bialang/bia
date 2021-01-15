@@ -8,14 +8,14 @@
 namespace bia {
 namespace util {
 
-class memory_streambuf : public std::streambuf
+class Memory_streambuf : public std::streambuf
 {
 public:
-	memory_streambuf(span<const byte*> buffer) noexcept
+	Memory_streambuf(span<const byte_type*> buffer) noexcept
 	{
-		setg(reinterpret_cast<char*>(const_cast<byte*>(buffer.begin())),
-		     reinterpret_cast<char*>(const_cast<byte*>(buffer.begin())),
-		     reinterpret_cast<char*>(const_cast<byte*>(buffer.end())));
+		setg(reinterpret_cast<char*>(const_cast<byte_type*>(buffer.begin())),
+		     reinterpret_cast<char*>(const_cast<byte_type*>(buffer.begin())),
+		     reinterpret_cast<char*>(const_cast<byte_type*>(buffer.end())));
 	}
 
 protected:
