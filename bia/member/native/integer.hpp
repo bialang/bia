@@ -52,10 +52,6 @@ public:
 	{
 		return gc::gc::active_gc()->construct<integer>(_value);
 	}
-	gc::gcable<member> invoke(parameters_type params, invoke_context& context) override
-	{
-		return {};
-	}
 	gc::gcable<member> operation(const member& right, infix_operator op) override
 	{
 		Type rhs{};

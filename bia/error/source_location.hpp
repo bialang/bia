@@ -5,7 +5,7 @@
 #include <ostream>
 #include <type_traits>
 
-#define BIA_CURRENT_SOURCE_LOCATION bia::error::source_location(__LINE__, 0, __FILE__, __func__)
+#define BIA_CURRENT_SOURCE_LOCATION bia::error::Source_location(__LINE__, 0, __FILE__, __func__)
 
 namespace bia {
 namespace error {

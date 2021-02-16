@@ -7,13 +7,16 @@
 
 using namespace bia::compiler;
 
-Compiler::Compiler(std::ostream& instructions) noexcept
-    : _instructor{ instructions }
+Compiler::Compiler(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
+                   std::ostream& instructions, std::ostream& resource) noexcept
+    : _instructor{ instructions }, _symbols{ allocator, symbol::Default_int_size::size_32 }, _serializer{
+	      resource
+      }
 {}
 
-void Compiler::receive(util::span<const token*> tokens, resource::Manager& manager)
+void Compiler::receive(util::Span<const Token*> tokens, resource::Manager& manager)
 {
-	elve::Parameter params{ _instructor, _symbols };
+	elve::Parameter params{ _instructor, _symbols, _serializer };
 	while (!tokens.empty()) {
 		tokens = elve::root(params, tokens);
 	}

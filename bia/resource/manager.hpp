@@ -27,7 +27,7 @@ public:
 	 */
 	Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
 	        std::size_t page_size = BIA_RESOURCE_PAGE_SIZE) noexcept;
-	~Manager();
+	~Manager() noexcept;
 	/**
 	 * Starts a new memory sequence.
 	 *

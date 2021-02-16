@@ -1,14 +1,22 @@
 #include "manager.hpp"
 
-#include <bia/compiler/type/integer.hpp>
+#include "../type/bool.hpp"
+#include "../type/floating_point.hpp"
+#include "../type/integer.hpp"
+#include "../type/string.hpp"
+
 #include <bia/error/exception.hpp>
 
 using namespace bia::compiler::symbol;
 
-Manager::Manager()
+Manager::Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
+                 Default_int_size default_int_size)
+    : _type_system{ allocator }
 {
+	_default_int_size = default_int_size;
 	// there is always a global scope
 	_scopes.emplace_back();
+	_introduce_native_types();
 }
 
 void Manager::open_scope()
@@ -19,23 +27,40 @@ void Manager::open_scope()
 void Manager::close_scope()
 {
 	BIA_EXPECTS(_scopes.size() > 1);
-	for (const auto& it : _scopes.back()) {
-		_symbols.erase(it);
+	auto& scope = _scopes.back();
+	for (auto i = scope.rbegin(); i != scope.rend(); ++i) {
+		_drop(*i);
 	}
 	_scopes.pop_back();
 }
 
-Builder Manager::declare(const resource::View& name)
+Variable Manager::create_temporary(util::Not_null<type::Definition*> type)
 {
-	if (_symbols.find(name) != _symbols.end() || _declared.find(name) != _declared.end()) {
-		BIA_THROW(error::Code::symbol_already_declared);
-	}
-	// TODO add location
-	_declared.insert({ name, Location{} });
-	return { this, name, Location{} };
+	Variable variable{};
+	variable.definition      = type;
+	variable.location.offset = _stack;
+	_stack += type->size();
+	return variable;
 }
 
-Symbol_type Manager::symbol(const resource::View& name)
+void Manager::free_temporary(Variable variable)
+{
+	// TODO add support if variable is not at the end
+	if (variable.location.offset + variable.definition->size() == _stack) {
+		_stack -= variable.definition->size();
+	}
+}
+
+void Manager::promote_temporary(const resource::View& name, const Variable& variable)
+{
+	if (_symbols.find({ name }) != _symbols.end()) {
+		BIA_THROW(error::Code::symbol_already_declared);
+	}
+	const auto it = _symbols.insert(std::make_pair(name, variable)).first;
+	_scopes.back().push_back(it);
+}
+
+Symbol Manager::symbol(const resource::View& name)
 {
 	const auto result = _symbols.find(name);
 	if (result == _symbols.end()) {
@@ -44,7 +69,7 @@ Symbol_type Manager::symbol(const resource::View& name)
 	return result->second;
 }
 
-Symbol_type Manager::symbol(const string_type& name)
+Symbol Manager::symbol(const string_type& name)
 {
 	const auto result = _symbols.find(name);
 	if (result == _symbols.end()) {
@@ -88,7 +113,7 @@ void Manager::_accept_declared(const resource::View& name, Variable var)
 	const auto d = _declared.find(name);
 	BIA_EXPECTS(d != _declared.end());
 	_declared.erase(d);
-	const auto it = _symbols.insert({ name, std::move(var) });
+	const auto it = _symbols.insert(std::make_pair(name, std::move(var)));
 	_scopes.back().push_back(it.first);
 }
 
@@ -97,4 +122,46 @@ void Manager::_decline_declared(const resource::View& name)
 	const auto d = _declared.find(name);
 	BIA_EXPECTS(d != _declared.end());
 	_declared.erase(d);
+}
+
+void Manager::_introduce_native_types()
+{
+	using namespace type;
+
+	if (_default_int_size == Default_int_size::size_32) {
+		_symbols.insert(
+		  std::make_pair(util::from_cstring("int"),
+		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i32))));
+		_symbols.insert(
+		  std::make_pair(util::from_cstring("uint"),
+		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::u32))));
+	} else {
+		BIA_ASSERT(false);
+	}
+
+	_symbols.insert(
+	  std::make_pair(util::from_cstring("bool"), static_cast<Definition*>(_type_system.create_type<Bool>())));
+
+	_symbols.insert(
+	  std::make_pair(util::from_cstring("int32"),
+	                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i32))));
+
+	_symbols.insert(std::make_pair(
+	  util::from_cstring("float32"),
+	  static_cast<Definition*>(_type_system.create_type<Floating_point>(Floating_point::Size::f32))));
+
+	_symbols.insert(std::make_pair(util::from_cstring("string"),
+	                               static_cast<Definition*>(_type_system.create_type<String>())));
+}
+
+void Manager::_drop(map_type::const_iterator it)
+{
+	if (it->second.is_type<symbol::Variable>()) {
+		const auto& variable = it->second.get<symbol::Variable>();
+		// TODO better freeing
+		if (variable.location.offset + variable.definition->size() == _stack) {
+			_stack -= variable.definition->size();
+		}
+	}
+	_symbols.erase(it);
 }

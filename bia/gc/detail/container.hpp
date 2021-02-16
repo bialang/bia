@@ -18,7 +18,7 @@ template<typename T>
 class container
 {
 public:
-	typedef std::unordered_set<T, std::hash<T>, std::equal_to<T>, memory::std_allocator<T>> container_type;
+	typedef std::unordered_set<T, std::hash<T>, std::equal_to<T>, memory::Std_allocator<T>> container_type;
 
 	class token
 	{

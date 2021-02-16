@@ -3,14 +3,14 @@
 
 using namespace bia::tokenizer::token;
 
-Error_info chained_type(parameter& param);
+Error_info chained_type(Parameter& param);
 
-inline Error_info tuple_type(parameter& param)
+inline Error_info tuple_type(Parameter& param)
 {
 	if (param.encoder.read(param.input) != '(') {
 		return param.make_error(bia::error::Code::bad_tuple, -1);
 	}
-	param.bundle.emplace_back(Token::control::bracket_open);
+	param.bundle.emplace_back(Token::Control::bracket_open);
 	parse::spacer(param);
 	if (const auto err = chained_type(param)) {
 		return err;
@@ -23,7 +23,7 @@ inline Error_info tuple_type(parameter& param)
 			param.restore(old);
 			break;
 		}
-		param.bundle.emplace_back(Token::control::comma);
+		param.bundle.emplace_back(Token::Control::comma);
 
 		parse::spacer(param);
 		old = param.backup();
@@ -40,13 +40,13 @@ inline Error_info tuple_type(parameter& param)
 	if (param.encoder.read(param.input) != ')') {
 		return param.make_error(bia::error::Code::bad_tuple, -1);
 	}
-	param.bundle.emplace_back(Token::control::bracket_close);
+	param.bundle.emplace_back(Token::Control::bracket_close);
 	return {};
 }
 
-inline Error_info single_type(parameter& param)
+inline Error_info single_type(Parameter& param)
 {
-	Token::array_dimension array{};
+	Token::Array_dimension array{};
 	while (true) {
 		const auto old = param.backup();
 		if (!parse::any_of(param, "[]").second) {
@@ -59,12 +59,12 @@ inline Error_info single_type(parameter& param)
 	return parse::any_of(param, parse::identifier, tuple_type);
 }
 
-inline Error_info type(parameter& param)
+inline Error_info type(Parameter& param)
 {
 	return parse::any_of(param, tuple_type, single_type);
 }
 
-inline Error_info chained_type(parameter& param)
+inline Error_info chained_type(Parameter& param)
 {
 	if (const auto err = type(param)) {
 		return err;
@@ -85,12 +85,12 @@ inline Error_info chained_type(parameter& param)
 	return {};
 }
 
-Error_info parse::type_stmt(parameter& param)
+Error_info parse::type_stmt(Parameter& param)
 {
 	if (!any_of(param, "type").second) {
 		return param.make_error(error::Code::expected_type_declaration, -1);
 	}
-	param.bundle.emplace_back(Token::keyword::type);
+	param.bundle.emplace_back(Token::Keyword::type);
 	if (const auto err = spacer(param)) {
 		return err;
 	}
@@ -107,12 +107,12 @@ Error_info parse::type_stmt(parameter& param)
 	return chained_type(param);
 }
 
-Error_info parse::type_definition(parameter& param)
+Error_info parse::type_definition(Parameter& param)
 {
 	if (!any_of(param, ":").second) {
 		return param.make_error(error::Code::expected_type_definition, -1);
 	}
-	param.bundle.emplace_back(Token::control::type_definition);
+	param.bundle.emplace_back(Token::Control::type_definition);
 	spacer(param);
 	if (const auto err = chained_type(param)) {
 		return err;

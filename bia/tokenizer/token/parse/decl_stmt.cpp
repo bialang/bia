@@ -3,11 +3,11 @@
 
 using namespace bia::tokenizer::token;
 
-inline Error_info decl_stmt_signature(parameter& param)
+inline Error_info decl_stmt_signature(Parameter& param)
 {
 	auto old = param.backup();
 	if (parse::any_of(param, "mut").second && !parse::spacer(param)) {
-		param.bundle.emplace_back(Token::keyword::mut);
+		param.bundle.emplace_back(Token::Keyword::mut);
 	} else {
 		param.restore(old);
 	}
@@ -23,12 +23,12 @@ inline Error_info decl_stmt_signature(parameter& param)
 	return {};
 }
 
-Error_info parse::decl_stmt(parameter& param)
+Error_info parse::decl_stmt(Parameter& param)
 {
 	if (!any_of(param, "let").second || spacer(param)) {
 		return param.make_error(error::Code::expected_let);
 	}
-	param.bundle.emplace_back(Token::keyword::let);
+	param.bundle.emplace_back(Token::Keyword::let);
 
 	if (const auto err = decl_stmt_signature(param)) {
 		return err;
@@ -37,7 +37,7 @@ Error_info parse::decl_stmt(parameter& param)
 		const auto old = param.backup();
 		spacer(param);
 		if (param.encoder.read(param.input) == ',') {
-			param.bundle.emplace_back(Token::control::comma);
+			param.bundle.emplace_back(Token::Control::comma);
 			spacer(param);
 			if (const auto err = decl_stmt_signature(param)) {
 				return err;
@@ -51,7 +51,7 @@ Error_info parse::decl_stmt(parameter& param)
 	const auto old = param.backup();
 	spacer(param);
 	if (param.encoder.read(param.input) == '=') {
-		param.bundle.emplace_back(operator_::assign);
+		param.bundle.emplace_back(Operator::assign);
 		spacer(param);
 		return multi_expression(param);
 	}
@@ -59,7 +59,7 @@ Error_info parse::decl_stmt(parameter& param)
 	return {};
 }
 
-Error_info parse::drop_stmt(parameter& param)
+Error_info parse::drop_stmt(Parameter& param)
 {
 	if (!any_of(param, "drop").second || spacer(param)) {
 		return param.make_error(error::Code::expected_drop);

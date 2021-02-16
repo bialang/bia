@@ -1,34 +1,31 @@
 #include "helpers.hpp"
 
 #include <bia/util/contract.hpp>
+#include <tuple>
 
 using namespace bia::compiler;
 using namespace bia::tokenizer::token;
 
-elve::Tokens_type elve::decl_stmt(parameter& param, Tokens_type tokens)
+elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 {
-	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::keyword::let);
+	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Keyword::let);
 
-	auto variable = param.symbols.declare(tokens.at(1).value.get<token::identifier>().memory);
-	tokens        = tokens.subspan(2);
+	const auto& variable_name      = tokens.at(1).value.get<Token::Identifier>().memory;
+	tokens                         = tokens.subspan(2);
+	type::Definition* desired_type = nullptr;
 
-	// process type definition
-	if (tokens.front().value != operator_::assign) {
-		type::definition* def;
-		std::tie(tokens, def) = type_definition(param, tokens);
-		variable.definition(def);
+	// process type definition available -> declare
+	if (tokens.front().value != Operator::assign) {
+		std::tie(tokens, desired_type) = type_definition(param, tokens);
 	}
 
-	BIA_EXPECTS(tokens.front().value == operator_::assign);
-	// TODO make util assignable from subset
-	const auto expr =
-	  single_expression(param, tokens.subspan(1), variable.location().get<bytecode::member::local>(), false);
+	symbol::Variable variable;
+	std::tie(tokens, variable) = single_expression(param, tokens.subspan(1));
 
-	// check types
-	if (variable.definition() && !variable.definition()->is_assignable(expr.second.get())) {
+	if (desired_type && !desired_type->is_assignable(variable.definition)) {
 		BIA_THROW(error::Code::type_mismatch);
 	}
-	variable.definition(expr.second.get());
-	variable.build();
-	return expr.first;
+
+	param.symbols.promote_temporary(variable_name, variable);
+	return tokens;
 }

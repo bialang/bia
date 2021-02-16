@@ -3,53 +3,51 @@
 
 #include "allocator.hpp"
 
+#include <bia/util/gsl.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <new>
-#include <bia/util/gsl.hpp>
 #include <utility>
 
 namespace bia {
 namespace gc {
 namespace memory {
 
-/*
- A memory allocator wrapper for the C++ STL.
-*/
-template<typename T>
-class std_allocator
+/// A memory allocator wrapper for the C++ STL.
+template<typename Type>
+class Std_allocator
 {
 public:
-	typedef T* pointer;
-	typedef const T* const_pointer;
-	typedef T& reference;
-	typedef const T& const_reference;
-	typedef T value_type;
+	typedef Type* pointer;
+	typedef const Type* const_pointer;
+	typedef Type& reference;
+	typedef const Type& const_reference;
+	typedef Type value_type;
 	typedef std::size_t size_type;
 	typedef std::ptrdiff_t difference_type;
 
-	template<typename U>
+	template<typename Other>
 	struct rebind
 	{
-		typedef std_allocator<U> other;
+		typedef Std_allocator<Other> other;
 	};
 
-	std_allocator(util::Not_null<std::shared_ptr<Allocator>> allocator) noexcept
+	Std_allocator(util::Not_null<std::shared_ptr<Allocator>> allocator) noexcept
 	    : _allocator(std::move(allocator.get()))
 	{}
-	template<typename U>
-	std_allocator(const std_allocator<U>& copy) noexcept : _allocator(copy._allocator)
+	template<typename Other>
+	Std_allocator(const Std_allocator<Other>& copy) noexcept : _allocator(copy._allocator)
 	{}
-	template<typename U, typename... Args>
-	void construct(util::Not_null<U*> ptr, Args&&... args)
+	template<typename Other, typename... Args>
+	void construct(util::Not_null<Other*> ptr, Args&&... args)
 	{
-		new (ptr) U(std::forward<Args>(args)...);
+		new (ptr) Other(std::forward<Args>(args)...);
 	}
-	template<typename U>
-	void destroy(util::Not_null<U*> ptr)
+	template<typename Other>
+	void destroy(util::Not_null<Other*> ptr)
 	{
-		ptr->~U();
+		ptr->~Other();
 	}
 	void deallocate(pointer ptr, size_type)
 	{
@@ -57,22 +55,22 @@ public:
 	}
 	pointer allocate(size_type n)
 	{
-		return static_cast<pointer>(_allocator->allocate(n * sizeof(T)));
+		return static_cast<pointer>(_allocator->allocate(n * sizeof(Type)));
 	}
-	template<typename U>
-	bool operator==(const std_allocator<U>& other) noexcept
+	template<typename Other>
+	bool operator==(const Std_allocator<Other>& other) noexcept
 	{
 		return _allocator == other._allocator;
 	}
-	template<typename U>
-	bool operator!=(const std_allocator<U>& other) noexcept
+	template<typename Other>
+	bool operator!=(const Std_allocator<Other>& other) noexcept
 	{
 		return !operator==(other);
 	}
 
 private:
-	template<typename U>
-	friend class std_allocator;
+	template<typename Other>
+	friend class Std_allocator;
 
 	std::shared_ptr<Allocator> _allocator;
 };

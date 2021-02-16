@@ -27,7 +27,7 @@ public:
 	 * @param tokens the parsed tokens
 	 * @param manager the resource manager for resource creation during compilation
 	 */
-	virtual void receive(util::span<const Token*> tokens, resource::Manager& manager) = 0;
+	virtual void receive(util::Span<const Token*> tokens, resource::Manager& manager) = 0;
 };
 
 } // namespace token

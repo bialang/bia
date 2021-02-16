@@ -13,29 +13,17 @@ namespace resource {
 
 class Manager;
 
-/**
- * An output stream buffer for the @ref manager.
- *
- * @see @ref manager
- */
+/// An output stream buffer for the @ref manager.
 class Streambuf : public std::streambuf
 {
 public:
-	/**
-	 * Constructor.
-	 *
-	 * @param space the destination of the data
-	 */
 	Streambuf(util::Not_null<Manager*> manager);
+	Streambuf(const Streambuf& copy) = delete;
 	Streambuf(Streambuf&& move) noexcept;
 	~Streambuf();
 	View finish(type type);
-	/**
-	 * Checks whether this streambuf is valid.
-	 *
-	 * @returns `true` if valid, otherwise `false`
-	 */
 	bool valid() const noexcept;
+	Streambuf& operator=(const Streambuf& copy) = delete;
 	Streambuf& operator=(Streambuf&& move) noexcept;
 
 protected:
@@ -43,9 +31,9 @@ protected:
 	int_type overflow(int_type ch = traits_type::eof()) override;
 
 private:
-	/** if non-null the parent */
+	/// The parent if valid.
 	Manager* _manager  = nullptr;
-	/** the size when this streambuf was created */
+	/// The size when this streambuf was created.
 	gc::memory::space::size_type _initial_size = 0;
 
 	void _discard() noexcept;

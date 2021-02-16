@@ -1,5 +1,5 @@
-#ifndef BIA_COMPILER_TYPE_INTEGER_HPP_
-#define BIA_COMPILER_TYPE_INTEGER_HPP_
+#ifndef BIA_COMPILER_TYPE_FLOATING_POINT_HPP_
+#define BIA_COMPILER_TYPE_FLOATING_POINT_HPP_
 
 #include "definition.hpp"
 
@@ -7,26 +7,21 @@ namespace bia {
 namespace compiler {
 namespace type {
 
-class Integer : public Definition
+class Floating_point : public Definition
 {
 public:
 	enum class Size
 	{
-		i8 = 2,
-		u8,
-		i16 = 4,
-		u16,
-		i32 = 8,
-		u32,
-		i64 = 16,
-		u64
+		f32,
+		f64
 	};
 
-	Integer(unsigned int type_code, Size size) noexcept : _type_code{ type_code }, _size{ size }
+	Floating_point(unsigned int type_code, Size size) noexcept : _type_code{ type_code }, _size{ size }
 	{}
 	bool is_assignable(const Definition* other) const noexcept override
 	{
-		return this == other;
+		return dynamic_cast<const Floating_point*>(other) &&
+		       static_cast<const Floating_point*>(other)->_size == _size;
 	}
 	unsigned int type_code() const noexcept override
 	{
@@ -34,16 +29,16 @@ public:
 	}
 	unsigned int size() const noexcept override
 	{
-		return static_cast<unsigned int>(_size) / 2;
+		return _size == Size::f32 ? 4 : 8;
 	}
 	int flags() const noexcept override
 	{
-		return flag_truthable;
+		return 0;
 	}
 
 private:
-	const unsigned int _type_code;
 	const Size _size;
+	const unsigned int _type_code;
 };
 
 } // namespace type

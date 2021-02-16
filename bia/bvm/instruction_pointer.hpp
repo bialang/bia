@@ -11,20 +11,22 @@
 namespace bia {
 namespace bvm {
 
-/**
- * Manages the input bytecode stream.
- */
+struct Operation
+{
+	bytecode::Op_code op_code;
+	std::uint8_t size : 2;
+};
+
+/// Manages the input bytecode stream.
 class Instruction_pointer
 {
 public:
-	typedef const util::byte_type* buffer_type;
-
 	/**
 	 * Constructor.
 	 *
 	 * @param instructions the byte instructions
 	 */
-	Instruction_pointer(util::span<buffer_type> instructions) noexcept
+	Instruction_pointer(util::Span<const util::Byte*> instructions) noexcept
 	{
 		_instructions = instructions;
 		_cursor       = instructions.begin();
@@ -45,13 +47,11 @@ public:
 		_cursor += sizeof(Type);
 		return x;
 	}
-	/**
-	 * @return the next opcode
-	 * @see read()
-	 */
-	bytecode::op_code_type next_op_code()
+	/// Reads the next op code. The cursor will advance.
+	Operation fetch_and_decode()
 	{
-		return read<bytecode::op_code_type>();
+		const auto code = read<typename std::underlying_type<bytecode::Op_code>::type>();
+		return Operation{ bytecode::read_op_code(code), bytecode::get_op_code_size(code) };
 	}
 	/**
 	 * Advances the instruction pointer.
@@ -69,24 +69,20 @@ public:
 		}
 		return *this;
 	}
-	/**
-	 * @return the current cursor
-	*/
+	/// The current cursor position.
 	std::size_t cursor() const noexcept
 	{
 		return static_cast<std::size_t>(_cursor - _instructions.begin());
 	}
-	/**
-	 * @return `true` if this object is valid, otherwise `false`
-	 */
+	/// Checks whether enough space is available for a complete instruction.
 	operator bool() const noexcept
 	{
 		return _cursor < _instructions.end();
 	}
 
 private:
-	util::span<buffer_type> _instructions;
-	buffer_type _cursor;
+	util::Span<const util::Byte*> _instructions;
+	const util::Byte* _cursor;
 };
 
 } // namespace bvm

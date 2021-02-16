@@ -6,7 +6,7 @@
 
 using namespace bia::tokenizer::token;
 
-inline std::tuple<std::string, enum Token::number::type, Error_info> extract_number(parameter& param)
+inline std::tuple<std::string, Token::Number::Type, Error_info> extract_number(Parameter& param)
 {
 	std::string str;
 	while (true) {
@@ -19,30 +19,29 @@ inline std::tuple<std::string, enum Token::number::type, Error_info> extract_num
 		str.append(1, c);
 	}
 	if (str.empty()) {
-		return { str, Token::number::type::i, param.make_error(bia::error::Code::bad_number) };
+		return { str, Token::Number::Type::i, param.make_error(bia::error::Code::bad_number) };
 	}
-	return { str, Token::number::type::i, {} };
+	return { str, Token::Number::Type::i, {} };
 }
 
-inline std::pair<enum Token::number::type, Error_info> check_special(parameter& param,
-                                                                     enum Token::number::type type)
+inline std::pair<Token::Number::Type, Error_info> check_special(Parameter& param, Token::Number::Type type)
 {
 	// TODO
 	return { type, {} };
 }
 
-inline Error_info convert(parameter& param, const std::string& str, enum Token::number::type type)
+inline Error_info convert(Parameter& param, const std::string& str, enum Token::Number::Type type)
 {
-	using number = Token::number;
+	using Number = Token::Number;
 	// convert
 	std::size_t processed = 0;
-	number num{};
+	Number num{};
 	num.type = type;
 	try {
 		switch (num.type) {
-		case number::type::i: num.value.i = std::stoi(str, &processed); break;
-		case number::type::f32: num.value.f32 = std::stof(str, &processed); break;
-		case number::type::f64: num.value.f64 = std::stod(str, &processed); break;
+		case Number::Type::i: num.value.i = std::stoll(str, &processed); break;
+		case Number::Type::f32: num.value.f32 = std::stof(str, &processed); break;
+		case Number::Type::f64: num.value.f64 = std::stod(str, &processed); break;
 		default: BIA_THROW(bia::error::Code::bad_switch_value);
 		}
 	} catch (const std::out_of_range& e) {
@@ -56,7 +55,7 @@ inline Error_info convert(parameter& param, const std::string& str, enum Token::
 	return {};
 }
 
-Error_info parse::number(parameter& param)
+Error_info parse::number(Parameter& param)
 {
 	const auto extracted = extract_number(param);
 	if (std::get<2>(extracted)) {

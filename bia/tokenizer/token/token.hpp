@@ -15,14 +15,14 @@ namespace token {
 
 struct Token
 {
-	struct batch
+	struct Batch
 	{
 		std::size_t statement_count;
 	};
 
-	struct number
+	struct Number
 	{
-		enum class type
+		enum class Type
 		{
 			i,
 			i8,
@@ -38,15 +38,15 @@ struct Token
 			f64,
 		};
 
-		type type;
+		Type type;
 		union
 		{
-			int i;
+			std::int64_t i;
 			std::int8_t i8;
 			std::int16_t i16;
 			std::int32_t i32;
 			std::int64_t i64;
-			unsigned int u;
+			std::uint64_t u;
 			std::uint8_t u8;
 			std::uint16_t u16;
 			std::uint32_t u32;
@@ -55,55 +55,55 @@ struct Token
 			double f64;
 		} value{};
 
-		bool operator==(const number& other) const
+		bool operator==(const Number& other) const
 		{
 			if (type != other.type) {
 				return false;
 			}
 			switch (type) {
-			case type::i:
-			case type::u: return value.u == other.value.u;
-			case type::i8:
-			case type::u8: return value.u8 == other.value.u8;
-			case type::i16:
-			case type::u16: return value.u16 == other.value.u16;
-			case type::i32:
-			case type::u32: return value.u32 == other.value.u32;
-			case type::i64:
-			case type::u64: return value.u64 == other.value.u64;
-			case type::f32: return value.f32 == other.value.f32;
-			case type::f64: return value.f64 == other.value.f64;
+			case Type::i:
+			case Type::u: return value.u == other.value.u;
+			case Type::i8:
+			case Type::u8: return value.u8 == other.value.u8;
+			case Type::i16:
+			case Type::u16: return value.u16 == other.value.u16;
+			case Type::i32:
+			case Type::u32: return value.u32 == other.value.u32;
+			case Type::i64:
+			case Type::u64: return value.u64 == other.value.u64;
+			case Type::f32: return value.f32 == other.value.f32;
+			case Type::f64: return value.f64 == other.value.f64;
 			default: BIA_THROW(error::Code::bad_switch_value);
 			}
 		}
 	};
 
-	struct array_dimension
+	struct Array_dimension
 	{
 		std::uint32_t dimension;
 
-		bool operator==(const array_dimension& other) const noexcept
+		bool operator==(const Array_dimension& other) const noexcept
 		{
 			return dimension == other.dimension;
 		}
 	};
 
-	struct identifier
+	struct Identifier
 	{
 		resource::View memory;
 	};
 
-	struct string
+	struct String
 	{
 		resource::View memory;
 	};
 
-	struct regex
+	struct Regex
 	{
 		resource::View memory;
 	};
 
-	enum class control
+	enum class Control
 	{
 		type_definition,
 		type_chain,
@@ -113,7 +113,7 @@ struct Token
 		cmd_end,
 	};
 
-	enum class keyword
+	enum class Keyword
 	{
 		false_,
 		true_,
@@ -130,10 +130,13 @@ struct Token
 		import,
 		as,
 		let,
+		if_,
+		else_if,
+		else_,
 	};
 
-	util::Variant<number, array_dimension, batch, control, keyword, string, regex, identifier, operator_,
-	              array_dimension>
+	util::Variant<Number, Array_dimension, Batch, Control, Keyword, String, Regex, Identifier, Operator,
+	              Array_dimension>
 	  value;
 
 	Token() = default;

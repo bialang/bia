@@ -36,9 +36,7 @@ View Streambuf::finish(type type)
 		_manager->_buf_active = false;
 		_manager              = nullptr;
 	});
-
 	_manager->_space.truncate(end);
-
 	return { type, _manager->_space.cursor(_initial_size), _manager->_space.cursor(end) };
 }
 
@@ -55,14 +53,12 @@ Streambuf::int_type Streambuf::sync()
 	if (!pptr() || pptr() == epptr()) {
 		try {
 			const auto buf =
-			    _manager->_space.next_region(std::numeric_limits<gc::memory::space::size_type>::max()).get();
-
+			  _manager->_space.next_region(std::numeric_limits<gc::memory::space::size_type>::max()).get();
 			setp(reinterpret_cast<char*>(buf.begin()), reinterpret_cast<char*>(buf.end()));
 		} catch (const error::Exception&) {
 			return -1;
 		}
 	}
-
 	return 0;
 }
 
@@ -77,17 +73,14 @@ Streambuf::int_type Streambuf::overflow(int_type ch)
 	else if (ch != traits_type::eof()) {
 		sputc(traits_type::to_char_type(ch));
 	}
-
 	return traits_type::eof() + 1;
 }
 
 Streambuf& Streambuf::operator=(Streambuf&& move) noexcept
 {
 	_discard();
-
 	std::swap(_manager, move._manager);
 	std::swap(_initial_size, move._initial_size);
-
 	return *this;
 }
 

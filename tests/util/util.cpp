@@ -6,6 +6,7 @@
 #include <bia/util/type_traits/size_of.hpp>
 #include <bia/util/type_traits/type_index.hpp>
 #include <catch.hpp>
+#include <bia/util/type_traits/is_invokable.hpp>
 
 using namespace bia::util;
 using namespace bia::util::type_traits;
@@ -70,4 +71,13 @@ TEST_CASE("type_index", "[type_traits][util]")
 	REQUIRE(type_index<int, float, int, double>::value == 1);
 	REQUIRE(type_index<int, float, double, int, int>::value == 2);
 	REQUIRE((type_index<int, float, double, short, char>::value == type_index<>::npos));
+}
+
+TEST_CASE("is_invokable", "[type_traits][util]")
+{
+	REQUIRE(Is_invokable<void(*)()>::value);
+	REQUIRE(!Is_invokable<void(*)(bool)>::value);
+	REQUIRE(!Is_invokable<void(*)(bool), std::string>::value);
+	REQUIRE(Is_invokable<void(*)(int), int>::value);
+	REQUIRE(Is_invokable<void(*)(int), bool>::value);
 }

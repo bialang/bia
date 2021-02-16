@@ -2,15 +2,14 @@
 #define BIA_BVM_BVM_HPP_
 
 #include <bia/gc/stack.hpp>
-#include <bia/gc/token.hpp>
+#include <bia/resource/deserialize.hpp>
 #include <bia/util/gsl.hpp>
 
 namespace bia {
 namespace bvm {
 
-void execute(util::span<const util::byte_type*> instructions, gc::root& resources);
-void execute(util::span<const util::byte_type*> instructions, gc::root& resources, gc::Stack<std::int32_t>& stack,
-             gc::token& token);
+void execute(util::Span<const util::Byte*> instructions, gc::Stack& stack,
+             const resource::Resources& resources);
 
 } // namespace bvm
 } // namespace bia

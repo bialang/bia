@@ -12,11 +12,11 @@ Bia_lexer::Bia_lexer(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allo
     : _manager(std::move(allocator), 4096)
 {}
 
-void Bia_lexer::lex(util::byte_istream_type& input, string::encoding::Encoder& encoder,
+void Bia_lexer::lex(std::istream& input, string::encoding::Encoder& encoder,
                     token::Receiver& receiver)
 {
 	std::vector<token::Token> bundle;
-	token::parameter param{ input, _manager, encoder, bundle };
+	token::Parameter param{ input, _manager, encoder, bundle };
 
 	while (!(input.peek(), input.eof())) {
 		token::parse::spacer(param);

@@ -1,16 +1,196 @@
+#include "../jumper.hpp"
 #include "../type/integer.hpp"
 #include "helpers.hpp"
 
-using namespace bia::compiler;
+using namespace bia::tokenizer::token;
 
-std::pair<elve::Tokens_type, bia::util::Not_null<type::definition*>>
-  elve::single_expression(parameter& param, Tokens_type tokens, destination_type destination, bool atomic)
+namespace bia {
+namespace compiler {
+namespace elve {
+
+inline bool is_test_operator(Operator optor) noexcept
 {
-	// BIA_EXPECTS(tokens.front());
-	BIA_EXPECTS(tokens.front().value.is_type<tokenizer::token::token::number>());
-	const auto def = param.symbols.get_symbol(util::from_cstring("int"));
-	BIA_EXPECTS(def.is_type<type::definition*>());
-	const auto number = tokens.front().value.get<tokenizer::token::token::number>();
-	param.writer.write<bytecode::Op_code::oc_push>(number.value.i);
-	return { tokens.subspan(1), def.get<type::definition*>() };
+	switch (optor) {
+	case Operator::equal:
+	case Operator::not_equal:
+	case Operator::less:
+	case Operator::less_equal:
+	case Operator::greater:
+	case Operator::greater_equal:
+	case Operator::in:
+	case Operator::three_way_comparison: return true;
+	default: return false;
+	}
 }
+
+inline bool has_right_hand_size(const Tokens& tokens) noexcept
+{
+	return tokens.size() > 1 && tokens[0].value.is_type<Operator>();
+}
+
+std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& param, Tokens tokens, Jumper& jumper,
+                                                           int precedence);
+
+inline std::pair<Tokens, symbol::Variable> number_value(Parameter& param, Tokens tokens)
+{
+	using Type = Token::Number::Type;
+
+	// get number type
+	const auto& number = tokens.front().value.get<Token::Number>();
+
+	symbol::Symbol right_type;
+	switch (number.type) {
+	case Type::i: right_type = param.symbols.symbol(util::from_cstring("int")); break;
+	case Type::i32: right_type = param.symbols.symbol(util::from_cstring("int32")); break;
+	case Type::f32: right_type = param.symbols.symbol(util::from_cstring("float32")); break;
+	default: BIA_THROW(error::Code::bad_switch_value);
+	}
+	BIA_ASSERT(right_type.is_type<type::Definition*>());
+
+	auto variable = param.symbols.create_temporary(right_type.get<type::Definition*>());
+	switch (number.type) {
+	case Type::i: {
+		// TODO check size with default int size
+		param.instructor.write<bytecode::Op_code::load>(variable.location.offset, number.value.i32);
+		break;
+	}
+	case Type::i32:
+	case Type::u32:
+	case Type::f32:
+		param.instructor.write<bytecode::Op_code::load>(variable.location.offset, number.value.i32);
+		break;
+	default: BIA_THROW(error::Code::bad_switch_value);
+	}
+
+	return { tokens.subspan(1), variable };
+}
+
+inline std::pair<Tokens, symbol::Variable> value(Parameter& param, Tokens tokens)
+{
+	BIA_EXPECTS(!tokens.empty());
+	if (tokens.front().value.is_type<Token::Keyword>()) {
+		const auto right = param.symbols.symbol(util::from_cstring("bool"));
+		BIA_ASSERT(right.is_type<type::Definition*>());
+
+		auto variable = param.symbols.create_temporary(right.get<type::Definition*>());
+		switch (tokens.front().value.get<Token::Keyword>()) {
+		case Token::Keyword::true_:
+			param.instructor.write<bytecode::Op_code::load>(variable.location.offset, std::int8_t{ 1 });
+			break;
+		case Token::Keyword::false_:
+			param.instructor.write<bytecode::Op_code::load>(variable.location.offset, std::int8_t{ 0 });
+			break;
+		default:
+			// TODO
+			BIA_ASSERT(false);
+		}
+		return { tokens.subspan(1), variable };
+	} else if (tokens.front().value.is_type<Token::Number>()) {
+		return number_value(param, tokens);
+	} else if (tokens.front().value.is_type<Token::Identifier>()) {
+		const auto right = param.symbols.symbol(tokens.front().value.get<Token::Identifier>().memory);
+		if (right.empty()) {
+			BIA_THROW(error::Code::undefined_symbol);
+		} else if (!right.is_type<symbol::Variable>()) {
+			BIA_THROW(error::Code::symbol_not_a_variable);
+		}
+
+		const auto variable = param.symbols.create_temporary(right.get<symbol::Variable>().definition);
+		param.instructor.write<bytecode::Op_code::copy, std::int32_t>(
+		  variable.location.offset, right.get<symbol::Variable>().location.offset);
+		return { tokens.subspan(1), variable };
+	} else if (tokens.front().value.is_type<Token::String>()) {
+		const auto right = param.symbols.symbol(util::from_cstring("string"));
+		BIA_ASSERT(right.is_type<type::Definition*>());
+
+		const auto variable = param.symbols.create_temporary(right.get<type::Definition*>());
+		const auto index    = param.serializer.index_of(tokens.front().value.get<Token::String>().memory);
+		param.instructor.write<bytecode::Op_code::load_resource>(variable.location.offset, index);
+		return { tokens.subspan(1), variable };
+	} else if (tokens.front().value == Token::Control::bracket_open) {
+		Jumper jumper{ param.instructor };
+		symbol::Variable variable;
+		std::tie(tokens, variable) = single_expression_impl(param, tokens.subspan(1), jumper, -1);
+		BIA_ASSERT(!tokens.empty() && tokens.front().value == Token::Control::bracket_close);
+		return { tokens.subspan(1), variable };
+	}
+
+	// TODO
+	BIA_ASSERT(false);
+}
+
+inline std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& param, Tokens tokens,
+                                                                  Jumper& jumper, int precedence)
+{
+	BIA_EXPECTS(!tokens.empty());
+
+	bool last_cond_was_and = false;
+	// handle left hand side
+	symbol::Variable lhs;
+	std::tie(tokens, lhs) = value(param, tokens);
+
+	while (has_right_hand_size(tokens)) {
+		const auto optor           = tokens.front().value.get<Operator>();
+		const int optor_precedence = precedence_of(optor);
+
+		// only if we have higher precedence
+		if (optor_precedence <= precedence) {
+			break;
+		}
+
+		// logical chaining
+		if (optor == Operator::logical_and || optor == Operator::logical_or) {
+			if (last_cond_was_and && optor == Operator::logical_or) {
+				jumper.mark(Jumper::Destination::end);
+				jumper.clear(Jumper::Destination::end);
+				last_cond_was_and = false;
+			} else if (optor == Operator::logical_and) {
+				last_cond_was_and = true;
+			}
+
+			param.instructor.write<bytecode::Op_code::truthy, std::int32_t>(lhs.location.offset);
+			param.symbols.free_temporary(lhs);
+			jumper.jump(optor == Operator::logical_and ? Jumper::Type::if_false : Jumper::Type::if_true,
+			            Jumper::Destination::end);
+			std::tie(tokens, lhs) = single_expression_impl(param, tokens.subspan(1), jumper, optor_precedence);
+			continue;
+		}
+
+		// TODO add member access
+		BIA_EXPECTS(optor != Operator::member_access);
+
+		// right hand side
+		symbol::Variable rhs;
+		std::tie(tokens, rhs) = single_expression_impl(param, tokens.subspan(1), jumper, optor_precedence);
+
+		if (is_test_operator(optor)) {
+			// TODO
+			const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
+			BIA_ASSERT(bool_type.is_type<type::Definition*>());
+
+			param.instructor.write<bytecode::Op_code::unsigned_integral_test, std::int32_t>(
+			  to_test_operation(optor), lhs.location.offset, rhs.location.offset);
+			param.symbols.free_temporary(rhs);
+			param.symbols.free_temporary(lhs);
+			lhs = param.symbols.create_temporary(bool_type.get<type::Definition*>());
+			param.instructor.write<bytecode::Op_code::booleanize>(lhs.location.offset);
+		} else {
+			param.instructor.write<bytecode::Op_code::unsigned_integral_operation, std::int32_t>(
+			  to_infix_operation(optor), lhs.location.offset, rhs.location.offset);
+			param.symbols.free_temporary(rhs);
+		}
+	}
+
+	jumper.mark(Jumper::Destination::end);
+	return { tokens, lhs };
+}
+
+std::pair<Tokens, symbol::Variable> single_expression(Parameter& param, Tokens tokens)
+{
+	Jumper jumper{ param.instructor };
+	return single_expression_impl(param, tokens, jumper, -1);
+}
+
+} // namespace elve
+} // namespace compiler
+} // namespace bia

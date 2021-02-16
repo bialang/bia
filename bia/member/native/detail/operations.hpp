@@ -15,35 +15,35 @@ namespace detail {
 
 template<typename Type>
 inline typename std::enable_if<std::is_integral<Type>::value, Type>::type
-    operation(Type left, infix_operator op, Type right)
+    operation(Type left, Infix_operator op, Type right)
 {
 	switch (op) {
-	case infix_operator::bitwise_or: return left | right;
-	case infix_operator::bitwise_xor: return left ^ right;
-	case infix_operator::bitwise_and: return left & right;
-	case infix_operator::bitwise_left_shift: return left << right;
-	case infix_operator::bitwise_right_shift: return left >> right;
-	case infix_operator::addition: return left + right;
-	case infix_operator::subtraction: return left - right;
-	case infix_operator::multiplication: return left * right;
-	case infix_operator::division: return left / right;
-	case infix_operator::remainder: return left % right;
-	case infix_operator::exponentation: return static_cast<Type>(std::pow(left, right));
+	case Infix_operator::bitwise_or: return left | right;
+	case Infix_operator::bitwise_xor: return left ^ right;
+	case Infix_operator::bitwise_and: return left & right;
+	case Infix_operator::bitwise_left_shift: return left << right;
+	case Infix_operator::bitwise_right_shift: return left >> right;
+	case Infix_operator::addition: return left + right;
+	case Infix_operator::subtraction: return left - right;
+	case Infix_operator::multiplication: return left * right;
+	case Infix_operator::division: return left / right;
+	case Infix_operator::remainder: return left % right;
+	case Infix_operator::exponentation: return static_cast<Type>(std::pow(left, right));
 	default: BIA_THROW(bia::error::Code::bad_infix_operator);
 	}
 }
 
 template<typename Type>
 inline typename std::enable_if<std::is_floating_point<Type>::value, Type>::type
-    operation(Type left, infix_operator op, Type right)
+    operation(Type left, Infix_operator op, Type right)
 {
 	switch (op) {
-	case infix_operator::addition: return left + right;
-	case infix_operator::subtraction: return left - right;
-	case infix_operator::multiplication: return left * right;
-	case infix_operator::division: return left / right;
-	case infix_operator::remainder: return std::fmod(left, right);
-	case infix_operator::exponentation: return std::pow(left, right);
+	case Infix_operator::addition: return left + right;
+	case Infix_operator::subtraction: return left - right;
+	case Infix_operator::multiplication: return left * right;
+	case Infix_operator::division: return left / right;
+	case Infix_operator::remainder: return std::fmod(left, right);
+	case Infix_operator::exponentation: return std::pow(left, right);
 	default: BIA_THROW(bia::error::Code::bad_infix_operator);
 	}
 }

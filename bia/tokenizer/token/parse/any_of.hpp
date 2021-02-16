@@ -13,7 +13,7 @@ namespace tokenizer {
 namespace token {
 namespace parse {
 
-inline std::pair<std::size_t, bool> any_of(parameter& param, util::czstring token)
+inline std::pair<std::size_t, bool> any_of(Parameter& param, util::Czstring token)
 {
 	while (*token) {
 		const auto pos = param.input.tellg();
@@ -25,7 +25,7 @@ inline std::pair<std::size_t, bool> any_of(parameter& param, util::czstring toke
 }
 
 template<typename... Types>
-inline std::pair<std::size_t, bool> any_of(parameter& param, util::czstring token, Types&&... tokens)
+inline std::pair<std::size_t, bool> any_of(Parameter& param, util::Czstring token, Types&&... tokens)
 {
 	const auto old = param.input.tellg();
 	const auto t   = any_of(param, token);
@@ -38,7 +38,7 @@ inline std::pair<std::size_t, bool> any_of(parameter& param, util::czstring toke
 }
 
 template<typename... Types>
-inline Error_info any_of(parameter& param, Types&&... tokens)
+inline Error_info any_of(Parameter& param, Types&&... tokens)
 {
 	static_assert(sizeof...(Types) > 0, "must provide at least one option");
 

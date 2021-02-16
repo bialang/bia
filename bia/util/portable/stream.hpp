@@ -43,7 +43,7 @@ inline Type read(std::istream& input)
 }
 
 template<typename Type>
-inline Type read(span<const byte_type*>& input)
+inline Type read(Span<const Byte*>& input)
 {
 	if (input.size_bytes() < sizeof(Type)) {
 		throw;
@@ -53,7 +53,7 @@ inline Type read(span<const byte_type*>& input)
 	std::memcpy(&value, input.data(), sizeof(Type));
 	input = input.subspan(sizeof(Type));
 #if BIA_BIG_ENDIAN
-	std::reverse(reinterpret_cast<byte_type*>(&value), reinterpret_cast<byte_type*>(&value) + sizeof(Type));
+	std::reverse(reinterpret_cast<Byte*>(&value), reinterpret_cast<Byte*>(&value) + sizeof(Type));
 #endif
 	return value;
 }

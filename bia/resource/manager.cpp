@@ -7,7 +7,7 @@ Manager::Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocato
     : _space(allocator, page_size)
 {}
 
-Manager::~Manager()
+Manager::~Manager() noexcept
 {
 	BIA_EXPECTS(!buf_active());
 }

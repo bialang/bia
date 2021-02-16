@@ -3,7 +3,7 @@
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/util/finally.hpp>
 
-bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(parameter& parameter)
+bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(Parameter& parameter)
 {
 	if (parameter.encoder.read(parameter.input) != '"') {
 		return parameter.make_error(error::Code::expected_string, -1);
@@ -42,7 +42,7 @@ bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(parameter
 			if (!escape) {
 				// zero terminate
 				outenc->put(output, 0);
-				parameter.bundle.emplace_back(Token::string{ streambuf.finish(resource::type::string) });
+				parameter.bundle.emplace_back(Token::String{ streambuf.finish(resource::type::string) });
 				return {};
 			}
 			break;

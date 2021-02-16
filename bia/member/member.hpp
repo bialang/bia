@@ -71,7 +71,7 @@ public:
 	 * @param op the operation type
 	 * @returns the result of this operation
 	 */
-	virtual gc::gcable<member> operation(const member& right, infix_operator op) = 0;
+	virtual gc::gcable<member> operation(const member& right, Infix_operator op) = 0;
 	/**
 	 * Executes a self operation on this member and returns the result.
 	 *

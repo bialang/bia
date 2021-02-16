@@ -6,28 +6,27 @@
 
 #include <bia/resource/manager.hpp>
 #include <bia/string/encoding/encoder.hpp>
-#include <bia/util/types.hpp>
 #include <vector>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
 
-struct parameter
+struct Parameter
 {
-	struct state
+	struct State
 	{
-		util::byte_istream_type::pos_type input_pos;
+		std::istream::pos_type input_pos;
 		resource::Manager::state_type rm_state;
 		std::size_t bundle_state;
 	};
 
-	util::byte_istream_type& input;
+	std::istream& input;
 	resource::Manager& manager;
 	string::encoding::Encoder& encoder;
 	std::vector<Token>& bundle;
 
-	state backup() const
+	State backup() const
 	{
 		return { input.tellg(), manager.save_state(), bundle.size() };
 	}
@@ -36,13 +35,13 @@ struct parameter
 	 *
 	 * @param old the old states
 	 */
-	void restore(const state& old)
+	void restore(const State& old)
 	{
 		input.seekg(old.input_pos);
 		manager.restore_state(old.rm_state);
 		bundle.resize(old.bundle_state);
 	}
-	Error_info make_error(error::code code, int offset = 0)
+	Error_info make_error(error::Code code, int offset = 0)
 	{
 		Error_info err{};
 		err.code = code;

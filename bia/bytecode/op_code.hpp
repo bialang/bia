@@ -2,29 +2,37 @@
 #define BIA_BYTECODE_OP_CODE_HPP_
 
 #include <cstdint>
+#include <type_traits>
 
 namespace bia {
 namespace bytecode {
 
-typedef std::uint8_t op_code_type;
-
-enum Op_code : op_code_type
+enum class Op_code : std::uint8_t
 {
-	oc_store_8,
-	oc_store_16,
-	oc_store_32,
-	oc_store_64,
+	// 2 bit variations
+	load                        = 0,
+	copy                        = load + 4,
+	unsigned_integral_operation = copy + 4,
+	unsigned_integral_test      = unsigned_integral_operation + 4,
+	truthy                      = unsigned_integral_test + 4,
+	jump                        = truthy + 4,
+	jump_if_false               = jump + 4,
+	jump_if_true                = jump_if_false + 4,
 
-	/// (Element) - pushes the argument on top of the native stack
-	oc_push,
-	/// (std::uint8_t) - pops n given elements from the native stack
-	oc_pop,
-	/// (std::uint8_t, Element) - moves the given element to the specified position (relative to the base)
-	oc_mov,
-
-	/// (std::uint8_t) - calls the object at the specified location on the advanced stack
-	oc_call
+	// 0 bit variations
+	booleanize    = jump_if_true + 4,
+	load_resource = booleanize + 4,
 };
+
+inline Op_code read_op_code(typename std::underlying_type<Op_code>::type value) noexcept
+{
+	return static_cast<Op_code>(value & 0xfc);
+}
+
+inline std::uint8_t get_op_code_size(typename std::underlying_type<Op_code>::type value) noexcept
+{
+	return static_cast<std::uint8_t>(value & 0x03);
+}
 
 } // namespace bytecode
 } // namespace bia

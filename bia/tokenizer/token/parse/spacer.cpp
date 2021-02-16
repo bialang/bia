@@ -2,7 +2,7 @@
 
 using namespace bia::tokenizer::token;
 
-Error_info parse::spacer(parameter& param)
+Error_info parse::spacer(Parameter& param)
 {
 	enum class state
 	{
@@ -40,6 +40,18 @@ Error_info parse::spacer(parameter& param)
 			case '\t':
 			case '\v':
 			case '\f': seperator = true; break;
+			case '+':
+			case '-':
+			case '*':
+			case '%':
+			case '=':
+			case '{':
+			case '}':
+			case '(':
+			case ')':
+			case ':':
+			case ',':
+			case '.': seperator = true;
 			default: goto gt_return;
 			}
 			break;

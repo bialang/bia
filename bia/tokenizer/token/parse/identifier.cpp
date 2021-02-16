@@ -48,7 +48,7 @@ struct comparator
 	}
 };
 
-Error_info parse::identifier(parameter& param)
+Error_info parse::identifier(Parameter& param)
 {
 	using namespace string::encoding;
 	const char* values[]{ "as",   "break",  "continue", "defer", "drop",   "else", "error", "false",
@@ -87,7 +87,7 @@ Error_info parse::identifier(parameter& param)
 				param.input.seekg(pos);
 				// zero terminate
 				outenc->put(output, 0);
-				param.bundle.emplace_back(Token::identifier{ streambuf.finish(resource::type::string) });
+				param.bundle.emplace_back(Token::Identifier{ streambuf.finish(resource::type::string) });
 				return {};
 			}
 			// not an identifier

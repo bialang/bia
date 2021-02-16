@@ -4,8 +4,10 @@
 #include "../symbol/manager.hpp"
 
 #include <bia/bytecode/instructor.hpp>
+#include <bia/resource/serializer.hpp>
 #include <bia/tokenizer/token/token.hpp>
 #include <bia/util/gsl.hpp>
+#include <bia/util/optional.hpp>
 #include <bia/util/variant.hpp>
 #include <cstdint>
 
@@ -17,19 +19,19 @@ struct Parameter
 {
 	bytecode::Instructor& instructor;
 	symbol::Manager& symbols;
+	resource::Serializer& serializer;
 };
 
-typedef util::span<const tokenizer::token::Token*> Tokens_type;
+typedef util::Span<const tokenizer::token::Token*> Tokens;
 
-Tokens_type root(parameter& param, Tokens_type tokens);
+Tokens root(Parameter& param, Tokens tokens);
+Tokens batch(Parameter& param, Tokens tokens);
 
-Tokens_type decl_stmt(parameter& param, Tokens_type tokens);
+Tokens decl_stmt(Parameter& param, Tokens tokens);
+Tokens if_stmt(Parameter& param, Tokens tokens);
 
-std::pair<Tokens_type, util::Not_null<type::Definition*>>
-  single_expression(Parameter& param, Tokens_type tokens, destination_type destination, bool atomic);
-
-std::pair<Tokens_type, util::Not_null<type::definition*>> type_definition(parameter& param,
-                                                                          Tokens_type tokens);
+std::pair<Tokens, symbol::Variable> single_expression(Parameter& param, Tokens tokens);
+std::pair<Tokens, util::Not_null<type::Definition*>> type_definition(Parameter& param, Tokens tokens);
 
 } // namespace elve
 } // namespace compiler

@@ -1,15 +1,13 @@
 #ifndef BIA_TOKENIZER_TOKEN_OPERATOR_HPP_
 #define BIA_TOKENIZER_TOKEN_OPERATOR_HPP_
 
+#include <bia/bytecode/operation.hpp>
 #include <bia/error/exception.hpp>
-#include <bia/member/operator_.hpp>
 #include <cstdint>
 
 namespace bia {
 namespace tokenizer {
 namespace token {
-
-typedef std::int8_t precedence_type;
 
 enum class operator_type
 {
@@ -18,7 +16,7 @@ enum class operator_type
 	postfix
 };
 
-template<precedence_type Precedence, std::uint8_t Variant, operator_type Type>
+template<int Precedence, std::uint8_t Variant, operator_type Type>
 constexpr inline std::uint16_t make()
 {
 	static_assert(Precedence >= 0 && Precedence <= 0xe, "invalid precedence");
@@ -27,7 +25,7 @@ constexpr inline std::uint16_t make()
 	return (Variant << 6) | (Precedence << 2) | static_cast<int>(Type);
 }
 
-enum class operator_ : std::uint16_t
+enum class Operator : std::uint16_t
 {
 	assign                      = make<0, 0, operator_type::infix>(),
 	logical_or                  = make<1, 0, operator_type::infix>(),
@@ -46,11 +44,11 @@ enum class operator_ : std::uint16_t
 	bitwise_and                 = make<8, 0, operator_type::infix>(),
 	bitwise_left_shift          = make<9, 0, operator_type::infix>(),
 	bitwise_right_shift         = make<9, 1, operator_type::infix>(),
-	addition                    = make<10, 0, operator_type::infix>(),
-	subtraction                 = make<10, 1, operator_type::infix>(),
-	multiplication              = make<11, 0, operator_type::infix>(),
-	division                    = make<11, 1, operator_type::infix>(),
-	remainder                   = make<11, 2, operator_type::infix>(),
+	plus                        = make<10, 0, operator_type::infix>(),
+	minus                       = make<10, 1, operator_type::infix>(),
+	multiply                    = make<11, 0, operator_type::infix>(),
+	divide                      = make<11, 1, operator_type::infix>(),
+	modulus                     = make<11, 2, operator_type::infix>(),
 	unary_minus                 = make<12, 0, operator_type::prefix>(),
 	bitwise_not                 = make<12, 1, operator_type::prefix>(),
 	exponentation               = make<13, 0, operator_type::infix>(),
@@ -61,55 +59,58 @@ enum class operator_ : std::uint16_t
 	function_call_close         = make<14, 4, operator_type::postfix>(),
 };
 
-inline precedence_type precedence_of(operator_ op) noexcept
+inline int precedence_of(Operator op) noexcept
 {
-	return static_cast<precedence_type>((static_cast<std::uint16_t>(op) >> 2) & 0xf);
+	return (static_cast<std::uint16_t>(op) >> 2) & 0xf;
 }
 
-inline operator_type type_of(operator_ op) noexcept
+inline operator_type type_of(Operator op) noexcept
 {
 	return static_cast<operator_type>(static_cast<std::uint16_t>(op) & 0x3);
 }
 
-inline member::infix_operator to_infix_operator(operator_ op)
+inline bytecode::Infix_operation to_infix_operation(Operator op)
 {
+	using bytecode::Infix_operation;
 	switch (op) {
-	case operator_::bitwise_or: return member::infix_operator::bitwise_or;
-	case operator_::bitwise_xor: return member::infix_operator::bitwise_xor;
-	case operator_::bitwise_and: return member::infix_operator::bitwise_and;
-	case operator_::bitwise_left_shift: return member::infix_operator::bitwise_left_shift;
-	case operator_::bitwise_right_shift: return member::infix_operator::bitwise_right_shift;
-	case operator_::addition: return member::infix_operator::addition;
-	case operator_::subtraction: return member::infix_operator::subtraction;
-	case operator_::multiplication: return member::infix_operator::multiplication;
-	case operator_::division: return member::infix_operator::division;
-	case operator_::remainder: return member::infix_operator::remainder;
-	case operator_::exponentation: return member::infix_operator::exponentation;
-	default: BIA_THROW(error::Code::bad_infix_operator);
+	case Operator::bitwise_or: return Infix_operation::bitwise_or;
+	case Operator::bitwise_xor: return Infix_operation::bitwise_xor;
+	case Operator::bitwise_and: return Infix_operation::bitwise_and;
+	case Operator::bitwise_left_shift: return Infix_operation::bitwise_left_shift;
+	case Operator::bitwise_right_shift: return Infix_operation::bitwise_right_shift;
+	case Operator::plus: return Infix_operation::addition;
+	case Operator::minus: return Infix_operation::subtraction;
+	case Operator::multiply: return Infix_operation::multiplication;
+	case Operator::divide: return Infix_operation::division;
+	case Operator::modulus: return Infix_operation::remainder;
+	case Operator::exponentation: return Infix_operation::exponentation;
+	default: BIA_THROW(error::Code::bad_infix_operation);
 	}
 }
 
-inline member::test_operator to_test_operator(operator_ op)
+inline bytecode::Test_operation to_test_operation(Operator op)
 {
+	using bytecode::Test_operation;
 	switch (op) {
-	case operator_::equal: return member::test_operator::equal;
-	case operator_::not_equal: return member::test_operator::not_equal;
-	case operator_::less: return member::test_operator::less;
-	case operator_::less_equal: return member::test_operator::less_equal;
-	case operator_::greater: return member::test_operator::greater;
-	case operator_::greater_equal: return member::test_operator::greater_equal;
-	case operator_::in: return member::test_operator::in;
-	case operator_::three_way_comparison: return member::test_operator::three_way_comparison;
-	default: BIA_THROW(error::Code::bad_test_operator);
+	case Operator::equal: return Test_operation::equal;
+	case Operator::not_equal: return Test_operation::not_equal;
+	case Operator::less: return Test_operation::less;
+	case Operator::less_equal: return Test_operation::less_equal;
+	case Operator::greater: return Test_operation::greater;
+	case Operator::greater_equal: return Test_operation::greater_equal;
+	case Operator::in: return Test_operation::in;
+	case Operator::three_way_comparison: return Test_operation::three_way_comparison;
+	default: BIA_THROW(error::Code::bad_test_operation);
 	}
 }
 
-inline member::self_operator to_self_operator(operator_ op)
+inline bytecode::Self_operation to_self_operator(Operator op)
 {
+	using bytecode::Self_operation;
 	switch (op) {
-	case operator_::unary_minus: return member::self_operator::unary_minus;
-	case operator_::bitwise_not: return member::self_operator::bitwise_not;
-	default: BIA_THROW(error::Code::bad_self_operator);
+	case Operator::unary_minus: return Self_operation::unary_minus;
+	case Operator::bitwise_not: return Self_operation::bitwise_not;
+	default: BIA_THROW(error::Code::bad_self_operation);
 	}
 }
 

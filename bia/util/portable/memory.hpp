@@ -18,7 +18,7 @@ void write(Not_null<void*> memory, Type value)
 	typedef typename std::decay<Type>::type type;
 	static_assert(std::is_trivial<type>::value, "must be a trivial type");
 
-	const auto ptr = static_cast<byte_type*>(memory.get());
+	const auto ptr = static_cast<Byte*>(memory.get());
 	std::memcpy(ptr, &value, sizeof(value));
 #if BIA_BIG_ENDIAN
 	std::reverse(ptr, ptr + sizeof(value));
@@ -35,7 +35,7 @@ typename std::decay<Type>::type read(Not_null<const void*> memory)
 	const auto ptr = memory.get();
 	std::memcpy(&val, ptr, sizeof(val));
 #if BIA_BIG_ENDIAN
-	std::reverse(reinterpret_cast<byte_type*>(&val), reinterpret_cast<byte_type*>(&val) + sizeof(val));
+	std::reverse(reinterpret_cast<Byte*>(&val), reinterpret_cast<Byte*>(&val) + sizeof(val));
 #endif
 	return val;
 }

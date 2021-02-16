@@ -12,7 +12,7 @@ class Bia_lexer : public Lexer
 {
 public:
 	Bia_lexer(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator);
-	void lex(util::byte_istream_type& input, string::encoding::Encoder& encoder,
+	void lex(std::istream& input, string::encoding::Encoder& encoder,
 	         token::Receiver& receiver) override;
 
 private:

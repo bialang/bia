@@ -23,15 +23,18 @@ enum class Code
 	out_of_bounds,
 	null_argument,
 	argument_count_mismatch,
-	bad_infix_operator,
-	bad_test_operator,
-	bad_self_operator,
+	bad_infix_operation,
+	bad_test_operation,
+	bad_self_operation,
 
+	empty_optional,
 	empty_variant,
 	bad_variant_index,
 
 	expected_opening_curly_bracket,
 	expected_closing_curly_bracket,
+	expected_opening_bracket,
+	expected_closing_bracket,
 	expected_scope,
 	expected_return,
 	expected_yield,
@@ -68,7 +71,10 @@ enum class Code
 
 	type_mismatch,
 	symbol_already_declared,
-	unknown_type,
+	symbol_not_a_type,
+	symbol_not_a_variable,
+	undefined_symbol,
+	type_not_truthable,
 
 	bad_opcode,
 	bad_offset_option,
@@ -104,9 +110,9 @@ inline const std::error_category& code_category() noexcept
 			case Code::out_of_bounds: return "out of bounds";
 			case Code::null_argument: return "null argument not allowed";
 			case Code::argument_count_mismatch: return "argument count mismatch";
-			case Code::bad_infix_operator: return "bad infix operator";
-			case Code::bad_test_operator: return "bad test operator";
-			case Code::bad_self_operator: return "bad self operator";
+			case Code::bad_infix_operation: return "bad infix operator";
+			case Code::bad_test_operation: return "bad test operator";
+			case Code::bad_self_operation: return "bad self operator";
 			case Code::empty_variant: return "accessing empty variant";
 			case Code::bad_variant_index: return "bad variant index";
 			// case code::expected_curly_bracket:
@@ -116,18 +122,24 @@ inline const std::error_category& code_category() noexcept
 			// case code::expected_regex:
 			// case code::expected_declaration_statement:
 			// case code::expected_import_statement:
-			case Code::expected_command_end: return "expected command end, like a semicolon";
-			// case code::expected_string:
-			// case code::expected_while_statement:
-			// case code::expected_whitespace:
-			// case code::bad_for_statement:
-			// case code::bad_function_statement:
-			// case code::bad_identifier:
-			// case code::bad_if_statement:
-			// case code::bad_else_statement:
-			// case code::bad_else_if_statement:
-			// case code::bad_number:
-			// case code::bad_operator:
+			case Code::expected_command_end:
+				return "expected command end, like a semicolon";
+				// case code::expected_string:
+				// case code::expected_while_statement:
+				// case code::expected_whitespace:
+				// case code::bad_for_statement:
+				// case code::bad_function_statement:
+				// case code::bad_identifier:
+				// case code::bad_if_statement:
+				// case code::bad_else_statement:
+				// case code::bad_else_if_statement:
+				// case code::bad_number:
+				// case code::bad_operator:
+			case Code::type_mismatch: return "type mismatch";
+			case Code::symbol_already_declared: return "symbol already declared";
+			case Code::symbol_not_a_type: return "symbol not a type";
+			case Code::symbol_not_a_variable: return "symbol not a variable";
+			case Code::undefined_symbol: return "undefined symbol";
 			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:

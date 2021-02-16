@@ -5,14 +5,28 @@
 using namespace bia::compiler;
 using namespace bia::tokenizer::token;
 
-elve::Tokens_type elve::root(parameter& param, Tokens_type tokens)
+elve::Tokens elve::root(Parameter& param, Tokens tokens)
 {
-	if (tokens.front().value.is_type<token::keyword>()) {
-		switch (tokens.front().value.get<token::keyword>()) {
-		case token::keyword::let: tokens = decl_stmt(param, tokens); break;
+	if (tokens.front().value.is_type<Token::Keyword>()) {
+		switch (tokens.front().value.get<Token::Keyword>()) {
+		case Token::Keyword::let: tokens = decl_stmt(param, tokens); break;
+		case Token::Keyword::if_: tokens = if_stmt(param, tokens); break;
 		default: BIA_THROW(error::Code::bad_switch_value);
 		}
 	}
-	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::control::cmd_end);
+	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Control::cmd_end);
 	return tokens.subspan(1);
+}
+
+elve::Tokens elve::batch(Parameter& param, Tokens tokens)
+{
+	BIA_EXPECTS(!tokens.empty() && tokens.front().value.is_type<Token::Batch>());
+	param.symbols.open_scope();
+	auto i = tokens.front().value.get<Token::Batch>().statement_count;
+	tokens = tokens.subspan(1);
+	while (i--) {
+		tokens = root(param, tokens);
+	}
+	param.symbols.close_scope();
+	return tokens;
 }

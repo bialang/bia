@@ -1,83 +1,18 @@
 #include "deserialize.hpp"
 
-#include "info.hpp"
-
 #include <bia/error/exception.hpp>
-#include <bia/util/finally.hpp>
 #include <bia/util/portable/stream.hpp>
 #include <cstdint>
 
-using namespace bia::resource;
-
-std::unique_ptr<bia::gc::root> bia::resource::deserialize(std::istream& input, gc::gc& gc)
+bia::resource::Resources bia::resource::deserialize(util::Span<const util::Byte*> data)
 {
-	const auto count = util::portable::read<Serializer::size_type>(input);
-	const auto lock  = gc.lock();
-	gc::root::builder builder{ &gc, count };
-
-	for (Serializer::size_type i = 0; i < count; ++i) {
-		const auto info    = info_from(input.get());
-		std::uint32_t size = 0;
-
-		switch (info.second) {
-		case size_width::_8: size = util::portable::read<std::uint8_t>(input); break;
-		case size_width::_16: size = util::portable::read<std::uint16_t>(input); break;
-		case size_width::_32: size = util::portable::read<std::uint32_t>(input); break;
-		default: throw;
-		}
-
-		switch (info.first) {
-		case type::string: {
-			auto string = gc.allocate(size);
-			auto gcable = gc.construct<member::native::string>(static_cast<char*>(string.peek()));
-
-			input.read(static_cast<char*>(string.peek()), size);
-			builder.add(gcable.peek());
-			string.start_monitor();
-			gcable.start_monitor();
-
-			break;
-		}
-		case type::regex: {
-			const auto pattern = gc.allocator()->checked_allocate(size).get();
-			const auto finally = util::finallay([&gc, pattern] { gc.allocator()->deallocate(pattern); });
-
-			input.read(static_cast<char*>(pattern), size);
-
-			auto gcable =
-			    gc.construct<member::native::regex>(std::regex{ static_cast<const char*>(pattern) });
-
-			builder.add(gcable.peek());
-			gcable.start_monitor();
-
-			break;
-		}
-		case type::function: {
-			// todo: this is dirty
-			const auto binding_size =
-			    util::portable::read<Serializer::size_type>(input) * sizeof(Serializer::size_type) * 2;
-			auto code   = gc.allocate(size + binding_size);
-			auto gcable = gc.construct<member::function::function>(
-			    static_cast<const util::byte_type*>(code.peek()), size, binding_size);
-
-			input.read(static_cast<char*>(code.peek()), size + binding_size);
-			builder.add(gcable.peek());
-			code.start_monitor();
-			gcable.start_monitor();
-
-			break;
-		}
-		default: BIA_THROW(error::Code::bad_switch_value);
-		}
+	Resources resources;
+	while (!data.empty()) {
+		const auto length = util::portable::read<std::uint32_t>(data);
+		// TODO check length
+		BIA_ASSERT(length <= data.size());
+		resources.push_back(util::Span<const char*>{ reinterpret_cast<const char*>(data.data()), length });
+		data = data.subspan(length);
 	}
-
-	return builder.finish();
-}
-
-std::pair<Serializer::size_type, Serializer::size_type>
-    bia::resource::deserialize_binding(util::span<const util::byte_type*>& input)
-{
-	const auto tmp = util::portable::read<Serializer::size_type>(input);
-
-	return { tmp, util::portable::read<Serializer::size_type>(input) };
+	return resources;
 }

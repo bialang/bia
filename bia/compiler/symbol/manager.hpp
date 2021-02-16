@@ -2,8 +2,9 @@
 #define BIA_COMPILER_SYMBOL_MANAGER_HPP_
 
 #include "../type/definition.hpp"
-#include "builder.hpp"
+#include "../type/system.hpp"
 
+#include <bia/gc/memory/allocator.hpp>
 #include <bia/resource/view.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/variant.hpp>
@@ -14,32 +15,54 @@ namespace bia {
 namespace compiler {
 namespace symbol {
 
+enum class Default_int_size
+{
+	size_8  = 8,
+	size_16 = 16,
+	size_32 = 32,
+	size_64 = 64
+};
+
+struct Location
+{
+	std::uint32_t offset;
+};
+
+struct Variable
+{
+	Location location;
+	type::Definition* definition;
+};
+
 /// A symbol is either a variable or a type.
-typedef util::Variant<Variable, type::Definition*> Symbol_type;
+typedef util::Variant<Variable, type::Definition*> Symbol;
 
 class Manager
 {
 public:
-	typedef util::span<const char*> string_type;
+	typedef util::Span<const char*> string_type;
 	typedef std::uint16_t index_type;
 
-	Manager();
+	Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
+	        Default_int_size default_int_size);
 	void open_scope();
 	void close_scope();
-	Builder declare(const resource::View& name);
+	Variable create_temporary(util::Not_null<type::Definition*> type);
+	void free_temporary(Variable variable);
+	void promote_temporary(const resource::View& name, const Variable& variable);
 	/// Returns the symbol or an empty variant if not found.
-	Symbol_type symbol(const resource::View& name);
+	Symbol symbol(const resource::View& name);
 	/// Returns the symbol or an empty variant if not found.
-	Symbol_type symbol(const string_type& name);
+	Symbol symbol(const string_type& name);
+	friend void introduce_native_type(Manager& manager, Default_int_size default_size);
 
 private:
-	friend Builder;
 	typedef util::Variant<resource::View, string_type> map_key_type;
 	struct Comparator
 	{
 		bool operator()(const map_key_type& left, const map_key_type& right) const;
 	};
-	typedef std::map<map_key_type, Symbol_type, Comparator> map_type;
+	typedef std::map<map_key_type, Symbol, Comparator> map_type;
 
 	/// All defined symbols.
 	map_type _symbols;
@@ -47,11 +70,15 @@ private:
 	std::map<resource::View, Location> _declared;
 	/// All scopes with the latest ones at the back.
 	std::vector<std::vector<map_type::const_iterator>> _scopes;
-	/// ID counter for all newly declared types.
-	unsigned int _type_index = 0;
+	type::System _type_system;
+	/// Size of the int and uint types.
+	Default_int_size _default_int_size;
+	std::uint32_t _stack = 0;
 
-	void _accept_declared(const resource::view& name, Variable var);
-	void _decline_declared(const resource::view& name);
+	void _accept_declared(const resource::View& name, Variable var);
+	void _decline_declared(const resource::View& name);
+	void _introduce_native_types();
+	void _drop(map_type::const_iterator it);
 };
 
 } // namespace symbol

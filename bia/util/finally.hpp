@@ -1,6 +1,8 @@
 #pragma once
 
+#include <bia/util/type_traits/is_invokable.hpp>
 #include <functional>
+#include <type_traits>
 #include <utility>
 
 namespace bia {
@@ -10,33 +12,44 @@ template<typename Lambda>
 class Final_action
 {
 public:
-	Final_action(const Lambda& lambda) : lambda(lambda)
+	static_assert(type_traits::Is_invokable<Lambda>::value, "Lambda must be a Callable and take no arguments");
+
+	Final_action(const Lambda& lambda) : lambda{ lambda }
 	{
 		run = true;
 	}
-	Final_action(Lambda&& lambda) : lambda(std::move(lambda))
+	Final_action(Lambda&& lambda) : lambda{ std::move(lambda) }
 	{
 		run = true;
 	}
 	Final_action(const Final_action& copy) = delete;
-	Final_action(Final_action&& move) : lambda(std::move(move.lambda))
+	Final_action(Final_action&& move) : lambda{ std::move(move.lambda) }
 	{
 		run      = move.run;
 		move.run = false;
 	}
-	~Final_action()
+	~Final_action() noexcept
 	{
 		if (run) {
 			lambda();
 		}
 	}
-	void cancel(bool x = true) noexcept
+	void cancel() noexcept
 	{
-		run = !x;
+		run = false;
 	}
 	bool cancelled() const noexcept
 	{
 		return !run;
+	}
+	Final_action& operator=(const Final_action& copy) = delete;
+	/// Move operator.
+	Final_action& operator=(Final_action&& move)
+	{
+		lambda   = std::move(move.lambda);
+		run      = move.run;
+		move.run = false;
+		return *this;
 	}
 
 private:

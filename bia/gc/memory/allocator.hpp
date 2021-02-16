@@ -4,6 +4,8 @@
 #include <bia/error/exception.hpp>
 #include <bia/util/gsl.hpp>
 #include <cstddef>
+#include <new>
+#include <utility>
 
 namespace bia {
 namespace gc {
@@ -57,6 +59,17 @@ public:
 			BIA_THROW(std::make_error_code(std::errc::not_enough_memory));
 		}
 		return ptr;
+	}
+	template<typename Type, typename... Arguments>
+	Type* construct(Arguments&&... arguments)
+	{
+		return new (checked_allocate(sizeof(Type)).get()) Type{ std::forward<Arguments>(arguments)... };
+	}
+	template<typename Type>
+	void destroy(Type* object)
+	{
+		object->~Type();
+		deallocate(object);
 	}
 };
 

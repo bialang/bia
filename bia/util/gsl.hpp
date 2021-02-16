@@ -20,7 +20,7 @@ template<typename Type>
 class Not_null
 {
 public:
-	static_assert(type_traits::is_equal_null_comparable<Type>::value, "invalid T");
+	static_assert(type_traits::is_equal_null_comparable<Type>::value, "Type must be null comparable");
 
 	template<typename Other>
 	Not_null(Other&& value) : _value(std::forward<Other>(value))
@@ -62,20 +62,20 @@ private:
 	Type _value;
 };
 
-typedef const char* czstring;
+typedef const char* Czstring;
 
-template<typename T>
-using owner = T;
+template<typename Type>
+using owner = Type;
 
-template<typename T>
-using gcable = T;
+template<typename Type>
+using gcable = Type;
 
 #if __cplusplus >= 201703L
-typedef std::byte byte_type;
+typedef std::byte Byte;
 #else
-typedef enum class : std::uint8_t
+enum class Byte : std::uint8_t
 {
-} byte_type;
+};
 #endif
 
 template<typename To, typename From>
@@ -97,7 +97,7 @@ constexpr To narrow(From from)
 constexpr std::size_t dynamic_extent = std::numeric_limits<std::size_t>::max();
 
 template<typename Iterable>
-class span
+class Span
 {
 public:
 	typedef typename std::iterator_traits<Iterable>::value_type value_type;
@@ -106,22 +106,22 @@ public:
 	typedef typename std::iterator_traits<Iterable>::pointer pointer;
 	typedef typename std::iterator_traits<Iterable>::reference reference;
 
-	span(std::nullptr_t = nullptr) noexcept
+	Span(std::nullptr_t = nullptr) noexcept
 	{
 		_data = nullptr;
 		_size = 0;
 	}
-	span(Iterable begin, size_type count)
+	Span(Iterable begin, size_type count)
 	{
 		_data = begin;
 		_size = count;
 	}
-	span(Iterable begin, Iterable end)
+	Span(Iterable begin, Iterable end)
 	{
 		_data = begin;
 		_size = std::distance(begin, end);
 	}
-	span(const span& copy) = default;
+	Span(const Span& copy) = default;
 	bool empty() const noexcept
 	{
 		return !_size;
@@ -142,17 +142,15 @@ public:
 	{
 		return _data + _size;
 	}
-	span subspan(std::size_t offset, std::size_t count = dynamic_extent) const
+	Span subspan(std::size_t offset, std::size_t count = dynamic_extent) const
 	{
 		if (count == dynamic_extent) {
 			count = _size - offset;
 		}
-
 		BIA_EXPECTS(offset + count <= _size);
-
 		return { _data + offset, _data + offset + count };
 	}
-	span subspan(Iterable from, std::size_t count = dynamic_extent) const
+	Span subspan(Iterable from, std::size_t count = dynamic_extent) const
 	{
 		return subspan(from - _data, dynamic_extent);
 	}
@@ -173,14 +171,13 @@ public:
 		if (index >= _size) {
 			BIA_THROW(error::Code::out_of_bounds);
 		}
-
 		return _data[index];
 	}
 	reference operator[](size_type index) const
 	{
 		return _data[index];
 	}
-	span& operator=(const span& copy) = default;
+	Span& operator=(const Span& copy) = default;
 	bool operator==(Iterable other) const noexcept
 	{
 		return _data == other;
@@ -195,9 +192,11 @@ private:
 	size_type _size;
 };
 
-inline span<const char*> from_cstring(const char* string)
+/// Creates a span from the constant string. The span includes the terminating zero character.
+template<std::size_t N>
+inline Span<const char*> from_cstring(const char (&string)[N])
 {
-	return { string, std::char_traits<char>::length(string) };
+	return { string, N };
 }
 
 } // namespace util

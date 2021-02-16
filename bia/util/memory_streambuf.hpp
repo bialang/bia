@@ -11,11 +11,11 @@ namespace util {
 class Memory_streambuf : public std::streambuf
 {
 public:
-	Memory_streambuf(span<const byte_type*> buffer) noexcept
+	Memory_streambuf(Span<const Byte*> buffer) noexcept
 	{
-		setg(reinterpret_cast<char*>(const_cast<byte_type*>(buffer.begin())),
-		     reinterpret_cast<char*>(const_cast<byte_type*>(buffer.begin())),
-		     reinterpret_cast<char*>(const_cast<byte_type*>(buffer.end())));
+		setg(reinterpret_cast<char*>(const_cast<Byte*>(buffer.begin())),
+		     reinterpret_cast<char*>(const_cast<Byte*>(buffer.begin())),
+		     reinterpret_cast<char*>(const_cast<Byte*>(buffer.end())));
 	}
 
 protected:
@@ -23,8 +23,7 @@ protected:
 	{
 		return seekoff(position, std::ios_base::beg, which);
 	}
-	pos_type seekoff(off_type offset, std::ios_base::seekdir direction,
-	                 std::ios_base::openmode which) override
+	pos_type seekoff(off_type offset, std::ios_base::seekdir direction, std::ios_base::openmode which) override
 	{
 		if (which != std::ios_base::in) {
 			return pos_type(off_type(-1));

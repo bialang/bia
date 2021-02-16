@@ -4,7 +4,6 @@
 #include "token/receiver.hpp"
 
 #include <bia/string/encoding/encoder.hpp>
-#include <bia/util/types.hpp>
 #include <istream>
 
 namespace bia {
@@ -14,7 +13,7 @@ class Lexer
 {
 public:
 	virtual ~Lexer()                            = default;
-	virtual void lex(util::byte_istream_type& input, string::encoding::Encoder& encoder,
+	virtual void lex(std::istream& input, string::encoding::Encoder& encoder,
 	                 token::Receiver& receiver) = 0;
 };
 

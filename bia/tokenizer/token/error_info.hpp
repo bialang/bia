@@ -9,7 +9,7 @@ namespace token {
 
 struct Error_info
 {
-	error::code code = error::code::success;
+	error::Code code = error::Code::success;
 	std::size_t line;
 	std::size_t column;
 	/// the offset in bytes
@@ -23,7 +23,7 @@ struct Error_info
 	}
 	operator bool() const noexcept
 	{
-		return code != error::code::success;
+		return code != error::Code::success;
 	}
 };
 

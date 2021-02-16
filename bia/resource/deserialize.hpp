@@ -7,22 +7,18 @@
 #include <bia/gc/root.hpp>
 #include <bia/util/gsl.hpp>
 #include <istream>
+#include <bia/util/variant.hpp>
+#include <vector>
 #include <utility>
 
 namespace bia {
 namespace resource {
 
-/**
- * Deserializes the resource stream into useable resources.
- *
- * @param[in] input the resource stream
- * @param[in] gc the garbage collector
- * @returns the allocated resources
- * @throw see gc::gc::construct()
- */
-std::unique_ptr<gc::root> deserialize(std::istream& input, gc::gc& gc);
-std::pair<Serializer::size_type, Serializer::size_type>
-    deserialize_binding(util::span<const util::byte_type*>& input);
+typedef util::Variant<util::Span<const char*>> Resource;
+typedef std::vector<Resource> Resources;
+
+/// Deserializes the resource elements from the provided data. The resources point to sections in the data.
+Resources deserialize(util::Span<const util::Byte*> data);
 
 } // namespace resource
 } // namespace bia

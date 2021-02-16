@@ -4,6 +4,7 @@
 #include "aggregate.hpp"
 #include "type_traits/are_all_copyable.hpp"
 #include "type_traits/are_all_moveable.hpp"
+#include "type_traits/equals_any.hpp"
 #include "type_traits/type_at.hpp"
 #include "type_traits/type_index.hpp"
 
@@ -26,10 +27,8 @@ public:
 	using index_of = type_traits::type_index<Type, Types...>;
 
 	Variant() = default;
-	template<
-	  typename Type,
-	  typename = typename std::enable_if<!std::is_same<
-	    typename std::remove_cv<typename std::remove_reference<Type>::type>::type, Variant>::value>::type>
+	template<typename Type, typename = typename std::enable_if<
+	                          util::type_traits::equals_any_type<typename std::decay<Type>::type, Types...>::value>::type>
 	Variant(Type&& value)
 	{
 		emplace<typename std::decay<Type>::type>(std::forward<Type>(value));
@@ -58,7 +57,7 @@ public:
 			_move<0, Types...>(std::move(move));
 		}
 	}
-	~Variant()
+	~Variant() noexcept
 	{
 		destroy();
 	}

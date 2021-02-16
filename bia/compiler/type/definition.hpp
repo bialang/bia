@@ -8,9 +8,16 @@ namespace type {
 class Definition
 {
 public:
+	enum Flag
+	{
+		flag_truthable = 0x01
+	};
+
 	virtual ~Definition()                                              = default;
 	virtual bool is_assignable(const Definition* other) const noexcept = 0;
-	virtual unsigned int hash_code() const noexcept                    = 0;
+	virtual unsigned int type_code() const noexcept                    = 0;
+	virtual unsigned int size() const noexcept                         = 0;
+	virtual int flags() const noexcept                                 = 0;
 };
 
 } // namespace type

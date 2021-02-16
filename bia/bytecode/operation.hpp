@@ -1,12 +1,12 @@
-#ifndef BIA_MEMBER_OPERATOR_HPP_
-#define BIA_MEMBER_OPERATOR_HPP_
+#ifndef BIA_BYTECODE_OPERATION_HPP_
+#define BIA_BYTECODE_OPERATION_HPP_
 
 #include <cstdint>
 
 namespace bia {
-namespace member {
+namespace bytecode {
 
-enum class infix_operator : std::uint8_t
+enum class Infix_operation : std::uint8_t
 {
 	bitwise_or,
 	bitwise_xor,
@@ -21,9 +21,8 @@ enum class infix_operator : std::uint8_t
 	exponentation,
 };
 
-enum class test_operator : std::uint8_t
+enum class Test_operation : std::uint8_t
 {
-	self,
 	equal,
 	not_equal,
 	less,
@@ -34,7 +33,7 @@ enum class test_operator : std::uint8_t
 	three_way_comparison,
 };
 
-enum class self_operator : std::uint8_t
+enum class Self_operation : std::uint8_t
 {
 	unary_minus,
 	bitwise_not,
