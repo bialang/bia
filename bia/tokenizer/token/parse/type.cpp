@@ -7,10 +7,11 @@ Error_info chained_type(Parameter& param);
 
 inline Error_info tuple_type(Parameter& param)
 {
-	if (param.encoder.read(param.input) != '(') {
-		return param.make_error(bia::error::Code::bad_tuple, -1);
+	auto ranger = param.begin_range();
+	if (param.reader.read() != '(') {
+		return param.make_error(bia::error::Code::bad_tuple, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Control::bracket_open);
+	param.bundle.emplace_back(Token::Control::bracket_open, ranger.range());
 	parse::spacer(param);
 	if (const auto err = chained_type(param)) {
 		return err;
@@ -19,11 +20,12 @@ inline Error_info tuple_type(Parameter& param)
 
 	for (auto first = true; true; first = false) {
 		auto old = param.backup();
-		if (param.encoder.read(param.input) != ',') {
+		ranger = param.begin_range();
+		if (param.reader.read() != ',') {
 			param.restore(old);
 			break;
 		}
-		param.bundle.emplace_back(Token::Control::comma);
+		param.bundle.emplace_back(Token::Control::comma, ranger.range());
 
 		parse::spacer(param);
 		old = param.backup();
@@ -37,16 +39,18 @@ inline Error_info tuple_type(Parameter& param)
 		parse::spacer(param);
 	}
 
-	if (param.encoder.read(param.input) != ')') {
-		return param.make_error(bia::error::Code::bad_tuple, -1);
+	ranger = param.begin_range();
+	if (param.reader.read() != ')') {
+		return param.make_error(bia::error::Code::bad_tuple, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Control::bracket_close);
+	param.bundle.emplace_back(Token::Control::bracket_close, ranger.range());
 	return {};
 }
 
 inline Error_info single_type(Parameter& param)
 {
 	Token::Array_dimension array{};
+	const auto ranger = param.begin_range();
 	while (true) {
 		const auto old = param.backup();
 		if (!parse::any_of(param, "[]").second) {
@@ -55,7 +59,7 @@ inline Error_info single_type(Parameter& param)
 		}
 		++array.dimension;
 	}
-	param.bundle.emplace_back(array);
+	param.bundle.emplace_back(array, ranger.range());
 	return parse::any_of(param, parse::identifier, tuple_type);
 }
 
@@ -73,7 +77,7 @@ inline Error_info chained_type(Parameter& param)
 	while (true) {
 		const auto old = param.backup();
 		parse::spacer(param);
-		if (param.encoder.read(param.input) != '|') {
+		if (param.reader.read() != '|') {
 			param.restore(old);
 			break;
 		}
@@ -87,10 +91,11 @@ inline Error_info chained_type(Parameter& param)
 
 Error_info parse::type_stmt(Parameter& param)
 {
+	auto ranger = param.begin_range();
 	if (!any_of(param, "type").second) {
-		return param.make_error(error::Code::expected_type_declaration, -1);
+		return param.make_error(error::Code::expected_type_declaration, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Keyword::type);
+	param.bundle.emplace_back(Token::Keyword::type, ranger.range());
 	if (const auto err = spacer(param)) {
 		return err;
 	}
@@ -100,8 +105,9 @@ Error_info parse::type_stmt(Parameter& param)
 	}
 	spacer(param);
 
-	if (param.encoder.read(param.input) != '=') {
-		return param.make_error(error::Code::expected_assignment, -1);
+	ranger = param.begin_range();
+	if (param.reader.read() != '=') {
+		return param.make_error(error::Code::expected_assignment, ranger.range());
 	}
 	spacer(param);
 	return chained_type(param);
@@ -109,10 +115,11 @@ Error_info parse::type_stmt(Parameter& param)
 
 Error_info parse::type_definition(Parameter& param)
 {
+	const auto ranger = param.begin_range();
 	if (!any_of(param, ":").second) {
-		return param.make_error(error::Code::expected_type_definition, -1);
+		return param.make_error(error::Code::expected_type_definition, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Control::type_definition);
+	param.bundle.emplace_back(Token::Control::type_definition, ranger.range());
 	spacer(param);
 	if (const auto err = chained_type(param)) {
 		return err;

@@ -17,46 +17,50 @@ inline Error_info operators(Parameter& param)
 		                           Operator::logical_or,    Operator::in,
 		                           Operator::bitwise_and,   Operator::bitwise_or,
 		                           Operator::bitwise_xor };
+	const auto ranger = param.begin_range();
 	const auto x = parse::any_of(param, ".", "**", "*", "/", "%", "+", "-", "==", "!=", "<=>", "<=", ">=", "<",
 	                             ">", "=", "and", "&&", "or", "||", "in", "&", "|", "^");
 
 	if (!x.second) {
-		return param.make_error(bia::error::Code::bad_operator);
+		return param.make_error(bia::error::Code::bad_operator, ranger.range());
 	}
-	param.bundle.emplace_back(static_cast<Operator>(ops[x.first]));
+	param.bundle.emplace_back(static_cast<Operator>(ops[x.first]), ranger.range());
 	return {};
 }
 
 inline Error_info constant_keyword(Parameter& param)
 {
-	const auto tmp = parse::any_of(param, "true", "false", "null");
+	const auto ranger = param.begin_range();
+	const auto tmp      = parse::any_of(param, "true", "false", "null");
 	if (tmp.second && !parse::spacer(param)) {
 		switch (tmp.first) {
-		case 0: param.bundle.emplace_back(Token::Keyword::true_); break;
-		case 1: param.bundle.emplace_back(Token::Keyword::false_); break;
-		case 2: param.bundle.emplace_back(Token::Keyword::null); break;
+		case 0: param.bundle.emplace_back(Token::Keyword::true_, ranger.range()); break;
+		case 1: param.bundle.emplace_back(Token::Keyword::false_, ranger.range()); break;
+		case 2: param.bundle.emplace_back(Token::Keyword::null, ranger.range()); break;
 		default: BIA_THROW(bia::error::Code::bad_switch_value);
 		}
 		return {};
 	}
-	return param.make_error(bia::error::Code::bad_constant_keyword);
+	return param.make_error(bia::error::Code::bad_constant_keyword, ranger.range());
 }
 
 inline Error_info single_expression_in_brackets(Parameter& param)
 {
-	if (param.encoder.read(param.input) != '(') {
-		return param.make_error(bia::error::Code::expected_opening_bracket, -1);
+	auto ranger = param.begin_range();
+	if (param.reader.read() != '(') {
+		return param.make_error(bia::error::Code::expected_opening_bracket, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Control::bracket_open);
+	param.bundle.emplace_back(Token::Control::bracket_open, ranger.range());
 	parse::spacer(param);
 	if (const auto err = parse::single_expression(param)) {
 		return err;
 	}
 	parse::spacer(param);
-	if (param.encoder.read(param.input) != ')') {
-		return param.make_error(bia::error::Code::expected_closing_bracket, -1);
+	ranger = param.begin_range();
+	if (param.reader.read() != ')') {
+		return param.make_error(bia::error::Code::expected_closing_bracket, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Control::bracket_close);
+	param.bundle.emplace_back(Token::Control::bracket_close, ranger.range());
 	return {};
 }
 
@@ -65,27 +69,32 @@ Error_info parse::value(Parameter& param)
 	return any_of(param, number, constant_keyword, string, identifier, single_expression_in_brackets);
 }
 
+inline Error_info use_value(Parameter& param)
+{
+	auto ranger = param.begin_range();
+	if (param.reader.read() != '(') {
+		return param.make_error(bia::error::Code::expected_use, ranger.range());
+	}
+	parse::spacer(param);
+	ranger = param.begin_range();
+	if (!parse::any_of(param, "use").second || parse::spacer(param)) {
+		return param.make_error(bia::error::Code::expected_use, ranger.range());
+	}
+	param.bundle.emplace_back(Token::Keyword::use, ranger.range());
+	if (const auto err = parse::value(param)) {
+		return err;
+	}
+	parse::spacer(param);
+	ranger = param.begin_range();
+	if (param.reader.read() != ')') {
+		return param.make_error(bia::error::Code::expected_use, ranger.range());
+	}
+	return {};
+}
+
 inline Error_info expression_value(Parameter& param)
 {
-	const auto use = static_cast<parse::token_type>([](Parameter& param) -> Error_info {
-		if (param.encoder.read(param.input) != '(') {
-			return param.make_error(bia::error::Code::expected_use, -1);
-		}
-		parse::spacer(param);
-		if (!parse::any_of(param, "use").second || parse::spacer(param)) {
-			return param.make_error(bia::error::Code::expected_use);
-		}
-		param.bundle.emplace_back(Token::Keyword::use);
-		if (const auto err = parse::value(param)) {
-			return err;
-		}
-		parse::spacer(param);
-		if (param.encoder.read(param.input) != ')') {
-			return param.make_error(bia::error::Code::expected_use, -1);
-		}
-		return {};
-	});
-	return parse::any_of(param, parse::value, use);
+	return parse::any_of(param, parse::value, use_value);
 }
 
 Error_info parse::multi_expression(Parameter& param)

@@ -8,18 +8,19 @@ using namespace bia::tokenizer::token;
 
 inline std::tuple<std::string, Token::Number::Type, Error_info> extract_number(Parameter& param)
 {
+	const auto ranger = param.begin_range();
 	std::string str;
 	while (true) {
-		const auto pos = param.input.tellg();
-		const auto c   = param.encoder.read(param.input);
+		const auto state = param.reader.backup();
+		const auto c     = param.reader.read();
 		if (c < '0' || c > '9') {
-			param.input.seekg(pos);
+			param.reader.restore(state);
 			break;
 		}
 		str.append(1, c);
 	}
 	if (str.empty()) {
-		return { str, Token::Number::Type::i, param.make_error(bia::error::Code::bad_number) };
+		return { str, Token::Number::Type::i, param.make_error(bia::error::Code::bad_number, ranger.range()) };
 	}
 	return { str, Token::Number::Type::i, {} };
 }
@@ -30,7 +31,8 @@ inline std::pair<Token::Number::Type, Error_info> check_special(Parameter& param
 	return { type, {} };
 }
 
-inline Error_info convert(Parameter& param, const std::string& str, enum Token::Number::Type type)
+inline Error_info convert(Parameter& param, const std::string& str, Token::Number::Type type,
+                          bia::tokenizer::Range range)
 {
 	using Number = Token::Number;
 	// convert
@@ -49,18 +51,19 @@ inline Error_info convert(Parameter& param, const std::string& str, enum Token::
 	}
 
 	if (processed != str.length()) {
-		return param.make_error(bia::error::Code::bad_number);
+		return param.make_error(bia::error::Code::bad_number, range);
 	}
-	param.bundle.emplace_back(num);
+	param.bundle.emplace_back(num, range);
 	return {};
 }
 
 Error_info parse::number(Parameter& param)
 {
+	const auto ranger = param.begin_range();
 	const auto extracted = extract_number(param);
 	if (std::get<2>(extracted)) {
 		return std::get<2>(extracted);
 	}
 	const auto special = check_special(param, std::get<1>(extracted));
-	return special.second ? special.second : convert(param, std::get<0>(extracted), special.first);
+	return special.second ? special.second : convert(param, std::get<0>(extracted), special.first, ranger.range());
 }

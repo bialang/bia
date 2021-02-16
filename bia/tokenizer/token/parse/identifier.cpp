@@ -59,11 +59,12 @@ Error_info parse::identifier(Parameter& param)
 	auto streambuf    = param.manager.start_memory(true);
 	const auto outenc = get_encoder(standard_encoding::utf_8);
 	const auto free   = util::finallay([outenc] { free_encoder(outenc); });
+	const auto ranger = param.begin_range();
 	std::ostream output{ &streambuf };
 
 	while (true) {
-		const auto pos = param.input.tellg();
-		const auto cp  = param.encoder.read(param.input);
+		const auto state = param.reader.backup();
+		const auto cp    = param.reader.read();
 		switch (category_of(cp)) {
 		case Category::Ll:
 		case Category::Lu:
@@ -84,14 +85,15 @@ Error_info parse::identifier(Parameter& param)
 		default: {
 			// valid identifier
 			if (!first && !keywords.result()) {
-				param.input.seekg(pos);
+				param.reader.restore(state);
 				// zero terminate
 				outenc->put(output, 0);
-				param.bundle.emplace_back(Token::Identifier{ streambuf.finish(resource::type::string) });
+				param.bundle.emplace_back(Token::Identifier{ streambuf.finish(resource::type::string) },
+				                          ranger.range());
 				return {};
 			}
 			// not an identifier
-			return param.make_error(error::Code::bad_identifier, -1);
+			return param.make_error(error::Code::bad_identifier, ranger.range());
 		}
 		}
 	}

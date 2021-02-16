@@ -5,10 +5,11 @@ using namespace bia::tokenizer::token;
 
 Error_info parse::scope_stmt(Parameter& param)
 {
+	const auto ranger = param.begin_range();
 	if (!any_of(param, "scoped").second) {
-		return param.make_error(error::Code::expected_scope);
+		return param.make_error(error::Code::expected_scope, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Keyword::scoped);
+	param.bundle.emplace_back(Token::Keyword::scoped, ranger.range());
 	spacer(param);
 	return batch(param);
 }

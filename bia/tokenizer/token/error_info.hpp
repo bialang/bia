@@ -1,6 +1,8 @@
 #ifndef BIA_TOKENIZER_TOKEN_ERROR_INFO_HPP_
 #define BIA_TOKENIZER_TOKEN_ERROR_INFO_HPP_
 
+#include "../location.hpp"
+
 #include <bia/error/code.hpp>
 
 namespace bia {
@@ -10,16 +12,11 @@ namespace token {
 struct Error_info
 {
 	error::Code code = error::Code::success;
-	std::size_t line;
-	std::size_t column;
-	/// the offset in bytes
-	std::size_t offset;
-	/// the length of the error token
-	std::size_t length;
+	Range range{};
 
 	bool operator<(const Error_info& other) const noexcept
 	{
-		return offset < other.offset;
+		return range.start < other.range.start;
 	}
 	operator bool() const noexcept
 	{

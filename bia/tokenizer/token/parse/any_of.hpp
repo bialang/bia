@@ -16,8 +16,7 @@ namespace parse {
 inline std::pair<std::size_t, bool> any_of(Parameter& param, util::Czstring token)
 {
 	while (*token) {
-		const auto pos = param.input.tellg();
-		if (param.encoder.read(param.input) != *token++) {
+		if (param.reader.read() != *token++) {
 			return { 0, false };
 		}
 	}
@@ -27,12 +26,12 @@ inline std::pair<std::size_t, bool> any_of(Parameter& param, util::Czstring toke
 template<typename... Types>
 inline std::pair<std::size_t, bool> any_of(Parameter& param, util::Czstring token, Types&&... tokens)
 {
-	const auto old = param.input.tellg();
+	const auto old = param.reader.backup();
 	const auto t   = any_of(param, token);
 	if (t.second) {
 		return t;
 	}
-	param.input.seekg(old);
+	param.reader.restore(old);
 	const auto o = any_of(param, std::forward<Types>(tokens)...);
 	return { o.first + 1, o.second };
 }

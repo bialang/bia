@@ -3,21 +3,22 @@
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/util/finally.hpp>
 
-bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(Parameter& parameter)
+bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(Parameter& param)
 {
-	if (parameter.encoder.read(parameter.input) != '"') {
-		return parameter.make_error(error::Code::expected_string, -1);
+	const auto ranger = param.begin_range();
+	if (param.reader.read() != '"') {
+		return param.make_error(error::Code::expected_string, ranger.range());
 	}
 
 	using namespace string::encoding;
-	auto streambuf    = parameter.manager.start_memory(true);
+	auto streambuf    = param.manager.start_memory(true);
 	const auto outenc = get_encoder(standard_encoding::utf_8);
 	const auto free   = util::finallay([outenc] { free_encoder(outenc); });
 	auto escape       = false;
 	std::ostream output{ &streambuf };
 
 	while (true) {
-		const auto cp = parameter.encoder.read(parameter.input);
+		const auto cp = param.reader.read();
 
 #define BIA_IMPL_STRING(a, b)                                                                                \
 	case a: {                                                                                                  \
@@ -37,12 +38,12 @@ bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(Parameter
 			BIA_IMPL_STRING('r', '\r')
 			BIA_IMPL_STRING('t', '\t')
 			BIA_IMPL_STRING('v', '\v')
-		case Encoder::eof: return parameter.make_error(error::Code::expected_string, -1);
+		case Encoder::eof: return param.make_error(error::Code::expected_string, ranger.range());
 		case '"': {
 			if (!escape) {
 				// zero terminate
 				outenc->put(output, 0);
-				parameter.bundle.emplace_back(Token::String{ streambuf.finish(resource::type::string) });
+				param.bundle.emplace_back(Token::String{ streambuf.finish(resource::type::string) }, ranger.range());
 				return {};
 			}
 			break;

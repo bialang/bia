@@ -14,13 +14,14 @@ Error_info parse::spacer(Parameter& param)
 		comment_multi_ending
 	};
 
-	auto state     = state::whitespace;
-	auto seperator = false;
-	auto last_pos  = param.input.tellg();
+	auto state          = state::whitespace;
+	auto seperator      = false;
+	auto last_state     = param.reader.backup();
+	const auto ranger = param.begin_range();
 
 	while (true) {
-		auto pos      = param.input.tellg();
-		const auto cp = param.encoder.read(param.input);
+		auto old      = param.reader.backup();
+		const auto cp = param.reader.read();
 		if (cp == string::encoding::Encoder::eof) {
 			seperator = true;
 			goto gt_return;
@@ -60,7 +61,7 @@ Error_info parse::spacer(Parameter& param)
 			switch (cp) {
 			case '/': state = state::comment_single; break;
 			case '*': state = state::comment_multi; break;
-			default: pos = last_pos; goto gt_return; // rollback one character more
+			default: old = last_state; goto gt_return; // rollback one character more
 			}
 			break;
 		}
@@ -75,7 +76,7 @@ Error_info parse::spacer(Parameter& param)
 			case '\r':
 			case '\n': break;
 			default: {
-				param.input.seekg(pos);
+				param.reader.restore(old);
 				state = state::whitespace;
 				break;
 			}
@@ -99,14 +100,14 @@ Error_info parse::spacer(Parameter& param)
 		}
 
 		// consume
-		last_pos = pos;
+		last_state = old;
 		continue;
 
 	gt_return:;
-		param.input.seekg(pos);
+		param.reader.restore(old);
 		if (seperator) {
 			return {};
 		}
-		return param.make_error(error::Code::expected_seperator, -1);
+		return param.make_error(error::Code::expected_seperator, ranger.range());
 	}
 }

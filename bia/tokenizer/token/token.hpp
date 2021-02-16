@@ -1,6 +1,7 @@
 #ifndef BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 #define BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 
+#include "../location.hpp"
 #include "operator_.hpp"
 
 #include <bia/bytecode/op_code.hpp>
@@ -133,28 +134,34 @@ struct Token
 		if_,
 		else_if,
 		else_,
+		drop,
 	};
 
-	util::Variant<Number, Array_dimension, Batch, Control, Keyword, String, Regex, Identifier, Operator,
-	              Array_dimension>
-	  value;
+	typedef util::Variant<Number, Array_dimension, Batch, Control, Keyword, String, Regex, Identifier, Operator,
+	                      Array_dimension>
+	  Value;
+
+	Value value;
+	Range range;
 
 	Token() = default;
 	template<typename Type>
-	Token(Type&& value) : value{ std::forward<Type>(value) }
+	Token(Type&& value, Range range) : value{ std::forward<Type>(value) }, range{ std::move(range) }
 	{}
-	Token(const Token& copy) : value{ copy.value }
+	Token(const Token& copy) : value{ copy.value }, range{ copy.range }
 	{}
-	Token(Token&& move) : value{ std::move(move.value) }
+	Token(Token&& move) : value{ std::move(move.value) }, range{ std::move(move.range) }
 	{}
 	Token& operator=(const Token& copy)
 	{
 		value = copy.value;
+		range = copy.range;
 		return *this;
 	}
 	Token& operator=(Token&& move)
 	{
 		value = std::move(move.value);
+		range = std::move(move.range);
 		return *this;
 	}
 };

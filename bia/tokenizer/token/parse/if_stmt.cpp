@@ -5,10 +5,11 @@ using namespace bia::tokenizer::token;
 
 Error_info parse::if_stmt(Parameter& param)
 {
+	const auto ranger = param.begin_range();
 	if (!any_of(param, "if").second || spacer(param)) {
-		return param.make_error(error::Code::expected_if);
+		return param.make_error(error::Code::expected_if, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Keyword::if_);
+	param.bundle.emplace_back(Token::Keyword::if_, ranger.range());
 	if (const auto err = single_expression(param)) {
 		return err;
 	}
@@ -36,10 +37,11 @@ Error_info parse::if_stmt(Parameter& param)
 
 Error_info parse::else_if_stmt(Parameter& param)
 {
+	const auto ranger = param.begin_range();
 	if (!any_of(param, "else").second || spacer(param) || !any_of(param, "if").second || spacer(param)) {
-		return param.make_error(error::Code::expected_else_if);
+		return param.make_error(error::Code::expected_else_if, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Keyword::else_if);
+	param.bundle.emplace_back(Token::Keyword::else_if, ranger.range());
 	if (const auto err = single_expression(param)) {
 		return err;
 	}
@@ -52,10 +54,11 @@ Error_info parse::else_if_stmt(Parameter& param)
 
 Error_info parse::else_stmt(Parameter& param)
 {
+	const auto ranger = param.begin_range();
 	if (!any_of(param, "else").second || spacer(param)) {
-		return param.make_error(error::Code::expected_else);
+		return param.make_error(error::Code::expected_else, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Keyword::else_);
+	param.bundle.emplace_back(Token::Keyword::else_, ranger.range());
 	if (const auto err = batch(param)) {
 		return err;
 	}

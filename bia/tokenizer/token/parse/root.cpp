@@ -12,7 +12,7 @@ inline Error_info small_stmt(Parameter& param)
 	}
 	const auto old = param.backup();
 	parse::spacer(param);
-	if (param.encoder.read(param.input) != ';') {
+	if (param.reader.read() != ';') {
 		param.restore(old);
 	}
 	return {};
@@ -28,14 +28,15 @@ Error_info parse::root(Parameter& param)
 	if (const auto err = parse::any_of(param, small_stmt, compound_stmt)) {
 		return err;
 	}
-	param.bundle.emplace_back(Token::Control::cmd_end);
+	param.bundle.emplace_back(Token::Control::cmd_end, param.begin_range().range());
 	return {};
 }
 
 Error_info parse::batch(Parameter& param)
 {
-	if (param.encoder.read(param.input) != '{') {
-		return param.make_error(error::Code::expected_opening_curly_bracket, -1);
+	const auto ranger = param.begin_range();
+	if (param.reader.read() != '{') {
+		return param.make_error(error::Code::expected_opening_curly_bracket, ranger.range());
 	}
 	Token::Batch info{};
 	const auto index = param.bundle.size();
@@ -52,10 +53,11 @@ Error_info parse::batch(Parameter& param)
 		++info.statement_count;
 	}
 
-	if (param.encoder.read(param.input) != '}') {
-		const auto err = param.make_error(error::Code::expected_closing_curly_bracket, -1);
+	const auto end_ranger = param.begin_range();
+	if (param.reader.read() != '}') {
+		const auto err = param.make_error(error::Code::expected_closing_curly_bracket, end_ranger.range());
 		return err < root_err ? root_err : err;
 	}
-	param.bundle.at(index).value.emplace<Token::Batch>(info);
+	param.bundle.at(index) = { info, ranger.range() };
 	return {};
 }
