@@ -22,7 +22,8 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 
 	auto expr = single_expression(param, tokens.subspan(1));
 	if (desired_type && !desired_type->is_assignable(expr.second.definition)) {
-		param.errors.add_error(error::Code::type_mismatch, tokens.at(1));
+		param.errors.add_error(error::Code::type_mismatch,
+		                       tokens.subspan(1, tokens.size() - expr.first.size() - 1));
 		param.symbols.free_temporary(expr.second);
 	} else {
 		param.symbols.promote_temporary(variable_name, expr.second);

@@ -91,9 +91,9 @@ inline std::pair<Tokens, symbol::Variable> value(Parameter& param, Tokens tokens
 		symbol::Variable variable{};
 		const auto right = param.symbols.symbol(tokens.front().value.get<Token::Identifier>().memory);
 		if (right.empty()) {
-			param.errors.add_error(error::Code::undefined_symbol, tokens.front());
+			param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(+0, 1));
 		} else if (!right.is_type<symbol::Variable>()) {
-			param.errors.add_error(error::Code::symbol_not_a_variable, tokens.front());
+			param.errors.add_error(error::Code::symbol_not_a_variable, tokens.subspan(+0, 1));
 		} else {
 			variable = param.symbols.create_temporary(right.get<symbol::Variable>().definition);
 			param.instructor.write<bytecode::Op_code::copy, std::int32_t>(

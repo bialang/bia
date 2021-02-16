@@ -4,6 +4,7 @@
 #include <bia/error/code.hpp>
 #include <bia/tokenizer/location.hpp>
 #include <bia/tokenizer/token/token.hpp>
+#include <bia/util/gsl.hpp>
 #include <vector>
 
 namespace bia {
@@ -18,9 +19,10 @@ struct Error
 class Errors
 {
 public:
-	void add_error(error::Code code, const tokenizer::token::Token& token)
+	void add_error(error::Code code, util::Span<const tokenizer::token::Token*> tokens)
 	{
-		_errors.push_back({ code, token.range });
+		BIA_EXPECTS(!tokens.empty());
+		_errors.push_back({ code, { tokens.front().range.start, tokens.back().range.end } });
 	}
 	void reset_fail() noexcept
 	{

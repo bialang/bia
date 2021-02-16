@@ -12,9 +12,9 @@ std::pair<elve::Tokens, type::Definition*> elve::type_definition(Parameter& para
 	            tokens[1].value.is_type<Token::Array_dimension>());
 	const auto type = param.symbols.symbol(tokens.at(2).value.get<Token::Identifier>().memory);
 	if (type.empty()) {
-		param.errors.add_error(error::Code::undefined_symbol, tokens.at(2));
+		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));
 	} else if (!type.is_type<type::Definition*>()) {
-		param.errors.add_error(error::Code::symbol_not_a_type, tokens.at(2));
+		param.errors.add_error(error::Code::symbol_not_a_type, tokens.subspan(1, 1));
 	}
 	return { tokens.subspan(3), type.get<type::Definition*>() };
 }

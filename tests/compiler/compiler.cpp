@@ -36,7 +36,7 @@ inline void print_error(const std::string& code, const compiler::Error& error)
 	std::cerr.write(line.data(), line.size());
 	std::cerr << '\n';
 	for (std::size_t i = 0; i < error.range.start.character - 1; ++i) {
-		std::cerr << ' ';
+		std::cerr << (line.at(i) == '\t' ? '\t' : ' ');
 	}
 	std::cerr << '^';
 	for (std::size_t i = error.range.start.character + 1; i < error.range.end.character; ++i) {
@@ -54,8 +54,9 @@ try {
 
 	code << u8R"(
   
-    let x: int = "hello, world"
-    let o = x
+	let x: int = "hello, world"
+	let o = x
+	let p: int = 1 == 0
 
 )";
 
@@ -71,8 +72,6 @@ try {
 	if (compiler.errors().size() > 0) {
 		const auto str = code.str();
 		for (auto err : compiler.errors()) {
-			// std::cerr << err.code << " at " << err.range.start.line << ":" << err.range.start.character << " to "
-			//           << err.range.end.line << ":" << err.range.end.character << std::endl;
 			print_error(str, err);
 		}
 		std::cerr << "compilation failed\n";
