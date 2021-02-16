@@ -15,6 +15,7 @@ elve::Tokens elve::root(Parameter& param, Tokens tokens)
 		}
 	}
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Control::cmd_end);
+	param.errors.reset_fail();
 	return tokens.subspan(1);
 }
 

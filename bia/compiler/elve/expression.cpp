@@ -88,16 +88,17 @@ inline std::pair<Tokens, symbol::Variable> value(Parameter& param, Tokens tokens
 	} else if (tokens.front().value.is_type<Token::Number>()) {
 		return number_value(param, tokens);
 	} else if (tokens.front().value.is_type<Token::Identifier>()) {
+		symbol::Variable variable{};
 		const auto right = param.symbols.symbol(tokens.front().value.get<Token::Identifier>().memory);
 		if (right.empty()) {
-			BIA_THROW(error::Code::undefined_symbol);
+			param.errors.add_error(error::Code::undefined_symbol, tokens.front());
 		} else if (!right.is_type<symbol::Variable>()) {
-			BIA_THROW(error::Code::symbol_not_a_variable);
+			param.errors.add_error(error::Code::symbol_not_a_variable, tokens.front());
+		} else {
+			variable = param.symbols.create_temporary(right.get<symbol::Variable>().definition);
+			param.instructor.write<bytecode::Op_code::copy, std::int32_t>(
+			  variable.location.offset, right.get<symbol::Variable>().location.offset);
 		}
-
-		const auto variable = param.symbols.create_temporary(right.get<symbol::Variable>().definition);
-		param.instructor.write<bytecode::Op_code::copy, std::int32_t>(
-		  variable.location.offset, right.get<symbol::Variable>().location.offset);
 		return { tokens.subspan(1), variable };
 	} else if (tokens.front().value.is_type<Token::String>()) {
 		const auto right = param.symbols.symbol(util::from_cstring("string"));

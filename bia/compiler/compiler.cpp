@@ -16,8 +16,13 @@ Compiler::Compiler(util::Not_null<std::shared_ptr<gc::memory::Allocator>> alloca
 
 void Compiler::receive(util::Span<const Token*> tokens, resource::Manager& manager)
 {
-	elve::Parameter params{ _instructor, _symbols, _serializer };
+	elve::Parameter params{ _instructor, _symbols, _serializer, _errors };
 	while (!tokens.empty()) {
 		tokens = elve::root(params, tokens);
 	}
+}
+
+const Errors& Compiler::errors() const noexcept
+{
+	return _errors;
 }

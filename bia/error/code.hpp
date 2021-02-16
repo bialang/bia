@@ -31,7 +31,7 @@ enum class Code
 	empty_variant,
 	bad_variant_index,
 
-	expected_opening_curly_bracket,
+	expected_opening_curly_bracket = 50,
 	expected_closing_curly_bracket,
 	expected_opening_bracket,
 	expected_closing_bracket,
@@ -69,25 +69,35 @@ enum class Code
 	bad_number,
 	bad_operator,
 
-	type_mismatch,
+	type_mismatch = 150,
 	symbol_already_declared,
 	symbol_not_a_type,
 	symbol_not_a_variable,
 	undefined_symbol,
 	type_not_truthable,
 
-	bad_opcode,
+	bad_opcode = 200,
 	bad_offset_option,
 	bad_constant_option,
 	bad_resource_option,
 	bad_member_source_option,
 	bad_member_destination_option,
 
-	module_not_found,
+	module_not_found = 250,
 
-	bad_switch_value,
+	bad_switch_value = 300,
 	why_did_this_happen
 };
+
+enum class Condition
+{
+	success,
+	compiler,
+	bvm,
+	implementation,
+};
+
+std::error_condition make_error_condition(Condition condition) noexcept;
 
 inline const std::error_category& code_category() noexcept
 {
@@ -97,6 +107,13 @@ inline const std::error_category& code_category() noexcept
 		const char* name() const noexcept override
 		{
 			return "bialang";
+		}
+		std::error_condition default_error_condition(int code) const noexcept override
+		{
+			if (code >= 150 && code < 200) {
+				return make_error_condition(Condition::compiler);
+			}
+			return error_category::default_error_condition(code);
 		}
 		std::string message(int ec) const override
 		{
@@ -156,18 +173,56 @@ inline const std::error_category& code_category() noexcept
 	return category;
 }
 
-inline std::error_code make_error_code(Code c) noexcept
+inline const std::error_category& condition_category() noexcept
 {
-	return { static_cast<int>(c), code_category() };
+	static class : public std::error_category
+	{
+	public:
+		const char* name() const noexcept override
+		{
+			return "bia";
+		}
+		std::string message(int condition) const override
+		{
+			switch (static_cast<Condition>(condition)) {
+			case Condition::compiler: return "compilation error";
+			default: return "(unrecognized error condition)";
+			}
+		}
+		bool equivalent(const std::error_code& code, int condition) const noexcept override
+		{
+			switch (static_cast<Condition>(condition)) {
+			case Condition::compiler: return code.value() >= 150 && code.value() < 200;
+			default: return false;
+			}
+		}
+	} category;
+	return category;
+}
+
+inline std::error_code make_error_code(Code code) noexcept
+{
+	return { static_cast<int>(code), code_category() };
+}
+
+inline std::error_condition make_error_condition(Condition condition) noexcept
+{
+	return { static_cast<int>(condition), condition_category() };
 }
 
 } // namespace error
 } // namespace bia
 
 namespace std {
+
 template<>
 struct is_error_code_enum<bia::error::Code> : true_type
 {};
+
+template<>
+struct is_error_condition_enum<bia::error::Condition> : true_type
+{};
+
 } // namespace std
 
 #endif

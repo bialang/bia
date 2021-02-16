@@ -17,10 +17,8 @@ namespace symbol {
 
 enum class Default_int_size
 {
-	size_8  = 8,
-	size_16 = 16,
 	size_32 = 32,
-	size_64 = 64
+	size_64 = 64,
 };
 
 struct Location

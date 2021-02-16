@@ -1,6 +1,7 @@
 #ifndef BIA_COMPILER_ELVE_HELPERS_HPP_
 #define BIA_COMPILER_ELVE_HELPERS_HPP_
 
+#include "../errors.hpp"
 #include "../symbol/manager.hpp"
 
 #include <bia/bytecode/instructor.hpp>
@@ -20,6 +21,7 @@ struct Parameter
 	bytecode::Instructor& instructor;
 	symbol::Manager& symbols;
 	resource::Serializer& serializer;
+	Errors& errors;
 };
 
 typedef util::Span<const tokenizer::token::Token*> Tokens;
@@ -31,7 +33,7 @@ Tokens decl_stmt(Parameter& param, Tokens tokens);
 Tokens if_stmt(Parameter& param, Tokens tokens);
 
 std::pair<Tokens, symbol::Variable> single_expression(Parameter& param, Tokens tokens);
-std::pair<Tokens, util::Not_null<type::Definition*>> type_definition(Parameter& param, Tokens tokens);
+std::pair<Tokens, type::Definition*> type_definition(Parameter& param, Tokens tokens);
 
 } // namespace elve
 } // namespace compiler

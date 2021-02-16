@@ -17,15 +17,15 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 	// process type definition available -> declare
 	if (tokens.front().value != Operator::assign) {
 		std::tie(tokens, desired_type) = type_definition(param, tokens);
+		// continue on error
 	}
 
-	symbol::Variable variable;
-	std::tie(tokens, variable) = single_expression(param, tokens.subspan(1));
-
-	if (desired_type && !desired_type->is_assignable(variable.definition)) {
-		BIA_THROW(error::Code::type_mismatch);
+	auto expr = single_expression(param, tokens.subspan(1));
+	if (desired_type && !desired_type->is_assignable(expr.second.definition)) {
+		param.errors.add_error(error::Code::type_mismatch, tokens.at(1));
+		param.symbols.free_temporary(expr.second);
+	} else {
+		param.symbols.promote_temporary(variable_name, expr.second);
 	}
-
-	param.symbols.promote_temporary(variable_name, variable);
-	return tokens;
+	return expr.first;
 }
