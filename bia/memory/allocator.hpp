@@ -1,5 +1,5 @@
-#ifndef BIA_GC_MEMORY_ALLOCATOR_HPP_
-#define BIA_GC_MEMORY_ALLOCATOR_HPP_
+#ifndef BIA_MEMORY_ALLOCATOR_HPP_
+#define BIA_MEMORY_ALLOCATOR_HPP_
 
 #include <bia/error/exception.hpp>
 #include <bia/util/gsl.hpp>
@@ -8,36 +8,21 @@
 #include <utility>
 
 namespace bia {
-namespace gc {
 namespace memory {
 
-/**
- * The memory allocator base class. A memory allocator allocates aligned memory and is thread-safe.
- *
- * @see simple_allocator
- */
+/// The memory allocator base class. A memory allocator allocates aligned memory and is thread-safe.
 class Allocator
 {
 public:
-	/** the alignment of the allocated memory */
+	/// The alignment of the allocated memory.
 	constexpr static std::size_t alignment = alignof(std::max_align_t);
 
-	/**
-	 * Destructor.
-	 */
 	virtual ~Allocator() = default;
-	/**
-	 * Deallocates the memory prior allocated by allocate(). This function is thread-safe to call.
-	 *
-	 * @pre `ptr` was allocated by allocate() or checked_allocated() and not deallocated before
-	 *
-	 * @param ptr is the memory that should be freed; if equal to `nullptr` this operation is a noop
-	 * @param previous_size must be the same as during allocation, otherwise undefined behavior
-	 */
+	/// Deallocates the memory prio allocated by allocate(). If the pointer is null, this operation is a noop.
 	virtual void deallocate(void* ptr) = 0;
 	/**
-	 * Allocates *size* bytes and returns the pointer to the first byte. This function is thread-safe to call.
-	 * The memory is aligned according to memory_allocator::alignment.
+	 * Allocates at least *size* bytes of uninitialized memory and returns the pointer to the first byte. This
+	 * function is thread-safe to call. The memory is aligned according to memory_allocator::alignment.
 	 *
 	 * @param size is the amount of required bytes
 	 * @return the pointer to the first byte if successful, otherwise `nullptr`
@@ -74,7 +59,6 @@ public:
 };
 
 } // namespace memory
-} // namespace gc
 } // namespace bia
 
 #endif

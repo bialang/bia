@@ -5,8 +5,8 @@
 #include "streambuf.hpp"
 
 #include <bia/config.hpp>
-#include <bia/gc/memory/space.hpp>
-#include <bia/gc/memory/view.hpp>
+#include <bia/memory/space.hpp>
+#include <bia/memory/view.hpp>
 #include <bia/util/gsl.hpp>
 #include <cstddef>
 #include <memory>
@@ -17,7 +17,7 @@ namespace resource {
 class Manager
 {
 public:
-	typedef gc::memory::space::size_type state_type;
+	typedef memory::space::size_type state_type;
 
 	/**
 	 * Constructor.
@@ -25,7 +25,7 @@ public:
 	 * @param allocator the memory allocator
 	 * @param page_size the size of each page
 	 */
-	Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
+	Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
 	        std::size_t page_size = BIA_RESOURCE_PAGE_SIZE) noexcept;
 	~Manager() noexcept;
 	/**
@@ -66,7 +66,7 @@ private:
 	/** whether a streambuf is active */
 	bool _buf_active = false;
 	/** the space where to put all the data */
-	gc::memory::space _space;
+	memory::space _space;
 };
 
 } // namespace resource

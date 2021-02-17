@@ -4,7 +4,7 @@
 #include "../type/definition.hpp"
 #include "../type/system.hpp"
 
-#include <bia/gc/memory/allocator.hpp>
+#include <bia/memory/allocator.hpp>
 #include <bia/resource/view.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/variant.hpp>
@@ -41,13 +41,12 @@ public:
 	typedef util::Span<const char*> string_type;
 	typedef std::uint16_t index_type;
 
-	Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
-	        Default_int_size default_int_size);
+	Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator, Default_int_size default_int_size);
 	void open_scope();
 	void close_scope();
 	Variable create_temporary(util::Not_null<type::Definition*> type);
 	void free_temporary(Variable variable);
-	void promote_temporary(const resource::View& name, const Variable& variable);
+	bool promote_temporary(const resource::View& name, const Variable& variable);
 	/// Returns the symbol or an empty variant if not found.
 	Symbol symbol(const resource::View& name);
 	/// Returns the symbol or an empty variant if not found.

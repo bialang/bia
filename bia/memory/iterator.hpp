@@ -1,5 +1,5 @@
-#ifndef BIA_GC_MEMORY_ITERATOR_HPP_
-#define BIA_GC_MEMORY_ITERATOR_HPP_
+#ifndef BIA_MEMORY_ITERATOR_HPP_
+#define BIA_MEMORY_ITERATOR_HPP_
 
 #include "std_allocator.hpp"
 
@@ -10,7 +10,6 @@
 #include <vector>
 
 namespace bia {
-namespace gc {
 namespace memory {
 
 typedef std::vector<util::Byte*, Std_allocator<util::Byte*>> page_container_type;
@@ -166,7 +165,6 @@ private:
 };
 
 } // namespace memory
-} // namespace gc
 } // namespace bia
 
 #endif

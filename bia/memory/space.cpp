@@ -3,7 +3,7 @@
 #include <algorithm>
 
 using namespace bia;
-using namespace bia::gc::memory;
+using namespace bia::memory;
 
 space::space(util::Not_null<std::shared_ptr<Allocator>> allocator, size_type page_size) noexcept
     : _allocator(std::move(allocator.get())),

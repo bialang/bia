@@ -4,7 +4,7 @@
 #include "info.hpp"
 #include "view.hpp"
 
-#include <bia/gc/memory/space.hpp>
+#include <bia/memory/space.hpp>
 #include <streambuf>
 #include <bia/util/gsl.hpp>
 
@@ -34,7 +34,7 @@ private:
 	/// The parent if valid.
 	Manager* _manager  = nullptr;
 	/// The size when this streambuf was created.
-	gc::memory::space::size_type _initial_size = 0;
+	memory::space::size_type _initial_size = 0;
 
 	void _discard() noexcept;
 };

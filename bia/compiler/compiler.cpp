@@ -7,8 +7,8 @@
 
 using namespace bia::compiler;
 
-Compiler::Compiler(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
-                   std::ostream& instructions, std::ostream& resource) noexcept
+Compiler::Compiler(util::Not_null<std::shared_ptr<memory::Allocator>> allocator, std::ostream& instructions,
+                   std::ostream& resource) noexcept
     : _instructor{ instructions }, _symbols{ allocator, symbol::Default_int_size::size_32 }, _serializer{
 	      resource
       }

@@ -3,7 +3,7 @@
 
 #include "info.hpp"
 
-#include <bia/gc/memory/iterator.hpp>
+#include <bia/memory/iterator.hpp>
 
 namespace bia {
 namespace resource {
@@ -11,14 +11,14 @@ namespace resource {
 struct View
 {
 	enum type type;
-	gc::memory::iterator first;
-	gc::memory::iterator last;
+	memory::iterator first;
+	memory::iterator last;
 
-	gc::memory::iterator begin() const noexcept
+	memory::iterator begin() const noexcept
 	{
 		return first;
 	}
-	gc::memory::iterator end() const noexcept
+	memory::iterator end() const noexcept
 	{
 		return last;
 	}

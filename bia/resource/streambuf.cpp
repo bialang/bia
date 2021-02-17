@@ -53,7 +53,7 @@ Streambuf::int_type Streambuf::sync()
 	if (!pptr() || pptr() == epptr()) {
 		try {
 			const auto buf =
-			  _manager->_space.next_region(std::numeric_limits<gc::memory::space::size_type>::max()).get();
+			  _manager->_space.next_region(std::numeric_limits<memory::space::size_type>::max()).get();
 			setp(reinterpret_cast<char*>(buf.begin()), reinterpret_cast<char*>(buf.end()));
 		} catch (const error::Exception&) {
 			return -1;

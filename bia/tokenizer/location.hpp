@@ -22,6 +22,10 @@ struct Location
 	{
 		return offset < other.offset;
 	}
+	bool operator<=(const Location& other) const noexcept
+	{
+		return offset <= other.offset;
+	}
 };
 
 struct Range

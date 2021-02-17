@@ -1,7 +1,7 @@
-#ifndef BIA_GC_STACK_HPP_
-#define BIA_GC_STACK_HPP_
+#ifndef BIA_MEMORY_STACK_HPP_
+#define BIA_MEMORY_STACK_HPP_
 
-#include "memory/allocator.hpp"
+#include "allocator.hpp"
 
 #include <bia/error/exception.hpp>
 #include <bia/util/gsl.hpp>
@@ -11,12 +11,12 @@
 #include <type_traits>
 
 namespace bia {
-namespace gc {
+namespace memory {
 
 class Stack
 {
 public:
-	Stack(std::shared_ptr<memory::Allocator> allocator, std::size_t size) : _allocator{ std::move(allocator) }
+	Stack(std::shared_ptr<Allocator> allocator, std::size_t size) : _allocator{ std::move(allocator) }
 	{
 		_memory = { static_cast<util::Byte*>(_allocator->allocate(size)), size };
 		_cursor = _memory.begin();
@@ -62,12 +62,12 @@ public:
 	}
 
 private:
-	std::shared_ptr<memory::Allocator> _allocator;
+	std::shared_ptr<Allocator> _allocator;
 	util::Span<util::Byte*> _memory;
 	util::Byte* _cursor;
 };
 
-} // namespace gc
+} // namespace memory
 } // namespace bia
 
 #endif

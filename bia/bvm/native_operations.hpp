@@ -3,7 +3,7 @@
 
 #include "instruction_pointer.hpp"
 
-#include <bia/gc/stack.hpp>
+#include <bia/memory/stack.hpp>
 #include <cstdint>
 #include <type_traits>
 
@@ -86,7 +86,7 @@ using Nao_type = typename std::conditional<Signed, typename std::make_signed<Typ
                                            typename std::make_unsigned<Type>::type>::type;
 
 template<typename Operation, bool Signed>
-inline void native_integral_operation(bvm::Operation op, Instruction_pointer& ip, gc::Stack& stack)
+inline void native_integral_operation(bvm::Operation op, Instruction_pointer& ip, memory::Stack& stack)
 {
 	const std::int32_t arg0 = ip.read<std::int32_t>();
 	const std::int32_t arg1 = ip.read<std::int32_t>();
@@ -111,7 +111,7 @@ inline void native_integral_operation(bvm::Operation op, Instruction_pointer& ip
 }
 
 template<typename Operation>
-inline void native_floating_point_operation(bvm::Operation op, Instruction_pointer& ip, gc::Stack& stack)
+inline void native_floating_point_operation(bvm::Operation op, Instruction_pointer& ip, memory::Stack& stack)
 {
 	const std::int32_t arg0 = ip.read<std::int32_t>();
 	const std::int32_t arg1 = ip.read<std::int32_t>();
@@ -122,7 +122,7 @@ inline void native_floating_point_operation(bvm::Operation op, Instruction_point
 }
 
 template<typename Operation, bool Signed>
-inline int native_integral_test(bvm::Operation op, Instruction_pointer& ip, gc::Stack& stack)
+inline int native_integral_test(bvm::Operation op, Instruction_pointer& ip, memory::Stack& stack)
 {
 	const std::int32_t arg0 = ip.read<std::int32_t>();
 	const std::int32_t arg1 = ip.read<std::int32_t>();

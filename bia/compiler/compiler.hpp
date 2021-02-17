@@ -5,7 +5,7 @@
 #include "symbol/manager.hpp"
 
 #include <bia/bytecode/instructor.hpp>
-#include <bia/gc/memory/allocator.hpp>
+#include <bia/memory/allocator.hpp>
 #include <bia/resource/serializer.hpp>
 #include <bia/tokenizer/token/receiver.hpp>
 #include <bia/util/gsl.hpp>
@@ -21,7 +21,7 @@ class Compiler : public tokenizer::token::Receiver
 public:
 	using Token = tokenizer::token::Token;
 
-	Compiler(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator, std::ostream& instructions,
+	Compiler(util::Not_null<std::shared_ptr<memory::Allocator>> allocator, std::ostream& instructions,
 	         std::ostream& resource) noexcept;
 	void receive(util::Span<const Token*> tokens, resource::Manager& manager) override;
 	const Errors& errors() const noexcept;

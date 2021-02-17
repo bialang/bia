@@ -2,8 +2,7 @@
 
 using namespace bia::resource;
 
-Manager::Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
-                 std::size_t page_size) noexcept
+Manager::Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator, std::size_t page_size) noexcept
     : _space(allocator, page_size)
 {}
 

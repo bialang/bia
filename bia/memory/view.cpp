@@ -1,6 +1,6 @@
 #include "view.hpp"
 
-using namespace bia::gc::memory;
+using namespace bia::memory;
 
 view::view(iterator first, iterator last) noexcept : _first(std::move(first)), _last(std::move(last))
 {}

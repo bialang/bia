@@ -3,8 +3,8 @@
 
 #include "definition.hpp"
 
-#include <bia/gc/memory/allocator.hpp>
-#include <bia/gc/memory/std_allocator.hpp>
+#include <bia/memory/allocator.hpp>
+#include <bia/memory/std_allocator.hpp>
 #include <bia/util/finally.hpp>
 #include <type_traits>
 #include <utility>
@@ -17,7 +17,7 @@ namespace type {
 class System
 {
 public:
-	System(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator)
+	System(util::Not_null<std::shared_ptr<memory::Allocator>> allocator)
 	    : _allocator{ allocator.get() }, _types{ allocator }
 	{}
 	System(const System& copy) = delete;
@@ -53,8 +53,8 @@ public:
 
 private:
 	unsigned int _id_counter = 0;
-	std::shared_ptr<gc::memory::Allocator> _allocator;
-	std::vector<Definition*, gc::memory::Std_allocator<Definition*>> _types;
+	std::shared_ptr<memory::Allocator> _allocator;
+	std::vector<Definition*, memory::Std_allocator<Definition*>> _types;
 };
 
 } // namespace type

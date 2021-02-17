@@ -10,11 +10,15 @@ std::pair<elve::Tokens, type::Definition*> elve::type_definition(Parameter& para
 	// TODO
 	BIA_EXPECTS(tokens.size() > 2 && tokens.front().value == Token::Control::type_definition &&
 	            tokens[1].value.is_type<Token::Array_dimension>());
-	const auto type = param.symbols.symbol(tokens.at(2).value.get<Token::Identifier>().memory);
+	const auto type              = param.symbols.symbol(tokens.at(2).value.get<Token::Identifier>().memory);
+	type::Definition* definition = nullptr;
+	// TODO array
 	if (type.empty()) {
-		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));
+		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(2, 1));
 	} else if (!type.is_type<type::Definition*>()) {
-		param.errors.add_error(error::Code::symbol_not_a_type, tokens.subspan(1, 1));
+		param.errors.add_error(error::Code::symbol_not_a_type, tokens.subspan(2, 1));
+	} else {
+		definition = type.get<type::Definition*>();
 	}
-	return { tokens.subspan(3), type.get<type::Definition*>() };
+	return { tokens.subspan(3), definition };
 }

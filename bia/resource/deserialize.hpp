@@ -3,13 +3,11 @@
 
 #include "serializer.hpp"
 
-#include <bia/gc/gc.hpp>
-#include <bia/gc/root.hpp>
 #include <bia/util/gsl.hpp>
-#include <istream>
 #include <bia/util/variant.hpp>
-#include <vector>
+#include <istream>
 #include <utility>
+#include <vector>
 
 namespace bia {
 namespace resource {

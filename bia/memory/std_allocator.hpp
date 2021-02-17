@@ -1,5 +1,5 @@
-#ifndef BIA_GC_MEMORY_STD_ALLOCATOR_HPP_
-#define BIA_GC_MEMORY_STD_ALLOCATOR_HPP_
+#ifndef BIA_MEMORY_STD_ALLOCATOR_HPP_
+#define BIA_MEMORY_STD_ALLOCATOR_HPP_
 
 #include "allocator.hpp"
 
@@ -11,7 +11,6 @@
 #include <utility>
 
 namespace bia {
-namespace gc {
 namespace memory {
 
 /// A memory allocator wrapper for the C++ STL.
@@ -76,7 +75,6 @@ private:
 };
 
 } // namespace memory
-} // namespace gc
 } // namespace bia
 
 #endif

@@ -8,8 +8,8 @@
 namespace bia {
 namespace tokenizer {
 
-Bia_lexer::Bia_lexer(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator)
-    : _manager(std::move(allocator), 4096)
+Bia_lexer::Bia_lexer(util::Not_null<std::shared_ptr<memory::Allocator>> allocator)
+    : _manager{ std::move(allocator), 4096 }
 {}
 
 void Bia_lexer::lex(Reader& reader, token::Receiver& receiver)

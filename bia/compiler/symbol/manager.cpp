@@ -9,7 +9,7 @@
 
 using namespace bia::compiler::symbol;
 
-Manager::Manager(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator,
+Manager::Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
                  Default_int_size default_int_size)
     : _type_system{ allocator }
 {
@@ -51,13 +51,14 @@ void Manager::free_temporary(Variable variable)
 	}
 }
 
-void Manager::promote_temporary(const resource::View& name, const Variable& variable)
+bool Manager::promote_temporary(const resource::View& name, const Variable& variable)
 {
 	if (_symbols.find({ name }) != _symbols.end()) {
-		BIA_THROW(error::Code::symbol_already_declared);
+		return false;
 	}
 	const auto it = _symbols.insert(std::make_pair(name, variable)).first;
 	_scopes.back().push_back(it);
+	return true;
 }
 
 Symbol Manager::symbol(const resource::View& name)

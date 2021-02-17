@@ -75,6 +75,7 @@ enum class Code
 	symbol_not_a_variable,
 	undefined_symbol,
 	type_not_truthable,
+	not_an_integral,
 
 	bad_opcode = 200,
 	bad_offset_option,
@@ -157,6 +158,8 @@ inline const std::error_category& code_category() noexcept
 			case Code::symbol_not_a_type: return "symbol not a type";
 			case Code::symbol_not_a_variable: return "symbol not a variable";
 			case Code::undefined_symbol: return "undefined symbol";
+			case Code::type_not_truthable: return "type is not truthable";
+			case Code::not_an_integral: return "type is not an integral";
 			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:

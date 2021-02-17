@@ -11,7 +11,7 @@ namespace tokenizer {
 class Bia_lexer : public Lexer
 {
 public:
-	Bia_lexer(util::Not_null<std::shared_ptr<gc::memory::Allocator>> allocator);
+	Bia_lexer(util::Not_null<std::shared_ptr<memory::Allocator>> allocator);
 	void lex(Reader& reader, token::Receiver& receiver) override;
 
 private:

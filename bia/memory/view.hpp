@@ -1,10 +1,9 @@
-#ifndef BIA_GC_MEMORY_VIEW_HPP_
-#define BIA_GC_MEMORY_VIEW_HPP_
+#ifndef BIA_MEMORY_VIEW_HPP_
+#define BIA_MEMORY_VIEW_HPP_
 
 #include "iterator.hpp"
 
 namespace bia {
-namespace gc {
 namespace memory {
 
 class view
@@ -27,7 +26,6 @@ private:
 };
 
 } // namespace memory
-} // namespace gc
 } // namespace bia
 
 #endif

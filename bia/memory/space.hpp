@@ -1,5 +1,5 @@
-#ifndef BIA_GC_MEMORY_SPACE_HPP_
-#define BIA_GC_MEMORY_SPACE_HPP_
+#ifndef BIA_MEMORY_SPACE_HPP_
+#define BIA_MEMORY_SPACE_HPP_
 
 #include "allocator.hpp"
 #include "iterator.hpp"
@@ -12,7 +12,6 @@
 #include <vector>
 
 namespace bia {
-namespace gc {
 namespace memory {
 
 class space
@@ -81,7 +80,6 @@ private:
 };
 
 } // namespace memory
-} // namespace gc
 } // namespace bia
 
 #endif

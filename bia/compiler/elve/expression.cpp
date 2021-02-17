@@ -1,4 +1,6 @@
 #include "../jumper.hpp"
+#include "../type/bool.hpp"
+#include "../type/floating_point.hpp"
 #include "../type/integer.hpp"
 #include "helpers.hpp"
 
@@ -128,7 +130,9 @@ inline std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& par
 	bool last_cond_was_and = false;
 	// handle left hand side
 	symbol::Variable lhs;
+	auto lhs_tokens       = tokens;
 	std::tie(tokens, lhs) = value(param, tokens);
+	lhs_tokens            = lhs_tokens.subspan(+0, lhs_tokens.size() - tokens.size());
 
 	while (has_right_hand_size(tokens)) {
 		const auto optor           = tokens.front().value.get<Operator>();
@@ -176,8 +180,12 @@ inline std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& par
 			lhs = param.symbols.create_temporary(bool_type.get<type::Definition*>());
 			param.instructor.write<bytecode::Op_code::booleanize>(lhs.location.offset);
 		} else {
-			param.instructor.write<bytecode::Op_code::unsigned_integral_operation, std::int32_t>(
-			  to_infix_operation(optor), lhs.location.offset, rhs.location.offset);
+			if (!dynamic_cast<type::Integer*>(lhs.definition)) {
+				param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
+			} else {
+				param.instructor.write<bytecode::Op_code::unsigned_integral_operation, std::int32_t>(
+				  to_infix_operation(optor), lhs.location.offset, rhs.location.offset);
+			}
 			param.symbols.free_temporary(rhs);
 		}
 	}
