@@ -8,7 +8,7 @@
 #cmakedefine BIA_LOG_NAME "@BIA_LOG_NAME@"
 
 #if BIA_LOG_ENABLE && !defined(SPDLOG_ACTIVE_LEVEL)
-#	define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_ @BIA_LOG_LEVEL@
+#	define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_@BIA_LOG_LEVEL@
 #endif
 // clang-format on
 

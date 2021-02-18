@@ -90,12 +90,12 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			if (resource.is_type<util::Span<const char*>>()) {
 				struct String
 				{
-
 					const char* ptr;
 					std::uint32_t length;
 				};
+				static_assert(offsetof(String, ptr) == 0, "bad pointer offset");
 				const auto& str = resource.get<util::Span<const char*>>();
-				stack.store(arg, String{ str.data(), static_cast<std::uint32_t>(str.size()) });
+				stack.store(arg, String{ str.data(), static_cast<std::uint32_t>(str.size()) }, true);
 			} else {
 				// TODO
 				BIA_ASSERT(false);

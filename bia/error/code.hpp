@@ -123,6 +123,7 @@ inline const std::error_category& code_category() noexcept
 			case Code::unfinished_utf_sequence: return "unfinished UTF sequence";
 			case Code::bad_utf_sequence: return "bad UTF sequence";
 			case Code::bad_unicode: return "bad Unicode code point value";
+			case Code::bad_stack_alignment: return "bad stack alignment";
 			case Code::bad_narrowing: return "bad narrowing";
 			case Code::bad_cast: return "bad cast";
 			case Code::out_of_bounds: return "out of bounds";

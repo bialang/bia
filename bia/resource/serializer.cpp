@@ -19,9 +19,6 @@ Serializer::Size Serializer::index_of(View view)
 	if (it != _map.end()) {
 		return it->second;
 	}
-
-	BIA_LOG(TRACE, "serializing new entry with {} bytes", view.size());
-
 	// copy data
 	util::portable::write(_output, static_cast<std::uint32_t>(view.size()));
 	for (auto i : view) {

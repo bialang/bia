@@ -2,6 +2,7 @@
 
 #include <bia/bvm/bvm.hpp>
 #include <bia/compiler/compiler.hpp>
+#include <bia/memory/gc/gc.hpp>
 #include <bia/memory/simple_allocator.hpp>
 #include <bia/resource/deserialize.hpp>
 #include <bia/string/encoding/unicode.hpp>
@@ -58,9 +59,9 @@ try {
 
 	code << u8R"(
 
-	let x = 2+3
-	let oo = x
-	let oo: []dth = x
+	// let x = 3
+	let y = "hi"
+	let x = "hi"
 
 )";
 
@@ -86,9 +87,12 @@ try {
 	const auto ins = output.str();
 	const auto res = resource_output.str();
 	memory::Stack stack{ allocator, 1024 };
+	memory::gc::GC gc{ allocator };
 	const auto resources =
-	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() });
+	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
+	gc.register_stack(stack);
 	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, stack, resources);
+	gc.run();
 
 	// print stack
 	for (int i = 0; i < 5; ++i) {
