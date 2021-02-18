@@ -9,6 +9,12 @@
 
 using namespace bia;
 
+struct String
+{
+	const char* ptr;
+	std::uint32_t length;
+};
+
 template<bool Conditional, bool IfTrue = false>
 inline void execute_jump(bvm::Operation op, bvm::Instruction_pointer& ip, bool test_register)
 {
@@ -29,7 +35,7 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 {
 	using namespace bytecode;
 	Instruction_pointer ip{ instructions };
-	int test_register = 0;
+	bool test_register = false;
 
 	while (ip) {
 		const auto op = ip.fetch_and_decode();
@@ -45,37 +51,28 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			break;
 		}
 		case Op_code::copy: native_integral_operation<Select_arg<false>, false>(op, ip, stack); break;
-		case Op_code::unsigned_integral_operation: {
-			using bytecode::Infix_operation;
-			switch (ip.read<Infix_operation>()) {
-			case Infix_operation::addition: native_integral_operation<Plus, false>(op, ip, stack); break;
-			case Infix_operation::subtraction: native_integral_operation<Minus, false>(op, ip, stack); break;
-			case Infix_operation::multiplication:
-				native_integral_operation<Multiplies, false>(op, ip, stack);
-				break;
-			case Infix_operation::division: native_integral_operation<Divides, false>(op, ip, stack); break;
-			default: BIA_THROW(error::Code::bad_infix_operation);
-			}
-			break;
-		}
-		case Op_code::unsigned_integral_test: {
-			using bytecode::Test_operation;
-			switch (ip.read<Test_operation>()) {
-			case Test_operation::equal: test_register = native_integral_test<Equal_to, false>(op, ip, stack); break;
-			case Test_operation::not_equal:
+		case Op_code::unsigned_raw_operation: {
+			using bytecode::Operation;
+			switch (ip.read<Operation>()) {
+			case Operation::addition: native_integral_operation<Plus, false>(op, ip, stack); break;
+			case Operation::subtraction: native_integral_operation<Minus, false>(op, ip, stack); break;
+			case Operation::multiplication: native_integral_operation<Multiplies, false>(op, ip, stack); break;
+			case Operation::division: native_integral_operation<Divides, false>(op, ip, stack); break;
+			case Operation::equal: test_register = native_integral_test<Equal_to, false>(op, ip, stack); break;
+			case Operation::not_equal:
 				test_register = native_integral_test<Not_equal_to, false>(op, ip, stack);
 				break;
-			default: BIA_THROW(error::Code::bad_test_operation);
+			default: BIA_THROW(error::Code::bad_operation);
 			}
 			break;
 		}
 		case Op_code::truthy: {
 			const std::int32_t arg = ip.read<std::int32_t>();
 			switch (op.size) {
-			case 0: test_register = stack.load<std::uint8_t>(arg) ? 1 : 0; break;
-			case 1: test_register = stack.load<std::uint16_t>(arg) ? 1 : 0; break;
-			case 2: test_register = stack.load<std::uint32_t>(arg) ? 1 : 0; break;
-			case 3: test_register = stack.load<std::uint64_t>(arg) ? 1 : 0; break;
+			case 0: test_register = static_cast<bool>(stack.load<std::uint8_t>(arg)); break;
+			case 1: test_register = static_cast<bool>(stack.load<std::uint16_t>(arg)); break;
+			case 2: test_register = static_cast<bool>(stack.load<std::uint32_t>(arg)); break;
+			case 3: test_register = static_cast<bool>(stack.load<std::uint64_t>(arg)); break;
 			}
 			break;
 		}
@@ -88,17 +85,31 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			const std::uint32_t index = ip.read<std::uint32_t>();
 			const auto& resource      = resources.at(index);
 			if (resource.is_type<util::Span<const char*>>()) {
-				struct String
-				{
-					const char* ptr;
-					std::uint32_t length;
-				};
 				static_assert(offsetof(String, ptr) == 0, "bad pointer offset");
 				const auto& str = resource.get<util::Span<const char*>>();
 				stack.store(arg, String{ str.data(), static_cast<std::uint32_t>(str.size()) }, true);
 			} else {
 				// TODO
 				BIA_ASSERT(false);
+			}
+			break;
+		}
+		case Op_code::resource_operation: {
+			using bytecode::Operation;
+			const auto operation    = ip.read<Operation>();
+			const std::int32_t arg0 = ip.read<std::int32_t>();
+			const std::int32_t arg1 = ip.read<std::int32_t>();
+			const auto left         = stack.load<String>(arg0);
+			const auto right        = stack.load<String>(arg1);
+			switch (operation) {
+			case Operation::equal:
+				test_register = left.length == right.length && !std::strcmp(left.ptr, right.ptr);
+				break;
+			case Operation::not_equal:
+				test_register = left.length != right.length || std::strcmp(left.ptr, right.ptr);
+				break;
+			case Operation::in: test_register = std::strstr(right.ptr, left.ptr) != nullptr; break;
+			default: BIA_THROW(error::Code::bad_operation);
 			}
 			break;
 		}

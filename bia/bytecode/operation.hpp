@@ -6,7 +6,7 @@
 namespace bia {
 namespace bytecode {
 
-enum class Infix_operation : std::uint8_t
+enum class Operation : std::uint8_t
 {
 	bitwise_or,
 	bitwise_xor,
@@ -19,10 +19,8 @@ enum class Infix_operation : std::uint8_t
 	division,
 	remainder,
 	exponentation,
-};
 
-enum class Test_operation : std::uint8_t
-{
+	// test
 	equal,
 	not_equal,
 	less,
@@ -31,12 +29,10 @@ enum class Test_operation : std::uint8_t
 	greater_equal,
 	in,
 	three_way_comparison,
-};
 
-enum class Self_operation : std::uint8_t
-{
-	unary_minus,
-	bitwise_not,
+	// self
+	// unary_minus,
+	// bitwise_not,
 };
 
 } // namespace member

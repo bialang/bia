@@ -69,48 +69,30 @@ inline operator_type type_of(Operator op) noexcept
 	return static_cast<operator_type>(static_cast<std::uint16_t>(op) & 0x3);
 }
 
-inline bytecode::Infix_operation to_infix_operation(Operator op)
+inline bytecode::Operation to_operation(Operator op)
 {
-	using bytecode::Infix_operation;
+	using bytecode::Operation;
 	switch (op) {
-	case Operator::bitwise_or: return Infix_operation::bitwise_or;
-	case Operator::bitwise_xor: return Infix_operation::bitwise_xor;
-	case Operator::bitwise_and: return Infix_operation::bitwise_and;
-	case Operator::bitwise_left_shift: return Infix_operation::bitwise_left_shift;
-	case Operator::bitwise_right_shift: return Infix_operation::bitwise_right_shift;
-	case Operator::plus: return Infix_operation::addition;
-	case Operator::minus: return Infix_operation::subtraction;
-	case Operator::multiply: return Infix_operation::multiplication;
-	case Operator::divide: return Infix_operation::division;
-	case Operator::modulus: return Infix_operation::remainder;
-	case Operator::exponentation: return Infix_operation::exponentation;
-	default: BIA_THROW(error::Code::bad_infix_operation);
-	}
-}
-
-inline bytecode::Test_operation to_test_operation(Operator op)
-{
-	using bytecode::Test_operation;
-	switch (op) {
-	case Operator::equal: return Test_operation::equal;
-	case Operator::not_equal: return Test_operation::not_equal;
-	case Operator::less: return Test_operation::less;
-	case Operator::less_equal: return Test_operation::less_equal;
-	case Operator::greater: return Test_operation::greater;
-	case Operator::greater_equal: return Test_operation::greater_equal;
-	case Operator::in: return Test_operation::in;
-	case Operator::three_way_comparison: return Test_operation::three_way_comparison;
-	default: BIA_THROW(error::Code::bad_test_operation);
-	}
-}
-
-inline bytecode::Self_operation to_self_operator(Operator op)
-{
-	using bytecode::Self_operation;
-	switch (op) {
-	case Operator::unary_minus: return Self_operation::unary_minus;
-	case Operator::bitwise_not: return Self_operation::bitwise_not;
-	default: BIA_THROW(error::Code::bad_self_operation);
+	case Operator::bitwise_or: return Operation::bitwise_or;
+	case Operator::bitwise_xor: return Operation::bitwise_xor;
+	case Operator::bitwise_and: return Operation::bitwise_and;
+	case Operator::bitwise_left_shift: return Operation::bitwise_left_shift;
+	case Operator::bitwise_right_shift: return Operation::bitwise_right_shift;
+	case Operator::plus: return Operation::addition;
+	case Operator::minus: return Operation::subtraction;
+	case Operator::multiply: return Operation::multiplication;
+	case Operator::divide: return Operation::division;
+	case Operator::modulus: return Operation::remainder;
+	case Operator::exponentation: return Operation::exponentation;
+	case Operator::equal: return Operation::equal;
+	case Operator::not_equal: return Operation::not_equal;
+	case Operator::less: return Operation::less;
+	case Operator::less_equal: return Operation::less_equal;
+	case Operator::greater: return Operation::greater;
+	case Operator::greater_equal: return Operation::greater_equal;
+	case Operator::in: return Operation::in;
+	case Operator::three_way_comparison: return Operation::three_way_comparison;
+	default: BIA_THROW(error::Code::bad_operation);
 	}
 }
 

@@ -13,13 +13,20 @@ elve::Tokens elve::if_stmt(Parameter& param, Tokens tokens)
 	// if and every following else if statements
 	do {
 		symbol::Variable variable;
-		std::tie(tokens, variable) = single_expression(param, tokens.subspan(1));
+		auto expression_tokens     = tokens.subspan(1);
+		std::tie(tokens, variable) = single_expression(param, expression_tokens);
+		expression_tokens          = expression_tokens.subspan(+0, expression_tokens.size() - tokens.size());
 
 		// test expression
 		if ((variable.definition->flags() & type::Definition::flag_truthable) !=
 		    type::Definition::flag_truthable) {
-			BIA_THROW(error::Code::type_not_truthable);
+			param.errors.add_error(error::Code::type_not_truthable, expression_tokens);
+			// TODO dry this
+			param.symbols.free_temporary(variable);
+			tokens = batch(param, tokens);
+			continue;
 		}
+
 		// TODO size of op code
 		switch (variable.definition->size()) {
 		case 1: param.instructor.write<bytecode::Op_code::truthy, std::int8_t>(variable.location.offset); break;

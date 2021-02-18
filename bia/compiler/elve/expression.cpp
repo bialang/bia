@@ -2,6 +2,7 @@
 #include "../type/bool.hpp"
 #include "../type/floating_point.hpp"
 #include "../type/integer.hpp"
+#include "../type/string.hpp"
 #include "helpers.hpp"
 
 using namespace bia::tokenizer::token;
@@ -19,8 +20,7 @@ inline bool is_test_operator(Operator optor) noexcept
 	case Operator::less_equal:
 	case Operator::greater:
 	case Operator::greater_equal:
-	case Operator::in:
-	case Operator::three_way_comparison: return true;
+	case Operator::in: return true;
 	default: return false;
 	}
 }
@@ -53,7 +53,7 @@ inline std::pair<Tokens, symbol::Variable> number_value(Parameter& param, Tokens
 	switch (number.type) {
 	case Type::i: {
 		// TODO check size with default int size
-		param.instructor.write<bytecode::Op_code::load>(variable.location.offset, number.value.i32);
+		param.instructor.write<bytecode::Op_code::load>(variable.location.offset, number.value.i64);
 		break;
 	}
 	case Type::i32:
@@ -98,7 +98,7 @@ inline std::pair<Tokens, symbol::Variable> value(Parameter& param, Tokens tokens
 			param.errors.add_error(error::Code::symbol_not_a_variable, tokens.subspan(+0, 1));
 		} else {
 			variable = param.symbols.create_temporary(right.get<symbol::Variable>().definition);
-			param.instructor.write<bytecode::Op_code::copy, std::int32_t>(
+			param.instructor.write<bytecode::Op_code::copy, std::int64_t>(
 			  variable.location.offset, right.get<symbol::Variable>().location.offset);
 		}
 		return { tokens.subspan(1), variable };
@@ -166,15 +166,30 @@ inline std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& par
 
 		// right hand side
 		symbol::Variable rhs;
-		std::tie(tokens, rhs) = single_expression_impl(param, tokens.subspan(1), jumper, optor_precedence);
+		auto rhs_tokens       = tokens.subspan(1);
+		std::tie(tokens, rhs) = single_expression_impl(param, rhs_tokens, jumper, optor_precedence);
+		rhs_tokens            = rhs_tokens.subspan(+0, rhs_tokens.size() - tokens.size());
+
+		// TODO
+		if (lhs.definition != rhs.definition) {
+			param.errors.add_error(error::Code::type_mismatch, rhs_tokens);
+		}
 
 		if (is_test_operator(optor)) {
 			// TODO
 			const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
 			BIA_ASSERT(bool_type.is_type<type::Definition*>());
 
-			param.instructor.write<bytecode::Op_code::unsigned_integral_test, std::int32_t>(
-			  to_test_operation(optor), lhs.location.offset, rhs.location.offset);
+			if (dynamic_cast<type::Integer*>(lhs.definition)) {
+				param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
+				  to_operation(optor), lhs.location.offset, rhs.location.offset);
+			} else if (dynamic_cast<type::String*>(lhs.definition)) {
+				param.instructor.write<bytecode::Op_code::resource_operation>(
+				  to_operation(optor), lhs.location.offset, rhs.location.offset);
+			} else {
+				// TODO
+				param.errors.add_error(error::Code::bad_operator, tokens.subspan(+0, 1));
+			}
 			param.symbols.free_temporary(rhs);
 			param.symbols.free_temporary(lhs);
 			lhs = param.symbols.create_temporary(bool_type.get<type::Definition*>());
@@ -183,8 +198,8 @@ inline std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& par
 			if (!dynamic_cast<type::Integer*>(lhs.definition)) {
 				param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
 			} else {
-				param.instructor.write<bytecode::Op_code::unsigned_integral_operation, std::int32_t>(
-				  to_infix_operation(optor), lhs.location.offset, rhs.location.offset);
+				param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
+				  to_operation(optor), lhs.location.offset, rhs.location.offset);
 			}
 			param.symbols.free_temporary(rhs);
 		}

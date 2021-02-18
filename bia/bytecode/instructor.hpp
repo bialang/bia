@@ -66,8 +66,8 @@ public:
 		util::portable::write(_output, arg1);
 	}
 	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::unsigned_integral_operation>::value>::type
-	  write(Infix_operation operation, std::int32_t arg0, std::int32_t arg1)
+	typename std::enable_if<is_op_code<op_code, Op_code::unsigned_raw_operation>::value>::type
+	  write(Operation operation, std::int32_t arg0, std::int32_t arg1)
 	{
 		static_assert(is_2_bit_variant<Type>::value, "bad operation type");
 		_write_2_bit_op_code<op_code, Type>();
@@ -75,12 +75,11 @@ public:
 		util::portable::write(_output, arg0);
 		util::portable::write(_output, arg1);
 	}
-	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::unsigned_integral_test>::value>::type
-	  write(Test_operation operation, std::int32_t arg0, std::int32_t arg1)
+	template<Op_code op_code>
+	typename std::enable_if<is_op_code<op_code, Op_code::resource_operation>::value>::type
+	  write(Operation operation, std::int32_t arg0, std::int32_t arg1)
 	{
-		static_assert(is_2_bit_variant<Type>::value, "bad operation type");
-		_write_2_bit_op_code<op_code, Type>();
+		util::portable::write(_output, op_code);
 		util::portable::write(_output, operation);
 		util::portable::write(_output, arg0);
 		util::portable::write(_output, arg1);

@@ -23,9 +23,7 @@ enum class Code
 	out_of_bounds,
 	null_argument,
 	argument_count_mismatch,
-	bad_infix_operation,
-	bad_test_operation,
-	bad_self_operation,
+	bad_operation,
 
 	empty_optional,
 	empty_variant,
@@ -129,9 +127,7 @@ inline const std::error_category& code_category() noexcept
 			case Code::out_of_bounds: return "out of bounds";
 			case Code::null_argument: return "null argument not allowed";
 			case Code::argument_count_mismatch: return "argument count mismatch";
-			case Code::bad_infix_operation: return "bad infix operator";
-			case Code::bad_test_operation: return "bad test operator";
-			case Code::bad_self_operation: return "bad self operator";
+			case Code::bad_operation: return "bad operation";
 			case Code::empty_variant: return "accessing empty variant";
 			case Code::bad_variant_index: return "bad variant index";
 			// case code::expected_curly_bracket:

@@ -16,6 +16,8 @@
 
 using namespace bia;
 
+#define IN_FILE "../../tests/compiler/test.bia"
+
 inline void print_error(const std::string& code, const compiler::Error& error)
 {
 	BIA_EXPECTS(error.range.start.line == error.range.end.line && error.range.start <= error.range.end);
@@ -33,7 +35,9 @@ inline void print_error(const std::string& code, const compiler::Error& error)
 			lines.push_back({ code.data() + line_start, code.data() + code.length() });
 		}
 	}
-	std::cerr << error.code.default_error_condition().message() << ": " << error.code.message() << '\n';
+	std::cerr << error.code.default_error_condition().message()
+	          << " in line " IN_FILE ":" << error.range.start.line << ":"
+	          << error.range.start.character << " => " << error.code.message() << '\n';
 	auto line = lines.at(error.range.start.line - 1);
 	std::cerr.write(line.data(), line.size());
 	std::cerr << '\n';
@@ -53,17 +57,10 @@ inline void print_error(const std::string& code, const compiler::Error& error)
 // TEST_CASE("simple compiling", "[compiler]")
 int main()
 try {
-	std::stringstream code;
+	// std::stringstream code;
+	std::fstream code{ IN_FILE, std::ios::binary | std::ios::in };
 	std::stringstream output;
 	std::stringstream resource_output;
-
-	code << u8R"(
-
-	// let x = 3
-	let y = "hi"
-	let x = "hi"
-
-)";
 
 	auto allocator = std::make_shared<memory::Simple_allocator>();
 	compiler::Compiler compiler{ allocator, output, resource_output };
@@ -75,7 +72,11 @@ try {
 	lexer.lex(reader, compiler);
 
 	if (compiler.errors().size() > 0) {
-		const auto str = code.str();
+		code.seekg(0, std::ios::end);
+		std::string str;
+		str.resize(code.tellg());
+		code.seekg(0, std::ios::beg);
+		code.read(&str[0], str.size());
 		for (auto err : compiler.errors()) {
 			print_error(str, err);
 		}
@@ -96,8 +97,9 @@ try {
 
 	// print stack
 	for (int i = 0; i < 5; ++i) {
-		std::cout << "%" << std::setw(3) << i * 4 << ": " << std::setw(16) << stack.load<std::uint32_t>(i * 4)
-		          << std::endl;
+		std::cout << "%" << std::setw(3) << std::setfill(' ') << std::dec << i * sizeof(std::size_t) << ": 0x"
+		          << std::setw(16) << std::setfill('0') << std::hex
+		          << stack.load<std::size_t>(i * sizeof(std::size_t)) << std::endl;
 	}
 } catch (const bia::error::Exception& e) {
 	std::cerr << "exception from main: " << e.code() << "\n\twhat: " << e.what()

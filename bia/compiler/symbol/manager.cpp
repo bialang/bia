@@ -9,6 +9,11 @@
 
 using namespace bia::compiler::symbol;
 
+inline std::size_t aligned_size(std::size_t size) noexcept
+{
+	return size + (size % sizeof(std::size_t) ? (sizeof(std::size_t) - size % sizeof(std::size_t)) : 0);
+}
+
 Manager::Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
                  Default_int_size default_int_size)
     : _type_system{ allocator }
@@ -39,15 +44,17 @@ Variable Manager::create_temporary(util::Not_null<type::Definition*> type)
 	Variable variable{};
 	variable.definition      = type;
 	variable.location.offset = _stack;
-	_stack += type->size();
+	_stack += aligned_size(type->size());
 	return variable;
 }
 
 void Manager::free_temporary(Variable variable)
 {
+	// TODO solve alignment a more efficient way
+	const auto size = aligned_size(variable.definition->size());
 	// TODO add support if variable is not at the end
-	if (variable.location.offset + variable.definition->size() == _stack) {
-		_stack -= variable.definition->size();
+	if (variable.location.offset + size == _stack) {
+		_stack -= size;
 	}
 }
 
@@ -132,10 +139,10 @@ void Manager::_introduce_native_types()
 	if (_default_int_size == Default_int_size::size_32) {
 		_symbols.insert(
 		  std::make_pair(util::from_cstring("int"),
-		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i32))));
+		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i64))));
 		_symbols.insert(
 		  std::make_pair(util::from_cstring("uint"),
-		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::u32))));
+		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::u64))));
 	} else {
 		BIA_ASSERT(false);
 	}

@@ -10,18 +10,18 @@ namespace bytecode {
 enum class Op_code : std::uint8_t
 {
 	// 2 bit variations
-	load                        = 0,
-	copy                        = load + 4,
-	unsigned_integral_operation = copy + 4,
-	unsigned_integral_test      = unsigned_integral_operation + 4,
-	truthy                      = unsigned_integral_test + 4,
-	jump                        = truthy + 4,
-	jump_if_false               = jump + 4,
-	jump_if_true                = jump_if_false + 4,
+	load                   = 0,
+	copy                   = load + 4,
+	unsigned_raw_operation = copy + 4,
+	truthy                 = unsigned_raw_operation + 4,
+	jump                   = truthy + 4,
+	jump_if_false          = jump + 4,
+	jump_if_true           = jump_if_false + 4,
 
 	// 0 bit variations
-	booleanize    = jump_if_true + 4,
-	load_resource = booleanize + 4,
+	booleanize         = jump_if_true + 4,
+	load_resource      = booleanize + 4,
+	resource_operation = load_resource + 4,
 };
 
 inline Op_code read_op_code(typename std::underlying_type<Op_code>::type value) noexcept

@@ -53,20 +53,20 @@ struct Divides
 struct Equal_to
 {
 	template<typename Type>
-	constexpr int operator()(Type left, Type right) const noexcept
+	constexpr bool operator()(Type left, Type right) const noexcept
 	{
 		static_assert(std::is_pod<Type>::value, "Type must be POD");
-		return static_cast<int>(left == right);
+		return left == right;
 	}
 };
 
 struct Not_equal_to
 {
 	template<typename Type>
-	constexpr int operator()(Type left, Type right) const noexcept
+	constexpr bool operator()(Type left, Type right) const noexcept
 	{
 		static_assert(std::is_pod<Type>::value, "Type must be POD");
-		return static_cast<int>(left != right);
+		return left != right;
 	}
 };
 
@@ -122,7 +122,7 @@ inline void native_floating_point_operation(bvm::Operation op, Instruction_point
 }
 
 template<typename Operation, bool Signed>
-inline int native_integral_test(bvm::Operation op, Instruction_pointer& ip, memory::Stack& stack)
+inline bool native_integral_test(bvm::Operation op, Instruction_pointer& ip, memory::Stack& stack)
 {
 	const std::int32_t arg0 = ip.read<std::int32_t>();
 	const std::int32_t arg1 = ip.read<std::int32_t>();

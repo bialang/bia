@@ -26,7 +26,7 @@ public:
 	}
 	int flags() const noexcept override
 	{
-		return flag_truthable;
+		return 0;
 	}
 
 private:

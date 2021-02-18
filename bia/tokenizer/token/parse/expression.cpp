@@ -17,7 +17,7 @@ inline Error_info operators(Parameter& param)
 		                           Operator::logical_or,    Operator::in,
 		                           Operator::bitwise_and,   Operator::bitwise_or,
 		                           Operator::bitwise_xor };
-	const auto ranger = param.begin_range();
+	const auto ranger        = param.begin_range();
 	const auto x = parse::any_of(param, ".", "**", "*", "/", "%", "+", "-", "==", "!=", "<=>", "<=", ">=", "<",
 	                             ">", "=", "and", "&&", "or", "||", "in", "&", "|", "^");
 
@@ -31,12 +31,13 @@ inline Error_info operators(Parameter& param)
 inline Error_info constant_keyword(Parameter& param)
 {
 	const auto ranger = param.begin_range();
-	const auto tmp      = parse::any_of(param, "true", "false", "null");
+	const auto tmp    = parse::any_of(param, "true", "false", "null");
+	const auto range  = ranger.range();
 	if (tmp.second && !parse::spacer(param)) {
 		switch (tmp.first) {
-		case 0: param.bundle.emplace_back(Token::Keyword::true_, ranger.range()); break;
-		case 1: param.bundle.emplace_back(Token::Keyword::false_, ranger.range()); break;
-		case 2: param.bundle.emplace_back(Token::Keyword::null, ranger.range()); break;
+		case 0: param.bundle.emplace_back(Token::Keyword::true_, range); break;
+		case 1: param.bundle.emplace_back(Token::Keyword::false_, range); break;
+		case 2: param.bundle.emplace_back(Token::Keyword::null, range); break;
 		default: BIA_THROW(bia::error::Code::bad_switch_value);
 		}
 		return {};
