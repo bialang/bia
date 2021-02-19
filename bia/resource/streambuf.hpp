@@ -21,7 +21,7 @@ public:
 	Streambuf(const Streambuf& copy) = delete;
 	Streambuf(Streambuf&& move) noexcept;
 	~Streambuf();
-	View finish(type type);
+	View finish(Type type);
 	bool valid() const noexcept;
 	Streambuf& operator=(const Streambuf& copy) = delete;
 	Streambuf& operator=(Streambuf&& move) noexcept;

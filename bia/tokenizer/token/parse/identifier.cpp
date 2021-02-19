@@ -88,7 +88,7 @@ Error_info parse::identifier(Parameter& param)
 				param.reader.restore(state);
 				// zero terminate
 				outenc->put(output, 0);
-				param.bundle.emplace_back(Token::Identifier{ streambuf.finish(resource::type::string) },
+				param.bundle.emplace_back(Token::Identifier{ streambuf.finish(resource::Type::string) },
 				                          ranger.range());
 				return {};
 			}

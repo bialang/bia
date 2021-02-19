@@ -4,6 +4,7 @@
 #include "op_code.hpp"
 #include "operation.hpp"
 
+#include <bia/memory/gc/types.hpp>
 #include <bia/util/portable/stream.hpp>
 #include <bia/util/type_traits/equals_any.hpp>
 #include <bia/util/type_traits/type_index.hpp>
@@ -32,11 +33,13 @@ public:
 		util::portable::write(_output, op_code);
 		util::portable::write(_output, arg);
 	}
-	template<Op_code op_code>
+	template<Op_code op_code, typename Type>
 	typename std::enable_if<is_op_code<op_code, Op_code::load_resource>::value>::type write(std::int32_t arg,
 	                                                                                        std::uint32_t index)
 	{
-		util::portable::write(_output, op_code);
+		static_assert(util::type_traits::equals_any_type<Type, memory::gc::String, memory::gc::Regex>::value,
+		              "bad resource type");
+		_write_2_bit_op_code_resource<op_code, Type>();
 		util::portable::write(_output, arg);
 		util::portable::write(_output, index);
 	}
@@ -75,11 +78,13 @@ public:
 		util::portable::write(_output, arg0);
 		util::portable::write(_output, arg1);
 	}
-	template<Op_code op_code>
+	template<Op_code op_code, typename Type>
 	typename std::enable_if<is_op_code<op_code, Op_code::resource_operation>::value>::type
 	  write(Operation operation, std::int32_t arg0, std::int32_t arg1)
 	{
-		util::portable::write(_output, op_code);
+		static_assert(util::type_traits::equals_any_type<Type, memory::gc::String, memory::gc::Regex>::value,
+		              "bad resource type");
+		_write_2_bit_op_code_resource<op_code, Type>();
 		util::portable::write(_output, operation);
 		util::portable::write(_output, arg0);
 		util::portable::write(_output, arg1);
@@ -111,6 +116,14 @@ private:
 		  static_cast<Op_code>(
 		    static_cast<int>(op_code) +
 		    util::type_traits::type_index<T, std::int8_t, std::int16_t, std::int32_t, std::int64_t>::value));
+	}
+	template<Op_code op_code, typename Type>
+	void _write_2_bit_op_code_resource()
+	{
+		util::portable::write(
+		  _output, static_cast<Op_code>(
+		             static_cast<int>(op_code) +
+		             util::type_traits::type_index<Type, memory::gc::String, memory::gc::Regex>::value));
 	}
 };
 

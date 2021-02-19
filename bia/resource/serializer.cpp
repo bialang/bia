@@ -20,6 +20,7 @@ Serializer::Size Serializer::index_of(View view)
 		return it->second;
 	}
 	// copy data
+	util::portable::write(_output, view.type);
 	util::portable::write(_output, static_cast<std::uint32_t>(view.size()));
 	for (auto i : view) {
 		_output.put(*reinterpret_cast<const char*>(&i));

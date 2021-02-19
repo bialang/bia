@@ -9,13 +9,13 @@ using namespace bia::memory::gc;
 GC::GC(util::Not_null<std::shared_ptr<Allocator>> allocator) : _allocator{ std::move(allocator.get()) }
 {}
 
-void* GC::allocate(std::size_t size)
+GC_able<void*> GC::allocate(std::size_t size)
 {
 	auto ptr = _allocator->allocate(size);
 	BIA_LOG(TRACE, "GC allocated ptr={}", ptr);
 	std::lock_guard<std::mutex> _{ _mutex };
 	_pointers.push_back(ptr);
-	return ptr;
+	return { ptr };
 }
 
 void GC::run()
@@ -41,8 +41,12 @@ void GC::run()
 	std::size_t reclaimed = 0;
 	for (auto i = _pointers.begin(); i != _pointers.end();) {
 		if (reachable.find(*i) == reachable.end()) {
-			BIA_LOG(TRACE, "sweeping ptr={}", *i);
-			_allocator->deallocate(*i);
+			GC_able<void*> ptr{ *i };
+			BIA_LOG(TRACE, "sweeping ptr={} (object: {})", ptr.get(), ptr.is_object());
+			if (ptr.is_object()) {
+				static_cast<Base*>(ptr)->~Base();
+			}
+			_allocator->deallocate(ptr);
 			i = _pointers.erase(i);
 			reclaimed++;
 		} else {

@@ -43,7 +43,7 @@ bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(Parameter
 			if (!escape) {
 				// zero terminate
 				outenc->put(output, 0);
-				param.bundle.emplace_back(Token::String{ streambuf.finish(resource::type::string) }, ranger.range());
+				param.bundle.emplace_back(Token::String{ streambuf.finish(resource::Type::string) }, ranger.range());
 				return {};
 			}
 			break;

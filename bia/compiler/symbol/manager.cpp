@@ -3,6 +3,7 @@
 #include "../type/bool.hpp"
 #include "../type/floating_point.hpp"
 #include "../type/integer.hpp"
+#include "../type/regex.hpp"
 #include "../type/string.hpp"
 
 #include <bia/error/exception.hpp>
@@ -160,6 +161,8 @@ void Manager::_introduce_native_types()
 
 	_symbols.insert(std::make_pair(util::from_cstring("string"),
 	                               static_cast<Definition*>(_type_system.create_type<String>())));
+	_symbols.insert(
+	  std::make_pair(util::from_cstring("regex"), static_cast<Definition*>(_type_system.create_type<Regex>())));
 }
 
 void Manager::_drop(map_type::const_iterator it)

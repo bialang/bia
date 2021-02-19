@@ -14,7 +14,7 @@ namespace bvm {
 struct Operation
 {
 	bytecode::Op_code op_code;
-	std::uint8_t size : 2;
+	std::uint8_t variation : 2;
 };
 
 /// Manages the input bytecode stream.

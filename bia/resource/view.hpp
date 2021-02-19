@@ -10,7 +10,7 @@ namespace resource {
 
 struct View
 {
-	enum type type;
+	Type type;
 	memory::iterator first;
 	memory::iterator last;
 
@@ -28,9 +28,9 @@ struct View
 	}
 	int compare(const char* string, std::size_t length) const noexcept
 	{
-		if (type < type::string) {
+		if (type < Type::string) {
 			return -1;
-		} else if (type > type::string) {
+		} else if (type > Type::string) {
 			return 1;
 		}
 

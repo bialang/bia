@@ -1,5 +1,5 @@
-#ifndef BIA_COMPILER_TYPE_STRING_HPP_
-#define BIA_COMPILER_TYPE_STRING_HPP_
+#ifndef BIA_COMPILER_TYPE_REGEX_HPP_
+#define BIA_COMPILER_TYPE_REGEX_HPP_
 
 #include "definition.hpp"
 
@@ -9,14 +9,14 @@ namespace bia {
 namespace compiler {
 namespace type {
 
-class String : public Definition
+class Regex : public Definition
 {
 public:
-	String(unsigned int type_code) noexcept : _type_code{ type_code }
+	Regex(unsigned int type_code) noexcept : _type_code{ type_code }
 	{}
 	bool is_assignable(const Definition* other) const noexcept override
 	{
-		return dynamic_cast<const String*>(other);
+		return dynamic_cast<const Regex*>(other);
 	}
 	unsigned int type_code() const noexcept override
 	{
@@ -24,7 +24,7 @@ public:
 	}
 	unsigned int size() const noexcept override
 	{
-		return sizeof(memory::gc::String);
+		return sizeof(memory::gc::Regex*);
 	}
 	int flags() const noexcept override
 	{

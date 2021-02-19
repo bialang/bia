@@ -2,6 +2,7 @@
 
 #include "instruction_pointer.hpp"
 #include "native_operations.hpp"
+#include "resource_operations.hpp"
 
 #include <bia/bytecode/op_code.hpp>
 #include <bia/bytecode/operation.hpp>
@@ -9,17 +10,11 @@
 
 using namespace bia;
 
-struct String
-{
-	const char* ptr;
-	std::uint32_t length;
-};
-
 template<bool Conditional, bool IfTrue = false>
 inline void execute_jump(bvm::Operation op, bvm::Instruction_pointer& ip, bool test_register)
 {
 	std::int64_t offset = 0;
-	switch (op.size) {
+	switch (op.variation) {
 	case 0: offset = ip.read<std::int8_t>(); break;
 	case 1: offset = ip.read<std::int16_t>(); break;
 	case 2: offset = ip.read<std::int32_t>(); break;
@@ -42,7 +37,7 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 		switch (op.op_code) {
 		case Op_code::load: {
 			const std::int32_t destination = ip.read<std::int32_t>();
-			switch (op.size) {
+			switch (op.variation) {
 			case 0: stack.store(destination, ip.read<std::uint8_t>()); break;
 			case 1: stack.store(destination, ip.read<std::uint16_t>()); break;
 			case 2: stack.store(destination, ip.read<std::uint32_t>()); break;
@@ -68,7 +63,7 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 		}
 		case Op_code::truthy: {
 			const std::int32_t arg = ip.read<std::int32_t>();
-			switch (op.size) {
+			switch (op.variation) {
 			case 0: test_register = static_cast<bool>(stack.load<std::uint8_t>(arg)); break;
 			case 1: test_register = static_cast<bool>(stack.load<std::uint16_t>(arg)); break;
 			case 2: test_register = static_cast<bool>(stack.load<std::uint32_t>(arg)); break;
@@ -84,10 +79,10 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			const std::int32_t arg    = ip.read<std::int32_t>();
 			const std::uint32_t index = ip.read<std::uint32_t>();
 			const auto& resource      = resources.at(index);
-			if (resource.is_type<util::Span<const char*>>()) {
-				static_assert(offsetof(String, ptr) == 0, "bad pointer offset");
-				const auto& str = resource.get<util::Span<const char*>>();
-				stack.store(arg, String{ str.data(), static_cast<std::uint32_t>(str.size()) }, true);
+			if (resource.is_type<memory::gc::String>()) {
+				stack.store(arg, resource.get<memory::gc::String>(), true);
+			} else if (resource.is_type<memory::gc::GC_able<memory::gc::Regex*>>()) {
+				stack.store(arg, resource.get<memory::gc::GC_able<memory::gc::Regex*>>(), true);
 			} else {
 				// TODO
 				BIA_ASSERT(false);
@@ -96,19 +91,11 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 		}
 		case Op_code::resource_operation: {
 			using bytecode::Operation;
-			const auto operation    = ip.read<Operation>();
-			const std::int32_t arg0 = ip.read<std::int32_t>();
-			const std::int32_t arg1 = ip.read<std::int32_t>();
-			const auto left         = stack.load<String>(arg0);
-			const auto right        = stack.load<String>(arg1);
+			const auto operation = ip.read<Operation>();
 			switch (operation) {
-			case Operation::equal:
-				test_register = left.length == right.length && !std::strcmp(left.ptr, right.ptr);
-				break;
-			case Operation::not_equal:
-				test_register = left.length != right.length || std::strcmp(left.ptr, right.ptr);
-				break;
-			case Operation::in: test_register = std::strstr(right.ptr, left.ptr) != nullptr; break;
+			case Operation::equal: test_register = resource_operation_test<Equal_to>(op, ip, stack); break;
+			case Operation::not_equal: test_register = resource_operation_test<Not_equal_to>(op, ip, stack); break;
+			case Operation::in: test_register = resource_operation_test<Inside_of>(op, ip, stack); break;
 			default: BIA_THROW(error::Code::bad_operation);
 			}
 			break;

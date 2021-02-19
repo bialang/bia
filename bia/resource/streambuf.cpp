@@ -27,10 +27,9 @@ Streambuf::~Streambuf()
 	_discard();
 }
 
-View Streambuf::finish(type type)
+View Streambuf::finish(Type type)
 {
 	BIA_EXPECTS(valid());
-
 	const auto end     = _manager->_space.size() - (epptr() - pptr());
 	const auto finally = util::finallay([this] {
 		_manager->_buf_active = false;

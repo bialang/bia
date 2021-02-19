@@ -67,7 +67,7 @@ inline Error_info single_expression_in_brackets(Parameter& param)
 
 Error_info parse::value(Parameter& param)
 {
-	return any_of(param, number, constant_keyword, string, identifier, single_expression_in_brackets);
+	return any_of(param, number, constant_keyword, regex, string, identifier, single_expression_in_brackets);
 }
 
 inline Error_info use_value(Parameter& param)

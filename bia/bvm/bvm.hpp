@@ -1,6 +1,7 @@
 #ifndef BIA_BVM_BVM_HPP_
 #define BIA_BVM_BVM_HPP_
 
+#include <bia/memory/gc/gc.hpp>
 #include <bia/memory/stack.hpp>
 #include <bia/resource/deserialize.hpp>
 #include <bia/util/gsl.hpp>

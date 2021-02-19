@@ -3,17 +3,18 @@
 
 #include "serializer.hpp"
 
+#include <bia/memory/gc/gc.hpp>
+#include <bia/memory/gc/types.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/variant.hpp>
 #include <istream>
-#include <bia/memory/gc/gc.hpp>
 #include <utility>
 #include <vector>
 
 namespace bia {
 namespace resource {
 
-typedef util::Variant<util::Span<const char*>> Resource;
+typedef util::Variant<memory::gc::String, memory::gc::GC_able<memory::gc::Regex*>> Resource;
 typedef std::vector<Resource> Resources;
 
 /// Deserializes the resource elements from the provided data. The resources point to sections in the data.

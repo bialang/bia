@@ -1,7 +1,4 @@
-let x = 89
-let o: int = false
-let y = "hi"
 
-if "ll" in "hello" {
+if r"hel+o" == "hello" {
 	let op = "yes"
 }
