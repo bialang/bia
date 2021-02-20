@@ -11,7 +11,14 @@ elve::Tokens elve::root(Parameter& param, Tokens tokens)
 		switch (tokens.front().value.get<Token::Keyword>()) {
 		case Token::Keyword::let: tokens = decl_stmt(param, tokens); break;
 		case Token::Keyword::if_: tokens = if_stmt(param, tokens); break;
+		case Token::Keyword::import: tokens = import_stmt(param, tokens); break;
 		default: BIA_THROW(error::Code::bad_switch_value);
+		}
+	} else {
+		symbol::Variable variable;
+		std::tie(tokens, variable) = single_expression(param, tokens);
+		if (variable.definition) {
+			param.symbols.free_temporary(variable);
 		}
 	}
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Control::cmd_end);

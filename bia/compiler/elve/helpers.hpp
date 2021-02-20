@@ -4,6 +4,7 @@
 #include "../errors.hpp"
 #include "../symbol/manager.hpp"
 
+#include <bia/bvm/context.hpp>
 #include <bia/bytecode/instructor.hpp>
 #include <bia/resource/serializer.hpp>
 #include <bia/tokenizer/token/token.hpp>
@@ -22,6 +23,7 @@ struct Parameter
 	symbol::Manager& symbols;
 	resource::Serializer& serializer;
 	Errors& errors;
+	bvm::Context& context;
 };
 
 typedef util::Span<const tokenizer::token::Token*> Tokens;
@@ -31,6 +33,7 @@ Tokens batch(Parameter& param, Tokens tokens);
 
 Tokens decl_stmt(Parameter& param, Tokens tokens);
 Tokens if_stmt(Parameter& param, Tokens tokens);
+Tokens import_stmt(Parameter& param, Tokens tokens);
 
 std::pair<Tokens, symbol::Variable> single_expression(Parameter& param, Tokens tokens);
 std::pair<Tokens, type::Definition*> type_definition(Parameter& param, Tokens tokens);

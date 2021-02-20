@@ -34,8 +34,9 @@ public:
 		util::portable::write(_output, arg);
 	}
 	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::load_resource>::value>::type write(std::int32_t arg,
-	                                                                                        std::uint32_t index)
+	typename std::enable_if<
+	  is_op_code<op_code, Op_code::load_resource, Op_code::load_from_context>::value>::type
+	  write(std::int32_t arg, std::uint32_t index)
 	{
 		static_assert(util::type_traits::equals_any_type<Type, memory::gc::String, memory::gc::Regex>::value,
 		              "bad resource type");

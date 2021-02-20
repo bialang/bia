@@ -7,6 +7,7 @@
 #include <bia/bytecode/op_code.hpp>
 #include <bia/bytecode/operation.hpp>
 #include <bia/error/exception.hpp>
+#include <bia/member/function/base.hpp>
 
 using namespace bia;
 
@@ -26,7 +27,7 @@ inline void execute_jump(bvm::Operation op, bvm::Instruction_pointer& ip, bool t
 }
 
 void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& stack,
-                  const resource::Resources& resources)
+                  const resource::Resources& resources, Context& context)
 {
 	using namespace bytecode;
 	Instruction_pointer ip{ instructions };
@@ -98,6 +99,15 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			case Operation::in: test_register = resource_operation_test<Inside_of>(op, ip, stack); break;
 			default: BIA_THROW(error::Code::bad_operation);
 			}
+			break;
+		}
+		case Op_code::load_from_context: {
+			const std::int32_t arg    = ip.read<std::int32_t>();
+			const std::uint32_t index = ip.read<std::uint32_t>();
+			const auto& resource      = resources.at(index);
+			BIA_ASSERT(resource.is_type<memory::gc::String>());
+			stack.store(arg, context.import(resource.get<memory::gc::String>().ptr), true);
+			stack.load<memory::gc::GC_able<member::function::Base*>>(arg)->invoke();
 			break;
 		}
 		default: BIA_THROW(error::Code::bad_opcode);

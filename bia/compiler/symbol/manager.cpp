@@ -51,6 +51,7 @@ Variable Manager::create_temporary(util::Not_null<type::Definition*> type)
 
 void Manager::free_temporary(Variable variable)
 {
+	BIA_EXPECTS(variable.definition);
 	// TODO solve alignment a more efficient way
 	const auto size = aligned_size(variable.definition->size());
 	// TODO add support if variable is not at the end

@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <bia/gc/memory/simple_allocator.hpp>
+#include <bia/memory/simple_allocator.hpp>
 #include <bia/tokenizer/token/parse/any_of.hpp>
 #include <bia/tokenizer/token/parse/tokens.hpp>
 #include <bia/util/finally.hpp>
@@ -17,13 +17,13 @@ using namespace bia::string::encoding;
 template<typename... T>
 inline std::shared_ptr<Parameter> create_parameter(T&&... values)
 {
-	auto input = std::make_shared<std::stringstream>();
-	auto enc   = get_encoder(standard_encoding::utf_8);
-	auto bndl  = std::make_shared<std::vector<Token>>();
-	auto manager =
-	  std::make_shared<bia::resource::Manager>(std::make_shared<bia::gc::memory::simple_allocator>());
+	auto input   = std::make_shared<std::stringstream>();
+	auto enc     = get_encoder(standard_encoding::utf_8);
+	auto reader  = std::make_shared<bia::tokenizer::Reader>(*input, *enc);
+	auto bndl    = std::make_shared<std::vector<Token>>();
+	auto manager = std::make_shared<bia::resource::Manager>(std::make_shared<bia::memory::Simple_allocator>());
 	int dummy[sizeof...(values)] = { (*input << values, 0)... };
-	return { new Parameter{ *input, *manager, *enc, *bndl }, [input, manager, enc, bndl](Parameter* ptr) {
+	return { new Parameter{ *reader, *manager, *bndl }, [input, reader, manager, enc, bndl](Parameter* ptr) {
 		        delete ptr;
 		        free_encoder(enc);
 		      } };
@@ -136,9 +136,10 @@ TEST_CASE("identifiers", "[tokenizer]")
 
 TEST_CASE("seperators", "[tokenizer]")
 {
-	const auto consumed = [](const char* str) -> std::streamoff {
+	const auto consumed = [](const char* str) -> int {
 		const auto param = create_parameter(str);
-		return static_cast<bool>(spacer(*param)) ? -1 : static_cast<std::streamoff>(param->input.tellg());
+		return static_cast<bool>(spacer(*param)) ? -1
+		                                         : static_cast<int>(param->reader.location().character_offset);
 	};
 
 	REQUIRE(consumed("") == 0);
@@ -185,6 +186,13 @@ TEST_CASE("single expression", "[tokenizer]")
 	REQUIRE(param->bundle[4].value == Operator::minus);
 	REQUIRE(param->bundle[5].value.is_type<Token::Number>());
 	REQUIRE(param->bundle[6].value == Token::Control::bracket_close);
+
+	param = create_parameter("foo()");
+	REQUIRE(!single_expression(*param));
+	REQUIRE(param->bundle.size() == 3);
+	REQUIRE(param->bundle[0].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[1].value == Token::Control::bracket_open);
+	REQUIRE(param->bundle[2].value == Token::Control::bracket_close);
 }
 
 TEST_CASE("if statement", "[tokenizer]")
@@ -219,4 +227,13 @@ TEST_CASE("if statement", "[tokenizer]")
 	REQUIRE(param->bundle[7].value.is_type<Token::Batch>());
 	REQUIRE(param->bundle[8].value == Token::Keyword::let);
 	// other tokens
+}
+
+TEST_CASE("import statement", "[tokenizer]")
+{
+	auto param = create_parameter("import hello_world");
+	REQUIRE(!import_stmt(*param));
+	REQUIRE(param->bundle.size() == 2);
+	REQUIRE(param->bundle[0].value == Token::Keyword::import);
+	REQUIRE(param->bundle[1].value.is_type<Token::Identifier>());
 }

@@ -115,11 +115,24 @@ Error_info parse::single_expression(Parameter& param)
 		spacer(param);
 		if (operators(param)) {
 			param.restore(old);
-			return {};
+			break;
 		}
 		spacer(param);
 		if (const auto err = expression_value(param)) {
 			return err;
 		}
 	}
+
+	// member operations
+	while (true) {
+		const auto old = param.backup();
+		spacer(param);
+		const auto result = any_of(param, member_invocation);
+		if (result) {
+			param.restore(old);
+			break;
+		}
+	}
+
+	return {};
 }

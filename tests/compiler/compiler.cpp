@@ -35,9 +35,9 @@ inline void print_error(const std::string& code, const compiler::Error& error)
 			lines.push_back({ code.data() + line_start, code.data() + code.length() });
 		}
 	}
-	std::cerr << error.code.default_error_condition().message()
-	          << " in line " IN_FILE ":" << error.range.start.line << ":"
-	          << error.range.start.character << " => " << error.code.message() << '\n';
+	std::cerr << error.code.default_error_condition().message() << " in line " IN_FILE ":"
+	          << error.range.start.line << ":" << error.range.start.character << " => " << error.code.message()
+	          << '\n';
 	auto line = lines.at(error.range.start.line - 1);
 	std::cerr.write(line.data(), line.size());
 	std::cerr << '\n';
@@ -89,10 +89,11 @@ try {
 	const auto res = resource_output.str();
 	memory::Stack stack{ allocator, 1024 };
 	memory::gc::GC gc{ allocator };
+	bvm::Context context{ gc };
 	const auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);
-	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, stack, resources);
+	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, stack, resources, context);
 	gc.run();
 
 	// print stack

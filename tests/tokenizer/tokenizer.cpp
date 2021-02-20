@@ -1,16 +1,16 @@
 #define CATCH_CONFIG_MAIN
 
-#include <bia/gc/memory/simple_allocator.hpp>
-#include <bia/tokenizer/bia_lexer.hpp>
-#include <bia/util/finally.hpp>
+// #include <bia/gc/memory/simple_allocator.hpp>
+// #include <bia/tokenizer/bia_lexer.hpp>
+// #include <bia/util/finally.hpp>
 #include <catch.hpp>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <vector>
+// #include <iomanip>
+// #include <iostream>
+// #include <sstream>
+// #include <vector>
 
-using namespace bia::tokenizer;
-using namespace bia::string;
+// using namespace bia::tokenizer;
+// using namespace bia::string;
 
 // class mock_receiver : public token::receiver
 // {

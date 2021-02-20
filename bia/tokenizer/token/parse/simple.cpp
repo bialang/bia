@@ -30,7 +30,7 @@ Error_info parse::import_stmt(Parameter& param)
 		return param.make_error(error::Code::expected_yield, ranger.range());
 	}
 	param.bundle.emplace_back(Token::Keyword::import, ranger.range());
-	return string(param);
+	return any_of(param, string, identifier);
 }
 
 Error_info parse::flow_control_stmt(Parameter& param)
