@@ -1,24 +1,20 @@
-#ifndef BIA_COMPILER_TYPE_BOOL_HPP_
-#define BIA_COMPILER_TYPE_BOOL_HPP_
+#ifndef BIA_INTERNAL_TYPE_BOOL_HPP_
+#define BIA_INTERNAL_TYPE_BOOL_HPP_
 
 #include "definition.hpp"
 
+#include <bia/util/aggregate.hpp>
+
 namespace bia {
-namespace compiler {
+namespace internal {
 namespace type {
 
 class Bool : public Definition
 {
 public:
-	Bool(unsigned int type_code) noexcept : _type_code{ type_code }
-	{}
 	bool is_assignable(const Definition* other) const noexcept override
 	{
 		return dynamic_cast<const Bool*>(other);
-	}
-	unsigned int type_code() const noexcept override
-	{
-		return _type_code;
 	}
 	unsigned int size() const noexcept override
 	{
@@ -28,13 +24,18 @@ public:
 	{
 		return flag_truthable;
 	}
-
-private:
-	const unsigned int _type_code;
+	int compare(util::Not_null<const Definition*> other) const noexcept override
+	{
+		return util::compare(ordinal(), other->ordinal());
+	}
+	unsigned int ordinal() const noexcept override
+	{
+		return 1;
+	}
 };
 
 } // namespace type
-} // namespace compiler
+} // namespace internal
 } // namespace bia
 
 #endif

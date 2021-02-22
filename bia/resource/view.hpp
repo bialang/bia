@@ -44,7 +44,7 @@ struct View
 		for (auto i = first; i != last; ++i, ++string) {
 			if (static_cast<char>(*i) < *string) {
 				return -1;
-			} else if (static_cast<char>(*i) < *string) {
+			} else if (static_cast<char>(*i) > *string) {
 				return 1;
 			}
 		}

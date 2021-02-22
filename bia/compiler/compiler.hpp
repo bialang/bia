@@ -5,6 +5,7 @@
 #include "symbol/manager.hpp"
 
 #include <bia/bytecode/instructor.hpp>
+#include <bia/internal/context.hpp>
 #include <bia/memory/allocator.hpp>
 #include <bia/resource/serializer.hpp>
 #include <bia/tokenizer/token/receiver.hpp>
@@ -22,7 +23,7 @@ public:
 	using Token = tokenizer::token::Token;
 
 	Compiler(util::Not_null<std::shared_ptr<memory::Allocator>> allocator, std::ostream& instructions,
-	         std::ostream& resource) noexcept;
+	         std::ostream& resource, internal::Context& context) noexcept;
 	void receive(util::Span<const Token*> tokens, resource::Manager& manager) override;
 	const Errors& errors() const noexcept;
 
@@ -31,6 +32,7 @@ private:
 	symbol::Manager _symbols;
 	resource::Serializer _serializer;
 	Errors _errors;
+	internal::Context& _context;
 };
 
 } // namespace compiler

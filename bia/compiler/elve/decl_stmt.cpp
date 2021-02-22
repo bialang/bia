@@ -10,9 +10,9 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 {
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Keyword::let);
 
-	const auto variable_token      = tokens.at(1);
-	tokens                         = tokens.subspan(2);
-	type::Definition* desired_type = nullptr;
+	const auto variable_token                = tokens.at(1);
+	tokens                                   = tokens.subspan(2);
+	internal::type::Definition* desired_type = nullptr;
 
 	// process type definition available -> declare
 	if (tokens.front().value != Operator::assign) {

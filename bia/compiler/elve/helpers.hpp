@@ -4,8 +4,9 @@
 #include "../errors.hpp"
 #include "../symbol/manager.hpp"
 
-#include <bia/bvm/context.hpp>
 #include <bia/bytecode/instructor.hpp>
+#include <bia/internal/context.hpp>
+#include <bia/internal/type/definition.hpp>
 #include <bia/resource/serializer.hpp>
 #include <bia/tokenizer/token/token.hpp>
 #include <bia/util/gsl.hpp>
@@ -23,7 +24,7 @@ struct Parameter
 	symbol::Manager& symbols;
 	resource::Serializer& serializer;
 	Errors& errors;
-	bvm::Context& context;
+	internal::Context& context;
 };
 
 typedef util::Span<const tokenizer::token::Token*> Tokens;
@@ -36,7 +37,7 @@ Tokens if_stmt(Parameter& param, Tokens tokens);
 Tokens import_stmt(Parameter& param, Tokens tokens);
 
 std::pair<Tokens, symbol::Variable> single_expression(Parameter& param, Tokens tokens);
-std::pair<Tokens, type::Definition*> type_definition(Parameter& param, Tokens tokens);
+std::pair<Tokens, internal::type::Definition*> type_definition(Parameter& param, Tokens tokens);
 
 } // namespace elve
 } // namespace compiler

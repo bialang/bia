@@ -1,12 +1,12 @@
 #include "../jumper.hpp"
-#include "../type/bool.hpp"
-#include "../type/floating_point.hpp"
-#include "../type/integer.hpp"
-#include "../type/regex.hpp"
-#include "../type/string.hpp"
 #include "helpers.hpp"
 
+#include <bia/internal/type/integer.hpp>
+#include <bia/internal/type/regex.hpp>
+#include <bia/internal/type/string.hpp>
+
 using namespace bia::tokenizer::token;
+using namespace bia::internal;
 
 namespace bia {
 namespace compiler {
@@ -182,7 +182,7 @@ inline std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& par
 		rhs_tokens            = rhs_tokens.subspan(+0, rhs_tokens.size() - tokens.size());
 
 		// TODO
-		if (lhs.definition != rhs.definition &&
+		if (lhs.definition->compare(rhs.definition) &&
 		    !(dynamic_cast<type::Regex*>(lhs.definition) && dynamic_cast<type::String*>(rhs.definition))) {
 			param.errors.add_error(error::Code::type_mismatch, rhs_tokens);
 		}

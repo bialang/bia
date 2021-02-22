@@ -3,6 +3,7 @@
 
 using namespace bia::compiler;
 using namespace bia::tokenizer::token;
+using namespace bia::internal;
 
 elve::Tokens elve::if_stmt(Parameter& param, Tokens tokens)
 {

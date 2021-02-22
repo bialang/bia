@@ -4,13 +4,15 @@
 
 using namespace bia::compiler;
 using namespace bia::tokenizer::token;
+using namespace bia::internal;
 
-std::pair<elve::Tokens, type::Definition*> elve::type_definition(Parameter& param, Tokens tokens)
+std::pair<elve::Tokens, type::Definition*> elve::type_definition(Parameter& param,
+                                                                                Tokens tokens)
 {
 	// TODO
 	BIA_EXPECTS(tokens.size() > 2 && tokens.front().value == Token::Control::type_definition &&
 	            tokens[1].value.is_type<Token::Array_dimension>());
-	const auto type              = param.symbols.symbol(tokens.at(2).value.get<Token::Identifier>().memory);
+	const auto type = param.symbols.symbol(tokens.at(2).value.get<Token::Identifier>().memory);
 	type::Definition* definition = nullptr;
 	// TODO array
 	if (type.empty()) {

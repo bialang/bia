@@ -27,7 +27,7 @@ inline void execute_jump(bvm::Operation op, bvm::Instruction_pointer& ip, bool t
 }
 
 void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& stack,
-                  const resource::Resources& resources, Context& context)
+                  const resource::Resources& resources, internal::Context& context)
 {
 	using namespace bytecode;
 	Instruction_pointer ip{ instructions };

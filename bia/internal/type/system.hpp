@@ -1,22 +1,24 @@
-#ifndef BIA_COMPILER_TYPE_SYSTEM_HPP_
-#define BIA_COMPILER_TYPE_SYSTEM_HPP_
+#ifndef BIA_INTERNAL_TYPE_SYSTEM_HPP_
+#define BIA_INTERNAL_TYPE_SYSTEM_HPP_
 
 #include "definition.hpp"
 
 #include <bia/memory/allocator.hpp>
 #include <bia/memory/std_allocator.hpp>
-#include <bia/util/finally.hpp>
+#include <map>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
 namespace bia {
-namespace compiler {
+namespace internal {
 namespace type {
 
 class System
 {
 public:
+	typedef unsigned int Code;
+
 	System(util::Not_null<std::shared_ptr<memory::Allocator>> allocator)
 	    : _allocator{ allocator.get() }, _types{ allocator }
 	{}
@@ -29,17 +31,14 @@ public:
 	typename std::enable_if<std::is_base_of<Definition, Type>::value, Type*>::type
 	  create_type(Arguments&&... arguments)
 	{
-		const auto ptr    = _allocator->construct<Type>(_id_counter + 1, std::forward<Arguments>(arguments)...);
-		auto final_action = util::finallay([&] { _allocator->destroy(ptr); });
-		_types.push_back(ptr);
-		final_action.cancel();
-		++_id_counter;
+		const auto ptr = _allocator->construct<Type>(std::forward<Arguments>(arguments)...);
+		_types.insert(std::make_pair(ptr, ++_id_counter));
 		return ptr;
 	}
 	~System() noexcept
 	{
-		for (const auto ptr : _types) {
-			_allocator->destroy(ptr);
+		for (const auto& i : _types) {
+			_allocator->destroy(i.first);
 		}
 	}
 	System& operator=(const System& copy) = delete;
@@ -52,13 +51,14 @@ public:
 	}
 
 private:
-	unsigned int _id_counter = 0;
+	Code _id_counter = 0;
 	std::shared_ptr<memory::Allocator> _allocator;
-	std::vector<Definition*, memory::Std_allocator<Definition*>> _types;
+	std::map<Definition*, Code, std::less<Definition*>, memory::Std_allocator<std::pair<Definition*, Code>>>
+	  _types;
 };
 
 } // namespace type
-} // namespace compiler
+} // namespace internal
 } // namespace bia
 
 #endif

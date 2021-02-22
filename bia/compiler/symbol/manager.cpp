@@ -1,12 +1,12 @@
 #include "manager.hpp"
 
-#include "../type/bool.hpp"
-#include "../type/floating_point.hpp"
-#include "../type/integer.hpp"
-#include "../type/regex.hpp"
-#include "../type/string.hpp"
-
 #include <bia/error/exception.hpp>
+#include <bia/internal/type/bool.hpp>
+#include <bia/internal/type/floating_point.hpp>
+#include <bia/internal/type/integer.hpp>
+#include <bia/internal/type/regex.hpp>
+#include <bia/internal/type/string.hpp>
+#include <bia/internal/type/void.hpp>
 
 using namespace bia::compiler::symbol;
 
@@ -40,7 +40,7 @@ void Manager::close_scope()
 	_scopes.pop_back();
 }
 
-Variable Manager::create_temporary(util::Not_null<type::Definition*> type)
+Variable Manager::create_temporary(util::Not_null<internal::type::Definition*> type)
 {
 	Variable variable{};
 	variable.definition      = type;
@@ -99,7 +99,7 @@ bool Manager::Comparator::operator()(const map_key_type& left, const map_key_typ
 	}
 	const auto lstr = left.get<string_type>();
 	if (right.is_type<resource::View>()) {
-		return right.get<resource::View>().compare(lstr.data(), lstr.size()) > 0;
+		return right.get<resource::View>().compare(lstr.data(), lstr.size()) >= 0;
 	}
 	// both are strings
 	const auto rstr = right.get<string_type>();
@@ -136,15 +136,15 @@ void Manager::_decline_declared(const resource::View& name)
 
 void Manager::_introduce_native_types()
 {
-	using namespace type;
+	using namespace internal::type;
 
 	if (_default_int_size == Default_int_size::size_32) {
 		_symbols.insert(
 		  std::make_pair(util::from_cstring("int"),
-		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i64))));
+		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i64, true))));
 		_symbols.insert(
 		  std::make_pair(util::from_cstring("uint"),
-		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::u64))));
+		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::u64, true))));
 	} else {
 		BIA_ASSERT(false);
 	}
@@ -154,7 +154,7 @@ void Manager::_introduce_native_types()
 
 	_symbols.insert(
 	  std::make_pair(util::from_cstring("int32"),
-	                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i32))));
+	                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i32, false))));
 
 	_symbols.insert(std::make_pair(
 	  util::from_cstring("float32"),

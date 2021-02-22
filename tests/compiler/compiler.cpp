@@ -63,7 +63,9 @@ try {
 	std::stringstream resource_output;
 
 	auto allocator = std::make_shared<memory::Simple_allocator>();
-	compiler::Compiler compiler{ allocator, output, resource_output };
+	memory::gc::GC gc{ allocator };
+	internal::Context context{ gc };
+	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
 	auto finally = util::finallay([encoder] { string::encoding::free_encoder(encoder); });
 	tokenizer::Bia_lexer lexer{ allocator };
@@ -88,8 +90,6 @@ try {
 	const auto ins = output.str();
 	const auto res = resource_output.str();
 	memory::Stack stack{ allocator, 1024 };
-	memory::gc::GC gc{ allocator };
-	bvm::Context context{ gc };
 	const auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);
