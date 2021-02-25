@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <regex>
+#include <string>
 #include <type_traits>
 #include <utility>
 
@@ -68,13 +69,13 @@ public:
 	virtual ~Base() = default;
 };
 
-struct String
+struct String : Base
 {
-	GC_able<const char*> ptr;
-	std::size_t length;
-};
+	std::string string;
 
-static_assert(offsetof(String, ptr) == 0, "bad String type");
+	String(std::string&& string) noexcept : string{ std::move(string) }
+	{}
+};
 
 struct Regex : Base
 {

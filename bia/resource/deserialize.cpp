@@ -14,9 +14,8 @@ bia::resource::Resources bia::resource::deserialize(util::Span<const util::Byte*
 		// TODO check length
 		BIA_ASSERT(length <= data.size());
 		if (type == Type::string) {
-			auto ptr = gc.allocate(length);
-			std::memcpy(ptr, data.data(), length);
-			resources.push_back(memory::gc::String{ static_cast<char*>(ptr), length });
+			resources.push_back(
+			  gc.create<memory::gc::String>(std::string{ reinterpret_cast<const char*>(data.data()), length }));
 		} else if (type == Type::regex) {
 			// TODO check size
 			resources.push_back(

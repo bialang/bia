@@ -7,6 +7,8 @@
 #include <bia/memory/std_allocator.hpp>
 #include <map>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
@@ -19,9 +21,7 @@ class System
 public:
 	typedef unsigned int Code;
 
-	System(util::Not_null<std::shared_ptr<memory::Allocator>> allocator)
-	    : _allocator{ allocator.get() }, _types{ allocator }
-	{}
+	System(util::Not_null<std::shared_ptr<memory::Allocator>> allocator);
 	System(const System& copy) = delete;
 	System(System&& move) noexcept : _allocator{ move._allocator }, _types{ std::move(move._types) }
 	{
@@ -41,6 +41,18 @@ public:
 			_allocator->destroy(i.first);
 		}
 	}
+	Definition* defintion_of(const std::type_info& type) const
+	{
+		const auto it = _real_types.find({ type });
+		if (it != _real_types.end()) {
+			return it->second;
+		}
+		return nullptr;
+	}
+	void link(util::Not_null<Definition*> definition, const std::type_info& type)
+	{
+		_real_types[{ type }] = definition;
+	}
 	System& operator=(const System& copy) = delete;
 	/// Move operator.
 	System& operator=(System&& move) noexcept
@@ -55,6 +67,7 @@ private:
 	std::shared_ptr<memory::Allocator> _allocator;
 	std::map<Definition*, Code, std::less<Definition*>, memory::Std_allocator<std::pair<Definition*, Code>>>
 	  _types;
+	std::map<std::type_index, Definition*> _real_types;
 };
 
 } // namespace type

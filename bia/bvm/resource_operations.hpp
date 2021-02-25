@@ -20,10 +20,12 @@ inline bool resource_operation_test(bvm::Operation op, Instruction_pointer& ip, 
 	const auto arg0 = ip.read<std::int32_t>();
 	const auto arg1 = ip.read<std::int32_t>();
 	switch (op.variation) {
-	case 0: return Operation{}(stack.load<memory::gc::String>(arg0), stack.load<memory::gc::String>(arg1));
+	case 0:
+		return Operation{}(stack.load<memory::gc::GC_able<memory::gc::String*>>(arg0),
+		                   stack.load<memory::gc::GC_able<memory::gc::String*>>(arg1));
 	case 1:
 		return Operation{}(stack.load<memory::gc::GC_able<memory::gc::Regex*>>(arg0),
-		                   stack.load<memory::gc::String>(arg1));
+		                   stack.load<memory::gc::GC_able<memory::gc::String*>>(arg1));
 	}
 	// TODO
 	BIA_ASSERT(false);

@@ -14,7 +14,8 @@
 namespace bia {
 namespace resource {
 
-typedef util::Variant<memory::gc::String, memory::gc::GC_able<memory::gc::Regex*>> Resource;
+typedef util::Variant<memory::gc::GC_able<memory::gc::String*>, memory::gc::GC_able<memory::gc::Regex*>>
+  Resource;
 typedef std::vector<Resource> Resources;
 
 /// Deserializes the resource elements from the provided data. The resources point to sections in the data.

@@ -33,7 +33,7 @@ public:
 	void put_function(const std::string& name, Return (*function)(Arguments...))
 	{
 		// TODO add type
-		_global_modules[name] = { gc.create<member::function::Static<Return, Arguments...>>(function).pointer };
+		// _global_modules[name] = { gc.create<member::function::Static<Return, Arguments...>>(function).pointer };
 	}
 	Module import(const char* name)
 	{
@@ -45,7 +45,7 @@ public:
 	}
 
 private:
-	type::System _type_system;
+	// type::System _type_system;
 	std::map<std::string, Module> _global_modules;
 };
 

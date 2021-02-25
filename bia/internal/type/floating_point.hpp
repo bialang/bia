@@ -3,6 +3,8 @@
 
 #include "definition.hpp"
 
+#include <bia/util/aggregate.hpp>
+
 namespace bia {
 namespace internal {
 namespace type {

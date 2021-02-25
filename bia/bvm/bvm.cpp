@@ -80,8 +80,8 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			const std::int32_t arg    = ip.read<std::int32_t>();
 			const std::uint32_t index = ip.read<std::uint32_t>();
 			const auto& resource      = resources.at(index);
-			if (resource.is_type<memory::gc::String>()) {
-				stack.store(arg, resource.get<memory::gc::String>(), true);
+			if (resource.is_type<memory::gc::GC_able<memory::gc::String*>>()) {
+				stack.store(arg, resource.get<memory::gc::GC_able<memory::gc::String*>>(), true);
 			} else if (resource.is_type<memory::gc::GC_able<memory::gc::Regex*>>()) {
 				stack.store(arg, resource.get<memory::gc::GC_able<memory::gc::Regex*>>(), true);
 			} else {
@@ -105,8 +105,9 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			const std::int32_t arg    = ip.read<std::int32_t>();
 			const std::uint32_t index = ip.read<std::uint32_t>();
 			const auto& resource      = resources.at(index);
-			BIA_ASSERT(resource.is_type<memory::gc::String>());
-			stack.store(arg, context.import(resource.get<memory::gc::String>().ptr), true);
+			BIA_ASSERT(resource.is_type<memory::gc::GC_able<memory::gc::String*>>());
+			stack.store(
+			  arg, context.import(resource.get<memory::gc::GC_able<memory::gc::String*>>()->string.c_str()), true);
 			stack.load<memory::gc::GC_able<member::function::Base*>>(arg)->invoke();
 			break;
 		}

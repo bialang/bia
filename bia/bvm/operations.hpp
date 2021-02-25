@@ -58,14 +58,15 @@ struct Equal_to
 		static_assert(std::is_pod<Type>::value, "Type must be POD");
 		return left == right;
 	}
-	bool operator()(const memory::gc::String& left, const memory::gc::String& right) const noexcept
+	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
+	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return left.length == right.length && !std::strcmp(left.ptr, right.ptr);
+		return left->string == right->string;
 	}
-	bool operator()(const memory::gc::GC_able<memory::gc::Regex*> left,
-	                const memory::gc::String& right) const noexcept
+	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
+	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return std::regex_match(right.ptr.get(), left->pattern);
+		return std::regex_match(right->string, left->pattern);
 	}
 };
 
@@ -77,27 +78,29 @@ struct Not_equal_to
 		static_assert(std::is_pod<Type>::value, "Type must be POD");
 		return left != right;
 	}
-	bool operator()(const memory::gc::String& left, const memory::gc::String& right) const noexcept
+	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
+	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return left.length != right.length || std::strcmp(left.ptr, right.ptr);
+		return left->string != right->string;
 	}
-	bool operator()(const memory::gc::GC_able<memory::gc::Regex*> left,
-	                const memory::gc::String& right) const noexcept
+	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
+	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return !std::regex_match(right.ptr.get(), left->pattern);
+		return !std::regex_match(right->string, left->pattern);
 	}
 };
 
 struct Inside_of
 {
-	bool operator()(const memory::gc::String& left, const memory::gc::String& right) const noexcept
+	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
+	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return std::strstr(right.ptr, left.ptr) != nullptr;
+		return right->string.find(left->string) != std::string::npos;
 	}
-	bool operator()(const memory::gc::GC_able<memory::gc::Regex*> left,
-	                const memory::gc::String& right) const noexcept
+	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
+	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return std::regex_search(right.ptr.get(), left->pattern);
+		return std::regex_search(right->string, left->pattern);
 	}
 };
 
