@@ -191,8 +191,18 @@ TEST_CASE("single expression", "[tokenizer]")
 	REQUIRE(!single_expression(*param));
 	REQUIRE(param->bundle.size() == 3);
 	REQUIRE(param->bundle[0].value.is_type<Token::Identifier>());
-	REQUIRE(param->bundle[1].value == Token::Control::bracket_open);
-	REQUIRE(param->bundle[2].value == Token::Control::bracket_close);
+	REQUIRE(param->bundle[1].value == Operator::function_call_open);
+	REQUIRE(param->bundle[2].value == Operator::function_call_close);
+
+	param = create_parameter("foo(x, 45)");
+	REQUIRE(!single_expression(*param));
+	REQUIRE(param->bundle.size() == 6);
+	REQUIRE(param->bundle[0].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[1].value == Operator::function_call_open);
+	REQUIRE(param->bundle[2].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[3].value == Token::Control::comma);
+	REQUIRE(param->bundle[4].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[5].value == Operator::function_call_close);
 }
 
 TEST_CASE("if statement", "[tokenizer]")

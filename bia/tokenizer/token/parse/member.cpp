@@ -20,18 +20,48 @@ Error_info parse::member_access(Parameter& param)
 	return parse::identifier(param);
 }
 
+inline Error_info argument_list(Parameter& param)
+{
+	Parameter::State old;
+	for (bool first = true; true; first = false) {
+		old = param.backup();
+		if (!first) {
+			parse::spacer(param);
+			const auto ranger = param.begin_range();
+			if (param.reader.read() != ',') {
+				break;
+			}
+			param.bundle.emplace_back(Token::Control::comma, ranger.range());
+			parse::spacer(param);
+		}
+		if (const auto err = parse::single_expression(param)) {
+			if (first) {
+				break;
+			}
+			return err;
+		}
+	}
+	param.restore(old);
+	return {};
+}
+
 Error_info parse::member_invocation(Parameter& param)
 {
 	auto ranger = param.begin_range();
 	if (param.reader.read() != '(') {
 		return param.make_error(error::Code::expected_opening_bracket, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Control::bracket_open, ranger.range());
+	param.bundle.emplace_back(Operator::function_call_open, ranger.range());
+	spacer(param);
+	if (const auto err = argument_list(param)) {
+		return err;
+	}
+	spacer(param);
 	ranger = param.begin_range();
 	if (param.reader.read() != ')') {
 		return param.make_error(error::Code::expected_opening_bracket, ranger.range());
 	}
-	param.bundle.emplace_back(Token::Control::bracket_close, ranger.range());
+	param.bundle.emplace_back(Operator::function_call_close, ranger.range());
 	return {};
 }
 
