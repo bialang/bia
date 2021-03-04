@@ -16,9 +16,13 @@ public:
 	{
 		return dynamic_cast<const String*>(other);
 	}
-	unsigned int size() const noexcept override
+	std::size_t size() const noexcept override
 	{
 		return sizeof(memory::gc::String);
+	}
+	std::size_t alignment() const noexcept override
+	{
+		return 1;
 	}
 	int flags() const noexcept override
 	{

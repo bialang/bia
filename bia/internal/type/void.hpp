@@ -16,9 +16,13 @@ public:
 	{
 		return true;
 	}
-	unsigned int size() const noexcept override
+	std::size_t size() const noexcept override
 	{
 		return 0;
+	}
+	std::size_t alignment() const noexcept override
+	{
+		return 1;
 	}
 	int flags() const noexcept override
 	{

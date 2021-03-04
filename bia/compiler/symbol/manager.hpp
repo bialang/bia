@@ -50,7 +50,19 @@ public:
 	Symbol symbol(const resource::View& name);
 	/// Returns the symbol or an empty variant if not found.
 	Symbol symbol(const string_type& name);
-	friend void introduce_native_type(Manager& manager, Default_int_size default_size);
+	std::uint32_t stack_position() const noexcept
+	{
+		return _stack;
+	}
+	Variable push(Variable variable)
+	{
+		// TODO
+		return variable;
+	}
+	void pop(Variable variable)
+	{
+		free_temporary(variable);
+	}
 
 private:
 	typedef util::Variant<resource::View, string_type> map_key_type;

@@ -9,6 +9,7 @@
 #include <type_traits>
 #include <typeindex>
 #include <typeinfo>
+#include <cstddef>
 #include <utility>
 #include <vector>
 
@@ -49,9 +50,11 @@ public:
 		}
 		return nullptr;
 	}
-	void link(util::Not_null<Definition*> definition, const std::type_info& type)
+	template<typename Type>
+	void link(util::Not_null<Definition*> definition)
 	{
-		_real_types[{ type }] = definition;
+		static_assert(alignof(Type) <= sizeof(std::max_align_t), "over-aligned types are not supported");
+		_real_types[{ typeid(Type) }] = definition;
 	}
 	System& operator=(const System& copy) = delete;
 	/// Move operator.

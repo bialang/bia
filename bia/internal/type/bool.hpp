@@ -16,7 +16,11 @@ public:
 	{
 		return dynamic_cast<const Bool*>(other);
 	}
-	unsigned int size() const noexcept override
+	std::size_t size() const noexcept override
+	{
+		return 1;
+	}
+	std::size_t alignment() const noexcept override
 	{
 		return 1;
 	}

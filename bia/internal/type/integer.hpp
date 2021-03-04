@@ -30,9 +30,13 @@ public:
 	{
 		return this == other;
 	}
-	unsigned int size() const noexcept override
+	std::size_t size() const noexcept override
 	{
 		return static_cast<unsigned int>(_size) / 2;
+	}
+	std::size_t alignment() const noexcept override
+	{
+		return 1;
 	}
 	int flags() const noexcept override
 	{

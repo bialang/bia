@@ -23,6 +23,7 @@ enum class Op_code : std::uint8_t
 	load_resource      = booleanize + 4,
 	resource_operation = load_resource + 4,
 	load_from_context  = resource_operation + 4,
+	invoke             = load_from_context + 4,
 };
 
 inline Op_code read_op_code(typename std::underlying_type<Op_code>::type value) noexcept

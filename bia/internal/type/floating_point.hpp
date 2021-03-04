@@ -25,9 +25,13 @@ public:
 		return dynamic_cast<const Floating_point*>(other) &&
 		       static_cast<const Floating_point*>(other)->_size == _size;
 	}
-	unsigned int size() const noexcept override
+	std::size_t size() const noexcept override
 	{
 		return _size == Size::f32 ? 4 : 8;
+	}
+	std::size_t alignment() const noexcept override
+	{
+		return 1;
 	}
 	int flags() const noexcept override
 	{

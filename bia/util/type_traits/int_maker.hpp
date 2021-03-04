@@ -7,55 +7,45 @@ namespace bia {
 namespace util {
 namespace type_traits {
 
-template<typename T, T... Ints>
-struct int_container
+template<typename Type, Type... Ints>
+struct Int_container
 {};
 
-template<typename T, std::size_t Count, T Value, T... Ints>
-struct int_filler : int_filler<T, Count - 1, Value, Ints..., Value>
+template<typename Type, std::size_t Count, Type Value, Type... Ints>
+struct Int_filler : Int_filler<Type, Count - 1, Value, Ints..., Value>
 {};
 
-/* starter */
-template<typename T, std::size_t Count, T Value>
-struct int_filler<T, Count, Value> : int_filler<T, Count - 1, Value, Value>
+/// Starter.
+template<typename Type, std::size_t Count, Type Value>
+struct Int_filler<Type, Count, Value> : Int_filler<Type, Count - 1, Value, Value>
 {
-	constexpr static auto count = Count;
-	typedef T int_type;
+	constexpr static std::size_t count = Count;
 };
 
-/* stopper */
-template<typename T, T Value, T... Ints>
-struct int_filler<T, 0, Value, Ints...>
+/// Stopper.
+template<typename Type, Type Value, Type... Ints>
+struct Int_filler<Type, 0, Value, Ints...>
 {
-	constexpr static int_container<T, Ints...> value{};
+	constexpr static Int_container<Type, Ints...> value{};
 };
 
-template<typename T, T Counter, T Stop, T... Ints>
-struct int_sequencer : int_sequencer<T, Counter + 1, Stop, Ints..., Counter>
+template<typename Type, Type From, Type To, Type... Ints>
+struct Int_sequencer : Int_sequencer<Type, From + 1, To, Ints..., From>
 {};
 
-/* starter */
-template<typename T, T Start, T Stop>
-struct int_sequencer<T, Start, Stop> : int_sequencer<T, Start + 1, Stop, Start>
+/// Stopper.
+template<typename Type, Type To, Type... Ints>
+struct Int_sequencer<Type, To, To, Ints...>
 {
-	constexpr static auto count = Stop - Start;
-	typedef T int_type;
+	constexpr static Int_container<Type, Ints...> value{};
 };
 
-template<typename T, T Stop>
-struct int_sequencer<T, Stop, Stop>
-{
-	constexpr static auto count = 0;
-	constexpr static int_container<T> value{};
-	typedef T int_type;
-};
-
-/* stopper */
-template<typename T, T Stop, T... Ints>
-struct int_sequencer<T, Stop, Stop, Ints...>
-{
-	constexpr static int_container<T, Ints...> value{};
-};
+// template<typename Type, Type Stop>
+// struct Int_sequencer<Type, Stop, Stop>
+// {
+// 	constexpr static std::size_t count = 0;
+// 	constexpr static Int_container<Type> value{};
+// };
 
 } // namespace type_traits
 } // namespace util

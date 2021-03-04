@@ -12,7 +12,9 @@ using namespace bia::compiler::symbol;
 
 inline std::size_t aligned_size(std::size_t size) noexcept
 {
-	return size + (size % sizeof(std::size_t) ? (sizeof(std::size_t) - size % sizeof(std::size_t)) : 0);
+	return size + (size % alignof(std::max_align_t)
+	                 ? (alignof(std::max_align_t) - size % alignof(std::max_align_t))
+	                 : 0);
 }
 
 Manager::Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,

@@ -3,10 +3,11 @@
 #include <bia/util/finally.hpp>
 #include <bia/util/type_traits/conjunction.hpp>
 #include <bia/util/type_traits/equals_any.hpp>
+#include <bia/util/type_traits/int_maker.hpp>
+#include <bia/util/type_traits/is_invokable.hpp>
 #include <bia/util/type_traits/size_of.hpp>
 #include <bia/util/type_traits/type_index.hpp>
 #include <catch.hpp>
-#include <bia/util/type_traits/is_invokable.hpp>
 
 using namespace bia::util;
 using namespace bia::util::type_traits;
@@ -75,9 +76,18 @@ TEST_CASE("type_index", "[type_traits][util]")
 
 TEST_CASE("is_invokable", "[type_traits][util]")
 {
-	REQUIRE(Is_invokable<void(*)()>::value);
-	REQUIRE(!Is_invokable<void(*)(bool)>::value);
-	REQUIRE(!Is_invokable<void(*)(bool), std::string>::value);
-	REQUIRE(Is_invokable<void(*)(int), int>::value);
-	REQUIRE(Is_invokable<void(*)(int), bool>::value);
+	REQUIRE(Is_invokable<void (*)()>::value);
+	REQUIRE(!Is_invokable<void (*)(bool)>::value);
+	REQUIRE(!Is_invokable<void (*)(bool), std::string>::value);
+	REQUIRE(Is_invokable<void (*)(int), int>::value);
+	REQUIRE(Is_invokable<void (*)(int), bool>::value);
+}
+
+TEST_CASE("int maker", "[type_traits][util]")
+{
+	REQUIRE(std::is_same<const Int_container<int, 0, 1, 2>, decltype(Int_sequencer<int, 0, 3>::value)>::value);
+	REQUIRE(
+	  std::is_same<const Int_container<int, 1, 2, 3, 4, 5>, decltype(Int_sequencer<int, 1, 6>::value)>::value);
+	REQUIRE(
+	  !std::is_same<const Int_container<int, 1, 2, 3, 4, 5>, decltype(Int_sequencer<int, 0, 6>::value)>::value);
 }

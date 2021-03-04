@@ -1,9 +1,11 @@
 #include "../jumper.hpp"
 #include "helpers.hpp"
 
+#include <bia/internal/type/function.hpp>
 #include <bia/internal/type/integer.hpp>
 #include <bia/internal/type/regex.hpp>
 #include <bia/internal/type/string.hpp>
+#include <bia/internal/type/void.hpp>
 
 using namespace bia::tokenizer::token;
 using namespace bia::internal;
@@ -28,7 +30,8 @@ inline bool is_test_operator(Operator optor) noexcept
 
 inline bool has_right_hand_size(const Tokens& tokens) noexcept
 {
-	return tokens.size() > 1 && tokens[0].value.is_type<Operator>();
+	return tokens.size() > 1 && tokens[0].value.is_type<Operator>() &&
+	       tokens[0].value != Operator::function_call_close;
 }
 
 std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& param, Tokens tokens, Jumper& jumper,
@@ -169,6 +172,53 @@ inline std::pair<Tokens, symbol::Variable> single_expression_impl(Parameter& par
 			jumper.jump(optor == Operator::logical_and ? Jumper::Type::if_false : Jumper::Type::if_true,
 			            Jumper::Destination::end);
 			std::tie(tokens, lhs) = single_expression_impl(param, tokens.subspan(1), jumper, optor_precedence);
+			continue;
+		}
+
+		// function call
+		if (optor == Operator::function_call_open) {
+			bool dont_check = false;
+			if (!dynamic_cast<const type::Function*>(lhs.definition)) {
+				param.errors.add_error(error::Code::not_a_function, lhs_tokens);
+				dont_check = true;
+			}
+
+			// TODO support return types
+			if (!dont_check) {
+				type::Void v;
+				BIA_ASSERT(!static_cast<const type::Function*>(lhs.definition)->return_type()->compare(&v));
+			}
+
+			tokens = tokens.subspan(1);
+			// TODO stack offset for functions
+			const auto stack_offset = param.symbols.stack_position();
+			std::vector<symbol::Variable> arguments;
+			// TODO check argument types
+			while (tokens.front().value != Operator::function_call_close) {
+				symbol::Variable arg;
+				BIA_ASSERT(tokens.front().value.is_type<Token::Number>());
+				std::tie(tokens, arg) = single_expression(param, tokens);
+				arguments.push_back(param.symbols.push(arg));
+				if (arguments.back().location.offset != arg.location.offset) {
+					// TODO type
+					if (!dont_check) {
+					}
+					param.instructor.write<bytecode::Op_code::copy, std::int64_t>(arguments.back().location.offset,
+					                                                              arg.location.offset);
+					param.symbols.free_temporary(arg);
+				}
+				// TODO push
+				BIA_ASSERT(tokens.front().value == Operator::function_call_close ||
+				           tokens.front().value == Token::Control::comma);
+				if (tokens.front().value == Token::Control::comma) {
+					tokens = tokens.subspan(1);
+				}
+			}
+			param.instructor.write<bytecode::Op_code::invoke>(lhs.location.offset, stack_offset);
+			tokens = tokens.subspan(1);
+			for (const auto& arg : arguments) {
+				param.symbols.pop(arg);
+			}
 			continue;
 		}
 

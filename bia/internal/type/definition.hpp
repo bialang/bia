@@ -3,6 +3,7 @@
 
 #include <bia/util/gsl.hpp>
 #include <functional>
+#include <cstddef>
 
 namespace bia {
 namespace internal {
@@ -16,9 +17,12 @@ public:
 		flag_truthable = 0x01
 	};
 
-	virtual ~Definition()                                                       = default;
-	virtual bool is_assignable(const Definition* other) const noexcept          = 0;
-	virtual unsigned int size() const noexcept                                  = 0;
+	virtual ~Definition()                                              = default;
+	virtual bool is_assignable(const Definition* other) const noexcept = 0;
+	/// The required size in bytes to store a value of this type.
+	virtual std::size_t size() const noexcept                                   = 0;
+	/// The required alignment of this type. Over-aligned types are not allowed.
+	virtual std::size_t alignment() const noexcept                              = 0;
 	virtual int flags() const noexcept                                          = 0;
 	virtual int compare(util::Not_null<const Definition*> other) const noexcept = 0;
 	virtual unsigned int ordinal() const noexcept                               = 0;

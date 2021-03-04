@@ -1,8 +1,10 @@
 #ifndef BIA_INTERNAL_CONTEXT_HPP_
 #define BIA_INTERNAL_CONTEXT_HPP_
 
+#include "type/function.hpp"
 #include "type/integer.hpp"
 #include "type/system.hpp"
+#include "type/void.hpp"
 
 #include <bia/error/exception.hpp>
 #include <bia/member/function/static.hpp>
@@ -25,15 +27,19 @@ public:
 
 	Context(memory::gc::GC& gc)
 	{
-		_global_modules["hello_world"] = {
-			gc.create<member::function::Static<void>>([] { puts("hello world!"); }).pointer
-		};
+		static type::Void v;
+		static type::Function foo{ &v };
+		_global_modules["hello_world"] = { gc.create<member::function::Static<void, int, int>>(
+			                                     [](int i, int j) { printf("hello world - %d | %d!\n", i, j); })
+			                                   .pointer,
+			                                 &foo };
 	}
 	template<typename Return, typename... Arguments>
 	void put_function(const std::string& name, Return (*function)(Arguments...))
 	{
 		// TODO add type
-		// _global_modules[name] = { gc.create<member::function::Static<Return, Arguments...>>(function).pointer };
+		// _global_modules[name] = { gc.create<member::function::Static<Return, Arguments...>>(function).pointer
+		// };
 	}
 	Module import(const char* name)
 	{

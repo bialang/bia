@@ -4,6 +4,7 @@
 #include "definition.hpp"
 
 #include <bia/util/aggregate.hpp>
+#include <vector>
 
 namespace bia {
 namespace internal {
@@ -18,9 +19,13 @@ public:
 	{
 		return dynamic_cast<const Function*>(other);
 	}
-	unsigned int size() const noexcept override
+	std::size_t size() const noexcept override
 	{
 		return sizeof(void*);
+	}
+	std::size_t alignment() const noexcept override
+	{
+		return 1;
 	}
 	int flags() const noexcept override
 	{
@@ -35,9 +40,18 @@ public:
 	{
 		return 6;
 	}
+	const Definition* return_type() const noexcept
+	{
+		return _return_type;
+	}
+	const std::vector<const Definition*>& arguments() const noexcept
+	{
+		return _arguments;
+	}
 
 private:
 	const Definition* _return_type;
+	std::vector<const Definition*> _arguments;
 };
 
 } // namespace type

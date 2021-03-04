@@ -26,7 +26,7 @@ inline void execute_jump(bvm::Operation op, bvm::Instruction_pointer& ip, bool t
 	}
 }
 
-void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& stack,
+void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame frame,
                   const resource::Resources& resources, internal::Context& context)
 {
 	using namespace bytecode;
@@ -39,24 +39,24 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 		case Op_code::load: {
 			const std::int32_t destination = ip.read<std::int32_t>();
 			switch (op.variation) {
-			case 0: stack.store(destination, ip.read<std::uint8_t>()); break;
-			case 1: stack.store(destination, ip.read<std::uint16_t>()); break;
-			case 2: stack.store(destination, ip.read<std::uint32_t>()); break;
-			case 3: stack.store(destination, ip.read<std::uint64_t>()); break;
+			case 0: frame.store(destination, ip.read<std::uint8_t>()); break;
+			case 1: frame.store(destination, ip.read<std::uint16_t>()); break;
+			case 2: frame.store(destination, ip.read<std::uint32_t>()); break;
+			case 3: frame.store(destination, ip.read<std::uint64_t>()); break;
 			}
 			break;
 		}
-		case Op_code::copy: native_integral_operation<Select_arg<false>, false>(op, ip, stack); break;
+		case Op_code::copy: native_integral_operation<Select_arg<false>, false>(op, ip, frame); break;
 		case Op_code::unsigned_raw_operation: {
 			using bytecode::Operation;
 			switch (ip.read<Operation>()) {
-			case Operation::addition: native_integral_operation<Plus, false>(op, ip, stack); break;
-			case Operation::subtraction: native_integral_operation<Minus, false>(op, ip, stack); break;
-			case Operation::multiplication: native_integral_operation<Multiplies, false>(op, ip, stack); break;
-			case Operation::division: native_integral_operation<Divides, false>(op, ip, stack); break;
-			case Operation::equal: test_register = native_integral_test<Equal_to, false>(op, ip, stack); break;
+			case Operation::addition: native_integral_operation<Plus, false>(op, ip, frame); break;
+			case Operation::subtraction: native_integral_operation<Minus, false>(op, ip, frame); break;
+			case Operation::multiplication: native_integral_operation<Multiplies, false>(op, ip, frame); break;
+			case Operation::division: native_integral_operation<Divides, false>(op, ip, frame); break;
+			case Operation::equal: test_register = native_integral_test<Equal_to, false>(op, ip, frame); break;
 			case Operation::not_equal:
-				test_register = native_integral_test<Not_equal_to, false>(op, ip, stack);
+				test_register = native_integral_test<Not_equal_to, false>(op, ip, frame);
 				break;
 			default: BIA_THROW(error::Code::bad_operation);
 			}
@@ -65,25 +65,25 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 		case Op_code::truthy: {
 			const std::int32_t arg = ip.read<std::int32_t>();
 			switch (op.variation) {
-			case 0: test_register = static_cast<bool>(stack.load<std::uint8_t>(arg)); break;
-			case 1: test_register = static_cast<bool>(stack.load<std::uint16_t>(arg)); break;
-			case 2: test_register = static_cast<bool>(stack.load<std::uint32_t>(arg)); break;
-			case 3: test_register = static_cast<bool>(stack.load<std::uint64_t>(arg)); break;
+			case 0: test_register = static_cast<bool>(frame.load<std::uint8_t>(arg)); break;
+			case 1: test_register = static_cast<bool>(frame.load<std::uint16_t>(arg)); break;
+			case 2: test_register = static_cast<bool>(frame.load<std::uint32_t>(arg)); break;
+			case 3: test_register = static_cast<bool>(frame.load<std::uint64_t>(arg)); break;
 			}
 			break;
 		}
 		case Op_code::jump: execute_jump<false>(op, ip, test_register); break;
 		case Op_code::jump_if_false: execute_jump<true, false>(op, ip, test_register); break;
 		case Op_code::jump_if_true: execute_jump<true, true>(op, ip, test_register); break;
-		case Op_code::booleanize: stack.store(ip.read<std::int32_t>(), static_cast<bool>(test_register)); break;
+		case Op_code::booleanize: frame.store(ip.read<std::int32_t>(), static_cast<bool>(test_register)); break;
 		case Op_code::load_resource: {
 			const std::int32_t arg    = ip.read<std::int32_t>();
 			const std::uint32_t index = ip.read<std::uint32_t>();
 			const auto& resource      = resources.at(index);
 			if (resource.is_type<memory::gc::GC_able<memory::gc::String*>>()) {
-				stack.store(arg, resource.get<memory::gc::GC_able<memory::gc::String*>>(), true);
+				frame.store(arg, resource.get<memory::gc::GC_able<memory::gc::String*>>(), true);
 			} else if (resource.is_type<memory::gc::GC_able<memory::gc::Regex*>>()) {
-				stack.store(arg, resource.get<memory::gc::GC_able<memory::gc::Regex*>>(), true);
+				frame.store(arg, resource.get<memory::gc::GC_able<memory::gc::Regex*>>(), true);
 			} else {
 				// TODO
 				BIA_ASSERT(false);
@@ -94,9 +94,9 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			using bytecode::Operation;
 			const auto operation = ip.read<Operation>();
 			switch (operation) {
-			case Operation::equal: test_register = resource_operation_test<Equal_to>(op, ip, stack); break;
-			case Operation::not_equal: test_register = resource_operation_test<Not_equal_to>(op, ip, stack); break;
-			case Operation::in: test_register = resource_operation_test<Inside_of>(op, ip, stack); break;
+			case Operation::equal: test_register = resource_operation_test<Equal_to>(op, ip, frame); break;
+			case Operation::not_equal: test_register = resource_operation_test<Not_equal_to>(op, ip, frame); break;
+			case Operation::in: test_register = resource_operation_test<Inside_of>(op, ip, frame); break;
 			default: BIA_THROW(error::Code::bad_operation);
 			}
 			break;
@@ -106,9 +106,15 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Stack& sta
 			const std::uint32_t index = ip.read<std::uint32_t>();
 			const auto& resource      = resources.at(index);
 			BIA_ASSERT(resource.is_type<memory::gc::GC_able<memory::gc::String*>>());
-			stack.store(
+			frame.store(
 			  arg, context.import(resource.get<memory::gc::GC_able<memory::gc::String*>>()->string.c_str()), true);
-			stack.load<memory::gc::GC_able<member::function::Base*>>(arg)->invoke();
+			break;
+		}
+		case Op_code::invoke: {
+			const std::int32_t arg    = ip.read<std::int32_t>();
+			const std::int32_t offset = ip.read<std::uint32_t>();
+			frame.load<memory::gc::GC_able<member::function::Base*>>(arg)->invoke(
+			  { frame, static_cast<std::size_t>(offset) });
 			break;
 		}
 		default: BIA_THROW(error::Code::bad_opcode);

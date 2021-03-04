@@ -90,17 +90,18 @@ try {
 	const auto ins = output.str();
 	const auto res = resource_output.str();
 	memory::Stack stack{ allocator, 1024 };
+	memory::Frame base_frame{ stack, 0 };
 	const auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);
-	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, stack, resources, context);
+	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, base_frame, resources, context);
 	gc.run();
 
 	// print stack
 	for (int i = 0; i < 5; ++i) {
 		std::cout << "%" << std::setw(3) << std::setfill(' ') << std::dec << i * sizeof(std::size_t) << ": 0x"
 		          << std::setw(16) << std::setfill('0') << std::hex
-		          << stack.load<std::size_t>(i * sizeof(std::size_t)) << std::endl;
+		          << base_frame.load<std::size_t>(i * sizeof(std::size_t)) << std::endl;
 	}
 } catch (const bia::error::Exception& e) {
 	std::cerr << "exception from main: " << e.code() << "\n\twhat: " << e.what()

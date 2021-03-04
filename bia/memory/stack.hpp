@@ -20,6 +20,8 @@ class GC;
 
 }
 
+class Frame;
+
 class Stack
 {
 public:
@@ -40,45 +42,11 @@ public:
 		_allocator->deallocate(_memory.data());
 		_allocator->deallocate(_meta.data());
 	}
-	template<typename Type>
-	void store(std::int32_t offset, const Type& value, bool mark = false)
-	{
-		static_assert(std::is_pod<Type>::value, "Type must be POD");
-
-		std::lock_guard<std::mutex> _{ _mutex };
-		const auto position = _memory.begin() + offset;
-		if (reinterpret_cast<std::intptr_t>(position) % alignof(Type)) {
-			BIA_THROW(error::Code::bad_stack_alignment);
-		} else if (position < _memory.begin() || position + sizeof(Type) > _memory.end()) {
-			BIA_THROW(error::Code::out_of_stack);
-		}
-		std::memcpy(position, &value, sizeof(value));
-		if (mark) {
-			_meta[offset / sizeof(void*) / 8] |= 1 << offset / sizeof(void*) % 8;
-		} else {
-			_meta[offset / sizeof(void*) / 8] &= ~(1 << offset / sizeof(void*) % 8);
-		}
-	}
-	template<typename Type>
-	Type load(std::int32_t offset) const
-	{
-		static_assert(std::is_pod<Type>::value, "Type must be POD");
-
-		std::lock_guard<std::mutex> _{ _mutex };
-		const auto position = _memory.begin() + offset;
-		if (reinterpret_cast<std::intptr_t>(position) % alignof(Type)) {
-			BIA_THROW(error::Code::bad_stack_alignment);
-		} else if (position < _memory.begin() || position + sizeof(Type) > _memory.end()) {
-			BIA_THROW(error::Code::out_of_stack);
-		}
-		Type value{};
-		std::memcpy(&value, position, sizeof(value));
-		return value;
-	}
 	Stack& operator=(const Stack& copy) = delete;
 
 private:
 	friend gc::GC;
+	friend Frame;
 	mutable std::mutex _mutex;
 	std::shared_ptr<Allocator> _allocator;
 	/// The actual stack data.

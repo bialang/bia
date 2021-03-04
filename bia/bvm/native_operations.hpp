@@ -3,7 +3,7 @@
 
 #include "instruction_pointer.hpp"
 
-#include <bia/memory/stack.hpp>
+#include <bia/memory/frame.hpp>
 #include <cstdint>
 #include <type_traits>
 
@@ -15,59 +15,59 @@ using Nao_type = typename std::conditional<Signed, typename std::make_signed<Typ
                                            typename std::make_unsigned<Type>::type>::type;
 
 template<typename Operation, bool Signed>
-inline void native_integral_operation(bvm::Operation op, Instruction_pointer& ip, memory::Stack& stack)
+inline void native_integral_operation(bvm::Operation op, Instruction_pointer& ip, memory::Frame& frame)
 {
 	const std::int32_t arg0 = ip.read<std::int32_t>();
 	const std::int32_t arg1 = ip.read<std::int32_t>();
 	switch (op.variation) {
 	case 0:
-		stack.store(arg0, Operation{}(stack.load<Nao_type<std::uint8_t, Signed>>(arg0),
-		                              stack.load<Nao_type<std::uint8_t, Signed>>(arg1)));
+		frame.store(arg0, Operation{}(frame.load<Nao_type<std::uint8_t, Signed>>(arg0),
+		                              frame.load<Nao_type<std::uint8_t, Signed>>(arg1)));
 		break;
 	case 1:
-		stack.store(arg0, Operation{}(stack.load<Nao_type<std::uint16_t, Signed>>(arg0),
-		                              stack.load<Nao_type<std::uint16_t, Signed>>(arg1)));
+		frame.store(arg0, Operation{}(frame.load<Nao_type<std::uint16_t, Signed>>(arg0),
+		                              frame.load<Nao_type<std::uint16_t, Signed>>(arg1)));
 		break;
 	case 2:
-		stack.store(arg0, Operation{}(stack.load<Nao_type<std::uint32_t, Signed>>(arg0),
-		                              stack.load<Nao_type<std::uint32_t, Signed>>(arg1)));
+		frame.store(arg0, Operation{}(frame.load<Nao_type<std::uint32_t, Signed>>(arg0),
+		                              frame.load<Nao_type<std::uint32_t, Signed>>(arg1)));
 		break;
 	case 3:
-		stack.store(arg0, Operation{}(stack.load<Nao_type<std::uint64_t, Signed>>(arg0),
-		                              stack.load<Nao_type<std::uint64_t, Signed>>(arg1)));
+		frame.store(arg0, Operation{}(frame.load<Nao_type<std::uint64_t, Signed>>(arg0),
+		                              frame.load<Nao_type<std::uint64_t, Signed>>(arg1)));
 		break;
 	}
 }
 
 template<typename Operation>
-inline void native_floating_point_operation(bvm::Operation op, Instruction_pointer& ip, memory::Stack& stack)
+inline void native_floating_point_operation(bvm::Operation op, Instruction_pointer& ip, memory::Frame& frame)
 {
 	const std::int32_t arg0 = ip.read<std::int32_t>();
 	const std::int32_t arg1 = ip.read<std::int32_t>();
 	switch (op.variation) {
-	case 0: stack.store(arg0, Operation{}(stack.load<float>(arg0), stack.load<float>(arg1))); break;
-	case 1: stack.store(arg0, Operation{}(stack.load<double>(arg0), stack.load<double>(arg1))); break;
+	case 0: frame.store(arg0, Operation{}(frame.load<float>(arg0), frame.load<float>(arg1))); break;
+	case 1: frame.store(arg0, Operation{}(frame.load<double>(arg0), frame.load<double>(arg1))); break;
 	}
 }
 
 template<typename Operation, bool Signed>
-inline bool native_integral_test(bvm::Operation op, Instruction_pointer& ip, memory::Stack& stack)
+inline bool native_integral_test(bvm::Operation op, Instruction_pointer& ip, memory::Frame& frame)
 {
 	const std::int32_t arg0 = ip.read<std::int32_t>();
 	const std::int32_t arg1 = ip.read<std::int32_t>();
 	switch (op.variation) {
 	case 0:
-		return Operation{}(stack.load<Nao_type<std::uint8_t, Signed>>(arg0),
-		                   stack.load<Nao_type<std::uint8_t, Signed>>(arg1));
+		return Operation{}(frame.load<Nao_type<std::uint8_t, Signed>>(arg0),
+		                   frame.load<Nao_type<std::uint8_t, Signed>>(arg1));
 	case 1:
-		return Operation{}(stack.load<Nao_type<std::uint16_t, Signed>>(arg0),
-		                   stack.load<Nao_type<std::uint16_t, Signed>>(arg1));
+		return Operation{}(frame.load<Nao_type<std::uint16_t, Signed>>(arg0),
+		                   frame.load<Nao_type<std::uint16_t, Signed>>(arg1));
 	case 2:
-		return Operation{}(stack.load<Nao_type<std::uint32_t, Signed>>(arg0),
-		                   stack.load<Nao_type<std::uint32_t, Signed>>(arg1));
+		return Operation{}(frame.load<Nao_type<std::uint32_t, Signed>>(arg0),
+		                   frame.load<Nao_type<std::uint32_t, Signed>>(arg1));
 	case 3:
-		return Operation{}(stack.load<Nao_type<std::uint64_t, Signed>>(arg0),
-		                   stack.load<Nao_type<std::uint64_t, Signed>>(arg1));
+		return Operation{}(frame.load<Nao_type<std::uint64_t, Signed>>(arg0),
+		                   frame.load<Nao_type<std::uint64_t, Signed>>(arg1));
 	}
 	BIA_ASSERT(false);
 }
