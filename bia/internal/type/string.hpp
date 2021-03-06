@@ -18,11 +18,11 @@ public:
 	}
 	std::size_t size() const noexcept override
 	{
-		return sizeof(memory::gc::String);
+		return sizeof(memory::gc::GC_able<memory::gc::String*>);
 	}
 	std::size_t alignment() const noexcept override
 	{
-		return 1;
+		return alignof(memory::gc::GC_able<memory::gc::String*>);
 	}
 	int flags() const noexcept override
 	{

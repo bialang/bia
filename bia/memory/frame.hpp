@@ -5,7 +5,10 @@
 
 #include <bia/internal/type/framer.hpp>
 #include <bia/memory/gc/gc.hpp>
+#include <bia/util/algorithm.hpp>
 #include <bia/util/type_traits/is_frameable.hpp>
+#include <bia/util/type_traits/type_at.hpp>
+#include <bia/util/type_traits/type_select.hpp>
 #include <cstdint>
 
 namespace bia {
@@ -54,11 +57,28 @@ public:
 		}
 		return Framer::unframe({ position, Framer::size() });
 	}
+	template<std::size_t Index, typename... Parameters>
+	typename util::type_traits::type_at<Index, Parameters...>::type load_parameter()
+	{
+		static_assert(util::sum(static_cast<int>(util::type_traits::Is_frameable<Parameters>::value)...) ==
+		                sizeof...(Parameters),
+		              "all parameters must be frameable");
+		// TODO
+		return _load_parameter<typename util::type_traits::type_at<Index, Parameters...>::type>(
+		  util::type_traits::type_select<0, Index, Parameters...>::value);
+	}
 
 private:
 	Stack& _stack;
 	gc::GC& _gc;
 	std::size_t _offset;
+
+	template<typename Parameter, typename... PreviousParameters>
+	Parameter _load_parameter(util::type_traits::type_container<PreviousParameters...>)
+	{
+		return load<Parameter>(util::sum(
+		  util::aligned(internal::type::Framer<PreviousParameters>::size(), alignof(std::max_align_t))...));
+	}
 };
 
 } // namespace memory

@@ -11,13 +11,6 @@
 
 using namespace bia::compiler::symbol;
 
-inline std::size_t aligned_size(std::size_t size) noexcept
-{
-	return size + (size % alignof(std::max_align_t)
-	                 ? (alignof(std::max_align_t) - size % alignof(std::max_align_t))
-	                 : 0);
-}
-
 Manager::Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
                  Default_int_size default_int_size)
     : _type_system{ allocator }
@@ -48,7 +41,7 @@ Variable Manager::create_temporary(util::Not_null<const internal::type::Definiti
 	Variable variable{};
 	variable.definition      = type;
 	variable.location.offset = _stack;
-	_stack += aligned_size(type->size());
+	_stack += util::aligned(type->size(), alignof(std::max_align_t));
 	return variable;
 }
 
@@ -56,7 +49,7 @@ void Manager::free_temporary(Variable variable)
 {
 	BIA_EXPECTS(variable.definition);
 	// TODO solve alignment a more efficient way
-	const auto size = aligned_size(variable.definition->size());
+	const auto size = util::aligned(variable.definition->size(), alignof(std::max_align_t));
 	// TODO add support if variable is not at the end
 	if (variable.location.offset + size == _stack) {
 		_stack -= size;

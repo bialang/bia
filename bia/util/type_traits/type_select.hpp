@@ -17,7 +17,7 @@ struct type_container
 template<typename... T>
 struct type_wrapper
 {
-	constexpr static type_container<T...> values{};
+	constexpr static type_container<T...> value{};
 };
 
 template<std::size_t Offset, std::size_t Count, typename... Types>

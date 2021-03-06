@@ -3,6 +3,7 @@
 
 #include "contract.hpp"
 
+#include <cstddef>
 #include <iterator>
 #include <type_traits>
 #include <utility>
@@ -32,6 +33,29 @@ template<typename Type, typename... Others>
 constexpr Type max(Type value, Type other, Others... others) noexcept
 {
 	return value > max(other, others...) ? value : max(other, others...);
+}
+
+constexpr int sum() noexcept
+{
+	return 0;
+}
+
+template<typename Type>
+constexpr Type sum(Type value) noexcept
+{
+	return value;
+}
+
+template<typename Type, typename Other, typename... Others>
+constexpr auto sum(Type value, Other other, Others... others) noexcept
+  -> decltype(value + other + sum(others...))
+{
+	return value + other + sum(others...);
+}
+
+constexpr std::size_t aligned(std::size_t size, std::size_t alignment) noexcept
+{
+	return size + (size % alignment ? (alignment - size % alignment) : 0);
 }
 
 template<typename Left, typename Right>

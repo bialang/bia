@@ -1,6 +1,5 @@
 import hello_world
-
-let x = hello_world("moin from ze otzer zide", 344)
+let x = hello_world("hi", 344)
 
 // hello_world(x, 4)
 
