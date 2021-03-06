@@ -98,11 +98,13 @@ try {
 	gc.run();
 
 	// print stack
+	std::cout << "\n==========STACK==========\n";
 	for (int i = 0; i < 5; ++i) {
 		std::cout << "%" << std::setw(3) << std::setfill(' ') << std::dec << i * sizeof(std::size_t) << ": 0x"
 		          << std::setw(16) << std::setfill('0') << std::hex
 		          << base_frame.load<std::size_t>(i * sizeof(std::size_t)) << std::endl;
 	}
+	std::cout << "==========STACK==========\n";
 } catch (const bia::error::Exception& e) {
 	std::cerr << "exception from main: " << e.code() << "\n\twhat: " << e.what()
 	          << "\n\tcondition: " << e.code().default_error_condition().message()

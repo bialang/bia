@@ -1,7 +1,7 @@
 #ifndef BIA_UTIL_VARIANT_HPP_
 #define BIA_UTIL_VARIANT_HPP_
 
-#include "aggregate.hpp"
+#include "algorithm.hpp"
 #include "type_traits/are_all_copyable.hpp"
 #include "type_traits/are_all_moveable.hpp"
 #include "type_traits/equals_any.hpp"
@@ -27,8 +27,8 @@ public:
 	using index_of = type_traits::type_index<Type, Types...>;
 
 	Variant() = default;
-	template<typename Type, typename = typename std::enable_if<
-	                          util::type_traits::equals_any_type<typename std::decay<Type>::type, Types...>::value>::type>
+	template<typename Type, typename = typename std::enable_if<util::type_traits::equals_any_type<
+	                          typename std::decay<Type>::type, Types...>::value>::type>
 	Variant(Type&& value)
 	{
 		emplace<typename std::decay<Type>::type>(std::forward<Type>(value));

@@ -3,17 +3,23 @@
 
 #include "definition.hpp"
 
-#include <bia/util/aggregate.hpp>
+#include <bia/util/algorithm.hpp>
 #include <vector>
 
 namespace bia {
 namespace internal {
 namespace type {
 
+struct Argument
+{
+	const Definition* definition;
+};
+
 class Function : public Definition
 {
 public:
-	Function(const Definition* return_type) noexcept : _return_type{ return_type }
+	Function(const Definition* return_type, std::vector<Argument> arguments) noexcept
+	    : _return_type{ return_type }, _arguments{ std::move(arguments) }
 	{}
 	bool is_assignable(const Definition* other) const noexcept override
 	{
@@ -44,14 +50,14 @@ public:
 	{
 		return _return_type;
 	}
-	const std::vector<const Definition*>& arguments() const noexcept
+	const std::vector<Argument>& arguments() const noexcept
 	{
 		return _arguments;
 	}
 
 private:
 	const Definition* _return_type;
-	std::vector<const Definition*> _arguments;
+	std::vector<Argument> _arguments;
 };
 
 } // namespace type

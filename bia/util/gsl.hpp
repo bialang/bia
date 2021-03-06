@@ -154,6 +154,11 @@ public:
 	{
 		return subspan(from - _data, dynamic_extent);
 	}
+	Span left(Iterable pivot) const
+	{
+		BIA_EXPECTS(pivot >= begin() && pivot <= end());
+		return subspan(+0, pivot - begin());
+	}
 	Iterable data() const noexcept
 	{
 		return _data;

@@ -75,6 +75,8 @@ enum class Code
 	type_not_truthable,
 	not_an_integral,
 	not_a_function,
+	too_few_arguments,
+	too_many_arguments,
 
 	bad_opcode = 200,
 	bad_offset_option,
@@ -159,6 +161,8 @@ inline const std::error_category& code_category() noexcept
 			case Code::type_not_truthable: return "type is not truthable";
 			case Code::not_an_integral: return "type is not an integral";
 			case Code::not_a_function: return "not a function";
+			case Code::too_few_arguments: return "too few arguments in function call";
+			case Code::too_many_arguments: return "too many arguments in function call";
 			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:

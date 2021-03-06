@@ -15,11 +15,11 @@ public:
 	Optional() = default;
 	Optional(Type&& value)
 	{
-		emplace<Type>(std::move(value));
+		emplace(std::move(value));
 	}
 	Optional(const Type& value)
 	{
-		emplace<Type>(value);
+		emplace(value);
 	}
 	Optional(const Optional& copy)
 	{

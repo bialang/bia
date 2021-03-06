@@ -3,7 +3,7 @@
 
 #include "definition.hpp"
 
-#include <bia/util/aggregate.hpp>
+#include <bia/util/algorithm.hpp>
 
 namespace bia {
 namespace internal {
@@ -28,7 +28,7 @@ public:
 	{}
 	bool is_assignable(const Definition* other) const noexcept override
 	{
-		return this == other;
+		return compare(other) == 0;
 	}
 	std::size_t size() const noexcept override
 	{

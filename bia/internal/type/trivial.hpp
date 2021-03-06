@@ -3,7 +3,7 @@
 
 #include "definition.hpp"
 
-#include <bia/util/aggregate.hpp>
+#include <bia/util/algorithm.hpp>
 #include <cstddef>
 #include <type_traits>
 #include <typeindex>

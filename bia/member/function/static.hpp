@@ -4,6 +4,7 @@
 #include "base.hpp"
 
 #include <bia/util/type_traits/int_maker.hpp>
+#include <type_traits>
 
 namespace bia {
 namespace member {
@@ -11,6 +12,13 @@ namespace function {
 
 template<typename Return, typename... Arguments, std::size_t... Indices>
 inline void invoke_static(Return (*function)(Arguments...), memory::Frame& frame,
+                          util::type_traits::Int_container<std::size_t, Indices...>)
+{
+	frame.store(0, function(frame.load<Arguments>(alignof(std::max_align_t) * (Indices + 1))...));
+}
+
+template<typename... Arguments, std::size_t... Indices>
+inline void invoke_static(void (*function)(Arguments...), memory::Frame& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
 	function(frame.load<Arguments>(alignof(std::max_align_t) * Indices)...);

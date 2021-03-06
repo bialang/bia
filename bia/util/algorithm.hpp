@@ -1,6 +1,9 @@
-#ifndef BIA_UTIL_AGGREGATE_HPP_
-#define BIA_UTIL_AGGREGATE_HPP_
+#ifndef BIA_UTIL_ALGORITHM_HPP_
+#define BIA_UTIL_ALGORITHM_HPP_
 
+#include "contract.hpp"
+
+#include <iterator>
 #include <type_traits>
 #include <utility>
 
@@ -43,6 +46,30 @@ inline typename std::enable_if<(sizeof...(Others) >= 2), int>::type compare(Left
 {
 	const int n = compare(std::forward<Left>(left), std::forward<Right>(right));
 	return n == 0 ? compare(std::forward<Others>(others)...) : n;
+}
+
+template<typename RandomIterator1, typename RandomIterator2, typename Comparator>
+inline int compare_ranges(RandomIterator1 first1, RandomIterator1 last1, RandomIterator2 first2,
+                          RandomIterator2 last2, Comparator comparator)
+{
+	BIA_EXPECTS(first1 <= last1);
+	BIA_EXPECTS(first2 <= last2);
+	if (const int n = compare(std::distance(first1, last1), std::distance(first2, last2))) {
+		return n;
+	}
+	for (; first1 != last1; ++first1, ++first2) {
+		if (const int n = comparator(*first1, *first2)) {
+			return n;
+		}
+	}
+	return 0;
+}
+
+template<typename RandomIterator1, typename RandomIterator2>
+inline int compare_ranges(RandomIterator1 first1, RandomIterator1 last1, RandomIterator2 first2,
+                          RandomIterator2 last2)
+{
+	return compare_ranges(first1, last1, first2, last2, &compare<decltype(*first1), decltype(*first2)>);
 }
 
 } // namespace util

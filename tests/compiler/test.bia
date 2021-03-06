@@ -1,5 +1,7 @@
 import hello_world
-hello_world(99, 61)
+
+let x = hello_world(99, 344)
+hello_world(x, 4)
 
 // let x: regex = r"hi"
 

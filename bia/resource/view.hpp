@@ -4,6 +4,7 @@
 #include "info.hpp"
 
 #include <bia/memory/iterator.hpp>
+#include <bia/util/algorithm.hpp>
 
 namespace bia {
 namespace resource {
@@ -28,52 +29,19 @@ struct View
 	}
 	int compare(const char* string, std::size_t length) const noexcept
 	{
-		if (type < Type::string) {
-			return -1;
-		} else if (type > Type::string) {
-			return 1;
+		if (auto n = util::compare(type, Type::string)) {
+			return n;
 		}
-
-		const auto ls = size();
-		if (ls < length) {
-			return -1;
-		} else if (ls > length) {
-			return 1;
-		}
-
-		for (auto i = first; i != last; ++i, ++string) {
-			if (static_cast<char>(*i) < *string) {
-				return -1;
-			} else if (static_cast<char>(*i) > *string) {
-				return 1;
-			}
-		}
-		return 0;
+		return util::compare_ranges(first, last, string, string + length, [](util::Byte left, char right) {
+			return util::compare(left, static_cast<util::Byte>(right));
+		});
 	}
 	int compare(const View& other) const noexcept
 	{
-		if (type < other.type) {
-			return -1;
-		} else if (type > other.type) {
-			return 1;
+		if (auto n = util::compare(type, other.type)) {
+			return n;
 		}
-
-		const auto ls = size();
-		const auto rs = other.size();
-		if (ls < rs) {
-			return -1;
-		} else if (ls > rs) {
-			return 1;
-		}
-
-		for (auto i = first, j = other.first; i != last; ++i, ++j) {
-			if (*i < *j) {
-				return -1;
-			} else if (*i > *j) {
-				return 1;
-			}
-		}
-		return 0;
+		return util::compare_ranges(first, last, other.first, other.last);
 	}
 	bool operator<(const View& other) const noexcept
 	{

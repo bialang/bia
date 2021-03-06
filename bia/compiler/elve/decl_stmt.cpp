@@ -21,15 +21,15 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 	}
 
 	auto expr = single_expression(param, tokens.subspan(1));
-	if (!param.errors.has_failed()) {
-		if (desired_type && !desired_type->is_assignable(expr.second.definition)) {
+	if (expr.second) {
+		if (desired_type && !desired_type->is_assignable(expr.second->definition)) {
 			param.errors.add_error(error::Code::type_mismatch,
 			                       tokens.subspan(1, tokens.size() - expr.first.size() - 1));
-			param.symbols.free_temporary(expr.second);
+			param.symbols.free_temporary(*expr.second);
 		} else if (!param.symbols.promote_temporary(variable_token.value.get<Token::Identifier>().memory,
-		                                            expr.second)) {
+		                                            *expr.second)) {
 			param.errors.add_error(error::Code::symbol_already_declared, { &variable_token, 1 });
-			param.symbols.free_temporary(expr.second);
+			param.symbols.free_temporary(*expr.second);
 		}
 	}
 	return expr.first;

@@ -36,7 +36,9 @@ Tokens decl_stmt(Parameter& param, Tokens tokens);
 Tokens if_stmt(Parameter& param, Tokens tokens);
 Tokens import_stmt(Parameter& param, Tokens tokens);
 
-std::pair<Tokens, symbol::Variable> single_expression(Parameter& param, Tokens tokens);
+std::pair<Tokens, util::Optional<symbol::Variable>> value(Parameter& param, Tokens tokens);
+std::pair<Tokens, util::Optional<symbol::Variable>> single_expression(Parameter& param, Tokens tokens);
+
 std::pair<Tokens, internal::type::Definition*> type_definition(Parameter& param, Tokens tokens);
 
 } // namespace elve

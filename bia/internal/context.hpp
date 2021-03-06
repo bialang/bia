@@ -10,6 +10,8 @@
 #include <bia/member/function/static.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
+#include <bia/resource/view.hpp>
+#include <bia/util/optional.hpp>
 #include <map>
 #include <string>
 
@@ -28,9 +30,12 @@ public:
 	Context(memory::gc::GC& gc)
 	{
 		static type::Void v;
-		static type::Function foo{ &v };
-		_global_modules["hello_world"] = { gc.create<member::function::Static<void, int, int>>(
-			                                     [](int i, int j) { printf("hello world - %d | %d!\n", i, j); })
+		static type::Integer i{ type::Integer::Size::i32, true };
+		static type::Function foo{ &i, { { &i }, { &i } } };
+		_global_modules["hello_world"] = { gc.create<member::function::Static<int, int, int>>([](int i, int j) {
+			                                     printf("hello world - %d | %d!\n", i, j);
+			                                     return i * j;
+			                                   })
 			                                   .pointer,
 			                                 &foo };
 	}
@@ -48,6 +53,10 @@ public:
 			BIA_THROW(error::Code::module_not_found);
 		}
 		return it->second;
+	}
+	util::Optional<Module> import(const resource::View&)
+	{
+		return import("hello_world");
 	}
 
 private:

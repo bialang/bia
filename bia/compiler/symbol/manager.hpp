@@ -28,7 +28,7 @@ struct Location
 struct Variable
 {
 	Location location;
-	internal::type::Definition* definition;
+	const internal::type::Definition* definition;
 };
 
 /// A symbol is either a variable or a type.
@@ -43,7 +43,7 @@ public:
 	Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator, Default_int_size default_int_size);
 	void open_scope();
 	void close_scope();
-	Variable create_temporary(util::Not_null<internal::type::Definition*> type);
+	Variable create_temporary(util::Not_null<const internal::type::Definition*> type);
 	void free_temporary(Variable variable);
 	bool promote_temporary(const resource::View& name, const Variable& variable);
 	/// Returns the symbol or an empty variant if not found.

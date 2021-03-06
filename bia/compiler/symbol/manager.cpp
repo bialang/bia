@@ -7,6 +7,7 @@
 #include <bia/internal/type/regex.hpp>
 #include <bia/internal/type/string.hpp>
 #include <bia/internal/type/void.hpp>
+#include <bia/util/algorithm.hpp>
 
 using namespace bia::compiler::symbol;
 
@@ -42,7 +43,7 @@ void Manager::close_scope()
 	_scopes.pop_back();
 }
 
-Variable Manager::create_temporary(util::Not_null<internal::type::Definition*> type)
+Variable Manager::create_temporary(util::Not_null<const internal::type::Definition*> type)
 {
 	Variable variable{};
 	variable.definition      = type;
@@ -92,32 +93,43 @@ Symbol Manager::symbol(const string_type& name)
 
 bool Manager::Comparator::operator()(const map_key_type& left, const map_key_type& right) const
 {
-	if (left.is_type<resource::View>()) {
+	const auto comp = [&] {
+		if (left.is_type<resource::View>()) {
+			if (right.is_type<resource::View>()) {
+				return left.get<resource::View>() < right.get<resource::View>();
+			}
+			const auto str = right.get<string_type>();
+			return left.get<resource::View>().compare(str.data(), str.size()) < 0;
+		}
+		const auto lstr = left.get<string_type>();
 		if (right.is_type<resource::View>()) {
-			return left.get<resource::View>() < right.get<resource::View>();
+			return right.get<resource::View>().compare(lstr.data(), lstr.size()) > 0;
 		}
-		const auto str = right.get<string_type>();
-		return left.get<resource::View>().compare(str.data(), str.size()) < 0;
-	}
-	const auto lstr = left.get<string_type>();
-	if (right.is_type<resource::View>()) {
-		return right.get<resource::View>().compare(lstr.data(), lstr.size()) >= 0;
-	}
-	// both are strings
-	const auto rstr = right.get<string_type>();
-	if (lstr.size() < rstr.size()) {
-		return true;
-	} else if (lstr.size() > rstr.size()) {
-		return false;
-	}
-	for (auto a = lstr.begin(), b = rstr.begin(); a != lstr.end(); ++a, ++b) {
-		if (*a < *b) {
-			return true;
-		} else if (*a > *b) {
-			return false;
-		}
-	}
-	return false;
+		// both are strings
+		const auto rstr = right.get<string_type>();
+		return util::compare_ranges(lstr.begin(), lstr.end(), rstr.begin(), rstr.end()) < 0;
+	};
+	// printf("comp: left=");
+	// if (left.is_type<resource::View>()) {
+	// 	printf("r'");
+	// 	for (auto i : left.get<resource::View>()) {
+	// 		printf("%c", (char) i);
+	// 	}
+	// } else {
+	// 	printf("'%s", left.get<string_type>().begin());
+	// }
+	// printf("', right=");
+	// if (right.is_type<resource::View>()) {
+	// 	printf("r'");
+	// 	for (auto i : right.get<resource::View>()) {
+	// 		printf("%c", (char) i);
+	// 	}
+	// } else {
+	// 	printf("'%s", right.get<string_type>().begin());
+	// }
+	bool less = comp();
+	// printf("', less=%s\n", less ? "yes" : "no");
+	return less;
 }
 
 void Manager::_accept_declared(const resource::View& name, Variable var)
@@ -143,13 +155,16 @@ void Manager::_introduce_native_types()
 	if (_default_int_size == Default_int_size::size_32) {
 		_symbols.insert(
 		  std::make_pair(util::from_cstring("int"),
-		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i64, true))));
+		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i32, true))));
 		_symbols.insert(
 		  std::make_pair(util::from_cstring("uint"),
-		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::u64, true))));
+		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::u32, true))));
 	} else {
 		BIA_ASSERT(false);
 	}
+
+	_symbols.insert(
+	  std::make_pair(util::from_cstring("void"), static_cast<Definition*>(_type_system.create_type<Void>())));
 
 	_symbols.insert(
 	  std::make_pair(util::from_cstring("bool"), static_cast<Definition*>(_type_system.create_type<Bool>())));

@@ -15,10 +15,10 @@ elve::Tokens elve::root(Parameter& param, Tokens tokens)
 		default: BIA_THROW(error::Code::bad_switch_value);
 		}
 	} else {
-		symbol::Variable variable;
+		util::Optional<symbol::Variable> variable;
 		std::tie(tokens, variable) = single_expression(param, tokens);
-		if (variable.definition) {
-			param.symbols.free_temporary(variable);
+		if (variable) {
+			param.symbols.free_temporary(*variable);
 		}
 	}
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Control::cmd_end);
