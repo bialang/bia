@@ -3,6 +3,7 @@
 
 #include "type/function.hpp"
 #include "type/integer.hpp"
+#include "type/string.hpp"
 #include "type/system.hpp"
 #include "type/void.hpp"
 
@@ -29,13 +30,14 @@ public:
 
 	Context(memory::gc::GC& gc)
 	{
-		static type::Void v;
+		static type::String s;
 		static type::Integer i{ type::Integer::Size::i32, true };
-		static type::Function foo{ &i, { { &i }, { &i } } };
-		_global_modules["hello_world"] = { gc.create<member::function::Static<int, int, int>>([](int i, int j) {
-			                                     printf("hello world - %d | %d!\n", i, j);
-			                                     return i * j;
-			                                   })
+		static type::Function foo{ &i, { { &s }, { &i } } };
+		_global_modules["hello_world"] = { gc.create<member::function::Static<int, std::string, int>>(
+			                                     [](std::string i, int j) {
+			                                       printf("hello world - '%s' | %d!\n", i.c_str(), j);
+			                                       return static_cast<int>(i.length() * j);
+			                                     })
 			                                   .pointer,
 			                                 &foo };
 	}

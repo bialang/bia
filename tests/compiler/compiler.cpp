@@ -90,11 +90,12 @@ try {
 	const auto ins = output.str();
 	const auto res = resource_output.str();
 	memory::Stack stack{ allocator, 1024 };
-	memory::Frame base_frame{ stack, 0 };
+	memory::Frame base_frame{ stack, gc, 0 };
 	const auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);
-	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, base_frame, resources, context);
+	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, base_frame, resources,
+	             context);
 	gc.run();
 
 	// print stack
