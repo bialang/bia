@@ -65,7 +65,7 @@ public:
 		              "all parameters must be frameable");
 		// TODO
 		return _load_parameter<typename util::type_traits::type_at<Index, Parameters...>::type>(
-		  util::type_traits::type_select<0, Index, Parameters...>::value);
+		  util::type_traits::type_select<0, Index + 1, gc::GC_able<void*>, Parameters...>::value);
 	}
 
 private:

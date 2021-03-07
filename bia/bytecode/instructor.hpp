@@ -52,12 +52,10 @@ public:
 		util::portable::write(_output, arg);
 	}
 	template<Op_code op_code>
-	typename std::enable_if<is_op_code<op_code, Op_code::invoke>::value>::type write(std::int32_t arg,
-	                                                                                 std::int32_t offset)
+	typename std::enable_if<is_op_code<op_code, Op_code::invoke>::value>::type write(std::int32_t arg)
 	{
 		util::portable::write(_output, op_code);
 		util::portable::write(_output, arg);
-		util::portable::write(_output, offset);
 	}
 	template<Op_code op_code, typename Type>
 	typename std::enable_if<is_op_code<op_code, Op_code::load>::value>::type write(std::int32_t destination,

@@ -82,7 +82,7 @@ try {
 		for (auto err : compiler.errors()) {
 			print_error(str, err);
 		}
-		std::cerr << "compilation failed\n";
+		BIA_LOG(ERROR, "compilation failed");
 		return -1;
 	}
 
@@ -94,8 +94,12 @@ try {
 	const auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);
-	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, base_frame, resources,
-	             context);
+	{
+		const auto start = std::chrono::high_resolution_clock::now();
+		bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, base_frame, resources,
+		             context);
+		BIA_LOG(INFO, "execution took {}", std::chrono::high_resolution_clock::now() - start);
+	}
 	gc.run();
 
 	// print stack

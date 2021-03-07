@@ -111,10 +111,9 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame fram
 			break;
 		}
 		case Op_code::invoke: {
-			const std::int32_t arg    = ip.read<std::int32_t>();
-			const std::int32_t offset = ip.read<std::uint32_t>();
+			const std::int32_t arg = ip.read<std::int32_t>();
 			frame.load<memory::gc::GC_able<member::function::Base*>>(arg)->invoke(
-			  { frame, static_cast<std::size_t>(offset) });
+			  { frame, static_cast<std::size_t>(arg) });
 			break;
 		}
 		default: BIA_THROW(error::Code::bad_opcode);

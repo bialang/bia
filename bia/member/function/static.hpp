@@ -14,7 +14,7 @@ template<typename Return, typename... Arguments, std::size_t... Indices>
 inline void invoke_static(Return (*function)(Arguments...), memory::Frame& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
-	frame.store(0, function(frame.load_parameter<Indices + 1, Return, Arguments...>()...));
+	frame.store(0, function(frame.load_parameter<Indices, Arguments...>()...));
 }
 
 template<typename... Arguments, std::size_t... Indices>

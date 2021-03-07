@@ -50,6 +50,12 @@ public:
 	Symbol symbol(const resource::View& name);
 	/// Returns the symbol or an empty variant if not found.
 	Symbol symbol(const string_type& name);
+	bool is_tos(const Variable& variable) const
+	{
+		BIA_EXPECTS(variable.definition);
+		const auto size = util::aligned(variable.definition->size(), alignof(std::max_align_t));
+		return variable.location.offset + size == _stack;
+	}
 	std::uint32_t stack_position() const noexcept
 	{
 		return _stack;

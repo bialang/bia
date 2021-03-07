@@ -39,12 +39,10 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
   member_invocation(Parameter& param, Tokens tokens, symbol::Variable function, Tokens function_tokens)
 {
 	BIA_EXPECTS(tokens.front().value == Operator::function_call_open);
+	BIA_EXPECTS(param.symbols.is_tos(function));
 
-	const auto stack_offset                                 = param.symbols.stack_position();
 	const std::vector<type::Argument>* argument_definitions = nullptr;
-	util::Optional<symbol::Variable> result;
 	if (const auto ptr = dynamic_cast<const type::Function*>(function.definition)) {
-		result               = param.symbols.create_temporary(ptr->return_type());
 		argument_definitions = &ptr->arguments();
 	} else {
 		param.errors.add_error(error::Code::not_a_function, function_tokens);
@@ -77,12 +75,17 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 		param.errors.add_error(error::Code::too_many_arguments, function_tokens);
 	}
 	// invoke
-	param.instructor.write<bytecode::Op_code::invoke>(function.location.offset, stack_offset);
+	param.instructor.write<bytecode::Op_code::invoke>(function.location.offset);
 	tokens = tokens.subspan(1);
 	for (const auto& arg : pushed) {
 		param.symbols.pop(arg);
 	}
-	return { tokens, result };
+	// result
+	if (const auto ptr = dynamic_cast<const type::Function*>(function.definition)) {
+		param.symbols.free_temporary(function);
+		return { tokens, param.symbols.create_temporary(ptr->return_type()) };
+	}
+	return { tokens, {} };
 }
 
 inline std::pair<Tokens, util::Optional<symbol::Variable>>
@@ -137,7 +140,6 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 			util::Optional<symbol::Variable> result;
 			std::tie(tokens, result) = member_invocation(param, tokens, *lhs, lhs_tokens);
 			if (result) {
-				param.symbols.free_temporary(*lhs);
 				lhs = result;
 			}
 			continue;
@@ -154,7 +156,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 
 		// TODO
 		if (lhs->definition->compare(rhs->definition) && !(dynamic_cast<const type::Regex*>(lhs->definition) &&
-		                                                 dynamic_cast<const type::String*>(rhs->definition))) {
+		                                                   dynamic_cast<const type::String*>(rhs->definition))) {
 			param.errors.add_error(error::Code::type_mismatch, rhs_tokens);
 		}
 
