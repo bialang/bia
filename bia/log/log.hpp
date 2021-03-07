@@ -26,15 +26,22 @@ struct formatter<std::chrono::duration<Rep, Period>>
 	template<typename Context>
 	auto format(const std::chrono::duration<Rep, Period>& duration, Context& context) -> decltype(context.out())
 	{
-		const char* unit = "?";
-		if (std::is_same<Period, std::nano>::value) {
+		using namespace std::chrono;
+		const char* unit;
+		double t = duration_cast<nanoseconds>(duration).count();
+		if (duration < nanoseconds{ 1000 }) {
 			unit = "ns";
-		} else if (std::is_same<Period, std::micro>::value) {
+		} else if (duration < microseconds{ 1000 }) {
 			unit = "µs";
-		} else if (std::is_same<Period, std::milli>::value) {
+			t /= 1000;
+		} else if (duration < milliseconds{ 1000 }) {
 			unit = "ms";
+			t /= 1000000;
+		} else {
+			unit = "s";
+			t /= 10000000000;
 		}
-		return format_to(context.out(), "{}{}", duration.count(), unit);
+		return format_to(context.out(), "{:.2f}{}", t, unit);
 	}
 };
 
