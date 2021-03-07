@@ -34,6 +34,7 @@ Tokens batch(Parameter& param, Tokens tokens);
 
 Tokens decl_stmt(Parameter& param, Tokens tokens);
 Tokens if_stmt(Parameter& param, Tokens tokens);
+Tokens while_stmt(Parameter& param, Tokens tokens);
 Tokens import_stmt(Parameter& param, Tokens tokens);
 
 std::pair<Tokens, util::Optional<symbol::Variable>> value(Parameter& param, Tokens tokens);

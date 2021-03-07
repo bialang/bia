@@ -1,6 +1,6 @@
 root ::= small_stmt | compound_stmt
 small_stmt ::= (drop_stmt | decl_stmt | return_stmt | yield_stmt | flow_ctrl_stmt | defer_stmt | import_stmt | type_stmt | single_expression) ";"?
-compound_stmt ::= if_stmt | scope_stmt | fun_stmt
+compound_stmt ::= if_stmt | while_stmt | scope_stmt | fun_stmt
 batch ::= "{" root* "}"
 
 scope_stmt ::= "scoped" batch
@@ -18,6 +18,8 @@ drop_stmt ::= "drop" identifier ("," identifier)*
 if_stmt ::= "if" single_expression batch else_if_stmt* else_stmt
 else_if_stmt ::= "else" "if" single_expression batch
 else_stmt ::= "else" batch
+
+while_stmt ::= "while" single_expression batch
 
 multi_expression ::= single_expression ("," single_expression)*
 single_expression ::= expression_value (operator expression_value)* (member_access | member_invocation | member_subscript)*

@@ -53,7 +53,7 @@ Error_info parse::identifier(Parameter& param)
 	using namespace string::encoding;
 	const char* values[]{ "as",   "break",  "continue", "defer", "drop",   "else", "error", "false",
 		                    "for",  "from",   "fun",      "if",    "import", "in",   "let",   "mut",
-		                    "null", "return", "scoped",   "true",  "type",   "use",  "yield" };
+		                    "null", "return", "scoped",   "true",  "type",   "use",  "while", "yield" };
 	comparator keywords{ values, values + sizeof(values) / sizeof(const char*) };
 	auto first        = true;
 	auto streambuf    = param.manager.start_memory(true);

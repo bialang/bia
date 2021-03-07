@@ -226,7 +226,7 @@ TEST_CASE("if statement", "[tokenizer]")
 
 	param = create_parameter("if 1 { } else if false {} else { let x = 0 }");
 	REQUIRE(!if_stmt(*param));
-	REQUIRE(param->bundle.size() == 13);
+	REQUIRE(param->bundle.size() > 9);
 	REQUIRE(param->bundle[0].value == Token::Keyword::if_);
 	REQUIRE(param->bundle[1].value.is_type<Token::Number>());
 	REQUIRE(param->bundle[2].value.is_type<Token::Batch>());
@@ -237,6 +237,27 @@ TEST_CASE("if statement", "[tokenizer]")
 	REQUIRE(param->bundle[7].value.is_type<Token::Batch>());
 	REQUIRE(param->bundle[8].value == Token::Keyword::let);
 	// other tokens
+}
+
+TEST_CASE("while statement", "[tokenizer]")
+{
+	auto param = create_parameter("while true { }");
+	REQUIRE(!root(*param));
+	REQUIRE(param->bundle.size() == 4);
+	REQUIRE(param->bundle[0].value == Token::Keyword::while_);
+	REQUIRE(param->bundle[1].value == Token::Keyword::true_);
+	REQUIRE(param->bundle[2].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[3].value == Token::Control::cmd_end);
+
+	param = create_parameter("while 1 {\nlet x = 0\n}");
+	REQUIRE(!root(*param));
+	REQUIRE(param->bundle.size() > 4);
+	REQUIRE(param->bundle[0].value == Token::Keyword::while_);
+	REQUIRE(param->bundle[1].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[2].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[3].value == Token::Keyword::let);
+	// other tokens
+	REQUIRE(param->bundle.back().value == Token::Control::cmd_end);
 }
 
 TEST_CASE("import statement", "[tokenizer]")

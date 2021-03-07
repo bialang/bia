@@ -135,6 +135,7 @@ struct Token
 		else_if,
 		else_,
 		drop,
+		while_,
 	};
 
 	typedef util::Variant<Number, Array_dimension, Batch, Control, Keyword, String, Regex, Identifier, Operator,

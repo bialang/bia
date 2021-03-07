@@ -17,6 +17,7 @@ Error_info spacer(Parameter& param);
 
 Error_info root(Parameter& param);
 Error_info batch(Parameter& param);
+Error_info scope_stmt(Parameter& param);
 
 Error_info identifier(Parameter& param);
 Error_info string(Parameter& param);
@@ -35,7 +36,8 @@ Error_info drop_stmt(Parameter& param);
 Error_info if_stmt(Parameter& param);
 Error_info else_if_stmt(Parameter& param);
 Error_info else_stmt(Parameter& param);
-Error_info scope_stmt(Parameter& param);
+
+Error_info while_stmt(Parameter& param);
 
 Error_info multi_expression(Parameter& param);
 Error_info single_expression(Parameter& param);

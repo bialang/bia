@@ -1,5 +1,7 @@
 import hello_world
+while true {
 let x = hello_world("hi", 344)
+}
 
 // hello_world(x, 4)
 
