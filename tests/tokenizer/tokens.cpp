@@ -162,6 +162,12 @@ TEST_CASE("single expression", "[tokenizer]")
 	REQUIRE(param->bundle.size() == 1);
 	REQUIRE(param->bundle[0].value == Token::Keyword::false_);
 
+	param = create_parameter("not false");
+	REQUIRE(!single_expression(*param));
+	REQUIRE(param->bundle.size() == 2);
+	REQUIRE(param->bundle[0].value == Operator::logical_not);
+	REQUIRE(param->bundle[1].value == Token::Keyword::false_);
+
 	param = create_parameter("1+2");
 	REQUIRE(!single_expression(*param));
 	REQUIRE(param->bundle.size() == 3);

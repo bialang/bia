@@ -88,12 +88,38 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 	return { tokens, {} };
 }
 
+inline util::Optional<symbol::Variable> apply_self_operator(Parameter& param, Operator optor,
+                                                            Tokens optor_tokens, symbol::Variable variable)
+{
+	if (optor == Operator::logical_not) {
+		const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
+		BIA_ASSERT(bool_type.is_type<type::Definition*>());
+		// TODO test size
+		param.instructor.write<bytecode::Op_code::falsey, std::int8_t>(variable.location.offset);
+		param.symbols.free_temporary(variable);
+		variable = param.symbols.create_temporary(bool_type.get<type::Definition*>());
+		param.instructor.write<bytecode::Op_code::booleanize>(variable.location.offset);
+		return variable;
+	}
+	param.errors.add_error(error::Code::bad_operator, optor_tokens);
+	return {};
+}
+
 inline std::pair<Tokens, util::Optional<symbol::Variable>>
   single_expression_impl(Parameter& param, Tokens tokens, Jumper& jumper, int precedence)
 {
 	BIA_EXPECTS(!tokens.empty());
 
 	bool last_cond_was_and = false;
+
+	// has self operator
+	util::Optional<std::pair<Operator, Tokens>> self_operator;
+	if (tokens.front().value.is_type<Operator>()) {
+		self_operator = std::make_pair(tokens.front().value.get<Operator>(), tokens.subspan(+0, 1));
+		tokens        = tokens.subspan(1);
+		BIA_ASSERT(!tokens.empty());
+	}
+
 	// handle left hand side
 	util::Optional<symbol::Variable> lhs;
 	auto lhs_tokens = tokens;
@@ -115,6 +141,15 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 		// only if we have higher precedence
 		if (optor_precedence <= precedence) {
 			break;
+		}
+
+		// prefix is stronger
+		if (self_operator && optor_precedence <= precedence_of(self_operator->first)) {
+			const auto result = apply_self_operator(param, self_operator->first, self_operator->second, *lhs);
+			if (result) {
+				lhs = result;
+			}
+			self_operator.clear();
 		}
 
 		// logical chaining
@@ -190,6 +225,14 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 				  to_operation(optor), lhs->location.offset, rhs->location.offset);
 			}
 			param.symbols.free_temporary(*rhs);
+		}
+	}
+
+	// apply self operator
+	if (self_operator) {
+		const auto result = apply_self_operator(param, self_operator->first, self_operator->second, *lhs);
+		if (result) {
+			lhs = result;
 		}
 	}
 

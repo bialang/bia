@@ -45,7 +45,8 @@ public:
 		util::portable::write(_output, index);
 	}
 	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::truthy>::value>::type write(std::int32_t arg)
+	typename std::enable_if<is_op_code<op_code, Op_code::truthy, Op_code::falsey>::value>::type
+	  write(std::int32_t arg)
 	{
 		static_assert(is_2_bit_variant<Type>::value, "bad truthy type");
 		_write_2_bit_op_code<op_code, Type>();

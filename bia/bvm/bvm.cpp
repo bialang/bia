@@ -72,6 +72,17 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame fram
 			}
 			break;
 		}
+		case Op_code::falsey: {
+			const std::int32_t arg = ip.read<std::int32_t>();
+			switch (op.variation) {
+			case 0: test_register = static_cast<bool>(frame.load<std::uint8_t>(arg)); break;
+			case 1: test_register = static_cast<bool>(frame.load<std::uint16_t>(arg)); break;
+			case 2: test_register = static_cast<bool>(frame.load<std::uint32_t>(arg)); break;
+			case 3: test_register = static_cast<bool>(frame.load<std::uint64_t>(arg)); break;
+			}
+			test_register = !test_register;
+			break;
+		}
 		case Op_code::jump: execute_jump<false>(op, ip, test_register); break;
 		case Op_code::jump_if_false: execute_jump<true, false>(op, ip, test_register); break;
 		case Op_code::jump_if_true: execute_jump<true, true>(op, ip, test_register); break;

@@ -14,7 +14,8 @@ enum class Op_code : std::uint8_t
 	copy                   = load + 4,
 	unsigned_raw_operation = copy + 4,
 	truthy                 = unsigned_raw_operation + 4,
-	jump                   = truthy + 4,
+	falsey                 = truthy + 4,
+	jump                   = falsey + 4,
 	jump_if_false          = jump + 4,
 	jump_if_true           = jump_if_false + 4,
 

@@ -5,26 +5,46 @@ using namespace bia::tokenizer::token;
 
 inline Error_info operators(Parameter& param)
 {
-	constexpr Operator ops[] = { Operator::member_access, Operator::exponentation,
-		                           Operator::multiply,      Operator::divide,
-		                           Operator::modulus,       Operator::plus,
-		                           Operator::minus,         Operator::equal,
-		                           Operator::not_equal,     Operator::three_way_comparison,
-		                           Operator::less_equal,    Operator::greater_equal,
-		                           Operator::less,          Operator::greater,
-		                           Operator::assign,        Operator::logical_and,
-		                           Operator::logical_and,   Operator::logical_or,
-		                           Operator::logical_or,    Operator::in,
-		                           Operator::bitwise_and,   Operator::bitwise_or,
+	constexpr Operator ops[] = { Operator::logical_and,
+		                           Operator::logical_or,
+		                           Operator::in,
+		                           Operator::member_access,
+		                           Operator::exponentation,
+		                           Operator::multiply,
+		                           Operator::divide,
+		                           Operator::modulus,
+		                           Operator::plus,
+		                           Operator::minus,
+		                           Operator::equal,
+		                           Operator::not_equal,
+		                           Operator::three_way_comparison,
+		                           Operator::less_equal,
+		                           Operator::greater_equal,
+		                           Operator::less,
+		                           Operator::greater,
+		                           Operator::assign,
+		                           Operator::bitwise_and,
+		                           Operator::bitwise_or,
 		                           Operator::bitwise_xor };
 	const auto ranger        = param.begin_range();
-	const auto x = parse::any_of(param, ".", "**", "*", "/", "%", "+", "-", "==", "!=", "<=>", "<=", ">=", "<",
-	                             ">", "=", "and", "&&", "or", "||", "in", "&", "|", "^");
+	const auto x             = parse::any_of(param, "and", "or", "in", ".", "**", "*", "/", "%", "+", "-",
+                               "==", "!=", "<=>", "<=", ">=", "<", ">", "=", "&", "|", "^");
 
-	if (!x.second) {
+	if (!x.second || (x.first < 3 && parse::spacer(param))) {
 		return param.make_error(bia::error::Code::bad_operator, ranger.range());
 	}
 	param.bundle.emplace_back(static_cast<Operator>(ops[x.first]), ranger.range());
+	return {};
+}
+
+inline Error_info self_operator(Parameter& param)
+{
+	const auto ranger = param.begin_range();
+	const auto x      = parse::any_of(param, "not");
+	if (!x.second || parse::spacer(param)) {
+		return param.make_error(bia::error::Code::bad_operator, ranger.range());
+	}
+	param.bundle.emplace_back(Operator::logical_not, ranger.range());
 	return {};
 }
 
@@ -105,6 +125,11 @@ Error_info parse::multi_expression(Parameter& param)
 
 Error_info parse::single_expression(Parameter& param)
 {
+	auto old = param.backup();
+	if (self_operator(param)) {
+		param.restore(old);
+	}
+
 	if (const auto err = expression_value(param)) {
 		return err;
 	}
@@ -125,7 +150,7 @@ Error_info parse::single_expression(Parameter& param)
 
 	// member operations
 	while (true) {
-		const auto old = param.backup();
+		old = param.backup();
 		spacer(param);
 		const auto result = any_of(param, member_invocation);
 		if (result) {
