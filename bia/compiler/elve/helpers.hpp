@@ -2,6 +2,7 @@
 #define BIA_COMPILER_ELVE_HELPERS_HPP_
 
 #include "../errors.hpp"
+#include "../flow_controller.hpp"
 #include "../symbol/manager.hpp"
 
 #include <bia/bytecode/instructor.hpp>
@@ -25,6 +26,7 @@ struct Parameter
 	resource::Serializer& serializer;
 	Errors& errors;
 	internal::Context& context;
+	Flow_controller& flow_controller;
 };
 
 typedef util::Span<const tokenizer::token::Token*> Tokens;
@@ -36,6 +38,7 @@ Tokens decl_stmt(Parameter& param, Tokens tokens);
 Tokens if_stmt(Parameter& param, Tokens tokens);
 Tokens while_stmt(Parameter& param, Tokens tokens);
 Tokens import_stmt(Parameter& param, Tokens tokens);
+Tokens flow_control_stmt(Parameter& param, Tokens tokens);
 
 std::pair<Tokens, util::Optional<symbol::Variable>> value(Parameter& param, Tokens tokens);
 std::pair<Tokens, util::Optional<symbol::Variable>> single_expression(Parameter& param, Tokens tokens);

@@ -40,7 +40,7 @@ Error_info parse::flow_control_stmt(Parameter& param)
 	if (!x.second || spacer(param)) {
 		return param.make_error(error::Code::expected_yield, ranger.range());
 	}
-	param.bundle.emplace_back(x.first == 1 ? Token::Keyword::break_ : Token::Keyword::continue_, ranger.range());
+	param.bundle.emplace_back(x.first == 0 ? Token::Keyword::break_ : Token::Keyword::continue_, ranger.range());
 
 	const auto old = param.backup();
 	if (identifier(param)) {

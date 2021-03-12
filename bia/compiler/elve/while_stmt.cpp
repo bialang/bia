@@ -11,6 +11,7 @@ elve::Tokens elve::while_stmt(Parameter& param, Tokens tokens)
 
 	Jumper jumper{ param.instructor };
 	jumper.mark(Jumper::Destination::start);
+	param.flow_controller.start_flow(jumper);
 
 	// condition
 	util::Optional<symbol::Variable> variable;
@@ -34,5 +35,6 @@ elve::Tokens elve::while_stmt(Parameter& param, Tokens tokens)
 	tokens = batch(param, tokens);
 	jumper.jump(Jumper::Type::unconditional, Jumper::Destination::start);
 	jumper.mark(Jumper::Destination::end);
+	param.flow_controller.end_flow();
 	return tokens;
 }

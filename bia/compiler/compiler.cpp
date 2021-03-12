@@ -15,7 +15,8 @@ Compiler::Compiler(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
 
 void Compiler::receive(util::Span<const Token*> tokens, resource::Manager& manager)
 {
-	elve::Parameter params{ _instructor, _symbols, _serializer, _errors, _context };
+	Flow_controller flow_controller;
+	elve::Parameter params{ _instructor, _symbols, _serializer, _errors, _context, flow_controller };
 	while (!tokens.empty()) {
 		tokens = elve::root(params, tokens);
 	}

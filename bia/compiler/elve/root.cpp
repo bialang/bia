@@ -13,6 +13,8 @@ elve::Tokens elve::root(Parameter& param, Tokens tokens)
 		case Token::Keyword::if_: tokens = if_stmt(param, tokens); break;
 		case Token::Keyword::while_: tokens = while_stmt(param, tokens); break;
 		case Token::Keyword::import: tokens = import_stmt(param, tokens); break;
+		case Token::Keyword::break_:
+		case Token::Keyword::continue_: tokens = flow_control_stmt(param, tokens); break;
 		default: BIA_THROW(error::Code::bad_switch_value);
 		}
 	} else {
