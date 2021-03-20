@@ -8,11 +8,20 @@
 namespace bia {
 namespace util {
 
+struct Nullopt
+{};
+
+namespace {
+Nullopt nullopt;
+}
+
 template<typename Type>
 class Optional
 {
 public:
 	Optional() = default;
+	Optional(Nullopt) noexcept
+	{}
 	Optional(Type&& value)
 	{
 		emplace(std::move(value));

@@ -1,6 +1,7 @@
 #ifndef BIA_INTERNAL_CONTEXT_HPP_
 #define BIA_INTERNAL_CONTEXT_HPP_
 
+#include "namespace.hpp"
 #include "type/function.hpp"
 #include "type/integer.hpp"
 #include "type/string.hpp"
@@ -22,48 +23,17 @@ namespace internal {
 class Context
 {
 public:
-	struct Module
+	Context(memory::gc::GC& gc) : _type_system{ gc.allocator() }, _namespace{ _type_system, gc }
+	{}
+	Namespace& global_namespace() noexcept
 	{
-		memory::gc::GC_able<memory::gc::Base*> pointer;
-		const type::Definition* definition;
-	};
-
-	Context(memory::gc::GC& gc)
-	{
-		static type::String s;
-		static type::Integer i{ type::Integer::Size::i32, true };
-		static type::Function foo{ &i, { { &s }, { &i } } };
-		_global_modules["hello_world"] = { gc.create<member::function::Static<int, std::string, int>>(
-			                                     [](std::string i, int j) {
-			                                       printf("hello world - '%s' | %d!\n", i.c_str(), j);
-			                                       return static_cast<int>(i.length() * j);
-			                                     })
-			                                   .pointer,
-			                                 &foo };
-	}
-	template<typename Return, typename... Arguments>
-	void put_function(const std::string& name, Return (*function)(Arguments...))
-	{
-		// TODO add type
-		// _global_modules[name] = { gc.create<member::function::Static<Return, Arguments...>>(function).pointer
-		// };
-	}
-	Module import(const char* name)
-	{
-		auto it = _global_modules.find(name);
-		if (it == _global_modules.end()) {
-			BIA_THROW(error::Code::module_not_found);
-		}
-		return it->second;
-	}
-	util::Optional<Module> import(const resource::View&)
-	{
-		return import("hello_world");
+		return _namespace;
 	}
 
 private:
-	// type::System _type_system;
-	std::map<std::string, Module> _global_modules;
+	type::System _type_system;
+	/// The global namespace. These variables and modules are always available.
+	Namespace _namespace;
 };
 
 } // namespace internal

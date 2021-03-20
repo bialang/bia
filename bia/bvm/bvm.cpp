@@ -8,8 +8,16 @@
 #include <bia/bytecode/operation.hpp>
 #include <bia/error/exception.hpp>
 #include <bia/member/function/base.hpp>
+#include <vector>
 
 using namespace bia;
+
+template<typename Type>
+inline Type read(util::Span<const util::Byte*> buffer, std::size_t offset)
+{
+	static_assert(std::is_trivial<Type>::value, "must be Trivial");
+	return *reinterpret_cast<const Type*>(buffer.data() + offset);
+}
 
 template<bool Conditional, bool IfTrue = false>
 inline void execute_jump(bvm::Operation op, bvm::Instruction_pointer& ip, bool test_register)
@@ -32,6 +40,8 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame fram
 	using namespace bytecode;
 	Instruction_pointer ip{ instructions };
 	bool test_register = false;
+	std::vector<util::Span<const util::Byte*>> namespaces;
+	namespaces.push_back(context.global_namespace().globals());
 
 	while (ip) {
 		const auto op = ip.fetch_and_decode();
@@ -43,6 +53,17 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame fram
 			case 1: frame.store(destination, ip.read<std::uint16_t>()); break;
 			case 2: frame.store(destination, ip.read<std::uint32_t>()); break;
 			case 3: frame.store(destination, ip.read<std::uint64_t>()); break;
+			}
+			break;
+		}
+		case Op_code::load_from_namespace: {
+			const std::int32_t destination = ip.read<std::int32_t>();
+			const std::int32_t source      = ip.read<std::int32_t>();
+			switch (op.variation) {
+			case 0: frame.store(destination, read<std::uint8_t>(namespaces[0], source));
+			case 1: frame.store(destination, read<std::uint16_t>(namespaces[0], source));
+			case 2: frame.store(destination, read<std::uint32_t>(namespaces[0], source));
+			case 3: frame.store(destination, read<std::uint64_t>(namespaces[0], source));
 			}
 			break;
 		}
@@ -110,15 +131,6 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame fram
 			case Operation::in: test_register = resource_operation_test<Inside_of>(op, ip, frame); break;
 			default: BIA_THROW(error::Code::bad_operation);
 			}
-			break;
-		}
-		case Op_code::load_from_context: {
-			const std::int32_t arg    = ip.read<std::int32_t>();
-			const std::uint32_t index = ip.read<std::uint32_t>();
-			const auto& resource      = resources.at(index);
-			BIA_ASSERT(resource.is_type<memory::gc::GC_able<memory::gc::String*>>());
-			frame.store(
-			  arg, context.import(resource.get<memory::gc::GC_able<memory::gc::String*>>()->string.c_str()), true);
 			break;
 		}
 		case Op_code::invoke: {

@@ -35,7 +35,7 @@ public:
 	}
 	template<Op_code op_code, typename Type>
 	typename std::enable_if<
-	  is_op_code<op_code, Op_code::load_resource, Op_code::load_from_context>::value>::type
+	  is_op_code<op_code, Op_code::load_resource /* , Op_code::load_from_context */>::value>::type
 	  write(std::int32_t arg, std::uint32_t index)
 	{
 		static_assert(util::type_traits::equals_any_type<Type, memory::gc::String, memory::gc::Regex>::value,
@@ -68,8 +68,8 @@ public:
 		util::portable::write(_output, value);
 	}
 	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::copy>::value>::type write(std::int32_t arg0,
-	                                                                               std::int32_t arg1)
+	typename std::enable_if<is_op_code<op_code, Op_code::copy, Op_code::load_from_namespace>::value>::type
+	  write(std::int32_t arg0, std::int32_t arg1)
 	{
 		static_assert(is_2_bit_variant<Type>::value, "bad copy type");
 		_write_2_bit_op_code<op_code, Type>();

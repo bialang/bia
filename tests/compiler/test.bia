@@ -1,8 +1,5 @@
-import hello_world
-while not false {
-let x = hello_world("hi", 344)
-break
-}
+
+foo("hi", 0)
 
 
 // hello_world(x, 4)

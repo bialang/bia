@@ -9,7 +9,8 @@ using namespace bia::compiler;
 
 Compiler::Compiler(util::Not_null<std::shared_ptr<memory::Allocator>> allocator, std::ostream& instructions,
                    std::ostream& resource, internal::Context& context) noexcept
-    : _instructor{ instructions }, _symbols{ allocator, symbol::Default_int_size::size_32 },
+    : _instructor{ instructions }, _symbols{ allocator, context.global_namespace(),
+	                                           symbol::Default_int_size::size_32 },
       _serializer{ resource }, _context{ context }
 {}
 

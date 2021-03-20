@@ -43,7 +43,7 @@ Tokens flow_control_stmt(Parameter& param, Tokens tokens);
 std::pair<Tokens, util::Optional<symbol::Variable>> value(Parameter& param, Tokens tokens);
 std::pair<Tokens, util::Optional<symbol::Variable>> single_expression(Parameter& param, Tokens tokens);
 
-std::pair<Tokens, internal::type::Definition*> type_definition(Parameter& param, Tokens tokens);
+std::pair<Tokens, const internal::type::Definition*> type_definition(Parameter& param, Tokens tokens);
 
 } // namespace elve
 } // namespace compiler

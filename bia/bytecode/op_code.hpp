@@ -11,7 +11,8 @@ enum class Op_code : std::uint8_t
 {
 	// 2 bit variations
 	load                   = 0,
-	copy                   = load + 4,
+	load_from_namespace    = load + 4,
+	copy                   = load_from_namespace + 4,
 	unsigned_raw_operation = copy + 4,
 	truthy                 = unsigned_raw_operation + 4,
 	falsey                 = truthy + 4,
@@ -23,8 +24,7 @@ enum class Op_code : std::uint8_t
 	booleanize         = jump_if_true + 4,
 	load_resource      = booleanize + 4,
 	resource_operation = load_resource + 4,
-	load_from_context  = resource_operation + 4,
-	invoke             = load_from_context + 4,
+	invoke             = resource_operation + 4,
 };
 
 inline Op_code read_op_code(typename std::underlying_type<Op_code>::type value) noexcept

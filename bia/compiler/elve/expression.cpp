@@ -93,11 +93,11 @@ inline util::Optional<symbol::Variable> apply_self_operator(Parameter& param, Op
 {
 	if (optor == Operator::logical_not) {
 		const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-		BIA_ASSERT(bool_type.is_type<type::Definition*>());
+		BIA_ASSERT(bool_type.is_type<const type::Definition*>());
 		// TODO test size
 		param.instructor.write<bytecode::Op_code::falsey, std::int8_t>(variable.location.offset);
 		param.symbols.free_temporary(variable);
-		variable = param.symbols.create_temporary(bool_type.get<type::Definition*>());
+		variable = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
 		param.instructor.write<bytecode::Op_code::booleanize>(variable.location.offset);
 		return variable;
 	}
@@ -171,7 +171,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 		}
 
 		// function call
-		if (optor == Operator::function_call_open) {
+		if (optor == Operator::function_call_open || optor == Operator::nullable_function_call_open) {
 			util::Optional<symbol::Variable> result;
 			std::tie(tokens, result) = member_invocation(param, tokens, *lhs, lhs_tokens);
 			if (result) {
@@ -181,7 +181,9 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 		}
 
 		// TODO add member access
-		BIA_EXPECTS(optor != Operator::member_access);
+		if (optor == Operator::member_access || optor == Operator::nullable_member_access) {
+			BIA_ASSERT(false);
+		}
 
 		// right hand side
 		util::Optional<symbol::Variable> rhs;
@@ -198,7 +200,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 		if (is_test_operator(optor)) {
 			// TODO
 			const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-			BIA_ASSERT(bool_type.is_type<type::Definition*>());
+			BIA_ASSERT(bool_type.is_type<const type::Definition*>());
 
 			if (dynamic_cast<const type::Integer*>(lhs->definition)) {
 				param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
@@ -215,7 +217,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 			}
 			param.symbols.free_temporary(*rhs);
 			param.symbols.free_temporary(*lhs);
-			lhs = param.symbols.create_temporary(bool_type.get<type::Definition*>());
+			lhs = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
 			param.instructor.write<bytecode::Op_code::booleanize>(lhs->location.offset);
 		} else {
 			if (!dynamic_cast<const type::Integer*>(lhs->definition)) {
