@@ -3,6 +3,7 @@
 #include <bia/util/finally.hpp>
 #include <bia/util/type_traits/conjunction.hpp>
 #include <bia/util/type_traits/equals_any.hpp>
+#include <bia/util/type_traits/function_info.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
 #include <bia/util/type_traits/is_invokable.hpp>
 #include <bia/util/type_traits/size_of.hpp>
@@ -90,4 +91,21 @@ TEST_CASE("int maker", "[type_traits][util]")
 	  std::is_same<const Int_container<int, 1, 2, 3, 4, 5>, decltype(Int_sequencer<int, 1, 6>::value)>::value);
 	REQUIRE(
 	  !std::is_same<const Int_container<int, 1, 2, 3, 4, 5>, decltype(Int_sequencer<int, 0, 6>::value)>::value);
+}
+
+void foo1();
+int foo2(int);
+double foo3(char, int);
+
+TEST_CASE("function info", "[type_traits][util]")
+{
+	REQUIRE((Function_info<decltype(foo1)>::is_function && !Function_info<decltype(foo1)>::is_member &&
+	         !Function_info<decltype(foo1)>::is_const && Function_info<decltype(foo1)>::argument_count == 0));
+	REQUIRE((Function_info<decltype(foo2)>::is_function && !Function_info<decltype(foo2)>::is_member &&
+	         !Function_info<decltype(foo2)>::is_const && Function_info<decltype(foo2)>::argument_count == 1));
+	REQUIRE((Function_info<decltype(foo3)>::is_function && !Function_info<decltype(foo3)>::is_member &&
+	         !Function_info<decltype(foo3)>::is_const && Function_info<decltype(foo3)>::argument_count == 2));
+	REQUIRE(std::is_void<typename Function_info<decltype(foo1)>::Return>::value);
+	REQUIRE(std::is_same<typename Function_info<decltype(foo2)>::Return, int>::value);
+	REQUIRE(std::is_same<typename Function_info<decltype(foo3)>::Return, double>::value);
 }

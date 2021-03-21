@@ -3,8 +3,8 @@
 
 #include "base.hpp"
 
+#include <bia/util/type_traits/function_info.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
-#include <bia/util/type_traits/method_info.hpp>
 #include <type_traits>
 #include <utility>
 
@@ -50,9 +50,10 @@ public:
 	{}
 	void invoke(memory::Frame frame) override
 	{
-		invoke_method(&Type::operator(), _functor, frame,
-		              util::type_traits::Int_sequencer<std::size_t, 0,
-		                                               util::type_traits::functor_info<Type>::arg_count>::value);
+		invoke_method(
+		  &Type::operator(), _functor, frame,
+		  util::type_traits::Int_sequencer<std::size_t, 0,
+		                                   util::type_traits::Functor_info<Type>::argument_count>::value);
 	}
 
 private:
