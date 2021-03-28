@@ -5,11 +5,12 @@
 
 #include <bia/memory/allocator.hpp>
 #include <bia/memory/std_allocator.hpp>
+#include <bia/util/type_traits/type_select.hpp>
+#include <cstddef>
 #include <map>
 #include <type_traits>
 #include <typeindex>
 #include <typeinfo>
-#include <cstddef>
 #include <utility>
 #include <vector>
 
@@ -17,6 +18,8 @@ namespace bia {
 namespace internal {
 namespace type {
 
+/// Stores and manages all types that were declared during compilation or by the user. The types are not
+/// required for the runtime, only for compilation.
 class System
 {
 public:
@@ -24,53 +27,70 @@ public:
 
 	System(util::Not_null<std::shared_ptr<memory::Allocator>> allocator);
 	System(const System& copy) = delete;
-	System(System&& move) noexcept : _allocator{ move._allocator }, _types{ std::move(move._types) }
+	System(System&& move) noexcept;
+	~System() noexcept;
+	template<typename... Types>
+	std::vector<const type::Definition*>
+	  definitions_of(util::type_traits::type_container<Types...> types = {}) const
 	{
-		std::swap(_id_counter, move._id_counter);
+		std::vector<const type::Definition*> definitions;
+		definitions.reserve(sizeof...(Types));
+		_definitions_of(definitions, types);
+		return definitions;
 	}
+	const Definition* definition_of(const std::type_info& type) const;
 	template<typename Type, typename... Arguments>
-	typename std::enable_if<std::is_base_of<Definition, Type>::value, Type*>::type
-	  create_type(Arguments&&... arguments)
+	typename std::enable_if<std::is_base_of<Definition, Type>::value, const Type*>::type
+	  get_or_create(Arguments&&... arguments)
 	{
-		const auto ptr = _allocator->construct<Type>(std::forward<Arguments>(arguments)...);
-		_types.insert(std::make_pair(ptr, ++_id_counter));
+		Type type{ std::forward<Arguments>(arguments)... };
+		const auto it = _type_index.find(&type);
+		if (it != _type_index.end()) {
+			return static_cast<const Type*>(it->first);
+		}
+		// create new
+		const auto ptr = _allocator->construct<Type>(std::move(type));
+		_type_index.insert(std::make_pair(ptr, ++_id_counter));
 		return ptr;
 	}
-	~System() noexcept
-	{
-		for (const auto& i : _types) {
-			_allocator->destroy(i.first);
-		}
-	}
-	Definition* defintion_of(const std::type_info& type) const
-	{
-		const auto it = _real_types.find({ type });
-		if (it != _real_types.end()) {
-			return it->second;
-		}
-		return nullptr;
-	}
 	template<typename Type>
-	void link(util::Not_null<Definition*> definition)
+	void link(util::Not_null<const Definition*> definition)
 	{
 		static_assert(alignof(Type) <= sizeof(std::max_align_t), "over-aligned types are not supported");
 		_real_types[{ typeid(Type) }] = definition;
 	}
 	System& operator=(const System& copy) = delete;
 	/// Move operator.
-	System& operator=(System&& move) noexcept
-	{
-		this->~System();
-		new (this) System{ std::move(move) };
-		return *this;
-	}
+	System& operator=(System&& move) noexcept;
 
 private:
+	struct Comparator
+	{
+		bool operator()(const Definition* left, const Definition* right) const
+		{
+			return left->compare(right) < 0;
+		}
+	};
+
 	Code _id_counter = 0;
+	/// Memory allocator for the dynamically created types.
 	std::shared_ptr<memory::Allocator> _allocator;
-	std::map<Definition*, Code, std::less<Definition*>, memory::Std_allocator<std::pair<Definition*, Code>>>
-	  _types;
-	std::map<std::type_index, Definition*> _real_types;
+	/// Index of all known types.
+	std::map<const Definition*, Code, Comparator, memory::Std_allocator<std::pair<const Definition*, Code>>>
+	  _type_index;
+	/// Mappings of real C++ types to dynamic types. The definition must be in the type index.
+	std::map<std::type_index, const Definition*> _real_types;
+
+	static void _definitions_of(std::vector<const type::Definition*>& output,
+	                            util::type_traits::type_container<> = {}) noexcept
+	{}
+	template<typename Type, typename... Others>
+	void _definitions_of(std::vector<const type::Definition*>& output,
+	                     util::type_traits::type_container<Type, Others...> = {}) const
+	{
+		output.push_back(definition_of(typeid(Type)));
+		_definitions_of(output, util::type_traits::type_container<Others...>{});
+	}
 };
 
 } // namespace type

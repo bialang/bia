@@ -1,6 +1,6 @@
 
-foo("hi", 0)
-
+//foo("hi", 0)
+hello_world(123)
 
 // hello_world(x, 4)
 

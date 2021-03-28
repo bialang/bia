@@ -12,13 +12,16 @@
 
 #include <bia/internal/type/definition.hpp>
 #include <bia/internal/type/system.hpp>
-#include <bia/member/function/static.hpp>
+#include <bia/member/function/creator.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/optional.hpp>
+#include <bia/util/type_traits/invokable_info.hpp>
+#include <bia/util/type_traits/type_select.hpp>
 #include <map>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 namespace bia {
@@ -36,56 +39,65 @@ public:
 	Namespace(internal::type::System& type_system, memory::gc::GC& gc) noexcept
 	    : _type_system{ type_system }, _gc{ gc }
 	{
-		static type::String s;
-		static type::Integer i{ type::Integer::Size::i32, true };
-		static type::Function foo{ &i, { { &s }, { &i } } };
-		_global_index.insert({ util::from_cstring("foo"), Symbol{ 0, &foo } });
-
-		const auto ptr = gc.create<member::function::Static<int, std::string, int>>([](std::string i, int j) {
-			printf("hello world - '%s' | %d!\n", i.c_str(), j);
-			return static_cast<int>(i.length() * j);
-		});
-		_globals.resize(sizeof(ptr));
-		std::memcpy(_globals.data(), &ptr, sizeof(ptr));
-
 		using namespace internal::type;
 
 		_global_index.insert(std::make_pair(
 		  util::from_cstring("int"),
-		  static_cast<const Definition*>(_type_system.create_type<Integer>(Integer::Size::i32, true))));
+		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::i32, true))));
 		_global_index.insert(std::make_pair(
 		  util::from_cstring("uint"),
-		  static_cast<const Definition*>(_type_system.create_type<Integer>(Integer::Size::u32, true))));
+		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::u32, true))));
 
 		_global_index.insert(std::make_pair(util::from_cstring("void"),
-		                                    static_cast<const Definition*>(_type_system.create_type<Void>())));
+		                                    static_cast<const Definition*>(_type_system.get_or_create<Void>())));
 
 		_global_index.insert(std::make_pair(util::from_cstring("bool"),
-		                                    static_cast<const Definition*>(_type_system.create_type<Bool>())));
+		                                    static_cast<const Definition*>(_type_system.get_or_create<Bool>())));
 
 		_global_index.insert(std::make_pair(
 		  util::from_cstring("int32"),
-		  static_cast<const Definition*>(_type_system.create_type<Integer>(Integer::Size::i32, false))));
+		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::i32, false))));
 
 		_global_index.insert(std::make_pair(
 		  util::from_cstring("float32"),
-		  static_cast<const Definition*>(_type_system.create_type<Floating_point>(Floating_point::Size::f32))));
+		  static_cast<const Definition*>(_type_system.get_or_create<Floating_point>(Floating_point::Size::f32))));
 
-		_global_index.insert(std::make_pair(util::from_cstring("string"),
-		                                    static_cast<const Definition*>(_type_system.create_type<String>())));
+		_global_index.insert(std::make_pair(
+		  util::from_cstring("string"), static_cast<const Definition*>(_type_system.get_or_create<String>())));
 		_global_index.insert(std::make_pair(util::from_cstring("regex"),
-		                                    static_cast<const Definition*>(_type_system.create_type<Regex>())));
+		                                    static_cast<const Definition*>(_type_system.get_or_create<Regex>())));
 	}
-	void put_function(String_key name)
+	template<typename Invokeable>
+	void put_invokable(String_key name, Invokeable&& invokable)
 	{
+		static_assert(util::type_traits::Invokable_info<Invokeable>::is_invokable, "Invokeable must be a invokable");
 		if (_global_index.find(name) != _global_index.end()) {
 			BIA_THROW(error::Code::symbol_already_declared);
 		}
+
+		// get types of signature
+		const auto return_type =
+		  _type_system.definition_of(typeid(typename util::type_traits::Invokable_info<Invokeable>::Return));
+		auto argument_definitions =
+		  _type_system.definitions_of(util::type_traits::Invokable_info<Invokeable>::arguments);
+		BIA_ASSERT(argument_definitions.size() == util::type_traits::Invokable_info<Invokeable>::argument_count);
+		std::vector<type::Argument> arguments;
+		arguments.reserve(argument_definitions.size());
+		for (const auto definition : argument_definitions) {
+			arguments.push_back({ definition });
+		}
+
+		// TODO alignment of types
+		const auto ptr = member::function::create(_gc, std::forward<Invokeable>(invokable));
+		_globals.resize(_globals.size() + sizeof(ptr));
+		std::memcpy(_globals.data() + _globals.size() - sizeof(ptr), &ptr, sizeof(ptr));
+
+		auto function_definition = _type_system.get_or_create<type::Function>(return_type, arguments);
+		_global_index.insert({ name, Symbol{ _globals.size() - sizeof(ptr), function_definition } });
 	}
-	// util::Span<int*> modules();
 	util::Span<const util::Byte*> globals() const
 	{
-		return {_globals.data(), _globals.size()};
+		return { _globals.data(), _globals.size() };
 	}
 	util::Variant<Symbol, const type::Definition*> global(const String_key& name) const
 	{

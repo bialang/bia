@@ -65,6 +65,10 @@ try {
 	auto allocator = std::make_shared<memory::Simple_allocator>();
 	memory::gc::GC gc{ allocator };
 	internal::Context context{ gc };
+
+	// define user defined types
+	context.global_namespace().put_invokable(util::from_cstring("hello_world"), [](int) { puts("Hello, World!"); });
+
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
 	auto finally = util::finallay([encoder] { string::encoding::free_encoder(encoder); });

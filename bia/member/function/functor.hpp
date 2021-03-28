@@ -3,8 +3,8 @@
 
 #include "base.hpp"
 
-#include <bia/util/type_traits/function_info.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
+#include <bia/util/type_traits/invokable_info.hpp>
 #include <type_traits>
 #include <utility>
 
@@ -53,7 +53,7 @@ public:
 		invoke_method(
 		  &Type::operator(), _functor, frame,
 		  util::type_traits::Int_sequencer<std::size_t, 0,
-		                                   util::type_traits::Functor_info<Type>::argument_count>::value);
+		                                   util::type_traits::Invokable_info<Type>::argument_count>::value);
 	}
 
 private:

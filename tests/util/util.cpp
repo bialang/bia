@@ -3,8 +3,8 @@
 #include <bia/util/finally.hpp>
 #include <bia/util/type_traits/conjunction.hpp>
 #include <bia/util/type_traits/equals_any.hpp>
-#include <bia/util/type_traits/function_info.hpp>
 #include <bia/util/type_traits/int_maker.hpp>
+#include <bia/util/type_traits/invokable_info.hpp>
 #include <bia/util/type_traits/is_invokable.hpp>
 #include <bia/util/type_traits/size_of.hpp>
 #include <bia/util/type_traits/type_index.hpp>
@@ -99,13 +99,13 @@ double foo3(char, int);
 
 TEST_CASE("function info", "[type_traits][util]")
 {
-	REQUIRE((Function_info<decltype(foo1)>::is_function && !Function_info<decltype(foo1)>::is_member &&
-	         !Function_info<decltype(foo1)>::is_const && Function_info<decltype(foo1)>::argument_count == 0));
-	REQUIRE((Function_info<decltype(foo2)>::is_function && !Function_info<decltype(foo2)>::is_member &&
-	         !Function_info<decltype(foo2)>::is_const && Function_info<decltype(foo2)>::argument_count == 1));
-	REQUIRE((Function_info<decltype(foo3)>::is_function && !Function_info<decltype(foo3)>::is_member &&
-	         !Function_info<decltype(foo3)>::is_const && Function_info<decltype(foo3)>::argument_count == 2));
-	REQUIRE(std::is_void<typename Function_info<decltype(foo1)>::Return>::value);
-	REQUIRE(std::is_same<typename Function_info<decltype(foo2)>::Return, int>::value);
-	REQUIRE(std::is_same<typename Function_info<decltype(foo3)>::Return, double>::value);
+	REQUIRE((Invokable_info<decltype(foo1)>::is_invokable && !Invokable_info<decltype(foo1)>::is_method &&
+	         !Invokable_info<decltype(foo1)>::is_const && Invokable_info<decltype(foo1)>::argument_count == 0));
+	REQUIRE((Invokable_info<decltype(foo2)>::is_invokable && !Invokable_info<decltype(foo2)>::is_method &&
+	         !Invokable_info<decltype(foo2)>::is_const && Invokable_info<decltype(foo2)>::argument_count == 1));
+	REQUIRE((Invokable_info<decltype(foo3)>::is_invokable && !Invokable_info<decltype(foo3)>::is_method &&
+	         !Invokable_info<decltype(foo3)>::is_const && Invokable_info<decltype(foo3)>::argument_count == 2));
+	REQUIRE(std::is_void<typename Invokable_info<decltype(foo1)>::Return>::value);
+	REQUIRE(std::is_same<typename Invokable_info<decltype(foo2)>::Return, int>::value);
+	REQUIRE(std::is_same<typename Invokable_info<decltype(foo3)>::Return, double>::value);
 }
