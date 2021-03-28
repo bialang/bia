@@ -49,9 +49,10 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 	}
 
 	std::vector<symbol::Variable> pushed;
+	tokens = tokens.subspan(1);
 	while (tokens.front().value != Operator::function_call_close) {
 		util::Optional<symbol::Variable> argument;
-		Tokens argument_tokens     = tokens.subspan(1);
+		auto argument_tokens       = tokens;
 		std::tie(tokens, argument) = single_expression(param, argument_tokens);
 		argument_tokens            = argument_tokens.left(tokens.begin());
 		if (argument) {
@@ -65,8 +66,10 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 			// TODO
 			BIA_ASSERT(pushed.back().location.offset == argument->location.offset);
 		}
-		BIA_ASSERT(tokens.front().value == Operator::function_call_close ||
-		           tokens.front().value == Token::Control::comma);
+		// remove comma
+		if (tokens.front().value == Token::Control::comma) {
+			tokens = tokens.subspan(1);
+		}
 	}
 	// check argument count
 	if (argument_definitions && pushed.size() < argument_definitions->size()) {
