@@ -152,7 +152,7 @@ Error_info parse::single_expression(Parameter& param)
 	while (true) {
 		old = param.backup();
 		spacer(param);
-		const auto result = any_of(param, member_invocation);
+		const auto result = any_of(param, member_access, member_invocation);
 		if (result) {
 			param.restore(old);
 			break;

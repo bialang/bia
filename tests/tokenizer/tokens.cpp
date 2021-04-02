@@ -193,6 +193,20 @@ TEST_CASE("single expression", "[tokenizer]")
 	REQUIRE(param->bundle[5].value.is_type<Token::Number>());
 	REQUIRE(param->bundle[6].value == Token::Control::bracket_close);
 
+	param = create_parameter("foo.asd");
+	REQUIRE(!single_expression(*param));
+	REQUIRE(param->bundle.size() == 3);
+	REQUIRE(param->bundle[0].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[1].value == Operator::member_access);
+	REQUIRE(param->bundle[2].value.is_type<Token::Identifier>());
+
+	param = create_parameter("\"kartoffel\".q");
+	REQUIRE(!single_expression(*param));
+	REQUIRE(param->bundle.size() == 3);
+	REQUIRE(param->bundle[0].value.is_type<Token::String>());
+	REQUIRE(param->bundle[1].value == Operator::member_access);
+	REQUIRE(param->bundle[2].value.is_type<Token::Identifier>());
+
 	param = create_parameter("foo()");
 	REQUIRE(!single_expression(*param));
 	REQUIRE(param->bundle.size() == 3);

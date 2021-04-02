@@ -110,7 +110,7 @@ std::pair<Tokens, util::Optional<symbol::Variable>> value(Parameter& param, Toke
 		                                                                            index);
 		return { tokens.subspan(1), variable };
 	}
-
+printf("%zu\n", tokens.front().value.index());
 	// TODO
 	BIA_ASSERT(false);
 }

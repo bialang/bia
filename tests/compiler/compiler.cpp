@@ -67,7 +67,7 @@ try {
 	internal::Context context{ gc };
 
 	// define user defined types
-	context.global_namespace().put_invokable(util::from_cstring("hello_world"), [](int) { puts("Hello, World!"); });
+	context.global_namespace().put_invokable(util::from_cstring("hello_world"), [](std::uint64_t a) { printf("Hello, World!, %llu\n",a); });
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);

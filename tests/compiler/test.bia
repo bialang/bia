@@ -1,6 +1,10 @@
 
-//foo("hi", 0)
-hello_world(123)
+/* Defined in C++
+url: string
+get(url: string): string
+*/
+
+hello_world("hi".length)
 
 // hello_world(x, 4)
 

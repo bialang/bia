@@ -77,6 +77,7 @@ enum class Code
 	not_a_function,
 	too_few_arguments,
 	too_many_arguments,
+	not_an_object,
 
 	bad_opcode = 200,
 	bad_offset_option,
@@ -163,6 +164,7 @@ inline const std::error_category& code_category() noexcept
 			case Code::not_a_function: return "not a function";
 			case Code::too_few_arguments: return "too few arguments in function call";
 			case Code::too_many_arguments: return "too many arguments in function call";
+			case Code::not_an_object: return "not an object";
 			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:

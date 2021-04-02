@@ -1,7 +1,8 @@
 #ifndef BIA_INTERNAL_TYPE_STRING_HPP_
 #define BIA_INTERNAL_TYPE_STRING_HPP_
 
-#include "definition.hpp"
+#include "integer.hpp"
+#include "object.hpp"
 
 #include <bia/memory/gc/types.hpp>
 
@@ -9,9 +10,14 @@ namespace bia {
 namespace internal {
 namespace type {
 
-class String : public Definition
+class String : public Object
 {
 public:
+	String()
+	{
+		static Integer i{ Integer::Size::u64, false };
+		add_member(util::from_cstring("length"), &i);
+	}
 	bool is_assignable(const Definition* other) const noexcept override
 	{
 		return dynamic_cast<const String*>(other);
