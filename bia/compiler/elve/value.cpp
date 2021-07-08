@@ -8,6 +8,7 @@
 
 using namespace bia::tokenizer::token;
 using namespace bia::internal;
+using namespace bia::bytecode;
 
 namespace bia {
 namespace compiler {
@@ -19,27 +20,13 @@ inline std::pair<Tokens, symbol::Variable> number_value(Parameter& param, Tokens
 
 	// get number type
 	const auto& number = tokens.front().value.get<Token::Number>();
+	symbol::Variable variable;
 
-	symbol::Symbol right_type;
 	switch (number.type) {
-	case Type::i: right_type = param.symbols.symbol(util::from_cstring("int")); break;
-	case Type::i32: right_type = param.symbols.symbol(util::from_cstring("int32")); break;
-	case Type::f32: right_type = param.symbols.symbol(util::from_cstring("float32")); break;
-	default: BIA_THROW(error::Code::bad_switch_value);
-	}
-	BIA_ASSERT(right_type.is_type<const type::Definition*>());
-
-	auto variable = param.symbols.create_temporary(right_type.get<const type::Definition*>());
-	switch (number.type) {
-	case Type::i: {
-		// TODO check size with default int size
-		param.instructor.write<bytecode::Op_code::load>(variable.location.offset, number.value.i64);
-		break;
-	}
-	case Type::i32:
-	case Type::u32:
-	case Type::f32:
-		param.instructor.write<bytecode::Op_code::load>(variable.location.offset, number.value.i32);
+	case Type::i:
+		variable = param.symbols.create_temporary(
+		  param.symbols.symbol(util::from_cstring("int")).get<const type::Definition*>());
+		param.instructor.write<bytecode::Op_code::store>(variable.location.offset, number.value.i);
 		break;
 	default: BIA_THROW(error::Code::bad_switch_value);
 	}
@@ -55,14 +42,39 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>> keyword_value(Paramet
 	auto variable = param.symbols.create_temporary(right.get<const type::Definition*>());
 	switch (tokens.front().value.get<Token::Keyword>()) {
 	case Token::Keyword::true_:
-		param.instructor.write<bytecode::Op_code::load>(variable.location.offset, std::int8_t{ 1 });
+		param.instructor.write<bytecode::Op_code::store>(variable.location.offset, std::uint8_t{ 1 });
 		break;
 	case Token::Keyword::false_:
-		param.instructor.write<bytecode::Op_code::load>(variable.location.offset, std::int8_t{ 0 });
+		param.instructor.write<bytecode::Op_code::store>(variable.location.offset, std::uint8_t{ 0 });
 		break;
 	default:
 		// TODO
 		BIA_ASSERT(false);
+	}
+	return { tokens.subspan(1), variable };
+}
+
+/// Handles an identifier value and translates it to an usable variable.
+inline std::pair<Tokens, util::Optional<symbol::Variable>> identifier_value(Parameter& param, Tokens tokens)
+{
+	BIA_EXPECTS(tokens.front().value.is_type<Token::Identifier>());
+
+	util::Optional<symbol::Variable> variable;
+	const auto identifier = param.symbols.symbol(tokens.front().value.get<Token::Identifier>().memory);
+	if (identifier.empty()) {
+		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(+0, 1));
+	} else if (identifier.is_type<symbol::Variable>()) {
+		variable = param.symbols.create_temporary(identifier.get<symbol::Variable>().definition);
+		// TODO actual copy size
+		param.instructor.write<Op_code::copy>(Size::bit_32, variable->location.offset,
+		                                      identifier.get<symbol::Variable>().location.offset);
+	} else if (identifier.is_type<internal::Symbol>()) {
+		BIA_ASSERT(false);
+		// variable = param.symbols.create_temporary(right.get<internal::Symbol>().definition);
+		// param.instructor.write<bytecode::Op_code::load_from_namespace, std::int64_t>(
+		//   variable->location.offset, right.get<internal::Symbol>().offset);
+	} else {
+		param.errors.add_error(error::Code::symbol_not_a_value, tokens.subspan(+0, 1));
 	}
 	return { tokens.subspan(1), variable };
 }
@@ -75,42 +87,27 @@ std::pair<Tokens, util::Optional<symbol::Variable>> value(Parameter& param, Toke
 	} else if (tokens.front().value.is_type<Token::Number>()) {
 		return number_value(param, tokens);
 	} else if (tokens.front().value.is_type<Token::Identifier>()) {
-		util::Optional<symbol::Variable> variable;
-		const auto right = param.symbols.symbol(tokens.front().value.get<Token::Identifier>().memory);
-		if (right.empty()) {
-			param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(+0, 1));
-		} else if (right.is_type<symbol::Variable>()) {
-			variable = param.symbols.create_temporary(right.get<symbol::Variable>().definition);
-			param.instructor.write<bytecode::Op_code::copy, std::int64_t>(
-			  variable->location.offset, right.get<symbol::Variable>().location.offset);
-		} else if (right.is_type<internal::Symbol>()) {
-			variable = param.symbols.create_temporary(right.get<internal::Symbol>().definition);
-			param.instructor.write<bytecode::Op_code::load_from_namespace, std::int64_t>(
-			  variable->location.offset, right.get<internal::Symbol>().offset);
-		} else {
-			param.errors.add_error(error::Code::symbol_not_a_variable, tokens.subspan(+0, 1));
-		}
-		return { tokens.subspan(1), variable };
+		return identifier_value(param, tokens);
 	} else if (tokens.front().value.is_type<Token::String>()) {
 		const auto right = param.symbols.symbol(util::from_cstring("string"));
 		BIA_ASSERT(right.is_type<const type::Definition*>());
 
 		const auto variable = param.symbols.create_temporary(right.get<const type::Definition*>());
 		const auto index    = param.serializer.index_of(tokens.front().value.get<Token::String>().memory);
-		param.instructor.write<bytecode::Op_code::load_resource, memory::gc::String>(variable.location.offset,
-		                                                                             index);
+		param.instructor.write<bytecode::Op_code::load_resource>(variable.location.offset, index);
 		return { tokens.subspan(1), variable };
 	} else if (tokens.front().value.is_type<Token::Regex>()) {
-		const auto right = param.symbols.symbol(util::from_cstring("regex"));
-		BIA_ASSERT(right.is_type<const type::Definition*>());
+		BIA_ASSERT(false);
+		// const auto right = param.symbols.symbol(util::from_cstring("regex"));
+		// BIA_ASSERT(right.is_type<const type::Definition*>());
 
-		const auto variable = param.symbols.create_temporary(right.get<const type::Definition*>());
-		const auto index    = param.serializer.index_of(tokens.front().value.get<Token::Regex>().memory);
-		param.instructor.write<bytecode::Op_code::load_resource, memory::gc::Regex>(variable.location.offset,
-		                                                                            index);
-		return { tokens.subspan(1), variable };
+		// const auto variable = param.symbols.create_temporary(right.get<const type::Definition*>());
+		// const auto index    = param.serializer.index_of(tokens.front().value.get<Token::Regex>().memory);
+		// param.instructor.write<bytecode::Op_code::load_resource, memory::gc::Regex>(variable.location.offset,
+		//                                                                             index);
+		// return { tokens.subspan(1), variable };
 	}
-printf("%zu\n", tokens.front().value.index());
+	printf("%zu\n", tokens.front().value.index());
 	// TODO
 	BIA_ASSERT(false);
 }

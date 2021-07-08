@@ -42,10 +42,11 @@ inline util::Optional<symbol::Variable> apply_self_operator(Parameter& param, Op
 		const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
 		BIA_ASSERT(bool_type.is_type<const type::Definition*>());
 		// TODO test size
-		param.instructor.write<bytecode::Op_code::falsey, std::int8_t>(variable.location.offset);
-		param.symbols.free_temporary(variable);
-		variable = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
-		param.instructor.write<bytecode::Op_code::booleanize>(variable.location.offset);
+		BIA_ASSERT(false);
+		// param.instructor.write<bytecode::Op_code::falsey, std::int8_t>(variable.location.offset);
+		// param.symbols.free_temporary(variable);
+		// variable = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
+		// param.instructor.write<bytecode::Op_code::booleanize>(variable.location.offset);
 		return variable;
 	}
 	param.errors.add_error(error::Code::bad_operator, optor_tokens);
@@ -101,24 +102,25 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 
 		// logical chaining
 		if (optor == Operator::logical_and || optor == Operator::logical_or) {
-			if (last_cond_was_and && optor == Operator::logical_or) {
-				jumper.mark(Jumper::Destination::end);
-				jumper.clear(Jumper::Destination::end);
-				last_cond_was_and = false;
-			} else if (optor == Operator::logical_and) {
-				last_cond_was_and = true;
-			}
+			BIA_ASSERT(false);
+			// if (last_cond_was_and && optor == Operator::logical_or) {
+			// 	jumper.mark(Jumper::Destination::end);
+			// 	jumper.clear(Jumper::Destination::end);
+			// 	last_cond_was_and = false;
+			// } else if (optor == Operator::logical_and) {
+			// 	last_cond_was_and = true;
+			// }
 
-			param.instructor.write<bytecode::Op_code::truthy, std::int32_t>(lhs->location.offset);
-			param.symbols.free_temporary(*lhs);
-			jumper.jump(optor == Operator::logical_and ? Jumper::Type::if_false : Jumper::Type::if_true,
-			            Jumper::Destination::end);
-			std::tie(tokens, lhs) = single_expression_impl(param, tokens.subspan(1), jumper, optor_precedence);
-			continue;
+			// param.instructor.write<bytecode::Op_code::truthy, std::int32_t>(lhs->location.offset);
+			// param.symbols.free_temporary(*lhs);
+			// jumper.jump(optor == Operator::logical_and ? Jumper::Type::if_false : Jumper::Type::if_true,
+			//             Jumper::Destination::end);
+			// std::tie(tokens, lhs) = single_expression_impl(param, tokens.subspan(1), jumper, optor_precedence);
+			// continue;
 		} // function call
 		else if (optor == Operator::function_call_open || optor == Operator::nullable_function_call_open) {
 			util::Optional<symbol::Variable> result;
-			std::tie(tokens, result) = member_invocation(param, tokens, *lhs, lhs_tokens);
+			std::tie(tokens, result) = member_invocation(param, tokens, lhs, lhs_tokens);
 			if (result) {
 				lhs = result;
 			}
@@ -145,37 +147,64 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 			param.errors.add_error(error::Code::type_mismatch, rhs_tokens);
 		}
 
-		if (is_test_operator(optor)) {
-			// TODO
-			const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-			BIA_ASSERT(bool_type.is_type<const type::Definition*>());
-
-			if (dynamic_cast<const type::Integer*>(lhs->definition)) {
-				param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
-				  to_operation(optor), lhs->location.offset, rhs->location.offset);
-			} else if (dynamic_cast<const type::String*>(lhs->definition)) {
-				param.instructor.write<bytecode::Op_code::resource_operation, memory::gc::String>(
-				  to_operation(optor), lhs->location.offset, rhs->location.offset);
-			} else if (dynamic_cast<const type::Regex*>(lhs->definition)) {
-				param.instructor.write<bytecode::Op_code::resource_operation, memory::gc::Regex>(
-				  to_operation(optor), lhs->location.offset, rhs->location.offset);
-			} else {
-				// TODO
-				BIA_ASSERT(false);
-			}
-			param.symbols.free_temporary(*rhs);
-			param.symbols.free_temporary(*lhs);
-			lhs = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
-			param.instructor.write<bytecode::Op_code::booleanize>(lhs->location.offset);
+		if (!dynamic_cast<const type::Integer*>(lhs->definition)) {
+			param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
 		} else {
-			if (!dynamic_cast<const type::Integer*>(lhs->definition)) {
-				param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
-			} else {
-				param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
-				  to_operation(optor), lhs->location.offset, rhs->location.offset);
+			using namespace bytecode;
+			bool is_test = false;
+			switch (optor) {
+			case Operator::equal:
+				param.instructor.write<Op_code::equal>(Size::bit_32, lhs->location.offset, rhs->location.offset);
+				is_test = true;
+				break;
+			case Operator::plus:
+				param.instructor.write<Op_code::add>(Size::bit_32, lhs->location.offset, rhs->location.offset);
+				break;
+			default: BIA_ASSERT(false);
 			}
-			param.symbols.free_temporary(*rhs);
+
+			if (is_test) {
+				const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
+				BIA_ASSERT(bool_type.is_type<const type::Definition*>());
+				param.symbols.free_temporary(*rhs);
+				param.symbols.free_temporary(*lhs);
+				lhs = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
+				continue;
+			}
 		}
+		param.symbols.free_temporary(*rhs);
+
+		// if (is_test_operator(optor)) {
+		// 	// TODO
+		// 	const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
+		// 	BIA_ASSERT(bool_type.is_type<const type::Definition*>());
+
+		// 	if (dynamic_cast<const type::Integer*>(lhs->definition)) {
+		// 		param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
+		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
+		// 	} else if (dynamic_cast<const type::String*>(lhs->definition)) {
+		// 		param.instructor.write<bytecode::Op_code::resource_operation, memory::gc::String>(
+		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
+		// 	} else if (dynamic_cast<const type::Regex*>(lhs->definition)) {
+		// 		param.instructor.write<bytecode::Op_code::resource_operation, memory::gc::Regex>(
+		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
+		// 	} else {
+		// 		// TODO
+		// 		BIA_ASSERT(false);
+		// 	}
+		// 	param.symbols.free_temporary(*rhs);
+		// 	param.symbols.free_temporary(*lhs);
+		// 	lhs = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
+		// 	param.instructor.write<bytecode::Op_code::booleanize>(lhs->location.offset);
+		// } else {
+		// 	if (!dynamic_cast<const type::Integer*>(lhs->definition)) {
+		// 		param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
+		// 	} else {
+		// 		param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
+		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
+		// 	}
+		// 	param.symbols.free_temporary(*rhs);
+		// }
 	}
 
 	// apply self operator

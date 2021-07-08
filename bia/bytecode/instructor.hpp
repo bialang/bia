@@ -5,6 +5,7 @@
 #include "operation.hpp"
 
 #include <bia/memory/gc/types.hpp>
+#include <bia/util/contract.hpp>
 #include <bia/util/portable/stream.hpp>
 #include <bia/util/type_traits/equals_any.hpp>
 #include <bia/util/type_traits/type_index.hpp>
@@ -15,97 +16,47 @@
 namespace bia {
 namespace bytecode {
 
+template<Op_code op_code>
+using is_with_2_operands =
+  std::integral_constant<bool, (op_code >= Op_code::copy && op_code <= Op_code::greater_equal_than)>;
+
+template<Op_code op_code>
+using is_branch_operation =
+  std::integral_constant<bool, (op_code >= Op_code::jump && op_code <= Op_code::jump_false)>;
+
 class Instructor
 {
 public:
-	template<Op_code op_code, Op_code... others>
-	using is_op_code = util::type_traits::equals_any<Op_code, op_code, others...>;
-	template<typename Type>
-	using is_2_bit_variant =
-	  util::type_traits::equals_any_type<Type, std::int8_t, std::int16_t, std::int32_t, std::int64_t,
-	                                     std::uint8_t, std::uint16_t, std::uint32_t, std::uint64_t>;
-
 	Instructor(std::ostream& output) noexcept : _output{ output }
 	{}
 	template<Op_code op_code>
-	typename std::enable_if<is_op_code<op_code, Op_code::booleanize>::value>::type write(std::int32_t arg)
+	typename std::enable_if<(op_code == Op_code::load_resource)>::type write(Address destination,
+	                                                                         std::uint32_t index)
 	{
-		util::portable::write(_output, op_code);
-		util::portable::write(_output, arg);
-	}
-	template<Op_code op_code, typename Type>
-	typename std::enable_if<
-	  is_op_code<op_code, Op_code::load_resource /* , Op_code::load_from_context */>::value>::type
-	  write(std::int32_t arg, std::uint32_t index)
-	{
-		static_assert(util::type_traits::equals_any_type<Type, memory::gc::String, memory::gc::Regex>::value,
-		              "bad resource type");
-		_write_2_bit_op_code_resource<op_code, Type>();
-		util::portable::write(_output, arg);
+		_write_op_code<op_code>();
+		util::portable::write(_output, destination);
 		util::portable::write(_output, index);
 	}
-	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::truthy, Op_code::falsey>::value>::type
-	  write(std::int32_t arg)
+	template<Op_code op_code>
+	typename std::enable_if<is_with_2_operands<op_code>::value>::type write(Size size, Address first,
+	                                                                        Address second)
 	{
-		static_assert(is_2_bit_variant<Type>::value, "bad truthy type");
-		_write_2_bit_op_code<op_code, Type>();
-		util::portable::write(_output, arg);
+		_write_op_code<op_code>(size);
+		_write(size, first);
+		_write(size, second);
 	}
 	template<Op_code op_code>
-	typename std::enable_if<is_op_code<op_code, Op_code::invoke>::value>::type write(std::int32_t arg)
+	typename std::enable_if<is_branch_operation<op_code>::value>::type write(std::int32_t offset)
 	{
-		util::portable::write(_output, op_code);
-		util::portable::write(_output, arg);
-	}
-	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::load>::value>::type write(std::int32_t destination,
-	                                                                               Type value)
-	{
-		static_assert(is_2_bit_variant<Type>::value, "bad load type");
-		_write_2_bit_op_code<op_code, Type>();
-		util::portable::write(_output, destination);
-		util::portable::write(_output, value);
-	}
-	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::copy, Op_code::load_from_namespace>::value>::type
-	  write(std::int32_t arg0, std::int32_t arg1)
-	{
-		static_assert(is_2_bit_variant<Type>::value, "bad copy type");
-		_write_2_bit_op_code<op_code, Type>();
-		util::portable::write(_output, arg0);
-		util::portable::write(_output, arg1);
-	}
-	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::unsigned_raw_operation>::value>::type
-	  write(Operation operation, std::int32_t arg0, std::int32_t arg1)
-	{
-		static_assert(is_2_bit_variant<Type>::value, "bad operation type");
-		_write_2_bit_op_code<op_code, Type>();
-		util::portable::write(_output, operation);
-		util::portable::write(_output, arg0);
-		util::portable::write(_output, arg1);
-	}
-	template<Op_code op_code, typename Type>
-	typename std::enable_if<is_op_code<op_code, Op_code::resource_operation>::value>::type
-	  write(Operation operation, std::int32_t arg0, std::int32_t arg1)
-	{
-		static_assert(util::type_traits::equals_any_type<Type, memory::gc::String, memory::gc::Regex>::value,
-		              "bad resource type");
-		_write_2_bit_op_code_resource<op_code, Type>();
-		util::portable::write(_output, operation);
-		util::portable::write(_output, arg0);
-		util::portable::write(_output, arg1);
-	}
-	template<Op_code op_code, typename Offset>
-	typename std::enable_if<
-	  is_op_code<op_code, Op_code::jump, Op_code::jump_if_false, Op_code::jump_if_true>::value>::type
-	  write(Offset offset)
-	{
-		static_assert(is_2_bit_variant<Offset>::value && std::is_signed<Offset>::value,
-		              "bad offset type for jump operation");
-		_write_2_bit_op_code<op_code, Offset>();
+		_write_op_code<op_code>();
 		util::portable::write(_output, offset);
+	}
+	template<Op_code op_code, typename Type>
+	typename std::enable_if<(op_code == Op_code::store)>::type write(Address destination, Type immediate)
+	{
+		_write_op_code<op_code>(_bytes_to_size<sizeof(typename std::decay<Type>::type)>());
+		util::portable::write(_output, destination);
+		util::portable::write(_output, immediate);
 	}
 	std::ostream& output() noexcept
 	{
@@ -115,23 +66,34 @@ public:
 private:
 	std::ostream& _output;
 
-	template<Op_code op_code, typename Type>
-	void _write_2_bit_op_code()
+	template<Op_code op_code>
+	void _write_op_code(Size size = {})
 	{
-		using T = typename std::make_signed<typename std::decay<Type>::type>::type;
 		util::portable::write(
-		  _output,
-		  static_cast<Op_code>(
-		    static_cast<int>(op_code) +
-		    util::type_traits::type_index<T, std::int8_t, std::int16_t, std::int32_t, std::int64_t>::value));
+		  _output, static_cast<std::uint8_t>(static_cast<int>(op_code) | (static_cast<int>(size) << 6)));
 	}
-	template<Op_code op_code, typename Type>
-	void _write_2_bit_op_code_resource()
+	template<typename Type>
+	void _write(Size size, Type value)
 	{
-		util::portable::write(
-		  _output, static_cast<Op_code>(
-		             static_cast<int>(op_code) +
-		             util::type_traits::type_index<Type, memory::gc::String, memory::gc::Regex>::value));
+		static_assert(std::is_trivial<Type>::value, "Type must be trivial");
+		BIA_ASSERT(_size_to_bytes(size) == sizeof(Type));
+		util::portable::write(_output, value);
+	}
+	static std::size_t _size_to_bytes(Size size)
+	{
+		switch (size) {
+		case Size::bit_8: return 1;
+		case Size::bit_16: return 2;
+		case Size::bit_32: return 4;
+		case Size::bit_64: return 8;
+		default: BIA_THROW(error::Code::bad_switch_value);
+		}
+	}
+	template<std::size_t Bytes>
+	constexpr static Size _bytes_to_size() noexcept
+	{
+		static_assert(Bytes == 1 || Bytes == 2 || Bytes == 4 || Bytes == 8, "bad Bytes");
+		return Bytes == 1 ? Size::bit_8 : Bytes == 2 ? Size::bit_16 : Bytes == 4 ? Size::bit_32 : Size::bit_64;
 	}
 };
 

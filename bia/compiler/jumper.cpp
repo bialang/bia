@@ -69,8 +69,8 @@ void Jumper::_write_jump(Type type, Offset offset)
 {
 	switch (type) {
 	case Type::unconditional: _instructor.write<bytecode::Op_code::jump>(offset); break;
-	case Type::if_true: _instructor.write<bytecode::Op_code::jump_if_true>(offset); break;
-	case Type::if_false: _instructor.write<bytecode::Op_code::jump_if_false>(offset); break;
+	case Type::if_true: _instructor.write<bytecode::Op_code::jump_true>(offset); break;
+	case Type::if_false: _instructor.write<bytecode::Op_code::jump_false>(offset); break;
 	default: BIA_THROW(error::Code::bad_switch_value);
 	}
 }

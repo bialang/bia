@@ -21,6 +21,7 @@
 #include <bia/util/type_traits/type_select.hpp>
 #include <map>
 #include <string>
+#include <bia/memory/frame.hpp>
 #include <type_traits>
 #include <vector>
 
@@ -37,7 +38,7 @@ class Namespace
 {
 public:
 	Namespace(internal::type::System& type_system, memory::gc::GC& gc) noexcept
-	    : _type_system{ type_system }, _gc{ gc }
+	    : _type_system{ type_system }, _gc{ gc }, _global_frame{}
 	{
 		using namespace internal::type;
 
@@ -57,6 +58,9 @@ public:
 		_global_index.insert(std::make_pair(
 		  util::from_cstring("int32"),
 		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::i32, false))));
+		_global_index.insert(std::make_pair(
+		  util::from_cstring("uint64"),
+		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::u64, false))));
 
 		_global_index.insert(std::make_pair(
 		  util::from_cstring("float32"),
@@ -89,15 +93,15 @@ public:
 
 		// TODO alignment of types
 		const auto ptr = member::function::create(_gc, std::forward<Invokeable>(invokable));
-		_globals.resize(_globals.size() + sizeof(ptr));
-		std::memcpy(_globals.data() + _globals.size() - sizeof(ptr), &ptr, sizeof(ptr));
+		_global_frame.resize(_global_frame.size() + sizeof(ptr));
+		std::memcpy(_global_frame.data() + _global_frame.size() - sizeof(ptr), &ptr, sizeof(ptr));
 
 		auto function_definition = _type_system.get_or_create<type::Function>(return_type, arguments);
-		_global_index.insert({ name, Symbol{ _globals.size() - sizeof(ptr), function_definition } });
+		_global_index.insert({ name, Symbol{ _global_frame.size() - sizeof(ptr), function_definition } });
 	}
-	util::Span<const util::Byte*> globals() const
+	memory::Frame<false> globals() const
 	{
-		return { _globals.data(), _globals.size() };
+		return _global_frame;
 	}
 	util::Variant<Symbol, const type::Definition*> global(const String_key& name) const
 	{
@@ -111,9 +115,9 @@ public:
 private:
 	internal::type::System& _type_system;
 	memory::gc::GC& _gc;
-	// std::vector<int> _modules;
-	std::vector<util::Byte> _globals;
-	// std::map<resource::String_key, std::size_t, resource::String_comparator> _module_index;
+	/// Stores the actual values of the global symbols.
+	memory::Frame<true> _global_frame;
+	/// Maps names to the global symbols relative to the global frame.
 	std::map<String_key, util::Variant<Symbol, const type::Definition*>, String_comparator> _global_index;
 };
 

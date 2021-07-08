@@ -11,7 +11,7 @@ namespace function {
 class Base : public memory::gc::Base
 {
 public:
-	virtual void invoke(memory::Frame frame) = 0;
+	virtual void invoke(memory::Frame<true> frame) = 0;
 };
 
 } // namespace function

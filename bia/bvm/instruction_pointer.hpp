@@ -14,7 +14,7 @@ namespace bvm {
 struct Operation
 {
 	bytecode::Op_code op_code;
-	std::uint8_t variation : 2;
+	bytecode::Size size;
 };
 
 /// Manages the input bytecode stream.
@@ -51,7 +51,7 @@ public:
 	Operation fetch_and_decode()
 	{
 		const auto code = read<typename std::underlying_type<bytecode::Op_code>::type>();
-		return Operation{ bytecode::read_op_code(code), bytecode::get_op_code_size(code) };
+		return Operation{ static_cast<bytecode::Op_code>(code & 0x3f), static_cast<bytecode::Size>(code >> 6) };
 	}
 	/**
 	 * Advances the instruction pointer.

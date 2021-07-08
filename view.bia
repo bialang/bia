@@ -172,3 +172,23 @@ fun foo(): any {
   }
   return o{x: 9}
 }
+
+
+// how does the stack look like?
+
+let x = 0 // -> by value: stores it directly on the stack
+
+let x: string = "some string" // -> stores the data in the heap (gc), pointer on stack
+struct string {
+  int length;
+  char pointer[length];
+}
+
+x.length
+/*compiler:
+int index = (typeof string).get_member("length")
+> get [x], [index]
+*/
+/* stack:
+
+*/

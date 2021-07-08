@@ -16,8 +16,17 @@ Compiler::Compiler(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
 
 void Compiler::receive(util::Span<const Token*> tokens, resource::Manager& manager)
 {
+	static_assert(sizeof(std::ptrdiff_t) == 4 || sizeof(std::ptrdiff_t) == 8,
+	              "unsupported std::ptrdiff_t size");
+
 	Flow_controller flow_controller;
-	elve::Parameter params{ _instructor, _symbols, _serializer, _errors, _context, flow_controller };
+	elve::Parameter params{ _instructor,
+		                      _symbols,
+		                      _serializer,
+		                      _errors,
+		                      _context,
+		                      flow_controller,
+		                      sizeof(std::ptrdiff_t) == 8 ? bytecode::Size::bit_64 : bytecode::Size::bit_32 };
 	while (!tokens.empty()) {
 		tokens = elve::root(params, tokens);
 	}

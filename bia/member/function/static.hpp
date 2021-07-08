@@ -11,14 +11,14 @@ namespace member {
 namespace function {
 
 template<typename Return, typename... Arguments, std::size_t... Indices>
-inline void invoke_static(Return (*function)(Arguments...), memory::Frame& frame,
+inline void invoke_static(Return (*function)(Arguments...), memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
 	frame.store(0, function(frame.load_parameter<Indices, Arguments...>()...));
 }
 
 template<typename... Arguments, std::size_t... Indices>
-inline void invoke_static(void (*function)(Arguments...), memory::Frame& frame,
+inline void invoke_static(void (*function)(Arguments...), memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
 	function(frame.load_parameter<Indices, Arguments...>()...);
@@ -32,7 +32,7 @@ public:
 
 	Static(Function pointer) noexcept : _pointer{ pointer }
 	{}
-	void invoke(memory::Frame frame) override
+	void invoke(memory::Frame<true> frame) override
 	{
 		invoke_static(_pointer, frame,
 		              util::type_traits::Int_sequencer<std::size_t, 0, sizeof...(Arguments)>::value);

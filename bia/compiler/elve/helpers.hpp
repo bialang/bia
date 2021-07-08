@@ -27,6 +27,7 @@ struct Parameter
 	Errors& errors;
 	internal::Context& context;
 	Flow_controller& flow_controller;
+	bytecode::Size int_size;
 };
 
 typedef util::Span<const tokenizer::token::Token*> Tokens;
@@ -44,7 +45,8 @@ std::pair<Tokens, util::Optional<symbol::Variable>> value(Parameter& param, Toke
 std::pair<Tokens, util::Optional<symbol::Variable>> single_expression(Parameter& param, Tokens tokens);
 
 std::pair<Tokens, util::Optional<symbol::Variable>>
-  member_invocation(Parameter& param, Tokens tokens, symbol::Variable function, Tokens function_tokens);
+  member_invocation(Parameter& param, Tokens tokens, util::Optional<symbol::Variable> function,
+                    Tokens function_tokens);
 std::pair<Tokens, util::Optional<symbol::Variable>>
   member_access(Parameter& param, Tokens tokens, symbol::Variable member, Tokens member_tokens);
 

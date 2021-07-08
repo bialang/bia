@@ -19,31 +19,8 @@ elve::Tokens elve::if_stmt(Parameter& param, Tokens tokens)
 		expression_tokens          = expression_tokens.left(tokens.begin());
 
 		if (variable) {
-			// test expression
-			if ((variable->definition->flags() & type::Definition::flag_truthable) !=
-			    type::Definition::flag_truthable) {
-				param.errors.add_error(error::Code::type_not_truthable, expression_tokens);
-				// TODO dry this
-				param.symbols.free_temporary(*variable);
-				tokens = batch(param, tokens);
-				continue;
-			}
-
-			// TODO size of op code
-			switch (variable->definition->size()) {
-			case 1:
-				param.instructor.write<bytecode::Op_code::truthy, std::int8_t>(variable->location.offset);
-				break;
-			case 2:
-				param.instructor.write<bytecode::Op_code::truthy, std::int16_t>(variable->location.offset);
-				break;
-			case 4:
-				param.instructor.write<bytecode::Op_code::truthy, std::int32_t>(variable->location.offset);
-				break;
-			case 8:
-				param.instructor.write<bytecode::Op_code::truthy, std::int64_t>(variable->location.offset);
-				break;
-			default: BIA_THROW(error::Code::bad_switch_value);
+			if (!dynamic_cast<const type::Bool*>(variable->definition)) {
+				param.errors.add_error(error::Code::type_mismatch, expression_tokens.left(tokens.begin()));
 			}
 
 			param.symbols.free_temporary(*variable);

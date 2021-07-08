@@ -70,7 +70,7 @@ enum class Code
 	type_mismatch = 150,
 	symbol_already_declared,
 	symbol_not_a_type,
-	symbol_not_a_variable,
+	symbol_not_a_value,
 	undefined_symbol,
 	type_not_truthable,
 	not_an_integral,
@@ -157,7 +157,7 @@ inline const std::error_category& code_category() noexcept
 			case Code::type_mismatch: return "type mismatch";
 			case Code::symbol_already_declared: return "symbol already declared";
 			case Code::symbol_not_a_type: return "symbol not a type";
-			case Code::symbol_not_a_variable: return "symbol not a variable";
+			case Code::symbol_not_a_value: return "symbol not a value";
 			case Code::undefined_symbol: return "undefined symbol";
 			case Code::type_not_truthable: return "type is not truthable";
 			case Code::not_an_integral: return "type is not an integral";

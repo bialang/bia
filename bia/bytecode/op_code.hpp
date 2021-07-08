@@ -9,33 +9,50 @@ namespace bytecode {
 
 enum class Op_code : std::uint8_t
 {
-	// 2 bit variations
-	load                   = 0,
-	load_from_namespace    = load + 4,
-	copy                   = load_from_namespace + 4,
-	unsigned_raw_operation = copy + 4,
-	truthy                 = unsigned_raw_operation + 4,
-	falsey                 = truthy + 4,
-	jump                   = falsey + 4,
-	jump_if_false          = jump + 4,
-	jump_if_true           = jump_if_false + 4,
+	store,
 
-	// 0 bit variations
-	booleanize         = jump_if_true + 4,
-	load_resource      = booleanize + 4,
-	resource_operation = load_resource + 4,
-	invoke             = resource_operation + 4,
+	load_resource,
+	load_from_namespace,
+
+	copy,
+	add,
+	fadd,
+	sub,
+	fsub,
+	mul,
+	fmul,
+	sdiv,
+	udiv,
+	fdiv,
+	srem,
+	urem,
+	frem,
+	bitwise_and,
+	bitwise_or,
+	bitwise_xor,
+	equal,
+	not_equal,
+	less_than,
+	less_equal_than,
+	greater_than,
+	greater_equal_than,
+
+	invoke,
+
+	jump,
+	jump_true,
+	jump_false
 };
 
-inline Op_code read_op_code(typename std::underlying_type<Op_code>::type value) noexcept
+enum class Size
 {
-	return static_cast<Op_code>(value & 0xfc);
-}
+	bit_8,
+	bit_16,
+	bit_32,
+	bit_64
+};
 
-inline std::uint8_t get_op_code_size(typename std::underlying_type<Op_code>::type value) noexcept
-{
-	return static_cast<std::uint8_t>(value & 0x03);
-}
+typedef std::uint32_t Address;
 
 } // namespace bytecode
 } // namespace bia

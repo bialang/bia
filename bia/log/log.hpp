@@ -41,7 +41,7 @@ struct formatter<std::chrono::duration<Rep, Period>>
 			unit = "s";
 			t /= 10000000000;
 		}
-		return format_to(context.out(), "{:.2f}{}", t, unit);
+		return format_to(context.out(), "{:.2f} {}", t, unit);
 	}
 };
 

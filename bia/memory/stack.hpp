@@ -20,6 +20,7 @@ class GC;
 
 }
 
+template<bool>
 class Frame;
 
 class Stack
@@ -46,7 +47,8 @@ public:
 
 private:
 	friend gc::GC;
-	friend Frame;
+	template<bool>
+	friend class Frame;
 	mutable std::mutex _mutex;
 	std::shared_ptr<Allocator> _allocator;
 	/// The actual stack data.

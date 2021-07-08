@@ -42,12 +42,12 @@ struct Token
 		Type type;
 		union
 		{
-			std::int64_t i;
+			std::ptrdiff_t i;
 			std::int8_t i8;
 			std::int16_t i16;
 			std::int32_t i32;
 			std::int64_t i64;
-			std::uint64_t u;
+			std::uintptr_t u;
 			std::uint8_t u8;
 			std::uint16_t u16;
 			std::uint32_t u32;

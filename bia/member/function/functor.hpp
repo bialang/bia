@@ -13,7 +13,7 @@ namespace member {
 namespace function {
 
 template<typename Class, typename Return, typename... Arguments, std::size_t... Indices>
-inline void invoke_method(Return (Class::*method)(Arguments...), Class& object, memory::Frame& frame,
+inline void invoke_method(Return (Class::*method)(Arguments...), Class& object, memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
 	frame.store(0, (object.*method)(frame.load_parameter<Indices, Arguments...>()...));
@@ -21,13 +21,14 @@ inline void invoke_method(Return (Class::*method)(Arguments...), Class& object, 
 
 template<typename Class, typename Return, typename... Arguments, std::size_t... Indices>
 inline void invoke_method(Return (Class::*method)(Arguments...) const, const Class& object,
-                          memory::Frame& frame, util::type_traits::Int_container<std::size_t, Indices...>)
+                          memory::Frame<true>& frame,
+                          util::type_traits::Int_container<std::size_t, Indices...>)
 {
 	frame.store(0, (object.*method)(frame.load_parameter<Indices, Arguments...>()...));
 }
 
 template<typename Class, typename... Arguments, std::size_t... Indices>
-inline void invoke_method(void (Class::*method)(Arguments...), Class& object, memory::Frame& frame,
+inline void invoke_method(void (Class::*method)(Arguments...), Class& object, memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
 	(object.*method)(frame.load_parameter<Indices, Arguments...>()...);
@@ -35,7 +36,8 @@ inline void invoke_method(void (Class::*method)(Arguments...), Class& object, me
 
 template<typename Class, typename... Arguments, std::size_t... Indices>
 inline void invoke_method(void (Class::*method)(Arguments...) const, const Class& object,
-                          memory::Frame& frame, util::type_traits::Int_container<std::size_t, Indices...>)
+                          memory::Frame<true>& frame,
+                          util::type_traits::Int_container<std::size_t, Indices...>)
 {
 	(object.*method)(frame.load_parameter<Indices, Arguments...>()...);
 }
@@ -48,7 +50,7 @@ public:
 	{}
 	Functor(Type&& functor) : _functor{ std::move(functor) }
 	{}
-	void invoke(memory::Frame frame) override
+	void invoke(memory::Frame<true> frame) override
 	{
 		invoke_method(
 		  &Type::operator(), _functor, frame,
