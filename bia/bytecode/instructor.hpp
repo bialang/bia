@@ -18,7 +18,8 @@ namespace bytecode {
 
 template<Op_code op_code>
 using is_with_2_operands =
-  std::integral_constant<bool, (op_code >= Op_code::copy && op_code <= Op_code::greater_equal_than)>;
+  std::integral_constant<bool,
+                         (op_code >= Op_code::load_from_namespace && op_code <= Op_code::greater_equal_than)>;
 
 template<Op_code op_code>
 using is_branch_operation =
@@ -42,8 +43,8 @@ public:
 	                                                                        Address second)
 	{
 		_write_op_code<op_code>(size);
-		_write(size, first);
-		_write(size, second);
+		util::portable::write(_output, first);
+		util::portable::write(_output, second);
 	}
 	template<Op_code op_code>
 	typename std::enable_if<is_branch_operation<op_code>::value>::type write(std::int32_t offset)
@@ -57,6 +58,13 @@ public:
 		_write_op_code<op_code>(_bytes_to_size<sizeof(typename std::decay<Type>::type)>());
 		util::portable::write(_output, destination);
 		util::portable::write(_output, immediate);
+	}
+	template<Op_code op_code>
+	typename std::enable_if<(op_code == Op_code::invoke || op_code == Op_code::test)>::type
+	  write(Address function)
+	{
+		_write_op_code<op_code>();
+		util::portable::write(_output, function);
 	}
 	std::ostream& output() noexcept
 	{

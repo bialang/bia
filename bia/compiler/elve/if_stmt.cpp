@@ -19,7 +19,9 @@ elve::Tokens elve::if_stmt(Parameter& param, Tokens tokens)
 		expression_tokens          = expression_tokens.left(tokens.begin());
 
 		if (variable) {
-			if (!dynamic_cast<const type::Bool*>(variable->definition)) {
+			if (dynamic_cast<const type::Bool*>(variable->definition)) {
+				param.instructor.write<bytecode::Op_code::test>(variable->location.offset);
+			} else {
 				param.errors.add_error(error::Code::type_mismatch, expression_tokens.left(tokens.begin()));
 			}
 

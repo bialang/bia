@@ -13,6 +13,7 @@
 #include <bia/internal/type/definition.hpp>
 #include <bia/internal/type/system.hpp>
 #include <bia/member/function/creator.hpp>
+#include <bia/memory/frame.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
 #include <bia/util/gsl.hpp>
@@ -21,7 +22,6 @@
 #include <bia/util/type_traits/type_select.hpp>
 #include <map>
 #include <string>
-#include <bia/memory/frame.hpp>
 #include <type_traits>
 #include <vector>
 
@@ -38,10 +38,14 @@ class Namespace
 {
 public:
 	Namespace(internal::type::System& type_system, memory::gc::GC& gc) noexcept
-	    : _type_system{ type_system }, _gc{ gc }, _global_frame{}
+	    : _type_system{ type_system }, _gc{ gc },
+	      _global_space{ static_cast<util::Byte*>(gc.allocator()->allocate(1024)), 1024 }, _global_frame{
+		      _global_space, _gc, 0
+	      }
 	{
 		using namespace internal::type;
 
+		const Definition* def = nullptr;
 		_global_index.insert(std::make_pair(
 		  util::from_cstring("int"),
 		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::i32, true))));
@@ -52,8 +56,9 @@ public:
 		_global_index.insert(std::make_pair(util::from_cstring("void"),
 		                                    static_cast<const Definition*>(_type_system.get_or_create<Void>())));
 
-		_global_index.insert(std::make_pair(util::from_cstring("bool"),
-		                                    static_cast<const Definition*>(_type_system.get_or_create<Bool>())));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("bool"), def = _type_system.get_or_create<Bool>()));
+		_type_system.link<bool>(def);
 
 		_global_index.insert(std::make_pair(
 		  util::from_cstring("int32"),
@@ -74,7 +79,8 @@ public:
 	template<typename Invokeable>
 	void put_invokable(String_key name, Invokeable&& invokable)
 	{
-		static_assert(util::type_traits::Invokable_info<Invokeable>::is_invokable, "Invokeable must be a invokable");
+		static_assert(util::type_traits::Invokable_info<Invokeable>::is_invokable,
+		              "Invokeable must be a invokable");
 		if (_global_index.find(name) != _global_index.end()) {
 			BIA_THROW(error::Code::symbol_already_declared);
 		}
@@ -92,12 +98,12 @@ public:
 		}
 
 		// TODO alignment of types
+		// TODO protect ptr from GC, because it cannot be collected in global namespace
 		const auto ptr = member::function::create(_gc, std::forward<Invokeable>(invokable));
-		_global_frame.resize(_global_frame.size() + sizeof(ptr));
-		std::memcpy(_global_frame.data() + _global_frame.size() - sizeof(ptr), &ptr, sizeof(ptr));
-
+		_global_frame.store(_offset, ptr);
 		auto function_definition = _type_system.get_or_create<type::Function>(return_type, arguments);
-		_global_index.insert({ name, Symbol{ _global_frame.size() - sizeof(ptr), function_definition } });
+		_global_index.insert({ name, Symbol{ _offset, function_definition } });
+		_offset += util::aligned(sizeof(ptr), alignof(std::max_align_t));
 	}
 	memory::Frame<false> globals() const
 	{
@@ -115,7 +121,8 @@ public:
 private:
 	internal::type::System& _type_system;
 	memory::gc::GC& _gc;
-	/// Stores the actual values of the global symbols.
+	std::size_t _offset = 0;
+	util::Span<util::Byte*> _global_space;
 	memory::Frame<true> _global_frame;
 	/// Maps names to the global symbols relative to the global frame.
 	std::map<String_key, util::Variant<Symbol, const type::Definition*>, String_comparator> _global_index;

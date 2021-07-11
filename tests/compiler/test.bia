@@ -1,1 +1,3 @@
-hello_world()
+if hello_world(5) {
+	hello_world(1)
+}

@@ -1,8 +1,6 @@
 #ifndef BIA_MEMORY_FRAME_HPP_
 #define BIA_MEMORY_FRAME_HPP_
 
-#include "stack.hpp"
-
 #include <bia/internal/type/framer.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/util/algorithm.hpp>
@@ -14,6 +12,12 @@
 namespace bia {
 namespace memory {
 
+/**
+ * A frame operates on the given memory and stores or loads data from it. It requires the GC to frame the
+ * given objects correctly.
+ *
+ * @tparam Writeable Whether write actions are allowed.
+ */
 template<bool Writable>
 class Frame;
 
@@ -21,10 +25,10 @@ template<>
 class Frame<false>
 {
 public:
-	Frame(Stack& stack, std::size_t offset) noexcept : _stack{ stack }, _offset{ offset }
+	Frame(util::Span<util::Byte*> space, std::size_t offset) noexcept : _space{ space }, _offset{ offset }
 	{}
-	Frame(Frame& parent, std::size_t offset) noexcept
-	    : _stack{ parent._stack }, _offset{ offset - parent._offset }
+	Frame(const Frame& parent, std::size_t offset) noexcept
+	    : _space{ parent._space }, _offset{ offset }
 	{}
 	/**
 	 * Loads a frameable type.
@@ -42,11 +46,10 @@ public:
 		static_assert(util::type_traits::Is_frameable<Type>::value, "Type is not frameable");
 		using Framer = internal::type::Framer<Type>;
 
-		std::lock_guard<std::mutex> _{ _stack._mutex };
-		const auto position = _stack._memory.begin() + offset + _offset;
+		const auto position = _space.begin() + offset + _offset;
 		if (reinterpret_cast<std::intptr_t>(position) % Framer::alignment()) {
 			BIA_THROW(error::Code::bad_stack_alignment);
-		} else if (position < _stack._memory.begin() || position + Framer::size() > _stack._memory.end()) {
+		} else if (position < _space.begin() || position + Framer::size() > _space.end()) {
 			BIA_THROW(error::Code::out_of_stack);
 		}
 		return Framer::unframe({ position, Framer::size() });
@@ -63,7 +66,7 @@ public:
 	}
 
 protected:
-	Stack& _stack;
+	util::Span<util::Byte*> _space;
 	std::size_t _offset;
 
 	template<typename Parameter, typename... PreviousParameters>
@@ -78,29 +81,24 @@ template<>
 class Frame<true> : public Frame<false>
 {
 public:
-	Frame(Stack& stack, gc::GC& gc, std::size_t offset) noexcept : Frame<false>{ stack, offset }, _gc{ gc }
+	Frame(util::Span<util::Byte*> space, gc::GC& gc, std::size_t offset) noexcept
+	    : Frame<false>{ space, offset }, _gc{ gc }
 	{}
 	Frame(Frame& parent, std::size_t offset) noexcept : Frame<false>{ parent, offset }, _gc{ parent._gc }
 	{}
 	template<typename Type>
-	void store(std::int32_t offset, const Type& value, bool mark = false)
+	void store(std::int32_t offset, const Type& value)
 	{
 		static_assert(util::type_traits::Is_frameable<Type>::value, "Type is not frameable");
 		using Framer = internal::type::Framer<Type>;
 
-		std::lock_guard<std::mutex> _{ _stack._mutex };
-		const auto position = _stack._memory.begin() + offset + _offset;
+		const auto position = _space.begin() + offset + _offset;
 		if (reinterpret_cast<std::intptr_t>(position) % Framer::alignment()) {
 			BIA_THROW(error::Code::bad_stack_alignment);
-		} else if (position < _stack._memory.begin() || position + Framer::size() > _stack._memory.end()) {
+		} else if (position < _space.begin() || position + Framer::size() > _space.end()) {
 			BIA_THROW(error::Code::out_of_stack);
 		}
 		Framer::frame(_gc, { position, Framer::size() }, value);
-		if (mark) {
-			_stack._meta[(offset + _offset) / sizeof(void*) / 8] |= 1 << (offset + _offset) / sizeof(void*) % 8;
-		} else {
-			_stack._meta[(offset + _offset) / sizeof(void*) / 8] &= ~(1 << (offset + _offset) / sizeof(void*) % 8);
-		}
 	}
 
 private:

@@ -20,9 +20,6 @@ class GC;
 
 }
 
-template<bool>
-class Frame;
-
 class Stack
 {
 public:
@@ -45,10 +42,9 @@ public:
 	}
 	Stack& operator=(const Stack& copy) = delete;
 
-private:
+// TODO
+// private:
 	friend gc::GC;
-	template<bool>
-	friend class Frame;
 	mutable std::mutex _mutex;
 	std::shared_ptr<Allocator> _allocator;
 	/// The actual stack data.

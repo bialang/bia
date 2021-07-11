@@ -25,7 +25,7 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 	using namespace bytecode;
 	Instruction_pointer ip{ instructions };
 	bool test_register = false;
-	std::vector<util::Span<const util::Byte*>> namespaces;
+	std::vector<memory::Frame<false>> namespaces;
 	namespaces.push_back(context.global_namespace().globals());
 
 	while (ip) {
@@ -46,9 +46,9 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 			const auto index       = ip.read<std::uint32_t>();
 			const auto& resource   = resources.at(index);
 			if (resource.is_type<memory::gc::GC_able<memory::gc::String*>>()) {
-				frame.store(destination, resource.get<memory::gc::GC_able<memory::gc::String*>>(), true);
+				frame.store(destination, resource.get<memory::gc::GC_able<memory::gc::String*>>());
 			} else if (resource.is_type<memory::gc::GC_able<memory::gc::Regex*>>()) {
-				frame.store(destination, resource.get<memory::gc::GC_able<memory::gc::Regex*>>(), true);
+				frame.store(destination, resource.get<memory::gc::GC_able<memory::gc::Regex*>>());
 			} else {
 				// TODO
 				BIA_ASSERT(false);
@@ -58,12 +58,12 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 		case Op_code::load_from_namespace: {
 			const auto destination = ip.read<Address>();
 			const auto source      = ip.read<Address>();
-			// switch (op.size) {
-			// case Size::bit_8:
-			// case Size::bit_16:
-			// case Size::bit_32:
-			// case Size::bit_64:
-			// }
+			switch (op.size) {
+			case Size::bit_8: frame.store(destination, namespaces[0].load<std::uint8_t>(source)); break;
+			case Size::bit_16: frame.store(destination, namespaces[0].load<std::uint16_t>(source)); break;
+			case Size::bit_32: frame.store(destination, namespaces[0].load<std::uint32_t>(source)); break;
+			case Size::bit_64: frame.store(destination, namespaces[0].load<std::uint64_t>(source)); break;
+			}
 			break;
 		}
 		case Op_code::copy: {
@@ -97,7 +97,12 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 		case Op_code::invoke: {
 			const auto function_address = ip.read<Address>();
 			const auto function_object = frame.load<memory::gc::GC_able<member::function::Base*>>(function_address);
-			function_object->invoke(memory::Frame<true>{ frame, 0 });
+			function_object->invoke(memory::Frame<true>{ frame, function_address });
+			break;
+		}
+		case Op_code::test: {
+			const auto source = ip.read<Address>();
+			test_register = static_cast<bool>(frame.load<std::uint8_t>(source));
 			break;
 		}
 		case Op_code::jump: {

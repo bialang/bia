@@ -28,6 +28,7 @@ std::pair<Tokens, util::Optional<symbol::Variable>>
 			param.errors.add_error(error::Code::not_a_function, function_tokens);
 		}
 	}
+	const bool is_function = argument_definitions != nullptr;
 
 	std::vector<symbol::Variable> pushed;
 	tokens = tokens.subspan(1);
@@ -60,17 +61,20 @@ std::pair<Tokens, util::Optional<symbol::Variable>>
 		param.errors.add_error(error::Code::too_many_arguments, function_tokens);
 	}
 
-	// invoke
-	// param.instructor.write<bytecode::Op_code::invoke>(function.location.offset);
 	tokens = tokens.subspan(1);
 	for (const auto& arg : pushed) {
 		param.symbols.pop(arg);
 	}
-	// result
-	// if (const auto ptr = dynamic_cast<const type::Function*>(function.definition)) {
-	// 	param.symbols.free_temporary(function);
-	// 	return { tokens, param.symbols.create_temporary(ptr->return_type()) };
-	// }
+
+	// invoke
+	if (is_function) {
+		param.instructor.write<bytecode::Op_code::invoke>(function->location.offset);
+		// result
+		param.symbols.free_temporary(*function);
+		return { tokens, param.symbols.create_temporary(
+			                 static_cast<const type::Function*>(function->definition)->return_type()) };
+	}
+
 	return { tokens, {} };
 }
 

@@ -67,8 +67,10 @@ try {
 	internal::Context context{ gc };
 
 	// define user defined types
-	context.global_namespace().put_invokable(util::from_cstring("hello_world"),
-	                                         [](int a) { printf("Hello, World!, %d\n", a); });
+	context.global_namespace().put_invokable(util::from_cstring("hello_world"), [](int a) {
+		printf("Hello, World! %d\n", a);
+		return false;
+	});
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
@@ -95,7 +97,7 @@ try {
 	const auto ins = output.str();
 	const auto res = resource_output.str();
 	memory::Stack stack{ allocator, 1024 };
-	memory::Frame<true> base_frame{ stack, gc, 0 };
+	memory::Frame<true> base_frame{ stack._memory, gc, 0 };
 	const auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);

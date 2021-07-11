@@ -69,10 +69,9 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>> identifier_value(Para
 		param.instructor.write<Op_code::copy>(Size::bit_32, variable->location.offset,
 		                                      identifier.get<symbol::Variable>().location.offset);
 	} else if (identifier.is_type<internal::Symbol>()) {
-		BIA_ASSERT(false);
-		// variable = param.symbols.create_temporary(right.get<internal::Symbol>().definition);
-		// param.instructor.write<bytecode::Op_code::load_from_namespace, std::int64_t>(
-		//   variable->location.offset, right.get<internal::Symbol>().offset);
+		variable = param.symbols.create_temporary(identifier.get<internal::Symbol>().definition);
+		param.instructor.write<bytecode::Op_code::load_from_namespace>(Size::bit_64, variable->location.offset,
+		                                                               identifier.get<internal::Symbol>().offset);
 	} else {
 		param.errors.add_error(error::Code::symbol_not_a_value, tokens.subspan(+0, 1));
 	}

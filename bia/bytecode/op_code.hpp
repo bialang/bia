@@ -12,8 +12,8 @@ enum class Op_code : std::uint8_t
 	store,
 
 	load_resource,
-	load_from_namespace,
 
+	load_from_namespace,
 	copy,
 	add,
 	fadd,
@@ -38,6 +38,7 @@ enum class Op_code : std::uint8_t
 	greater_equal_than,
 
 	invoke,
+	test,
 
 	jump,
 	jump_true,
