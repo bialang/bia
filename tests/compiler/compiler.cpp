@@ -9,6 +9,7 @@
 #include <bia/tokenizer/bia_lexer.hpp>
 #include <bia/util/finally.hpp>
 #include <catch.hpp>
+#include <bia/bytecode/disassembler.hpp>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -96,6 +97,10 @@ try {
 	// run
 	const auto ins = output.str();
 	const auto res = resource_output.str();
+
+	output.seekg(std::ios::beg);
+	bytecode::disassemble(output, std::cout);
+
 	memory::Stack stack{ allocator, 1024 };
 	memory::Frame<true> base_frame{ stack._memory, gc, 0 };
 	const auto resources =
